@@ -1,9 +1,11 @@
 <template>
-  <v-layout>
+  <v-layout wrap>
     <v-flex xs3>
       <img alt="Vue logo" src="@/assets/logo.png" />
     </v-flex>
-    <v-flex xs2></v-flex>
+    <v-flex xs2>
+      <v-select v-model="selected" :options="options"></v-select>
+    </v-flex>
     <v-flex xs2></v-flex>
     <v-flex class="icon-container-row">
       <div class="icon-container">
@@ -19,7 +21,12 @@ export default {
   name: "Header",
   data: function() {
     return {
-      items: [1, 2, 3, 4, 5]
+      selected: null,
+      options: [
+        { label: "foo", value: "Foo" },
+        { label: "bar", value: "Bar" },
+        { label: "car", value: "Car" }
+      ]
     };
   }
 };
