@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
+import Header from '@/components/Header.vue';
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Header
   }
@@ -21,7 +21,7 @@ export default {
 body {
   margin: 0;
   padding: 0;
-  font-family: "Rubik", sans-serif;
+  font-family: 'Rubik', sans-serif;
   background: #f9f9f9;
   color: #666666;
 }

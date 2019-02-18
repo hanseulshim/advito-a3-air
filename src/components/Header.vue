@@ -4,9 +4,9 @@
       <img alt="Vue logo" src="@/assets/logo.png" />
     </v-flex>
     <v-flex xs2>
-      <v-select v-model="selected" :options="options"></v-select>
+      <v-select v-model="selected" :options="options" />
     </v-flex>
-    <v-flex xs2></v-flex>
+    <v-flex xs2 />
     <v-flex class="icon-container-row">
       <div class="icon-container">
         <i class="far fa-comment-alt" />
@@ -17,16 +17,42 @@
 </template>
 
 <script>
+import gql from 'graphql-tag';
+
 export default {
-  name: "Header",
+  name: 'Header',
+  apollo: {
+    getClients: {
+      query: gql`
+        query getClients($clientId: Int!, $sessionToken: String!) {
+          getClients(clientId: $clientId, sessionToken: $sessionToken) {
+            statusCode
+            body {
+              apicode
+              apimessage
+              apidataset {
+                id
+                name
+              }
+            }
+          }
+        }
+      `,
+      variables: {
+        clientId: 1,
+        sessionToken: 'egpSjxgHbWdGY5DySz6gcw=='
+      }
+    }
+  },
   data: function() {
     return {
       selected: null,
       options: [
-        { label: "foo", value: "Foo" },
-        { label: "bar", value: "Bar" },
-        { label: "car", value: "Car" }
-      ]
+        { label: 'foo', value: 'Foo' },
+        { label: 'bar', value: 'Bar' },
+        { label: 'car', value: 'Car' }
+      ],
+      getClients: ''
     };
   }
 };
