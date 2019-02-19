@@ -50,6 +50,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/variables.scss';
 .icon-container-row {
   display: flex;
   justify-content: flex-end;
@@ -58,14 +59,14 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #4baaa3;
+  color: $tradewind;
   cursor: pointer;
 }
 .fa-comment-alt {
   font-size: 2.5em;
 }
 .back-to-console {
-  color: #ff9e16;
+  color: $tree-poppy;
 }
 .link {
   cursor: pointer;
