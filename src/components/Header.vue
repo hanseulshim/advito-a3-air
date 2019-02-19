@@ -1,19 +1,24 @@
 <template>
-  <v-layout wrap align-center>
-    <v-flex xs3>
+  <v-layout wrap class="header-container">
+    <div class="logo-container">
       <img alt="Vue logo" src="@/assets/logo.png" />
+    </div>
+    <v-flex md2>
+      <v-autocomplete
+        :items="clientList"
+        label="Select Client"
+        item-text="name"
+        item-value="id"
+        outline
+      ></v-autocomplete>
     </v-flex>
-    <v-flex xs2>
-      <v-select v-model="selected" label="name" :options="getClients" />
-    </v-flex>
-    <v-flex xs2 />
     <v-flex class="icon-container-row">
       <div class="icon-container">
         <i class="far fa-comment-alt" />
         <span>Ask Addy</span>
       </div>
     </v-flex>
-    <v-flex xs12>
+    <v-flex md12>
       <span class="back-to-console link">« Back to Console</span>
       |
       <span class="link">Air Program Manager</span>
@@ -27,7 +32,7 @@ import { GET_CLIENTS } from '@/graphql/queries';
 export default {
   name: 'Header',
   apollo: {
-    getClients: {
+    clientList: {
       query: GET_CLIENTS,
       variables: {
         clientId: 1,
@@ -38,12 +43,7 @@ export default {
   data: function() {
     return {
       selected: null,
-      options: [
-        { label: 'foo', value: 'Foo' },
-        { label: 'bar', value: 'Bar' },
-        { label: 'car', value: 'Car' }
-      ],
-      getClients: []
+      clientList: []
     };
   }
 };
@@ -51,6 +51,16 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
+.header-container {
+  margin-bottom: 2em !important;
+}
+.logo-container {
+  max-width: 294px;
+  margin-right: 4em;
+  img {
+    width: 100%;
+  }
+}
 .icon-container-row {
   display: flex;
   justify-content: flex-end;

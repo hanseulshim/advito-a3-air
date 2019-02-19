@@ -13,7 +13,6 @@
     "vue": "^2.5.22",
     "vue-apollo": "^3.0.0-beta.28",
     "vue-router": "^3.0.1",
-    "vue-select": "^2.5.1",
     "vuetify": "^1.5.1",
     "vuex": "^3.0.1"
   },

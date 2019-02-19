@@ -3,3 +3,35 @@ $tradewind: #4baaa3;
 $white: #FFF;
 $black: #000;
 $gray-nurse: #dee1df;
+
+button {
+  color: $tree-poppy;
+  border: 1px solid $tree-poppy;
+  border-radius: 15px;
+  width: 150px;
+  padding: 5px;
+  font-size: .8em;
+
+  &:hover {
+    background: $tree-poppy;
+    color: $white;
+  }
+}
+
+.fa-info {
+  color: $tree-poppy;
+  border: 1px solid $tree-poppy;
+  padding: 5px;
+  border-radius: 100%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background: $tree-poppy;
+    color: $white;
+  }
+}

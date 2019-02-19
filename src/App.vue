@@ -4,8 +4,8 @@
     <v-app>
       <v-container grid-list-md fluid>
         <Header />
+        <router-view />
       </v-container>
-      <router-view />
     </v-app>
   </div>
 </template>

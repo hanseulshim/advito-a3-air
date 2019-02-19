@@ -24,5 +24,5 @@ const clientData = [
 ];
 
 exports.clientResolvers = {
-  getClients: (_, payload) => fakeInvoke(payload, clientData)
+  clientList: (_, payload) => fakeInvoke(payload, clientData)
 };

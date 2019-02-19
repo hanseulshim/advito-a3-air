@@ -22,5 +22,5 @@ type Project {
 }
 `;
 exports.projectQuery = `
-getProjects(clientId: Int!, sessionToken: String!): [Project]
+projectList(clientId: Int!, sessionToken: String!): [Project]
 `;

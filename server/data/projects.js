@@ -19,7 +19,7 @@ exports.projectList = [
     leadAnalyst: 'Dinara Sagatova',
     dataSpecialistId: 4,
     dataSpecialist: 'Dinara Sagatova',
-    favorite: false
+    favorite: true
   },
   {
     id: 2,
@@ -501,7 +501,7 @@ exports.projectList = [
     leadAnalyst: 'Dinara Sagatova',
     dataSpecialistId: 2,
     dataSpecialist: 'Kevin Ingalls',
-    favorite: false
+    favorite: true
   },
   {
     id: 24,
@@ -809,7 +809,7 @@ exports.projectList = [
     leadAnalyst: 'Dinara Sagatova',
     dataSpecialistId: 2,
     dataSpecialist: 'Kevin Ingalls',
-    favorite: false
+    favorite: true
   },
   {
     id: 38,
@@ -897,7 +897,7 @@ exports.projectList = [
     leadAnalyst: 'Kevin Ingalls',
     dataSpecialistId: 4,
     dataSpecialist: 'Dinara Sagatova',
-    favorite: false
+    favorite: true
   },
   {
     id: 42,
@@ -1073,7 +1073,7 @@ exports.projectList = [
     leadAnalyst: 'Dinara Sagatova',
     dataSpecialistId: 1,
     dataSpecialist: 'Anders Madsen',
-    favorite: false
+    favorite: true
   },
   {
     id: 50,

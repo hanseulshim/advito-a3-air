@@ -3,7 +3,6 @@ import Vuetify from 'vuetify';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import vSelect from 'vue-select';
 import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
 
@@ -18,7 +17,6 @@ const apolloProvider = new VueApollo({
 
 Vue.use(VueApollo);
 Vue.use(Vuetify);
-Vue.component('v-select', vSelect);
 
 Vue.config.productionTip = false;
 

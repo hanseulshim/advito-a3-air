@@ -6,5 +6,5 @@ type Client {
 `;
 
 exports.clientQuery = `
-getClients(clientId: Int!, sessionToken: String!): [Client]
+clientList(clientId: Int!, sessionToken: String!): [Client]
 `;
