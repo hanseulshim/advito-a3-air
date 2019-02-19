@@ -1,10 +1,10 @@
 <template>
-  <v-layout wrap>
+  <v-layout wrap align-center>
     <v-flex xs3>
       <img alt="Vue logo" src="@/assets/logo.png" />
     </v-flex>
     <v-flex xs2>
-      <v-select v-model="selected" :options="options" />
+      <v-select v-model="selected" label="name" :options="getClients" />
     </v-flex>
     <v-flex xs2 />
     <v-flex class="icon-container-row">
@@ -13,31 +13,22 @@
         <span>Ask Addy</span>
       </div>
     </v-flex>
+    <v-flex xs12>
+      <span class="back-to-console link">« Back to Console</span>
+      |
+      <span class="link">Air Program Manager</span>
+    </v-flex>
   </v-layout>
 </template>
 
 <script>
-import gql from 'graphql-tag';
+import { GET_CLIENTS } from '@/graphql/queries';
 
 export default {
   name: 'Header',
   apollo: {
     getClients: {
-      query: gql`
-        query getClients($clientId: Int!, $sessionToken: String!) {
-          getClients(clientId: $clientId, sessionToken: $sessionToken) {
-            statusCode
-            body {
-              apicode
-              apimessage
-              apidataset {
-                id
-                name
-              }
-            }
-          }
-        }
-      `,
+      query: GET_CLIENTS,
       variables: {
         clientId: 1,
         sessionToken: 'egpSjxgHbWdGY5DySz6gcw=='
@@ -52,7 +43,7 @@ export default {
         { label: 'bar', value: 'Bar' },
         { label: 'car', value: 'Car' }
       ],
-      getClients: ''
+      getClients: []
     };
   }
 };
@@ -72,5 +63,14 @@ export default {
 }
 .fa-comment-alt {
   font-size: 2.5em;
+}
+.back-to-console {
+  color: #ff9e16;
+}
+.link {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>
