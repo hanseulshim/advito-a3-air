@@ -37,7 +37,7 @@ export default {
   color: $tree-poppy;
   font-size: 1.5em;
   position: absolute;
-  right: 30%;
+  right: 27%;
   bottom: 0;
   cursor: pointer;
   &:hover {
