@@ -64,6 +64,13 @@ exports.lambdaFakeInvoke = async (payload, data) => {
   }
 };
 
+exports.fakeInvoke = async (payload, data) => {
+  if (payload.sessionToken) {
+    return data;
+  }
+  return null;
+};
+
 exports.generateResponse = data => ({
   statusCode: 200,
   body: {

@@ -1,13 +1,10 @@
-const { generateQuery, generateTypeList } = require('../helper');
-
 exports.clientDefs = `
-${generateTypeList(
-  'Client',
-  `{
-      id: Int,
-      name: String,
-    }`
-)}
+type Client {
+  id: Int,
+  name: String,
+}
 `;
+
 exports.clientQuery = `
-${generateQuery('getClients', 'Client')}`;
+getClients(clientId: Int!, sessionToken: String!): [Client]
+`;

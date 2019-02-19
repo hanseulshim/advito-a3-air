@@ -1,6 +1,6 @@
-const { lambdaFakeInvoke } = require('../helper');
+const { fakeInvoke } = require('../helper');
 const { projectList } = require('../../data/projects');
 
 exports.projectResolvers = {
-  getProjects: (_, payload) => lambdaFakeInvoke(payload, projectList)
+  getProjects: (_, payload) => fakeInvoke(payload, projectList)
 };

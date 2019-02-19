@@ -1,4 +1,4 @@
-const { lambdaFakeInvoke } = require('../helper');
+const { fakeInvoke } = require('../helper');
 
 const clientData = [
   {
@@ -24,5 +24,5 @@ const clientData = [
 ];
 
 exports.clientResolvers = {
-  getClients: (_, payload) => lambdaFakeInvoke(payload, clientData)
+  getClients: (_, payload) => fakeInvoke(payload, clientData)
 };
