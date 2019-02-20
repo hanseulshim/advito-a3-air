@@ -1,4 +1,6 @@
 exports.projectDefs = `
+scalar Date
+
 type Project {
   id: Int,
   clientId: Int,
@@ -10,8 +12,8 @@ type Project {
   projectType: String,
   savingsTypeId: Int,
   savingsType: String,
-  effectiveFrom: String,
-  effectiveTo: String,
+  effectiveFrom: Date,
+  effectiveTo: Date,
   projectManagerId: Int,
   projectManagerName: String,
   projectManagerEmail: String,
