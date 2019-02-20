@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import Vuetify from 'vuetify';
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
-
-import 'vuetify/dist/vuetify.min.css';
+import 'element-ui/lib/theme-chalk/index.css';
 
 const apolloClient = new ApolloClient({
   uri: 'http://localhost:8085/graphql'
@@ -16,7 +16,7 @@ const apolloProvider = new VueApollo({
 });
 
 Vue.use(VueApollo);
-Vue.use(Vuetify);
+Vue.use(ElementUI, { locale });
 
 Vue.config.productionTip = false;
 

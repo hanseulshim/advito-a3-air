@@ -11,7 +11,7 @@ button {
   width: 150px;
   padding: 5px;
   font-size: .8em;
-
+  cursor: pointer;
   &:hover {
     background: $tree-poppy;
     color: $white;
@@ -23,8 +23,8 @@ button {
   border: 1px solid $tree-poppy;
   padding: 5px;
   border-radius: 100%;
-  width: 30px;
-  height: 30px;
+  width: 15px;
+  height: 15px;
   display: flex;
   justify-content: center;
   align-items: center;

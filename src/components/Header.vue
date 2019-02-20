@@ -1,29 +1,40 @@
 <template>
-  <v-layout wrap class="header-container">
-    <div class="logo-container">
-      <img alt="Vue logo" src="@/assets/logo.png" />
+  <div class="header-container">
+    <img class="logo" alt="Vue logo" src="@/assets/logo.png" />
+    <el-select v-model="selected" placeholder="Select" filterable clearable>
+      <el-option
+        v-for="item in clientList"
+        :key="item.value"
+        :label="item.name"
+        :value="item.id"
+      >
+      </el-option>
+    </el-select>
+    <el-select
+      v-if="selected"
+      v-model="selected"
+      placeholder="Select"
+      filterable
+      clearable
+    >
+      <el-option
+        v-for="item in clientList"
+        :key="item.value"
+        :label="item.name"
+        :value="item.id"
+      >
+      </el-option>
+    </el-select>
+    <div class="icon-container">
+      <i class="far fa-comment-alt" />
+      <span>Ask Addy</span>
     </div>
-    <v-flex md2>
-      <v-autocomplete
-        :items="clientList"
-        label="Select Client"
-        item-text="name"
-        item-value="id"
-        outline
-      ></v-autocomplete>
-    </v-flex>
-    <v-flex class="icon-container-row">
-      <div class="icon-container">
-        <i class="far fa-comment-alt" />
-        <span>Ask Addy</span>
-      </div>
-    </v-flex>
-    <v-flex md12>
+    <div class="navigation">
       <span class="back-to-console link">« Back to Console</span>
       |
       <span class="link">Air Program Manager</span>
-    </v-flex>
-  </v-layout>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -52,28 +63,35 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/variables.scss';
 .header-container {
-  margin-bottom: 2em !important;
+  display: grid;
+  grid-template-areas: 'logo . . . addy' 'navigation navigation . . .';
+  grid-template-columns: 25% 17% 17% auto 75px;
+  row-gap: 1em;
+  column-gap: 1em;
+  align-items: flex-end;
 }
-.logo-container {
+.el-select {
+  width: 100%;
+}
+.logo {
   max-width: 294px;
-  margin-right: 4em;
-  img {
-    width: 100%;
-  }
+  width: 100%;
 }
-.icon-container-row {
-  display: flex;
-  justify-content: flex-end;
-}
+
 .icon-container {
+  color: $tradewind;
+  cursor: pointer;
+  grid-area: addy;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: $tradewind;
-  cursor: pointer;
 }
 .fa-comment-alt {
   font-size: 2.5em;
+}
+
+.navigation {
+  grid-area: navigation;
 }
 .back-to-console {
   color: $tree-poppy;

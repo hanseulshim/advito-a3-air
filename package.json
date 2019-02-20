@@ -9,11 +9,11 @@
   },
   "dependencies": {
     "apollo-boost": "^0.1.28",
+    "element-ui": "^2.5.4",
     "graphql": "^14.1.1",
     "vue": "^2.5.22",
     "vue-apollo": "^3.0.0-beta.28",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.5.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

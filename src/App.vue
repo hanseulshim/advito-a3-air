@@ -1,12 +1,10 @@
 <template>
   <div>
     <Sidebar />
-    <v-app>
-      <v-container grid-list-md fluid>
-        <Header />
-        <router-view />
-      </v-container>
-    </v-app>
+    <div id="app">
+      <Header />
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -35,7 +33,8 @@ body {
 }
 
 #app {
-  padding: 1em 4em;
+  display: grid;
+  padding: 2em 4em;
   font-family: 'Rubik', sans-serif;
   @media (max-width: 1336px) {
     font-size: 13px;
