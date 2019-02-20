@@ -25,12 +25,35 @@ export const GET_PROJECTS = gql`
       effectiveFrom
       effectiveTo
       projectManagerId
-      projectManager
+      projectManagerName
+      projectManagerEmail
       leadAnalystId
-      leadAnalyst
+      leadAnalystName
+      leadAnalystEmail
       dataSpecialistId
-      dataSpecialistString
+      dataSpecialistName
+      dataSpecialistEmail
       favorite
+    }
+  }
+`;
+
+export const GET_USER = gql`
+  {
+    user @client {
+      name
+      email
+      clientId
+      sessionToken
+    }
+  }
+`;
+
+export const GET_CLIENT = gql`
+  {
+    client @client {
+      id
+      name
     }
   }
 `;

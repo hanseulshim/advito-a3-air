@@ -9,7 +9,40 @@ import VueApollo from 'vue-apollo';
 import 'element-ui/lib/theme-chalk/index.css';
 
 const apolloClient = new ApolloClient({
-  uri: 'http://localhost:8085/graphql'
+  uri: 'http://localhost:8085/graphql',
+  clientState: {
+    defaults: {
+      user: {
+        name: 'Scott Cashon',
+        email: 'scott.cashon@boostlabs.com',
+        clientId: 1,
+        profilePicturePath: null,
+        sessionToken: 'Ep6JsErunzl0Smj96gSxCA==',
+        __typename: 'User'
+      },
+      client: {
+        id: null,
+        name: null,
+        __typename: 'Client'
+      }
+    },
+    resolvers: {
+      Mutation: {
+        updateClient: (_, { id, name }, { cache }) => {
+          cache.writeData({
+            data: {
+              client: {
+                id,
+                name,
+                __typename: 'Client'
+              }
+            }
+          });
+          return null;
+        }
+      }
+    }
+  }
 });
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient

@@ -1,7 +1,13 @@
 <template>
   <div class="header-container">
     <img class="logo" alt="Vue logo" src="@/assets/logo.png" />
-    <el-select v-model="selected" placeholder="Select" filterable clearable>
+    <el-select
+      :value="client.id"
+      placeholder="Select"
+      filterable
+      clearable
+      @change="updateClient"
+    >
       <el-option
         v-for="item in clientList"
         :key="item.value"
@@ -38,24 +44,49 @@
 </template>
 
 <script>
-import { GET_CLIENTS } from '@/graphql/queries';
+import { GET_CLIENTS, GET_CLIENT, GET_USER } from '@/graphql/queries';
+import { UPDATE_CLIENT } from '@/graphql/mutations';
 
 export default {
   name: 'Header',
   apollo: {
+    user: {
+      query: GET_USER
+    },
     clientList: {
       query: GET_CLIENTS,
-      variables: {
-        clientId: 1,
-        sessionToken: 'egpSjxgHbWdGY5DySz6gcw=='
+      variables() {
+        return {
+          clientId: this.user.clientId,
+          sessionToken: this.user.sessionToken
+        };
       }
+    },
+    client: {
+      query: GET_CLIENT
     }
   },
   data: function() {
     return {
       selected: null,
-      clientList: []
+      clientList: [],
+      client: null,
+      user: null
     };
+  },
+  methods: {
+    updateClient(id) {
+      const variables = { id: null, name: null };
+      if (id) {
+        const client = this.clientList.filter(client => client.id === id)[0];
+        variables.id = id;
+        variables.name = client.name;
+      }
+      this.$apollo.mutate({
+        mutation: UPDATE_CLIENT,
+        variables
+      });
+    }
   }
 };
 </script>
