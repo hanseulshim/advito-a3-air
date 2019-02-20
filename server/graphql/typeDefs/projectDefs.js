@@ -13,11 +13,14 @@ type Project {
   effectiveFrom: String,
   effectiveTo: String,
   projectManagerId: Int,
-  projectManager: String,
+  projectManagerName: String,
+  projectManagerEmail: String,
   leadAnalystId: Int,
-  leadAnalyst: String,
+  leadAnalystName: String,
+  leadAnalystEmail: String,
   dataSpecialistId: Int,
-  dataSpecialistString: String,
+  dataSpecialistName: String,
+  dataSpecialistEmail: String,
   favorite: Boolean,
 }
 `;
