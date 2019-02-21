@@ -80,13 +80,20 @@ export default {
   margin-top: 2em;
 }
 .favorite-project {
-  border: 1px solid $gray-nurse;
+  border: 2px solid $gray-nurse;
   border-radius: 10px;
   font-size: 0.8em;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  cursor: pointer;
+  &:hover {
+    border: 2px solid $tree-poppy;
+    .title-row {
+      color: $tree-poppy;
+    }
+  }
 }
 .favorite-project-main {
   padding: 1em;
