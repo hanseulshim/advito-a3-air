@@ -36,6 +36,10 @@ body {
   display: grid;
   padding: 2em 4em;
   font-family: 'Rubik', sans-serif;
+  max-width: 1600px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
   @media (max-width: 1336px) {
     font-size: 13px;
     line-height: 17px;
