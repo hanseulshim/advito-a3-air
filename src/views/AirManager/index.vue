@@ -112,7 +112,6 @@ export default {
 .projects-container {
   background: $white;
   padding: 2em;
-  margin-top: 2em;
   border: 1px solid $gray-nurse;
 }
 

@@ -13,7 +13,7 @@ export default new Router({
       component: AirManager
     },
     {
-      path: '/project',
+      path: '/project/:menu',
       name: 'project',
       component: Project
     }

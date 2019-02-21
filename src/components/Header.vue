@@ -134,6 +134,7 @@ export default {
   row-gap: 1em;
   column-gap: 1em;
   align-items: flex-end;
+  margin-bottom: 2em;
 }
 .el-select {
   width: 100%;

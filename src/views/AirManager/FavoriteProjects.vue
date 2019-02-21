@@ -89,7 +89,6 @@ export default {
       return formatDate(date);
     },
     updateProject(project) {
-      console.log('client', this.client);
       const client = this.clientList.filter(
         client => client.id === project.clientId
       )[0];
