@@ -129,7 +129,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import '@/styles/global.scss';
 .header-container {
   display: grid;
   grid-template-areas: 'logo . . . addy' 'navigation navigation . . .';

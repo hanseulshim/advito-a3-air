@@ -1,15 +1,11 @@
 <template>
   <div class="projects-container">
     <div class="option-container">
-      <div class="favorite-projects">
+      <div class="favorite-projects section-header">
         {{ favoriteProjectList.length }} favorite projects
       </div>
       <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
-      <el-select
-        v-model="selectedUser"
-        placeholder="Select"
-        filterable
-        clearable
+      <el-select v-model="selectedUser" placeholder="Select" filterable
         ><el-option
           v-for="item in projectManagerList"
           :key="item.email"
@@ -20,19 +16,19 @@
       <i class="fas fa-info project-top-item" />
     </div>
     <FavoriteProjects :favorite-project-list="favoriteProjectList" />
-    <AllProjects :all-project-list="allProjectList" :user="user" />
+    <TotalProjects :total-project-list="totalProjectList" :user="user" />
   </div>
 </template>
 
 <script>
-import AllProjects from './AllProjects.vue';
+import TotalProjects from './TotalProjects.vue';
 import FavoriteProjects from './FavoriteProjects.vue';
 import { GET_PROJECTS, GET_USER, GET_CLIENT } from '@/graphql/queries';
 
 export default {
   name: 'Projects',
   components: {
-    AllProjects,
+    TotalProjects,
     FavoriteProjects
   },
   apollo: {
@@ -54,7 +50,7 @@ export default {
   },
   data: function() {
     return {
-      selectedUser: null,
+      selectedUser: '',
       showInactive: false,
       projectList: [],
       user: null,
@@ -72,9 +68,15 @@ export default {
       });
     },
     favoriteProjectList: function() {
-      return this.filteredProjectList.filter(project => project.favorite);
+      return this.filteredProjectList.filter(
+        project =>
+          project.favorite &&
+          (project.projectManagerEmail === this.selectedUser ||
+            project.leadAnalystEmail === this.selectedUser ||
+            project.dataSpecialistEmail === this.selectedUser)
+      );
     },
-    allProjectList: function() {
+    totalProjectList: function() {
       return this.filteredProjectList.filter(project => !project.favorite);
     },
     projectManagerList: function() {
@@ -92,7 +94,11 @@ export default {
               ? 'User: Me'
               : projectManager.projectManagerName,
           email: projectManager.projectManagerEmail
-        }));
+        }))
+        .sort((a, b) => {
+          if (a.name === 'User: Me') return -1;
+          return a.name.localeCompare(b.name);
+        });
     }
   },
   mounted() {
@@ -102,7 +108,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/styles/variables.scss';
+@import '@/styles/global.scss';
 .projects-container {
   background: $white;
   padding: 2em;
@@ -120,9 +126,6 @@ export default {
 }
 .favorite-projects {
   justify-self: flex-start;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: $black;
 }
 .el-checkbox {
   margin: 0;

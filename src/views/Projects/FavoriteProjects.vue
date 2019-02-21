@@ -6,7 +6,7 @@
       class="favorite-project"
     >
       <div class="favorite-project-main">
-        <div class="title-row">
+        <div class="title-row title">
           <span>{{ project.clientName }} {{ project.name }}</span>
           <i class="fas fa-times"></i>
         </div>
@@ -33,12 +33,16 @@
           <span>Lead Analyst</span>
           <span>{{ project.leadAnalystName }}</span>
         </div>
+        <div class="value-row">
+          <span>Data Specialist</span>
+          <span>{{ project.dataSpecialistName }}</span>
+        </div>
         <div class="description">
           {{ project.description }}
         </div>
       </div>
       <div class="favorite-project-footer">
-        <span>Footer</span>
+        <span>{{ project.progress }}</span>
         <div>
           <i class="fas fa-pencil-alt"></i>
           <i class="fas fa-trash-alt"></i>
@@ -67,10 +71,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import '@/styles/global.scss';
 .favorite-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(3, 1fr);
   column-gap: 1em;
   row-gap: 1em;
   margin-top: 2em;
@@ -91,11 +95,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  font-weight: 700;
-  color: #000;
   padding-bottom: 1em;
   border-bottom: 1px solid $gray-nurse;
-  font-size: 1rem;
 }
 .fa-times {
   color: $tree-poppy;

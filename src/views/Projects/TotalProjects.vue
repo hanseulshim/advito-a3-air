@@ -1,13 +1,14 @@
 <template>
   <div class="all-projects-container">
-    <div class="all-projects-title">
-      all projects ({{ allProjectList.length }})
+    <div class="all-projects-title section-header">
+      {{ totalProjectList.length }} total projects
     </div>
     <el-table
-      :data="allProjectList"
-      :default-sort="{ prop: 'name', order: 'ascending' }"
+      :data="totalProjectList"
+      :default-sort="{ prop: 'projectManagerEmail', order: 'ascending' }"
       style="width: 100%"
       header-cell-class-name="table-header-cell"
+      max-height="750"
     >
       <el-table-column prop="name" label="Project Name" sortable width="180" />
       <el-table-column
@@ -22,12 +23,17 @@
       <el-table-column
         width="100"
         label="My Role"
+        prop="projectManagerEmail"
         sortable
         :sort-method="sortByRole"
       >
         <template slot-scope="scope">
           <i
-            v-if="scope.row.projectManagerEmail === user.email"
+            v-if="
+              scope.row.projectManagerEmail === user.email ||
+                scope.row.leadAnalystEmail === user.email ||
+                scope.row.dataSpecialistEmail === user.email
+            "
             class="fas fa-user"
           ></i>
         </template>
@@ -54,7 +60,7 @@ import { formatDate } from '@/helper';
 export default {
   name: 'AllProjects',
   props: {
-    allProjectList: {
+    totalProjectList: {
       type: Array,
       required: true
     },
@@ -70,23 +76,25 @@ export default {
       )}`;
     },
     sortByRole(a) {
-      if (a.projectManagerEmail === this.user.email) return -1;
+      if (
+        a.projectManagerEmail === this.user.email ||
+        a.leadAnalystEmail === this.user.email ||
+        a.dataSpecialistEmail === this.user.email
+      )
+        return -1;
       return 1;
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-@import '@/styles/variables.scss';
+<style lang="scss">
+@import '@/styles/global.scss';
 .all-projects-container {
   margin-top: 3em;
 }
 
 .all-projects-title {
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #000;
   margin-bottom: 1em;
 }
 
@@ -97,6 +105,7 @@ export default {
 }
 
 .el-table {
+  color: initial;
   .table-header-cell {
     background-color: $gray-nurse;
     color: $black;

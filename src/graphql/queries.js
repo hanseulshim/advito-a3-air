@@ -33,6 +33,7 @@ export const GET_PROJECTS = gql`
       dataSpecialistId
       dataSpecialistName
       dataSpecialistEmail
+      progress
       favorite
     }
   }

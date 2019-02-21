@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import '@/styles/global.scss';
 .sidebar-icon {
   position: absolute;
   font-size: 1.3em;

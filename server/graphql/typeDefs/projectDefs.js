@@ -23,6 +23,7 @@ type Project {
   dataSpecialistId: Int,
   dataSpecialistName: String,
   dataSpecialistEmail: String,
+  progress: String,
   favorite: Boolean,
 }
 `;

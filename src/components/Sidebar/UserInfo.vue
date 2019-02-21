@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import '@/styles/global.scss';
 .user-info-container {
   display: flex;
   flex-direction: column;
