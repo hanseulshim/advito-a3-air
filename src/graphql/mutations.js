@@ -5,3 +5,9 @@ export const UPDATE_CLIENT = gql`
     updateClient(id: $id, name: $name) @client
   }
 `;
+
+export const UPDATE_PROJECT = gql`
+  mutation updateProject($id: Int!, $name: String!) {
+    updateProject(id: $id, name: $name) @client
+  }
+`;

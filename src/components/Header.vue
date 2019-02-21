@@ -3,7 +3,7 @@
     <img class="logo" alt="Vue logo" src="@/assets/logo.png" />
     <el-select
       :value="client.id"
-      placeholder="Select"
+      placeholder="Select Client"
       filterable
       clearable
       @change="updateClient"
@@ -17,14 +17,15 @@
       </el-option>
     </el-select>
     <el-select
-      v-if="selected"
-      v-model="selected"
-      placeholder="Select"
+      v-if="client.id"
+      :value="project.id"
+      placeholder="Select Project"
       filterable
       clearable
+      @change="updateProject"
     >
       <el-option
-        v-for="item in clientList"
+        v-for="item in projectList"
         :key="item.value"
         :label="item.name"
         :value="item.id"
@@ -44,8 +45,14 @@
 </template>
 
 <script>
-import { GET_CLIENTS, GET_CLIENT, GET_USER } from '@/graphql/queries';
-import { UPDATE_CLIENT } from '@/graphql/mutations';
+import {
+  GET_CLIENTS,
+  GET_PROJECTS,
+  GET_CLIENT,
+  GET_PROJECT,
+  GET_USER
+} from '@/graphql/queries';
+import { UPDATE_CLIENT, UPDATE_PROJECT } from '@/graphql/mutations';
 
 export default {
   name: 'Header',
@@ -53,30 +60,44 @@ export default {
     user: {
       query: GET_USER
     },
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
     clientList: {
       query: GET_CLIENTS,
       variables() {
         return {
-          clientId: this.user.clientId,
+          clientId: this.client.id,
           sessionToken: this.user.sessionToken
         };
       }
     },
-    client: {
-      query: GET_CLIENT
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id,
+          sessionToken: this.user.sessionToken
+        };
+      }
     }
   },
   data: function() {
     return {
       selected: null,
       clientList: [],
+      projectList: [],
+      project: null,
       client: null,
       user: null
     };
   },
   methods: {
     updateClient(id) {
-      const variables = { id: null, name: null };
+      const variables = {};
       if (id) {
         const client = this.clientList.filter(client => client.id === id)[0];
         variables.id = id;
@@ -84,6 +105,20 @@ export default {
       }
       this.$apollo.mutate({
         mutation: UPDATE_CLIENT,
+        variables
+      });
+    },
+    updateProject(id) {
+      const variables = {};
+      if (id) {
+        const project = this.projectList.filter(
+          project => project.id === id
+        )[0];
+        variables.id = id;
+        variables.name = project.name;
+      }
+      this.$apollo.mutate({
+        mutation: UPDATE_PROJECT,
         variables
       });
     }

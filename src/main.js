@@ -24,17 +24,34 @@ const apolloClient = new ApolloClient({
         id: null,
         name: null,
         __typename: 'Client'
+      },
+      project: {
+        id: null,
+        name: null,
+        __typename: 'Project'
       }
     },
     resolvers: {
       Mutation: {
-        updateClient: (_, { id, name }, { cache }) => {
+        updateClient: (_, { id = null, name = null }, { cache }) => {
           cache.writeData({
             data: {
               client: {
                 id,
                 name,
                 __typename: 'Client'
+              }
+            }
+          });
+          return null;
+        },
+        updateProject: (_, { id = null, name = null }, { cache }) => {
+          cache.writeData({
+            data: {
+              project: {
+                id,
+                name,
+                __typename: 'Project'
               }
             }
           });

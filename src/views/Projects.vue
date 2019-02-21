@@ -49,16 +49,24 @@
 </template>
 
 <script>
-import { GET_PROJECTS } from '@/graphql/queries';
+import { GET_PROJECTS, GET_USER, GET_CLIENT } from '@/graphql/queries';
 
 export default {
   name: 'Projects',
   apollo: {
+    user: {
+      query: GET_USER
+    },
+    client: {
+      query: GET_CLIENT
+    },
     projectList: {
       query: GET_PROJECTS,
-      variables: {
-        clientId: 1,
-        sessionToken: 'egpSjxgHbWdGY5DySz6gcw=='
+      variables() {
+        return {
+          clientId: this.client.id,
+          sessionToken: this.user.sessionToken
+        };
       }
     }
   },
@@ -66,15 +74,20 @@ export default {
     return {
       selected: null,
       showInactive: false,
-      projectList: []
+      projectList: [],
+      user: null,
+      client: null
     };
   },
   computed: {
+    filteredProjects: function() {
+      return this.projectList.slice();
+    },
     favoriteProjects: function() {
-      return this.projectList.filter(project => project.favorite);
+      return this.filteredProjects.filter(project => project.favorite);
     },
     allProjects: function() {
-      return this.projectList.filter(project => !project.favorite);
+      return this.filteredProjects.filter(project => !project.favorite);
     }
   }
 };
