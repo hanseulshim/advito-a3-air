@@ -39,7 +39,7 @@
     <div class="navigation">
       <span class="back-to-console link">« Back to Console</span>
       |
-      <span class="link">Air Program Manager</span>
+      <span class="link" @click="updateClient()">Air Program Manager</span>
     </div>
   </div>
 </template>
@@ -70,7 +70,6 @@ export default {
       query: GET_CLIENTS,
       variables() {
         return {
-          clientId: this.client.id,
           sessionToken: this.user.sessionToken
         };
       }
@@ -99,11 +98,11 @@ export default {
     updateClient(id) {
       const variables = {};
       if (id) {
-        const client = this.clientList.filter(client => client.id === id)[0];
-        variables.id = id;
-        variables.name = client.name;
-      } else {
-        this.updateProject(null);
+        variables.client = this.clientList.filter(
+          client => client.id === id
+        )[0];
+      } else if (this.project.id) {
+        this.updateProject();
       }
       this.$apollo.mutate({
         mutation: UPDATE_CLIENT,
@@ -113,11 +112,9 @@ export default {
     updateProject(id) {
       const variables = {};
       if (id) {
-        const project = this.projectList.filter(
+        variables.project = this.projectList.filter(
           project => project.id === id
         )[0];
-        variables.id = id;
-        variables.name = project.name;
       }
       this.$apollo.mutate({
         mutation: UPDATE_PROJECT,

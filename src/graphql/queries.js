@@ -63,7 +63,28 @@ export const GET_PROJECT = gql`
   {
     project @client {
       id
+      clientId
+      clientName
       name
+      description
+      isDeleted
+      projectTypeId
+      projectType
+      savingsTypeId
+      savingsType
+      effectiveFrom
+      effectiveTo
+      projectManagerId
+      projectManagerName
+      projectManagerEmail
+      leadAnalystId
+      leadAnalystName
+      leadAnalystEmail
+      dataSpecialistId
+      dataSpecialistName
+      dataSpecialistEmail
+      progress
+      favorite
     }
   }
 `;

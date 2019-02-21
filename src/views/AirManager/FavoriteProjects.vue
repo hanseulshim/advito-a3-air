@@ -4,6 +4,7 @@
       v-for="project in favoriteProjectList"
       :key="project.id"
       class="favorite-project"
+      @click="updateProject(project)"
     >
       <div class="favorite-project-main">
         <div class="title-row title">
@@ -54,17 +55,52 @@
 
 <script>
 import { formatDate } from '@/helper';
+import { UPDATE_PROJECT, UPDATE_CLIENT } from '@/graphql/mutations';
+import { GET_CLIENTS, GET_USER } from '@/graphql/queries';
 export default {
   name: 'FavoriteProjects',
+  apollo: {
+    user: {
+      query: GET_USER
+    },
+    clientList: {
+      query: GET_CLIENTS,
+      variables() {
+        return {
+          sessionToken: this.user.sessionToken
+        };
+      }
+    }
+  },
   props: {
     favoriteProjectList: {
       type: Array,
       required: true
     }
   },
+  data() {
+    return {
+      clientList: null,
+      user: null
+    };
+  },
   methods: {
     formatDate(date) {
       return formatDate(date);
+    },
+    updateProject(project) {
+      console.log('client', this.client);
+      const client = this.clientList.filter(
+        client => client.id === project.clientId
+      )[0];
+      this.$apollo.mutate({
+        mutation: UPDATE_CLIENT,
+        variables: { client }
+      });
+      this.$apollo.mutate({
+        mutation: UPDATE_PROJECT,
+        variables: { project }
+      });
     }
   }
 };

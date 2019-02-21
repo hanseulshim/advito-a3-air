@@ -26,7 +26,7 @@ import FavoriteProjects from './FavoriteProjects.vue';
 import { GET_PROJECTS, GET_USER, GET_CLIENT } from '@/graphql/queries';
 
 export default {
-  name: 'Projects',
+  name: 'AirManager',
   components: {
     TotalProjects,
     FavoriteProjects
