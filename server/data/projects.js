@@ -21,7 +21,7 @@ exports.projectList = [
     dataSpecialistId: 3,
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
-    favorite: false
+    favorite: true
   },
   {
     id: 2,
@@ -69,7 +69,7 @@ exports.projectList = [
     dataSpecialistId: 3,
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
-    favorite: false
+    favorite: true
   },
   {
     id: 4,
@@ -93,7 +93,7 @@ exports.projectList = [
     dataSpecialistId: 4,
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
-    favorite: false
+    favorite: true
   },
   {
     id: 5,
@@ -381,7 +381,7 @@ exports.projectList = [
     dataSpecialistId: 1,
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
-    favorite: false
+    favorite: true
   },
   {
     id: 17,
