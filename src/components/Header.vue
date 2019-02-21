@@ -102,6 +102,8 @@ export default {
         const client = this.clientList.filter(client => client.id === id)[0];
         variables.id = id;
         variables.name = client.name;
+      } else {
+        this.updateProject(null);
       }
       this.$apollo.mutate({
         mutation: UPDATE_CLIENT,

@@ -12,6 +12,7 @@ button {
   padding: 5px;
   font-size: .8em;
   cursor: pointer;
+  background: transparent;
   &:hover {
     background: $tree-poppy;
     color: $white;
