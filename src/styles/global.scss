@@ -1,13 +1,13 @@
 @import './variables.scss';
 @import './typography.scss';
 
-button {
+.button {
   color: $tree-poppy;
   border: 1px solid $tree-poppy;
   border-radius: 15px;
   width: 150px;
   padding: 5px;
-  font-size: .8em;
+  font-size: 0.8em;
   cursor: pointer;
   background: transparent;
   &:hover {
@@ -32,4 +32,15 @@ button {
     background: $tree-poppy;
     color: $white;
   }
+}
+
+.modal-container {
+  border: 1px solid $gray-nurse;
+  padding: 2em;
+  background: $white;
+  border-radius: 10px;
+}
+
+.v--modal-overlay {
+  background:rgba(255,255,255, 0.5) !important;
 }

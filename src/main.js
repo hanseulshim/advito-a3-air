@@ -5,6 +5,7 @@ import App from './App.vue';
 import router from './router';
 import ApolloClient from 'apollo-boost';
 import VueApollo from 'vue-apollo';
+import VModal from 'vue-js-modal';
 import 'element-ui/lib/theme-chalk/index.css';
 import defaults from './graphql/defaults';
 import resolvers from './graphql/resolvers';
@@ -22,6 +23,7 @@ const apolloProvider = new VueApollo({
 
 Vue.use(VueApollo);
 Vue.use(ElementUI, { locale });
+Vue.use(VModal);
 
 Vue.config.productionTip = false;
 

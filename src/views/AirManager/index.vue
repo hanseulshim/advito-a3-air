@@ -12,24 +12,27 @@
           :label="item.name"
           :value="item.email"
       /></el-select>
-      <button>+ NEW PROJECT</button>
+      <button class="button" @click="showNewProject">+ NEW PROJECT</button>
       <i class="fas fa-info project-top-item" />
     </div>
     <FavoriteProjects :favorite-project-list="favoriteProjectList" />
     <TotalProjects :total-project-list="totalProjectList" :user="user" />
+    <NewProjectModal />
   </div>
 </template>
 
 <script>
 import TotalProjects from './TotalProjects.vue';
 import FavoriteProjects from './FavoriteProjects.vue';
+import NewProjectModal from './NewProjectModal.vue';
 import { GET_PROJECTS, GET_USER, GET_CLIENT } from '@/graphql/queries';
 
 export default {
   name: 'AirManager',
   components: {
     TotalProjects,
-    FavoriteProjects
+    FavoriteProjects,
+    NewProjectModal
   },
   apollo: {
     user: {
@@ -103,6 +106,11 @@ export default {
   },
   mounted() {
     this.selectedUser = this.user.email;
+  },
+  methods: {
+    showNewProject() {
+      this.$modal.show('new-project');
+    }
   }
 };
 </script>
