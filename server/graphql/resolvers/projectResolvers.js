@@ -3,6 +3,7 @@ const { fakeInvoke } = require('../helper');
 const { projectList } = require('../../data/projects');
 const { clientList } = require('../../data/clients');
 const { projectData } = require('../../data/projectData');
+const { getProjectName } = require('../helper');
 
 exports.projectResolvers = {
   projectList: (_, payload) => {
@@ -18,22 +19,13 @@ exports.projectResolvers = {
 
 exports.projectMutations = {
   addProject: (_, payload) => {
-    if (
-      payload.client !== 'Home Depot' &&
-      payload.client !== 'DuPont' &&
-      payload.client !== 'Nestle' &&
-      payload.client !== 'Optimus' &&
-      payload.client !== 'Pfizer'
-    )
-      throw new ApolloError(
-        'Please enter one of the following valid clients: Home Depot, DuPont, Nestle, Optimus, Pfizer',
-        400
-      );
-
     const maxId = Math.max(...projectList.map(project => project.id)) + 1;
     const client = clientList.filter(
-      client => client.name === payload.client
+      client => client.id === payload.clientId
     )[0];
+    if (!client) {
+      throw new ApolloError('Client not found', 400);
+    }
     const projectType = projectData.projectTypeList[payload.projectTypeId - 1];
     const savingsType = projectData.savingsTypeList[payload.savingsTypeId - 1];
     const projectManager =
@@ -45,8 +37,13 @@ exports.projectMutations = {
       id: maxId,
       clientId: client.id,
       clientName: client.name,
-      name: payload.division,
+      name: getProjectName({
+        ...payload,
+        projectType: projectType.name,
+        clientName: client.name
+      }),
       description: payload.description,
+      division: payload.division,
       isDeleted: false,
       projectTypeId: projectType.id,
       projectType: projectType.name,
@@ -73,38 +70,23 @@ exports.projectMutations = {
     };
   },
   editProject: (_, payload) => {
-    if (
-      payload.client !== 'Home Depot' &&
-      payload.client !== 'DuPont' &&
-      payload.client !== 'Nestle' &&
-      payload.client !== 'Optimus' &&
-      payload.client !== 'Pfizer'
-    )
-      throw new ApolloError(
-        'Please enter one of the following valid clients: Home Depot, DuPont, Nestle, Optimus, Pfizer',
-        400
-      );
     const project = projectList.filter(project => project.id === payload.id)[0];
     if (!project) {
       throw new ApolloError('Project not found', 400);
     }
-    const client = clientList.filter(
-      client => client.name === payload.client
-    )[0];
-    const projectType = projectData.projectTypeList[payload.projectTypeId - 1];
     const savingsType = projectData.savingsTypeList[payload.savingsTypeId - 1];
     const projectManager =
       projectData.projectManagerList[payload.projectManagerId - 1];
     const leadAnalyst = projectData.leadAnalystList[payload.leadAnalystId - 1];
     const dataSpecialist =
       projectData.dataSpecialistList[payload.dataSpecialistId - 1];
-
-    project.clientId = client.id;
-    project.clientName = client.name;
-    project.name = payload.division;
+    project.name = getProjectName({
+      ...payload,
+      clientName: project.clientName,
+      projectType: project.projectType
+    });
     project.description = payload.description;
-    project.projectTypeId = projectType.id;
-    project.projectType = projectType.name;
+    project.division = payload.division;
     project.savingsTypeId = savingsType.id;
     project.savingsType = savingsType.name;
     project.effectiveFrom = payload.effectiveFrom;

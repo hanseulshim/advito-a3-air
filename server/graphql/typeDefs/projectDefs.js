@@ -7,6 +7,7 @@ type Project {
   clientName: String,
   name: String,
   description: String,
+  division: String,
   isDeleted: Boolean,
   projectTypeId: Int,
   projectType: String,
@@ -38,7 +39,7 @@ projectList(clientId: Int, sessionToken: String!): [Project]
 exports.projectMutation = `
 addProject(
   sessionToken: String!
-  client: String!,
+  clientId: Int!,
   division: String!,
   projectTypeId: Int!,
   savingsTypeId: Int!,
@@ -52,9 +53,7 @@ addProject(
 editProject(
   sessionToken: String!
   id: Int!
-  client: String!,
   division: String!,
-  projectTypeId: Int!,
   savingsTypeId: Int!,
   effectiveFrom: Date!,
   effectiveTo: Date!,
