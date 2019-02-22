@@ -15,7 +15,7 @@ export const UPDATE_PROJECT = gql`
 export const ADD_PROJECT = gql`
   mutation addProject(
     $sessionToken: String!
-    $client: String!
+    $clientId: Int!
     $division: String!
     $projectTypeId: Int!
     $savingsTypeId: Int!
@@ -28,7 +28,7 @@ export const ADD_PROJECT = gql`
   ) {
     addProject(
       sessionToken: $sessionToken
-      client: $client
+      clientId: $clientId
       division: $division
       projectTypeId: $projectTypeId
       savingsTypeId: $savingsTypeId
@@ -49,9 +49,7 @@ export const EDIT_PROJECT = gql`
   mutation editProject(
     $sessionToken: String!
     $id: Int!
-    $client: String!
     $division: String!
-    $projectTypeId: Int!
     $savingsTypeId: Int!
     $effectiveFrom: Date!
     $effectiveTo: Date!
@@ -63,9 +61,7 @@ export const EDIT_PROJECT = gql`
     editProject(
       sessionToken: $sessionToken
       id: $id
-      client: $client
       division: $division
-      projectTypeId: $projectTypeId
       savingsTypeId: $savingsTypeId
       effectiveFrom: $effectiveFrom
       effectiveTo: $effectiveTo
