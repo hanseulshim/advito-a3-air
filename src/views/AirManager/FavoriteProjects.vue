@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <DeleteProjectModal :user="user" :apollo="apollo" />
+    <DeleteProjectModal :apollo="apollo" />
   </div>
 </template>
 
@@ -76,14 +76,6 @@ export default {
       type: Array,
       required: true
     },
-    clientList: {
-      type: Array,
-      required: true
-    },
-    user: {
-      type: Object,
-      required: true
-    },
     apollo: {
       type: Object,
       required: true
@@ -94,7 +86,7 @@ export default {
       return formatDate(date);
     },
     updateProject(project) {
-      const client = this.clientList.filter(
+      const client = this.apollo.vm.clientList.filter(
         client => client.id === project.clientId
       )[0];
       this.apollo.mutate({
@@ -113,7 +105,7 @@ export default {
       this.apollo
         .mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { sessionToken: this.user.sessionToken, id }
+          variables: { sessionToken: this.apollo.vm.user.sessionToken, id }
         })
         .then(() => {
           this.apollo.queries.projectList.refetch();

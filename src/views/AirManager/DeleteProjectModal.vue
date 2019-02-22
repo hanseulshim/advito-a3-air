@@ -32,10 +32,6 @@ export default {
     ErrorModal
   },
   props: {
-    user: {
-      type: Object,
-      required: true
-    },
     apollo: {
       type: Object,
       required: true
@@ -51,7 +47,10 @@ export default {
       this.apollo
         .mutate({
           mutation: DELETE_PROJECT,
-          variables: { sessionToken: this.user.sessionToken, id: this.id }
+          variables: {
+            sessionToken: this.apollo.vm.user.sessionToken,
+            id: this.id
+          }
         })
         .then(() => {
           this.apollo.queries.projectList.refetch();

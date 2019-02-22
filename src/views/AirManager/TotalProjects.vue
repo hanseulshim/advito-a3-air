@@ -34,9 +34,9 @@
         <template slot-scope="scope">
           <i
             v-if="
-              scope.row.projectManagerEmail === user.email ||
-                scope.row.leadAnalystEmail === user.email ||
-                scope.row.dataSpecialistEmail === user.email
+              scope.row.projectManagerEmail === apollo.vm.user.email ||
+                scope.row.leadAnalystEmail === apollo.vm.user.email ||
+                scope.row.dataSpecialistEmail === apollo.vm.user.email
             "
             class="fas fa-user"
           ></i>
@@ -62,7 +62,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <DeleteProjectModal :user="user" :apollo="apollo" />
+    <DeleteProjectModal :apollo="apollo" />
   </div>
 </template>
 
@@ -71,17 +71,13 @@ import DeleteProjectModal from './DeleteProjectModal';
 import { formatDate } from '@/helper';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
 export default {
-  name: 'AllProjects',
+  name: 'TotalProjects',
   components: {
     DeleteProjectModal
   },
   props: {
     totalProjectList: {
       type: Array,
-      required: true
-    },
-    user: {
-      type: Object,
       required: true
     },
     apollo: {
@@ -97,9 +93,9 @@ export default {
     },
     sortByRole(a) {
       if (
-        a.projectManagerEmail === this.user.email ||
-        a.leadAnalystEmail === this.user.email ||
-        a.dataSpecialistEmail === this.user.email
+        a.projectManagerEmail === this.apollo.vm.user.email ||
+        a.leadAnalystEmail === this.apollo.vm.user.email ||
+        a.dataSpecialistEmail === this.apollo.vm.user.email
       )
         return -1;
       return 1;
@@ -111,7 +107,7 @@ export default {
       this.apollo
         .mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { sessionToken: this.user.sessionToken, id }
+          variables: { sessionToken: this.apollo.vm.user.sessionToken, id }
         })
         .then(() => {
           this.apollo.queries.projectList.refetch();

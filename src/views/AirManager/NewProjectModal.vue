@@ -116,10 +116,6 @@ export default {
     ErrorModal
   },
   props: {
-    user: {
-      type: Object,
-      required: true
-    },
     apollo: {
       type: Object,
       required: true
@@ -172,7 +168,7 @@ export default {
         .mutate({
           mutation: ADD_PROJECT,
           variables: {
-            sessionToken: this.user.sessionToken,
+            sessionToken: this.apollo.vm.user.sessionToken,
             client: this.clientInput,
             division: this.division,
             projectTypeId: this.projectTypeId,

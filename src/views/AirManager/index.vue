@@ -17,16 +17,10 @@
     </div>
     <FavoriteProjects
       :favorite-project-list="favoriteProjectList"
-      :user="user"
-      :client-list="clientList"
       :apollo="$apollo"
     />
-    <TotalProjects
-      :total-project-list="totalProjectList"
-      :user="user"
-      :apollo="$apollo"
-    />
-    <NewProjectModal :user="user" :apollo="$apollo" />
+    <TotalProjects :total-project-list="totalProjectList" :apollo="$apollo" />
+    <NewProjectModal :apollo="$apollo" />
   </div>
 </template>
 
