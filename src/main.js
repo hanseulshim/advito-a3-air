@@ -12,6 +12,7 @@ import resolvers from './graphql/resolvers';
 
 const apolloClient = new ApolloClient({
   uri: 'http://localhost:8085/graphql',
+  // uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
   clientState: {
     defaults,
     resolvers

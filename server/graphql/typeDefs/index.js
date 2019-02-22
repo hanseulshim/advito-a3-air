@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server-lambda');
-const { projectDefs, projectQuery } = require('./projectDefs');
+const { projectDefs, projectQuery, projectMutation } = require('./projectDefs');
 const { clientDefs, clientQuery } = require('./clientDefs');
 
 exports.typeDefs = gql`
@@ -8,5 +8,8 @@ exports.typeDefs = gql`
   type Query {
     ${projectQuery}
     ${clientQuery}
+  }
+  type Mutation {
+    ${projectMutation}
   }
 `;

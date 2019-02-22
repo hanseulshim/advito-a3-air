@@ -10,7 +10,11 @@
       header-cell-class-name="table-header-cell"
       max-height="750"
     >
-      <el-table-column prop="name" label="Project Name" sortable width="180" />
+      <el-table-column prop="name" label="Project Name" sortable width="180">
+        <template slot-scope="scope">
+          <div>{{ scope.row.clientName }} {{ scope.row.name }}</div>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="effectiveFrom"
         label="Project Date Range"

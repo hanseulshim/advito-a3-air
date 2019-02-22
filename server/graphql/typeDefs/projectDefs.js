@@ -26,7 +26,27 @@ type Project {
   progress: String,
   favorite: Boolean,
 }
+
+type Success {
+  success: Boolean,
+  message: String
+}
 `;
 exports.projectQuery = `
 projectList(clientId: Int, sessionToken: String!): [Project]
+`;
+exports.projectMutation = `
+addProject(
+  sessionToken: String!
+  client: String!,
+  division: String!,
+  projectTypeId: Int!,
+  savingsTypeId: Int!,
+  effectiveFrom: String!,
+  effectiveTo: String!,
+  description: String,
+  projectManagerId: Int!,
+  leadAnalystId: Int!,
+  dataSpecialistId: Int!,
+): Success
 `;

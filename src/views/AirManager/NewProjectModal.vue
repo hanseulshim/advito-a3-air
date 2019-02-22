@@ -6,7 +6,7 @@
     </div>
     <div class="value-row">
       <div>Client *</div>
-      <el-input v-model="client" class="input"></el-input>
+      <el-input v-model="clientInput" class="input"></el-input>
     </div>
     <div class="value-row">
       <div>Division *</div>
@@ -44,14 +44,12 @@
           class="date-container"
           type="date"
           format="dd MMM yyyy"
-          value-format="dd MMM yyyy"
         />
         <el-date-picker
           v-model="effectiveTo"
           class="date-container"
           type="date"
           format="dd MMM yyyy"
-          value-format="dd MMM yyyy"
         />
       </div>
     </div>
@@ -96,23 +94,55 @@
       </el-select>
     </div>
     <div class="save-container">
-      <button class="button">SAVE</button>
+      <button class="button" @click="addProject">SAVE</button>
+      <SuccessModal
+        :hide-modal="hideModal"
+        message="Project successfully created."
+      />
+      <ErrorModal message="Failed to create project. Please try again" />
     </div>
   </modal>
 </template>
 
 <script>
+import SuccessModal from '@/components/Modals/SuccessModal.vue';
+import ErrorModal from '@/components/Modals/ErrorModal.vue';
+import { GET_PROJECTS, GET_CLIENT, GET_USER } from '@/graphql/queries';
+import { ADD_PROJECT } from '@/graphql/mutations';
 import projectData from '@/data/projectData';
 export default {
   name: 'NewProjectModal',
+  components: {
+    SuccessModal,
+    ErrorModal
+  },
+  apollo: {
+    user: {
+      query: GET_USER
+    },
+    client: {
+      query: GET_CLIENT
+    },
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id,
+          sessionToken: this.user.sessionToken
+        };
+      }
+    }
+  },
   data() {
     return {
+      clientInput: null,
       client: null,
       division: null,
       projectTypeId: null,
       savingsTypeId: null,
-      effectiveFrom: '01 Jan 2018',
-      effectiveTo: '31 Dec 2018',
+      effectiveFrom:
+        'Mon Jan 01 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      effectiveTo: 'Mon Dec 31 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
       description: null,
       projectManagerId: null,
       leadAnalystId: null,
@@ -144,6 +174,32 @@ export default {
   methods: {
     hideModal() {
       this.$modal.hide('new-project');
+    },
+    addProject() {
+      this.$apollo
+        .mutate({
+          mutation: ADD_PROJECT,
+          variables: {
+            sessionToken: this.user.sessionToken,
+            client: this.clientInput,
+            division: this.division,
+            projectTypeId: this.projectTypeId,
+            savingsTypeId: this.savingsTypeId,
+            effectiveFrom: this.effectiveFrom,
+            effectiveTo: this.effectiveTo,
+            description: this.description,
+            projectManagerId: this.projectManagerId,
+            leadAnalystId: this.leadAnalystId,
+            dataSpecialistId: this.dataSpecialistId
+          }
+        })
+        .then(() => {
+          this.$apollo.queries.projectList.refetch();
+          this.$modal.show('success');
+        })
+        .catch(() => {
+          this.$modal.show('error');
+        });
     }
   }
 };
