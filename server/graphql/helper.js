@@ -80,3 +80,13 @@ exports.generateResponse = data => ({
     apidataset: data
   }
 });
+
+exports.getProjectName = project => {
+  const effectiveFromYear = new Date(project.effectiveFrom).getFullYear();
+  const effectiveToYear = new Date(project.effectiveTo).getFullYear();
+  const yearRange =
+    effectiveFromYear !== effectiveToYear
+      ? `${effectiveFromYear} - ${effectiveToYear.toString().substr(-2)}`
+      : effectiveFromYear;
+  return `${project.clientName} ${yearRange} ${project.projectType}`;
+};
