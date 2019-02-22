@@ -43,8 +43,11 @@
         </template>
       </el-table-column>
       <el-table-column prop="favorite" label="Favorite" width="75">
-        <template>
-          <i class="far fa-star"></i>
+        <template slot-scope="scope">
+          <i
+            class="far fa-star"
+            @click="toggleFavoriteProject(scope.row.id)"
+          ></i>
         </template>
       </el-table-column>
       <el-table-column width="55" label="Edit">
@@ -59,13 +62,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <DeleteProjectModal />
+    <DeleteProjectModal :user="user" :apollo="apollo" />
   </div>
 </template>
 
 <script>
 import DeleteProjectModal from './DeleteProjectModal';
 import { formatDate } from '@/helper';
+import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
 export default {
   name: 'AllProjects',
   components: {
@@ -77,6 +81,10 @@ export default {
       required: true
     },
     user: {
+      type: Object,
+      required: true
+    },
+    apollo: {
       type: Object,
       required: true
     }
@@ -98,6 +106,16 @@ export default {
     },
     deleteProject(id) {
       this.$modal.show('delete', { id });
+    },
+    toggleFavoriteProject(id) {
+      this.apollo
+        .mutate({
+          mutation: TOGGLE_FAVORITE_PROJECT,
+          variables: { sessionToken: this.user.sessionToken, id }
+        })
+        .then(() => {
+          this.apollo.queries.projectList.refetch();
+        });
     }
   }
 };

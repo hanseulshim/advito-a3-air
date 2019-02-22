@@ -15,9 +15,18 @@
       <button class="button" @click="showNewProject">+ NEW PROJECT</button>
       <i class="fas fa-info project-top-item" />
     </div>
-    <FavoriteProjects :favorite-project-list="favoriteProjectList" />
-    <TotalProjects :total-project-list="totalProjectList" :user="user" />
-    <NewProjectModal />
+    <FavoriteProjects
+      :favorite-project-list="favoriteProjectList"
+      :user="user"
+      :client-list="clientList"
+      :apollo="$apollo"
+    />
+    <TotalProjects
+      :total-project-list="totalProjectList"
+      :user="user"
+      :apollo="$apollo"
+    />
+    <NewProjectModal :user="user" :apollo="$apollo" />
   </div>
 </template>
 
@@ -25,7 +34,12 @@
 import TotalProjects from './TotalProjects.vue';
 import FavoriteProjects from './FavoriteProjects.vue';
 import NewProjectModal from './NewProjectModal.vue';
-import { GET_PROJECTS, GET_USER, GET_CLIENT } from '@/graphql/queries';
+import {
+  GET_PROJECTS,
+  GET_USER,
+  GET_CLIENT,
+  GET_CLIENTS
+} from '@/graphql/queries';
 
 export default {
   name: 'AirManager',
@@ -40,6 +54,14 @@ export default {
     },
     client: {
       query: GET_CLIENT
+    },
+    clientList: {
+      query: GET_CLIENTS,
+      variables() {
+        return {
+          sessionToken: this.user.sessionToken
+        };
+      }
     },
     projectList: {
       query: GET_PROJECTS,
@@ -56,6 +78,7 @@ export default {
       selectedUser: '',
       showInactive: false,
       projectList: [],
+      clientList: [],
       user: null,
       client: null
     };

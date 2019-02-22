@@ -107,7 +107,6 @@
 <script>
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
-import { GET_PROJECTS, GET_CLIENT, GET_USER } from '@/graphql/queries';
 import { ADD_PROJECT } from '@/graphql/mutations';
 import projectData from '@/data/projectData';
 export default {
@@ -116,21 +115,14 @@ export default {
     SuccessModal,
     ErrorModal
   },
-  apollo: {
+  props: {
     user: {
-      query: GET_USER
+      type: Object,
+      required: true
     },
-    client: {
-      query: GET_CLIENT
-    },
-    projectList: {
-      query: GET_PROJECTS,
-      variables() {
-        return {
-          clientId: this.client.id,
-          sessionToken: this.user.sessionToken
-        };
-      }
+    apollo: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -176,7 +168,7 @@ export default {
       this.$modal.hide('new-project');
     },
     addProject() {
-      this.$apollo
+      this.apollo
         .mutate({
           mutation: ADD_PROJECT,
           variables: {
@@ -194,7 +186,7 @@ export default {
           }
         })
         .then(() => {
-          this.$apollo.queries.projectList.refetch();
+          this.apollo.queries.projectList.refetch();
           this.$modal.show('success');
         })
         .catch(() => {

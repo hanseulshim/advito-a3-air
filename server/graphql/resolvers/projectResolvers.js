@@ -82,5 +82,16 @@ exports.projectMutations = {
       success: true,
       message: 'Successfully deleted project'
     };
+  },
+  toggleFavoriteProject: (_, payload) => {
+    const project = projectList.filter(project => project.id === payload.id)[0];
+    if (!project) {
+      throw new ApolloError('Project not found', 400);
+    }
+    project.favorite = !project.favorite;
+    return {
+      success: true,
+      message: 'Toggled favorite project'
+    };
   }
 };

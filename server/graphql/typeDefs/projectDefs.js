@@ -53,4 +53,8 @@ deleteProject(
   sessionToken: String!
   id: Int!
 ): Success
+toggleFavoriteProject(
+  sessionToken: String!
+  id: Int!
+): Success
 `;

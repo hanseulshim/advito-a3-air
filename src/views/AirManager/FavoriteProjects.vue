@@ -10,7 +10,10 @@
           <span @click="updateProject(project)"
             >{{ project.clientName }} {{ project.name }}</span
           >
-          <i class="fas fa-times"></i>
+          <i
+            class="fas fa-times"
+            @click="toggleFavoriteProject(project.id)"
+          ></i>
         </div>
         <div class="value-row">
           <span>Processed Date</span>
@@ -51,44 +54,40 @@
         </div>
       </div>
     </div>
-    <DeleteProjectModal />
+    <DeleteProjectModal :user="user" :apollo="apollo" />
   </div>
 </template>
 
 <script>
 import DeleteProjectModal from './DeleteProjectModal';
 import { formatDate } from '@/helper';
-import { UPDATE_PROJECT, UPDATE_CLIENT } from '@/graphql/mutations';
-import { GET_CLIENTS, GET_USER } from '@/graphql/queries';
+import {
+  UPDATE_PROJECT,
+  UPDATE_CLIENT,
+  TOGGLE_FAVORITE_PROJECT
+} from '@/graphql/mutations';
 export default {
   name: 'FavoriteProjects',
   components: {
     DeleteProjectModal
   },
-  apollo: {
-    user: {
-      query: GET_USER
-    },
-    clientList: {
-      query: GET_CLIENTS,
-      variables() {
-        return {
-          sessionToken: this.user.sessionToken
-        };
-      }
-    }
-  },
   props: {
     favoriteProjectList: {
       type: Array,
       required: true
+    },
+    clientList: {
+      type: Array,
+      required: true
+    },
+    user: {
+      type: Object,
+      required: true
+    },
+    apollo: {
+      type: Object,
+      required: true
     }
-  },
-  data() {
-    return {
-      clientList: null,
-      user: null
-    };
   },
   methods: {
     formatDate(date) {
@@ -98,17 +97,27 @@ export default {
       const client = this.clientList.filter(
         client => client.id === project.clientId
       )[0];
-      this.$apollo.mutate({
+      this.apollo.mutate({
         mutation: UPDATE_CLIENT,
         variables: { client }
       });
-      this.$apollo.mutate({
+      this.apollo.mutate({
         mutation: UPDATE_PROJECT,
         variables: { project }
       });
     },
     deleteProject(id) {
       this.$modal.show('delete', { id });
+    },
+    toggleFavoriteProject(id) {
+      this.apollo
+        .mutate({
+          mutation: TOGGLE_FAVORITE_PROJECT,
+          variables: { sessionToken: this.user.sessionToken, id }
+        })
+        .then(() => {
+          this.apollo.queries.projectList.refetch();
+        });
     }
   }
 };

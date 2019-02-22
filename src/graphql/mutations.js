@@ -53,3 +53,12 @@ export const DELETE_PROJECT = gql`
     }
   }
 `;
+
+export const TOGGLE_FAVORITE_PROJECT = gql`
+  mutation toggleFavoriteProject($sessionToken: String!, $id: Int!) {
+    toggleFavoriteProject(sessionToken: $sessionToken, id: $id) {
+      success
+      message
+    }
+  }
+`;
