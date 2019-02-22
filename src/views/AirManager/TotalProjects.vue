@@ -48,21 +48,29 @@
         </template>
       </el-table-column>
       <el-table-column width="55" label="Edit">
-        <template>
+        <template slot-scope="scope">
           <div class="edit-project-container">
             <i class="fas fa-pencil-alt"></i>
-            <i class="fas fa-trash-alt"></i>
+            <i
+              class="fas fa-trash-alt"
+              @click="deleteProject(scope.row.id)"
+            ></i>
           </div>
         </template>
       </el-table-column>
     </el-table>
+    <DeleteProjectModal />
   </div>
 </template>
 
 <script>
+import DeleteProjectModal from './DeleteProjectModal';
 import { formatDate } from '@/helper';
 export default {
   name: 'AllProjects',
+  components: {
+    DeleteProjectModal
+  },
   props: {
     totalProjectList: {
       type: Array,
@@ -87,6 +95,9 @@ export default {
       )
         return -1;
       return 1;
+    },
+    deleteProject(id) {
+      this.$modal.show('delete', { id });
     }
   }
 };

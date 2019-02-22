@@ -9,7 +9,10 @@ exports.projectResolvers = {
     const projectListFiltered = payload.clientId
       ? projectList.filter(project => project.clientId === payload.clientId)
       : projectList;
-    return fakeInvoke(payload, projectListFiltered);
+    return fakeInvoke(
+      payload,
+      projectListFiltered.filter(project => !project.isDeleted)
+    );
   }
 };
 
@@ -67,6 +70,17 @@ exports.projectMutations = {
     return {
       success: true,
       message: 'Successfully added project'
+    };
+  },
+  deleteProject: (_, payload) => {
+    const project = projectList.filter(project => project.id === payload.id)[0];
+    if (!project) {
+      throw new ApolloError('Project not found', 400);
+    }
+    project.isDeleted = true;
+    return {
+      success: true,
+      message: 'Successfully deleted project'
     };
   }
 };

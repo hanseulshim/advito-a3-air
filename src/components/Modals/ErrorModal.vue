@@ -7,7 +7,7 @@
   >
     <div style="text-align: center">{{ message }}</div>
     <div class="close-container">
-      <button class="button" @click="closeModals">CLOSE</button>
+      <button class="button" @click="closeModal">CLOSE</button>
     </div>
   </modal>
 </template>
@@ -22,7 +22,7 @@ export default {
     }
   },
   methods: {
-    closeModals() {
+    closeModal() {
       this.$modal.hide('error');
     }
   }

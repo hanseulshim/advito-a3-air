@@ -95,12 +95,12 @@
     </div>
     <div class="save-container">
       <button class="button" @click="addProject">SAVE</button>
-      <SuccessModal
-        :hide-modal="hideModal"
-        message="Project successfully created."
-      />
-      <ErrorModal message="Failed to create project. Please try again" />
     </div>
+    <SuccessModal
+      :hide-modal="hideModal"
+      message="Project successfully created."
+    />
+    <ErrorModal message="Failed to create project. Please try again" />
   </modal>
 </template>
 

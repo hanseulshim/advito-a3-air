@@ -49,4 +49,8 @@ addProject(
   leadAnalystId: Int!,
   dataSpecialistId: Int!,
 ): Success
+deleteProject(
+  sessionToken: String!
+  id: Int!
+): Success
 `;

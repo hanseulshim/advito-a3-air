@@ -4,11 +4,12 @@
       v-for="project in favoriteProjectList"
       :key="project.id"
       class="favorite-project"
-      @click="updateProject(project)"
     >
       <div class="favorite-project-main">
         <div class="title-row title">
-          <span>{{ project.clientName }} {{ project.name }}</span>
+          <span @click="updateProject(project)"
+            >{{ project.clientName }} {{ project.name }}</span
+          >
           <i class="fas fa-times"></i>
         </div>
         <div class="value-row">
@@ -46,19 +47,24 @@
         <span>{{ project.progress }}</span>
         <div>
           <i class="fas fa-pencil-alt"></i>
-          <i class="fas fa-trash-alt"></i>
+          <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
         </div>
       </div>
     </div>
+    <DeleteProjectModal />
   </div>
 </template>
 
 <script>
+import DeleteProjectModal from './DeleteProjectModal';
 import { formatDate } from '@/helper';
 import { UPDATE_PROJECT, UPDATE_CLIENT } from '@/graphql/mutations';
 import { GET_CLIENTS, GET_USER } from '@/graphql/queries';
 export default {
   name: 'FavoriteProjects',
+  components: {
+    DeleteProjectModal
+  },
   apollo: {
     user: {
       query: GET_USER
@@ -100,6 +106,9 @@ export default {
         mutation: UPDATE_PROJECT,
         variables: { project }
       });
+    },
+    deleteProject(id) {
+      this.$modal.show('delete', { id });
     }
   }
 };
