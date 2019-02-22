@@ -6,7 +6,15 @@
     </div>
     <div class="value-row">
       <div>Client *</div>
-      <el-input v-model="client" class="input"></el-input>
+      <el-select v-model="clientId" class="input">
+        <el-option
+          v-for="item in clientList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        >
+        </el-option>
+      </el-select>
     </div>
     <div class="value-row">
       <div>Division *</div>
@@ -123,7 +131,7 @@ export default {
   },
   data() {
     return {
-      client: null,
+      clientId: null,
       division: null,
       projectTypeId: null,
       savingsTypeId: null,
@@ -151,6 +159,9 @@ export default {
         return savingsTypeList.slice(0, 1);
       }
       return [];
+    },
+    clientList: function() {
+      return this.apollo.vm.clientList.slice();
     }
   },
   watch: {
@@ -168,7 +179,7 @@ export default {
           mutation: ADD_PROJECT,
           variables: {
             sessionToken: this.apollo.vm.user.sessionToken,
-            client: this.client,
+            clientId: this.clientId,
             division: this.division,
             projectTypeId: this.projectTypeId,
             savingsTypeId: this.savingsTypeId,

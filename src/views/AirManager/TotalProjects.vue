@@ -10,9 +10,9 @@
       header-cell-class-name="table-header-cell"
       max-height="750"
     >
-      <el-table-column prop="name" label="Project Name" sortable width="180">
+      <el-table-column prop="name" label="Project Name" sortable width="230">
         <template slot-scope="scope">
-          <div>{{ scope.row.clientName }} {{ scope.row.name }}</div>
+          <div>{{ scope.row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -42,7 +42,7 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column prop="favorite" label="Favorite" width="75">
+      <el-table-column prop="favorite" label="Favorite" width="85">
         <template slot-scope="scope">
           <i
             class="far fa-star"
@@ -144,6 +144,7 @@ export default {
   .table-header-cell {
     background-color: $gray-nurse;
     color: $black;
+    font-weight: 500;
   }
   .edit-project-container {
     display: flex;

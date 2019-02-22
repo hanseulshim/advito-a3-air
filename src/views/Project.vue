@@ -11,7 +11,7 @@
       >
     </div>
     <div class="content-container">
-      <div>{{ project.clientName }} {{ project.name }}</div>
+      <div>{{ project.name }}</div>
       <!-- <router-view></router-view> -->
     </div>
   </div>

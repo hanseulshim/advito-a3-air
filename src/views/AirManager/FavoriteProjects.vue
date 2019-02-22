@@ -7,9 +7,7 @@
     >
       <div class="favorite-project-main">
         <div class="title-row title">
-          <span @click="updateProject(project)"
-            >{{ project.clientName }} {{ project.name }}</span
-          >
+          <span @click="updateProject(project)">{{ project.name }}</span>
           <i
             class="fas fa-times"
             @click="toggleFavoriteProject(project.id)"
@@ -47,11 +45,8 @@
         </div>
       </div>
       <div class="favorite-project-footer">
-        <span>{{ project.progress }}</span>
-        <div>
-          <i class="fas fa-pencil-alt" @click="editProject(project)"></i>
-          <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
-        </div>
+        <i class="fas fa-pencil-alt" @click="editProject(project)"></i>
+        <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
       </div>
     </div>
     <EditProjectModal :apollo="apollo" />
@@ -176,7 +171,7 @@ export default {
   padding: 1em;
   background: $gray-nurse;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   .fa-trash-alt {
     margin-left: 10px;
   }

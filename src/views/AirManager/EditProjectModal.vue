@@ -12,7 +12,7 @@
     </div>
     <div class="value-row">
       <div>Client *</div>
-      <el-input v-model="client" class="input"></el-input>
+      <el-input v-model="client" class="input" disabled></el-input>
     </div>
     <div class="value-row">
       <div>Division *</div>
@@ -20,15 +20,7 @@
     </div>
     <div class="value-row">
       <div>Project Type *</div>
-      <el-select v-model="projectTypeId" class="input">
-        <el-option
-          v-for="item in projectTypeList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        >
-        </el-option>
-      </el-select>
+      <el-input v-model="projectType" disabled class="input"></el-input>
     </div>
     <div class="value-row">
       <div>Savings Type *</div>
@@ -132,6 +124,7 @@ export default {
       client: null,
       id: null,
       division: null,
+      projectType: null,
       projectTypeId: null,
       savingsTypeId: null,
       effectiveFrom: null,
@@ -175,9 +168,7 @@ export default {
           variables: {
             sessionToken: this.apollo.vm.user.sessionToken,
             id: this.id,
-            client: this.client,
             division: this.division,
-            projectTypeId: this.projectTypeId,
             savingsTypeId: this.savingsTypeId,
             effectiveFrom: this.effectiveFrom,
             effectiveTo: this.effectiveTo,
@@ -199,7 +190,8 @@ export default {
       const project = event.params.project;
       this.client = project.clientName;
       this.id = project.id;
-      this.division = project.name;
+      this.division = project.division;
+      this.projectType = project.projectType;
       this.projectTypeId = project.projectTypeId;
       this.savingsTypeId = project.savingsTypeId;
       this.effectiveFrom = project.effectiveFrom;
