@@ -53,7 +53,7 @@
       <el-table-column width="55" label="Edit">
         <template slot-scope="scope">
           <div class="edit-project-container">
-            <i class="fas fa-pencil-alt"></i>
+            <i class="fas fa-pencil-alt" @click="editProject(scope.row)"></i>
             <i
               class="fas fa-trash-alt"
               @click="deleteProject(scope.row.id)"
@@ -62,18 +62,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <EditProjectModal :apollo="apollo" />
     <DeleteProjectModal :apollo="apollo" />
   </div>
 </template>
 
 <script>
 import DeleteProjectModal from './DeleteProjectModal';
+import EditProjectModal from './EditProjectModal';
 import { formatDate } from '@/helper';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
 export default {
   name: 'TotalProjects',
   components: {
-    DeleteProjectModal
+    DeleteProjectModal,
+    EditProjectModal
   },
   props: {
     totalProjectList: {
@@ -99,6 +102,9 @@ export default {
       )
         return -1;
       return 1;
+    },
+    editProject(project) {
+      this.$modal.show('edit-project', { project });
     },
     deleteProject(id) {
       this.$modal.show('delete', { id });

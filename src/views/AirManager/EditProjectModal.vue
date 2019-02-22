@@ -1,7 +1,13 @@
 <template>
-  <modal classes="modal-container" name="new-project" height="auto">
+  <modal
+    classes="modal-container"
+    name="edit-project"
+    height="auto"
+    @before-open="beforeOpen"
+    @before-close="beforeClose"
+  >
     <div class="title-row">
-      <div class="section-header">new project</div>
+      <div class="section-header">edit project</div>
       <i class="fas fa-times" @click="hideModal"></i>
     </div>
     <div class="value-row">
@@ -107,10 +113,10 @@
 <script>
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
-import { ADD_PROJECT } from '@/graphql/mutations';
+import { EDIT_PROJECT } from '@/graphql/mutations';
 import projectData from '@/data/projectData';
 export default {
-  name: 'NewProjectModal',
+  name: 'EditProjectModal',
   components: {
     SuccessModal,
     ErrorModal
@@ -124,12 +130,12 @@ export default {
   data() {
     return {
       client: null,
+      id: null,
       division: null,
       projectTypeId: null,
       savingsTypeId: null,
-      effectiveFrom:
-        'Mon Jan 01 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
-      effectiveTo: 'Mon Dec 31 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      effectiveFrom: null,
+      effectiveTo: null,
       description: null,
       projectManagerId: null,
       leadAnalystId: null,
@@ -154,20 +160,21 @@ export default {
     }
   },
   watch: {
-    projectTypeId: function() {
-      this.savingsTypeId = null;
+    projectTypeId: function(a, b) {
+      if (a && b) this.savingsTypeId = null;
     }
   },
   methods: {
     hideModal() {
-      this.$modal.hide('new-project');
+      this.$modal.hide('edit-project');
     },
     addProject() {
       this.apollo
         .mutate({
-          mutation: ADD_PROJECT,
+          mutation: EDIT_PROJECT,
           variables: {
             sessionToken: this.apollo.vm.user.sessionToken,
+            id: this.id,
             client: this.client,
             division: this.division,
             projectTypeId: this.projectTypeId,
@@ -187,6 +194,23 @@ export default {
         .catch(() => {
           this.$modal.show('error');
         });
+    },
+    beforeOpen(event) {
+      const project = event.params.project;
+      this.client = project.clientName;
+      this.id = project.id;
+      this.division = project.name;
+      this.projectTypeId = project.projectTypeId;
+      this.savingsTypeId = project.savingsTypeId;
+      this.effectiveFrom = project.effectiveFrom;
+      this.effectiveTo = project.effectiveTo;
+      this.description = project.description;
+      this.projectManagerId = project.projectManagerId;
+      this.leadAnalystId = project.leadAnalystId;
+      this.dataSpecialistId = project.dataSpecialistId;
+    },
+    beforeClose() {
+      this.projectTypeId = null;
     }
   }
 };

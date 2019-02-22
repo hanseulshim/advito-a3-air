@@ -42,8 +42,22 @@ addProject(
   division: String!,
   projectTypeId: Int!,
   savingsTypeId: Int!,
-  effectiveFrom: String!,
-  effectiveTo: String!,
+  effectiveFrom: Date!,
+  effectiveTo: Date!,
+  description: String,
+  projectManagerId: Int!,
+  leadAnalystId: Int!,
+  dataSpecialistId: Int!,
+): Success
+editProject(
+  sessionToken: String!
+  id: Int!
+  client: String!,
+  division: String!,
+  projectTypeId: Int!,
+  savingsTypeId: Int!,
+  effectiveFrom: Date!,
+  effectiveTo: Date!,
   description: String,
   projectManagerId: Int!,
   leadAnalystId: Int!,

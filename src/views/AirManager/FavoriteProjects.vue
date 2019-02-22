@@ -49,17 +49,19 @@
       <div class="favorite-project-footer">
         <span>{{ project.progress }}</span>
         <div>
-          <i class="fas fa-pencil-alt"></i>
+          <i class="fas fa-pencil-alt" @click="editProject(project)"></i>
           <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
         </div>
       </div>
     </div>
+    <EditProjectModal :apollo="apollo" />
     <DeleteProjectModal :apollo="apollo" />
   </div>
 </template>
 
 <script>
 import DeleteProjectModal from './DeleteProjectModal';
+import EditProjectModal from './EditProjectModal';
 import { formatDate } from '@/helper';
 import {
   UPDATE_PROJECT,
@@ -69,7 +71,8 @@ import {
 export default {
   name: 'FavoriteProjects',
   components: {
-    DeleteProjectModal
+    DeleteProjectModal,
+    EditProjectModal
   },
   props: {
     favoriteProjectList: {
@@ -97,6 +100,9 @@ export default {
         mutation: UPDATE_PROJECT,
         variables: { project }
       });
+    },
+    editProject(project) {
+      this.$modal.show('edit-project', { project });
     },
     deleteProject(id) {
       this.$modal.show('delete', { id });

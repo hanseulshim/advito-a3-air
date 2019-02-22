@@ -72,6 +72,58 @@ exports.projectMutations = {
       message: 'Successfully added project'
     };
   },
+  editProject: (_, payload) => {
+    if (
+      payload.client !== 'Home Depot' &&
+      payload.client !== 'DuPont' &&
+      payload.client !== 'Nestle' &&
+      payload.client !== 'Optimus' &&
+      payload.client !== 'Pfizer'
+    )
+      throw new ApolloError(
+        'Please enter one of the following valid clients: Home Depot, DuPont, Nestle, Optimus, Pfizer',
+        400
+      );
+    const project = projectList.filter(project => project.id === payload.id)[0];
+    if (!project) {
+      throw new ApolloError('Project not found', 400);
+    }
+    const client = clientList.filter(
+      client => client.name === payload.client
+    )[0];
+    const projectType = projectData.projectTypeList[payload.projectTypeId - 1];
+    const savingsType = projectData.savingsTypeList[payload.savingsTypeId - 1];
+    const projectManager =
+      projectData.projectManagerList[payload.projectManagerId - 1];
+    const leadAnalyst = projectData.leadAnalystList[payload.leadAnalystId - 1];
+    const dataSpecialist =
+      projectData.dataSpecialistList[payload.dataSpecialistId - 1];
+
+    project.clientId = client.id;
+    project.clientName = client.name;
+    project.name = payload.division;
+    project.description = payload.description;
+    project.projectTypeId = projectType.id;
+    project.projectType = projectType.name;
+    project.savingsTypeId = savingsType.id;
+    project.savingsType = savingsType.name;
+    project.effectiveFrom = payload.effectiveFrom;
+    project.effectiveTo = payload.effectiveTo;
+    project.projectManagerId = projectManager.id;
+    project.projectManagerName = projectManager.name;
+    project.projectManagerEmail = projectManager.email;
+    project.leadAnalystId = leadAnalyst.id;
+    project.leadAnalystName = leadAnalyst.name;
+    project.leadAnalystEmail = leadAnalyst.email;
+    project.dataSpecialistId = dataSpecialist.id;
+    project.dataSpecialistName = dataSpecialist.name;
+    project.dataSpecialistEmail = dataSpecialist.email;
+
+    return {
+      success: true,
+      message: 'Successfully edited project'
+    };
+  },
   deleteProject: (_, payload) => {
     const project = projectList.filter(project => project.id === payload.id)[0];
     if (!project) {

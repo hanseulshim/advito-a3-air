@@ -19,8 +19,8 @@ export const ADD_PROJECT = gql`
     $division: String!
     $projectTypeId: Int!
     $savingsTypeId: Int!
-    $effectiveFrom: String!
-    $effectiveTo: String!
+    $effectiveFrom: Date!
+    $effectiveTo: Date!
     $description: String
     $projectManagerId: Int!
     $leadAnalystId: Int!
@@ -28,6 +28,41 @@ export const ADD_PROJECT = gql`
   ) {
     addProject(
       sessionToken: $sessionToken
+      client: $client
+      division: $division
+      projectTypeId: $projectTypeId
+      savingsTypeId: $savingsTypeId
+      effectiveFrom: $effectiveFrom
+      effectiveTo: $effectiveTo
+      description: $description
+      projectManagerId: $projectManagerId
+      leadAnalystId: $leadAnalystId
+      dataSpecialistId: $dataSpecialistId
+    ) {
+      success
+      message
+    }
+  }
+`;
+
+export const EDIT_PROJECT = gql`
+  mutation editProject(
+    $sessionToken: String!
+    $id: Int!
+    $client: String!
+    $division: String!
+    $projectTypeId: Int!
+    $savingsTypeId: Int!
+    $effectiveFrom: Date!
+    $effectiveTo: Date!
+    $description: String
+    $projectManagerId: Int!
+    $leadAnalystId: Int!
+    $dataSpecialistId: Int!
+  ) {
+    editProject(
+      sessionToken: $sessionToken
+      id: $id
       client: $client
       division: $division
       projectTypeId: $projectTypeId
