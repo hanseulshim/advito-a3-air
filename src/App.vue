@@ -21,11 +21,12 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/styles/global.scss';
 body {
   margin: 0;
   padding: 0;
-  background: #f9f9f9;
-  color: #666666;
+  background: $alabaster;
+  color: $dove-gray;
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
   font-size: 16px;

@@ -1,0 +1,12 @@
+@import './variables.scss';
+
+.el-table {
+  .cell {
+    color: $dove-gray;
+  }
+  .table-header-cell {
+    background-color: $gray-nurse;
+    color: $black;
+    font-weight: 500;
+  }
+}

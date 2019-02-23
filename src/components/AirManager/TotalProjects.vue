@@ -123,7 +123,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/styles/global.scss';
 .all-projects-container {
   margin-top: 3em;
@@ -139,16 +139,8 @@ export default {
   cursor: pointer;
 }
 
-.el-table {
-  color: initial;
-  .table-header-cell {
-    background-color: $gray-nurse;
-    color: $black;
-    font-weight: 500;
-  }
-  .edit-project-container {
-    display: flex;
-    justify-content: space-between;
-  }
+.edit-project-container {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

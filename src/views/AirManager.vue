@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import TotalProjects from './TotalProjects.vue';
-import FavoriteProjects from './FavoriteProjects.vue';
-import NewProjectModal from './NewProjectModal.vue';
+import TotalProjects from '@/components/AirManager/TotalProjects.vue';
+import FavoriteProjects from '@/components/AirManager/FavoriteProjects.vue';
+import NewProjectModal from '@/components/AirManager/NewProjectModal.vue';
 import {
   GET_PROJECTS,
   GET_USER,
