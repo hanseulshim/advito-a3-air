@@ -43,22 +43,20 @@ export default {
     };
   },
   methods: {
-    deleteProject() {
-      this.apollo
-        .mutate({
+    async deleteProject() {
+      try {
+        await this.apollo.mutate({
           mutation: DELETE_PROJECT,
           variables: {
             sessionToken: this.apollo.vm.user.sessionToken,
             id: this.id
           }
-        })
-        .then(() => {
-          this.apollo.queries.projectList.refetch();
-          this.$modal.show('success');
-        })
-        .catch(() => {
-          this.$modal.show('error');
         });
+        this.apollo.queries.projectList.refetch();
+        this.$modal.show('success');
+      } catch (error) {
+        this.$modal.show('error');
+      }
     },
     beforeOpen(event) {
       this.id = event.params.id;

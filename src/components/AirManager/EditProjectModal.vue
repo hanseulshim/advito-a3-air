@@ -92,7 +92,7 @@
       </el-select>
     </div>
     <div class="save-container">
-      <button class="button" @click="addProject">SAVE</button>
+      <button class="button" @click="editProject">SAVE</button>
     </div>
     <SuccessModal
       :hide-modal="hideModal"
@@ -161,9 +161,9 @@ export default {
     hideModal() {
       this.$modal.hide('edit-project');
     },
-    addProject() {
-      this.apollo
-        .mutate({
+    async editProject() {
+      try {
+        await this.apollo.mutate({
           mutation: EDIT_PROJECT,
           variables: {
             sessionToken: this.apollo.vm.user.sessionToken,
@@ -177,14 +177,12 @@ export default {
             leadAnalystId: this.leadAnalystId,
             dataSpecialistId: this.dataSpecialistId
           }
-        })
-        .then(() => {
-          this.apollo.queries.projectList.refetch();
-          this.$modal.show('success');
-        })
-        .catch(() => {
-          this.$modal.show('error');
         });
+        this.apollo.queries.projectList.refetch();
+        this.$modal.show('success');
+      } catch (error) {
+        this.$modal.show('error');
+      }
     },
     beforeOpen(event) {
       const project = event.params.project;

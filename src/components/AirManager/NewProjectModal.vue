@@ -173,9 +173,9 @@ export default {
     hideModal() {
       this.$modal.hide('new-project');
     },
-    addProject() {
-      this.apollo
-        .mutate({
+    async addProject() {
+      try {
+        await this.apollo.mutate({
           mutation: ADD_PROJECT,
           variables: {
             sessionToken: this.apollo.vm.user.sessionToken,
@@ -190,14 +190,12 @@ export default {
             leadAnalystId: this.leadAnalystId,
             dataSpecialistId: this.dataSpecialistId
           }
-        })
-        .then(() => {
-          this.apollo.queries.projectList.refetch();
-          this.$modal.show('success');
-        })
-        .catch(() => {
-          this.$modal.show('error');
         });
+        this.apollo.queries.projectList.refetch();
+        this.$modal.show('success');
+      } catch (error) {
+        this.$modal.show('error');
+      }
     }
   }
 };
