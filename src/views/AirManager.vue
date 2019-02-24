@@ -50,19 +50,13 @@ export default {
       query: GET_CLIENT
     },
     clientList: {
-      query: GET_CLIENTS,
-      variables() {
-        return {
-          sessionToken: this.user.sessionToken
-        };
-      }
+      query: GET_CLIENTS
     },
     projectList: {
       query: GET_PROJECTS,
       variables() {
         return {
-          clientId: this.client.id,
-          sessionToken: this.user.sessionToken
+          clientId: this.client.id
         };
       }
     }

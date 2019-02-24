@@ -1,5 +1,4 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { fakeInvoke } = require('../helper');
 const { projectList } = require('../../data/projects');
 const { clientList } = require('../../data/clients');
 const { projectData } = require('../../data/projectData');
@@ -10,10 +9,7 @@ exports.projectResolvers = {
     const projectListFiltered = payload.clientId
       ? projectList.filter(project => project.clientId === payload.clientId)
       : projectList;
-    return fakeInvoke(
-      payload,
-      projectListFiltered.filter(project => !project.isDeleted)
-    );
+    return projectListFiltered.filter(project => !project.isDeleted);
   }
 };
 
@@ -65,7 +61,6 @@ exports.projectMutations = {
     };
     projectList.push(project);
     return {
-      success: true,
       message: 'Successfully added project'
     };
   },
@@ -102,7 +97,6 @@ exports.projectMutations = {
     project.dataSpecialistEmail = dataSpecialist.email;
 
     return {
-      success: true,
       message: 'Successfully edited project'
     };
   },
@@ -113,7 +107,6 @@ exports.projectMutations = {
     }
     project.isDeleted = true;
     return {
-      success: true,
       message: 'Successfully deleted project'
     };
   },
@@ -124,7 +117,6 @@ exports.projectMutations = {
     }
     project.favorite = !project.favorite;
     return {
-      success: true,
       message: 'Toggled favorite project'
     };
   }

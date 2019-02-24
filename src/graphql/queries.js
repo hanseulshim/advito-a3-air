@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_CLIENTS = gql`
-  query clientList($sessionToken: String!) {
-    clientList(sessionToken: $sessionToken) {
+  {
+    clientList {
       id
       name
     }
@@ -10,8 +10,8 @@ export const GET_CLIENTS = gql`
 `;
 
 export const GET_PROJECTS = gql`
-  query projectList($clientId: Int, $sessionToken: String!) {
-    projectList(clientId: $clientId, sessionToken: $sessionToken) {
+  query projectList($clientId: Int) {
+    projectList(clientId: $clientId) {
       id
       clientId
       clientName

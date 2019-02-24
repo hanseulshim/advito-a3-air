@@ -14,7 +14,6 @@ export const UPDATE_PROJECT = gql`
 
 export const ADD_PROJECT = gql`
   mutation addProject(
-    $sessionToken: String!
     $clientId: Int!
     $division: String!
     $projectTypeId: Int!
@@ -27,7 +26,6 @@ export const ADD_PROJECT = gql`
     $dataSpecialistId: Int!
   ) {
     addProject(
-      sessionToken: $sessionToken
       clientId: $clientId
       division: $division
       projectTypeId: $projectTypeId
@@ -39,7 +37,6 @@ export const ADD_PROJECT = gql`
       leadAnalystId: $leadAnalystId
       dataSpecialistId: $dataSpecialistId
     ) {
-      success
       message
     }
   }
@@ -47,7 +44,6 @@ export const ADD_PROJECT = gql`
 
 export const EDIT_PROJECT = gql`
   mutation editProject(
-    $sessionToken: String!
     $id: Int!
     $division: String!
     $savingsTypeId: Int!
@@ -59,7 +55,6 @@ export const EDIT_PROJECT = gql`
     $dataSpecialistId: Int!
   ) {
     editProject(
-      sessionToken: $sessionToken
       id: $id
       division: $division
       savingsTypeId: $savingsTypeId
@@ -70,25 +65,22 @@ export const EDIT_PROJECT = gql`
       leadAnalystId: $leadAnalystId
       dataSpecialistId: $dataSpecialistId
     ) {
-      success
       message
     }
   }
 `;
 
 export const DELETE_PROJECT = gql`
-  mutation deleteProject($sessionToken: String!, $id: Int!) {
-    deleteProject(sessionToken: $sessionToken, id: $id) {
-      success
+  mutation deleteProject($id: Int!) {
+    deleteProject(id: $id) {
       message
     }
   }
 `;
 
 export const TOGGLE_FAVORITE_PROJECT = gql`
-  mutation toggleFavoriteProject($sessionToken: String!, $id: Int!) {
-    toggleFavoriteProject(sessionToken: $sessionToken, id: $id) {
-      success
+  mutation toggleFavoriteProject($id: Int!) {
+    toggleFavoriteProject(id: $id) {
       message
     }
   }

@@ -49,17 +49,13 @@ import {
   GET_CLIENTS,
   GET_PROJECTS,
   GET_CLIENT,
-  GET_PROJECT,
-  GET_USER
+  GET_PROJECT
 } from '@/graphql/queries';
 import { UPDATE_CLIENT, UPDATE_PROJECT } from '@/graphql/mutations';
 
 export default {
   name: 'Header',
   apollo: {
-    user: {
-      query: GET_USER
-    },
     client: {
       query: GET_CLIENT
     },
@@ -67,19 +63,13 @@ export default {
       query: GET_PROJECT
     },
     clientList: {
-      query: GET_CLIENTS,
-      variables() {
-        return {
-          sessionToken: this.user.sessionToken
-        };
-      }
+      query: GET_CLIENTS
     },
     projectList: {
       query: GET_PROJECTS,
       variables() {
         return {
-          clientId: this.client.id,
-          sessionToken: this.user.sessionToken
+          clientId: this.client.id
         };
       }
     }
@@ -90,8 +80,7 @@ export default {
       clientList: [],
       projectList: [],
       project: null,
-      client: null,
-      user: null
+      client: null
     };
   },
   methods: {

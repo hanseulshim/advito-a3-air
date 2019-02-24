@@ -28,17 +28,15 @@ type Project {
   favorite: Boolean,
 }
 
-type Success {
-  success: Boolean,
+type MutationSuccess {
   message: String
 }
 `;
 exports.projectQuery = `
-projectList(clientId: Int, sessionToken: String!): [Project]
+projectList(clientId: Int): [Project]
 `;
 exports.projectMutation = `
 addProject(
-  sessionToken: String!
   clientId: Int!,
   division: String!,
   projectTypeId: Int!,
@@ -49,9 +47,8 @@ addProject(
   projectManagerId: Int!,
   leadAnalystId: Int!,
   dataSpecialistId: Int!,
-): Success
+): MutationSuccess
 editProject(
-  sessionToken: String!
   id: Int!
   division: String!,
   savingsTypeId: Int!,
@@ -61,13 +58,11 @@ editProject(
   projectManagerId: Int!,
   leadAnalystId: Int!,
   dataSpecialistId: Int!,
-): Success
+): MutationSuccess
 deleteProject(
-  sessionToken: String!
   id: Int!
-): Success
+): MutationSuccess
 toggleFavoriteProject(
-  sessionToken: String!
   id: Int!
-): Success
+): MutationSuccess
 `;

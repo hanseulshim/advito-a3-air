@@ -9,15 +9,20 @@ import VModal from 'vue-js-modal';
 import 'element-ui/lib/theme-chalk/index.css';
 import defaults from './graphql/defaults';
 import resolvers from './graphql/resolvers';
+import { checkToken } from './helper';
 
 const apolloClient = new ApolloClient({
-  // uri: 'http://localhost:8085/graphql',
-  uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
+  uri: 'http://localhost:8085/graphql',
+  // uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
   clientState: {
     defaults,
     resolvers
+  },
+  headers: {
+    sessionToken: checkToken(router)
   }
 });
+
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient
 });
