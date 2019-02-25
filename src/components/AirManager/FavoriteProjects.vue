@@ -102,15 +102,16 @@ export default {
     deleteProject(id) {
       this.$modal.show('delete', { id });
     },
-    toggleFavoriteProject(id) {
-      this.apollo
-        .mutate({
+    async toggleFavoriteProject(id) {
+      try {
+        await this.apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { sessionToken: this.apollo.vm.user.sessionToken, id }
-        })
-        .then(() => {
-          this.apollo.queries.projectList.refetch();
+          variables: { id }
         });
+        this.apollo.queries.projectList.refetch();
+      } catch (error) {
+        return 'this was an error';
+      }
     }
   }
 };
