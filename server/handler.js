@@ -9,10 +9,7 @@ const server = new ApolloServer({
   context: async ({ event }) => {
     const sessionToken = event.headers.sessiontoken || '';
     const user = await authenticateUser(sessionToken);
-    if (!user)
-      throw new AuthenticationError(
-        'you must be logged in ' + JSON.stringify(event.headers)
-      );
+    if (!user) throw new AuthenticationError('you must be logged in ');
     return { sessionToken, user };
   }
 });
