@@ -34,9 +34,9 @@
         <template slot-scope="scope">
           <i
             v-if="
-              scope.row.projectManagerEmail === apollo.vm.user.email ||
-                scope.row.leadAnalystEmail === apollo.vm.user.email ||
-                scope.row.dataSpecialistEmail === apollo.vm.user.email
+              scope.row.projectManagerEmail === user.email ||
+                scope.row.leadAnalystEmail === user.email ||
+                scope.row.dataSpecialistEmail === user.email
             "
             class="fas fa-user"
           ></i>
@@ -62,8 +62,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <EditProjectModal :apollo="apollo" />
-    <DeleteProjectModal :apollo="apollo" />
+    <EditProjectModal :client="client" />
+    <DeleteProjectModal :client="client" />
   </div>
 </template>
 
@@ -72,6 +72,7 @@ import DeleteProjectModal from './DeleteProjectModal';
 import EditProjectModal from './EditProjectModal';
 import { formatDate } from '@/helper';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
+import { GET_USER, GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'TotalProjects',
   components: {
@@ -83,10 +84,29 @@ export default {
       type: Array,
       required: true
     },
-    apollo: {
+    client: {
       type: Object,
       required: true
     }
+  },
+  apollo: {
+    user: {
+      query: GET_USER
+    },
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id
+        };
+      }
+    }
+  },
+  data() {
+    return {
+      user: null,
+      projectList: []
+    };
   },
   methods: {
     formatDate(row) {
@@ -96,9 +116,9 @@ export default {
     },
     sortByRole(a) {
       if (
-        a.projectManagerEmail === this.apollo.vm.user.email ||
-        a.leadAnalystEmail === this.apollo.vm.user.email ||
-        a.dataSpecialistEmail === this.apollo.vm.user.email
+        a.projectManagerEmail === this.user.email ||
+        a.leadAnalystEmail === this.user.email ||
+        a.dataSpecialistEmail === this.user.email
       )
         return -1;
       return 1;
@@ -111,11 +131,11 @@ export default {
     },
     async toggleFavoriteProject(id) {
       try {
-        await this.apollo.mutate({
+        await this.$apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
           variables: { id }
         });
-        this.apollo.queries.projectList.refetch();
+        this.$apollo.queries.projectList.refetch();
       } catch (error) {
         return 'this was an error';
       }

@@ -25,6 +25,7 @@
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { DELETE_PROJECT } from '@/graphql/mutations';
+import { GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'DeleteModal',
   components: {
@@ -32,7 +33,7 @@ export default {
     ErrorModal
   },
   props: {
-    apollo: {
+    client: {
       type: Object,
       required: true
     }
@@ -42,17 +43,26 @@ export default {
       id: null
     };
   },
+  apollo: {
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id
+        };
+      }
+    }
+  },
   methods: {
     async deleteProject() {
       try {
-        await this.apollo.mutate({
+        await this.$apollo.mutate({
           mutation: DELETE_PROJECT,
           variables: {
-            sessionToken: this.apollo.vm.user.sessionToken,
             id: this.id
           }
         });
-        this.apollo.queries.projectList.refetch();
+        this.$apollo.queries.projectList.refetch();
         this.$modal.show('success');
       } catch (error) {
         this.$modal.show('error');

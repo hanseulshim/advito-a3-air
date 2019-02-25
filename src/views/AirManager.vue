@@ -16,11 +16,12 @@
       <i class="fas fa-info project-top-item" />
     </div>
     <FavoriteProjects
+      :client-list="clientList"
       :favorite-project-list="favoriteProjectList"
-      :apollo="$apollo"
+      :client="client"
     />
-    <TotalProjects :total-project-list="totalProjectList" :apollo="$apollo" />
-    <NewProjectModal :apollo="$apollo" />
+    <TotalProjects :total-project-list="totalProjectList" :client="client" />
+    <NewProjectModal :client="client" :client-list="clientList" />
   </div>
 </template>
 
@@ -61,7 +62,7 @@ export default {
       }
     }
   },
-  data: function() {
+  data() {
     return {
       selectedUser: '',
       showInactive: false,

@@ -7,16 +7,19 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ event }) => {
-    const sessionToken = event.headers.sessionToken || '';
+    const sessionToken = event.headers.sessiontoken || '';
     const user = await authenticateUser(sessionToken);
-    if (!user) throw new AuthenticationError('you must be logged in');
+    if (!user)
+      throw new AuthenticationError(
+        'you must be logged in ' + JSON.stringify(event.headers)
+      );
     return { sessionToken, user };
   }
 });
 
 exports.graphqlHandler = server.createHandler({
   cors: {
-    origin: '*',
+    origin: true,
     credentials: true
   }
 });

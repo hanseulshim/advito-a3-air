@@ -49,8 +49,8 @@
         <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
       </div>
     </div>
-    <EditProjectModal :apollo="apollo" />
-    <DeleteProjectModal :apollo="apollo" />
+    <EditProjectModal :client="client" />
+    <DeleteProjectModal :client="client" />
   </div>
 </template>
 
@@ -63,6 +63,7 @@ import {
   UPDATE_CLIENT,
   TOGGLE_FAVORITE_PROJECT
 } from '@/graphql/mutations';
+import { GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'FavoriteProjects',
   components: {
@@ -74,24 +75,43 @@ export default {
       type: Array,
       required: true
     },
-    apollo: {
+    clientList: {
+      type: Array,
+      required: true
+    },
+    client: {
       type: Object,
       required: true
     }
+  },
+  apollo: {
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id
+        };
+      }
+    }
+  },
+  data() {
+    return {
+      projectList: []
+    };
   },
   methods: {
     formatDate(date) {
       return formatDate(date);
     },
     updateProject(project) {
-      const client = this.apollo.vm.clientList.filter(
+      const client = this.clientList.filter(
         client => client.id === project.clientId
       )[0];
-      this.apollo.mutate({
+      this.$apollo.mutate({
         mutation: UPDATE_CLIENT,
         variables: { client }
       });
-      this.apollo.mutate({
+      this.$apollo.mutate({
         mutation: UPDATE_PROJECT,
         variables: { project }
       });
@@ -104,11 +124,11 @@ export default {
     },
     async toggleFavoriteProject(id) {
       try {
-        await this.apollo.mutate({
+        await this.$apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
           variables: { id }
         });
-        this.apollo.queries.projectList.refetch();
+        this.$apollo.queries.projectList.refetch();
       } catch (error) {
         return 'this was an error';
       }

@@ -12,7 +12,7 @@
     </div>
     <div class="value-row">
       <div>Client *</div>
-      <el-input v-model="client" class="input" disabled></el-input>
+      <el-input v-model="clientName" class="input" disabled></el-input>
     </div>
     <div class="value-row">
       <div>Division *</div>
@@ -96,9 +96,9 @@
     </div>
     <SuccessModal
       :hide-modal="hideModal"
-      message="Project successfully created."
+      message="Project successfully edited."
     />
-    <ErrorModal message="Failed to create project. Please try again" />
+    <ErrorModal message="Failed to edit project. Please try again" />
   </modal>
 </template>
 
@@ -106,6 +106,7 @@
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { EDIT_PROJECT } from '@/graphql/mutations';
+import { GET_PROJECTS } from '@/graphql/queries';
 import projectData from '@/data/projectData';
 export default {
   name: 'EditProjectModal',
@@ -114,14 +115,25 @@ export default {
     ErrorModal
   },
   props: {
-    apollo: {
+    client: {
       type: Object,
       required: true
     }
   },
+  apollo: {
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id
+        };
+      }
+    }
+  },
   data() {
     return {
-      client: null,
+      projectList: [],
+      clientName: null,
       id: null,
       division: null,
       projectType: null,
@@ -163,10 +175,9 @@ export default {
     },
     async editProject() {
       try {
-        await this.apollo.mutate({
+        await this.$apollo.mutate({
           mutation: EDIT_PROJECT,
           variables: {
-            sessionToken: this.apollo.vm.user.sessionToken,
             id: this.id,
             division: this.division,
             savingsTypeId: this.savingsTypeId,
@@ -178,7 +189,7 @@ export default {
             dataSpecialistId: this.dataSpecialistId
           }
         });
-        this.apollo.queries.projectList.refetch();
+        this.$apollo.queries.projectList.refetch();
         this.$modal.show('success');
       } catch (error) {
         this.$modal.show('error');
@@ -186,7 +197,7 @@ export default {
     },
     beforeOpen(event) {
       const project = event.params.project;
-      this.client = project.clientName;
+      this.clientName = project.clientName;
       this.id = project.id;
       this.division = project.division;
       this.projectType = project.projectType;

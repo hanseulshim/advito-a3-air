@@ -115,6 +115,7 @@
 <script>
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
+import { GET_PROJECTS } from '@/graphql/queries';
 import { ADD_PROJECT } from '@/graphql/mutations';
 import projectData from '@/data/projectData';
 export default {
@@ -124,13 +125,28 @@ export default {
     ErrorModal
   },
   props: {
-    apollo: {
+    client: {
       type: Object,
       required: true
+    },
+    clientList: {
+      type: Array,
+      required: true
+    }
+  },
+  apollo: {
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id
+        };
+      }
     }
   },
   data() {
     return {
+      projectList: [],
       clientId: null,
       division: null,
       projectTypeId: null,
@@ -159,9 +175,6 @@ export default {
         return savingsTypeList.slice(0, 1);
       }
       return [];
-    },
-    clientList: function() {
-      return this.apollo.vm.clientList.slice();
     }
   },
   watch: {
@@ -175,10 +188,9 @@ export default {
     },
     async addProject() {
       try {
-        await this.apollo.mutate({
+        await this.$apollo.mutate({
           mutation: ADD_PROJECT,
           variables: {
-            sessionToken: this.apollo.vm.user.sessionToken,
             clientId: this.clientId,
             division: this.division,
             projectTypeId: this.projectTypeId,
@@ -191,7 +203,7 @@ export default {
             dataSpecialistId: this.dataSpecialistId
           }
         });
-        this.apollo.queries.projectList.refetch();
+        this.$apollo.queries.projectList.refetch();
         this.$modal.show('success');
       } catch (error) {
         this.$modal.show('error');
