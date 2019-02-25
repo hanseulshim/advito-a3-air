@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div v-if="password === 'air2019'">
     <Sidebar />
     <div id="app">
       <Header />
       <router-view />
     </div>
+  </div>
+  <div v-else class="validation-container">
+    <el-input v-model="password" placeholder="Please input password"></el-input>
   </div>
 </template>
 
@@ -16,6 +19,11 @@ export default {
   components: {
     Header,
     Sidebar
+  },
+  data() {
+    return {
+      password: ''
+    };
   }
 };
 </script>
@@ -45,5 +53,11 @@ body {
     font-size: 13px;
     line-height: 17px;
   }
+}
+
+.validation-container {
+  width: 300px;
+  margin: auto;
+  margin-top: 5em;
 }
 </style>

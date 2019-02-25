@@ -13,7 +13,8 @@ import { checkToken, logout } from './helper';
 
 const apolloClient = new ApolloClient({
   // uri: 'http://localhost:8085/graphql',
-  uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
+  // uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
+  uri: 'https://hq893l4up1.execute-api.us-east-2.amazonaws.com/beta/graphql',
   clientState: {
     defaults,
     resolvers
