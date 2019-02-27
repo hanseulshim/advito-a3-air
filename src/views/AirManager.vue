@@ -5,15 +5,16 @@
         {{ favoriteProjectList.length }} favorite projects
       </div>
       <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
-      <el-select v-model="selectedUser" placeholder="Select" filterable
-        ><el-option
+      <el-select v-model="selectedUser" placeholder="Select" filterable>
+        <el-option
           v-for="item in projectManagerList"
           :key="item.email"
           :label="item.name"
           :value="item.email"
-      /></el-select>
+        />
+      </el-select>
       <button class="button" @click="showNewProject">+ NEW PROJECT</button>
-      <i class="fas fa-info project-top-item" />
+      <i class="fas fa-info project-top-item" @click="showInfoModal" />
     </div>
     <FavoriteProjects
       :client-list="clientList"
@@ -22,13 +23,15 @@
     />
     <TotalProjects :total-project-list="totalProjectList" :client="client" />
     <NewProjectModal :client="client" :client-list="clientList" />
+    <InfoModal />
   </div>
 </template>
 
 <script>
-import TotalProjects from '@/components/AirManager/TotalProjects.vue';
-import FavoriteProjects from '@/components/AirManager/FavoriteProjects.vue';
-import NewProjectModal from '@/components/AirManager/NewProjectModal.vue';
+import TotalProjects from '@/components/AirManager/TotalProjects';
+import FavoriteProjects from '@/components/AirManager/FavoriteProjects';
+import NewProjectModal from '@/components/AirManager/NewProjectModal';
+import InfoModal from '@/components/Modals/InfoModal';
 import {
   GET_PROJECTS,
   GET_USER,
@@ -41,7 +44,8 @@ export default {
   components: {
     TotalProjects,
     FavoriteProjects,
-    NewProjectModal
+    NewProjectModal,
+    InfoModal
   },
   apollo: {
     user: {
@@ -122,6 +126,9 @@ export default {
   methods: {
     showNewProject() {
       this.$modal.show('new-project');
+    },
+    showInfoModal() {
+      this.$modal.show('info');
     }
   }
 };

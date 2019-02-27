@@ -11,16 +11,20 @@
       >
     </div>
     <div class="content-container">
-      <div>{{ project.name }}</div>
-      <!-- <router-view></router-view> -->
+      <ProjectInfo />
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
+import ProjectInfo from '@/components/ProjectInfo';
 import { GET_PROJECT } from '@/graphql/queries';
 export default {
   name: 'Project',
+  components: {
+    ProjectInfo
+  },
   data() {
     return {
       project: null,

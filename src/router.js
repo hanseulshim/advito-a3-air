@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import AirManager from './views/AirManager';
 import Project from './views/Project';
+import ProjectSettings from '@/components/ProjectSettings';
 
 Vue.use(Router);
 
@@ -13,9 +14,15 @@ export default new Router({
       component: AirManager
     },
     {
-      path: '/project/:menu',
+      path: '/project',
       name: 'project',
-      component: Project
+      component: Project,
+      children: [
+        {
+          path: 'program-settings',
+          component: ProjectSettings
+        }
+      ]
     }
   ]
 });
