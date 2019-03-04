@@ -68,6 +68,7 @@ export const GET_PROJECT = gql`
       clientName
       name
       description
+      division
       isDeleted
       projectTypeId
       projectType

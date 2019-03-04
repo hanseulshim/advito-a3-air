@@ -13,16 +13,16 @@ import resolvers from './graphql/resolvers';
 import { logout } from './helper';
 
 const apolloClient = new ApolloClient({
-  // uri: 'http://localhost:8085/graphql',
+  uri: 'http://localhost:8085/graphql',
   // uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
-  uri: 'https://hq893l4up1.execute-api.us-east-2.amazonaws.com/beta/graphql',
+  // uri: 'https://hq893l4up1.execute-api.us-east-2.amazonaws.com/beta/graphql',
   clientState: {
     defaults,
     resolvers
   },
   headers: {
     // SessionToken: checkToken(router)
-    sessiontoken: 'valid'
+    sessiontoken: 'advitoValidToken'
   },
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {

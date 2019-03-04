@@ -1,4 +1,4 @@
-const { clientList } = require('../../data/clients');
+const { clientList } = require('../../data/client');
 
 exports.clientResolvers = {
   clientList: () => clientList

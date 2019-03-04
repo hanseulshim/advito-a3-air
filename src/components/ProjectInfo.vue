@@ -1,6 +1,12 @@
 <template>
   <div class="project-info-container">
-    <div>{{ project.name }}</div>
+    <div class="project-name">{{ project.name }}</div>
+    <div>
+      <div>Division: {{ project.division }}</div>
+    </div>
+    <div>Column 2</div>
+    <div>Column 3</div>
+    <div>buttons</div>
   </div>
 </template>
 
@@ -22,13 +28,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/global.scss';
 .project-info-container {
   display: grid;
-  grid-template-areas: 'logo . . . addy' 'navigation navigation . . .';
-  grid-template-columns: 25% 17% 17% auto 75px;
-  row-gap: 1em;
+  grid-template-areas: 'projectName column1 column2 column3 buttons';
+  grid-template-columns: auto auto auto auto 75px;
   column-gap: 1em;
-  align-items: flex-end;
   margin-bottom: 2em;
+}
+.project-name {
+  grid-area: projectName;
+  font-size: 1.5em;
+  color: $tradewind;
 }
 </style>

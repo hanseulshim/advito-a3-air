@@ -18,6 +18,7 @@ export default {
     clientName: null,
     name: null,
     description: null,
+    division: null,
     isDeleted: null,
     projectTypeId: null,
     projectType: null,

@@ -1,17 +1,27 @@
-const { ApolloServer, AuthenticationError } = require('apollo-server-lambda');
+const { ApolloServer } = require('apollo-server-lambda');
 const { typeDefs } = require('./graphql/typeDefs');
 const { resolvers } = require('./graphql/resolvers');
-const { authenticateUser } = require('./graphql/auth');
+const requireAuthDirective = require('./graphql/directives');
+const { playground } = require('./graphql/playground');
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ event }) => {
     const sessionToken = event.headers.sessiontoken || '';
-    const user = await authenticateUser(sessionToken);
-    if (!user) throw new AuthenticationError('you must be logged in ');
+    const user =
+      sessionToken === 'advitoValidToken'
+        ? {
+            name: 'test',
+            role: ['Admin']
+          }
+        : null;
     return { sessionToken, user };
-  }
+  },
+  schemaDirectives: {
+    auth: requireAuthDirective
+  },
+  playground
 });
 
 exports.graphqlHandler = server.createHandler({

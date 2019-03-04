@@ -15,6 +15,8 @@ type Project {
   savingsType: String,
   effectiveFrom: Date,
   effectiveTo: Date,
+  reportFrom: Date,
+  reportTo: Date,
   projectManagerId: Int,
   projectManagerName: String,
   projectManagerEmail: String,
@@ -33,7 +35,7 @@ type MutationSuccess {
 }
 `;
 exports.projectQuery = `
-projectList(clientId: Int): [Project]
+projectList(clientId: Int): [Project] @auth
 `;
 exports.projectMutation = `
 addProject(
@@ -47,7 +49,7 @@ addProject(
   projectManagerId: Int!,
   leadAnalystId: Int!,
   dataSpecialistId: Int!,
-): MutationSuccess
+): MutationSuccess @auth
 editProject(
   id: Int!
   division: String!,
@@ -58,11 +60,11 @@ editProject(
   projectManagerId: Int!,
   leadAnalystId: Int!,
   dataSpecialistId: Int!,
-): MutationSuccess
+): MutationSuccess @auth
 deleteProject(
   id: Int!
-): MutationSuccess
+): MutationSuccess @auth
 toggleFavoriteProject(
   id: Int!
-): MutationSuccess
+): MutationSuccess @auth
 `;

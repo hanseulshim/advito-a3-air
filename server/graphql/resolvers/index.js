@@ -1,7 +1,7 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
-const { projectResolvers, projectMutations } = require('./projectResolvers');
-const { clientResolvers } = require('./clientResolvers');
+const { projectResolvers, projectMutations } = require('./project');
+const { clientResolvers } = require('./client');
 
 exports.resolvers = {
   Query: {

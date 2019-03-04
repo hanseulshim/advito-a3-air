@@ -1,6 +1,6 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { projectList } = require('../../data/projects');
-const { clientList } = require('../../data/clients');
+const { projectList } = require('../../data/project');
+const { clientList } = require('../../data/client');
 const { projectData } = require('../../data/projectData');
 const { getProjectName } = require('../helper');
 

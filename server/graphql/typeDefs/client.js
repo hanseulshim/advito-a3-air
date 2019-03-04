@@ -6,5 +6,5 @@ type Client {
 `;
 
 exports.clientQuery = `
-clientList: [Client]
+clientList: [Client] @auth
 `;

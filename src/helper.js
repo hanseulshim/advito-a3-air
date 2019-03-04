@@ -26,6 +26,6 @@ export const checkToken = router => {
 
 export const logout = () => {
   localStorage.removeItem('air-session-token');
-  window.location.href =
-    'https://s3.amazonaws.com/beta.boostlabs/BlackOps/index.html#/login';
+  // window.location.href =
+  //   'https://s3.amazonaws.com/beta.boostlabs/BlackOps/index.html#/login';
 };
