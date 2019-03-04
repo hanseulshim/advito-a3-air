@@ -8,10 +8,16 @@
       <div class="favorite-project-main">
         <div class="title-row title">
           <span @click="updateProject(project)">{{ project.name }}</span>
-          <i
-            class="fas fa-times"
-            @click="toggleFavoriteProject(project.id)"
-          ></i>
+          <el-tooltip
+            effect="dark"
+            content="Remove from Favorites"
+            placement="top"
+          >
+            <i
+              class="fas fa-times"
+              @click="toggleFavoriteProject(project.id)"
+            ></i>
+          </el-tooltip>
         </div>
         <div class="value-row">
           <span>Processed Date</span>
