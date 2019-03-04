@@ -39,7 +39,7 @@ exports.projectMutations = {
         clientName: client.name
       }),
       description: payload.description,
-      division: payload.division,
+      division: maxId % 2 === 0 ? 'Technology' : '',
       isDeleted: false,
       projectTypeId: projectType.id,
       projectType: projectType.name,
@@ -81,7 +81,6 @@ exports.projectMutations = {
       projectType: project.projectType
     });
     project.description = payload.description;
-    project.division = payload.division;
     project.savingsTypeId = savingsType.id;
     project.savingsType = savingsType.name;
     project.effectiveFrom = payload.effectiveFrom;

@@ -40,7 +40,6 @@ projectList(clientId: Int): [Project] @auth
 exports.projectMutation = `
 addProject(
   clientId: Int!,
-  division: String!,
   projectTypeId: Int!,
   savingsTypeId: Int!,
   effectiveFrom: Date!,
@@ -54,7 +53,6 @@ addProject(
 ): MutationSuccess @auth
 editProject(
   id: Int!
-  division: String!,
   savingsTypeId: Int!,
   effectiveFrom: Date!,
   effectiveTo: Date!,

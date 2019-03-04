@@ -20,8 +20,8 @@
         <div class="value-row">
           <span>Date Range</span>
           <span>
-            {{ formatDate(project.reportFrom) }} —
-            {{ formatDate(project.reportTo) }}
+            {{ formatDate(project.effectiveFrom) }} —
+            {{ formatDate(project.effectiveTo) }}
           </span>
         </div>
         <div class="value-row">

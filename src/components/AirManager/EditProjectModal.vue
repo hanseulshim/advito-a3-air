@@ -15,10 +15,6 @@
       <el-input v-model="clientName" class="input" disabled></el-input>
     </div>
     <div class="value-row">
-      <div>Division *</div>
-      <el-input v-model="division" class="input"></el-input>
-    </div>
-    <div class="value-row">
       <div>Project Type *</div>
       <el-input v-model="projectType" disabled class="input"></el-input>
     </div>
@@ -37,23 +33,6 @@
       <div>Project Dates *</div>
       <div class="input">
         <el-date-picker
-          v-model="reportFrom"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
-        <el-date-picker
-          v-model="reportTo"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
-      </div>
-    </div>
-    <div class="value-row">
-      <div>Effective Dates *</div>
-      <div class="input">
-        <el-date-picker
           v-model="effectiveFrom"
           class="date-container"
           type="date"
@@ -61,6 +40,23 @@
         />
         <el-date-picker
           v-model="effectiveTo"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+      </div>
+    </div>
+    <div class="value-row">
+      <div>Report Dates *</div>
+      <div class="input">
+        <el-date-picker
+          v-model="reportFrom"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+        <el-date-picker
+          v-model="reportTo"
           class="date-container"
           type="date"
           format="dd MMM yyyy"
@@ -148,7 +144,6 @@ export default {
       projectList: [],
       clientName: null,
       id: null,
-      division: null,
       projectType: null,
       projectTypeId: null,
       savingsTypeId: null,
@@ -194,7 +189,6 @@ export default {
           mutation: EDIT_PROJECT,
           variables: {
             id: this.id,
-            division: this.division,
             savingsTypeId: this.savingsTypeId,
             effectiveFrom: this.effectiveFrom,
             effectiveTo: this.effectiveTo,
@@ -216,7 +210,6 @@ export default {
       const project = event.params.project;
       this.clientName = project.clientName;
       this.id = project.id;
-      this.division = project.division;
       this.projectType = project.projectType;
       this.projectTypeId = project.projectTypeId;
       this.savingsTypeId = project.savingsTypeId;

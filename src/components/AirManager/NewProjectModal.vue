@@ -16,10 +16,6 @@
       </el-select>
     </div>
     <div class="value-row">
-      <div>Division *</div>
-      <el-input v-model="division" class="input"></el-input>
-    </div>
-    <div class="value-row">
       <div>Project Type *</div>
       <el-select v-model="projectTypeId" class="input">
         <el-option
@@ -45,23 +41,6 @@
       <div>Project Dates *</div>
       <div class="input">
         <el-date-picker
-          v-model="reportFrom"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
-        <el-date-picker
-          v-model="reportTo"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
-      </div>
-    </div>
-    <div class="value-row">
-      <div>Effective Dates *</div>
-      <div class="input">
-        <el-date-picker
           v-model="effectiveFrom"
           class="date-container"
           type="date"
@@ -69,6 +48,23 @@
         />
         <el-date-picker
           v-model="effectiveTo"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+      </div>
+    </div>
+    <div class="value-row">
+      <div>Report Dates *</div>
+      <div class="input">
+        <el-date-picker
+          v-model="reportFrom"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+        <el-date-picker
+          v-model="reportTo"
           class="date-container"
           type="date"
           format="dd MMM yyyy"
@@ -159,7 +155,6 @@ export default {
     return {
       projectList: [],
       clientId: null,
-      division: null,
       projectTypeId: null,
       savingsTypeId: null,
       effectiveFrom:
@@ -205,7 +200,6 @@ export default {
           mutation: ADD_PROJECT,
           variables: {
             clientId: this.clientId,
-            division: this.division,
             projectTypeId: this.projectTypeId,
             savingsTypeId: this.savingsTypeId,
             effectiveFrom: this.effectiveFrom,

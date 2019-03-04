@@ -15,7 +15,6 @@ export const UPDATE_PROJECT = gql`
 export const ADD_PROJECT = gql`
   mutation addProject(
     $clientId: Int!
-    $division: String!
     $projectTypeId: Int!
     $savingsTypeId: Int!
     $effectiveFrom: Date!
@@ -29,7 +28,6 @@ export const ADD_PROJECT = gql`
   ) {
     addProject(
       clientId: $clientId
-      division: $division
       projectTypeId: $projectTypeId
       savingsTypeId: $savingsTypeId
       effectiveFrom: $effectiveFrom
@@ -49,7 +47,6 @@ export const ADD_PROJECT = gql`
 export const EDIT_PROJECT = gql`
   mutation editProject(
     $id: Int!
-    $division: String!
     $savingsTypeId: Int!
     $effectiveFrom: Date!
     $effectiveTo: Date!
@@ -62,7 +59,6 @@ export const EDIT_PROJECT = gql`
   ) {
     editProject(
       id: $id
-      division: $division
       savingsTypeId: $savingsTypeId
       effectiveFrom: $effectiveFrom
       effectiveTo: $effectiveTo
