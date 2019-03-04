@@ -12,8 +12,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="value-row">
@@ -28,8 +27,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="value-row">
@@ -40,9 +38,25 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
+    </div>
+    <div class="value-row">
+      <div>Project Dates *</div>
+      <div class="input">
+        <el-date-picker
+          v-model="reportFrom"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+        <el-date-picker
+          v-model="reportTo"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+      </div>
     </div>
     <div class="value-row">
       <div>Effective Dates *</div>
@@ -73,8 +87,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="value-row">
@@ -85,8 +98,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="value-row">
@@ -97,8 +109,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="save-container">
@@ -154,6 +165,8 @@ export default {
       effectiveFrom:
         'Mon Jan 01 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
       effectiveTo: 'Mon Dec 31 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      reportFrom: 'Mon Jan 01 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      reportTo: 'Mon Dec 31 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
       description: null,
       projectManagerId: null,
       leadAnalystId: null,
@@ -197,6 +210,8 @@ export default {
             savingsTypeId: this.savingsTypeId,
             effectiveFrom: this.effectiveFrom,
             effectiveTo: this.effectiveTo,
+            reportFrom: this.reportFrom,
+            reportTo: this.reportTo,
             description: this.description,
             projectManagerId: this.projectManagerId,
             leadAnalystId: this.leadAnalystId,

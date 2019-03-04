@@ -19,10 +19,10 @@
         </div>
         <div class="value-row">
           <span>Date Range</span>
-          <span
-            >{{ formatDate(project.effectiveFrom) }} —
-            {{ formatDate(project.effectiveTo) }}</span
-          >
+          <span>
+            {{ formatDate(project.reportFrom) }} —
+            {{ formatDate(project.reportTo) }}
+          </span>
         </div>
         <div class="value-row">
           <span>Savings Type</span>
@@ -40,9 +40,7 @@
           <span>Data Specialist</span>
           <span>{{ project.dataSpecialistName }}</span>
         </div>
-        <div class="description">
-          {{ project.description }}
-        </div>
+        <div class="description">{{ project.description }}</div>
       </div>
       <div class="favorite-project-footer">
         <i class="fas fa-pencil-alt" @click="editProject(project)"></i>

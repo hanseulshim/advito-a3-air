@@ -47,6 +47,8 @@ exports.projectMutations = {
       savingsTypeId: 3
       effectiveFrom: "01 Jan 2018"
       effectiveTo: "31 Dec 2018"
+      reportFrom: "01 Jan 2018"
+      reportTo: "31 Dec 2018"
       description: "my description"
       projectManagerId: 4
       leadAnalystId: 2
@@ -66,6 +68,8 @@ exports.projectMutations = {
       savingsTypeId: 3
       effectiveFrom: "01 Jan 2018"
       effectiveTo: "31 Dec 2018"
+      reportFrom: "01 Jan 2018"
+      reportTo: "31 Dec 2018"
       description: "my description"
       projectManagerId: 4
       leadAnalystId: 2

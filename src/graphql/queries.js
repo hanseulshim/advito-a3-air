@@ -25,6 +25,8 @@ export const GET_PROJECTS = gql`
       savingsType
       effectiveFrom
       effectiveTo
+      reportFrom
+      reportTo
       projectManagerId
       projectManagerName
       projectManagerEmail
@@ -76,6 +78,8 @@ export const GET_PROJECT = gql`
       savingsType
       effectiveFrom
       effectiveTo
+      reportFrom
+      reportTo
       projectManagerId
       projectManagerName
       projectManagerEmail

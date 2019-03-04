@@ -26,6 +26,8 @@ export default {
     savingsType: null,
     effectiveFrom: null,
     effectiveTo: null,
+    reportFrom: null,
+    reportTo: null,
     projectManagerId: null,
     projectManagerName: null,
     projectManagerEmail: null,

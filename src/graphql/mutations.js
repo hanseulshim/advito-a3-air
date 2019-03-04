@@ -20,6 +20,8 @@ export const ADD_PROJECT = gql`
     $savingsTypeId: Int!
     $effectiveFrom: Date!
     $effectiveTo: Date!
+    $reportFrom: Date!
+    $reportTo: Date!
     $description: String
     $projectManagerId: Int!
     $leadAnalystId: Int!
@@ -32,6 +34,8 @@ export const ADD_PROJECT = gql`
       savingsTypeId: $savingsTypeId
       effectiveFrom: $effectiveFrom
       effectiveTo: $effectiveTo
+      reportFrom: $reportFrom
+      reportTo: $reportTo
       description: $description
       projectManagerId: $projectManagerId
       leadAnalystId: $leadAnalystId
@@ -49,6 +53,8 @@ export const EDIT_PROJECT = gql`
     $savingsTypeId: Int!
     $effectiveFrom: Date!
     $effectiveTo: Date!
+    $reportFrom: Date!
+    $reportTo: Date!
     $description: String
     $projectManagerId: Int!
     $leadAnalystId: Int!
@@ -60,6 +66,8 @@ export const EDIT_PROJECT = gql`
       savingsTypeId: $savingsTypeId
       effectiveFrom: $effectiveFrom
       effectiveTo: $effectiveTo
+      reportFrom: $reportFrom
+      reportTo: $reportTo
       description: $description
       projectManagerId: $projectManagerId
       leadAnalystId: $leadAnalystId

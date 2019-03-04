@@ -16,12 +16,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="effectiveFrom"
+        prop="reportFrom"
         label="Project Date Range"
         width="220"
         :formatter="formatDate"
         sortable
-        sort-by="effectiveFrom"
+        sort-by="reportFrom"
       />
       <el-table-column prop="description" label="Description" />
       <el-table-column
@@ -110,9 +110,7 @@ export default {
   },
   methods: {
     formatDate(row) {
-      return `${formatDate(row.effectiveFrom)} — ${formatDate(
-        row.effectiveTo
-      )}`;
+      return `${formatDate(row.reportFrom)} — ${formatDate(row.reportTo)}`;
     },
     sortByRole(a) {
       if (

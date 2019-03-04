@@ -30,9 +30,25 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
+    </div>
+    <div class="value-row">
+      <div>Project Dates *</div>
+      <div class="input">
+        <el-date-picker
+          v-model="reportFrom"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+        <el-date-picker
+          v-model="reportTo"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+      </div>
     </div>
     <div class="value-row">
       <div>Effective Dates *</div>
@@ -63,8 +79,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="value-row">
@@ -75,8 +90,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="value-row">
@@ -87,8 +101,7 @@
           :key="item.id"
           :label="item.name"
           :value="item.id"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
     <div class="save-container">
@@ -141,6 +154,8 @@ export default {
       savingsTypeId: null,
       effectiveFrom: null,
       effectiveTo: null,
+      reportFrom: null,
+      reportTo: null,
       description: null,
       projectManagerId: null,
       leadAnalystId: null,
@@ -183,6 +198,8 @@ export default {
             savingsTypeId: this.savingsTypeId,
             effectiveFrom: this.effectiveFrom,
             effectiveTo: this.effectiveTo,
+            reportFrom: this.reportFrom,
+            reportTo: this.reportTo,
             description: this.description,
             projectManagerId: this.projectManagerId,
             leadAnalystId: this.leadAnalystId,
@@ -205,6 +222,8 @@ export default {
       this.savingsTypeId = project.savingsTypeId;
       this.effectiveFrom = project.effectiveFrom;
       this.effectiveTo = project.effectiveTo;
+      this.reportFrom = project.reportFrom;
+      this.reportTo = project.reportTo;
       this.description = project.description;
       this.projectManagerId = project.projectManagerId;
       this.leadAnalystId = project.leadAnalystId;
