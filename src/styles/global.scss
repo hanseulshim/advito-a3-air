@@ -17,6 +17,7 @@
   }
 }
 
+// INFO BUTTON STYLES
 .fa-info {
   color: $tree-poppy;
   border: 1px solid $tree-poppy;
@@ -35,6 +36,25 @@
   }
 }
 
+// CLOSE MODAL BUTTON STYLE
+.close-modal-button {
+  color: $tree-poppy;
+  margin-bottom: 1em;
+  border: 1px solid $tree-poppy;
+  padding: 7px;
+  border-radius: 100%;
+  height: 10px;
+  width: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    background: $tree-poppy;
+    color: $white;
+  }
+}
+
 .modal-container {
   border: 1px solid $gray-nurse;
   padding: 2em;
@@ -43,5 +63,5 @@
 }
 
 .v--modal-overlay {
-  background:rgba(255,255,255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
 }

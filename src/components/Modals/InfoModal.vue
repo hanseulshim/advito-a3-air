@@ -7,7 +7,7 @@
   >
     <div class="title-row">
       <div class="section-header">Info</div>
-      <i class="fas fa-times" @click="closeModal"></i>
+      <i class="fas fa-times close-modal-button" @click="closeModal"></i>
     </div>
     <div>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -39,22 +39,5 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-}
-.fa-times {
-  color: $tree-poppy;
-  margin-bottom: 1em;
-  border: 1px solid $tree-poppy;
-  padding: 7px;
-  border-radius: 100%;
-  height: 10px;
-  width: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  &:hover {
-    background: $tree-poppy;
-    color: $white;
-  }
 }
 </style>

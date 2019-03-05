@@ -2,7 +2,7 @@
   <modal classes="modal-container" name="new-project" height="auto">
     <div class="title-row">
       <div class="section-header">new project</div>
-      <i class="fas fa-times" @click="hideModal"></i>
+      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
     </div>
     <div class="value-row">
       <div>Client *</div>
@@ -229,23 +229,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-}
-.fa-times {
-  color: $tree-poppy;
-  margin-bottom: 1em;
-  border: 1px solid $tree-poppy;
-  padding: 7px;
-  border-radius: 100%;
-  height: 10px;
-  width: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  &:hover {
-    background: $tree-poppy;
-    color: $white;
-  }
 }
 .value-row {
   display: flex;
