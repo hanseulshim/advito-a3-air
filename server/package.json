@@ -1,0 +1,24 @@
+{
+  "name": "advito-air-a3-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "sls offline"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server-lambda": "^2.4.0",
+    "aws-sdk": "^2.413.0",
+    "graphql": "^14.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "serverless-offline": "^4.4.2",
+    "serverless-plugin-warmup": "^4.3.3-rc.1"
+  }
+}

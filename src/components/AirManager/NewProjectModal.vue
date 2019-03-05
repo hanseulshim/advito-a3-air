@@ -1,0 +1,252 @@
+<template>
+  <modal classes="modal-container" name="new-project" height="auto">
+    <div class="title-row">
+      <div class="section-header">new project</div>
+      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+    </div>
+    <div class="value-row">
+      <div>Client *</div>
+      <el-select v-model="clientId" class="input">
+        <el-option
+          v-for="item in clientList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </div>
+    <div class="value-row">
+      <div>Project Type *</div>
+      <el-select v-model="projectTypeId" class="input">
+        <el-option
+          v-for="item in projectTypeList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </div>
+    <div class="value-row">
+      <div>Savings Type *</div>
+      <el-select v-model="savingsTypeId" class="input">
+        <el-option
+          v-for="item in savingsTypeList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </div>
+    <div class="value-row">
+      <div>Project Dates *</div>
+      <div class="input">
+        <el-date-picker
+          v-model="effectiveFrom"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+        <el-date-picker
+          v-model="effectiveTo"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+      </div>
+    </div>
+    <div class="value-row">
+      <div>Report Dates *</div>
+      <div class="input">
+        <el-date-picker
+          v-model="reportFrom"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+        <el-date-picker
+          v-model="reportTo"
+          class="date-container"
+          type="date"
+          format="dd MMM yyyy"
+        />
+      </div>
+    </div>
+    <div class="value-row">
+      <div>Description</div>
+      <el-input v-model="description" type="textarea" class="input"></el-input>
+    </div>
+    <div class="value-row">
+      <div>Project Manager *</div>
+      <el-select v-model="projectManagerId" class="input">
+        <el-option
+          v-for="item in projectManagerList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </div>
+    <div class="value-row">
+      <div>Lead Analyst *</div>
+      <el-select v-model="leadAnalystId" class="input">
+        <el-option
+          v-for="item in leadAnalystList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </div>
+    <div class="value-row">
+      <div>Data Specialist *</div>
+      <el-select v-model="dataSpecialistId" class="input">
+        <el-option
+          v-for="item in dataSpecialistList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </div>
+    <div class="save-container">
+      <button class="button" @click="addProject">SAVE</button>
+    </div>
+    <SuccessModal
+      :hide-modal="hideModal"
+      message="Project successfully created."
+    />
+    <ErrorModal message="Failed to create project. Please try again" />
+  </modal>
+</template>
+
+<script>
+import SuccessModal from '@/components/Modals/SuccessModal.vue';
+import ErrorModal from '@/components/Modals/ErrorModal.vue';
+import { GET_PROJECTS, GET_CLIENT, GET_CLIENTS } from '@/graphql/queries';
+import { ADD_PROJECT } from '@/graphql/mutations';
+import projectData from '@/data/projectData';
+export default {
+  name: 'NewProjectModal',
+  components: {
+    SuccessModal,
+    ErrorModal
+  },
+  apollo: {
+    clientList: {
+      query: GET_CLIENTS
+    }
+  },
+  data() {
+    return {
+      clientList: [],
+      clientId: null,
+      projectTypeId: null,
+      savingsTypeId: null,
+      effectiveFrom:
+        'Mon Jan 01 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      effectiveTo: 'Mon Dec 31 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      reportFrom: 'Mon Jan 01 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      reportTo: 'Mon Dec 31 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
+      description: null,
+      projectManagerId: null,
+      leadAnalystId: null,
+      dataSpecialistId: null,
+      projectTypeList: projectData.projectTypeList.slice(),
+      projectManagerList: projectData.projectManagerList.slice(),
+      leadAnalystList: projectData.leadAnalystList.slice(),
+      dataSpecialistList: projectData.dataSpecialistList.slice()
+    };
+  },
+  computed: {
+    savingsTypeList: function() {
+      const savingsTypeList = projectData.savingsTypeList.slice();
+      if (this.projectTypeId === 1) {
+        return savingsTypeList.slice(0, 2);
+      } else if (this.projectTypeId === 2) {
+        return savingsTypeList.slice(1, 3);
+      } else if (this.projectTypeId === 3) {
+        return savingsTypeList.slice(0, 1);
+      }
+      return [];
+    }
+  },
+  watch: {
+    projectTypeId: function() {
+      this.savingsTypeId = null;
+    }
+  },
+  methods: {
+    hideModal() {
+      this.$modal.hide('new-project');
+    },
+    async addProject() {
+      try {
+        await this.$apollo.mutate({
+          mutation: ADD_PROJECT,
+          variables: {
+            clientId: this.clientId,
+            projectTypeId: this.projectTypeId,
+            savingsTypeId: this.savingsTypeId,
+            effectiveFrom: this.effectiveFrom,
+            effectiveTo: this.effectiveTo,
+            reportFrom: this.reportFrom,
+            reportTo: this.reportTo,
+            description: this.description,
+            projectManagerId: this.projectManagerId,
+            leadAnalystId: this.leadAnalystId,
+            dataSpecialistId: this.dataSpecialistId
+          },
+          update: (store, data) => {
+            const project = data.data.addProject;
+            const client = store.readQuery({
+              query: GET_CLIENT
+            }).client;
+            const newData = store.readQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id }
+            });
+            newData.projectList.push(project);
+            store.writeQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id },
+              data: newData
+            });
+          }
+        });
+        this.$modal.show('success');
+      } catch (error) {
+        this.$modal.show('error');
+      }
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+@import '@/styles/global.scss';
+.title-row {
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.value-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1em;
+  .input {
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    .date-container {
+      width: 48%;
+    }
+  }
+}
+.save-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2em;
+}
+</style>

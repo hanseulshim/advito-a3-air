@@ -1,24 +1,28 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "./views/Home.vue";
+import Vue from 'vue';
+import Router from 'vue-router';
+import AirManager from './views/AirManager';
+import Project from './views/Project';
+import ProjectSettings from '@/components/ProjectSettings';
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: "/",
-      name: "home",
-      component: Home
+      path: '/',
+      name: 'root',
+      component: AirManager
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+      path: '/project',
+      name: 'project',
+      component: Project,
+      children: [
+        {
+          path: 'program-settings',
+          component: ProjectSettings
+        }
+      ]
     }
   ]
 });
