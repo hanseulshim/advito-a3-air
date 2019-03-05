@@ -158,7 +158,7 @@ export default {
   margin-top: 2em;
 }
 .favorite-project {
-  border: 2px solid $gray-nurse;
+  border: 1px solid $gray-nurse;
   border-radius: 10px;
   font-size: 0.8em;
   overflow: hidden;
@@ -167,7 +167,7 @@ export default {
   justify-content: space-between;
   cursor: pointer;
   &:hover {
-    border: 2px solid $tree-poppy;
+    border: 1px solid $tree-poppy;
     .title-row {
       color: $tree-poppy;
     }

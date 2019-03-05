@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      password: ''
+      password: 'air2019'
     };
   }
 };
