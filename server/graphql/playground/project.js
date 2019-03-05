@@ -42,7 +42,6 @@ exports.projectMutations = {
   mutation {
     addProject(
       clientId: 1
-      division: "Test"
       projectTypeId: 1
       savingsTypeId: 3
       effectiveFrom: "01 Jan 2018"
@@ -54,17 +53,37 @@ exports.projectMutations = {
       leadAnalystId: 2
       dataSpecialistId: 3
     ) {
-      message
+      id
+      clientId
+      clientName
+      name
+      division
+      description
+      isDeleted
+      projectTypeId
+      projectType
+      savingsTypeId
+      savingsType
+      effectiveFrom
+      effectiveTo
+      reportFrom
+      reportTo
+      projectManagerId
+      projectManagerName
+      projectManagerEmail
+      leadAnalystId
+      leadAnalystName
+      leadAnalystEmail
+      dataSpecialistId
+      dataSpecialistName
+      dataSpecialistEmail
+      progress
+      favorite
     }
-    deleteProject(id: 1) {
-      message
-    }
-    toggleFavoriteProject(id: 50) {
-      message
-    },
+    deleteProject(id: 1)
+    toggleFavoriteProject(id: 50)
     editProject(
       id:50,
-      division: "Test"
       savingsTypeId: 3
       effectiveFrom: "01 Jan 2018"
       effectiveTo: "31 Dec 2018"
@@ -75,7 +94,32 @@ exports.projectMutations = {
       leadAnalystId: 2
       dataSpecialistId: 3
     ) {
-      message
+      id
+      clientId
+      clientName
+      name
+      description
+      division
+      isDeleted
+      projectTypeId
+      projectType
+      savingsTypeId
+      savingsType
+      effectiveFrom
+      effectiveTo
+      reportFrom
+      reportTo
+      projectManagerId
+      projectManagerName
+      projectManagerEmail
+      leadAnalystId
+      leadAnalystName
+      leadAnalystEmail
+      dataSpecialistId
+      dataSpecialistName
+      dataSpecialistEmail
+      progress
+      favorite
     }
   }
   `

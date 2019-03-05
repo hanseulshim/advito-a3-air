@@ -37,7 +37,7 @@ body {
   color: $dove-gray;
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 20px;
 }
 

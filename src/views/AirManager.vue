@@ -16,13 +16,9 @@
       <button class="button" @click="showNewProject">+ NEW PROJECT</button>
       <i class="fas fa-info project-top-item" @click="showInfoModal" />
     </div>
-    <FavoriteProjects
-      :client-list="clientList"
-      :favorite-project-list="favoriteProjectList"
-      :client="client"
-    />
-    <TotalProjects :total-project-list="totalProjectList" :client="client" />
-    <NewProjectModal :client="client" :client-list="clientList" />
+    <FavoriteProjects :favorite-project-list="favoriteProjectList" />
+    <TotalProjects :total-project-list="totalProjectList" />
+    <NewProjectModal />
     <InfoModal />
   </div>
 </template>

@@ -29,10 +29,6 @@ type Project {
   progress: String,
   favorite: Boolean,
 }
-
-type MutationSuccess {
-  message: String
-}
 `;
 exports.projectQuery = `
 projectList(clientId: Int): [Project] @auth
@@ -50,7 +46,7 @@ addProject(
   projectManagerId: Int!,
   leadAnalystId: Int!,
   dataSpecialistId: Int!,
-): MutationSuccess @auth
+): Project @auth
 editProject(
   id: Int!
   savingsTypeId: Int!,
@@ -62,11 +58,11 @@ editProject(
   projectManagerId: Int!,
   leadAnalystId: Int!,
   dataSpecialistId: Int!,
-): MutationSuccess @auth
+): Project @auth
 deleteProject(
   id: Int!
-): MutationSuccess @auth
+): Int @auth
 toggleFavoriteProject(
   id: Int!
-): MutationSuccess @auth
+): Int @auth
 `;

@@ -96,6 +96,7 @@ export default {
   border-bottom: 1px solid $white;
   border-left: 1px solid $gray-nurse;
   border-right: 1px solid $gray-nurse;
+  font-weight: 600;
 }
 .content-container {
   background: $white;

@@ -122,7 +122,7 @@
 <script>
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
-import { GET_PROJECTS } from '@/graphql/queries';
+import { GET_PROJECTS, GET_CLIENT, GET_CLIENTS } from '@/graphql/queries';
 import { ADD_PROJECT } from '@/graphql/mutations';
 import projectData from '@/data/projectData';
 export default {
@@ -131,29 +131,14 @@ export default {
     SuccessModal,
     ErrorModal
   },
-  props: {
-    client: {
-      type: Object,
-      required: true
-    },
-    clientList: {
-      type: Array,
-      required: true
-    }
-  },
   apollo: {
-    projectList: {
-      query: GET_PROJECTS,
-      variables() {
-        return {
-          clientId: this.client.id
-        };
-      }
+    clientList: {
+      query: GET_CLIENTS
     }
   },
   data() {
     return {
-      projectList: [],
+      clientList: [],
       clientId: null,
       projectTypeId: null,
       savingsTypeId: null,
@@ -210,9 +195,24 @@ export default {
             projectManagerId: this.projectManagerId,
             leadAnalystId: this.leadAnalystId,
             dataSpecialistId: this.dataSpecialistId
+          },
+          update: (store, data) => {
+            const project = data.data.addProject;
+            const client = store.readQuery({
+              query: GET_CLIENT
+            }).client;
+            const newData = store.readQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id }
+            });
+            newData.projectList.push(project);
+            store.writeQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id },
+              data: newData
+            });
           }
         });
-        this.$apollo.queries.projectList.refetch();
         this.$modal.show('success');
       } catch (error) {
         this.$modal.show('error');

@@ -25,33 +25,17 @@
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { DELETE_PROJECT } from '@/graphql/mutations';
-import { GET_PROJECTS } from '@/graphql/queries';
+import { GET_CLIENT, GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'DeleteModal',
   components: {
     SuccessModal,
     ErrorModal
   },
-  props: {
-    client: {
-      type: Object,
-      required: true
-    }
-  },
   data() {
     return {
       id: null
     };
-  },
-  apollo: {
-    projectList: {
-      query: GET_PROJECTS,
-      variables() {
-        return {
-          clientId: this.client.id
-        };
-      }
-    }
   },
   methods: {
     async deleteProject() {
@@ -60,9 +44,27 @@ export default {
           mutation: DELETE_PROJECT,
           variables: {
             id: this.id
+          },
+          update: (store, data) => {
+            const id = data.data.deleteProject;
+            const client = store.readQuery({
+              query: GET_CLIENT
+            }).client;
+            const newData = store.readQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id }
+            });
+            const projectIndex = newData.projectList.findIndex(
+              project => project.id === id
+            );
+            newData.projectList.splice(projectIndex, 1);
+            store.writeQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id },
+              data: newData
+            });
           }
         });
-        this.$apollo.queries.projectList.refetch();
         this.$modal.show('success');
       } catch (error) {
         this.$modal.show('error');

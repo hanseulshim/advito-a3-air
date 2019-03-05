@@ -47,6 +47,8 @@ exports.projectMutations = {
       savingsType: savingsType.name,
       effectiveFrom: payload.effectiveFrom,
       effectiveTo: payload.effectiveTo,
+      reportFrom: payload.reportFrom,
+      reportTo: payload.reportTo,
       projectManagerId: projectManager.id,
       projectManagerName: projectManager.name,
       projectManagerEmail: projectManager.email,
@@ -60,9 +62,7 @@ exports.projectMutations = {
       favorite: true
     };
     projectList.push(project);
-    return {
-      message: 'Successfully added project'
-    };
+    return project;
   },
   editProject: (_, payload) => {
     const project = projectList.filter(project => project.id === payload.id)[0];
@@ -95,9 +95,7 @@ exports.projectMutations = {
     project.dataSpecialistName = dataSpecialist.name;
     project.dataSpecialistEmail = dataSpecialist.email;
 
-    return {
-      message: 'Successfully edited project'
-    };
+    return project;
   },
   deleteProject: (_, payload) => {
     const project = projectList.filter(project => project.id === payload.id)[0];
@@ -105,9 +103,7 @@ exports.projectMutations = {
       throw new ApolloError('Project not found', 400);
     }
     project.isDeleted = true;
-    return {
-      message: 'Successfully deleted project'
-    };
+    return payload.id;
   },
   toggleFavoriteProject: (_, payload) => {
     const project = projectList.filter(project => project.id === payload.id)[0];
@@ -115,8 +111,6 @@ exports.projectMutations = {
       throw new ApolloError('Project not found', 400);
     }
     project.favorite = !project.favorite;
-    return {
-      message: 'Toggled favorite project'
-    };
+    return payload.id;
   }
 };

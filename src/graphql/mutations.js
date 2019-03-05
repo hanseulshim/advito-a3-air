@@ -39,7 +39,32 @@ export const ADD_PROJECT = gql`
       leadAnalystId: $leadAnalystId
       dataSpecialistId: $dataSpecialistId
     ) {
-      message
+      id
+      clientId
+      clientName
+      name
+      division
+      description
+      isDeleted
+      projectTypeId
+      projectType
+      savingsTypeId
+      savingsType
+      effectiveFrom
+      effectiveTo
+      reportFrom
+      reportTo
+      projectManagerId
+      projectManagerName
+      projectManagerEmail
+      leadAnalystId
+      leadAnalystName
+      leadAnalystEmail
+      dataSpecialistId
+      dataSpecialistName
+      dataSpecialistEmail
+      progress
+      favorite
     }
   }
 `;
@@ -69,23 +94,44 @@ export const EDIT_PROJECT = gql`
       leadAnalystId: $leadAnalystId
       dataSpecialistId: $dataSpecialistId
     ) {
-      message
+      id
+      clientId
+      clientName
+      name
+      division
+      description
+      isDeleted
+      projectTypeId
+      projectType
+      savingsTypeId
+      savingsType
+      effectiveFrom
+      effectiveTo
+      reportFrom
+      reportTo
+      projectManagerId
+      projectManagerName
+      projectManagerEmail
+      leadAnalystId
+      leadAnalystName
+      leadAnalystEmail
+      dataSpecialistId
+      dataSpecialistName
+      dataSpecialistEmail
+      progress
+      favorite
     }
   }
 `;
 
 export const DELETE_PROJECT = gql`
   mutation deleteProject($id: Int!) {
-    deleteProject(id: $id) {
-      message
-    }
+    deleteProject(id: $id)
   }
 `;
 
 export const TOGGLE_FAVORITE_PROJECT = gql`
   mutation toggleFavoriteProject($id: Int!) {
-    toggleFavoriteProject(id: $id) {
-      message
-    }
+    toggleFavoriteProject(id: $id)
   }
 `;

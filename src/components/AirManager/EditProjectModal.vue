@@ -115,7 +115,7 @@
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { EDIT_PROJECT } from '@/graphql/mutations';
-import { GET_PROJECTS } from '@/graphql/queries';
+import { GET_PROJECT } from '@/graphql/queries';
 import projectData from '@/data/projectData';
 export default {
   name: 'EditProjectModal',
@@ -123,25 +123,8 @@ export default {
     SuccessModal,
     ErrorModal
   },
-  props: {
-    client: {
-      type: Object,
-      required: true
-    }
-  },
-  apollo: {
-    projectList: {
-      query: GET_PROJECTS,
-      variables() {
-        return {
-          clientId: this.client.id
-        };
-      }
-    }
-  },
   data() {
     return {
-      projectList: [],
       clientName: null,
       id: null,
       projectType: null,
@@ -198,9 +181,12 @@ export default {
             projectManagerId: this.projectManagerId,
             leadAnalystId: this.leadAnalystId,
             dataSpecialistId: this.dataSpecialistId
+          },
+          update: (store, data) => {
+            const project = data.data.editProject;
+            store.writeQuery({ query: GET_PROJECT, data: { project } });
           }
         });
-        this.$apollo.queries.projectList.refetch();
         this.$modal.show('success');
       } catch (error) {
         this.$modal.show('error');

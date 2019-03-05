@@ -62,8 +62,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <EditProjectModal :client="client" />
-    <DeleteProjectModal :client="client" />
+    <EditProjectModal />
+    <DeleteProjectModal />
   </div>
 </template>
 
@@ -72,7 +72,7 @@ import DeleteProjectModal from './DeleteProjectModal';
 import EditProjectModal from './EditProjectModal';
 import { formatDate } from '@/helper';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
-import { GET_USER, GET_PROJECTS } from '@/graphql/queries';
+import { GET_USER, GET_CLIENT, GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'TotalProjects',
   components: {
@@ -83,29 +83,16 @@ export default {
     totalProjectList: {
       type: Array,
       required: true
-    },
-    client: {
-      type: Object,
-      required: true
     }
   },
   apollo: {
     user: {
       query: GET_USER
-    },
-    projectList: {
-      query: GET_PROJECTS,
-      variables() {
-        return {
-          clientId: this.client.id
-        };
-      }
     }
   },
   data() {
     return {
-      user: null,
-      projectList: []
+      user: null
     };
   },
   methods: {
@@ -133,9 +120,29 @@ export default {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { id }
+          variables: { id },
+          update: (store, data) => {
+            const id = data.data.toggleFavoriteProject;
+            const client = store.readQuery({
+              query: GET_CLIENT
+            }).client;
+            const newData = store.readQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id }
+            });
+            const projectIndex = newData.projectList.findIndex(
+              project => project.id === id
+            );
+            newData.projectList[projectIndex].favorite = !newData.projectList[
+              projectIndex
+            ].favorite;
+            store.writeQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id },
+              data: newData
+            });
+          }
         });
-        this.$apollo.queries.projectList.refetch();
       } catch (error) {
         return 'this was an error';
       }

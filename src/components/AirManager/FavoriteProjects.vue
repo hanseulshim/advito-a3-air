@@ -53,8 +53,8 @@
         <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
       </div>
     </div>
-    <EditProjectModal :client="client" />
-    <DeleteProjectModal :client="client" />
+    <EditProjectModal />
+    <DeleteProjectModal />
   </div>
 </template>
 
@@ -67,35 +67,22 @@ import {
   UPDATE_CLIENT,
   TOGGLE_FAVORITE_PROJECT
 } from '@/graphql/mutations';
-import { GET_PROJECTS } from '@/graphql/queries';
+import { GET_PROJECTS, GET_CLIENT, GET_CLIENTS } from '@/graphql/queries';
 export default {
   name: 'FavoriteProjects',
   components: {
     DeleteProjectModal,
     EditProjectModal
   },
+  apollo: {
+    clientList: {
+      query: GET_CLIENTS
+    }
+  },
   props: {
     favoriteProjectList: {
       type: Array,
       required: true
-    },
-    clientList: {
-      type: Array,
-      required: true
-    },
-    client: {
-      type: Object,
-      required: true
-    }
-  },
-  apollo: {
-    projectList: {
-      query: GET_PROJECTS,
-      variables() {
-        return {
-          clientId: this.client.id
-        };
-      }
     }
   },
   data() {
@@ -130,9 +117,29 @@ export default {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { id }
+          variables: { id },
+          update: (store, data) => {
+            const id = data.data.toggleFavoriteProject;
+            const client = store.readQuery({
+              query: GET_CLIENT
+            }).client;
+            const newData = store.readQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id }
+            });
+            const projectIndex = newData.projectList.findIndex(
+              project => project.id === id
+            );
+            newData.projectList[projectIndex].favorite = !newData.projectList[
+              projectIndex
+            ].favorite;
+            store.writeQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id },
+              data: newData
+            });
+          }
         });
-        this.$apollo.queries.projectList.refetch();
       } catch (error) {
         return 'this was an error';
       }
