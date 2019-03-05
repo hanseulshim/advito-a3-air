@@ -115,7 +115,7 @@
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { EDIT_PROJECT } from '@/graphql/mutations';
-import { GET_PROJECT } from '@/graphql/queries';
+import { GET_PROJECT, GET_CLIENT, GET_PROJECTS } from '@/graphql/queries';
 import projectData from '@/data/projectData';
 export default {
   name: 'EditProjectModal',
@@ -184,6 +184,22 @@ export default {
           },
           update: (store, data) => {
             const project = data.data.editProject;
+            const client = store.readQuery({
+              query: GET_CLIENT
+            }).client;
+            const newData = store.readQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id }
+            });
+            const projectIndex = newData.projectList.findIndex(
+              findProject => findProject.id === project.id
+            );
+            newData.projectList[projectIndex] = { ...project };
+            store.writeQuery({
+              query: GET_PROJECTS,
+              variables: { clientId: client.id },
+              data: newData
+            });
             store.writeQuery({ query: GET_PROJECT, data: { project } });
           }
         });
