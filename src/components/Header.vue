@@ -13,8 +13,7 @@
         :key="item.value"
         :label="item.name"
         :value="item.id"
-      >
-      </el-option>
+      ></el-option>
     </el-select>
     <el-select
       v-if="client.id"
@@ -29,8 +28,7 @@
         :key="item.value"
         :label="item.name"
         :value="item.id"
-      >
-      </el-option>
+      ></el-option>
     </el-select>
     <div class="icon-container">
       <i class="far fa-comment-alt" />
@@ -90,9 +88,8 @@ export default {
         variables.client = this.clientList.filter(
           client => client.id === id
         )[0];
-      } else if (this.project.id) {
-        this.updateProject();
       }
+      this.updateProject();
       this.$apollo.mutate({
         mutation: UPDATE_CLIENT,
         variables
