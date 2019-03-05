@@ -53,10 +53,15 @@
         <span class="project-value">{{ project.division }}</span>
       </div>
     </div>
-    <div class="project-column">
-      <i class="fas fa-pencil-alt" @click="editProject(project)"></i>
+    <div class="project-column icon-container">
+      <i
+        class="fas fa-pencil-alt project-info-icon"
+        @click="editProject(project)"
+      ></i>
+      <i class="fas fa-info project-info-icon" @click="showInfoModal" />
     </div>
     <EditProjectModal />
+    <InfoModal />
   </div>
 </template>
 
@@ -64,10 +69,12 @@
 import { GET_PROJECT } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import EditProjectModal from '@/components/AirManager/EditProjectModal';
+import InfoModal from '@/components/Modals/InfoModal';
 export default {
   name: 'ProjectInfo',
   components: {
-    EditProjectModal
+    EditProjectModal,
+    InfoModal
   },
   apollo: {
     project: {
@@ -85,6 +92,9 @@ export default {
     },
     editProject(project) {
       this.$modal.show('edit-project', { project });
+    },
+    showInfoModal() {
+      this.$modal.show('info');
     }
   }
 };
@@ -114,5 +124,22 @@ export default {
 }
 .project-value {
   color: $black;
+}
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.project-info-icon {
+  color: $tradewind;
+  cursor: pointer;
+  align-self: center;
+  margin: 5px 0;
+  &.fa-info {
+    border: 1px solid $tradewind;
+    &:hover {
+      background: $tradewind;
+    }
+  }
 }
 </style>
