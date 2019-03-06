@@ -29,9 +29,29 @@ type Project {
   progress: String,
   favorite: Boolean,
 }
+
+type ProjectInfo {
+  projectTypeList: [ProjectType]
+  savingsTypeList: [ProjectType]
+  projectManagerList: [ProjectUser]
+  leadAnalystList: [ProjectUser]
+  dataSpecialistList: [ProjectUser]
+}
+
+type ProjectType {
+  id: Int,
+  name: String
+}
+
+type ProjectUser {
+  id: Int,
+  name: String,
+  email: String
+}
 `;
 exports.projectQuery = `
 projectList(clientId: Int): [Project] @auth
+projectInfo: ProjectInfo @auth
 `;
 exports.projectMutation = `
 addProject(

@@ -94,3 +94,33 @@ export const GET_PROJECT = gql`
     }
   }
 `;
+
+export const GET_PROJECT_INFO = gql`
+  {
+    projectInfo {
+      projectTypeList {
+        id
+        name
+      }
+      savingsTypeList {
+        id
+        name
+      }
+      projectManagerList {
+        id
+        name
+        email
+      }
+      leadAnalystList {
+        id
+        name
+        email
+      }
+      dataSpecialistList {
+        id
+        name
+        email
+      }
+    }
+  }
+`;
