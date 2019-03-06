@@ -47,7 +47,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Project Dates *" required>
+      <el-form-item label="Project Dates *">
         <div class="date-picker-container">
           <el-form-item prop="effectiveFrom" class="date-picker-item">
             <el-date-picker
@@ -325,13 +325,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-@import '@/styles/global.scss';
-.title-row {
-  margin-bottom: 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-</style>

@@ -1,3 +1,9 @@
+.title-row {
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
 .el-form-item {
   .select-modal {
     width: 100%;

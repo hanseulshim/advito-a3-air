@@ -4,105 +4,112 @@
     name="edit-project"
     height="auto"
     @before-open="beforeOpen"
-    @before-close="beforeClose"
   >
-    <div class="title-row">
-      <div class="section-header">edit project</div>
-      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
-    </div>
-    <div class="value-row">
-      <div>Client *</div>
-      <el-input v-model="clientName" class="input" disabled></el-input>
-    </div>
-    <div class="value-row">
-      <div>Project Type *</div>
-      <el-input v-model="projectType" disabled class="input"></el-input>
-    </div>
-    <div class="value-row">
-      <div>Savings Type *</div>
-      <el-select v-model="savingsTypeId" class="input">
-        <el-option
-          v-for="item in savingsTypeList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        ></el-option>
-      </el-select>
-    </div>
-    <div class="value-row">
-      <div>Project Dates *</div>
-      <div class="input">
-        <el-date-picker
-          v-model="effectiveFrom"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
-        <el-date-picker
-          v-model="effectiveTo"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
+    <el-form
+      ref="editProjectForm"
+      :model="form"
+      :rules="rules"
+      label-position="left"
+      label-width="150px"
+      hide-required-asterisk
+    >
+      <div class="title-row">
+        <div class="section-header">edit project</div>
+        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
-    </div>
-    <div class="value-row">
-      <div>Report Dates *</div>
-      <div class="input">
-        <el-date-picker
-          v-model="reportFrom"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
-        <el-date-picker
-          v-model="reportTo"
-          class="date-container"
-          type="date"
-          format="dd MMM yyyy"
-        />
-      </div>
-    </div>
-    <div class="value-row">
-      <div>Description</div>
-      <el-input v-model="description" type="textarea" class="input"></el-input>
-    </div>
-    <div class="value-row">
-      <div>Project Manager *</div>
-      <el-select v-model="projectManagerId" class="input">
-        <el-option
-          v-for="item in projectManagerList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        ></el-option>
-      </el-select>
-    </div>
-    <div class="value-row">
-      <div>Lead Analyst *</div>
-      <el-select v-model="leadAnalystId" class="input">
-        <el-option
-          v-for="item in leadAnalystList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        ></el-option>
-      </el-select>
-    </div>
-    <div class="value-row">
-      <div>Data Specialist *</div>
-      <el-select v-model="dataSpecialistId" class="input">
-        <el-option
-          v-for="item in dataSpecialistList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        ></el-option>
-      </el-select>
-    </div>
-    <div class="save-container">
-      <button class="button" @click="editProject">SAVE</button>
-    </div>
+      <el-form-item label="Client *">
+        <el-input v-model="clientName" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="Project Type">
+        <el-input v-model="projectType" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="Savings Type *" prop="savingsTypeId">
+        <el-select v-model="form.savingsTypeId" class="select-modal">
+          <el-option
+            v-for="item in savingsTypeList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Project Dates *">
+        <div class="date-picker-container">
+          <el-form-item prop="effectiveFrom" class="date-picker-item">
+            <el-date-picker
+              v-model="form.effectiveFrom"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+          </el-form-item>
+          <el-form-item prop="effectiveTo" class="date-picker-item">
+            <el-date-picker
+              v-model="form.effectiveTo"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+          </el-form-item>
+        </div>
+      </el-form-item>
+      <el-form-item label="Report Dates *">
+        <div class="date-picker-container">
+          <el-form-item prop="reportFrom" class="date-picker-item">
+            <el-date-picker
+              v-model="form.reportFrom"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+          </el-form-item>
+          <el-form-item prop="reportTo" class="date-picker-item">
+            <el-date-picker
+              v-model="form.reportTo"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+          </el-form-item>
+        </div>
+      </el-form-item>
+      <el-form-item label="Description">
+        <el-input v-model="form.description" type="textarea"></el-input>
+      </el-form-item>
+      <el-form-item label="Project Manager *" prop="projectManagerId">
+        <el-select v-model="form.projectManagerId" class="select-modal">
+          <el-option
+            v-for="item in projectManagerList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Lead Analyst *" prop="leadAnalystId">
+        <el-select v-model="form.leadAnalystId" class="select-modal">
+          <el-option
+            v-for="item in leadAnalystList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Data Specialist *" prop="dataSpecialistId">
+        <el-select v-model="form.dataSpecialistId" class="select-modal">
+          <el-option
+            v-for="item in dataSpecialistList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item class="save-container">
+        <button class="button" @click="validateForm">SAVE</button>
+      </el-form-item>
+    </el-form>
     <SuccessModal
       :hide-modal="hideModal"
       message="Project successfully edited."
@@ -125,20 +132,79 @@ export default {
   },
   data() {
     return {
-      clientName: null,
-      id: null,
+      form: {
+        id: null,
+        savingsTypeId: null,
+        effectiveFrom: null,
+        effectiveTo: null,
+        reportFrom: null,
+        reportTo: null,
+        description: null,
+        projectManagerId: null,
+        leadAnalystId: null,
+        dataSpecialistId: null
+      },
+      rules: {
+        savingsTypeId: [
+          {
+            required: true,
+            message: 'Please select a savings type',
+            trigger: 'change'
+          }
+        ],
+        effectiveFrom: [
+          {
+            required: true,
+            message: 'Please select a project start date',
+            trigger: 'change'
+          }
+        ],
+        effectiveTo: [
+          {
+            required: true,
+            message: 'Please select a project end date',
+            trigger: 'change'
+          }
+        ],
+        reportFrom: [
+          {
+            required: true,
+            message: 'Please select a report start date',
+            trigger: 'change'
+          }
+        ],
+        reportTo: [
+          {
+            required: true,
+            message: 'Please select a report end date',
+            trigger: 'change'
+          }
+        ],
+        projectManagerId: [
+          {
+            required: true,
+            message: 'Please select a project manager',
+            trigger: 'change'
+          }
+        ],
+        leadAnalystId: [
+          {
+            required: true,
+            message: 'Please select a lead analyst',
+            trigger: 'change'
+          }
+        ],
+        dataSpecialistId: [
+          {
+            required: true,
+            message: 'Please select a data specialist',
+            trigger: 'change'
+          }
+        ]
+      },
       projectType: null,
       projectTypeId: null,
-      savingsTypeId: null,
-      effectiveFrom: null,
-      effectiveTo: null,
-      reportFrom: null,
-      reportTo: null,
-      description: null,
-      projectManagerId: null,
-      leadAnalystId: null,
-      dataSpecialistId: null,
-      projectTypeList: projectData.projectTypeList.slice(),
+      clientName: null,
       projectManagerList: projectData.projectManagerList.slice(),
       leadAnalystList: projectData.leadAnalystList.slice(),
       dataSpecialistList: projectData.dataSpecialistList.slice()
@@ -157,30 +223,25 @@ export default {
       return [];
     }
   },
-  watch: {
-    projectTypeId: function(a, b) {
-      if (a && b) this.savingsTypeId = null;
-    }
-  },
   methods: {
     hideModal() {
       this.$modal.hide('edit-project');
+    },
+    validateForm() {
+      this.$refs['editProjectForm'].validate(valid => {
+        if (valid) {
+          this.editProject();
+        } else {
+          return false;
+        }
+      });
     },
     async editProject() {
       try {
         await this.$apollo.mutate({
           mutation: EDIT_PROJECT,
           variables: {
-            id: this.id,
-            savingsTypeId: this.savingsTypeId,
-            effectiveFrom: this.effectiveFrom,
-            effectiveTo: this.effectiveTo,
-            reportFrom: this.reportFrom,
-            reportTo: this.reportTo,
-            description: this.description,
-            projectManagerId: this.projectManagerId,
-            leadAnalystId: this.leadAnalystId,
-            dataSpecialistId: this.dataSpecialistId
+            ...this.form
           },
           update: (store, data) => {
             const project = data.data.editProject;
@@ -211,51 +272,19 @@ export default {
     beforeOpen(event) {
       const project = event.params.project;
       this.clientName = project.clientName;
-      this.id = project.id;
       this.projectType = project.projectType;
       this.projectTypeId = project.projectTypeId;
-      this.savingsTypeId = project.savingsTypeId;
-      this.effectiveFrom = project.effectiveFrom;
-      this.effectiveTo = project.effectiveTo;
-      this.reportFrom = project.reportFrom;
-      this.reportTo = project.reportTo;
-      this.description = project.description;
-      this.projectManagerId = project.projectManagerId;
-      this.leadAnalystId = project.leadAnalystId;
-      this.dataSpecialistId = project.dataSpecialistId;
-    },
-    beforeClose() {
-      this.projectTypeId = null;
+      this.form.id = project.id;
+      this.form.savingsTypeId = project.savingsTypeId;
+      this.form.effectiveFrom = project.effectiveFrom;
+      this.form.effectiveTo = project.effectiveTo;
+      this.form.reportFrom = project.reportFrom;
+      this.form.reportTo = project.reportTo;
+      this.form.description = project.description;
+      this.form.projectManagerId = project.projectManagerId;
+      this.form.leadAnalystId = project.leadAnalystId;
+      this.form.dataSpecialistId = project.dataSpecialistId;
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-@import '@/styles/global.scss';
-.title-row {
-  margin-bottom: 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-.value-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1em;
-  .input {
-    width: 70%;
-    display: flex;
-    justify-content: space-between;
-    .date-container {
-      width: 48%;
-    }
-  }
-}
-.save-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2em;
-}
-</style>
