@@ -1,9 +1,15 @@
 <template>
-  <div>asdf</div>
+  <div>
+    <LocationCollections />
+  </div>
 </template>
 
 <script>
+import LocationCollections from './LocationCollections';
 export default {
-  name: 'ProjectSettings'
+  name: 'ProjectSettings',
+  components: {
+    LocationCollections
+  }
 };
 </script>
