@@ -31,6 +31,31 @@ exports.projectQueries = {
       progress
       favorite
     }
+    projectInfo {
+      projectTypeList {
+        id
+        name
+      }
+      savingsTypeList {
+        id
+        name
+      }
+      projectManagerList {
+        id
+        name
+        email
+      }
+      leadAnalystList {
+        id
+        name
+        email
+      }
+      dataSpecialistList {
+        id
+        name
+        email
+      }
+    }
   }
   `
 };

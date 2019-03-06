@@ -26,7 +26,7 @@
       <el-form-item label="Savings Type *" prop="savingsTypeId">
         <el-select v-model="form.savingsTypeId" class="select-modal">
           <el-option
-            v-for="item in savingsTypeList"
+            v-for="item in projectInfo.savingsTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -79,7 +79,7 @@
       <el-form-item label="Project Manager *" prop="projectManagerId">
         <el-select v-model="form.projectManagerId" class="select-modal">
           <el-option
-            v-for="item in projectManagerList"
+            v-for="item in projectInfo.projectManagerList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -89,7 +89,7 @@
       <el-form-item label="Lead Analyst *" prop="leadAnalystId">
         <el-select v-model="form.leadAnalystId" class="select-modal">
           <el-option
-            v-for="item in leadAnalystList"
+            v-for="item in projectInfo.leadAnalystList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -99,7 +99,7 @@
       <el-form-item label="Data Specialist *" prop="dataSpecialistId">
         <el-select v-model="form.dataSpecialistId" class="select-modal">
           <el-option
-            v-for="item in dataSpecialistList"
+            v-for="item in projectInfo.dataSpecialistList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -122,13 +122,22 @@
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { EDIT_PROJECT } from '@/graphql/mutations';
-import { GET_PROJECT, GET_CLIENT, GET_PROJECTS } from '@/graphql/queries';
-import projectData from '@/data/projectData';
+import {
+  GET_PROJECT,
+  GET_CLIENT,
+  GET_PROJECTS,
+  GET_PROJECT_INFO
+} from '@/graphql/queries';
 export default {
   name: 'EditProjectModal',
   components: {
     SuccessModal,
     ErrorModal
+  },
+  apollo: {
+    projectInfo: {
+      query: GET_PROJECT_INFO
+    }
   },
   data() {
     return {
@@ -205,14 +214,12 @@ export default {
       projectType: null,
       projectTypeId: null,
       clientName: null,
-      projectManagerList: projectData.projectManagerList.slice(),
-      leadAnalystList: projectData.leadAnalystList.slice(),
-      dataSpecialistList: projectData.dataSpecialistList.slice()
+      projectInfo: {}
     };
   },
   computed: {
     savingsTypeList: function() {
-      const savingsTypeList = projectData.savingsTypeList.slice();
+      const savingsTypeList = this.projectInfo.savingsTypeList.slice();
       if (this.projectTypeId === 1) {
         return savingsTypeList.slice(0, 2);
       } else if (this.projectTypeId === 2) {

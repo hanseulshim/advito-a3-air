@@ -10,7 +10,8 @@ exports.projectResolvers = {
       ? projectList.filter(project => project.clientId === payload.clientId)
       : projectList;
     return projectListFiltered.filter(project => !project.isDeleted);
-  }
+  },
+  projectInfo: () => projectData
 };
 
 exports.projectMutations = {

@@ -30,7 +30,7 @@
       <el-form-item label="Project Type *" prop="projectTypeId">
         <el-select v-model="form.projectTypeId" class="select-modal">
           <el-option
-            v-for="item in projectTypeList"
+            v-for="item in projectInfo.projectTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -40,7 +40,7 @@
       <el-form-item label="Savings Type *" prop="savingsTypeId">
         <el-select v-model="form.savingsTypeId" class="select-modal">
           <el-option
-            v-for="item in savingsTypeList"
+            v-for="item in projectInfo.savingsTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -93,7 +93,7 @@
       <el-form-item label="Project Manager *" prop="projectManagerId">
         <el-select v-model="form.projectManagerId" class="select-modal">
           <el-option
-            v-for="item in projectManagerList"
+            v-for="item in projectInfo.projectManagerList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -103,7 +103,7 @@
       <el-form-item label="Lead Analyst *" prop="leadAnalystId">
         <el-select v-model="form.leadAnalystId" class="select-modal">
           <el-option
-            v-for="item in leadAnalystList"
+            v-for="item in projectInfo.leadAnalystList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -113,7 +113,7 @@
       <el-form-item label="Data Specialist *" prop="dataSpecialistId">
         <el-select v-model="form.dataSpecialistId" class="select-modal">
           <el-option
-            v-for="item in dataSpecialistList"
+            v-for="item in projectInfo.dataSpecialistList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -135,9 +135,13 @@
 <script>
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
-import { GET_PROJECTS, GET_CLIENT, GET_CLIENTS } from '@/graphql/queries';
+import {
+  GET_PROJECTS,
+  GET_CLIENT,
+  GET_CLIENTS,
+  GET_PROJECT_INFO
+} from '@/graphql/queries';
 import { ADD_PROJECT } from '@/graphql/mutations';
-import projectData from '@/data/projectData';
 export default {
   name: 'NewProjectModal',
   components: {
@@ -147,6 +151,9 @@ export default {
   apollo: {
     clientList: {
       query: GET_CLIENTS
+    },
+    projectInfo: {
+      query: GET_PROJECT_INFO
     }
   },
   data() {
@@ -239,15 +246,12 @@ export default {
         ]
       },
       clientList: [],
-      projectTypeList: projectData.projectTypeList.slice(),
-      projectManagerList: projectData.projectManagerList.slice(),
-      leadAnalystList: projectData.leadAnalystList.slice(),
-      dataSpecialistList: projectData.dataSpecialistList.slice()
+      projectInfo: {}
     };
   },
   computed: {
     savingsTypeList: function() {
-      const savingsTypeList = projectData.savingsTypeList.slice();
+      const savingsTypeList = this.projectInfo.savingsTypeList.slice();
       if (this.form.projectTypeId === 1) {
         return savingsTypeList.slice(0, 2);
       } else if (this.form.projectTypeId === 2) {
