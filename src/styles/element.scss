@@ -26,8 +26,16 @@
   }
   // Dropdown Styles
   .el-input__inner {
-    border: 1px solid #fafaf9;
+    border: 1px solid $gray-nurse;
     border-radius: 0;
+  }
+  .el-form-item.is-error .el-input__inner,
+  .el-form-item.is-error .el-input__inner:focus,
+  .el-form-item.is-error .el-textarea__inner,
+  .el-form-item.is-error .el-textarea__inner:focus,
+  .el-message-box__input input.invalid,
+  .el-message-box__input input.invalid:focus {
+    border-color: #f56c6c;
   }
   .el-icon-arrow-up:before {
     color: $black;
@@ -35,7 +43,7 @@
 }
 .el-select-dropdown {
   .el-select-dropdown__item.selected {
-    color: $tree-poppy;
-    font-weight: 500;
+    color: $black;
+    font-weight: 400;
   }
 }

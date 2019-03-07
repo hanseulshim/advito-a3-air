@@ -160,7 +160,6 @@ export default {
 .favorite-project {
   border: 1px solid $gray-nurse;
   border-radius: 10px;
-  font-size: 0.8em;
   overflow: hidden;
   display: flex;
   flex-direction: column;
