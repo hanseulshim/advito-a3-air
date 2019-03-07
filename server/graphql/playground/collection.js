@@ -15,5 +15,21 @@ exports.collection = {
         countryList
       }
     }
+    travelSectorCollectionList {
+      id
+      name
+      description
+      dateUpdated
+      active
+      sectorList {
+        name
+        shortName
+        geographyList {
+          origin
+          destination
+          exclude
+        }
+      }
+    }
   }`
 };

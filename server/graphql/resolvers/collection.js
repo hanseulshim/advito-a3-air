@@ -1,5 +1,9 @@
-const { locationCollectionList } = require('../../data/collection');
+const {
+  locationCollectionList,
+  travelSectorCollectionList
+} = require('../../data/collection');
 
 exports.collectionResolvers = {
-  locationCollectionList: () => locationCollectionList
+  locationCollectionList: () => locationCollectionList,
+  travelSectorCollectionList: () => travelSectorCollectionList
 };
