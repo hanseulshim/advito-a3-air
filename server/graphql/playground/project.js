@@ -106,7 +106,10 @@ exports.projectMutations = {
       favorite
     }
     deleteProject(id: 1)
-    toggleFavoriteProject(id: 50)
+    toggleFavoriteProject(id: 50) {
+      id
+      favorite
+    }
     editProject(
       id:50,
       savingsTypeId: 3
@@ -120,14 +123,7 @@ exports.projectMutations = {
       dataSpecialistId: 3
     ) {
       id
-      clientId
-      clientName
-      name
       description
-      division
-      isDeleted
-      projectTypeId
-      projectType
       savingsTypeId
       savingsType
       effectiveFrom
@@ -143,8 +139,6 @@ exports.projectMutations = {
       dataSpecialistId
       dataSpecialistName
       dataSpecialistEmail
-      progress
-      favorite
     }
   }
   `

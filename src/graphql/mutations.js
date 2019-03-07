@@ -95,14 +95,7 @@ export const EDIT_PROJECT = gql`
       dataSpecialistId: $dataSpecialistId
     ) {
       id
-      clientId
-      clientName
-      name
-      division
       description
-      isDeleted
-      projectTypeId
-      projectType
       savingsTypeId
       savingsType
       effectiveFrom
@@ -118,8 +111,6 @@ export const EDIT_PROJECT = gql`
       dataSpecialistId
       dataSpecialistName
       dataSpecialistEmail
-      progress
-      favorite
     }
   }
 `;
@@ -132,6 +123,9 @@ export const DELETE_PROJECT = gql`
 
 export const TOGGLE_FAVORITE_PROJECT = gql`
   mutation toggleFavoriteProject($id: Int!) {
-    toggleFavoriteProject(id: $id)
+    toggleFavoriteProject(id: $id) {
+      id
+      favorite
+    }
   }
 `;

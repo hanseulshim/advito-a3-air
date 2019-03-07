@@ -84,5 +84,5 @@ deleteProject(
 ): Int @auth
 toggleFavoriteProject(
   id: Int!
-): Int @auth
+): Project @auth
 `;
