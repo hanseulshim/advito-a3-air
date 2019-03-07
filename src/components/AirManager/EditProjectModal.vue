@@ -122,12 +122,7 @@
 import SuccessModal from '@/components/Modals/SuccessModal.vue';
 import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { EDIT_PROJECT } from '@/graphql/mutations';
-import {
-  GET_PROJECT,
-  GET_CLIENT,
-  GET_PROJECTS,
-  GET_PROJECT_INFO
-} from '@/graphql/queries';
+import { GET_PROJECT_INFO } from '@/graphql/queries';
 export default {
   name: 'EditProjectModal',
   components: {
@@ -249,26 +244,6 @@ export default {
           mutation: EDIT_PROJECT,
           variables: {
             ...this.form
-          },
-          update: (store, data) => {
-            const project = data.data.editProject;
-            const client = store.readQuery({
-              query: GET_CLIENT
-            }).client;
-            const newData = store.readQuery({
-              query: GET_PROJECTS,
-              variables: { clientId: client.id }
-            });
-            const projectIndex = newData.projectList.findIndex(
-              findProject => findProject.id === project.id
-            );
-            newData.projectList[projectIndex] = { ...project };
-            store.writeQuery({
-              query: GET_PROJECTS,
-              variables: { clientId: client.id },
-              data: newData
-            });
-            store.writeQuery({ query: GET_PROJECT, data: { project } });
           }
         });
         this.$modal.show('success');

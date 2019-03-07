@@ -112,6 +112,6 @@ exports.projectMutations = {
       throw new ApolloError('Project not found', 400);
     }
     project.favorite = !project.favorite;
-    return payload.id;
+    return project;
   }
 };

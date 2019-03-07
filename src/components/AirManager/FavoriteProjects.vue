@@ -67,7 +67,7 @@ import {
   UPDATE_CLIENT,
   TOGGLE_FAVORITE_PROJECT
 } from '@/graphql/mutations';
-import { GET_PROJECTS, GET_CLIENT, GET_CLIENTS } from '@/graphql/queries';
+import { GET_CLIENTS } from '@/graphql/queries';
 export default {
   name: 'FavoriteProjects',
   components: {
@@ -117,28 +117,7 @@ export default {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { id },
-          update: (store, data) => {
-            const id = data.data.toggleFavoriteProject;
-            const client = store.readQuery({
-              query: GET_CLIENT
-            }).client;
-            const newData = store.readQuery({
-              query: GET_PROJECTS,
-              variables: { clientId: client.id }
-            });
-            const projectIndex = newData.projectList.findIndex(
-              project => project.id === id
-            );
-            newData.projectList[projectIndex].favorite = !newData.projectList[
-              projectIndex
-            ].favorite;
-            store.writeQuery({
-              query: GET_PROJECTS,
-              variables: { clientId: client.id },
-              data: newData
-            });
-          }
+          variables: { id }
         });
       } catch (error) {
         return 'this was an error';
