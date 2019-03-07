@@ -149,7 +149,4 @@ export default {
 .favorite-projects {
   justify-self: flex-start;
 }
-.el-checkbox {
-  margin: 0;
-}
 </style>

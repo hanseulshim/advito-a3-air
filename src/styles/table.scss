@@ -1,12 +1,25 @@
-@import './variables.scss';
-
-.el-table {
-  .cell {
+#app {
+  .el-table {
     color: $dove-gray;
-  }
-  .table-header-cell {
-    background-color: $gallery;
-    color: $black;
-    font-weight: 500;
+    thead tr th {
+      padding: 5px 0;
+    }
+    th>.cell {
+      color: $black;
+    }
+    .cell {
+      color: $dove-gray;
+    }
+    .table-header-cell {
+      background-color: $gallery;
+      color: $black;
+      font-weight: 500;
+    }
+    .ascending .sort-caret.ascending {
+      border-bottom-color: $black;
+    }
+    .descending .sort-caret.descending {
+      border-top-color: $black;
+    }
   }
 }

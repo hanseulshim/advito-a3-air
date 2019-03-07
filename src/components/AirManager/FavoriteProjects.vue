@@ -174,7 +174,7 @@ export default {
   }
 }
 .favorite-project-main {
-  padding: 1em;
+  padding: 2em;
 }
 .title-row {
   display: flex;
@@ -200,8 +200,8 @@ export default {
   margin: 1em 0;
 }
 .favorite-project-footer {
-  padding: 1em;
-  background: $gray-nurse;
+  padding: 1em 2em;
+  background: $black-haze;
   display: flex;
   justify-content: flex-end;
   .fa-trash-alt {
