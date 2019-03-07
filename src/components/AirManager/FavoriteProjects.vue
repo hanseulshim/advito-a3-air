@@ -53,14 +53,10 @@
         <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
       </div>
     </div>
-    <EditProjectModal />
-    <DeleteProjectModal />
   </div>
 </template>
 
 <script>
-import DeleteProjectModal from './DeleteProjectModal';
-import EditProjectModal from './EditProjectModal';
 import { formatDate } from '@/helper';
 import {
   UPDATE_PROJECT,
@@ -70,10 +66,6 @@ import {
 import { GET_PROJECTS, GET_CLIENT, GET_CLIENTS } from '@/graphql/queries';
 export default {
   name: 'FavoriteProjects',
-  components: {
-    DeleteProjectModal,
-    EditProjectModal
-  },
   apollo: {
     clientList: {
       query: GET_CLIENTS

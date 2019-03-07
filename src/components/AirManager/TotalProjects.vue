@@ -62,23 +62,15 @@
         </template>
       </el-table-column>
     </el-table>
-    <EditProjectModal />
-    <DeleteProjectModal />
   </div>
 </template>
 
 <script>
-import DeleteProjectModal from './DeleteProjectModal';
-import EditProjectModal from './EditProjectModal';
 import { formatDate } from '@/helper';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
 import { GET_USER, GET_CLIENT, GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'TotalProjects',
-  components: {
-    DeleteProjectModal,
-    EditProjectModal
-  },
   props: {
     totalProjectList: {
       type: Array,

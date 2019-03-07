@@ -1,10 +1,5 @@
 <template>
-  <modal
-    classes="modal-container"
-    name="info"
-    height="auto"
-    :click-to-close="false"
-  >
+  <modal classes="modal-container" name="info" height="auto">
     <div class="title-row">
       <div class="section-header">Info</div>
       <i class="fas fa-times close-modal-button" @click="closeModal"></i>

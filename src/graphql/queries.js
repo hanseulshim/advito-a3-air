@@ -124,3 +124,19 @@ export const GET_PROJECT_INFO = gql`
     }
   }
 `;
+
+export const GET_LOCATION_COLLECTION_LIST = gql`
+  {
+    locationCollectionList {
+      id
+      name
+      description
+      dateUpdated
+      active
+      regionList {
+        name
+        countryList
+      }
+    }
+  }
+`;
