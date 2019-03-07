@@ -8,10 +8,7 @@
       color: $black;
       font-weight: 500;
     }
-    .cell {
-      color: $dove-gray;
-    }
-    .table-header-cell {
+    th {
       background-color: $gallery;
     }
     .ascending .sort-caret.ascending {
@@ -59,10 +56,25 @@
     cursor: pointer;
   }
 
-  .region-table {
+  .level-two-table {
     border: 1px solid $gallery;
     td {
       border: none;
+    }
+    th {
+      background: $alabaster;
+    }
+    .cell {
+      padding: 0 20px;
+    }
+  }
+  .level-three-table {
+    border: 1px solid $gallery;
+    td {
+      border: none;
+    }
+    th, td {
+      background: $alabaster;
     }
     .cell {
       padding: 0 20px;

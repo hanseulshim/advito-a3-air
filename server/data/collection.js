@@ -555,6 +555,7 @@ exports.travelSectorCollectionList = [
     name: 'Standard (Advito)',
     sectorList: [
       {
+        id: 1,
         name: 'TATL (no GB)',
         shortName: 'NA-EUR',
         geographyList: [
@@ -571,6 +572,7 @@ exports.travelSectorCollectionList = [
         ]
       },
       {
+        id: 2,
         name: 'EMEA - ASPAC',
         shortName: 'EMEA-ASPAC',
         geographyList: [
@@ -592,6 +594,7 @@ exports.travelSectorCollectionList = [
         ]
       },
       {
+        id: 3,
         name: 'Intra Afr',
         shortName: 'INTRA AFR',
         geographyList: [
@@ -603,6 +606,7 @@ exports.travelSectorCollectionList = [
         ]
       },
       {
+        id: 4,
         name: 'Intra Eur (no DE)',
         shortName: 'INTRA EUR',
         geographyList: [

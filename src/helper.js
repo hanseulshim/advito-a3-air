@@ -8,6 +8,10 @@ export const formatDate = date => {
     : '';
 };
 
+export const pluralize = (word, count) => {
+  return count > 1 ? `${count} ${word}s` : `${count} ${word}`;
+};
+
 export const checkToken = router => {
   const localToken = localStorage.getItem('air-session-token');
   if (localToken) {

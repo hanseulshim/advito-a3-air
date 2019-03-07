@@ -1,13 +1,12 @@
 <template>
   <div class="all-projects-container">
     <div class="section-header title-row">
-      {{ totalProjectList.length }} total projects
+      {{ pluralize('total project', totalProjectList.length) }}
     </div>
     <el-table
       :data="totalProjectList"
       :default-sort="{ prop: 'projectManagerEmail', order: 'ascending' }"
       style="width: 100%"
-      header-cell-class-name="table-header-cell"
       max-height="750"
     >
       <el-table-column prop="name" label="Project Name" sortable width="230">
@@ -66,7 +65,7 @@
 </template>
 
 <script>
-import { formatDate } from '@/helper';
+import { formatDate, pluralize } from '@/helper';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
 import { GET_USER } from '@/graphql/queries';
 export default {
@@ -88,6 +87,9 @@ export default {
     };
   },
   methods: {
+    pluralize(word, count) {
+      return pluralize(word, count);
+    },
     formatDate(row) {
       return `${formatDate(row.effectiveFrom)} — ${formatDate(
         row.effectiveTo

@@ -20,6 +20,7 @@ type TravelSectorCollection {
   active: Boolean
 }
 type Sector {
+  id: Int,
   name: String,
   shortName: String,
   geographyList: [Geography]

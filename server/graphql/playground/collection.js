@@ -22,6 +22,7 @@ exports.collection = {
       dateUpdated
       active
       sectorList {
+        id
         name
         shortName
         geographyList {

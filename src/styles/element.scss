@@ -5,19 +5,16 @@
     border-radius: 0;
     width: 20px;
     height: 20px;
-  }
-  .el-checkbox__inner:hover {
-    border-color: $tree-poppy;
+    border: 1px solid $dove-gray;
+    background-color: $alabaster;
   }
   .el-checkbox__input.is-checked + .el-checkbox__label {
-    color: $tree-poppy;
-  }
-  .el-checkbox__input.is-checked .el-checkbox__inner,
-  .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: $tree-poppy;
-    border-color: $tree-poppy;
+    color: $dove-gray;
   }
   .el-checkbox__inner::after {
+    border: 1px solid $dove-gray;
+    border-left: 0;
+    border-top: 0;
     height: 13px;
     left: 7px;
   }

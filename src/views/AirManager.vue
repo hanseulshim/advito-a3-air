@@ -2,7 +2,7 @@
   <div class="projects-container">
     <div class="option-container">
       <div class="favorite-projects section-header">
-        {{ favoriteProjectList.length }} favorite projects
+        {{ pluralize('favorite project', favoriteProjectList.length) }}
       </div>
       <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
       <el-select v-model="selectedUser" placeholder="Select" filterable>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { pluralize } from '@/helper';
 import TotalProjects from '@/components/AirManager/TotalProjects';
 import FavoriteProjects from '@/components/AirManager/FavoriteProjects';
 import NewProjectModal from '@/components/AirManager/NewProjectModal';
@@ -126,6 +127,9 @@ export default {
     this.selectedUser = this.user.email;
   },
   methods: {
+    pluralize(word, count) {
+      return pluralize(word, count);
+    },
     showNewProject() {
       this.$modal.show('new-project');
     },

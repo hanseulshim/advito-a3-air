@@ -1,37 +1,20 @@
 <template>
-  <div>
+  <div class="travel-sector-collection-container">
     <div class="section-header title-row">
-      {{ pluralize('location collection', locationCollectionList.length) }}
+      {{
+        pluralize('travel sector collection', travelSectorCollectionList.length)
+      }}
     </div>
     <el-table
-      ref="locationCollection"
-      :data="locationCollectionList"
+      ref="travelSectorCollection"
+      :data="travelSectorCollectionList"
       style="width: 100%"
       max-height="750"
       @expand-change="updateExpand"
     >
       <el-table-column type="expand" width="0">
         <template slot-scope="props">
-          <el-table
-            :data="props.row.regionList"
-            class="level-two-table"
-            style="width: 100%"
-          >
-            <el-table-column prop="name" label="Region" width="200" />
-            <el-table-column label="Countries">
-              <template slot-scope="scope">
-                {{ getCountryNames(scope.row.countryList) }}
-              </template>
-            </el-table-column>
-            <el-table-column label="Actions" width="90">
-              <template>
-                <div class="edit-project-container">
-                  <i class="fas fa-pencil-alt"></i>
-                  <i class="fas fa-trash-alt"></i>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
+          <GeographyTable :sector-list="props.row.sectorList" />
         </template>
       </el-table-column>
       <el-table-column width="35">
@@ -54,9 +37,9 @@
         width="250"
         sortable
       />
-      <el-table-column label="Regions" width="100" sortable>
+      <el-table-column label="Sectors" width="100" sortable>
         <template slot-scope="scope">
-          <div>{{ scope.row.regionList.length }}</div>
+          <div>{{ scope.row.sectorList.length }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="description" label="Description" />
@@ -88,18 +71,22 @@
 
 <script>
 import { pluralize } from '@/helper';
-import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
+import { GET_TRAVEL_SECTOR_COLLECTION_LIST } from '@/graphql/queries';
 import { formatDate } from '@/helper';
+import GeographyTable from './GeographyTable';
 export default {
-  name: 'LocationCollections',
+  name: 'TravelSectorCollections',
+  components: {
+    GeographyTable
+  },
   apollo: {
-    locationCollectionList: {
-      query: GET_LOCATION_COLLECTION_LIST
+    travelSectorCollectionList: {
+      query: GET_TRAVEL_SECTOR_COLLECTION_LIST
     }
   },
   data() {
     return {
-      locationCollectionList: [],
+      travelSectorCollectionList: [],
       expandedRows: []
     };
   },
@@ -114,7 +101,7 @@ export default {
       this.$modal.show('info');
     },
     toggleRow(scope) {
-      this.$refs.locationCollection.toggleRowExpansion(scope.row);
+      this.$refs.travelSectorCollection.toggleRowExpansion(scope.row);
     },
     updateExpand(row, expandedRows) {
       this.expandedRows = expandedRows.map(row => row.id);
@@ -127,3 +114,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.travel-sector-collection-container {
+  margin-top: 5em;
+}
+</style>

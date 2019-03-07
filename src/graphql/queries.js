@@ -140,3 +140,25 @@ export const GET_LOCATION_COLLECTION_LIST = gql`
     }
   }
 `;
+
+export const GET_TRAVEL_SECTOR_COLLECTION_LIST = gql`
+  {
+    travelSectorCollectionList {
+      id
+      name
+      description
+      dateUpdated
+      active
+      sectorList {
+        id
+        name
+        shortName
+        geographyList {
+          origin
+          destination
+          exclude
+        }
+      }
+    }
+  }
+`;
