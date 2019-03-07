@@ -4,16 +4,15 @@
     thead tr th {
       padding: 5px 0;
     }
-    th>.cell {
+    th > .cell {
       color: $black;
+      font-weight: 500;
     }
     .cell {
       color: $dove-gray;
     }
     .table-header-cell {
       background-color: $gallery;
-      color: $black;
-      font-weight: 500;
     }
     .ascending .sort-caret.ascending {
       border-bottom-color: $black;
@@ -21,6 +20,10 @@
     .descending .sort-caret.descending {
       border-top-color: $black;
     }
+    td,
+    th.is-leaf {
+      border-bottom: 1px solid $gallery;
+    }
   }
   .el-table__expand-icon > .el-icon-arrow-right {
     display: none;
@@ -35,6 +38,7 @@
   }
   .fa-pencil-alt,
   .fa-trash-alt,
+  .fa-copy,
   .fa-star {
     cursor: pointer;
   }
@@ -53,5 +57,15 @@
   .fa-trash-alt,
   .fa-star {
     cursor: pointer;
+  }
+
+  .region-table {
+    border: 1px solid $gallery;
+    td {
+      border: none;
+    }
+    .cell {
+      padding: 0 20px;
+    }
   }
 }

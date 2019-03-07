@@ -1,13 +1,7 @@
 <template>
   <div>
-    <div class="collection-title-row">
-      <div class="section-header">
-        {{ locationCollectionList.length }} location collections
-      </div>
-      <div class="collection-button-container">
-        <button class="button">+ NEW COLLECTION</button>
-        <i class="fas fa-info" @click="showInfoModal" />
-      </div>
+    <div class="section-header title-row">
+      {{ locationCollectionList.length }} location collections
     </div>
     <el-table
       ref="locationCollection"
@@ -21,11 +15,23 @@
         <template slot-scope="props">
           <el-table
             :data="props.row.regionList"
+            class="region-table"
             style="width: 100%"
-            max-height="750"
           >
-            <el-table-column prop="name" label="Region" />
-            <el-table-column prop="countryList" label="Countries" />
+            <el-table-column prop="name" label="Region" width="200" />
+            <el-table-column label="Countries">
+              <template slot-scope="scope">
+                {{ getCountryNames(scope.row.countryList) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="Actions" width="90">
+              <template>
+                <div class="edit-project-container">
+                  <i class="fas fa-pencil-alt"></i>
+                  <i class="fas fa-trash-alt"></i>
+                </div>
+              </template>
+            </el-table-column>
           </el-table>
         </template>
       </el-table-column>
@@ -68,14 +74,12 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="Edit" width="55">
+      <el-table-column label="Actions" width="75">
         <template slot-scope="scope">
           <div class="edit-project-container">
-            <i class="fas fa-pencil-alt" @click="editProject(scope.row)"></i>
-            <i
-              class="fas fa-trash-alt"
-              @click="deleteProject(scope.row.id)"
-            ></i>
+            <i class="far fa-copy"></i>
+            <i v-if="scope.row.id !== 1" class="fas fa-pencil-alt"></i>
+            <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
           </div>
         </template>
       </el-table-column>
@@ -111,21 +115,12 @@ export default {
     },
     updateExpand(row, expandedRows) {
       this.expandedRows = expandedRows.map(row => row.id);
+    },
+    getCountryNames(countryList) {
+      return countryList.length > 10
+        ? countryList.slice(0, 9).join(', ') + '...'
+        : countryList.join(', ');
     }
   }
 };
 </script>
-
-<style lang="scss">
-.collection-title-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  .collection-button-container {
-    display: flex;
-    .fa-info {
-      margin-left: 10px;
-    }
-  }
-}
-</style>

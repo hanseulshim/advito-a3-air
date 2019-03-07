@@ -1,6 +1,6 @@
 <template>
   <div class="all-projects-container">
-    <div class="all-projects-title section-header">
+    <div class="section-header title-row">
       {{ totalProjectList.length }} total projects
     </div>
     <el-table
@@ -126,9 +126,5 @@ export default {
 @import '@/styles/global.scss';
 .all-projects-container {
   margin-top: 3em;
-}
-
-.all-projects-title {
-  margin-bottom: 1em;
 }
 </style>
