@@ -2,7 +2,8 @@ exports.locationCollectionList = [
   {
     id: 1,
     name: 'Standard (Advito)',
-    description: 'Standard Advito Location Collection',
+    description:
+      'Standard Advito Location Collection - Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     dateUpdated: '2019-01-15',
     active: true,
     regionList: [
@@ -277,7 +278,8 @@ exports.locationCollectionList = [
   {
     id: 2,
     name: 'Pfizer Standard',
-    description: 'Pfizer Location Collection',
+    description:
+      'Pfizer Location Collection - Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     dateUpdated: '2018-12-25',
     active: false,
     regionList: [
