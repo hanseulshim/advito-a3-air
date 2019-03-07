@@ -9,4 +9,11 @@
     color: $black;
     font-weight: 500;
   }
+  .el-table__expand-icon>.el-icon-arrow-right {
+    display: none;
+  }
+  .table-toggle-icon {
+    cursor: pointer;
+    color: $tree-poppy;
+  }
 }

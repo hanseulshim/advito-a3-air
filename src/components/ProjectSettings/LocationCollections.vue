@@ -10,12 +10,14 @@
       </div>
     </div>
     <el-table
+      ref="locationCollection"
       :data="locationCollectionList"
       style="width: 100%"
       header-cell-class-name="table-header-cell"
       max-height="750"
+      @expand-change="updateExpand"
     >
-      <el-table-column type="expand">
+      <el-table-column type="expand" width="0">
         <template slot-scope="props">
           <el-table
             :data="props.row.regionList"
@@ -25,6 +27,20 @@
             <el-table-column prop="name" label="Region" />
             <el-table-column prop="countryList" label="Countries" />
           </el-table>
+        </template>
+      </el-table-column>
+      <el-table-column width="35">
+        <template slot-scope="scope">
+          <i
+            v-if="expandedRows.indexOf(scope.row.id) === -1"
+            class="fas fa-plus table-toggle-icon"
+            @click="toggleRow(scope)"
+          ></i>
+          <i
+            v-else
+            class="fas fa-minus table-toggle-icon"
+            @click="toggleRow(scope)"
+          ></i>
         </template>
       </el-table-column>
       <el-table-column prop="name" label="Location Collection" sortable />
@@ -68,7 +84,8 @@ export default {
   },
   data() {
     return {
-      locationCollectionList: []
+      locationCollectionList: [],
+      expandedRows: []
     };
   },
   methods: {
@@ -77,6 +94,12 @@ export default {
     },
     showInfoModal() {
       this.$modal.show('info');
+    },
+    toggleRow(scope) {
+      this.$refs.locationCollection.toggleRowExpansion(scope.row);
+    },
+    updateExpand(row, expandedRows) {
+      this.expandedRows = expandedRows.map(row => row.id);
     }
   }
 };
