@@ -152,15 +152,4 @@ export default {
 .all-projects-title {
   margin-bottom: 1em;
 }
-
-.fa-pencil-alt,
-.fa-trash-alt,
-.fa-star {
-  cursor: pointer;
-}
-
-.edit-project-container {
-  display: flex;
-  justify-content: space-between;
-}
 </style>

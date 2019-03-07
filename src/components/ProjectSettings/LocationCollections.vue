@@ -43,8 +43,13 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="Location Collection" sortable />
-      <el-table-column label="Regions" sortable>
+      <el-table-column
+        prop="name"
+        label="Location Collection"
+        width="250"
+        sortable
+      />
+      <el-table-column label="Regions" width="100" sortable>
         <template slot-scope="scope">
           <div>{{ scope.row.regionList.length }}</div>
         </template>
@@ -55,17 +60,23 @@
         label="Date Updated"
         sortable
         :formatter="formatDate"
+        width="150"
       />
-      <el-table-column label="Status">
+      <el-table-column label="Status" width="100">
         <template slot-scope="scope">
           <el-switch :value="scope.row.active" active-color="#ff9e16">
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="Edit">
+      <el-table-column label="Edit" width="55">
         <template slot-scope="scope">
-          <i class="fas fa-pencil-alt" @click="editProject(scope.row)"></i>
-          <i class="fas fa-trash-alt" @click="deleteProject(scope.row.id)"></i>
+          <div class="edit-project-container">
+            <i class="fas fa-pencil-alt" @click="editProject(scope.row)"></i>
+            <i
+              class="fas fa-trash-alt"
+              @click="deleteProject(scope.row.id)"
+            ></i>
+          </div>
         </template>
       </el-table-column>
     </el-table>

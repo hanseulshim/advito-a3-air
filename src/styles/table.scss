@@ -9,11 +9,20 @@
     color: $black;
     font-weight: 500;
   }
-  .el-table__expand-icon>.el-icon-arrow-right {
+  .el-table__expand-icon > .el-icon-arrow-right {
     display: none;
   }
   .table-toggle-icon {
     cursor: pointer;
     color: $tree-poppy;
+  }
+  .edit-project-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .fa-pencil-alt,
+  .fa-trash-alt,
+  .fa-star {
+    cursor: pointer;
   }
 }
