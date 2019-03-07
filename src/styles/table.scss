@@ -38,4 +38,20 @@
   .fa-star {
     cursor: pointer;
   }
+  .el-table__expand-icon > .el-icon-arrow-right {
+    display: none;
+  }
+  .table-toggle-icon {
+    cursor: pointer;
+    color: $tree-poppy;
+  }
+  .edit-project-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .fa-pencil-alt,
+  .fa-trash-alt,
+  .fa-star {
+    cursor: pointer;
+  }
 }
