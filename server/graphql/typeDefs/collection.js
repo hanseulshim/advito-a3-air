@@ -45,10 +45,22 @@ type AirlineGroup {
   effectiveEndDate: Date
   airlineList: [Airline]
 }
+type PreferredAirlineCollection {
+  id: Int,
+  name: String,
+  airlineList: [Airline]
+  description: String,
+  dateUpdated: Date,
+  active: Boolean
+}
 type Airline {
   name: String
+  preferenceLevel: String
   effectiveStartDate: Date,
-  effectiveEndDate: Date
+  effectiveEndDate: Date,
+  cabins: String,
+  pos: String,
+  status: Boolean
 }
 `;
 
@@ -56,4 +68,5 @@ exports.collectionQuery = `
 locationCollectionList: [LocationCollection] @auth
 travelSectorCollectionList: [TravelSectorCollection] @auth
 airlineGroupCollectionList: [AirlineGroupCollection] @auth
+preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
 `;

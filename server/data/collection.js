@@ -663,3 +663,42 @@ exports.airlineGroupCollectionList = [
     ]
   }
 ];
+
+exports.preferredAirlineCollectionList = [
+  {
+    id: 1,
+    name: 'Collection 1',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    dateUpdated: '01-25-2019',
+    active: true,
+    airlineList: [
+      {
+        name: 'Air France',
+        preferenceLevel: 'Primary',
+        effectiveStartDate: '01-01-2019',
+        effectiveEndDate: '12-31-2019',
+        cabins: 'F.C.P.Y',
+        pos: 'EU',
+        active: true
+      },
+      {
+        name: 'Aeroflot',
+        preferenceLevel: 'Primary',
+        effectiveStartDate: '01-01-2019',
+        effectiveEndDate: null,
+        cabins: 'F.C.P.Y',
+        pos: 'EU',
+        active: true
+      },
+      {
+        name: 'Lufthansa',
+        preferenceLevel: 'Primary',
+        effectiveStartDate: '01-01-2019',
+        effectiveEndDate: '12-31-2019',
+        cabins: 'F.C.P.Y',
+        pos: 'EU',
+        active: true
+      }
+    ]
+  }
+];
