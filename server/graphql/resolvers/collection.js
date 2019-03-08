@@ -1,9 +1,11 @@
 const {
   locationCollectionList,
-  travelSectorCollectionList
+  travelSectorCollectionList,
+  airlineGroupCollectionList
 } = require('../../data/collection');
 
 exports.collectionResolvers = {
   locationCollectionList: () => locationCollectionList,
-  travelSectorCollectionList: () => travelSectorCollectionList
+  travelSectorCollectionList: () => travelSectorCollectionList,
+  airlineGroupCollectionList: () => airlineGroupCollectionList
 };

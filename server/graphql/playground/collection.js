@@ -32,5 +32,23 @@ exports.collection = {
         }
       }
     }
+    airlineGroupCollectionList {
+      id
+      name
+      description
+      dateUpdated
+      active
+      airlineGroupList {
+        id
+        name
+        effectiveStartDate
+        effectiveEndDate
+        airlineList {
+          name
+          effectiveStartDate
+          effectiveEndDate
+        }
+      }
+    }
   }`
 };

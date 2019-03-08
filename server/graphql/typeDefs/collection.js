@@ -30,9 +30,30 @@ type Geography {
   destination: String,
   exclude: Boolean
 }
+type AirlineGroupCollection {
+  id: Int,
+  name: String,
+  airlineGroupList: [AirlineGroup]
+  description: String,
+  dateUpdated: Date,
+  active: Boolean
+}
+type AirlineGroup {
+  id: Int,
+  name: String,
+  effectiveStartDate: Date,
+  effectiveEndDate: Date
+  airlineList: [Airline]
+}
+type Airline {
+  name: String
+  effectiveStartDate: Date,
+  effectiveEndDate: Date
+}
 `;
 
 exports.collectionQuery = `
 locationCollectionList: [LocationCollection] @auth
 travelSectorCollectionList: [TravelSectorCollection] @auth
+airlineGroupCollectionList: [AirlineGroupCollection] @auth
 `;
