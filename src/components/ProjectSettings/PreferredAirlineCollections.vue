@@ -59,7 +59,7 @@
           </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" width="75">
+      <el-table-column label="Actions" width="90">
         <template slot-scope="scope">
           <div class="edit-project-container">
             <i class="far fa-copy"></i>
