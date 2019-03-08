@@ -162,3 +162,26 @@ export const GET_TRAVEL_SECTOR_COLLECTION_LIST = gql`
     }
   }
 `;
+
+export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
+  {
+    airlineGroupCollectionList {
+      id
+      name
+      description
+      dateUpdated
+      active
+      airlineGroupList {
+        id
+        name
+        effectiveStartDate
+        effectiveEndDate
+        airlineList {
+          name
+          effectiveStartDate
+          effectiveEndDate
+        }
+      }
+    }
+  }
+`;

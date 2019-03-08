@@ -1,20 +1,20 @@
 <template>
-  <div class="travel-sector-collection-container">
+  <div class="airline-group-collection-container">
     <div class="section-header title-row">
       {{
-        pluralize('travel sector collection', travelSectorCollectionList.length)
+        pluralize('airline group collection', airlineGroupCollectionList.length)
       }}
     </div>
     <el-table
-      ref="travelSectorCollection"
-      :data="travelSectorCollectionList"
+      ref="airlineGroupCollection"
+      :data="airlineGroupCollectionList"
       style="width: 100%"
       max-height="750"
       @expand-change="updateExpand"
     >
       <el-table-column type="expand" width="0">
         <template slot-scope="props">
-          <SectorTable :sector-list="props.row.sectorList" />
+          <AirlineGroupTable :airline-group-list="props.row.airlineGroupList" />
         </template>
       </el-table-column>
       <el-table-column width="35">
@@ -37,9 +37,9 @@
         width="250"
         sortable
       />
-      <el-table-column label="Sectors" width="100" sortable>
+      <el-table-column label="Groups" width="100" sortable>
         <template slot-scope="scope">
-          <div>{{ scope.row.sectorList.length }}</div>
+          <div>{{ scope.row.airlineGroupList.length }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="description" label="Description" />
@@ -71,22 +71,22 @@
 
 <script>
 import { pluralize } from '@/helper';
-import { GET_TRAVEL_SECTOR_COLLECTION_LIST } from '@/graphql/queries';
+import { GET_AIRLINE_GROUP_COLLECTION_LIST } from '@/graphql/queries';
 import { formatDate } from '@/helper';
-import SectorTable from './SectorTable';
+import AirlineGroupTable from './AirlineGroupTable';
 export default {
-  name: 'TravelSectorCollections',
+  name: 'AirlineGroupCollections',
   components: {
-    SectorTable
+    AirlineGroupTable
   },
   apollo: {
-    travelSectorCollectionList: {
-      query: GET_TRAVEL_SECTOR_COLLECTION_LIST
+    airlineGroupCollectionList: {
+      query: GET_AIRLINE_GROUP_COLLECTION_LIST
     }
   },
   data() {
     return {
-      travelSectorCollectionList: [],
+      airlineGroupCollectionList: [],
       expandedRows: []
     };
   },
@@ -101,7 +101,7 @@ export default {
       this.$modal.show('info');
     },
     toggleRow(scope) {
-      this.$refs.travelSectorCollection.toggleRowExpansion(scope.row);
+      this.$refs.airlineGroupCollection.toggleRowExpansion(scope.row);
     },
     updateExpand(row, expandedRows) {
       this.expandedRows = expandedRows.map(row => row.id);
@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.travel-sector-collection-container {
+.airline-group-collection-container {
   margin-top: 5em;
 }
 </style>

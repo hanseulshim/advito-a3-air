@@ -1,7 +1,7 @@
 <template>
   <el-table
-    ref="sectorList"
-    :data="sectorList"
+    ref="airlineGroupList"
+    :data="airlineGroupList"
     class="level-two-table"
     style="width: 100%"
     @expand-change="updateExpand"
@@ -9,23 +9,23 @@
     <el-table-column type="expand" width="0">
       <template slot-scope="scope">
         <el-table
-          ref="geographyList"
-          :data="scope.row.geographyList"
+          :data="scope.row.airlineList"
           class="level-three-table"
           style="width: 100%"
         >
-          <el-table-column label="Bidirection">
-            <template slot-scope="prop">
-              <div>
-                {{ prop.row.origin }} &lt;—&gt; {{ prop.row.destination }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="Exclude">
-            <template slot-scope="prop">
-              <el-checkbox :value="prop.row.exclude" />
-            </template>
-          </el-table-column>
+          <el-table-column prop="name" label="Airlines" />
+          <el-table-column
+            prop="effectiveStartDate"
+            label="Effective Start Date"
+            :formatter="formatStartDate"
+            width="250"
+          />
+          <el-table-column
+            prop="effectiveEndDate"
+            label="Effective End Date"
+            :formatter="formatEndDate"
+            width="250"
+          />
         </el-table>
       </template>
     </el-table-column>
@@ -43,13 +43,24 @@
         ></i>
       </template>
     </el-table-column>
-    <el-table-column prop="name" label="Travel Sector" width="200" />
-    <el-table-column prop="shortName" label="Short Name" width="200" />
-    <el-table-column label="Geographies">
+    <el-table-column prop="name" label="Airline Group" width="200" />
+    <el-table-column label="Airlines">
       <template slot-scope="scope">
-        <div>{{ scope.row.geographyList.length }}</div>
+        <div>{{ scope.row.airlineList.length }}</div>
       </template>
     </el-table-column>
+    <el-table-column
+      prop="effectiveStartDate"
+      label="Effective Start Date"
+      :formatter="formatStartDate"
+      width="175"
+    />
+    <el-table-column
+      prop="effectiveEndDate"
+      label="Effective End Date"
+      :formatter="formatEndDate"
+      width="175"
+    />
     <el-table-column label="Actions" width="90">
       <template>
         <div class="edit-project-container">
@@ -62,10 +73,11 @@
 </template>
 
 <script>
+import { formatDate } from '@/helper';
 export default {
-  name: 'GeographyTable',
+  name: 'AirlineGroupTable',
   props: {
-    sectorList: {
+    airlineGroupList: {
       type: Array,
       required: true
     }
@@ -76,8 +88,14 @@ export default {
     };
   },
   methods: {
+    formatStartDate(row) {
+      return formatDate(row.effectiveStartDate);
+    },
+    formatEndDate(row) {
+      return formatDate(row.effectiveEndDate);
+    },
     toggleRow(scope) {
-      this.$refs.sectorList.toggleRowExpansion(scope.row);
+      this.$refs.airlineGroupList.toggleRowExpansion(scope.row);
     },
     updateExpand(row, expandedRows) {
       this.expandedRows = expandedRows.map(row => row.id);
