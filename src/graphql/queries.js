@@ -185,3 +185,24 @@ export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
     }
   }
 `;
+
+export const GET_PREFERRED_AIRLINE_COLLECTION_LIST = gql`
+  {
+    preferredAirlineCollectionList {
+      id
+      name
+      description
+      dateUpdated
+      active
+      airlineList {
+        name
+        preferenceLevel
+        effectiveStartDate
+        effectiveEndDate
+        cabins
+        pos
+        active
+      }
+    }
+  }
+`;

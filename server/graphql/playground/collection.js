@@ -50,5 +50,21 @@ exports.collection = {
         }
       }
     }
+    preferredAirlineCollectionList {
+      id
+      name
+      description
+      dateUpdated
+      active
+      airlineList {
+        name
+        preferenceLevel
+        effectiveStartDate
+        effectiveEndDate
+        cabins
+        pos
+        active
+      }
+    }
   }`
 };

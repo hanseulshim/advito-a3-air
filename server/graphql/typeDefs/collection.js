@@ -60,7 +60,7 @@ type Airline {
   effectiveEndDate: Date,
   cabins: String,
   pos: String,
-  status: Boolean
+  active: Boolean
 }
 `;
 
