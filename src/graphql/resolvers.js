@@ -13,7 +13,7 @@ export default {
       });
       return null;
     },
-    updateProject: (proxy, { project = defaults.project }, { cache }) => {
+    updateProject: (_, { project = defaults.project }, { cache }) => {
       if (project.id) {
         router.push('/project/program-settings');
       } else {
