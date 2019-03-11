@@ -62,11 +62,11 @@ type Airline {
   pos: String,
   active: Boolean
 }
-`;
 
-exports.collectionQuery = `
-locationCollectionList: [LocationCollection] @auth
-travelSectorCollectionList: [TravelSectorCollection] @auth
-airlineGroupCollectionList: [AirlineGroupCollection] @auth
-preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
+extend type Query {
+  locationCollectionList: [LocationCollection] @auth
+  travelSectorCollectionList: [TravelSectorCollection] @auth
+  airlineGroupCollectionList: [AirlineGroupCollection] @auth
+  preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
+}
 `;

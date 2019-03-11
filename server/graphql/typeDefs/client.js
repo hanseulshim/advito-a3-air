@@ -3,8 +3,8 @@ type Client {
   id: Int,
   name: String,
 }
-`;
 
-exports.clientQuery = `
-clientList: [Client] @auth
+extend type Query {
+  clientList: [Client] @auth
+}
 `;

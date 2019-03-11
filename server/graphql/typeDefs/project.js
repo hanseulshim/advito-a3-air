@@ -48,41 +48,43 @@ type ProjectUser {
   name: String,
   email: String
 }
-`;
-exports.projectQuery = `
-projectList(clientId: Int): [Project] @auth
-projectInfo: ProjectInfo @auth
-`;
-exports.projectMutation = `
-addProject(
-  clientId: Int!,
-  projectTypeId: Int!,
-  savingsTypeId: Int!,
-  effectiveFrom: Date!,
-  effectiveTo: Date!,
-  reportFrom: Date!,
-  reportTo: Date!,
-  description: String,
-  projectManagerId: Int!,
-  leadAnalystId: Int!,
-  dataSpecialistId: Int!,
-): Project @auth
-editProject(
-  id: Int!
-  savingsTypeId: Int!,
-  effectiveFrom: Date!,
-  effectiveTo: Date!,
-  reportFrom: Date!,
-  reportTo: Date!,
-  description: String,
-  projectManagerId: Int!,
-  leadAnalystId: Int!,
-  dataSpecialistId: Int!,
-): Project @auth
-deleteProject(
-  id: Int!
-): Int @auth
-toggleFavoriteProject(
-  id: Int!
-): Project @auth
+
+extend type Query {
+  projectList(clientId: Int): [Project] @auth
+  projectInfo: ProjectInfo @auth
+}
+
+extend type Mutation {
+  addProject(
+    clientId: Int!,
+    projectTypeId: Int!,
+    savingsTypeId: Int!,
+    effectiveFrom: Date!,
+    effectiveTo: Date!,
+    reportFrom: Date!,
+    reportTo: Date!,
+    description: String,
+    projectManagerId: Int!,
+    leadAnalystId: Int!,
+    dataSpecialistId: Int!,
+  ): Project @auth
+  editProject(
+    id: Int!
+    savingsTypeId: Int!,
+    effectiveFrom: Date!,
+    effectiveTo: Date!,
+    reportFrom: Date!,
+    reportTo: Date!,
+    description: String,
+    projectManagerId: Int!,
+    leadAnalystId: Int!,
+    dataSpecialistId: Int!,
+  ): Project @auth
+  deleteProject(
+    id: Int!
+  ): Int @auth
+  toggleFavoriteProject(
+    id: Int!
+  ): Project @auth
+}
 `;

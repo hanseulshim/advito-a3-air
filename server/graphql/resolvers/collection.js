@@ -6,8 +6,10 @@ const {
 } = require('../../data/collection');
 
 exports.collectionResolvers = {
-  locationCollectionList: () => locationCollectionList,
-  travelSectorCollectionList: () => travelSectorCollectionList,
-  airlineGroupCollectionList: () => airlineGroupCollectionList,
-  preferredAirlineCollectionList: () => preferredAirlineCollectionList
+  Query: {
+    locationCollectionList: () => locationCollectionList,
+    travelSectorCollectionList: () => travelSectorCollectionList,
+    airlineGroupCollectionList: () => airlineGroupCollectionList,
+    preferredAirlineCollectionList: () => preferredAirlineCollectionList
+  }
 };

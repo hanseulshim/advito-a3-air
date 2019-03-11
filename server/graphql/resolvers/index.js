@@ -1,18 +1,13 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
-const { projectResolvers, projectMutations } = require('./project');
+const { projectResolvers } = require('./project');
 const { clientResolvers } = require('./client');
 const { collectionResolvers } = require('./collection');
 
 exports.resolvers = {
-  Query: {
-    ...projectResolvers,
-    ...clientResolvers,
-    ...collectionResolvers
-  },
-  Mutation: {
-    ...projectMutations
-  },
+  ...projectResolvers,
+  ...clientResolvers,
+  ...collectionResolvers,
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Date custom scalar type',
