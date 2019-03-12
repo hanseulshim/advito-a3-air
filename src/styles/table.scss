@@ -23,9 +23,6 @@
       border-bottom: 1px solid $gallery;
     }
   }
-  .el-table__expand-icon > .el-icon-arrow-right {
-    display: none;
-  }
   .table-toggle-icon {
     cursor: pointer;
     color: $tree-poppy;
@@ -42,6 +39,8 @@
   }
   .el-table__expand-icon > .el-icon-arrow-right {
     display: none;
+    color: $tree-poppy;
+    font-weight: 700;
   }
   .table-toggle-icon {
     cursor: pointer;

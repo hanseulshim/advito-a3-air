@@ -5,6 +5,202 @@ exports.airportList = [
     cityName: 'String',
     airportCode: 'String',
     airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
+  },
+  {
+    country: 'String',
+    cityCode: 'String',
+    cityName: 'String',
+    airportCode: 'String',
+    airportName: 'String'
   }
 ];
 
