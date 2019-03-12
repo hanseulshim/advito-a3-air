@@ -1,4 +1,4 @@
-exports.defaultDataQueries = {
+exports.dataSetQueries = {
   name: 'Default Data Queries',
   endpoint: 'http://localhost:8085/graphql',
   headers: { sessiontoken: 'advitoValidToken' },
@@ -16,7 +16,7 @@ exports.defaultDataQueries = {
   }`
 };
 
-exports.defaultDataMutations = {
+exports.dataSetMutations = {
   name: 'Default Data Mutations',
   endpoint: 'http://localhost:8085/graphql',
   headers: { sessiontoken: 'advitoValidToken' },
