@@ -1,5 +1,6 @@
 #app {
   .el-table {
+    width: 100%;
     color: $dove-gray;
     thead tr th {
       padding: 5px 0;
@@ -73,7 +74,8 @@
     td {
       border: none;
     }
-    th, td {
+    th,
+    td {
       background: $alabaster;
     }
     .cell {

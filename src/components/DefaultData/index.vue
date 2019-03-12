@@ -4,12 +4,7 @@
       <i class="fas fa-exclamation-circle" />
       {{ pluralize('unaccepted data set', unacceptedDataSetList.length) }}
     </div>
-    <el-table
-      ref="locationCollection"
-      :data="unacceptedDataSetList"
-      style="width: 100%"
-      max-height="750"
-    >
+    <el-table ref="locationCollection" :data="unacceptedDataSetList">
       <el-table-column prop="id" label="Data Set Id" width="250" />
     </el-table>
   </div>

@@ -6,8 +6,7 @@
     <el-table
       :data="totalProjectList"
       :default-sort="{ prop: 'projectManagerEmail', order: 'ascending' }"
-      style="width: 100%"
-      max-height="750"
+      :max-height="750"
     >
       <el-table-column prop="name" label="Project Name" sortable width="230">
         <template slot-scope="scope">

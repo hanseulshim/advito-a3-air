@@ -11,8 +11,6 @@
     <el-table
       ref="preferredAirlineCollection"
       :data="preferredAirlineCollectionList"
-      style="width: 100%"
-      max-height="750"
       @expand-change="updateExpand"
     >
       <el-table-column type="expand" width="0">
@@ -36,11 +34,11 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="Location Collection"
+        label="Preferred Airline Collection"
         width="250"
         sortable
       />
-      <el-table-column label="Groups" width="100" sortable>
+      <el-table-column label="Airlines" width="100" sortable>
         <template slot-scope="scope">
           <div>{{ scope.row.airlineList.length }}</div>
         </template>

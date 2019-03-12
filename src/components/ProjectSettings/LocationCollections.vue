@@ -6,17 +6,11 @@
     <el-table
       ref="locationCollection"
       :data="locationCollectionList"
-      style="width: 100%"
-      max-height="750"
       @expand-change="updateExpand"
     >
       <el-table-column type="expand" width="0">
         <template slot-scope="props">
-          <el-table
-            :data="props.row.regionList"
-            class="level-two-table"
-            style="width: 100%"
-          >
+          <el-table :data="props.row.regionList" class="level-two-table">
             <el-table-column prop="name" label="Region" width="200" />
             <el-table-column label="Countries">
               <template slot-scope="scope">

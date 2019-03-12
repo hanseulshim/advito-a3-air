@@ -1,10 +1,5 @@
 <template>
-  <el-table
-    ref="airlineList"
-    :data="airlineList"
-    class="level-two-table"
-    style="width: 100%"
-  >
+  <el-table ref="airlineList" :data="airlineList" class="level-two-table">
     <el-table-column prop="name" label="Airline Name" min-width="160" />
     <el-table-column
       prop="preferenceLevel"

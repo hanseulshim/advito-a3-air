@@ -3,7 +3,6 @@
     ref="sectorList"
     :data="sectorList"
     class="level-two-table"
-    style="width: 100%"
     @expand-change="updateExpand"
   >
     <el-table-column type="expand" width="0">
@@ -12,7 +11,6 @@
           ref="geographyList"
           :data="scope.row.geographyList"
           class="level-three-table"
-          style="width: 100%"
         >
           <el-table-column label="Bidirection">
             <template slot-scope="prop">

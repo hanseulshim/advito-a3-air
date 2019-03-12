@@ -3,16 +3,11 @@
     ref="airlineGroupList"
     :data="airlineGroupList"
     class="level-two-table"
-    style="width: 100%"
     @expand-change="updateExpand"
   >
     <el-table-column type="expand" width="0">
       <template slot-scope="scope">
-        <el-table
-          :data="scope.row.airlineList"
-          class="level-three-table"
-          style="width: 100%"
-        >
+        <el-table :data="scope.row.airlineList" class="level-three-table">
           <el-table-column prop="name" label="Airlines" />
           <el-table-column
             prop="effectiveStartDate"

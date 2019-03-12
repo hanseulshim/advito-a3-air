@@ -8,8 +8,6 @@
     <el-table
       ref="airlineGroupCollection"
       :data="airlineGroupCollectionList"
-      style="width: 100%"
-      max-height="750"
       @expand-change="updateExpand"
     >
       <el-table-column type="expand" width="0">
@@ -33,7 +31,7 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="Location Collection"
+        label="Airline Group Collection"
         width="250"
         sortable
       />
