@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import AirManager from './views/AirManager';
 import Project from './views/Project';
 import ProjectSettings from '@/components/ProjectSettings';
-import DefaultData from '@/components/DefaultData';
+// import DefaultData from '@/components/DefaultData';
 
 Vue.use(Router);
 
@@ -22,11 +22,11 @@ export default new Router({
         {
           path: 'program-settings',
           component: ProjectSettings
-        },
-        {
-          path: 'default-data',
-          component: DefaultData
         }
+        // {
+        //   path: 'default-data',
+        //   component: DefaultData
+        // }
       ]
     }
   ]
