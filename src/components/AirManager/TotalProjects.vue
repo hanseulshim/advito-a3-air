@@ -8,22 +8,26 @@
       :default-sort="{ prop: 'projectManagerEmail', order: 'ascending' }"
       :max-height="750"
     >
-      <el-table-column prop="name" label="Project Name" sortable width="250">
+      <el-table-column
+        prop="name"
+        label="Project Name"
+        sortable
+        :width="tableColumnWidth.name"
+      >
         <template slot-scope="scope">
           <div>{{ scope.row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column
-        prop="effectiveFrom"
         label="Project Date Range"
-        width="250"
+        :width="tableColumnWidth.dateRange"
         :formatter="formatDate"
         sortable
         sort-by="effectiveFrom"
       />
       <el-table-column prop="description" label="Description" />
       <el-table-column
-        width="100"
+        :width="tableColumnWidth.icon"
         label="My Role"
         prop="projectManagerEmail"
         sortable
@@ -40,7 +44,11 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column prop="favorite" label="Favorite" width="100">
+      <el-table-column
+        prop="favorite"
+        label="Favorite"
+        :width="tableColumnWidth.icon"
+      >
         <template slot-scope="scope">
           <i
             class="far fa-star"
@@ -48,15 +56,13 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column width="75" label="Edit">
+      <el-table-column :width="tableColumnWidth.actions" label="Edit">
         <template slot-scope="scope">
-          <div class="edit-project-container">
-            <i class="fas fa-pencil-alt" @click="editProject(scope.row)"></i>
-            <i
-              class="fas fa-trash-alt"
-              @click="deleteProject(scope.row.id)"
-            ></i>
-          </div>
+          <i
+            class="fas fa-pencil-alt icon-spacer"
+            @click="editProject(scope.row)"
+          ></i>
+          <i class="fas fa-trash-alt" @click="deleteProject(scope.row.id)"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -65,6 +71,7 @@
 
 <script>
 import { formatDate, pluralize } from '@/helper';
+import { tableColumnWidth } from '@/config';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
 import { GET_USER } from '@/graphql/queries';
 export default {
@@ -82,7 +89,8 @@ export default {
   },
   data() {
     return {
-      user: null
+      user: null,
+      tableColumnWidth
     };
   },
   methods: {

@@ -37,6 +37,11 @@
   .el-icon-arrow-up:before {
     color: $black;
   }
+  // Toggle Styles
+  .el-switch.is-checked .el-switch__core {
+    border-color: $tree-poppy;
+    background-color: $tree-poppy;
+  }
 }
 .el-select-dropdown {
   .el-select-dropdown__item.selected {

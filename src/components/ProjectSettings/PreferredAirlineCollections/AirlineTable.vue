@@ -1,22 +1,26 @@
 <template>
   <el-table ref="airlineList" :data="airlineList" class="level-two-table">
-    <el-table-column prop="name" label="Airline Name" min-width="160" />
+    <el-table-column
+      prop="name"
+      label="Airline Name"
+      :width="tableColumnWidth.name"
+    />
     <el-table-column
       prop="preferenceLevel"
       label="Preference Level"
-      min-width="175"
+      :width="tableColumnWidth.name"
     />
     <el-table-column
       prop="effectiveStartDate"
       label="Effective Start Date"
-      :formatter="formatStartDate"
-      min-width="175"
+      :formatter="row => formatDate(row, 'effectiveStartDate')"
+      :width="tableColumnWidth.date"
     />
     <el-table-column
       prop="effectiveEndDate"
       label="Effective End Date"
-      :formatter="formatEndDate"
-      min-width="175"
+      :formatter="row => formatDate(row, 'effectiveEndDate')"
+      :width="tableColumnWidth.date"
     />
     <el-table-column prop="cabins" label="Cabins" />
     <el-table-column prop="pos" label="PoS" />
@@ -25,12 +29,10 @@
         {{ props.row.active ? 'Active' : 'Inactive' }}
       </template>
     </el-table-column>
-    <el-table-column label="Actions" width="90">
+    <el-table-column label="Actions" :width="tableColumnWidth.actions">
       <template>
-        <div class="edit-project-container">
-          <i class="fas fa-pencil-alt"></i>
-          <i class="fas fa-trash-alt"></i>
-        </div>
+        <i class="fas fa-pencil-alt icon-spacer"></i>
+        <i class="fas fa-trash-alt"></i>
       </template>
     </el-table-column>
   </el-table>
@@ -38,6 +40,7 @@
 
 <script>
 import { formatDate } from '@/helper';
+import { tableColumnWidth } from '@/config';
 export default {
   name: 'AirlineTable',
   props: {
@@ -46,16 +49,14 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      tableColumnWidth
+    };
+  },
   methods: {
-    formatStartDate(row) {
-      return row.effectiveStartDate
-        ? formatDate(row.effectiveStartDate)
-        : 'Undefined';
-    },
-    formatEndDate(row) {
-      return row.effectiveEndDate
-        ? formatDate(row.effectiveEndDate)
-        : 'Undefined';
+    formatDate(row, param) {
+      return row[param] ? formatDate(row[param]) : 'Undefined';
     }
   }
 };

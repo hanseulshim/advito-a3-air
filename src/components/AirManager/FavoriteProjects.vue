@@ -172,7 +172,7 @@ export default {
   display: flex;
   justify-content: flex-end;
   .fa-trash-alt {
-    margin-left: 10px;
+    margin-left: 1em;
   }
 }
 </style>

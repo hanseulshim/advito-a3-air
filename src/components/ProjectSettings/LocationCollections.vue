@@ -3,55 +3,44 @@
     <div class="section-header title-row space-between">
       {{ pluralize('location collection', locationCollectionList.length) }}
     </div>
-    <el-table
-      ref="locationCollection"
-      :data="locationCollectionList"
-      @expand-change="updateExpand"
-    >
-      <el-table-column type="expand" width="0">
+    <el-table ref="locationCollection" :data="locationCollectionList">
+      <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
           <el-table :data="props.row.regionList" class="level-two-table">
-            <el-table-column prop="name" label="Region" width="200" />
-            <el-table-column label="Countries">
+            <el-table-column
+              prop="name"
+              label="Region"
+              :width="tableColumnWidth.name"
+            />
+            <el-table-column
+              prop="countryList.length"
+              label="Countries"
+              :width="tableColumnWidth.count"
+            />
+            <el-table-column label="Country Name">
               <template slot-scope="scope">
                 {{ getCountryNames(scope.row.countryList) }}
               </template>
             </el-table-column>
-            <el-table-column label="Actions" width="90">
+            <el-table-column label="Actions" :width="tableColumnWidth.actions">
               <template>
-                <div class="edit-project-container">
-                  <i class="fas fa-pencil-alt"></i>
-                  <i class="fas fa-trash-alt"></i>
-                </div>
+                <i class="fas fa-pencil-alt icon-spacer"></i>
+                <i class="fas fa-trash-alt"></i>
               </template>
             </el-table-column>
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column width="35">
-        <template slot-scope="scope">
-          <i
-            v-if="expandedRows.indexOf(scope.row.id) === -1"
-            class="fas fa-plus table-toggle-icon"
-            @click="toggleRow(scope)"
-          ></i>
-          <i
-            v-else
-            class="fas fa-minus table-toggle-icon"
-            @click="toggleRow(scope)"
-          ></i>
-        </template>
-      </el-table-column>
       <el-table-column
         prop="name"
         label="Location Collection"
-        width="250"
+        :width="tableColumnWidth.name"
         sortable
       />
       <el-table-column
         prop="regionList.length"
         label="Regions"
-        width="100"
+        :width="tableColumnWidth.count"
         sortable
       />
       <el-table-column prop="description" label="Description" />
@@ -60,21 +49,21 @@
         label="Date Updated"
         sortable
         :formatter="formatDate"
-        width="150"
+        :width="tableColumnWidth.date"
       />
-      <el-table-column label="Status" width="100">
+      <el-table-column label="Status" :width="tableColumnWidth.icon">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.active" active-color="#ff9e16">
-          </el-switch>
+          <el-switch :value="scope.row.active" />
         </template>
       </el-table-column>
-      <el-table-column label="Actions" width="75">
+      <el-table-column label="Actions" :width="tableColumnWidth.actions">
         <template slot-scope="scope">
-          <div class="edit-project-container">
-            <i class="far fa-copy"></i>
-            <i v-if="scope.row.id !== 1" class="fas fa-pencil-alt"></i>
-            <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
-          </div>
+          <i class="far fa-copy icon-spacer"></i>
+          <i
+            v-if="scope.row.id !== 1"
+            class="fas fa-pencil-alt icon-spacer"
+          ></i>
+          <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -83,6 +72,7 @@
 
 <script>
 import { pluralize, formatDate } from '@/helper';
+import { tableColumnWidth } from '@/config';
 import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
 export default {
   name: 'LocationCollections',
@@ -94,7 +84,7 @@ export default {
   data() {
     return {
       locationCollectionList: [],
-      expandedRows: []
+      tableColumnWidth
     };
   },
   methods: {
@@ -103,15 +93,6 @@ export default {
     },
     formatDate(row) {
       return formatDate(row.dateUpdated);
-    },
-    showInfoModal() {
-      this.$modal.show('info');
-    },
-    toggleRow(scope) {
-      this.$refs.locationCollection.toggleRowExpansion(scope.row);
-    },
-    updateExpand(row, expandedRows) {
-      this.expandedRows = expandedRows.map(row => row.id);
     },
     getCountryNames(countryList) {
       return countryList.length > 10

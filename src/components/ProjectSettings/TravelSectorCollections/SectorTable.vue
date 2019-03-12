@@ -1,11 +1,6 @@
 <template>
-  <el-table
-    ref="sectorList"
-    :data="sectorList"
-    class="level-two-table"
-    @expand-change="updateExpand"
-  >
-    <el-table-column type="expand" width="0">
+  <el-table ref="sectorList" :data="sectorList" class="level-two-table">
+    <el-table-column type="expand" :width="tableColumnWidth.expand">
       <template slot-scope="scope">
         <el-table
           ref="geographyList"
@@ -27,39 +22,28 @@
         </el-table>
       </template>
     </el-table-column>
-    <el-table-column width="75">
-      <template slot-scope="scope">
-        <i
-          v-if="expandedRows.indexOf(scope.row.id) === -1"
-          class="fas fa-plus table-toggle-icon"
-          @click="toggleRow(scope)"
-        ></i>
-        <i
-          v-else
-          class="fas fa-minus table-toggle-icon"
-          @click="toggleRow(scope)"
-        ></i>
-      </template>
-    </el-table-column>
-    <el-table-column prop="name" label="Travel Sector" width="200" />
-    <el-table-column prop="shortName" label="Short Name" width="200" />
-    <el-table-column label="Geographies">
-      <template slot-scope="scope">
-        <div>{{ scope.row.geographyList.length }}</div>
-      </template>
-    </el-table-column>
-    <el-table-column label="Actions" width="90">
+    <el-table-column
+      prop="name"
+      label="Travel Sector"
+      :width="tableColumnWidth.name"
+    />
+    <el-table-column
+      prop="shortName"
+      label="Short Name"
+      :width="tableColumnWidth.name"
+    />
+    <el-table-column prop="geographyList.length" label="Geographies" />
+    <el-table-column label="Actions" :width="tableColumnWidth.actions">
       <template>
-        <div class="edit-project-container">
-          <i class="fas fa-pencil-alt"></i>
-          <i class="fas fa-trash-alt"></i>
-        </div>
+        <i class="fas fa-pencil-alt icon-spacer"></i>
+        <i class="fas fa-trash-alt"></i>
       </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script>
+import { tableColumnWidth } from '@/config';
 export default {
   name: 'SectorTable',
   props: {
@@ -70,16 +54,8 @@ export default {
   },
   data() {
     return {
-      expandedRows: []
+      tableColumnWidth
     };
-  },
-  methods: {
-    toggleRow(scope) {
-      this.$refs.sectorList.toggleRowExpansion(scope.row);
-    },
-    updateExpand(row, expandedRows) {
-      this.expandedRows = expandedRows.map(row => row.id);
-    }
   }
 };
 </script>
