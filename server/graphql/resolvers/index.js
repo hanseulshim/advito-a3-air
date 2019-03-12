@@ -1,13 +1,12 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
+const merge = require('lodash.merge');
 const { projectResolvers } = require('./project');
 const { clientResolvers } = require('./client');
 const { collectionResolvers } = require('./collection');
 
 exports.resolvers = {
-  ...projectResolvers,
-  ...clientResolvers,
-  ...collectionResolvers,
+  ...merge(projectResolvers, clientResolvers, collectionResolvers),
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Date custom scalar type',
