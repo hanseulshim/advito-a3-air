@@ -1,6 +1,6 @@
 <template>
   <el-table :data="airlineMappingList" class="level-two-table">
-    <el-table-column type="expand" width="50">
+    <el-table-column type="expand" :width="tableColumnWidth.expand">
       <template slot-scope="props">
         <el-table :data="props.row.exceptionList" class="level-three-table">
           <el-table-column prop="recordOrder" label="Record Order" />
@@ -13,30 +13,31 @@
         </el-table>
       </template>
     </el-table-column>
-    <el-table-column prop="code" label="Code" width="75" />
+    <el-table-column prop="code" label="Code" :width="tableColumnWidth.code" />
     <el-table-column prop="name" label="Name" />
     <el-table-column
       prop="ticketingDate"
       label="Ticketing Date"
       :formatter="row => formatDate(row, 'ticketingDate')"
-      width="150"
+      :width="tableColumnWidth.date"
     />
     <el-table-column
       prop="travelDate"
       label="Travel Date"
       :formatter="row => formatDate(row, 'travelDate')"
-      width="150"
+      :width="tableColumnWidth.date"
     />
-    <el-table-column label="Exceptions" width="150">
-      <template slot-scope="scope">
-        {{ scope.row.exceptionList.length }}
-      </template>
-    </el-table-column>
+    <el-table-column
+      prop="exceptionList.length"
+      label="Exceptions"
+      :width="tableColumnWidth.code"
+    />
   </el-table>
 </template>
 
 <script>
 import { formatDate } from '@/helper';
+import { tableColumnWidth } from '@/config';
 export default {
   name: 'AirlineMappingTable',
   props: {
@@ -44,6 +45,11 @@ export default {
       type: Array,
       required: true
     }
+  },
+  data() {
+    return {
+      tableColumnWidth
+    };
   },
   methods: {
     formatDate(row, param) {
