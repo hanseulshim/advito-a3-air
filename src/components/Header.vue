@@ -35,9 +35,15 @@
       <span>Ask Addy</span>
     </div>
     <div class="navigation">
-      <span class="back-to-console link">« Back to Console</span>
-      |
-      <span class="link" @click="updateClient()">Air Program Manager</span>
+      <span class="previous-nav link">« Back to Console</span>
+      <span> | </span>
+      <span
+        :class="{ link: client.id, 'previous-nav': project.id }"
+        @click="updateClient()"
+        >Air Program Manager</span
+      >
+      <span v-if="project.id"> | </span>
+      <span v-if="project.id">Project</span>
     </div>
   </div>
 </template>
@@ -145,7 +151,7 @@ export default {
 .navigation {
   grid-area: navigation;
 }
-.back-to-console {
+.previous-nav {
   color: $tree-poppy;
 }
 .link {
