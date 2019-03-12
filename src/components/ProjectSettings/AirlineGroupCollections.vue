@@ -1,6 +1,6 @@
 <template>
   <div class="airline-group-collection-container">
-    <div class="section-header title-row space">
+    <div class="section-header title-row space-between">
       {{
         pluralize('airline group collection', airlineGroupCollectionList.length)
       }}

@@ -1,6 +1,6 @@
 <template>
   <div class="travel-sector-collection-container">
-    <div class="section-header title-row space">
+    <div class="section-header title-row space-between">
       {{
         pluralize('travel sector collection', travelSectorCollectionList.length)
       }}

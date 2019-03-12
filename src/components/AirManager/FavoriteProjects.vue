@@ -6,7 +6,7 @@
       class="favorite-project"
     >
       <div class="favorite-project-main">
-        <div class="title-row space title">
+        <div class="title-row space-between title">
           <span @click="updateProject(project)">{{ project.name }}</span>
           <el-tooltip
             effect="dark"

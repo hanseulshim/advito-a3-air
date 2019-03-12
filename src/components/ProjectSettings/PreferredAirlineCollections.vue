@@ -1,6 +1,6 @@
 <template>
   <div class="preferred-airline-collection-container">
-    <div class="section-header title-row space">
+    <div class="section-header title-row space-between">
       {{
         pluralize(
           'preferred airline collection',

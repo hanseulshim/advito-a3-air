@@ -1,6 +1,6 @@
 <template>
   <modal classes="modal-container" name="info" height="auto">
-    <div class="title-row space">
+    <div class="title-row space-between">
       <div class="section-header">Info</div>
       <i class="fas fa-times close-modal-button" @click="closeModal"></i>
     </div>
