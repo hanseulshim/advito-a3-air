@@ -8,7 +8,7 @@
       :default-sort="{ prop: 'projectManagerEmail', order: 'ascending' }"
       :max-height="750"
     >
-      <el-table-column prop="name" label="Project Name" sortable width="230">
+      <el-table-column prop="name" label="Project Name" sortable width="250">
         <template slot-scope="scope">
           <div>{{ scope.row.name }}</div>
         </template>
@@ -16,7 +16,7 @@
       <el-table-column
         prop="effectiveFrom"
         label="Project Date Range"
-        width="220"
+        width="250"
         :formatter="formatDate"
         sortable
         sort-by="effectiveFrom"
@@ -40,7 +40,7 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column prop="favorite" label="Favorite" width="85">
+      <el-table-column prop="favorite" label="Favorite" width="100">
         <template slot-scope="scope">
           <i
             class="far fa-star"
@@ -48,7 +48,7 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column width="55" label="Edit">
+      <el-table-column width="75" label="Edit">
         <template slot-scope="scope">
           <div class="edit-project-container">
             <i class="fas fa-pencil-alt" @click="editProject(scope.row)"></i>
