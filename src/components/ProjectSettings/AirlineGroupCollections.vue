@@ -1,6 +1,6 @@
 <template>
   <div class="airline-group-collection-container">
-    <div class="section-header title-row">
+    <div class="section-header title-row space">
       {{
         pluralize('airline group collection', airlineGroupCollectionList.length)
       }}
@@ -70,9 +70,8 @@
 </template>
 
 <script>
-import { pluralize } from '@/helper';
+import { pluralize, formatDate } from '@/helper';
 import { GET_AIRLINE_GROUP_COLLECTION_LIST } from '@/graphql/queries';
-import { formatDate } from '@/helper';
 import AirlineGroupTable from './AirlineGroupTable';
 export default {
   name: 'AirlineGroupCollections',

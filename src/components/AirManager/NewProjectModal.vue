@@ -13,7 +13,7 @@
       label-width="150px"
       hide-required-asterisk
     >
-      <div class="title-row">
+      <div class="title-row space">
         <div class="section-header">new project</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>

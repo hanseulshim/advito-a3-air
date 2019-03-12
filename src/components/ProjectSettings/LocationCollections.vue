@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="section-header title-row">
+    <div class="section-header title-row space">
       {{ pluralize('location collection', locationCollectionList.length) }}
     </div>
     <el-table
@@ -87,9 +87,8 @@
 </template>
 
 <script>
-import { pluralize } from '@/helper';
+import { pluralize, formatDate } from '@/helper';
 import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
-import { formatDate } from '@/helper';
 export default {
   name: 'LocationCollections',
   apollo: {

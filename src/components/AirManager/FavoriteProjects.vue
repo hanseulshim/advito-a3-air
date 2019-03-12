@@ -6,7 +6,7 @@
       class="favorite-project"
     >
       <div class="favorite-project-main">
-        <div class="title-row title">
+        <div class="title-row space title">
           <span @click="updateProject(project)">{{ project.name }}</span>
           <el-tooltip
             effect="dark"
@@ -147,9 +147,6 @@ export default {
   padding: 2em;
 }
 .title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
   padding-bottom: 1em;
   border-bottom: 1px solid $gray-nurse;
 }

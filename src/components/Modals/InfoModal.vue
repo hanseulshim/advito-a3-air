@@ -1,6 +1,6 @@
 <template>
   <modal classes="modal-container" name="info" height="auto">
-    <div class="title-row">
+    <div class="title-row space">
       <div class="section-header">Info</div>
       <i class="fas fa-times close-modal-button" @click="closeModal"></i>
     </div>
@@ -26,13 +26,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-@import '@/styles/global.scss';
-.title-row {
-  margin-bottom: 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-</style>

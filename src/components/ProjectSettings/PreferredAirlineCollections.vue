@@ -1,6 +1,6 @@
 <template>
   <div class="preferred-airline-collection-container">
-    <div class="section-header title-row">
+    <div class="section-header title-row space">
       {{
         pluralize(
           'preferred airline collection',
@@ -73,9 +73,8 @@
 </template>
 
 <script>
-import { pluralize } from '@/helper';
+import { pluralize, formatDate } from '@/helper';
 import { GET_PREFERRED_AIRLINE_COLLECTION_LIST } from '@/graphql/queries';
-import { formatDate } from '@/helper';
 import AirlineTable from './AirlineTable';
 export default {
   name: 'PreferredAirlineCollections',
