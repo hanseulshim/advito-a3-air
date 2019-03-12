@@ -1,4 +1,4 @@
-exports.defaultDataDefs = `
+exports.dataSetDefs = `
 type DataSet {
   id: Int
   ticketingTo: Date

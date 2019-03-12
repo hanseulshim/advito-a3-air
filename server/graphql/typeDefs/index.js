@@ -2,14 +2,14 @@ const { gql } = require('apollo-server-lambda');
 const { projectDefs } = require('./project');
 const { clientDefs } = require('./client');
 const { collectionDefs } = require('./collection');
-const { defaultDataDefs } = require('./defaultData');
+const { dataSetDefs } = require('./dataSet');
 
 exports.typeDefs = gql`
   directive @auth on FIELD_DEFINITION
   ${projectDefs}
   ${clientDefs}
   ${collectionDefs}
-  ${defaultDataDefs}
+  ${dataSetDefs}
   type Query {
     _empty: String
   }

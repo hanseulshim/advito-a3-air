@@ -4,14 +4,14 @@ const merge = require('lodash.merge');
 const { projectResolvers } = require('./project');
 const { clientResolvers } = require('./client');
 const { collectionResolvers } = require('./collection');
-const { defaultDataResolvers } = require('./defaultData');
+const { dataSetResolvers } = require('./dataSet');
 
 exports.resolvers = {
   ...merge(
     projectResolvers,
     clientResolvers,
     collectionResolvers,
-    defaultDataResolvers
+    dataSetResolvers
   ),
   Date: new GraphQLScalarType({
     name: 'Date',

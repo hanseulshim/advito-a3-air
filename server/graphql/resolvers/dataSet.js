@@ -1,7 +1,7 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { dataSetList } = require('../../data/defaultData');
+const { dataSetList } = require('../../data/dataSet');
 
-exports.defaultDataResolvers = {
+exports.dataSetResolvers = {
   Query: {
     dataSetList: () => dataSetList
   },
