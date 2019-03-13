@@ -1,70 +1,99 @@
 exports.collection = {
-  name: 'Collection Queries',
-  endpoint: 'http://localhost:8085/graphql',
-  headers: { sessiontoken: 'advitoValidToken' },
-  query: `
-  {
-    locationCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      active
-      regionList {
-        name
-        countryList
-      }
-    }
-    travelSectorCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      active
-      sectorList {
+  queries: {
+    name: 'Collection Queries',
+    endpoint: 'http://localhost:8085/graphql',
+    headers: { sessiontoken: 'advitoValidToken' },
+    query: `
+    {
+      locationCollectionList {
         id
         name
-        shortName
-        geographyList {
-          origin
-          destination
-          exclude
+        description
+        dateUpdated
+        active
+        regionList {
+          name
+          countryList
         }
       }
-    }
-    airlineGroupCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      active
-      airlineGroupList {
+      travelSectorCollectionList {
         id
         name
-        effectiveStartDate
-        effectiveEndDate
-        airlineList {
+        description
+        dateUpdated
+        active
+        sectorList {
+          id
+          name
+          shortName
+          geographyList {
+            origin
+            destination
+            exclude
+          }
+        }
+      }
+      airlineGroupCollectionList {
+        id
+        name
+        description
+        dateUpdated
+        active
+        airlineGroupList {
+          id
           name
           effectiveStartDate
           effectiveEndDate
+          airlineList {
+            name
+            effectiveStartDate
+            effectiveEndDate
+          }
         }
       }
-    }
-    preferredAirlineCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      active
-      airlineList {
+      preferredAirlineCollectionList {
+        id
         name
-        preferenceLevel
-        effectiveStartDate
-        effectiveEndDate
-        cabins
-        pos
+        description
+        dateUpdated
         active
+        airlineList {
+          name
+          preferenceLevel
+          effectiveStartDate
+          effectiveEndDate
+          cabins
+          pos
+          active
+        }
       }
+    }`
+  },
+  mutations: {
+    name: 'Collection Mutations',
+    endpoint: 'http://localhost:8085/graphql',
+    headers: { sessiontoken: 'advitoValidToken' },
+    query: `
+    mutation {
+      createLocationCollection(id: 1, name: "Collection 1", description: "Collection 1 description") {
+        id
+        name
+        description
+        dateUpdated
+        active
+        regionList {
+          name
+          countryList
+        }
+      }
+      editLocationCollection(id: 2, name: "Updated Collection", description: "new description") {
+        id
+        name
+        description
+        dateUpdated
+      }
+      deleteLocationCollection(id: 2)
     }
-  }`
+    `
+  }
 };

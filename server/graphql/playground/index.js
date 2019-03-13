@@ -1,16 +1,17 @@
 const { client } = require('./client');
 const { collection } = require('./collection');
-const { projectQueries, projectMutations } = require('./project');
-const { dataSetQueries, dataSetMutations } = require('./dataSet');
+const { project } = require('./project');
+const { dataSet } = require('./dataSet');
 const { libraryQueries } = require('./library');
 exports.playground = {
   tabs: [
     client,
-    projectQueries,
-    projectMutations,
-    collection,
-    dataSetQueries,
-    dataSetMutations,
+    project.queries,
+    project.mutations,
+    collection.queries,
+    collection.mutations,
+    dataSet.queries,
+    dataSet.mutations,
     libraryQueries
   ]
 };

@@ -69,4 +69,10 @@ extend type Query {
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
 }
+
+extend type Mutation {
+  createLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
+  editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
+  deleteLocationCollection(id: Int!): Int @auth
+}
 `;
