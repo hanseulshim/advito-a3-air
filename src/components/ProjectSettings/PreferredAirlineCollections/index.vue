@@ -1,5 +1,5 @@
 <template>
-  <div class="preferred-airline-collection-container">
+  <div class="table-spacer">
     <div class="section-header title-row space-between">
       {{
         pluralize(
@@ -11,59 +11,45 @@
     <el-table
       ref="preferredAirlineCollection"
       :data="preferredAirlineCollectionList"
-      @expand-change="updateExpand"
     >
-      <el-table-column type="expand" width="0">
+      <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
           <AirlineTable :airline-list="props.row.airlineList" />
-        </template>
-      </el-table-column>
-      <el-table-column width="35">
-        <template slot-scope="scope">
-          <i
-            v-if="expandedRows.indexOf(scope.row.id) === -1"
-            class="fas fa-plus table-toggle-icon"
-            @click="toggleRow(scope)"
-          ></i>
-          <i
-            v-else
-            class="fas fa-minus table-toggle-icon"
-            @click="toggleRow(scope)"
-          ></i>
         </template>
       </el-table-column>
       <el-table-column
         prop="name"
         label="Preferred Airline Collection"
-        width="250"
+        :width="tableColumnWidth.name"
         sortable
       />
-      <el-table-column label="Airlines" width="100" sortable>
-        <template slot-scope="scope">
-          <div>{{ scope.row.airlineList.length }}</div>
-        </template>
-      </el-table-column>
+      <el-table-column
+        prop="airlineList.length"
+        label="Airlines"
+        :width="tableColumnWidth.count"
+        sortable
+      />
       <el-table-column prop="description" label="Description" />
       <el-table-column
         prop="dateUpdated"
         label="Date Updated"
         sortable
         :formatter="formatDate"
-        width="150"
+        :width="tableColumnWidth.date"
       />
-      <el-table-column label="Status" width="100">
+      <el-table-column label="Status" :width="tableColumnWidth.icon">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.active" active-color="#ff9e16">
-          </el-switch>
+          <el-switch :value="scope.row.active" />
         </template>
       </el-table-column>
-      <el-table-column label="Actions" width="90">
+      <el-table-column label="Actions" :width="tableColumnWidth.actions">
         <template slot-scope="scope">
-          <div class="edit-project-container">
-            <i class="far fa-copy"></i>
-            <i v-if="scope.row.id !== 1" class="fas fa-pencil-alt"></i>
-            <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
-          </div>
+          <i class="far fa-copy icon-spacer"></i>
+          <i
+            v-if="scope.row.id !== 1"
+            class="fas fa-pencil-alt icon-spacer"
+          ></i>
+          <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -72,6 +58,7 @@
 
 <script>
 import { pluralize, formatDate } from '@/helper';
+import { tableColumnWidth } from '@/config';
 import { GET_PREFERRED_AIRLINE_COLLECTION_LIST } from '@/graphql/queries';
 import AirlineTable from './AirlineTable';
 export default {
@@ -87,7 +74,7 @@ export default {
   data() {
     return {
       preferredAirlineCollectionList: [],
-      expandedRows: []
+      tableColumnWidth
     };
   },
   methods: {
@@ -96,27 +83,7 @@ export default {
     },
     formatDate(row) {
       return formatDate(row.dateUpdated);
-    },
-    showInfoModal() {
-      this.$modal.show('info');
-    },
-    toggleRow(scope) {
-      this.$refs.preferredAirlineCollection.toggleRowExpansion(scope.row);
-    },
-    updateExpand(row, expandedRows) {
-      this.expandedRows = expandedRows.map(row => row.id);
-    },
-    getCountryNames(countryList) {
-      return countryList.length > 10
-        ? countryList.slice(0, 9).join(', ') + '...'
-        : countryList.join(', ');
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.preferred-airline-collection-container {
-  margin-top: 5em;
-}
-</style>

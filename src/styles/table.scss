@@ -27,35 +27,20 @@
     cursor: pointer;
     color: $tree-poppy;
   }
-  .edit-project-container {
-    display: flex;
-    justify-content: space-between;
-  }
   .fa-pencil-alt,
   .fa-trash-alt,
   .fa-copy,
   .fa-star {
     cursor: pointer;
   }
+  .icon-spacer {
+    margin-right: 1em;
+  }
   .el-table__expand-icon > .el-icon-arrow-right {
-    display: none;
     color: $tree-poppy;
+    font-size: 1.2em;
     font-weight: 700;
   }
-  .table-toggle-icon {
-    cursor: pointer;
-    color: $tree-poppy;
-  }
-  .edit-project-container {
-    display: flex;
-    justify-content: space-between;
-  }
-  .fa-pencil-alt,
-  .fa-trash-alt,
-  .fa-star {
-    cursor: pointer;
-  }
-
   .level-two-table {
     border: 1px solid $gallery;
     td {
@@ -80,5 +65,8 @@
     .cell {
       padding: 0 20px;
     }
+  }
+  .table-spacer {
+    margin-top: 5em;
   }
 }
