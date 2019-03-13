@@ -110,25 +110,14 @@
         <button class="button" @click="validateForm">SAVE</button>
       </el-form-item>
     </el-form>
-    <SuccessModal
-      :hide-modal="hideModal"
-      message="Project successfully edited."
-    />
-    <ErrorModal message="Failed to edit project. Please try again" />
   </modal>
 </template>
 
 <script>
-import SuccessModal from '@/components/Modals/SuccessModal.vue';
-import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { EDIT_PROJECT } from '@/graphql/mutations';
 import { GET_PROJECT_INFO } from '@/graphql/queries';
 export default {
   name: 'EditProjectModal',
-  components: {
-    SuccessModal,
-    ErrorModal
-  },
   apollo: {
     projectInfo: {
       query: GET_PROJECT_INFO
@@ -246,9 +235,14 @@ export default {
             ...this.form
           }
         });
-        this.$modal.show('success');
+        this.$modal.show('success', {
+          message: 'Project successfully edited.',
+          name: 'edit-project'
+        });
       } catch (error) {
-        this.$modal.show('error');
+        this.$modal.show('error', {
+          message: 'Failed to edit project. Please try again.'
+        });
       }
     },
     beforeOpen(event) {
