@@ -1,8 +1,9 @@
 <template>
   <modal
-    classes="modal-container booking-class-modal"
+    classes="modal-container"
     name="booking-class"
     height="auto"
+    width="1200px"
   >
     <div class="title-row space-between">
       <div class="section-header">booking class mappings</div>
@@ -66,7 +67,7 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('airport-listing');
+      this.$modal.hide('booking-class');
     },
     formatDate(row) {
       return formatDate(row.dateUpdated);
@@ -74,9 +75,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.booking-class-modal {
-  width: 1200px !important;
-}
-</style>

@@ -1,8 +1,9 @@
 <template>
   <modal
-    classes="modal-container airport-listing-modal"
+    classes="modal-container"
     name="airport-listing"
     height="auto"
+    width="1000px"
   >
     <div class="title-row space-between">
       <div class="section-header">airport listing</div>
@@ -61,9 +62,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.airport-listing-modal {
-  width: 1000px !important;
-}
-</style>
