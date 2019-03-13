@@ -5,13 +5,15 @@ const { projectResolvers } = require('./project');
 const { clientResolvers } = require('./client');
 const { collectionResolvers } = require('./collection');
 const { dataSetResolvers } = require('./dataSet');
+const { libraryResolvers } = require('./library');
 
 exports.resolvers = {
   ...merge(
     projectResolvers,
     clientResolvers,
     collectionResolvers,
-    dataSetResolvers
+    dataSetResolvers,
+    libraryResolvers
   ),
   Date: new GraphQLScalarType({
     name: 'Date',

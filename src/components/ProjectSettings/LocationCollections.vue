@@ -48,11 +48,12 @@
         width="250"
         sortable
       />
-      <el-table-column label="Regions" width="100" sortable>
-        <template slot-scope="scope">
-          <div>{{ scope.row.regionList.length }}</div>
-        </template>
-      </el-table-column>
+      <el-table-column
+        prop="regionList.length"
+        label="Regions"
+        width="100"
+        sortable
+      />
       <el-table-column prop="description" label="Description" />
       <el-table-column
         prop="dateUpdated"
