@@ -58,7 +58,10 @@
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
         <template slot-scope="scope">
-          <i class="far fa-copy icon-spacer"></i>
+          <i
+            class="far fa-copy icon-spacer"
+            @click="showNewLocationCollection(scope.row)"
+          ></i>
           <i
             v-if="scope.row.id !== 1"
             class="fas fa-pencil-alt icon-spacer"
@@ -98,6 +101,9 @@ export default {
       return countryList.length > 10
         ? countryList.slice(0, 9).join(', ') + '...'
         : countryList.join(', ');
+    },
+    showNewLocationCollection(collection) {
+      console.log(collection);
     }
   }
 };
