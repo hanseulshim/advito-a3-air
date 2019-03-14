@@ -6,10 +6,10 @@
     :click-to-close="false"
     @before-open="beforeOpen"
   >
-    <div style="text-align: center">
+    <div class="delete-modal-text">
       Are you sure you want to delete this project?
     </div>
-    <div class="close-container">
+    <div class="delete-modal-button-container">
       <button class="button" @click="deleteProject">Yes</button>
       <button class="button" @click="hideModal">No</button>
     </div>
@@ -73,11 +73,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.close-container {
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 2em;
-}
-</style>

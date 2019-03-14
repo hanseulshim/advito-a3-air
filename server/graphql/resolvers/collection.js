@@ -59,6 +59,13 @@ exports.collectionResolvers = {
         throw new ApolloError('Location Collection not found', 400);
       }
       locationCollection.isDeleted = true;
+      if (locationCollection.active) {
+        const advitoStandard = locationCollectionList.filter(
+          collection => collection.id === 1
+        )[0];
+        advitoStandard.active = true;
+        locationCollection.active = false;
+      }
       locationCollection.dateUpdated = new Date();
       return id;
     }

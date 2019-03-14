@@ -16,3 +16,11 @@
     align-items: flex-end;
   }
 }
+.delete-modal-text {
+  text-align: center;
+}
+.delete-modal-button-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 2em;
+}

@@ -65,11 +65,19 @@
           <i
             v-if="scope.row.id !== 1"
             class="fas fa-pencil-alt icon-spacer"
+            @click="showEditLocationCollection(scope.row)"
           ></i>
-          <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
+          <i
+            v-if="scope.row.id !== 1"
+            class="fas fa-trash-alt"
+            @click="showDeleteLocationCollection(scope.row)"
+          ></i>
         </template>
       </el-table-column>
     </el-table>
+    <NewLocationCollectionModal @toggle-row="toggleRow" />
+    <EditLocationCollectionModal />
+    <DeleteLocationCollectionModal />
   </div>
 </template>
 
@@ -77,8 +85,17 @@
 import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
+import NewLocationCollectionModal from './NewLocationCollectionModal';
+import EditLocationCollectionModal from './EditLocationCollectionModal';
+import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
+
 export default {
   name: 'LocationCollections',
+  components: {
+    NewLocationCollectionModal,
+    EditLocationCollectionModal,
+    DeleteLocationCollectionModal
+  },
   apollo: {
     locationCollectionList: {
       query: GET_LOCATION_COLLECTION_LIST
@@ -103,7 +120,19 @@ export default {
         : countryList.join(', ');
     },
     showNewLocationCollection(collection) {
-      console.log(collection);
+      this.$modal.show('new-location-collection', { collection });
+    },
+    showEditLocationCollection(collection) {
+      this.$modal.show('edit-location-collection', { collection });
+    },
+    showDeleteLocationCollection(collection) {
+      this.$modal.show('delete-location-collection', { collection });
+    },
+    toggleRow(id) {
+      const row = this.$refs.locationCollection.data.filter(
+        collection => collection.id === id
+      )[0];
+      this.$refs.locationCollection.toggleRowExpansion(row);
     }
   }
 };
