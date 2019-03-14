@@ -93,6 +93,32 @@ exports.collection = {
         dateUpdated
       }
       deleteLocationCollection(id: 2)
+      addRegion(id: 1, name: "Region") {
+        id
+        regionList {
+          name
+          countryList
+        }
+      }
+      deleteRegion(id: 1, name: "Africa") {
+        id
+        regionList {
+          name
+          countryList
+        }
+      }
+      moveCountries(id: 1, destination: "Africa", origin: [
+        {
+          name: "South Pacific",
+          countryList: ["Australia"]
+        }
+      ]) {
+        id
+        regionList {
+          name
+          countryList
+        }
+      }
     }
     `
   }

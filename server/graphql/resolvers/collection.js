@@ -68,6 +68,49 @@ exports.collectionResolvers = {
       }
       locationCollection.dateUpdated = new Date();
       return id;
+    },
+    addRegion: (_, { id, name }) => {
+      const locationCollection = locationCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!locationCollection) {
+        throw new ApolloError('Location Collection not found', 400);
+      }
+      const region = {
+        name,
+        countryList: []
+      };
+      locationCollection.regionList.push(region);
+      return locationCollection;
+    },
+    deleteRegion: (_, { id, name }) => {
+      const locationCollection = locationCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!locationCollection) {
+        throw new ApolloError('Location Collection not found', 400);
+      }
+      const index = locationCollection.regionList.findIndex(
+        region => region.name === name
+      );
+      if (index === -1) {
+        throw new ApolloError('Region not found', 400);
+      }
+      const countryList = locationCollection.regionList[index].countryList;
+      if (countryList.length !== 0) {
+        throw new ApolloError('Cannot delete region', 400);
+      }
+      locationCollection.regionList.splice(index, 1);
+      return locationCollection;
+    },
+    moveCountries: (_, { id, destination, origin }) => {
+      const locationCollection = locationCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!locationCollection) {
+        throw new ApolloError('Location Collection not found', 400);
+      }
+      return null;
     }
   }
 };
