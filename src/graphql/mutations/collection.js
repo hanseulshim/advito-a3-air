@@ -40,3 +40,27 @@ export const DELETE_LOCATION_COLLECTION = gql`
     deleteLocationCollection(id: $id)
   }
 `;
+
+export const ADD_REGION = gql`
+  mutation addRegion($id: Int!, $name: String!) {
+    addRegion(id: $id, name: $name) {
+      id
+      regionList {
+        name
+        countryList
+      }
+    }
+  }
+`;
+
+export const DELETE_REGION = gql`
+  mutation deleteRegion($id: Int!, $name: String!) {
+    deleteRegion(id: $id, name: $name) {
+      id
+      regionList {
+        name
+        countryList
+      }
+    }
+  }
+`;

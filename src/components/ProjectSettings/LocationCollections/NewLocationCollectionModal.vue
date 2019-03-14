@@ -105,7 +105,6 @@ export default {
               collection => (collection.active = false)
             );
             newData.locationCollectionList.push(locationCollection);
-            this.$emit('toggle-row', locationCollection);
             store.writeQuery({
               query: GET_LOCATION_COLLECTION_LIST,
               data: newData

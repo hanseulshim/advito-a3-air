@@ -23,9 +23,15 @@
               </template>
             </el-table-column>
             <el-table-column label="Actions" :width="tableColumnWidth.actions">
-              <template>
-                <i class="fas fa-pencil-alt icon-spacer"></i>
-                <i class="fas fa-trash-alt"></i>
+              <template slot-scope="scope">
+                <i
+                  class="fas fa-pencil-alt icon-spacer"
+                  @click="showEditRegionModal(props.row, scope.row)"
+                />
+                <i
+                  class="fas fa-trash-alt"
+                  @click="showDeleteRegionModal(props.row, scope.row)"
+                ></i>
               </template>
             </el-table-column>
           </el-table>
@@ -78,6 +84,8 @@
     <NewLocationCollectionModal @toggle-row="toggleRow" />
     <EditLocationCollectionModal />
     <DeleteLocationCollectionModal />
+    <EditRegionModal @toggle-row="toggleRow" />
+    <DeleteRegionModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -88,13 +96,17 @@ import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
 import NewLocationCollectionModal from './NewLocationCollectionModal';
 import EditLocationCollectionModal from './EditLocationCollectionModal';
 import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
+import EditRegionModal from './EditRegionModal';
+import DeleteRegionModal from './DeleteRegionModal';
 
 export default {
   name: 'LocationCollections',
   components: {
     NewLocationCollectionModal,
     EditLocationCollectionModal,
-    DeleteLocationCollectionModal
+    DeleteLocationCollectionModal,
+    EditRegionModal,
+    DeleteRegionModal
   },
   apollo: {
     locationCollectionList: {
@@ -127,6 +139,12 @@ export default {
     },
     showDeleteLocationCollection(collection) {
       this.$modal.show('delete-location-collection', { collection });
+    },
+    showEditRegionModal(collection, region) {
+      this.$modal.show('edit-region', { collection, region });
+    },
+    showDeleteRegionModal(collection, region) {
+      this.$modal.show('delete-region', { collection, region });
     },
     toggleRow(id) {
       const row = this.$refs.locationCollection.data.filter(
