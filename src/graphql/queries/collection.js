@@ -9,8 +9,13 @@ export const GET_LOCATION_COLLECTION_LIST = gql`
       dateUpdated
       active
       regionList {
+        id
         name
-        countryList
+        countryList {
+          id
+          regionId
+          name
+        }
       }
     }
   }

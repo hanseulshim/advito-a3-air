@@ -76,22 +76,25 @@ exports.collectionResolvers = {
       if (!locationCollection) {
         throw new ApolloError('Location Collection not found', 400);
       }
+      const maxId =
+        Math.max(...locationCollection.regionList.map(region => region.id)) + 1;
       const region = {
+        id: maxId,
         name,
         countryList: []
       };
       locationCollection.regionList.push(region);
       return locationCollection;
     },
-    deleteRegion: (_, { id, name }) => {
+    deleteRegion: (_, { id, collectionId }) => {
       const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
+        collection => collection.id === collectionId
       )[0];
       if (!locationCollection) {
         throw new ApolloError('Location Collection not found', 400);
       }
       const index = locationCollection.regionList.findIndex(
-        region => region.name === name
+        region => region.id === id
       );
       if (index === -1) {
         throw new ApolloError('Region not found', 400);
@@ -103,26 +106,32 @@ exports.collectionResolvers = {
       locationCollection.regionList.splice(index, 1);
       return locationCollection;
     },
-    moveCountries: (_, { id, destination, origin }) => {
+    moveCountries: (_, { collectionId, id, countryList }) => {
       const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
+        collection => collection.id === collectionId
       )[0];
       if (!locationCollection) {
         throw new ApolloError('Location Collection not found', 400);
       }
       const regionList = locationCollection.regionList;
       const destinationRegion = regionList.filter(
-        region => region.name === destination
+        region => region.id === id
       )[0];
-      origin.forEach(originRegion => {
-        const foundRegion = regionList.filter(
-          region => region.name === originRegion.name
+      countryList.forEach(country => {
+        const originRegion = regionList.filter(
+          region => region.id === country.regionId
         )[0];
-        originRegion.countryList.forEach(country => {
-          const index = foundRegion.countryList.indexOf(country);
-          foundRegion.countryList.splice(index, 1);
-          destinationRegion.countryList.push(country);
+        const maxId =
+          Math.max(...destinationRegion.countryList.map(c => c.id)) + 1;
+        destinationRegion.countryList.push({
+          id: maxId,
+          regionId: destinationRegion.id,
+          name: country.name
         });
+        const index = originRegion.countryList.findIndex(
+          c => c.id === country.id
+        );
+        originRegion.countryList.splice(index, 1);
       });
       return locationCollection;
     }

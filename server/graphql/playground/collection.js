@@ -12,8 +12,13 @@ exports.collection = {
         dateUpdated
         active
         regionList {
+          id
           name
-          countryList
+          countryList {
+            id
+            regionId
+            name
+          }
         }
       }
       travelSectorCollectionList {
@@ -82,8 +87,13 @@ exports.collection = {
         dateUpdated
         active
         regionList {
+          id
           name
-          countryList
+          countryList {
+            id
+            regionId
+            name
+          }
         }
       }
       editLocationCollection(id: 2, name: "Updated Collection", description: "new description") {
@@ -96,31 +106,43 @@ exports.collection = {
       addRegion(id: 1, name: "Region") {
         id
         regionList {
+          id
           name
-          countryList
+          countryList {
+            id
+            regionId
+            name
+          }
         }
       }
-      deleteRegion(id: 1, name: "Africa") {
+      deleteRegion(id: 1, collectionId: 1) {
         id
         regionList {
+          id
           name
-          countryList
+          countryList {
+            id
+            regionId
+            name
+          }
         }
       }
-      moveCountries(id: 1, destination: "Africa", origin: [
+      moveCountries(collectionId: 1, id: 1, countryList: [
         {
-          name: "Antarctica",
-          countryList: ["French Southern Territories"]
-        },
-        {
-          name: "Asia",
-          countryList: ["Bhutan", "China", "India", "Japan"]
+          id: 1
+          regionId: 2
+          name: "French Southern Territories"
         }
       ]) {
         id
         regionList {
+          id
           name
-          countryList
+          countryList {
+            id
+            regionId
+            name
+          }
         }
       }
     }

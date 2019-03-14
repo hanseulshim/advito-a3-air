@@ -40,7 +40,7 @@ export default {
     return {
       form: {
         id: null,
-        name: null
+        collectionId: null
       },
       deleteRegionStatus: null,
       countryListLength: null
@@ -58,7 +58,7 @@ export default {
             ...this.form
           }
         });
-        this.$emit('toggle-row', this.form.id);
+        this.$emit('toggle-row', this.form.collectionId);
         this.$modal.show('success', {
           message: 'Region successfully deleted.',
           name: 'delete-region'
@@ -73,14 +73,14 @@ export default {
     beforeOpen(event) {
       const collection = event.params.collection;
       const region = event.params.region;
-      this.form.id = collection.id;
-      this.form.name = region.name;
+      this.form.id = region.id;
+      this.form.collectionId = collection.id;
       this.deleteRegionStatus = region.countryList.length === 0;
       this.countryListLength = region.countryList.length;
     },
     beforeClose() {
       this.form.id = null;
-      this.form.name = null;
+      this.form.collectionId = null;
       this.deleteRegionStatus = null;
       this.countryListLength = null;
     }

@@ -8,8 +8,14 @@ type LocationCollection {
   active: Boolean
 }
 type Region {
+  id: Int
   name: String,
-  countryList: [String]
+  countryList: [Country]
+}
+type Country {
+  id: Int
+  regionId: Int
+  name: String
 }
 type TravelSectorCollection {
   id: Int,
@@ -62,9 +68,10 @@ type Airline {
   pos: String,
   active: Boolean
 }
-input RegionInput {
-  name: String,
-  countryList: [String]
+input MoveCountry {
+  id: Int
+  regionId: Int
+  name: String
 }
 
 extend type Query {
@@ -79,7 +86,7 @@ extend type Mutation {
   editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   deleteLocationCollection(id: Int!): Int @auth
   addRegion(id: Int!, name: String!): LocationCollection @auth
-  deleteRegion(id: Int!, name: String!): LocationCollection @auth
-  moveCountries(id: Int!, destination: String!, origin: [RegionInput]): LocationCollection @auth
+  deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
+  moveCountries(collectionId: Int!, id: Int!, countryList: [MoveCountry]): LocationCollection @auth
 }
 `;

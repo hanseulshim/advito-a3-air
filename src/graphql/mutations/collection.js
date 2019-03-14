@@ -13,8 +13,13 @@ export const CREATE_LOCATION_COLLECTION = gql`
       dateUpdated
       active
       regionList {
+        id
         name
-        countryList
+        countryList {
+          id
+          regionId
+          name
+        }
       }
     }
   }
@@ -46,20 +51,55 @@ export const ADD_REGION = gql`
     addRegion(id: $id, name: $name) {
       id
       regionList {
+        id
         name
-        countryList
+        countryList {
+          id
+          regionId
+          name
+        }
       }
     }
   }
 `;
 
 export const DELETE_REGION = gql`
-  mutation deleteRegion($id: Int!, $name: String!) {
-    deleteRegion(id: $id, name: $name) {
+  mutation deleteRegion($id: Int!, $collectionId: Int!) {
+    deleteRegion(id: $id, collectionId: $collectionId) {
       id
       regionList {
+        id
         name
-        countryList
+        countryList {
+          id
+          regionId
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const MOVE_COUNTRIES = gql`
+  mutation moveCountries(
+    $id: Int!
+    $collectionId: Int!
+    $countryList: [Country]
+  ) {
+    moveCountries(
+      id: $id
+      collectionId: $collectionId
+      countryList: $countryList
+    ) {
+      id
+      regionList {
+        id
+        name
+        countryList {
+          id
+          regionId
+          name
+        }
       }
     }
   }

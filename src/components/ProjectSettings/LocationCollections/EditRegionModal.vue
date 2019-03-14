@@ -6,6 +6,10 @@
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
+    <div class="title-row space-between">
+      <div class="section-header">edit region</div>
+      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+    </div>
     <el-form
       ref="editRegionForm"
       :model="form"
@@ -13,10 +17,6 @@
       label-position="left"
       hide-required-asterisk
     >
-      <div class="title-row space-between">
-        <div class="section-header">edit region</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
-      </div>
       <el-form-item prop="name" label-width="150px">
         <div class="region-name-container">
           <div>New Region Name</div>
@@ -24,10 +24,13 @@
           <button class="button" @click="validateForm">ADD TO LIST</button>
         </div>
       </el-form-item>
-      <el-form-item class="save-container">
-        <button class="button" @click="validateForm">SAVE</button>
-      </el-form-item>
     </el-form>
+    <div>All Countries</div>
+    <div>
+      <div v-for="region in regionList" :key="region.id">
+        {{ region.name }}
+      </div>
+    </div>
   </modal>
 </template>
 
@@ -41,6 +44,7 @@ export default {
         id: null,
         name: null
       },
+      regionList: [],
       rules: {
         name: [
           {
@@ -74,8 +78,7 @@ export default {
           }
         });
         this.$modal.show('success', {
-          message: 'Region successfully created.',
-          name: 'delete-location-collection'
+          message: 'Region successfully created.'
         });
         this.$emit('toggle-row', data.data.addRegion.id);
       } catch (error) {
@@ -87,6 +90,7 @@ export default {
     beforeOpen(event) {
       const collection = event.params.collection;
       this.form.id = collection.id;
+      this.regionList = collection.regionList;
     },
     beforeClose() {
       this.form.id = null;

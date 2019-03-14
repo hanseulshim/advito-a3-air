@@ -127,9 +127,10 @@ export default {
       return formatDate(row.dateUpdated);
     },
     getCountryNames(countryList) {
-      return countryList.length > 10
-        ? countryList.slice(0, 9).join(', ') + '...'
-        : countryList.join(', ');
+      const countryListCopy = countryList.map(country => country.name);
+      return countryListCopy.length > 10
+        ? countryListCopy.slice(0, 9).join(', ') + '...'
+        : countryListCopy.join(', ');
     },
     showNewLocationCollection(collection) {
       this.$modal.show('new-location-collection', { collection });
