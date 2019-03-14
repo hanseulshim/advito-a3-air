@@ -109,8 +109,12 @@ exports.collection = {
       }
       moveCountries(id: 1, destination: "Africa", origin: [
         {
-          name: "South Pacific",
-          countryList: ["Australia"]
+          name: "Antarctica",
+          countryList: ["French Southern Territories"]
+        },
+        {
+          name: "Asia",
+          countryList: ["Bhutan", "China", "India", "Japan"]
         }
       ]) {
         id

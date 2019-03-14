@@ -110,7 +110,21 @@ exports.collectionResolvers = {
       if (!locationCollection) {
         throw new ApolloError('Location Collection not found', 400);
       }
-      return null;
+      const regionList = locationCollection.regionList;
+      const destinationRegion = regionList.filter(
+        region => region.name === destination
+      )[0];
+      origin.forEach(originRegion => {
+        const foundRegion = regionList.filter(
+          region => region.name === originRegion.name
+        )[0];
+        originRegion.countryList.forEach(country => {
+          const index = foundRegion.countryList.indexOf(country);
+          foundRegion.countryList.splice(index, 1);
+          destinationRegion.countryList.push(country);
+        });
+      });
+      return locationCollection;
     }
   }
 };
