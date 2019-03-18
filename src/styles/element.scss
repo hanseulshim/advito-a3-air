@@ -48,6 +48,9 @@
     font-size: inherit;
   }
 }
+.el-select {
+  width: 100%;
+}
 .el-select-dropdown {
   .el-select-dropdown__item.selected {
     color: $black;

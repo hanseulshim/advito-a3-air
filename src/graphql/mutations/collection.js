@@ -84,7 +84,7 @@ export const MOVE_COUNTRIES = gql`
   mutation moveCountries(
     $id: Int!
     $collectionId: Int!
-    $countryList: [Country]
+    $countryList: [MoveCountry]
   ) {
     moveCountries(
       id: $id
