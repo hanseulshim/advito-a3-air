@@ -43,25 +43,25 @@ exports.travelSectorCollection = {
       travelSectorCollection.description = description;
       travelSectorCollection.dateUpdated = new Date();
       return travelSectorCollection;
+    },
+    deleteTravelSectorCollection: (_, { id }) => {
+      const travelSectorCollection = travelSectorCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!travelSectorCollection) {
+        throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      travelSectorCollection.isDeleted = true;
+      if (travelSectorCollection.active) {
+        const advitoStandard = travelSectorCollectionList.filter(
+          collection => collection.id === 1
+        )[0];
+        advitoStandard.active = true;
+        travelSectorCollection.active = false;
+      }
+      travelSectorCollection.dateUpdated = new Date();
+      return id;
     }
-    //   deleteLocationCollection: (_, { id }) => {
-    //     const locationCollection = travelSectorCollectionList.filter(
-    //       collection => collection.id === id
-    //     )[0];
-    //     if (!locationCollection) {
-    //       throw new ApolloError('Travel Sector Collection not found', 400);
-    //     }
-    //     locationCollection.isDeleted = true;
-    //     if (locationCollection.active) {
-    //       const advitoStandard = travelSectorCollectionList.filter(
-    //         collection => collection.id === 1
-    //       )[0];
-    //       advitoStandard.active = true;
-    //       locationCollection.active = false;
-    //     }
-    //     locationCollection.dateUpdated = new Date();
-    //     return id;
-    //   },
     //   addRegion: (_, { id, name }) => {
     //     const locationCollection = travelSectorCollectionList.filter(
     //       collection => collection.id === id

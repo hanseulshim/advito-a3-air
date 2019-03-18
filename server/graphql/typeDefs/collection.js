@@ -91,5 +91,6 @@ extend type Mutation {
 
   createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
+  deleteTravelSectorCollection(id: Int!): Int @auth
 }
 `;

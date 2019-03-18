@@ -21,6 +21,13 @@ exports.travelSectorCollection = {
         dateUpdated
         active
       }
+      editTravelSectorCollection(id: 2, name: "Updated Collection", description: "new description") {
+        id
+        name
+        description
+        dateUpdated
+      }
+      deleteLocationCollection(id: 2)
     }
     `
 };
