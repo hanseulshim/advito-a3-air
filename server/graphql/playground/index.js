@@ -9,7 +9,7 @@ exports.playground = {
     project.queries,
     project.mutations,
     collection.queries,
-    collection.mutations,
+    ...collection.mutations,
     dataSet.queries,
     dataSet.mutations,
     libraryQueries

@@ -88,5 +88,8 @@ extend type Mutation {
   addRegion(id: Int!, name: String!): LocationCollection @auth
   deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
   moveCountries(collectionId: Int!, id: Int!, countryList: [MoveCountry]): LocationCollection @auth
+
+  createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
+  editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
 }
 `;
