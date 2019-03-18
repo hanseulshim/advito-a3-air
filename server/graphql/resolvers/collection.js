@@ -121,13 +121,7 @@ exports.collectionResolvers = {
         const originRegion = regionList.filter(
           region => region.id === country.regionId
         )[0];
-        const maxId =
-          Math.max(...destinationRegion.countryList.map(c => c.id)) + 1;
-        destinationRegion.countryList.push({
-          id: maxId,
-          regionId: destinationRegion.id,
-          name: country.name
-        });
+        destinationRegion.countryList.push(country);
         const index = originRegion.countryList.findIndex(
           c => c.id === country.id
         );
