@@ -4,14 +4,21 @@
       <span>{{
         pluralize('travel sector collection', travelSectorCollectionList.length)
       }}</span>
-      <button v-if="travelSectorCollectionList.length > 1" class="button">
+      <button
+        v-if="travelSectorCollectionList.length > 1"
+        class="button"
+        @click="showNewTravelSector"
+      >
         + NEW TRAVEL SECTOR
       </button>
     </div>
     <el-table ref="travelSectorCollection" :data="travelSectorCollectionList">
       <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
-          <SectorTable :sector-list="props.row.sectorList" />
+          <SectorTable
+            :sector-list="props.row.sectorList"
+            :collection-id="props.row.id"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -43,17 +50,17 @@
         <template slot-scope="scope">
           <i
             class="far fa-copy icon-spacer"
-            @click="showNewTravelSector(scope.row)"
+            @click="showNewTravelSectorCollection(scope.row)"
           ></i>
           <i
             v-if="scope.row.id !== 1"
             class="fas fa-pencil-alt icon-spacer"
-            @click="showEditTravelSector(scope.row)"
+            @click="showEditTravelSectorCollection(scope.row)"
           ></i>
           <i
             v-if="scope.row.id !== 1"
             class="fas fa-trash-alt"
-            @click="showDeleteTravelSector(scope.row)"
+            @click="showDeleteTravelSectorCollection(scope.row)"
           ></i>
         </template>
       </el-table-column>
@@ -61,6 +68,9 @@
     <NewTravelSectorCollectionModal @toggle-row="toggleRow" />
     <EditTravelSectorCollectionModal @toggle-row="toggleRow" />
     <DeleteTravelSectorCollectionModal @toggle-row="toggleRow" />
+    <NewTravelSectorModal @toggle-row="toggleRow" />
+    <EditTravelSectorModal @toggle-row="toggleRow" />
+    <DeleteTravelSectorModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -72,13 +82,19 @@ import SectorTable from './SectorTable';
 import NewTravelSectorCollectionModal from './NewTravelSectorCollectionModal';
 import EditTravelSectorCollectionModal from './EditTravelSectorCollectionModal';
 import DeleteTravelSectorCollectionModal from './DeleteTravelSectorCollectionModal';
+import NewTravelSectorModal from './NewTravelSectorModal';
+import EditTravelSectorModal from './EditTravelSectorModal';
+import DeleteTravelSectorModal from './DeleteTravelSectorModal';
 export default {
   name: 'TravelSectorCollections',
   components: {
     SectorTable,
     NewTravelSectorCollectionModal,
     EditTravelSectorCollectionModal,
-    DeleteTravelSectorCollectionModal
+    DeleteTravelSectorCollectionModal,
+    NewTravelSectorModal,
+    EditTravelSectorModal,
+    DeleteTravelSectorModal
   },
   apollo: {
     travelSectorCollectionList: {
@@ -103,14 +119,17 @@ export default {
         ? countryList.slice(0, 9).join(', ') + '...'
         : countryList.join(', ');
     },
-    showNewTravelSector(collection) {
+    showNewTravelSectorCollection(collection) {
       this.$modal.show('new-travel-sector-collection', { collection });
     },
-    showEditTravelSector(collection) {
+    showEditTravelSectorCollection(collection) {
       this.$modal.show('edit-travel-sector-collection', { collection });
     },
-    showDeleteTravelSector(collection) {
+    showDeleteTravelSectorCollection(collection) {
       this.$modal.show('delete-travel-sector-collection', { collection });
+    },
+    showNewTravelSector() {
+      this.$modal.show('new-travel-sector');
     },
     toggleRow(id) {
       const row = this.$refs.travelSectorCollection.data.filter(

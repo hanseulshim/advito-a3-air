@@ -34,8 +34,14 @@ export const GET_TRAVEL_SECTOR_COLLECTION_LIST = gql`
         name
         shortName
         geographyList {
-          origin
-          destination
+          origin {
+            id
+            name
+          }
+          destination {
+            id
+            name
+          }
           exclude
         }
       }
