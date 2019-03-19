@@ -65,24 +65,40 @@ exports.travelSectorCollection = {
       }
       travelSectorCollection.dateUpdated = new Date();
       return id;
+    },
+    addTravelSector: (_, { id, name, shortName, geographyList }) => {
+      const travelSectorCollection = travelSectorCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!travelSectorCollection) {
+        throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      const maxId =
+        Math.max(
+          ...travelSectorCollection.sectorList.map(sector => sector.id)
+        ) + 1;
+      const geographyListCopy = geographyList.map(geography => {
+        const origin = travelSectorRegionList.filter(
+          region => region.id === geography.origin
+        )[0];
+        const destination = travelSectorRegionList.filter(
+          region => region.id === geography.destination
+        )[0];
+        return {
+          ...geography,
+          origin,
+          destination
+        };
+      });
+      const sector = {
+        id: maxId,
+        name,
+        shortName,
+        geographyList: geographyListCopy
+      };
+      travelSectorCollection.sectorList.push(sector);
+      return travelSectorCollection;
     }
-    //   addRegion: (_, { id, name }) => {
-    //     const locationCollection = travelSectorCollectionList.filter(
-    //       collection => collection.id === id
-    //     )[0];
-    //     if (!locationCollection) {
-    //       throw new ApolloError('Travel Sector Collection not found', 400);
-    //     }
-    //     const maxId =
-    //       Math.max(...locationCollection.regionList.map(region => region.id)) + 1;
-    //     const region = {
-    //       id: maxId,
-    //       name,
-    //       countryList: []
-    //     };
-    //     locationCollection.regionList.push(region);
-    //     return locationCollection;
-    //   },
     //   deleteRegion: (_, { id, collectionId }) => {
     //     const locationCollection = travelSectorCollectionList.filter(
     //       collection => collection.id === collectionId

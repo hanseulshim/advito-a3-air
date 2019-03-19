@@ -1,9 +1,12 @@
 <template>
   <div class="table-spacer">
     <div class="section-header title-row space-between">
-      {{
+      <span>{{
         pluralize('travel sector collection', travelSectorCollectionList.length)
-      }}
+      }}</span>
+      <button v-if="travelSectorCollectionList.length > 1" class="button">
+        + NEW TRAVEL SECTOR
+      </button>
     </div>
     <el-table ref="travelSectorCollection" :data="travelSectorCollectionList">
       <el-table-column type="expand" :width="tableColumnWidth.expand">

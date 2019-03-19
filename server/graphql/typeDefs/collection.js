@@ -77,6 +77,11 @@ input MoveCountry {
   regionId: Int
   name: String
 }
+input SectorGeography {
+  origin: Int,
+  destination: Int,
+  exclude: Boolean
+}
 
 extend type Query {
   locationCollectionList: [LocationCollection] @auth
@@ -92,11 +97,11 @@ extend type Mutation {
   deleteLocationCollection(id: Int!): Int @auth
   addRegion(id: Int!, name: String!): LocationCollection @auth
   deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
-  moveCountries(collectionId: Int!, id: Int!, countryList: [MoveCountry]): LocationCollection @auth
+  moveCountries(id: Int!, collectionId: Int!, countryList: [MoveCountry]): LocationCollection @auth
 
   createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   deleteTravelSectorCollection(id: Int!): Int @auth
-  addTravelSector(id: Int!, name: String!, shortName: String!, origin: Int!)
+  addTravelSector(id: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
 }
 `;

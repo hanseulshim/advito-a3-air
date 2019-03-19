@@ -12,8 +12,14 @@ exports.travelSectorCollection = {
           name
           shortName
           geographyList {
-            origin
-            destination
+            origin {
+              id
+              name
+            }
+            destination {
+              id
+              name
+            }
             exclude
           }
         }
@@ -28,6 +34,31 @@ exports.travelSectorCollection = {
         dateUpdated
       }
       deleteLocationCollection(id: 2)
+      addTravelSector(id: 1, name: "USMA", shortName: "US (USA)", geographyList: [
+        {
+          origin: 1,
+          destination: 2,
+          exclude: false
+        }
+      ]) {
+        id
+        sectorList {
+          id
+          name
+          shortName
+          geographyList {
+            origin {
+              id
+              name
+            }
+            destination {
+              id
+              name
+            }
+            exclude
+          }
+        }
+      }
     }
     `
 };
