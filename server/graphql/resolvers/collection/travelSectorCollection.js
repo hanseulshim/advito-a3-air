@@ -98,6 +98,55 @@ exports.travelSectorCollection = {
       };
       travelSectorCollection.sectorList.push(sector);
       return travelSectorCollection;
+    },
+    editTravelSector: (
+      _,
+      { id, collectionId, name, shortName, geographyList }
+    ) => {
+      const travelSectorCollection = travelSectorCollectionList.filter(
+        collection => collection.id === collectionId
+      )[0];
+      if (!travelSectorCollection) {
+        throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      const travelSector = travelSectorCollection.sectorList.filter(
+        sector => sector.id === id
+      )[0];
+      if (!travelSector) {
+        throw new ApolloError('Travel Sector not found', 400);
+      }
+      travelSector.name = name;
+      travelSector.shortName = shortName;
+      travelSector.geographyList = geographyList.map(geography => {
+        const origin = travelSectorRegionList.filter(
+          region => region.id === geography.origin
+        )[0];
+        const destination = travelSectorRegionList.filter(
+          region => region.id === geography.destination
+        )[0];
+        return {
+          ...geography,
+          origin,
+          destination
+        };
+      });
+      return travelSectorCollection;
+    },
+    deleteTravelSector: (_, { id, collectionId }) => {
+      const travelSectorCollection = travelSectorCollectionList.filter(
+        collection => collection.id === collectionId
+      )[0];
+      if (!travelSectorCollection) {
+        throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      const index = travelSectorCollection.sectorList.findIndex(
+        sector => sector.id === id
+      );
+      if (index === -1) {
+        throw new ApolloError('Travel Sector not found', 400);
+      }
+      travelSectorCollection.sectorList.splice(index, 1);
+      return travelSectorCollection;
     }
     //   deleteRegion: (_, { id, collectionId }) => {
     //     const locationCollection = travelSectorCollectionList.filter(

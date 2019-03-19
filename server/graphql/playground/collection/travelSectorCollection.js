@@ -59,6 +59,50 @@ exports.travelSectorCollection = {
           }
         }
       }
+      editTravelSector(id: 1, collectionId: 1, name: "USMA", shortName: "US (USA)", geographyList: [
+        {
+          origin: 1,
+          destination: 2,
+          exclude: false
+        }
+      ]) {
+        id
+        sectorList {
+          id
+          name
+          shortName
+          geographyList {
+            origin {
+              id
+              name
+            }
+            destination {
+              id
+              name
+            }
+            exclude
+          }
+        }
+      }
+      deleteTravelSector(id: 1, collectionId: 1) {
+        id
+        sectorList {
+          id
+          name
+          shortName
+          geographyList {
+            origin {
+              id
+              name
+            }
+            destination {
+              id
+              name
+            }
+            exclude
+          }
+        }
+      }
     }
     `
 };
