@@ -319,6 +319,7 @@ exports.travelSectorCollectionList = [
   {
     id: 1,
     name: 'Standard (Advito)',
+    isDeleted: false,
     sectorList: [
       {
         id: 1,
@@ -412,6 +413,7 @@ exports.airlineGroupCollectionList = [
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     dateUpdated: '01-25-2019',
     active: true,
+    isDeleted: false,
     airlineGroupList: [
       {
         id: 1,
@@ -437,6 +439,7 @@ exports.preferredAirlineCollectionList = [
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     dateUpdated: '01-25-2019',
     active: true,
+    isDeleted: false,
     airlineList: [
       {
         name: 'Air France',
