@@ -1,10 +1,14 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { travelSectorCollectionList } = require('../../../data/collection');
+const {
+  travelSectorCollectionList,
+  travelSectorRegionList
+} = require('../../../data/collection');
 
 exports.travelSectorCollection = {
   Query: {
     travelSectorCollectionList: () =>
-      travelSectorCollectionList.filter(collection => !collection.isDeleted)
+      travelSectorCollectionList.filter(collection => !collection.isDeleted),
+    travelSectorRegionList: () => travelSectorRegionList
   },
   Mutation: {
     createTravelSectorCollection: (_, { id, name, description }) => {

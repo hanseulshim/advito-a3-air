@@ -38,15 +38,26 @@
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
         <template slot-scope="scope">
-          <i class="far fa-copy icon-spacer"></i>
+          <i
+            class="far fa-copy icon-spacer"
+            @click="showNewTravelSector(scope.row)"
+          ></i>
           <i
             v-if="scope.row.id !== 1"
             class="fas fa-pencil-alt icon-spacer"
+            @click="showEditTravelSector(scope.row)"
           ></i>
-          <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
+          <i
+            v-if="scope.row.id !== 1"
+            class="fas fa-trash-alt"
+            @click="showDeleteTravelSector(scope.row)"
+          ></i>
         </template>
       </el-table-column>
     </el-table>
+    <NewTravelSectorCollectionModal @toggle-row="toggleRow" />
+    <EditTravelSectorCollectionModal @toggle-row="toggleRow" />
+    <DeleteTravelSectorCollectionModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -55,10 +66,16 @@ import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_TRAVEL_SECTOR_COLLECTION_LIST } from '@/graphql/queries';
 import SectorTable from './SectorTable';
+import NewTravelSectorCollectionModal from './NewTravelSectorCollectionModal';
+import EditTravelSectorCollectionModal from './EditTravelSectorCollectionModal';
+import DeleteTravelSectorCollectionModal from './DeleteTravelSectorCollectionModal';
 export default {
   name: 'TravelSectorCollections',
   components: {
-    SectorTable
+    SectorTable,
+    NewTravelSectorCollectionModal,
+    EditTravelSectorCollectionModal,
+    DeleteTravelSectorCollectionModal
   },
   apollo: {
     travelSectorCollectionList: {
@@ -82,6 +99,21 @@ export default {
       return countryList.length > 10
         ? countryList.slice(0, 9).join(', ') + '...'
         : countryList.join(', ');
+    },
+    showNewTravelSector(collection) {
+      this.$modal.show('new-travel-sector-collection', { collection });
+    },
+    showEditTravelSector(collection) {
+      this.$modal.show('edit-travel-sector-collection', { collection });
+    },
+    showDeleteTravelSector(collection) {
+      this.$modal.show('delete-travel-sector-collection', { collection });
+    },
+    toggleRow(id) {
+      const row = this.$refs.travelSectorCollection.data.filter(
+        collection => collection.id === id
+      )[0];
+      this.$refs.travelSectorCollection.toggleRowExpansion(row);
     }
   }
 };

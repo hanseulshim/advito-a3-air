@@ -43,6 +43,15 @@ export const GET_TRAVEL_SECTOR_COLLECTION_LIST = gql`
   }
 `;
 
+export const GET_TRAVEL_SECTOR_REGION_LIST = gql`
+  {
+    travelSectorRegionList {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
   {
     airlineGroupCollectionList {

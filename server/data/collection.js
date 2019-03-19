@@ -292,6 +292,29 @@ exports.locationCollectionList = [
   }
 ];
 
+exports.travelSectorRegionList = [
+  {
+    id: 1,
+    name: 'US (USA)'
+  },
+  {
+    id: 2,
+    name: 'EU (Europe)'
+  },
+  {
+    id: 3,
+    name: 'UK (United Kingdom)'
+  },
+  {
+    id: 4,
+    name: 'RUS (Russia)'
+  },
+  {
+    id: 5,
+    name: 'CN (China)'
+  }
+];
+
 exports.travelSectorCollectionList = [
   {
     id: 1,
@@ -303,13 +326,13 @@ exports.travelSectorCollectionList = [
         shortName: 'NA-EUR',
         geographyList: [
           {
-            origin: 'US (USA)',
-            destination: 'UK (United Kingdom)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[1],
             exclude: true
           },
           {
-            origin: 'US (USA)',
-            destination: 'EU (Europe)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[2],
             exclude: false
           }
         ]
@@ -320,18 +343,18 @@ exports.travelSectorCollectionList = [
         shortName: 'EMEA-ASPAC',
         geographyList: [
           {
-            origin: 'US (USA)',
-            destination: 'UK (United Kingdom)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[1],
             exclude: true
           },
           {
-            origin: 'US (USA)',
-            destination: 'EU (Europe)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[2],
             exclude: true
           },
           {
-            origin: 'US (USA)',
-            destination: 'RUS (Russia)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[3],
             exclude: true
           }
         ]
@@ -342,8 +365,8 @@ exports.travelSectorCollectionList = [
         shortName: 'INTRA AFR',
         geographyList: [
           {
-            origin: 'US (USA)',
-            destination: 'UK (United Kingdom)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[1],
             exclude: true
           }
         ]
@@ -354,23 +377,23 @@ exports.travelSectorCollectionList = [
         shortName: 'INTRA EUR',
         geographyList: [
           {
-            origin: 'US (USA)',
-            destination: 'UK (United Kingdom)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[1],
             exclude: true
           },
           {
-            origin: 'US (USA)',
-            destination: 'EU (Europe)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[2],
             exclude: true
           },
           {
-            origin: 'US (USA)',
-            destination: 'RUS (Russia)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[3],
             exclude: true
           },
           {
-            origin: 'US (USA)',
-            destination: 'CN (China)',
+            origin: exports.travelSectorRegionList[0],
+            destination: exports.travelSectorRegionList[4],
             exclude: false
           }
         ]

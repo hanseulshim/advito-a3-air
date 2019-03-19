@@ -104,3 +104,58 @@ export const MOVE_COUNTRIES = gql`
     }
   }
 `;
+
+export const CREATE_TRAVEL_SECTOR_COLLECTION = gql`
+  mutation createTravelSectorCollection(
+    $id: Int!
+    $name: String!
+    $description: String
+  ) {
+    createTravelSectorCollection(
+      id: $id
+      name: $name
+      description: $description
+    ) {
+      id
+      name
+      sectorList {
+        id
+        name
+        shortName
+        geographyList {
+          origin
+          destination
+          exclude
+        }
+      }
+      description
+      dateUpdated
+      active
+    }
+  }
+`;
+
+export const EDIT_TRAVEL_SECTOR_COLLECTION = gql`
+  mutation editTravelSectorCollection(
+    $id: Int!
+    $name: String!
+    $description: String
+  ) {
+    editTravelSectorCollection(
+      id: $id
+      name: $name
+      description: $description
+    ) {
+      id
+      name
+      description
+      dateUpdated
+    }
+  }
+`;
+
+export const DELETE_TRAVEL_SECTOR_COLLECTION = gql`
+  mutation deleteTravelSectorCollection($id: Int!) {
+    deleteTravelSectorCollection(id: $id)
+  }
+`;

@@ -34,11 +34,21 @@ exports.collection = {
           name
           shortName
           geographyList {
-            origin
-            destination
+            origin {
+              id
+              name
+            }
+            destination {
+              id
+              name
+            }
             exclude
           }
         }
+      }
+      travelSectorRegionList {
+        id
+        name
       }
       airlineGroupCollectionList {
         id

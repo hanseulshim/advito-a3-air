@@ -82,7 +82,7 @@
       </el-table-column>
     </el-table>
     <NewLocationCollectionModal @toggle-row="toggleRow" />
-    <EditLocationCollectionModal />
+    <EditLocationCollectionModal @toggle-row="toggleRow" />
     <DeleteLocationCollectionModal />
     <EditRegionModal @toggle-row="toggleRow" />
     <DeleteRegionModal @toggle-row="toggleRow" />

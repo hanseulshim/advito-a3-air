@@ -1,13 +1,13 @@
 <template>
   <modal
     classes="modal-container"
-    name="edit-location-collection"
+    name="new-travel-sector-collection"
     height="auto"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
-      ref="editLocationCollection"
+      ref="newTravelSectorCollection"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -15,7 +15,7 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">edit location collection</div>
+        <div class="section-header">copy travel sector collection</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
       <div>
@@ -40,10 +40,14 @@
 </template>
 
 <script>
-import { GET_CLIENT, GET_PROJECT } from '@/graphql/queries';
-import { EDIT_LOCATION_COLLECTION } from '@/graphql/mutations';
+import {
+  GET_CLIENT,
+  GET_PROJECT,
+  GET_TRAVEL_SECTOR_COLLECTION_LIST
+} from '@/graphql/queries';
+import { CREATE_TRAVEL_SECTOR_COLLECTION } from '@/graphql/mutations';
 export default {
-  name: 'EditLocationCollectionModal',
+  name: 'NewTravelSectorCollectionModal',
   apollo: {
     client: {
       query: GET_CLIENT
@@ -74,33 +78,49 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('edit-location-collection');
+      this.$modal.hide('new-travel-sector-collection');
     },
     validateForm() {
-      this.$refs['editLocationCollection'].validate(valid => {
+      this.$refs.newTravelSectorCollection.validate(valid => {
         if (valid) {
-          this.editLocationCollection();
+          this.createTravelSectorCollection();
         } else {
           return false;
         }
       });
     },
-    async editLocationCollection() {
+    async createTravelSectorCollection() {
       try {
         const data = await this.$apollo.mutate({
-          mutation: EDIT_LOCATION_COLLECTION,
+          mutation: CREATE_TRAVEL_SECTOR_COLLECTION,
           variables: {
             ...this.form
+          },
+          update: (store, data) => {
+            const travelSectorCollection =
+              data.data.createTravelSectorCollection;
+            const newData = store.readQuery({
+              query: GET_TRAVEL_SECTOR_COLLECTION_LIST
+            });
+            newData.travelSectorCollectionList.forEach(
+              collection => (collection.active = false)
+            );
+            newData.travelSectorCollectionList.push(travelSectorCollection);
+            store.writeQuery({
+              query: GET_TRAVEL_SECTOR_COLLECTION_LIST,
+              data: newData
+            });
           }
         });
-        this.$emit('toggle-row', data.data.editLocationCollection.id);
+        this.$emit('toggle-row', data.data.createTravelSectorCollection.id);
         this.$modal.show('success', {
-          message: 'Location Collection successfully edited.',
-          name: 'edit-location-collection'
+          message: 'Travel Sector Collection successfully created.',
+          name: 'new-travel-sector-collection'
         });
       } catch (error) {
         this.$modal.show('error', {
-          message: 'Failed to edit location collection. Please try again.'
+          message:
+            'Failed to create travel sector collection. Please try again.'
         });
       }
     },
@@ -108,7 +128,6 @@ export default {
       const collection = event.params.collection;
       this.form.id = collection.id;
       this.form.name = collection.name;
-      this.form.description = collection.description;
     },
     beforeClose() {
       this.form.id = null;

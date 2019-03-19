@@ -32,9 +32,13 @@ type Sector {
   geographyList: [Geography]
 }
 type Geography {
-  origin: String,
-  destination: String,
+  origin: GeographyRegion,
+  destination: GeographyRegion,
   exclude: Boolean
+}
+type GeographyRegion {
+  id: Int,
+  name: String
 }
 type AirlineGroupCollection {
   id: Int,
@@ -77,6 +81,7 @@ input MoveCountry {
 extend type Query {
   locationCollectionList: [LocationCollection] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth
+  travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
 }
@@ -92,5 +97,6 @@ extend type Mutation {
   createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   deleteTravelSectorCollection(id: Int!): Int @auth
+  addTravelSector(id: Int!, name: String!, shortName: String!, origin: Int!)
 }
 `;
