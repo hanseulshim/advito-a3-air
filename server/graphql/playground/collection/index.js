@@ -69,6 +69,10 @@ exports.collection = {
           }
         }
       }
+      airlineList {
+        id
+        name
+      }
       preferredAirlineCollectionList {
         id
         name
