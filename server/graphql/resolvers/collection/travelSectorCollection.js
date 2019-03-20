@@ -148,48 +148,5 @@ exports.travelSectorCollection = {
       travelSectorCollection.sectorList.splice(index, 1);
       return travelSectorCollection;
     }
-    //   deleteRegion: (_, { id, collectionId }) => {
-    //     const locationCollection = travelSectorCollectionList.filter(
-    //       collection => collection.id === collectionId
-    //     )[0];
-    //     if (!locationCollection) {
-    //       throw new ApolloError('Travel Sector Collection not found', 400);
-    //     }
-    //     const index = locationCollection.regionList.findIndex(
-    //       region => region.id === id
-    //     );
-    //     if (index === -1) {
-    //       throw new ApolloError('Region not found', 400);
-    //     }
-    //     const countryList = locationCollection.regionList[index].countryList;
-    //     if (countryList.length !== 0) {
-    //       throw new ApolloError('Cannot delete region', 400);
-    //     }
-    //     locationCollection.regionList.splice(index, 1);
-    //     return locationCollection;
-    //   },
-    //   moveCountries: (_, { collectionId, id, countryList }) => {
-    //     const locationCollection = travelSectorCollectionList.filter(
-    //       collection => collection.id === collectionId
-    //     )[0];
-    //     if (!locationCollection) {
-    //       throw new ApolloError('Travel Sector Collection not found', 400);
-    //     }
-    //     const regionList = locationCollection.regionList;
-    //     const destinationRegion = regionList.filter(
-    //       region => region.id === id
-    //     )[0];
-    //     countryList.forEach(country => {
-    //       const originRegion = regionList.filter(
-    //         region => region.id === country.regionId
-    //       )[0];
-    //       destinationRegion.countryList.push(country);
-    //       const index = originRegion.countryList.findIndex(
-    //         c => c.id === country.id
-    //       );
-    //       originRegion.countryList.splice(index, 1);
-    //     });
-    //     return locationCollection;
-    //   }
   }
 };

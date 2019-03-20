@@ -412,6 +412,29 @@ exports.airlineGroupCollectionList = [
     name: 'Standard (Advito)',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     dateUpdated: '01-25-2019',
+    active: false,
+    isDeleted: false,
+    airlineGroupList: [
+      {
+        id: 1,
+        name: 'Delta JV',
+        effectiveStartDate: '01-01-2018',
+        effectiveEndDate: '12-31-2019',
+        airlineList: [
+          {
+            name: 'Air France',
+            effectiveStartDate: '01-01-2018',
+            effectiveEndDate: '12-31-2019'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Collection 1',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    dateUpdated: '02-25-2019',
     active: true,
     isDeleted: false,
     airlineGroupList: [

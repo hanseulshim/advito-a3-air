@@ -1,5 +1,6 @@
 const { locationCollection } = require('./locationCollection');
 const { travelSectorCollection } = require('./travelSectorCollection');
+const { airlineGroupCollection } = require('./airlineGroupCollection');
 exports.collection = {
   queries: {
     name: 'Collection Queries',
@@ -86,5 +87,9 @@ exports.collection = {
       }
     }`
   },
-  mutations: [locationCollection, travelSectorCollection]
+  mutations: [
+    locationCollection,
+    travelSectorCollection,
+    airlineGroupCollection
+  ]
 };

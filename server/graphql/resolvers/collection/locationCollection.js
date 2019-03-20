@@ -1,7 +1,6 @@
 const { ApolloError } = require('apollo-server-lambda');
 const {
   locationCollectionList,
-  airlineGroupCollectionList,
   preferredAirlineCollectionList
 } = require('../../../data/collection');
 
@@ -9,7 +8,6 @@ exports.locationCollection = {
   Query: {
     locationCollectionList: () =>
       locationCollectionList.filter(collection => !collection.isDeleted),
-    airlineGroupCollectionList: () => airlineGroupCollectionList,
     preferredAirlineCollectionList: () => preferredAirlineCollectionList
   },
   Mutation: {
