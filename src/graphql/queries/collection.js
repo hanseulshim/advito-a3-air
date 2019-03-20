@@ -81,6 +81,15 @@ export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
   }
 `;
 
+export const GET_AIRLINE_LIST = gql`
+  {
+    airlineList {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_PREFERRED_AIRLINE_COLLECTION_LIST = gql`
   {
     preferredAirlineCollectionList {
