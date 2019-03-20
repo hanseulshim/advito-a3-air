@@ -38,15 +38,21 @@
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
         <template slot-scope="scope">
-          <i class="far fa-copy icon-spacer"></i>
           <i
             v-if="scope.row.id !== 1"
             class="fas fa-pencil-alt icon-spacer"
+            @click="showEditAirlineGroupCollection(scope.row)"
           ></i>
-          <i v-if="scope.row.id !== 1" class="fas fa-trash-alt icon-spacer"></i>
+          <i
+            v-if="scope.row.id !== 1"
+            class="fas fa-trash-alt icon-spacer"
+            @click="showDeleteAirlineGroupCollection(scope.row)"
+          ></i>
         </template>
       </el-table-column>
     </el-table>
+    <EditAirlineGroupCollectionModal @toggle-row="toggleRow" />
+    <DeleteAirlineGroupCollectionModal />
   </div>
 </template>
 
@@ -55,10 +61,14 @@ import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_AIRLINE_GROUP_COLLECTION_LIST } from '@/graphql/queries';
 import AirlineGroupTable from './AirlineGroupTable';
+import EditAirlineGroupCollectionModal from './EditAirlineGroupCollectionModal';
+import DeleteAirlineGroupCollectionModal from './DeleteAirlineGroupCollectionModal';
 export default {
   name: 'AirlineGroupCollections',
   components: {
-    AirlineGroupTable
+    AirlineGroupTable,
+    EditAirlineGroupCollectionModal,
+    DeleteAirlineGroupCollectionModal
   },
   apollo: {
     airlineGroupCollectionList: {
@@ -77,6 +87,18 @@ export default {
     },
     formatDate(row) {
       return formatDate(row.dateUpdated);
+    },
+    showEditAirlineGroupCollection(collection) {
+      this.$modal.show('edit-airline-group-collection', { collection });
+    },
+    showDeleteAirlineGroupCollection(collection) {
+      this.$modal.show('delete-airline-group-collection', { collection });
+    },
+    toggleRow(id) {
+      const row = this.$refs.airlineGroupCollection.data.filter(
+        collection => collection.id === id
+      )[0];
+      this.$refs.airlineGroupCollection.toggleRowExpansion(row);
     }
   }
 };

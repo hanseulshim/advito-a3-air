@@ -81,7 +81,7 @@ export default {
       this.$modal.hide('new-location-collection');
     },
     validateForm() {
-      this.$refs['newLocationCollection'].validate(valid => {
+      this.$refs.newLocationCollection.validate(valid => {
         if (valid) {
           this.createLocationCollection();
         } else {

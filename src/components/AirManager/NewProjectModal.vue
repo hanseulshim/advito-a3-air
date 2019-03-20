@@ -261,7 +261,7 @@ export default {
       this.$modal.hide('new-project');
     },
     validateForm() {
-      this.$refs['newProjectForm'].validate(valid => {
+      this.$refs.newProjectForm.validate(valid => {
         if (valid) {
           this.addProject();
         } else {

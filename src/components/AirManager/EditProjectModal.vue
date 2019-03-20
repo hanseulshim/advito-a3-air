@@ -219,7 +219,7 @@ export default {
       this.$modal.hide('edit-project');
     },
     validateForm() {
-      this.$refs['editProjectForm'].validate(valid => {
+      this.$refs.editProjectForm.validate(valid => {
         if (valid) {
           this.editProject();
         } else {

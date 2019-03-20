@@ -1,13 +1,13 @@
 <template>
   <modal
     classes="modal-container"
-    name="edit-location-collection"
+    name="edit-airline-group-collection"
     height="auto"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
-      ref="editLocationCollection"
+      ref="editAirlineGroupCollection"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -15,7 +15,7 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">edit location collection</div>
+        <div class="section-header">edit airline group collection</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
       <div>
@@ -41,9 +41,9 @@
 
 <script>
 import { GET_CLIENT, GET_PROJECT } from '@/graphql/queries';
-import { EDIT_LOCATION_COLLECTION } from '@/graphql/mutations';
+import { EDIT_AIRLINE_GROUP_COLLECTION } from '@/graphql/mutations';
 export default {
-  name: 'EditLocationCollectionModal',
+  name: 'EditAirlineGroupCollectionModal',
   apollo: {
     client: {
       query: GET_CLIENT
@@ -74,33 +74,33 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('edit-location-collection');
+      this.$modal.hide('edit-airline-group-collection');
     },
     validateForm() {
-      this.$refs.editLocationCollection.validate(valid => {
+      this.$refs.editAirlineGroupCollection.validate(valid => {
         if (valid) {
-          this.editLocationCollection();
+          this.editAirlineGroupCollection();
         } else {
           return false;
         }
       });
     },
-    async editLocationCollection() {
+    async editAirlineGroupCollection() {
       try {
         const data = await this.$apollo.mutate({
-          mutation: EDIT_LOCATION_COLLECTION,
+          mutation: EDIT_AIRLINE_GROUP_COLLECTION,
           variables: {
             ...this.form
           }
         });
-        this.$emit('toggle-row', data.data.editLocationCollection.id);
+        this.$emit('toggle-row', data.data.editAirlineGroupCollection.id);
         this.$modal.show('success', {
-          message: 'Location Collection successfully edited.',
-          name: 'edit-location-collection'
+          message: 'Airline Group successfully edited.',
+          name: 'edit-airline-group-collection'
         });
       } catch (error) {
         this.$modal.show('error', {
-          message: 'Failed to edit location collection. Please try again.'
+          message: 'Failed to edit airline group collection. Please try again.'
         });
       }
     },
