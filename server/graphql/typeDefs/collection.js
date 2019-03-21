@@ -46,6 +46,8 @@ type AirlineGroupCollection {
   airlineGroupList: [AirlineGroup]
   description: String
   dateUpdated: Date
+  effectiveStartDate: Date
+  effectiveEndDate: Date
   active: Boolean
 }
 type AirlineGroup {
@@ -113,7 +115,7 @@ extend type Mutation {
   editTravelSector(id: Int!, collectionId: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
   deleteTravelSector(id: Int!, collectionId: Int!): TravelSectorCollection @auth
 
-  editAirlineGroupCollection(id: Int!, name: String!, description: String): AirlineGroupCollection @auth
+  editAirlineGroupCollection(id: Int!, name: String!, description: String, effectiveStartDate: Date, effectiveEndDate: Date): AirlineGroupCollection @auth
   deleteAirlineGroupCollection(id: Int!): Int @auth
   addAirlineGroup(id: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
   editAirlineGroup(id: Int!, collectionId: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth

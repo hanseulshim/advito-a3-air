@@ -56,6 +56,8 @@ exports.collection = {
         name
         description
         dateUpdated
+        effectiveStartDate
+        effectiveEndDate
         active
         airlineGroupList {
           id

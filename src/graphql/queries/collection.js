@@ -65,6 +65,8 @@ export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
       name
       description
       dateUpdated
+      effectiveStartDate
+      effectiveEndDate
       active
       airlineGroupList {
         id

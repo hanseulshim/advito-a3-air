@@ -20,6 +20,8 @@ exports.airlineGroupCollection = {
       ]) {
         id
         name
+        effectiveStartDate
+        effectiveEndDate
         airlineGroupList {
           id
           name

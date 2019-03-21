@@ -412,6 +412,8 @@ exports.airlineGroupCollectionList = [
     name: 'Standard (Advito)',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     dateUpdated: '01-25-2019',
+    effectiveStartDate: '01-25-2019',
+    effectiveEndDate: '02-28-2019',
     active: false,
     isDeleted: false,
     airlineGroupList: [
@@ -436,6 +438,8 @@ exports.airlineGroupCollectionList = [
     name: 'Collection 1',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     dateUpdated: '02-25-2019',
+    effectiveStartDate: '01-25-2019',
+    effectiveEndDate: '02-28-2019',
     active: true,
     isDeleted: false,
     airlineGroupList: [

@@ -11,7 +11,10 @@ exports.airlineGroupCollection = {
     airlineGroupAirlineList: () => airlineGroupAirlineList
   },
   Mutation: {
-    editAirlineGroupCollection: (_, { id, name, description }) => {
+    editAirlineGroupCollection: (
+      _,
+      { id, name, description, effectiveStartDate, effectiveEndDate }
+    ) => {
       const airGroupCollection = airlineGroupCollectionList.filter(
         collection => collection.id === id
       )[0];
@@ -20,6 +23,8 @@ exports.airlineGroupCollection = {
       }
       airGroupCollection.name = name;
       airGroupCollection.description = description;
+      airGroupCollection.effectiveStartDate = new Date(effectiveStartDate);
+      airGroupCollection.effectiveEndDate = new Date(effectiveEndDate);
       airGroupCollection.dateUpdated = new Date();
       return airGroupCollection;
     },

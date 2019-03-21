@@ -5,16 +5,22 @@ export const EDIT_AIRLINE_GROUP_COLLECTION = gql`
     $id: Int!
     $name: String!
     $description: String
+    $effectiveStartDate: Date
+    $effectiveEndDate: Date
   ) {
     editAirlineGroupCollection(
       id: $id
       name: $name
       description: $description
+      effectiveStartDate: $effectiveStartDate
+      effectiveEndDate: $effectiveEndDate
     ) {
       id
       name
       description
       dateUpdated
+      effectiveStartDate
+      effectiveEndDate
     }
   }
 `;

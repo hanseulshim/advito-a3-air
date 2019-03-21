@@ -32,6 +32,26 @@
       <el-form-item label="Description">
         <el-input v-model="form.description" type="textarea" />
       </el-form-item>
+      <el-form-item label="Effective Dates *">
+        <div class="date-picker-container">
+          <el-form-item prop="effectiveStartDate" class="date-picker-item">
+            <el-date-picker
+              v-model="form.effectiveStartDate"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+          </el-form-item>
+          <el-form-item prop="effectiveEndDate" class="date-picker-item">
+            <el-date-picker
+              v-model="form.effectiveEndDate"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+          </el-form-item>
+        </div>
+      </el-form-item>
       <el-form-item class="save-container">
         <button class="button" @click="validateForm">SAVE</button>
       </el-form-item>
@@ -57,13 +77,29 @@ export default {
       form: {
         id: null,
         name: null,
-        description: null
+        description: null,
+        effectiveStartDate: null,
+        effectiveEndDate: null
       },
       rules: {
         name: [
           {
             required: true,
             message: 'Please input a collection name.',
+            trigger: 'change'
+          }
+        ],
+        effectiveStartDate: [
+          {
+            required: true,
+            message: 'Please select an effective start date',
+            trigger: 'change'
+          }
+        ],
+        effectiveEndDate: [
+          {
+            required: true,
+            message: 'Please select an effective end date',
             trigger: 'change'
           }
         ]
@@ -95,7 +131,7 @@ export default {
         });
         this.$emit('toggle-row', data.data.editAirlineGroupCollection.id);
         this.$modal.show('success', {
-          message: 'Airline Group successfully edited.',
+          message: 'Airline Group collection successfully edited.',
           name: 'edit-airline-group-collection'
         });
       } catch (error) {
@@ -109,11 +145,15 @@ export default {
       this.form.id = collection.id;
       this.form.name = collection.name;
       this.form.description = collection.description;
+      this.form.effectiveStartDate = collection.effectiveStartDate;
+      this.form.effectiveEndDate = collection.effectiveEndDate;
     },
     beforeClose() {
       this.form.id = null;
       this.form.name = null;
       this.form.description = null;
+      this.form.effectiveStartDate = null;
+      this.form.effectiveEndDate = null;
     }
   }
 };
