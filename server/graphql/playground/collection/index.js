@@ -63,13 +63,14 @@ exports.collection = {
           effectiveStartDate
           effectiveEndDate
           airlineList {
+            id
             name
             effectiveStartDate
             effectiveEndDate
           }
         }
       }
-      airlineList {
+      airlineGroupAirlineList {
         id
         name
       }

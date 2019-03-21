@@ -32,6 +32,42 @@ exports.airlineGroupCollection = {
           }
         }
       }
+      editAirlineGroup(id: 2, collectionId: 2, name: "USA", effectiveStartDate: "01 Jan 2018", effectiveEndDate: "01 Jan 2018", airlineList: [
+        {
+          id: 1,
+          effectiveStartDate: "01 Jan 2018",
+          effectiveEndDate: "01 Jan 2018"
+        }
+      ]) {
+        id
+        name
+        airlineGroupList {
+          id
+          name
+          effectiveStartDate
+          effectiveEndDate
+          airlineList {
+            name
+            effectiveStartDate
+            effectiveEndDate
+          }
+        }
+      }
+      deleteAirlineGroup(id: 1, collectionId: 1) {
+        id
+        name
+        airlineGroupList {
+          id
+          name
+          effectiveStartDate
+          effectiveEndDate
+          airlineList {
+            name
+            effectiveStartDate
+            effectiveEndDate
+          }
+        }
+      }
     }
     `
 };

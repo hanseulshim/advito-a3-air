@@ -72,6 +72,7 @@ export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
         effectiveStartDate
         effectiveEndDate
         airlineList {
+          id
           name
           effectiveStartDate
           effectiveEndDate
@@ -83,7 +84,7 @@ export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
 
 export const GET_AIRLINE_LIST = gql`
   {
-    airlineList {
+    airlineGroupAirlineList {
       id
       name
     }

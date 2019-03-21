@@ -2,16 +2,6 @@
   .select-modal {
     width: 100%;
   }
-  .date-picker-container {
-      display: flex;
-      justify-content: space-between;
-      .date-picker-item {
-        width: 48%;
-        .date-picker {
-          width: 100%;
-        }
-      }
-  }
   &.save-container {
     display: flex;
     justify-content: center;
@@ -25,4 +15,15 @@
   display: inline-block;
   width: 150px;
   margin-bottom: 1em;
+}
+
+.date-picker-container {
+  display: flex;
+  justify-content: space-between;
+  .date-picker-item {
+    width: 48%;
+    .date-picker {
+      width: 100%;
+    }
+  }
 }

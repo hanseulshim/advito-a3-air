@@ -8,7 +8,7 @@ exports.airlineGroupCollection = {
   Query: {
     airlineGroupCollectionList: () =>
       airlineGroupCollectionList.filter(collection => !collection.isDeleted),
-    airlineList: () => airlineGroupAirlineList
+    airlineGroupAirlineList: () => airlineGroupAirlineList
   },
   Mutation: {
     editAirlineGroupCollection: (_, { id, name, description }) => {
@@ -64,7 +64,6 @@ exports.airlineGroupCollection = {
           name
         };
       });
-      console.log(effectiveStartDate, effectiveEndDate, airlineList);
       const airline = {
         id: maxId,
         name,
@@ -74,55 +73,59 @@ exports.airlineGroupCollection = {
       };
       airlineGroupCollection.airlineGroupList.push(airline);
       return airlineGroupCollection;
+    },
+    editAirlineGroup: (
+      _,
+      {
+        id,
+        collectionId,
+        name,
+        effectiveStartDate,
+        effectiveEndDate,
+        airlineList
+      }
+    ) => {
+      const airlineGroupCollection = airlineGroupCollectionList.filter(
+        collection => collection.id === collectionId
+      )[0];
+      if (!airlineGroupCollection) {
+        throw new ApolloError('Airline Group Collection not found', 400);
+      }
+      const airlineGroup = airlineGroupCollection.airlineGroupList.filter(
+        airline => airline.id === id
+      )[0];
+      if (!airlineGroup) {
+        throw new ApolloError('Airline Group not found', 400);
+      }
+      airlineGroup.name = name;
+      airlineGroup.effectiveStartDate = effectiveStartDate;
+      airlineGroup.effectiveEndDate = effectiveEndDate;
+      airlineGroup.airlineList = airlineList.map(airline => {
+        const air = airlineGroupAirlineList.filter(
+          line => line.id === airline.id
+        )[0];
+        return {
+          ...airline,
+          name: air.name
+        };
+      });
+      return airlineGroupCollection;
+    },
+    deleteAirlineGroup: (_, { id, collectionId }) => {
+      const airlineGroupCollection = airlineGroupCollectionList.filter(
+        collection => collection.id === collectionId
+      )[0];
+      if (!airlineGroupCollection) {
+        throw new ApolloError('Airline Group Collection not found', 400);
+      }
+      const index = airlineGroupCollection.airlineGroupList.findIndex(
+        group => group.id === id
+      );
+      if (index === -1) {
+        throw new ApolloError('Airline Group not found', 400);
+      }
+      airlineGroupCollection.airlineGroupList.splice(index, 1);
+      return airlineGroupCollection;
     }
-    // editTravelSector: (
-    //   _,
-    //   { id, collectionId, name, shortName, geographyList }
-    // ) => {
-    //   const travelSectorCollection = airlineGroupCollectionList.filter(
-    //     collection => collection.id === collectionId
-    //   )[0];
-    //   if (!travelSectorCollection) {
-    //     throw new ApolloError('Airline Group Collection not found', 400);
-    //   }
-    //   const travelSector = travelSectorCollection.sectorList.filter(
-    //     sector => sector.id === id
-    //   )[0];
-    //   if (!travelSector) {
-    //     throw new ApolloError('Travel Sector not found', 400);
-    //   }
-    //   travelSector.name = name;
-    //   travelSector.shortName = shortName;
-    //   travelSector.geographyList = geographyList.map(geography => {
-    //     const origin = travelSectorRegionList.filter(
-    //       region => region.id === geography.origin
-    //     )[0];
-    //     const destination = travelSectorRegionList.filter(
-    //       region => region.id === geography.destination
-    //     )[0];
-    //     return {
-    //       ...geography,
-    //       origin,
-    //       destination
-    //     };
-    //   });
-    //   return travelSectorCollection;
-    // },
-    // deleteTravelSector: (_, { id, collectionId }) => {
-    //   const travelSectorCollection = airlineGroupCollectionList.filter(
-    //     collection => collection.id === collectionId
-    //   )[0];
-    //   if (!travelSectorCollection) {
-    //     throw new ApolloError('Airline Group Collection not found', 400);
-    //   }
-    //   const index = travelSectorCollection.sectorList.findIndex(
-    //     sector => sector.id === id
-    //   );
-    //   if (index === -1) {
-    //     throw new ApolloError('Travel Sector not found', 400);
-    //   }
-    //   travelSectorCollection.sectorList.splice(index, 1);
-    //   return travelSectorCollection;
-    // }
   }
 };

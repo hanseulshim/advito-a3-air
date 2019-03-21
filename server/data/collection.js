@@ -422,7 +422,8 @@ exports.airlineGroupCollectionList = [
         effectiveEndDate: '12-31-2019',
         airlineList: [
           {
-            name: 'Air France',
+            id: 1,
+            name: 'Bulgarian Air Charter',
             effectiveStartDate: '01-01-2018',
             effectiveEndDate: '12-31-2019'
           }
@@ -445,7 +446,8 @@ exports.airlineGroupCollectionList = [
         effectiveEndDate: '12-31-2019',
         airlineList: [
           {
-            name: 'Air France',
+            id: 6,
+            name: 'Air Serbia',
             effectiveStartDate: '01-01-2018',
             effectiveEndDate: '12-31-2019'
           }

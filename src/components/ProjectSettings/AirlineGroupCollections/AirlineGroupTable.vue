@@ -42,9 +42,15 @@
       :width="tableColumnWidth.date"
     />
     <el-table-column label="Actions" :width="tableColumnWidth.actions">
-      <template>
-        <i class="fas fa-pencil-alt icon-spacer"></i>
-        <i class="fas fa-trash-alt"></i>
+      <template slot-scope="scope">
+        <i
+          class="fas fa-pencil-alt icon-spacer"
+          @click="showEditAirlineGroup(scope.row)"
+        ></i>
+        <i
+          class="fas fa-trash-alt"
+          @click="showDeleteAirlineGroup(scope.row)"
+        ></i>
       </template>
     </el-table-column>
   </el-table>
@@ -59,6 +65,10 @@ export default {
     airlineGroupList: {
       type: Array,
       required: true
+    },
+    collectionId: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -69,6 +79,18 @@ export default {
   methods: {
     formatDate(row, param) {
       return formatDate(row[param]);
+    },
+    showEditAirlineGroup(airlineGroup) {
+      this.$modal.show('edit-airline-group', {
+        airlineGroup,
+        collectionId: this.collectionId
+      });
+    },
+    showDeleteAirlineGroup(airlineGroup) {
+      this.$modal.show('delete-airline-group', {
+        airlineGroup,
+        collectionId: this.collectionId
+      });
     }
   }
 };

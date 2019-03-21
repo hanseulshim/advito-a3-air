@@ -94,7 +94,7 @@ extend type Query {
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
-  airlineList: [Airline] @auth
+  airlineGroupAirlineList: [Airline] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
 }
 
@@ -110,11 +110,13 @@ extend type Mutation {
   editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   deleteTravelSectorCollection(id: Int!): Int @auth
   addTravelSector(id: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
-  editTravelSector(id: Int!, collectionId: Int! name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
+  editTravelSector(id: Int!, collectionId: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
   deleteTravelSector(id: Int!, collectionId: Int!): TravelSectorCollection @auth
 
   editAirlineGroupCollection(id: Int!, name: String!, description: String): AirlineGroupCollection @auth
   deleteAirlineGroupCollection(id: Int!): Int @auth
   addAirlineGroup(id: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
+  editAirlineGroup(id: Int!, collectionId: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
+  deleteAirlineGroup(id: Int!, collectionId: Int!): AirlineGroupCollection @auth
 }
 `;

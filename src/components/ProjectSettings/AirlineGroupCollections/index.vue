@@ -1,14 +1,24 @@
 <template>
   <div class="table-spacer">
     <div class="section-header title-row space-between">
-      {{
+      <span>{{
         pluralize('airline group collection', airlineGroupCollectionList.length)
-      }}
+      }}</span>
+      <button
+        v-if="airlineGroupCollectionList.length > 1"
+        class="button"
+        @click="showNewAirlineGroup"
+      >
+        + NEW AIRLINE GROUP
+      </button>
     </div>
     <el-table ref="airlineGroupCollection" :data="airlineGroupCollectionList">
       <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
-          <AirlineGroupTable :airline-group-list="props.row.airlineGroupList" />
+          <AirlineGroupTable
+            :airline-group-list="props.row.airlineGroupList"
+            :collection-id="props.row.id"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -53,6 +63,9 @@
     </el-table>
     <EditAirlineGroupCollectionModal @toggle-row="toggleRow" />
     <DeleteAirlineGroupCollectionModal />
+    <NewAirlineGroupModal @toggle-row="toggleRow" />
+    <EditAirlineGroupModal @toggle-row="toggleRow" />
+    <DeleteAirlineGroupModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -63,12 +76,18 @@ import { GET_AIRLINE_GROUP_COLLECTION_LIST } from '@/graphql/queries';
 import AirlineGroupTable from './AirlineGroupTable';
 import EditAirlineGroupCollectionModal from './EditAirlineGroupCollectionModal';
 import DeleteAirlineGroupCollectionModal from './DeleteAirlineGroupCollectionModal';
+import NewAirlineGroupModal from './NewAirlineGroupModal';
+import EditAirlineGroupModal from './EditAirlineGroupModal';
+import DeleteAirlineGroupModal from './DeleteAirlineGroupModal';
 export default {
   name: 'AirlineGroupCollections',
   components: {
     AirlineGroupTable,
     EditAirlineGroupCollectionModal,
-    DeleteAirlineGroupCollectionModal
+    DeleteAirlineGroupCollectionModal,
+    NewAirlineGroupModal,
+    EditAirlineGroupModal,
+    DeleteAirlineGroupModal
   },
   apollo: {
     airlineGroupCollectionList: {
@@ -93,6 +112,9 @@ export default {
     },
     showDeleteAirlineGroupCollection(collection) {
       this.$modal.show('delete-airline-group-collection', { collection });
+    },
+    showNewAirlineGroup() {
+      this.$modal.show('new-airline-group');
     },
     toggleRow(id) {
       const row = this.$refs.airlineGroupCollection.data.filter(
