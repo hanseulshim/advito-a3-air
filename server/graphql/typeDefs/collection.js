@@ -1,15 +1,15 @@
 exports.collectionDefs = `
 type LocationCollection {
-  id: Int,
-  name: String,
+  id: Int
+  name: String
   regionList: [Region]
-  description: String,
-  dateUpdated: Date,
+  description: String
+  dateUpdated: Date
   active: Boolean
 }
 type Region {
   id: Int
-  name: String,
+  name: String
   countryList: [Country]
 }
 type Country {
@@ -18,58 +18,59 @@ type Country {
   name: String
 }
 type TravelSectorCollection {
-  id: Int,
-  name: String,
+  id: Int
+  name: String
   sectorList: [Sector]
-  description: String,
-  dateUpdated: Date,
+  description: String
+  dateUpdated: Date
   active: Boolean
 }
 type Sector {
-  id: Int,
-  name: String,
-  shortName: String,
+  id: Int
+  name: String
+  shortName: String
   geographyList: [Geography]
 }
 type Geography {
-  origin: GeographyRegion,
-  destination: GeographyRegion,
+  origin: GeographyRegion
+  destination: GeographyRegion
   exclude: Boolean
 }
 type GeographyRegion {
-  id: Int,
+  id: Int
   name: String
 }
 type AirlineGroupCollection {
-  id: Int,
-  name: String,
+  id: Int
+  name: String
   airlineGroupList: [AirlineGroup]
-  description: String,
-  dateUpdated: Date,
+  description: String
+  dateUpdated: Date
   active: Boolean
 }
 type AirlineGroup {
-  id: Int,
-  name: String,
-  effectiveStartDate: Date,
+  id: Int
+  name: String
+  effectiveStartDate: Date
   effectiveEndDate: Date
   airlineList: [Airline]
 }
 type PreferredAirlineCollection {
-  id: Int,
-  name: String,
+  id: Int
+  name: String
   airlineList: [Airline]
-  description: String,
-  dateUpdated: Date,
+  description: String
+  dateUpdated: Date
   active: Boolean
 }
 type Airline {
+  id: Int
   name: String
   preferenceLevel: String
-  effectiveStartDate: Date,
-  effectiveEndDate: Date,
-  cabins: String,
-  pos: String,
+  effectiveStartDate: Date
+  effectiveEndDate: Date
+  cabins: String
+  pos: String
   active: Boolean
 }
 input MoveCountry {
@@ -78,9 +79,14 @@ input MoveCountry {
   name: String
 }
 input SectorGeography {
-  origin: Int,
-  destination: Int,
+  origin: Int
+  destination: Int
   exclude: Boolean
+}
+input GroupAirline {
+  id: Int
+  effectiveStartDate: Date
+  effectiveEndDate: Date
 }
 
 extend type Query {
@@ -88,6 +94,7 @@ extend type Query {
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
+  airlineList: [Airline] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
 }
 
@@ -108,5 +115,6 @@ extend type Mutation {
 
   editAirlineGroupCollection(id: Int!, name: String!, description: String): AirlineGroupCollection @auth
   deleteAirlineGroupCollection(id: Int!): Int @auth
+  addAirlineGroup(id: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
 }
 `;

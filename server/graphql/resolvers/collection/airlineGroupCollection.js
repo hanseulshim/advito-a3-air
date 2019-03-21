@@ -1,10 +1,14 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { airlineGroupCollectionList } = require('../../../data/collection');
+const {
+  airlineGroupAirlineList,
+  airlineGroupCollectionList
+} = require('../../../data/collection');
 
 exports.airlineGroupCollection = {
   Query: {
     airlineGroupCollectionList: () =>
-      airlineGroupCollectionList.filter(collection => !collection.isDeleted)
+      airlineGroupCollectionList.filter(collection => !collection.isDeleted),
+    airlineList: () => airlineGroupAirlineList
   },
   Mutation: {
     editAirlineGroupCollection: (_, { id, name, description }) => {
@@ -36,40 +40,41 @@ exports.airlineGroupCollection = {
       }
       airGroupCollection.dateUpdated = new Date();
       return id;
+    },
+    addAirlineGroup: (
+      _,
+      { id, name, effectiveStartDate, effectiveEndDate, airlineList }
+    ) => {
+      const airlineGroupCollection = airlineGroupCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!airlineGroupCollection) {
+        throw new ApolloError('Airline Group Collection not found', 400);
+      }
+      const maxId =
+        Math.max(
+          ...airlineGroupCollection.airlineGroupList.map(group => group.id)
+        ) + 1;
+      const airlineListCopy = airlineList.map(airline => {
+        const name = airlineGroupAirlineList.filter(
+          air => air.id === airline.id
+        )[0].name;
+        return {
+          ...airline,
+          name
+        };
+      });
+      console.log(effectiveStartDate, effectiveEndDate, airlineList);
+      const airline = {
+        id: maxId,
+        name,
+        effectiveStartDate: new Date(effectiveStartDate),
+        effectiveEndDate: new Date(effectiveEndDate),
+        airlineList: airlineListCopy
+      };
+      airlineGroupCollection.airlineGroupList.push(airline);
+      return airlineGroupCollection;
     }
-    // addTravelSector: (_, { id, name, shortName, geographyList }) => {
-    //   const travelSectorCollection = airlineGroupCollectionList.filter(
-    //     collection => collection.id === id
-    //   )[0];
-    //   if (!travelSectorCollection) {
-    //     throw new ApolloError('Airline Group Collection not found', 400);
-    //   }
-    //   const maxId =
-    //     Math.max(
-    //       ...travelSectorCollection.sectorList.map(sector => sector.id)
-    //     ) + 1;
-    //   const geographyListCopy = geographyList.map(geography => {
-    //     const origin = travelSectorRegionList.filter(
-    //       region => region.id === geography.origin
-    //     )[0];
-    //     const destination = travelSectorRegionList.filter(
-    //       region => region.id === geography.destination
-    //     )[0];
-    //     return {
-    //       ...geography,
-    //       origin,
-    //       destination
-    //     };
-    //   });
-    //   const sector = {
-    //     id: maxId,
-    //     name,
-    //     shortName,
-    //     geographyList: geographyListCopy
-    //   };
-    //   travelSectorCollection.sectorList.push(sector);
-    //   return travelSectorCollection;
-    // },
     // editTravelSector: (
     //   _,
     //   { id, collectionId, name, shortName, geographyList }
