@@ -9,8 +9,13 @@ export const GET_LOCATION_COLLECTION_LIST = gql`
       dateUpdated
       active
       regionList {
+        id
         name
-        countryList
+        countryList {
+          id
+          regionId
+          name
+        }
       }
     }
   }
@@ -29,11 +34,26 @@ export const GET_TRAVEL_SECTOR_COLLECTION_LIST = gql`
         name
         shortName
         geographyList {
-          origin
-          destination
+          origin {
+            id
+            name
+          }
+          destination {
+            id
+            name
+          }
           exclude
         }
       }
+    }
+  }
+`;
+
+export const GET_TRAVEL_SECTOR_REGION_LIST = gql`
+  {
+    travelSectorRegionList {
+      id
+      name
     }
   }
 `;
@@ -45,6 +65,8 @@ export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
       name
       description
       dateUpdated
+      effectiveStartDate
+      effectiveEndDate
       active
       airlineGroupList {
         id
@@ -52,11 +74,21 @@ export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
         effectiveStartDate
         effectiveEndDate
         airlineList {
+          id
           name
           effectiveStartDate
           effectiveEndDate
         }
       }
+    }
+  }
+`;
+
+export const GET_AIRLINE_LIST = gql`
+  {
+    airlineGroupAirlineList {
+      id
+      name
     }
   }
 `;
@@ -70,13 +102,28 @@ export const GET_PREFERRED_AIRLINE_COLLECTION_LIST = gql`
       dateUpdated
       active
       airlineList {
+        id
         name
         preferenceLevel
         effectiveStartDate
         effectiveEndDate
-        cabins
         pos
         active
+      }
+    }
+  }
+`;
+
+export const GET_PREFERRED_AIRLINE_INFO = gql`
+  {
+    preferredAirlineInfo {
+      posList {
+        id
+        name
+      }
+      preferenceLevelList {
+        id
+        name
       }
     }
   }

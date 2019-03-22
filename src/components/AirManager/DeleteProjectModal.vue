@@ -6,32 +6,21 @@
     :click-to-close="false"
     @before-open="beforeOpen"
   >
-    <div style="text-align: center">
+    <div class="delete-modal-text">
       Are you sure you want to delete this project?
     </div>
-    <div class="close-container">
+    <div class="delete-modal-button-container">
       <button class="button" @click="deleteProject">Yes</button>
       <button class="button" @click="hideModal">No</button>
     </div>
-    <SuccessModal
-      :hide-modal="hideModal"
-      message="Project successfully deleted."
-    />
-    <ErrorModal message="Failed to delete project. Please try again" />
   </modal>
 </template>
 
 <script>
-import SuccessModal from '@/components/Modals/SuccessModal.vue';
-import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import { DELETE_PROJECT } from '@/graphql/mutations';
 import { GET_CLIENT, GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'DeleteModal',
-  components: {
-    SuccessModal,
-    ErrorModal
-  },
   data() {
     return {
       id: null
@@ -65,9 +54,14 @@ export default {
             });
           }
         });
-        this.$modal.show('success');
+        this.$modal.show('success', {
+          message: 'Project successfully deleted.',
+          name: 'delete'
+        });
       } catch (error) {
-        this.$modal.show('error');
+        this.$modal.show('error', {
+          message: 'Failed to delete project. Please try again'
+        });
       }
     },
     beforeOpen(event) {
@@ -79,11 +73,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.close-container {
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 2em;
-}
-</style>

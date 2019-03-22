@@ -23,9 +23,15 @@
               </template>
             </el-table-column>
             <el-table-column label="Actions" :width="tableColumnWidth.actions">
-              <template>
-                <i class="fas fa-pencil-alt icon-spacer"></i>
-                <i class="fas fa-trash-alt"></i>
+              <template slot-scope="scope">
+                <i
+                  class="fas fa-pencil-alt icon-spacer"
+                  @click="showEditRegionModal(props.row, scope.row)"
+                />
+                <i
+                  class="fas fa-trash-alt"
+                  @click="showDeleteRegionModal(props.row, scope.row)"
+                ></i>
               </template>
             </el-table-column>
           </el-table>
@@ -58,15 +64,28 @@
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
         <template slot-scope="scope">
-          <i class="far fa-copy icon-spacer"></i>
+          <i
+            class="far fa-copy icon-spacer"
+            @click="showNewLocationCollection(scope.row)"
+          ></i>
           <i
             v-if="scope.row.id !== 1"
             class="fas fa-pencil-alt icon-spacer"
+            @click="showEditLocationCollection(scope.row)"
           ></i>
-          <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
+          <i
+            v-if="scope.row.id !== 1"
+            class="fas fa-trash-alt"
+            @click="showDeleteLocationCollection(scope.row)"
+          ></i>
         </template>
       </el-table-column>
     </el-table>
+    <NewLocationCollectionModal @toggle-row="toggleRow" />
+    <EditLocationCollectionModal @toggle-row="toggleRow" />
+    <DeleteLocationCollectionModal />
+    <EditRegionModal @toggle-row="toggleRow" />
+    <DeleteRegionModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -74,8 +93,21 @@
 import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
+import NewLocationCollectionModal from './NewLocationCollectionModal';
+import EditLocationCollectionModal from './EditLocationCollectionModal';
+import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
+import EditRegionModal from './EditRegionModal';
+import DeleteRegionModal from './DeleteRegionModal';
+
 export default {
   name: 'LocationCollections',
+  components: {
+    NewLocationCollectionModal,
+    EditLocationCollectionModal,
+    DeleteLocationCollectionModal,
+    EditRegionModal,
+    DeleteRegionModal
+  },
   apollo: {
     locationCollectionList: {
       query: GET_LOCATION_COLLECTION_LIST
@@ -95,9 +127,31 @@ export default {
       return formatDate(row.dateUpdated);
     },
     getCountryNames(countryList) {
-      return countryList.length > 10
-        ? countryList.slice(0, 9).join(', ') + '...'
-        : countryList.join(', ');
+      const countryListCopy = countryList.map(country => country.name);
+      return countryListCopy.length > 10
+        ? countryListCopy.slice(0, 9).join(', ') + '...'
+        : countryListCopy.join(', ');
+    },
+    showNewLocationCollection(collection) {
+      this.$modal.show('new-location-collection', { collection });
+    },
+    showEditLocationCollection(collection) {
+      this.$modal.show('edit-location-collection', { collection });
+    },
+    showDeleteLocationCollection(collection) {
+      this.$modal.show('delete-location-collection', { collection });
+    },
+    showEditRegionModal(collection, region) {
+      this.$modal.show('edit-region', { collection, region });
+    },
+    showDeleteRegionModal(collection, region) {
+      this.$modal.show('delete-region', { collection, region });
+    },
+    toggleRow(id) {
+      const row = this.$refs.locationCollection.data.filter(
+        collection => collection.id === id
+      )[0];
+      this.$refs.locationCollection.toggleRowExpansion(row);
     }
   }
 };

@@ -22,6 +22,9 @@
     th.is-leaf {
       border-bottom: 1px solid $gallery;
     }
+    .expanded > td {
+      border-bottom: none;
+    }
   }
   .table-toggle-icon {
     cursor: pointer;

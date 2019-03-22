@@ -128,9 +128,6 @@ export default {
   align-items: flex-end;
   margin-bottom: 2em;
 }
-.el-select {
-  width: 100%;
-}
 .logo {
   max-width: 294px;
   width: 100%;

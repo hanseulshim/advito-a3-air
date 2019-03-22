@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 export const GET_AIRPORT_LIST = gql`
   {
     airportList {
-      country
+      countryName
       cityCode
       cityName
       airportCode

@@ -61,7 +61,6 @@
       <i class="fas fa-info project-info-icon" @click="showInfoModal" />
     </div>
     <EditProjectModal />
-    <InfoModal />
   </div>
 </template>
 
@@ -69,12 +68,10 @@
 import { GET_PROJECT } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import EditProjectModal from '@/components/AirManager/EditProjectModal';
-import InfoModal from '@/components/Modals/InfoModal';
 export default {
   name: 'ProjectInfo',
   components: {
-    EditProjectModal,
-    InfoModal
+    EditProjectModal
   },
   apollo: {
     project: {

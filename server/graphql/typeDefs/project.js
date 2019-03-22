@@ -32,10 +32,10 @@ type Project {
 
 type ProjectInfo {
   projectTypeList: [ProjectType]
-  savingsTypeList: [ProjectType]
-  projectManagerList: [ProjectUser]
-  leadAnalystList: [ProjectUser]
-  dataSpecialistList: [ProjectUser]
+  savingsTypeList: [SavingsType]
+  projectManagerList: [ProjectManagerUser]
+  leadAnalystList: [LeadAnalystUser]
+  dataSpecialistList: [DataSpecialistUser]
 }
 
 type ProjectType {
@@ -43,7 +43,24 @@ type ProjectType {
   name: String
 }
 
-type ProjectUser {
+type SavingsType {
+  id: Int,
+  name: String
+}
+
+type ProjectManagerUser {
+  id: Int,
+  name: String,
+  email: String
+}
+
+type LeadAnalystUser {
+  id: Int,
+  name: String,
+  email: String
+}
+
+type DataSpecialistUser {
   id: Int,
   name: String,
   email: String

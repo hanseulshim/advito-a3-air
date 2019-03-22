@@ -19,7 +19,6 @@
     <FavoriteProjects :favorite-project-list="favoriteProjectList" />
     <TotalProjects :total-project-list="totalProjectList" />
     <NewProjectModal />
-    <InfoModal />
     <EditProjectModal />
     <DeleteProjectModal />
   </div>
@@ -32,7 +31,6 @@ import FavoriteProjects from '@/components/AirManager/FavoriteProjects';
 import NewProjectModal from '@/components/AirManager/NewProjectModal';
 import DeleteProjectModal from '@/components/AirManager/DeleteProjectModal';
 import EditProjectModal from '@/components/AirManager/EditProjectModal';
-import InfoModal from '@/components/Modals/InfoModal';
 import {
   GET_PROJECTS,
   GET_USER,
@@ -46,7 +44,6 @@ export default {
     TotalProjects,
     FavoriteProjects,
     NewProjectModal,
-    InfoModal,
     DeleteProjectModal,
     EditProjectModal
   },

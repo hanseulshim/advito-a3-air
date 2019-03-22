@@ -4,6 +4,7 @@
     name="error"
     height="auto"
     :click-to-close="false"
+    @before-open="beforeOpen"
   >
     <div style="text-align: center">{{ message }}</div>
     <div class="close-container">
@@ -15,15 +16,17 @@
 <script>
 export default {
   name: 'ErrorModal',
-  props: {
-    message: {
-      type: String,
-      required: true
-    }
+  data() {
+    return {
+      message: ''
+    };
   },
   methods: {
     closeModal() {
       this.$modal.hide('error');
+    },
+    beforeOpen(event) {
+      this.message = event.params.message;
     }
   }
 };

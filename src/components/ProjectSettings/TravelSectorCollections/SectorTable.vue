@@ -10,7 +10,8 @@
           <el-table-column label="Bidirection">
             <template slot-scope="prop">
               <div>
-                {{ prop.row.origin }} &lt;—&gt; {{ prop.row.destination }}
+                {{ prop.row.origin.name }} &lt;—&gt;
+                {{ prop.row.destination.name }}
               </div>
             </template>
           </el-table-column>
@@ -34,9 +35,15 @@
     />
     <el-table-column prop="geographyList.length" label="Geographies" />
     <el-table-column label="Actions" :width="tableColumnWidth.actions">
-      <template>
-        <i class="fas fa-pencil-alt icon-spacer"></i>
-        <i class="fas fa-trash-alt"></i>
+      <template slot-scope="scope">
+        <i
+          class="fas fa-pencil-alt icon-spacer"
+          @click="showEditTravelSector(scope.row)"
+        ></i>
+        <i
+          class="fas fa-trash-alt"
+          @click="showDeleteTravelSector(scope.row)"
+        ></i>
       </template>
     </el-table-column>
   </el-table>
@@ -50,12 +57,30 @@ export default {
     sectorList: {
       type: Array,
       required: true
+    },
+    collectionId: {
+      type: Number,
+      required: true
     }
   },
   data() {
     return {
       tableColumnWidth
     };
+  },
+  methods: {
+    showEditTravelSector(sector) {
+      this.$modal.show('edit-travel-sector', {
+        sector,
+        collectionId: this.collectionId
+      });
+    },
+    showDeleteTravelSector(sector) {
+      this.$modal.show('delete-travel-sector', {
+        sector,
+        collectionId: this.collectionId
+      });
+    }
   }
 };
 </script>

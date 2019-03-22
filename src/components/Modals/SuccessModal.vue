@@ -4,6 +4,7 @@
     name="success"
     height="auto"
     :click-to-close="false"
+    @before-open="beforeOpen"
   >
     <div style="text-align: center">{{ message }}</div>
     <div class="close-container">
@@ -15,20 +16,20 @@
 <script>
 export default {
   name: 'SuccessModal',
-  props: {
-    hideModal: {
-      type: Function,
-      required: true
-    },
-    message: {
-      type: String,
-      required: true
-    }
+  data() {
+    return {
+      message: '',
+      name: ''
+    };
   },
   methods: {
     closeModal() {
       this.$modal.hide('success');
-      this.hideModal();
+      this.$modal.hide(this.name);
+    },
+    beforeOpen(event) {
+      this.message = event.params.message;
+      this.name = event.params.name;
     }
   }
 };

@@ -124,17 +124,10 @@
         <button class="button" @click="validateForm">SAVE</button>
       </el-form-item>
     </el-form>
-    <SuccessModal
-      :hide-modal="hideModal"
-      message="Project successfully created."
-    />
-    <ErrorModal message="Failed to create project. Please try again" />
   </modal>
 </template>
 
 <script>
-import SuccessModal from '@/components/Modals/SuccessModal.vue';
-import ErrorModal from '@/components/Modals/ErrorModal.vue';
 import {
   GET_PROJECTS,
   GET_CLIENT,
@@ -144,10 +137,6 @@ import {
 import { ADD_PROJECT } from '@/graphql/mutations';
 export default {
   name: 'NewProjectModal',
-  components: {
-    SuccessModal,
-    ErrorModal
-  },
   apollo: {
     clientList: {
       query: GET_CLIENTS
@@ -272,7 +261,7 @@ export default {
       this.$modal.hide('new-project');
     },
     validateForm() {
-      this.$refs['newProjectForm'].validate(valid => {
+      this.$refs.newProjectForm.validate(valid => {
         if (valid) {
           this.addProject();
         } else {
@@ -304,9 +293,14 @@ export default {
             });
           }
         });
-        this.$modal.show('success');
+        this.$modal.show('success', {
+          message: 'Project successfully created.',
+          name: 'new-project'
+        });
       } catch (error) {
-        this.$modal.show('error');
+        this.$modal.show('error', {
+          message: 'Failed to create project. Please try again.'
+        });
       }
     },
     beforeClose() {

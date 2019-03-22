@@ -11,7 +11,7 @@
     </div>
     <el-table :data="airportList" :max-height="750">
       <el-table-column
-        prop="country"
+        prop="countryName"
         label="Country"
         sortable
         :width="tableColumnWidth.shortName"

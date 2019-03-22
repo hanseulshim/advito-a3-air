@@ -4,6 +4,7 @@
     <div id="app">
       <Header />
       <router-view />
+      <Modals />
     </div>
   </div>
   <div v-else class="validation-container">
@@ -12,13 +13,15 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue';
+import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
+import Modals from '@/components/Modals';
 export default {
   name: 'App',
   components: {
     Header,
-    Sidebar
+    Sidebar,
+    Modals
   },
   data() {
     return {
