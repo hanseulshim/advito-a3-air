@@ -21,6 +21,9 @@
 }
 .delete-modal-button-container {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   margin-top: 2em;
+  .button {
+    margin: 0 5px;
+  }
 }
