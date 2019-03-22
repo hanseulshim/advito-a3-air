@@ -17,7 +17,10 @@
     >
       <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
-          <AirlineTable :airline-list="props.row.airlineList" />
+          <AirlineTable
+            :airline-list="props.row.airlineList"
+            :collection-id="props.row.id"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -59,8 +62,10 @@
       </el-table-column>
     </el-table>
     <EditPreferredAirlineCollectionModal @toggle-row="toggleRow" />
-    <NewPreferredAirlineModal @toggle-row="toggleRow"/>
+    <EditPreferredAirlineModal @toggle-row="toggleRow" />
+    <NewPreferredAirlineModal @toggle-row="toggleRow" />
     <DeletePreferredAirlineCollectionModal />
+    <DeletePreferredAirlineModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -72,13 +77,17 @@ import AirlineTable from './AirlineTable';
 import EditPreferredAirlineCollectionModal from './EditPreferredAirlineCollectionModal';
 import NewPreferredAirlineModal from './NewPreferredAirlineModal';
 import DeletePreferredAirlineCollectionModal from './DeletePreferredAirlineCollectionModal';
+import EditPreferredAirlineModal from './EditPreferredAirlineModal';
+import DeletePreferredAirlineModal from './DeletePreferredAirlineModal';
 export default {
   name: 'PreferredAirlineCollections',
   components: {
     AirlineTable,
     EditPreferredAirlineCollectionModal,
     NewPreferredAirlineModal,
-    DeletePreferredAirlineCollectionModal
+    DeletePreferredAirlineCollectionModal,
+    EditPreferredAirlineModal,
+    DeletePreferredAirlineModal
   },
   apollo: {
     preferredAirlineCollectionList: {

@@ -33,6 +33,44 @@ exports.preferredAirlineCollection = {
           active
         }
       }
+      editPreferredAirline(id: 1, airlineList: [
+        {
+          id: 1,
+          posId: 1,
+          preferenceLevelId: 1
+        }
+      ]) {
+        id
+        name
+        description
+        dateUpdated
+        active
+        airlineList {
+          id
+          name
+          preferenceLevel
+          effectiveStartDate
+          effectiveEndDate
+          pos
+          active
+        }
+      }
+      deletePreferredAirline(id: 1, collectionId: 1) {
+        id
+        name
+        description
+        dateUpdated
+        active
+        airlineList {
+          id
+          name
+          preferenceLevel
+          effectiveStartDate
+          effectiveEndDate
+          pos
+          active
+        }
+      }
     }
     `
 };

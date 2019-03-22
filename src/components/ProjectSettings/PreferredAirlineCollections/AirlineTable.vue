@@ -29,9 +29,15 @@
       </template>
     </el-table-column>
     <el-table-column label="Actions" :width="tableColumnWidth.actions">
-      <template>
-        <i class="fas fa-pencil-alt icon-spacer"></i>
-        <i class="fas fa-trash-alt"></i>
+      <template slot-scope="scope">
+        <i
+          class="fas fa-pencil-alt icon-spacer"
+          @click="showEditPreferredAirline(airlineList)"
+        ></i>
+        <i
+          class="fas fa-trash-alt"
+          @click="showDeletePreferredAirline(scope.row)"
+        ></i>
       </template>
     </el-table-column>
   </el-table>
@@ -46,6 +52,10 @@ export default {
     airlineList: {
       type: Array,
       required: true
+    },
+    collectionId: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -56,6 +66,18 @@ export default {
   methods: {
     formatDate(row, param) {
       return row[param] ? formatDate(row[param]) : 'Undefined';
+    },
+    showEditPreferredAirline(airlineList) {
+      this.$modal.show('edit-preferred-airline', {
+        airlineList,
+        collectionId: this.collectionId
+      });
+    },
+    showDeletePreferredAirline(airline) {
+      this.$modal.show('delete-preferred-airline', {
+        airline,
+        collectionId: this.collectionId
+      });
     }
   }
 };

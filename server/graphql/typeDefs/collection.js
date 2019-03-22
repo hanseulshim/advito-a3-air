@@ -146,6 +146,8 @@ extend type Mutation {
 
   editPreferredAirlineCollection(id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
   deletePreferredAirlineCollection(id: Int!): Int @auth
-  addPreferredAirline(id: Int, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
+  addPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
+  editPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
+  deletePreferredAirline(id: Int!, collectionId: Int!): PreferredAirlineCollection @auth
 }
 `;

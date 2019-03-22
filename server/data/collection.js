@@ -1421,7 +1421,7 @@ exports.preferredAirlineCollectionList = [
     isDeleted: false,
     airlineList: [
       {
-        id: 1,
+        id: 26,
         name: 'Air France',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
@@ -1430,8 +1430,8 @@ exports.preferredAirlineCollectionList = [
         active: true
       },
       {
-        id: 2,
-        name: 'Aeroflot',
+        id: 103,
+        name: 'Aeroflot Russian Airlines',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: null,
@@ -1439,8 +1439,8 @@ exports.preferredAirlineCollectionList = [
         active: true
       },
       {
-        id: 3,
-        name: 'Lufthansa',
+        id: 651,
+        name: 'Luxair',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: '12-31-2019',
