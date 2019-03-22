@@ -8,11 +8,14 @@
   color: $tree-poppy;
   border: 1px solid $tree-poppy;
   border-radius: 10px;
-  width: 150px;
+  width: 100px;
   padding: 5px;
   font-size: 0.8em;
   cursor: pointer;
   background: transparent;
+  &.long {
+    width: 150px;
+  }
   &:hover {
     background: $tree-poppy;
     color: $white;
