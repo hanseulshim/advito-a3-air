@@ -55,25 +55,42 @@ type AirlineGroup {
   name: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  airlineList: [Airline]
+  airlineList: [AirlineGroupAirline]
+}
+type AirlineGroupAirline {
+  id: Int
+  name: String
+  effectiveStartDate: Date
+  effectiveEndDate: Date
 }
 type PreferredAirlineCollection {
   id: Int
   name: String
-  airlineList: [Airline]
+  airlineList: [PreferredAirline]
   description: String
   dateUpdated: Date
   active: Boolean
 }
-type Airline {
+type PreferredAirline {
   id: Int
   name: String
   preferenceLevel: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  cabins: String
   pos: String
   active: Boolean
+}
+type PreferredAirlineInfo {
+  posList: [PreferredAirlinePos]
+  preferenceLevelList: [PreferredAirlinePreference]
+}
+type PreferredAirlinePos {
+  id: Int
+  name: String
+}
+type PreferredAirlinePreference {
+  id: Int
+  name: String
 }
 input MoveCountry {
   id: Int
@@ -90,14 +107,20 @@ input GroupAirline {
   effectiveStartDate: Date
   effectiveEndDate: Date
 }
+input PreferredAirlineInput {
+  id: Int
+  posId: Int
+  preferenceLevelId: Int
+}
 
 extend type Query {
   locationCollectionList: [LocationCollection] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
-  airlineGroupAirlineList: [Airline] @auth
+  airlineGroupAirlineList: [AirlineGroupAirline] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
+  preferredAirlineInfo: PreferredAirlineInfo @auth
 }
 
 extend type Mutation {
@@ -120,5 +143,9 @@ extend type Mutation {
   addAirlineGroup(id: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
   editAirlineGroup(id: Int!, collectionId: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
   deleteAirlineGroup(id: Int!, collectionId: Int!): AirlineGroupCollection @auth
+
+  editPreferredAirlineCollection(id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
+  deletePreferredAirlineCollection(id: Int!): Int @auth
+  addPreferredAirline(id: Int, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
 }
 `;

@@ -1421,32 +1421,67 @@ exports.preferredAirlineCollectionList = [
     isDeleted: false,
     airlineList: [
       {
+        id: 1,
         name: 'Air France',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: '12-31-2019',
-        cabins: 'F.C.P.Y',
         pos: 'EU',
         active: true
       },
       {
+        id: 2,
         name: 'Aeroflot',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: null,
-        cabins: 'F.C.P.Y',
         pos: 'EU',
         active: true
       },
       {
+        id: 3,
         name: 'Lufthansa',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: '12-31-2019',
-        cabins: 'F.C.P.Y',
         pos: 'EU',
         active: true
       }
     ]
   }
 ];
+
+exports.preferredAirlineInfo = {
+  posList: [
+    {
+      id: 1,
+      name: 'EU'
+    },
+    {
+      id: 2,
+      name: 'US'
+    },
+    {
+      id: 3,
+      name: 'FR'
+    },
+    {
+      id: 4,
+      name: 'Various'
+    }
+  ],
+  preferenceLevelList: [
+    {
+      id: 1,
+      name: 'Primary'
+    },
+    {
+      id: 2,
+      name: 'Secondary'
+    },
+    {
+      id: 3,
+      name: 'Tertiary'
+    }
+  ]
+};

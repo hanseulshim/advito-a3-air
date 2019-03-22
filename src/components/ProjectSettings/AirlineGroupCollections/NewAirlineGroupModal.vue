@@ -91,7 +91,7 @@
       <div
         v-for="(airline, index) in form.airlineList"
         :key="index"
-        class="airline-group-item airline-item"
+        class="airline-group-item"
       >
         <div class="airline-group-label">
           <i class="fas fa-times" @click="removeAirline(index)" />
@@ -258,9 +258,7 @@ export default {
 .airline-group-item {
   display: flex;
   margin-top: 1em;
-  &.airline-item {
-    align-items: center;
-  }
+  align-items: center;
   .airline-group-label {
     width: 200px;
     .fa-times {

@@ -1,12 +1,15 @@
 <template>
   <div class="table-spacer">
     <div class="section-header title-row space-between">
-      {{
+      <span>{{
         pluralize(
           'preferred airline collection',
           preferredAirlineCollectionList.length
         )
-      }}
+      }}</span>
+      <button class="button" @click="showNewPreferredAirline">
+        + NEW AIRLINE
+      </button>
     </div>
     <el-table
       ref="preferredAirlineCollection"
@@ -44,15 +47,20 @@
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
         <template slot-scope="scope">
-          <i class="far fa-copy icon-spacer"></i>
           <i
-            v-if="scope.row.id !== 1"
             class="fas fa-pencil-alt icon-spacer"
+            @click="showEditPreferredAirlineCollection(scope.row)"
           ></i>
-          <i v-if="scope.row.id !== 1" class="fas fa-trash-alt"></i>
+          <i
+            class="fas fa-trash-alt"
+            @click="showDeletePreferredAirlineCollection(scope.row)"
+          ></i>
         </template>
       </el-table-column>
     </el-table>
+    <EditPreferredAirlineCollectionModal @toggle-row="toggleRow" />
+    <NewPreferredAirlineModal @toggle-row="toggleRow"/>
+    <DeletePreferredAirlineCollectionModal />
   </div>
 </template>
 
@@ -61,10 +69,16 @@ import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_PREFERRED_AIRLINE_COLLECTION_LIST } from '@/graphql/queries';
 import AirlineTable from './AirlineTable';
+import EditPreferredAirlineCollectionModal from './EditPreferredAirlineCollectionModal';
+import NewPreferredAirlineModal from './NewPreferredAirlineModal';
+import DeletePreferredAirlineCollectionModal from './DeletePreferredAirlineCollectionModal';
 export default {
   name: 'PreferredAirlineCollections',
   components: {
-    AirlineTable
+    AirlineTable,
+    EditPreferredAirlineCollectionModal,
+    NewPreferredAirlineModal,
+    DeletePreferredAirlineCollectionModal
   },
   apollo: {
     preferredAirlineCollectionList: {
@@ -83,6 +97,21 @@ export default {
     },
     formatDate(row) {
       return formatDate(row.dateUpdated);
+    },
+    showNewPreferredAirline() {
+      this.$modal.show('new-preferred-airline');
+    },
+    showEditPreferredAirlineCollection(collection) {
+      this.$modal.show('edit-preferred-airline-collection', { collection });
+    },
+    showDeletePreferredAirlineCollection(collection) {
+      this.$modal.show('delete-preferred-airline-collection', { collection });
+    },
+    toggleRow(id) {
+      const row = this.$refs.preferredAirlineCollection.data.filter(
+        collection => collection.id === id
+      )[0];
+      this.$refs.preferredAirlineCollection.toggleRowExpansion(row);
     }
   }
 };

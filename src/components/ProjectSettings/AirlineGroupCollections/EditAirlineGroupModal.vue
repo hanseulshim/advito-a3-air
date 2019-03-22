@@ -263,36 +263,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import '@/styles/global.scss';
-.airline-group-spacer {
-  width: 200px;
-  border: 1px solid $gray-nurse;
-  margin: 2em 0;
-}
-.airline-group-item {
-  display: flex;
-  margin-top: 1em;
-  &.airline-item {
-    align-items: center;
-  }
-  .airline-group-label {
-    width: 200px;
-    .fa-times {
-      cursor: pointer;
-      margin-right: 5px;
-    }
-  }
-  .airline-group-content {
-    flex: 1;
-    .date-picker {
-      width: 48%;
-    }
-  }
-}
-.airline-group-button {
-  margin-left: 200px;
-  margin-top: 2em;
-}
-</style>

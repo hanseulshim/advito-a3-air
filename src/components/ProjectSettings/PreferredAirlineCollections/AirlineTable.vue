@@ -22,7 +22,6 @@
       :formatter="row => formatDate(row, 'effectiveEndDate')"
       :width="tableColumnWidth.date"
     />
-    <el-table-column prop="cabins" label="Cabins" />
     <el-table-column prop="pos" label="PoS" />
     <el-table-column label="Status">
       <template slot-scope="props">

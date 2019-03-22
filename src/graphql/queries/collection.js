@@ -102,13 +102,28 @@ export const GET_PREFERRED_AIRLINE_COLLECTION_LIST = gql`
       dateUpdated
       active
       airlineList {
+        id
         name
         preferenceLevel
         effectiveStartDate
         effectiveEndDate
-        cabins
         pos
         active
+      }
+    }
+  }
+`;
+
+export const GET_PREFERRED_AIRLINE_INFO = gql`
+  {
+    preferredAirlineInfo {
+      posList {
+        id
+        name
+      }
+      preferenceLevelList {
+        id
+        name
       }
     }
   }
