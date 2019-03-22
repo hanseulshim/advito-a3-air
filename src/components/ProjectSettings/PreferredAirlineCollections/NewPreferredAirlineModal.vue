@@ -76,35 +76,37 @@
         ADD
       </button>
       <div class="airline-group-spacer" />
-      <div v-for="(airline, index) in form.airlineList" :key="index">
-        <div class="airline-group-item">
-          <div class="airline-group-label">
-            <i class="fas fa-times" @click="removeAirline(index)" />
-            {{ getAirline(airline.id) }}
+      <div class="preferred-airline-list-container">
+        <div v-for="(airline, index) in form.airlineList" :key="index">
+          <div class="airline-group-item">
+            <div class="airline-group-label">
+              <i class="fas fa-times" @click="removeAirline(index)" />
+              {{ getAirline(airline.id) }}
+            </div>
+            <el-select v-model="airline.posId" class="select-modal" filterable>
+              <el-option
+                v-for="item in preferredAirlineInfo.posList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </div>
-          <el-select v-model="airline.posId" class="select-modal" filterable>
-            <el-option
-              v-for="item in preferredAirlineInfo.posList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </div>
-        <div class="airline-group-item">
-          <div class="airline-group-label" />
-          <el-select
-            v-model="airline.preferenceLevelId"
-            class="select-modal"
-            filterable
-          >
-            <el-option
-              v-for="item in preferredAirlineInfo.preferenceLevelList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <div class="airline-group-item">
+            <div class="airline-group-label" />
+            <el-select
+              v-model="airline.preferenceLevelId"
+              class="select-modal"
+              filterable
+            >
+              <el-option
+                v-for="item in preferredAirlineInfo.preferenceLevelList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </div>
         </div>
       </div>
       <el-form-item class="save-container">
@@ -222,7 +224,8 @@ export default {
 </script>
 
 <style lang="scss">
-.preference-level-select {
-  margin-left: 200px;
+.preferred-airline-list-container {
+  max-height: 400px;
+  overflow: auto;
 }
 </style>
