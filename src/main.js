@@ -21,6 +21,8 @@ const apolloClient = new ApolloClient({
   // uri: 'https://hq893l4up1.execute-api.us-east-2.amazonaws.com/beta/graphql',
   // BOOST ENDPOINTS
   uri: 'https://c1wt7hzxc5.execute-api.us-east-2.amazonaws.com/test/graphql',
+  // uri: 'https://5aoegpag40.execute-api.us-east-2.amazonaws.com/alpha/graphql',
+  // uri: 'https://daqpm0wy59.execute-api.us-east-2.amazonaws.com/beta/graphql',
   clientState: {
     defaults,
     resolvers
