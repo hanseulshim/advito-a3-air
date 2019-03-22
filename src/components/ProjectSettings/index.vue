@@ -8,7 +8,7 @@
       >
         Airport Listing
       </button>
-      <button class="button" @click="toggleBookingClass">
+      <button class="button long" @click="toggleBookingClass">
         Booking Class Mappings
       </button>
     </div>

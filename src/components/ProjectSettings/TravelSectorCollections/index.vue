@@ -6,7 +6,7 @@
       }}</span>
       <button
         v-if="travelSectorCollectionList.length > 1"
-        class="button"
+        class="button long"
         @click="showNewTravelSector"
       >
         + NEW TRAVEL SECTOR
