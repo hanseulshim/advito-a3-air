@@ -34,10 +34,6 @@ export default {
           title: 'project settings'
         },
         {
-          link: '/project/default-data',
-          title: 'default data'
-        },
-        {
           link: '/project/data-qc',
           title: 'data qc'
         },
