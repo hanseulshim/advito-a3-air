@@ -25,7 +25,7 @@
         </div>
       </el-form-item>
     </el-form>
-    <div>All Countries</div>
+    <div style="margin-bottom: 5px">All Countries</div>
     <div class="country-list-container">
       <div v-for="region in regionList" :key="region.id">
         <div class="region-container">
@@ -201,14 +201,22 @@ export default {
 }
 .edit-region-toggle {
   color: $tree-poppy;
-  margin-right: 5px;
+  margin-right: 10px;
   cursor: pointer;
 }
 .region-container {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.7em;
 }
 .country-container {
   margin-left: 1em;
+}
+#app {
+  .country-container {
+    .el-checkbox__inner {
+      background-color: $white;
+      border: 1px solid $gray-nurse;
+    }
+  }
 }
 .select-region-container {
   margin-top: 1em;

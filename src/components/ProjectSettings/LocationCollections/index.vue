@@ -15,7 +15,7 @@
             <el-table-column
               prop="countryList.length"
               label="Countries"
-              :width="tableColumnWidth.count"
+              :width="tableColumnWidth.code"
             />
             <el-table-column label="Country Name">
               <template slot-scope="scope">
