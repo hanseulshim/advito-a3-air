@@ -130,6 +130,30 @@ export const DELETE_TRAVEL_SECTOR = gql`
   }
 `;
 
+export const DELETE_BIDIRECTION = gql`
+  mutation deleteBidirection($id: Int!, $collectionId: Int!, $index: Int!) {
+    deleteBidirection(id: $id, collectionId: $collectionId, index: $index) {
+      id
+      sectorList {
+        id
+        name
+        shortName
+        geographyList {
+          origin {
+            id
+            name
+          }
+          destination {
+            id
+            name
+          }
+          exclude
+        }
+      }
+    }
+  }
+`;
+
 export const EDIT_TRAVEL_SECTOR_COLLECTION = gql`
   mutation editTravelSectorCollection(
     $id: Int!

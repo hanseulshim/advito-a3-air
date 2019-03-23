@@ -137,6 +137,7 @@ extend type Mutation {
   addTravelSector(id: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
   editTravelSector(id: Int!, collectionId: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
   deleteTravelSector(id: Int!, collectionId: Int!): TravelSectorCollection @auth
+  deleteBidirection(id: Int!, collectionId: Int!, index: Int!): TravelSectorCollection @auth
 
   editAirlineGroupCollection(id: Int!, name: String!, description: String, effectiveStartDate: Date, effectiveEndDate: Date): AirlineGroupCollection @auth
   deleteAirlineGroupCollection(id: Int!): Int @auth

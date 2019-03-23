@@ -147,6 +147,22 @@ exports.travelSectorCollection = {
       }
       travelSectorCollection.sectorList.splice(index, 1);
       return travelSectorCollection;
+    },
+    deleteBidirection: (_, { id, collectionId, index }) => {
+      const travelSectorCollection = travelSectorCollectionList.filter(
+        collection => collection.id === collectionId
+      )[0];
+      if (!travelSectorCollection) {
+        throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      const travelSector = travelSectorCollection.sectorList.filter(
+        sector => sector.id === id
+      )[0];
+      if (!travelSector) {
+        throw new ApolloError('Travel Sector not found', 400);
+      }
+      travelSector.geographyList.splice(index, 1);
+      return travelSectorCollection;
     }
   }
 };

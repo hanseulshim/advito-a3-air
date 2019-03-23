@@ -103,6 +103,25 @@ exports.travelSectorCollection = {
           }
         }
       }
+      deleteBidirection(id: 1, collectionId: 1, index: 1) {
+        id
+        sectorList {
+          id
+          name
+          shortName
+          geographyList {
+            origin {
+              id
+              name
+            }
+            destination {
+              id
+              name
+            }
+            exclude
+          }
+        }
+      }
     }
     `
 };
