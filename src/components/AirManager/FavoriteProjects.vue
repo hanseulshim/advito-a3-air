@@ -20,11 +20,7 @@
           </el-tooltip>
         </div>
         <div class="value-row">
-          <span>Processed Date</span>
-          <span></span>
-        </div>
-        <div class="value-row">
-          <span>Date Range</span>
+          <span>Project Dates</span>
           <span>
             {{ formatDate(project.effectiveFrom) }} —
             {{ formatDate(project.effectiveTo) }}
