@@ -28,7 +28,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Nullam molestie nibh in lectus.'
+    progress: 'Nullam molestie nibh in lectus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 2,
@@ -57,7 +61,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'Nunc rhoncus dui vel sem.'
+    progress: 'Nunc rhoncus dui vel sem.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 3,
@@ -86,7 +94,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Maecenas ut massa quis augue luctus tincidunt.'
+    progress: 'Maecenas ut massa quis augue luctus tincidunt.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 4,
@@ -115,7 +127,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'In hac habitasse platea dictumst.'
+    progress: 'In hac habitasse platea dictumst.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 5,
@@ -145,7 +161,11 @@ exports.projectList = [
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
     progress:
-      'Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue.'
+      'Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 6,
@@ -174,7 +194,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'Proin at turpis a pede posuere nonummy.'
+    progress: 'Proin at turpis a pede posuere nonummy.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 7,
@@ -204,7 +228,11 @@ exports.projectList = [
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
     progress:
-      'Vestibulum quam sapien, varius ut, blandit non, interdum in, ante.'
+      'Vestibulum quam sapien, varius ut, blandit non, interdum in, ante.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 8,
@@ -233,7 +261,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Nulla facilisi.'
+    progress: 'Nulla facilisi.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 9,
@@ -262,7 +294,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'In congue.'
+    progress: 'In congue.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 10,
@@ -291,7 +327,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Fusce posuere felis sed lacus.'
+    progress: 'Fusce posuere felis sed lacus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 11,
@@ -320,7 +360,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'Cras pellentesque volutpat dui.'
+    progress: 'Cras pellentesque volutpat dui.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 12,
@@ -350,7 +394,11 @@ exports.projectList = [
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
     progress:
-      'Vestibulum quam sapien, varius ut, blandit non, interdum in, ante.'
+      'Vestibulum quam sapien, varius ut, blandit non, interdum in, ante.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 13,
@@ -379,7 +427,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: true,
-    progress: 'Integer a nibh.'
+    progress: 'Integer a nibh.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 14,
@@ -408,7 +460,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Nam nulla.'
+    progress: 'Nam nulla.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 15,
@@ -437,7 +493,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'In hac habitasse platea dictumst.'
+    progress: 'In hac habitasse platea dictumst.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 16,
@@ -466,7 +526,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Aenean auctor gravida sem.'
+    progress: 'Aenean auctor gravida sem.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 17,
@@ -495,7 +559,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Ut tellus.'
+    progress: 'Ut tellus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 18,
@@ -524,7 +592,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Aenean fermentum.'
+    progress: 'Aenean fermentum.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 19,
@@ -554,7 +626,11 @@ exports.projectList = [
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
     progress:
-      'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.'
+      'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 20,
@@ -583,7 +659,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Morbi non lectus.'
+    progress: 'Morbi non lectus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 21,
@@ -612,7 +692,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Morbi vel lectus in quam fringilla rhoncus.'
+    progress: 'Morbi vel lectus in quam fringilla rhoncus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 22,
@@ -641,7 +725,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'Pellentesque viverra pede ac diam.'
+    progress: 'Pellentesque viverra pede ac diam.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 23,
@@ -671,7 +759,11 @@ exports.projectList = [
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
     progress:
-      'Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.'
+      'Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 24,
@@ -700,7 +792,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Ut at dolor quis odio consequat varius.'
+    progress: 'Ut at dolor quis odio consequat varius.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 25,
@@ -729,7 +825,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Pellentesque eget nunc.'
+    progress: 'Pellentesque eget nunc.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 26,
@@ -758,7 +858,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Sed sagittis.'
+    progress: 'Sed sagittis.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 27,
@@ -788,7 +892,11 @@ exports.projectList = [
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
     progress:
-      'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.'
+      'Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 28,
@@ -818,7 +926,11 @@ exports.projectList = [
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
     progress:
-      'In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.'
+      'In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 29,
@@ -847,7 +959,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: true,
-    progress: 'Duis ac nibh.'
+    progress: 'Duis ac nibh.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 30,
@@ -876,7 +992,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: true,
-    progress: 'Nulla facilisi.'
+    progress: 'Nulla facilisi.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 31,
@@ -905,7 +1025,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'Nulla tellus.'
+    progress: 'Nulla tellus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 32,
@@ -934,7 +1058,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Morbi ut odio.'
+    progress: 'Morbi ut odio.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 33,
@@ -964,7 +1092,11 @@ exports.projectList = [
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
     progress:
-      'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.'
+      'Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 34,
@@ -993,7 +1125,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Morbi vel lectus in quam fringilla rhoncus.'
+    progress: 'Morbi vel lectus in quam fringilla rhoncus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 35,
@@ -1022,7 +1158,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Etiam pretium iaculis justo.'
+    progress: 'Etiam pretium iaculis justo.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 36,
@@ -1051,7 +1191,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Nulla ac enim.'
+    progress: 'Nulla ac enim.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 37,
@@ -1080,7 +1224,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Duis at velit eu est congue elementum.'
+    progress: 'Duis at velit eu est congue elementum.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 38,
@@ -1109,7 +1257,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: true,
-    progress: 'Morbi quis tortor id nulla ultrices aliquet.'
+    progress: 'Morbi quis tortor id nulla ultrices aliquet.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 39,
@@ -1138,7 +1290,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'Mauris sit amet eros.'
+    progress: 'Mauris sit amet eros.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 40,
@@ -1167,7 +1323,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Sed ante.'
+    progress: 'Sed ante.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 41,
@@ -1196,7 +1356,11 @@ exports.projectList = [
     dataSpecialistName: 'Dinara Sagatova',
     dataSpecialistEmail: 'dinara.sagatova@boostlabs.com',
     favorite: false,
-    progress: 'Proin risus.'
+    progress: 'Proin risus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 42,
@@ -1225,7 +1389,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.'
+    progress: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 43,
@@ -1254,7 +1422,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Duis at velit eu est congue elementum.'
+    progress: 'Duis at velit eu est congue elementum.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 44,
@@ -1283,7 +1455,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'In hac habitasse platea dictumst.'
+    progress: 'In hac habitasse platea dictumst.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 45,
@@ -1313,7 +1489,11 @@ exports.projectList = [
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
     progress:
-      'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.'
+      'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 46,
@@ -1342,7 +1522,11 @@ exports.projectList = [
     dataSpecialistName: 'Kevin Ingalls',
     dataSpecialistEmail: 'kevin.ingalls@boostlabs.com',
     favorite: false,
-    progress: 'Curabitur at ipsum ac tellus semper interdum.'
+    progress: 'Curabitur at ipsum ac tellus semper interdum.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 47,
@@ -1371,7 +1555,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Cras non velit nec nisi vulputate nonummy.'
+    progress: 'Cras non velit nec nisi vulputate nonummy.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 48,
@@ -1399,7 +1587,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Vivamus vestibulum sagittis sapien.'
+    progress: 'Vivamus vestibulum sagittis sapien.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 49,
@@ -1428,7 +1620,11 @@ exports.projectList = [
     dataSpecialistName: 'Anders Madsen',
     dataSpecialistEmail: 'anders.madsen@advito.com',
     favorite: false,
-    progress: 'Pellentesque eget nunc.'
+    progress: 'Pellentesque eget nunc.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   },
   {
     id: 50,
@@ -1457,7 +1653,11 @@ exports.projectList = [
     dataSpecialistName: 'Scott Cashon',
     dataSpecialistEmail: 'scott.cashon@boostlabs.com',
     favorite: false,
-    progress: 'Donec ut mauris eget massa tempor convallis.'
+    progress: 'Donec ut mauris eget massa tempor convallis.',
+    currencyId: 1,
+    currencyName: 'US Dollar',
+    distanceUnitId: 1,
+    distanceUnitName: 'Miles'
   }
 ].map(project => {
   return {

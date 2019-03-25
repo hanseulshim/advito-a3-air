@@ -29,6 +29,10 @@ exports.project = {
         dataSpecialistId
         dataSpecialistName
         dataSpecialistEmail
+        currencyId
+        currencyName
+        distanceUnitId
+        distanceUnitName
         progress
         favorite
       }
@@ -55,6 +59,14 @@ exports.project = {
           id
           name
           email
+        }
+        currencyList {
+          id
+          name
+        }
+        distanceUnitList {
+          id
+          name
         }
       }
     }
@@ -122,6 +134,8 @@ exports.project = {
         projectManagerId: 4
         leadAnalystId: 2
         dataSpecialistId: 3
+        currencyId: 3,
+        distanceUnitId: 2
       ) {
         id
         description
@@ -140,6 +154,10 @@ exports.project = {
         dataSpecialistId
         dataSpecialistName
         dataSpecialistEmail
+        currencyId
+        currencyName
+        distanceUnitId
+        distanceUnitName
       }
     }
     `

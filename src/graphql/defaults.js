@@ -37,6 +37,10 @@ export default {
     dataSpecialistId: null,
     dataSpecialistName: null,
     dataSpecialistEmail: null,
+    currencyId: null,
+    currencyName: null,
+    distanceUnitId: null,
+    distanceUnitName: null,
     progress: null,
     favorite: null,
     __typename: 'Project'

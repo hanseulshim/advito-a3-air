@@ -27,6 +27,10 @@ export const GET_PROJECTS = gql`
       dataSpecialistId
       dataSpecialistName
       dataSpecialistEmail
+      currencyId
+      currencyName
+      distanceUnitId
+      distanceUnitName
       progress
       favorite
     }
@@ -60,6 +64,10 @@ export const GET_PROJECT = gql`
       dataSpecialistId
       dataSpecialistName
       dataSpecialistEmail
+      currencyId
+      currencyName
+      distanceUnitId
+      distanceUnitName
       progress
       favorite
     }
@@ -91,6 +99,14 @@ export const GET_PROJECT_INFO = gql`
         id
         name
         email
+      }
+      currencyList {
+        id
+        name
+      }
+      distanceUnitList {
+        id
+        name
       }
     }
   }

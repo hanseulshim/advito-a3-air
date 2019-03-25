@@ -120,6 +120,26 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="Currency *" prop="currencyId">
+        <el-select v-model="form.currencyId" class="select-modal">
+          <el-option
+            v-for="item in projectInfo.currencyList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Distance Unit *" prop="distanceUnitId">
+        <el-select v-model="form.distanceUnitId" class="select-modal">
+          <el-option
+            v-for="item in projectInfo.distanceUnitList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item class="save-container">
         <button class="button" @click="validateForm">SAVE</button>
       </el-form-item>
@@ -160,7 +180,9 @@ export default {
         description: null,
         projectManagerId: null,
         leadAnalystId: null,
-        dataSpecialistId: null
+        dataSpecialistId: null,
+        currencyId: null,
+        distanceUnitId: null
       },
       rules: {
         clientId: [
@@ -230,6 +252,20 @@ export default {
           {
             required: true,
             message: 'Please select a data specialist',
+            trigger: 'change'
+          }
+        ],
+        currencyId: [
+          {
+            required: true,
+            message: 'Please select a currency',
+            trigger: 'change'
+          }
+        ],
+        distanceUnitId: [
+          {
+            required: true,
+            message: 'Please select a distance unit',
             trigger: 'change'
           }
         ]

@@ -19,6 +19,8 @@ export const ADD_PROJECT = gql`
     $projectManagerId: Int!
     $leadAnalystId: Int!
     $dataSpecialistId: Int!
+    $currencyId: Int!
+    $distanceUnitId: Int!
   ) {
     addProject(
       clientId: $clientId
@@ -32,6 +34,8 @@ export const ADD_PROJECT = gql`
       projectManagerId: $projectManagerId
       leadAnalystId: $leadAnalystId
       dataSpecialistId: $dataSpecialistId
+      currencyId: $currencyId
+      distanceUnitId: $distanceUnitId
     ) {
       id
       clientId
@@ -57,6 +61,10 @@ export const ADD_PROJECT = gql`
       dataSpecialistId
       dataSpecialistName
       dataSpecialistEmail
+      currencyId
+      currencyName
+      distanceUnitId
+      distanceUnitName
       progress
       favorite
     }
@@ -75,6 +83,8 @@ export const EDIT_PROJECT = gql`
     $projectManagerId: Int!
     $leadAnalystId: Int!
     $dataSpecialistId: Int!
+    $currencyId: Int!
+    $distanceUnitId: Int!
   ) {
     editProject(
       id: $id
@@ -87,6 +97,8 @@ export const EDIT_PROJECT = gql`
       projectManagerId: $projectManagerId
       leadAnalystId: $leadAnalystId
       dataSpecialistId: $dataSpecialistId
+      currencyId: $currencyId
+      distanceUnitId: $distanceUnitId
     ) {
       id
       description
@@ -105,6 +117,10 @@ export const EDIT_PROJECT = gql`
       dataSpecialistId
       dataSpecialistName
       dataSpecialistEmail
+      currencyId
+      currencyName
+      distanceUnitId
+      distanceUnitName
     }
   }
 `;

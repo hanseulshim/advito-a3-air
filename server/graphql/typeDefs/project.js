@@ -26,6 +26,10 @@ type Project {
   dataSpecialistId: Int,
   dataSpecialistName: String,
   dataSpecialistEmail: String,
+ currencyId: Int,
+ currencyName: String,
+ distanceUnitId: Int,
+ distanceUnitName: String,
   progress: String,
   favorite: Boolean,
 }
@@ -36,6 +40,8 @@ type ProjectInfo {
   projectManagerList: [ProjectManagerUser]
   leadAnalystList: [LeadAnalystUser]
   dataSpecialistList: [DataSpecialistUser]
+  currencyList: [CurrencyType]
+  distanceUnitList: [DistanceUnitType]
 }
 
 type ProjectType {
@@ -66,6 +72,16 @@ type DataSpecialistUser {
   email: String
 }
 
+type CurrencyType {
+  id: Int,
+  name: String
+}
+
+type DistanceUnitType {
+  id: Int,
+  name: String
+}
+
 extend type Query {
   projectList(clientId: Int): [Project] @auth
   projectInfo: ProjectInfo @auth
@@ -84,6 +100,8 @@ extend type Mutation {
     projectManagerId: Int!,
     leadAnalystId: Int!,
     dataSpecialistId: Int!,
+    currencyId: Int!,
+    distanceUnitId: Int!,
   ): Project @auth
   editProject(
     id: Int!
@@ -96,6 +114,8 @@ extend type Mutation {
     projectManagerId: Int!,
     leadAnalystId: Int!,
     dataSpecialistId: Int!,
+    currencyId: Int!,
+    distanceUnitId: Int!
   ): Project @auth
   deleteProject(
     id: Int!

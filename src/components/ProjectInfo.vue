@@ -24,11 +24,11 @@
     <div class="project-column">
       <div class="project-line">
         Default Report Currency:
-        <span class="project-value">USD</span>
+        <span class="project-value">{{ project.currencyName }}</span>
       </div>
       <div class="project-line">
         Default Distance Unit:
-        <span class="project-value">Miles</span>
+        <span class="project-value">{{ project.distanceUnitName }}</span>
       </div>
       <div class="project-line">
         Description:
