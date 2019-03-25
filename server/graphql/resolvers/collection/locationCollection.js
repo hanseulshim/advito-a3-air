@@ -65,6 +65,28 @@ exports.locationCollection = {
       locationCollection.dateUpdated = new Date();
       return id;
     },
+    toggleLocationCollection: (_, { id }) => {
+      const locationCollection = locationCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!locationCollection) {
+        throw new ApolloError('Location Collection not found', 400);
+      }
+      if (locationCollection.active && locationCollection.id !== 1) {
+        const advitoStandard = locationCollectionList.filter(
+          collection => collection.id === 1
+        )[0];
+        advitoStandard.active = true;
+        locationCollection.active = false;
+      } else {
+        locationCollectionList.forEach(collection => {
+          collection.active = false;
+        });
+        locationCollection.active = true;
+      }
+      locationCollection.dateUpdated = new Date();
+      return locationCollectionList;
+    },
     addRegion: (_, { id, name }) => {
       const locationCollection = locationCollectionList.filter(
         collection => collection.id === id

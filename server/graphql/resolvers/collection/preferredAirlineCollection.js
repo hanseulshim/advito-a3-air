@@ -37,6 +37,30 @@ exports.preferredAirlineCollection = {
       preferredAirlineCollection.dateUpdated = new Date();
       return id;
     },
+    togglePreferredAirlineCollection: (_, { id }) => {
+      const preferredAirlineCollection = preferredAirlineCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!preferredAirlineCollection) {
+        throw new ApolloError('Preferred Airline Collection not found', 400);
+      }
+      if (
+        preferredAirlineCollection.active &&
+        preferredAirlineCollection.id !== 1
+      ) {
+        const advitoStandard = preferredAirlineCollectionList.filter(
+          collection => collection.id === 1
+        )[0];
+        advitoStandard.active = true;
+        preferredAirlineCollection.active = false;
+      } else {
+        preferredAirlineCollectionList.forEach(collection => {
+          collection.active = false;
+        });
+        preferredAirlineCollection.active = true;
+      }
+      return preferredAirlineCollectionList;
+    },
     addPreferredAirline: (_, { id, airlineList }) => {
       const preferredAirlineCollection = preferredAirlineCollectionList.filter(
         collection => collection.id === id

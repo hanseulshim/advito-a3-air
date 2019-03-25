@@ -45,7 +45,10 @@
       />
       <el-table-column label="Status" :width="tableColumnWidth.icon">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.active" />
+          <el-switch
+            :value="scope.row.active"
+            @change="togglePreferredAirlineCollection(scope.row.id)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
@@ -73,6 +76,7 @@
 import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_PREFERRED_AIRLINE_COLLECTION_LIST } from '@/graphql/queries';
+import { TOGGLE_PREFERRED_AIRLINE_COLLECTION } from '@/graphql/mutations';
 import AirlineTable from './AirlineTable';
 import EditPreferredAirlineCollectionModal from './EditPreferredAirlineCollectionModal';
 import NewPreferredAirlineModal from './NewPreferredAirlineModal';
@@ -121,6 +125,16 @@ export default {
         collection => collection.id === id
       )[0];
       this.$refs.preferredAirlineCollection.toggleRowExpansion(row);
+    },
+    togglePreferredAirlineCollection(id) {
+      if (this.preferredAirlineCollectionList.length) {
+        this.$apollo.mutate({
+          mutation: TOGGLE_PREFERRED_AIRLINE_COLLECTION,
+          variables: {
+            id
+          }
+        });
+      }
     }
   }
 };

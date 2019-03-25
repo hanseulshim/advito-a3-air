@@ -59,7 +59,10 @@
       />
       <el-table-column label="Status" :width="tableColumnWidth.icon">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.active" />
+          <el-switch
+            :value="scope.row.active"
+            @change="toggleLocationCollection(scope.row.id)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
@@ -93,6 +96,7 @@
 import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
+import { TOGGLE_LOCATION_COLLECTION } from '@/graphql/mutations';
 import NewLocationCollectionModal from './NewLocationCollectionModal';
 import EditLocationCollectionModal from './EditLocationCollectionModal';
 import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
@@ -152,6 +156,16 @@ export default {
         collection => collection.id === id
       )[0];
       this.$refs.locationCollection.toggleRowExpansion(row);
+    },
+    toggleLocationCollection(id) {
+      if (this.locationCollectionList.length) {
+        this.$apollo.mutate({
+          mutation: TOGGLE_LOCATION_COLLECTION,
+          variables: {
+            id
+          }
+        });
+      }
     }
   }
 };
