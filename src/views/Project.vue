@@ -7,7 +7,9 @@
         :to="nav.link"
         class="nav-item"
         :class="{ active: $route.path === nav.link }"
-        >{{ nav.title }}</router-link
+        ><i class="fas fa-circle" :class="getStatus(nav.id)" />{{
+          nav.title
+        }}</router-link
       >
     </div>
     <div class="content-container">
@@ -19,7 +21,7 @@
 
 <script>
 import ProjectInfo from '@/components/ProjectInfo';
-import { GET_PROJECT } from '@/graphql/queries';
+import { GET_PROJECT, GET_PROJECT_STATUS_LIST } from '@/graphql/queries';
 export default {
   name: 'Project',
   components: {
@@ -30,30 +32,32 @@ export default {
       project: null,
       navItems: [
         {
+          id: 1,
           link: '/project/program-settings',
           title: 'project settings'
         },
         {
-          link: '/project/default-data',
-          title: 'default data'
-        },
-        {
+          id: 2,
           link: '/project/data-qc',
           title: 'data qc'
         },
         {
+          id: 3,
           link: '/project/default-contracts',
           title: 'default contracts'
         },
         {
+          id: 4,
           link: '/project/scenario-settings',
           title: 'scenario settings'
         },
         {
+          id: 5,
           link: '/project/process',
           title: 'process'
         }
-      ]
+      ],
+      projectStatusList: []
     };
   },
   mounted() {
@@ -62,6 +66,23 @@ export default {
   apollo: {
     project: {
       query: GET_PROJECT
+    },
+    projectStatusList: {
+      query: GET_PROJECT_STATUS_LIST
+    }
+  },
+  methods: {
+    getStatus(id) {
+      const project = this.projectStatusList.filter(
+        project => project.id === id
+      )[0];
+      if (project.status === 'valid') {
+        return 'valid';
+      } else if (project.status === 'invalid') {
+        return 'invalid';
+      } else {
+        return '';
+      }
     }
   }
 };
@@ -96,12 +117,22 @@ export default {
   border-bottom: 1px solid $white;
   border-left: 1px solid $gray-nurse;
   border-right: 1px solid $gray-nurse;
-  font-weight: 600;
+  font-weight: 500;
 }
 .content-container {
   background: $white;
   padding: 2em;
   border: 1px solid $gray-nurse;
   border-top: none;
+}
+.fa-circle {
+  margin-right: 5px;
+  color: $gray-nurse;
+  &.valid {
+    color: $wild-willow;
+  }
+  &.invalid {
+    color: $monza;
+  }
 }
 </style>

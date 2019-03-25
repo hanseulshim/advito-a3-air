@@ -6,7 +6,7 @@
       }}</span>
       <button
         v-if="airlineGroupCollectionList.length > 1"
-        class="button"
+        class="button long"
         @click="showNewAirlineGroup"
       >
         + NEW AIRLINE GROUP

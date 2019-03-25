@@ -13,10 +13,10 @@
       background-color: $gallery;
     }
     .ascending .sort-caret.ascending {
-      border-bottom-color: $black;
+      border-bottom-color: $gray;
     }
     .descending .sort-caret.descending {
-      border-top-color: $black;
+      border-top-color: $gray;
     }
     td,
     th.is-leaf {
@@ -35,6 +35,9 @@
   .fa-copy,
   .fa-star {
     cursor: pointer;
+  }
+  .fa-copy {
+    font-size: 20px;
   }
   .icon-spacer {
     margin-right: 1em;

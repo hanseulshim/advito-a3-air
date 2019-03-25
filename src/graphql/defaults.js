@@ -12,6 +12,33 @@ export default {
     name: null,
     __typename: 'Client'
   },
+  projectStatusList: [
+    {
+      id: 1,
+      status: null,
+      __typename: 'ProjectStatus'
+    },
+    {
+      id: 2,
+      status: null,
+      __typename: 'ProjectStatus'
+    },
+    {
+      id: 3,
+      status: null,
+      __typename: 'ProjectStatus'
+    },
+    {
+      id: 4,
+      status: null,
+      __typename: 'ProjectStatus'
+    },
+    {
+      id: 5,
+      status: null,
+      __typename: 'ProjectStatus'
+    }
+  ],
   project: {
     id: null,
     clientId: null,

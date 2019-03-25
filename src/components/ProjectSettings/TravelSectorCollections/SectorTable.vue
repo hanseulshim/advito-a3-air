@@ -20,6 +20,14 @@
               <el-checkbox :value="prop.row.exclude" />
             </template>
           </el-table-column>
+          <el-table-column :width="tableColumnWidth.actions">
+            <template slot-scope="bidirection">
+              <i
+                class="fas fa-trash-alt"
+                @click="showDeleteBidirection(scope.row.id, bidirection)"
+              ></i>
+            </template>
+          </el-table-column>
         </el-table>
       </template>
     </el-table-column>
@@ -79,6 +87,13 @@ export default {
       this.$modal.show('delete-travel-sector', {
         sector,
         collectionId: this.collectionId
+      });
+    },
+    showDeleteBidirection(id, bidirection) {
+      this.$modal.show('delete-bidirection', {
+        id,
+        collectionId: this.collectionId,
+        index: bidirection.$index
       });
     }
   }

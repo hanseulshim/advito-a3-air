@@ -7,5 +7,5 @@ export const tableColumnWidth = {
   actions: 100,
   expand: 35,
   count: 100,
-  code: 130
+  code: 140
 };

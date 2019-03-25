@@ -123,3 +123,9 @@ export const TOGGLE_FAVORITE_PROJECT = gql`
     }
   }
 `;
+
+export const UPDATE_PROJECT_STATUS = gql`
+  mutation updateProjectStatus($id: Int!, $status: String!) {
+    updateProjectStatus(id: $id, status: $status) @client
+  }
+`;
