@@ -141,9 +141,11 @@ export default {
       this.$refs.preferredAirlineCollection.toggleRowExpansion(row);
     },
     checkAirlineWarning() {
-      return this.preferredAirlineCollectionList.every(
+      const invalidStatus = this.preferredAirlineCollectionList.every(
         collection => !collection.airlineList.length
       );
+      this.$emit('check-status', invalidStatus ? 'invalid' : 'valid');
+      return invalidStatus;
     }
   }
 };
