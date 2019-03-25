@@ -1,12 +1,15 @@
 <template>
   <div class="table-spacer">
     <div class="section-header title-row space-between">
-      <span>{{
-        pluralize(
-          'preferred airline collection',
-          preferredAirlineCollectionList.length
-        )
-      }}</span>
+      <div>
+        <i v-if="checkAirlineWarning()" class="fas fa-exclamation-circle" />
+        <span>{{
+          pluralize(
+            'preferred airline collection',
+            preferredAirlineCollectionList.length
+          )
+        }}</span>
+      </div>
       <button class="button" @click="showNewPreferredAirline">
         + NEW AIRLINE
       </button>
@@ -30,11 +33,26 @@
         sortable
       />
       <el-table-column
-        prop="airlineList.length"
         label="Airlines"
         :width="tableColumnWidth.count"
         sortable
-      />
+      >
+        <template slot-scope="scope">
+          <el-tooltip
+            v-if="!scope.row.airlineList.length"
+            placement="top"
+            effect="light"
+          >
+            <div slot="content">
+              You have to have at<br />least one Preferred<br />Airline or this
+              Collection<br />
+              will be deleted in 48<br />hours.
+            </div>
+            <span style="color: red">{{ scope.row.airlineList.length }}</span>
+          </el-tooltip>
+          <span v-else>{{ scope.row.airlineList.length }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="description" label="Description" />
       <el-table-column
         prop="dateUpdated"
@@ -121,6 +139,11 @@ export default {
         collection => collection.id === id
       )[0];
       this.$refs.preferredAirlineCollection.toggleRowExpansion(row);
+    },
+    checkAirlineWarning() {
+      return this.preferredAirlineCollectionList.every(
+        collection => !collection.airlineList.length
+      );
     }
   }
 };
