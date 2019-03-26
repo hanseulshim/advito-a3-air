@@ -38,7 +38,11 @@
       </div>
     </div>
     <div class="select-region-container">
-      <el-select v-model="selectedRegion" class="select-modal">
+      <el-select
+        v-model="selectedRegion"
+        class="select-modal"
+        placeholder="Move to"
+      >
         <el-option
           v-for="item in regionList"
           :key="item.id"
