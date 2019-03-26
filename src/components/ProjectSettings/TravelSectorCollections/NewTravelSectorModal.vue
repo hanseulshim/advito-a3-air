@@ -26,16 +26,10 @@
         <div class="form-label-no-select">Project</div>
         <span>{{ project.name }}</span>
       </div>
-      <el-form-item label="Collection Name *" prop="id">
-        <el-select v-model="form.id" class="select-modal" disabled>
-          <el-option
-            v-for="item in travelSectorCollectionList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+      <div>
+        <div class="form-label-no-select">Collection Name</div>
+        <span>{{ collectionName }}</span>
+      </div>
       <el-form-item label="Travel Sector Name *" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
@@ -127,6 +121,7 @@ export default {
         shortName: null,
         geographyList: []
       },
+      collectionName: null,
       origin: null,
       destination: null,
       exclude: false,
@@ -213,6 +208,7 @@ export default {
     },
     beforeOpen(event) {
       const collection = event.params.collection;
+      this.collectionName = collection.name;
       this.form.id = collection.id;
     },
     beforeClose() {
@@ -223,6 +219,7 @@ export default {
       this.origin = null;
       this.destination = null;
       this.exclude = false;
+      this.collectionName = null;
     }
   }
 };

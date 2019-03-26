@@ -18,16 +18,10 @@
         <div class="section-header">new preferred airline</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
-      <el-form-item label="Collection Name *" prop="id">
-        <el-select v-model="form.id" class="select-modal" disabled>
-          <el-option
-            v-for="item in preferredAirlineCollectionList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+      <div>
+        <div class="form-label-no-select">Collection Name</div>
+        <span>{{ collectionName }}</span>
+      </div>
       <div class="airline-group-item">
         <div class="airline-group-label">Airline Name *</div>
         <el-select
@@ -143,6 +137,7 @@ export default {
         id: null,
         airlineList: []
       },
+      collectionName: null,
       airlineId: null,
       posId: null,
       preferenceLevelId: null,
@@ -215,6 +210,7 @@ export default {
     },
     beforeOpen(event) {
       const collection = event.params.collection;
+      this.collectionName = collection.name;
       this.form.id = collection.id;
     },
     beforeClose() {
@@ -223,6 +219,7 @@ export default {
       this.airlineId = null;
       this.posId = null;
       this.preferenceLevelId = null;
+      this.collectionName = null;
     }
   }
 };
