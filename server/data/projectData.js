@@ -86,5 +86,37 @@ exports.projectData = {
       name: 'Dinara Sagatova',
       email: 'dinara.sagatova@boostlabs.com'
     }
+  ],
+  currencyList: [
+    {
+      id: 1,
+      name: 'US Dollar'
+    },
+    {
+      id: 2,
+      name: 'UK Pound'
+    },
+    {
+      id: 3,
+      name: 'Euro'
+    },
+    {
+      id: 4,
+      name: 'Chinese Yuan'
+    },
+    {
+      id: 5,
+      name: 'Japanese Yen'
+    }
+  ],
+  distanceUnitList: [
+    {
+      id: 1,
+      name: 'Miles'
+    },
+    {
+      id: 2,
+      name: 'Kilometers'
+    }
   ]
 };

@@ -46,6 +46,28 @@ exports.airlineGroupCollection = {
       airGroupCollection.dateUpdated = new Date();
       return id;
     },
+    toggleAirlineGroupCollection: (_, { id }) => {
+      const airGroupCollection = airlineGroupCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!airGroupCollection) {
+        throw new ApolloError('Airline Group Collection not found', 400);
+      }
+      if (airGroupCollection.active && airGroupCollection.id !== 1) {
+        const advitoStandard = airlineGroupCollectionList.filter(
+          collection => collection.id === 1
+        )[0];
+        advitoStandard.active = true;
+        airGroupCollection.active = false;
+      } else {
+        airlineGroupCollectionList.forEach(collection => {
+          collection.active = false;
+        });
+        airGroupCollection.active = true;
+      }
+      airGroupCollection.dateUpdated = new Date();
+      return airlineGroupCollectionList;
+    },
     addAirlineGroup: (
       _,
       { id, name, effectiveStartDate, effectiveEndDate, airlineList }

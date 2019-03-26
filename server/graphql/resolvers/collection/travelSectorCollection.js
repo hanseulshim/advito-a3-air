@@ -66,6 +66,28 @@ exports.travelSectorCollection = {
       travelSectorCollection.dateUpdated = new Date();
       return id;
     },
+    toggleTravelSectorCollection: (_, { id }) => {
+      const travelSectorCollection = travelSectorCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!travelSectorCollection) {
+        throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      if (travelSectorCollection.active && travelSectorCollection.id !== 1) {
+        const advitoStandard = travelSectorCollectionList.filter(
+          collection => collection.id === 1
+        )[0];
+        advitoStandard.active = true;
+        travelSectorCollection.active = false;
+      } else {
+        travelSectorCollectionList.forEach(collection => {
+          collection.active = false;
+        });
+        travelSectorCollection.active = true;
+      }
+      travelSectorCollection.dateUpdated = new Date();
+      return travelSectorCollectionList;
+    },
     addTravelSector: (_, { id, name, shortName, geographyList }) => {
       const travelSectorCollection = travelSectorCollectionList.filter(
         collection => collection.id === id

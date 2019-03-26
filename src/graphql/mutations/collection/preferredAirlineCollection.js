@@ -25,6 +25,27 @@ export const DELETE_PREFERRED_AIRLINE_COLLECTION = gql`
   }
 `;
 
+export const TOGGLE_PREFERRED_AIRLINE_COLLECTION = gql`
+  mutation togglePreferredAirlineCollection($id: Int!) {
+    togglePreferredAirlineCollection(id: $id) {
+      id
+      name
+      description
+      dateUpdated
+      active
+      airlineList {
+        id
+        name
+        preferenceLevel
+        effectiveStartDate
+        effectiveEndDate
+        pos
+        active
+      }
+    }
+  }
+`;
+
 export const ADD_PREFERRED_AIRLINE = gql`
   mutation addPreferredAirline(
     $id: Int!

@@ -178,3 +178,31 @@ export const DELETE_TRAVEL_SECTOR_COLLECTION = gql`
     deleteTravelSectorCollection(id: $id)
   }
 `;
+
+export const TOGGLE_TRAVEL_SECTOR_COLLECTION = gql`
+  mutation toggleTravelSectorCollection($id: Int!) {
+    toggleTravelSectorCollection(id: $id) {
+      id
+      name
+      description
+      dateUpdated
+      active
+      sectorList {
+        id
+        name
+        shortName
+        geographyList {
+          origin {
+            id
+            name
+          }
+          destination {
+            id
+            name
+          }
+          exclude
+        }
+      }
+    }
+  }
+`;

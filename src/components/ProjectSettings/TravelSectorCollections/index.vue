@@ -43,7 +43,10 @@
       />
       <el-table-column label="Status" :width="tableColumnWidth.icon">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.active" />
+          <el-switch
+            :value="scope.row.active"
+            @change="toggleTravelSectorCollection(scope.row.id)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
@@ -79,6 +82,7 @@
 import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_TRAVEL_SECTOR_COLLECTION_LIST } from '@/graphql/queries';
+import { TOGGLE_TRAVEL_SECTOR_COLLECTION } from '@/graphql/mutations';
 import SectorTable from './SectorTable';
 import NewTravelSectorCollectionModal from './NewTravelSectorCollectionModal';
 import EditTravelSectorCollectionModal from './EditTravelSectorCollectionModal';
@@ -139,6 +143,16 @@ export default {
         collection => collection.id === id
       )[0];
       this.$refs.travelSectorCollection.toggleRowExpansion(row);
+    },
+    toggleTravelSectorCollection(id) {
+      if (this.travelSectorCollectionList.length) {
+        this.$apollo.mutate({
+          mutation: TOGGLE_TRAVEL_SECTOR_COLLECTION,
+          variables: {
+            id
+          }
+        });
+      }
     }
   }
 };

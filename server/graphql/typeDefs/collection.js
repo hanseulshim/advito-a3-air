@@ -127,6 +127,7 @@ extend type Mutation {
   createLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   deleteLocationCollection(id: Int!): Int @auth
+  toggleLocationCollection(id: Int!): [LocationCollection] @auth
   addRegion(id: Int!, name: String!): LocationCollection @auth
   deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
   moveCountries(id: Int!, collectionId: Int!, countryList: [MoveCountry]): LocationCollection @auth
@@ -134,6 +135,7 @@ extend type Mutation {
   createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   deleteTravelSectorCollection(id: Int!): Int @auth
+  toggleTravelSectorCollection(id: Int!): [TravelSectorCollection] @auth
   addTravelSector(id: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
   editTravelSector(id: Int!, collectionId: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
   deleteTravelSector(id: Int!, collectionId: Int!): TravelSectorCollection @auth
@@ -141,12 +143,14 @@ extend type Mutation {
 
   editAirlineGroupCollection(id: Int!, name: String!, description: String, effectiveStartDate: Date, effectiveEndDate: Date): AirlineGroupCollection @auth
   deleteAirlineGroupCollection(id: Int!): Int @auth
+  toggleAirlineGroupCollection(id: Int!): [AirlineGroupCollection] @auth
   addAirlineGroup(id: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
   editAirlineGroup(id: Int!, collectionId: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
   deleteAirlineGroup(id: Int!, collectionId: Int!): AirlineGroupCollection @auth
 
   editPreferredAirlineCollection(id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
   deletePreferredAirlineCollection(id: Int!): Int @auth
+  togglePreferredAirlineCollection(id: Int!): [PreferredAirlineCollection] @auth
   addPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
   editPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
   deletePreferredAirline(id: Int!, collectionId: Int!): PreferredAirlineCollection @auth

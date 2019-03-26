@@ -31,6 +31,32 @@ export const DELETE_AIRLINE_GROUP_COLLECTION = gql`
   }
 `;
 
+export const TOGGLE_AIRLINE_GROUP_COLLECTION = gql`
+  mutation toggleAirlineGroupCollection($id: Int!) {
+    toggleAirlineGroupCollection(id: $id) {
+      id
+      name
+      description
+      dateUpdated
+      effectiveStartDate
+      effectiveEndDate
+      active
+      airlineGroupList {
+        id
+        name
+        effectiveStartDate
+        effectiveEndDate
+        airlineList {
+          id
+          name
+          effectiveStartDate
+          effectiveEndDate
+        }
+      }
+    }
+  }
+`;
+
 export const ADD_AIRLINE_GROUP = gql`
   mutation addAirlineGroup(
     $id: Int!

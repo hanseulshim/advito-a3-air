@@ -43,7 +43,10 @@
       />
       <el-table-column label="Status" :width="tableColumnWidth.icon">
         <template slot-scope="scope">
-          <el-switch :value="scope.row.active" />
+          <el-switch
+            :value="scope.row.active"
+            @change="toggleAirlineGroupCollection(scope.row.id)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
@@ -73,6 +76,7 @@
 import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_AIRLINE_GROUP_COLLECTION_LIST } from '@/graphql/queries';
+import { TOGGLE_AIRLINE_GROUP_COLLECTION } from '@/graphql/mutations';
 import AirlineGroupTable from './AirlineGroupTable';
 import EditAirlineGroupCollectionModal from './EditAirlineGroupCollectionModal';
 import DeleteAirlineGroupCollectionModal from './DeleteAirlineGroupCollectionModal';
@@ -121,6 +125,16 @@ export default {
         collection => collection.id === id
       )[0];
       this.$refs.airlineGroupCollection.toggleRowExpansion(row);
+    },
+    toggleAirlineGroupCollection(id) {
+      if (this.airlineGroupCollectionList.length) {
+        this.$apollo.mutate({
+          mutation: TOGGLE_AIRLINE_GROUP_COLLECTION,
+          variables: {
+            id
+          }
+        });
+      }
     }
   }
 };

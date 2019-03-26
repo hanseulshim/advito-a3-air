@@ -33,6 +33,9 @@ exports.projectResolvers = {
         projectData.leadAnalystList[payload.leadAnalystId - 1];
       const dataSpecialist =
         projectData.dataSpecialistList[payload.dataSpecialistId - 1];
+      const currency = projectData.currencyList[payload.currencyId - 1];
+      const distanceUnit =
+        projectData.distanceUnitList[payload.distanceUnitId - 1];
       const project = {
         id: maxId,
         clientId: client.id,
@@ -62,6 +65,10 @@ exports.projectResolvers = {
         dataSpecialistId: dataSpecialist.id,
         dataSpecialistName: dataSpecialist.name,
         dataSpecialistEmail: dataSpecialist.email,
+        currencyId: currency.id,
+        currencyName: currency.name,
+        distanceUnitId: distanceUnit.id,
+        distanceUnitName: distanceUnit.name,
         progress: 'Front-line solution-oriented leverage',
         favorite: true
       };
@@ -83,6 +90,9 @@ exports.projectResolvers = {
         projectData.leadAnalystList[payload.leadAnalystId - 1];
       const dataSpecialist =
         projectData.dataSpecialistList[payload.dataSpecialistId - 1];
+      const currency = projectData.currencyList[payload.currencyId - 1];
+      const distanceUnit =
+        projectData.distanceUnitList[payload.distanceUnitId - 1];
       project.name = getProjectName({
         ...payload,
         clientName: project.clientName,
@@ -102,7 +112,10 @@ exports.projectResolvers = {
       project.dataSpecialistId = dataSpecialist.id;
       project.dataSpecialistName = dataSpecialist.name;
       project.dataSpecialistEmail = dataSpecialist.email;
-
+      project.currencyId = currency.id;
+      project.currencyName = currency.name;
+      project.distanceUnitId = distanceUnit.id;
+      project.distanceUnitName = distanceUnit.name;
       return project;
     },
     deleteProject: (_, payload) => {

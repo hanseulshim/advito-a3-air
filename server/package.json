@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "sls offline"
+    "start": "sls offline",
+    "alpha": "sls deploy -s alpha",
+    "beta": "sls deploy -s beta",
+    "test": "sls deploy -s test"
   },
   "license": "MIT",
   "dependencies": {
