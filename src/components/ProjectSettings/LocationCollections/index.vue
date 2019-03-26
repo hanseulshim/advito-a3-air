@@ -25,10 +25,12 @@
             <el-table-column label="Actions" :width="tableColumnWidth.actions">
               <template slot-scope="scope">
                 <i
+                  v-if="props.row.id !== 1"
                   class="fas fa-pencil-alt icon-spacer"
                   @click="showEditRegionModal(props.row, scope.row)"
                 />
                 <i
+                  v-if="props.row.id !== 1"
                   class="fas fa-trash-alt"
                   @click="showDeleteRegionModal(props.row, scope.row)"
                 ></i>
