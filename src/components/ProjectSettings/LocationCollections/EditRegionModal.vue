@@ -10,21 +10,6 @@
       <div class="section-header">edit region</div>
       <i class="fas fa-times close-modal-button" @click="hideModal"></i>
     </div>
-    <el-form
-      ref="editRegionForm"
-      :model="form"
-      :rules="rules"
-      label-position="left"
-      hide-required-asterisk
-    >
-      <el-form-item prop="regionName" label-width="150px">
-        <div class="region-name-container">
-          <div>New Region Name</div>
-          <el-input v-model="form.regionName" />
-          <button class="button" @click="validateForm">ADD TO LIST</button>
-        </div>
-      </el-form-item>
-    </el-form>
     <div style="margin-bottom: 5px">All Countries</div>
     <div class="country-list-container">
       <div v-for="region in regionList" :key="region.id">
@@ -39,7 +24,7 @@
             class="fa fa-minus edit-region-toggle"
             @click="toggleExpand(region)"
           />
-          <span>{{ region.name }}</span>
+          <span>{{ region.name }} ({{ region.code }})</span>
         </div>
         <div v-if="region.expand" class="country-container">
           <div v-for="country in region.countryList" :key="country.id">
@@ -67,41 +52,20 @@
 </template>
 
 <script>
-import { ADD_REGION, MOVE_COUNTRIES } from '@/graphql/mutations';
+import { MOVE_COUNTRIES } from '@/graphql/mutations';
 export default {
   name: 'EditRegionModal',
   data() {
     return {
-      form: {
-        regionName: null
-      },
       collectionId: null,
       selectedRegion: null,
       regionList: [],
-      countryList: [],
-      rules: {
-        regionName: [
-          {
-            required: true,
-            message: 'Please input a collection name.',
-            trigger: 'change'
-          }
-        ]
-      }
+      countryList: []
     };
   },
   methods: {
     hideModal() {
       this.$modal.hide('edit-region');
-    },
-    validateForm() {
-      this.$refs.editRegionForm.validate(valid => {
-        if (valid) {
-          this.addRegion();
-        } else {
-          return false;
-        }
-      });
     },
     toggleExpand(region) {
       region.expand = !region.expand;
@@ -117,26 +81,6 @@ export default {
     checkCountry(country) {
       const index = this.countryList.findIndex(c => c.id === country.id);
       return index !== -1;
-    },
-    async addRegion() {
-      try {
-        const data = await this.$apollo.mutate({
-          mutation: ADD_REGION,
-          variables: {
-            id: this.collectionId,
-            name: this.form.regionName
-          }
-        });
-        this.$modal.show('success', {
-          message: 'Region successfully created.',
-          name: 'edit-region'
-        });
-        this.$emit('toggle-row', data.data.addRegion.id);
-      } catch (error) {
-        this.$modal.show('error', {
-          message: 'Failed to create region. Please try again.'
-        });
-      }
     },
     async moveCountries() {
       try {
@@ -174,7 +118,6 @@ export default {
     },
     beforeClose() {
       this.collectionId = null;
-      this.form.regionName = null;
       this.countryList = [];
       this.selectedRegion = null;
     }

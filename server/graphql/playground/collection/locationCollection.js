@@ -27,11 +27,12 @@ exports.locationCollection = {
         dateUpdated
       }
       deleteLocationCollection(id: 2)
-      addRegion(id: 1, name: "Region") {
+      addRegion(id: 1, name: "Region", code: "RE") {
         id
         regionList {
           id
           name
+          code
           countryList {
             id
             regionId
