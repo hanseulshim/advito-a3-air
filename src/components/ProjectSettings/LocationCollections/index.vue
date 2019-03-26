@@ -11,7 +11,7 @@
             class="button collection-add"
             @click="showNewRegionCollection(props.row)"
           >
-            New Region
+            + NEW REGION
           </button>
           <el-table :data="props.row.regionList" class="level-two-table">
             <el-table-column label="Region" :width="tableColumnWidth.name">
