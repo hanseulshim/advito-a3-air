@@ -1,20 +1,20 @@
 <template>
   <div class="table-spacer">
     <div class="section-header title-row space-between">
-      <span>{{
+      {{
         pluralize('travel sector collection', travelSectorCollectionList.length)
-      }}</span>
-      <button
-        v-if="travelSectorCollectionList.length > 1"
-        class="button long"
-        @click="showNewTravelSector"
-      >
-        + NEW TRAVEL SECTOR
-      </button>
+      }}
     </div>
     <el-table ref="travelSectorCollection" :data="travelSectorCollectionList">
       <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
+          <button
+            v-if="props.row.id !== 1"
+            class="button long collection-add"
+            @click="showNewTravelSector(props.row)"
+          >
+            + NEW TRAVEL SECTOR
+          </button>
           <SectorTable
             :sector-list="props.row.sectorList"
             :collection-id="props.row.id"
@@ -135,8 +135,8 @@ export default {
     showDeleteTravelSectorCollection(collection) {
       this.$modal.show('delete-travel-sector-collection', { collection });
     },
-    showNewTravelSector() {
-      this.$modal.show('new-travel-sector');
+    showNewTravelSector(collection) {
+      this.$modal.show('new-travel-sector', { collection });
     },
     toggleRow(id) {
       const row = this.$refs.travelSectorCollection.data.filter(

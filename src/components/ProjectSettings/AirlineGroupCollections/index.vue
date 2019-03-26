@@ -1,20 +1,20 @@
 <template>
   <div class="table-spacer">
     <div class="section-header title-row space-between">
-      <span>{{
+      {{
         pluralize('airline group collection', airlineGroupCollectionList.length)
-      }}</span>
-      <button
-        v-if="airlineGroupCollectionList.length > 1"
-        class="button long"
-        @click="showNewAirlineGroup"
-      >
-        + NEW AIRLINE GROUP
-      </button>
+      }}
     </div>
     <el-table ref="airlineGroupCollection" :data="airlineGroupCollectionList">
       <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
+          <button
+            v-if="props.row.id !== 1"
+            class="button long collection-add"
+            @click="showNewAirlineGroup(props.row)"
+          >
+            + NEW AIRLINE GROUP
+          </button>
           <AirlineGroupTable
             :airline-group-list="props.row.airlineGroupList"
             :collection-id="props.row.id"
@@ -117,8 +117,8 @@ export default {
     showDeleteAirlineGroupCollection(collection) {
       this.$modal.show('delete-airline-group-collection', { collection });
     },
-    showNewAirlineGroup() {
-      this.$modal.show('new-airline-group');
+    showNewAirlineGroup(collection) {
+      this.$modal.show('new-airline-group', { collection });
     },
     toggleRow(id) {
       const row = this.$refs.airlineGroupCollection.data.filter(

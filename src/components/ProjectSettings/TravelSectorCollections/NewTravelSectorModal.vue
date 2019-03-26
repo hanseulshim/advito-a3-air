@@ -3,6 +3,7 @@
     classes="modal-container"
     name="new-travel-sector"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
@@ -26,7 +27,7 @@
         <span>{{ project.name }}</span>
       </div>
       <el-form-item label="Collection Name *" prop="id">
-        <el-select v-model="form.id" class="select-modal">
+        <el-select v-model="form.id" class="select-modal" disabled>
           <el-option
             v-for="item in travelSectorCollectionList"
             :key="item.id"
@@ -206,6 +207,10 @@ export default {
           message: 'Failed to create travel sector. Please try again.'
         });
       }
+    },
+    beforeOpen(event) {
+      const collection = event.params.collection;
+      this.form.id = collection.id;
     },
     beforeClose() {
       this.form.id = null;
