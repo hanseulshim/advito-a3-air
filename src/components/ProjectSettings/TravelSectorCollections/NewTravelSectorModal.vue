@@ -69,8 +69,11 @@
           <el-checkbox v-model="exclude" class="bidirectional-spacer"
             >Exclude</el-checkbox
           >
-          <button class="button bidirectional-spacer" @click="addGeography">
-            ADD
+          <button
+            class="button long bidirectional-spacer"
+            @click="addGeography"
+          >
+            ADD BIDIRECTION
           </button>
         </div>
       </div>
