@@ -38,8 +38,8 @@ export default {
         },
         {
           id: 2,
-          link: '/project/data-qc',
-          title: 'data qc'
+          link: '/project/data',
+          title: 'data'
         },
         {
           id: 3,
