@@ -145,6 +145,7 @@ exports.locationCollection = {
         );
         originRegion.countryList.splice(index, 1);
       });
+      destinationRegion.countryList.sort((a, b) => a.id - b.id);
       return locationCollection;
     }
   }

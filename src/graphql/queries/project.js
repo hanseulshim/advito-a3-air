@@ -111,3 +111,12 @@ export const GET_PROJECT_INFO = gql`
     }
   }
 `;
+
+export const GET_PROJECT_STATUS_LIST = gql`
+  {
+    projectStatusList @client {
+      id
+      status
+    }
+  }
+`;

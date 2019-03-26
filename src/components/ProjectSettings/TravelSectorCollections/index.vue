@@ -6,7 +6,7 @@
       }}</span>
       <button
         v-if="travelSectorCollectionList.length > 1"
-        class="button"
+        class="button long"
         @click="showNewTravelSector"
       >
         + NEW TRAVEL SECTOR
@@ -74,6 +74,7 @@
     <NewTravelSectorModal @toggle-row="toggleRow" />
     <EditTravelSectorModal @toggle-row="toggleRow" />
     <DeleteTravelSectorModal @toggle-row="toggleRow" />
+    <DeleteBidirectionModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -89,6 +90,7 @@ import DeleteTravelSectorCollectionModal from './DeleteTravelSectorCollectionMod
 import NewTravelSectorModal from './NewTravelSectorModal';
 import EditTravelSectorModal from './EditTravelSectorModal';
 import DeleteTravelSectorModal from './DeleteTravelSectorModal';
+import DeleteBidirectionModal from './DeleteBidirectionModal';
 export default {
   name: 'TravelSectorCollections',
   components: {
@@ -98,7 +100,8 @@ export default {
     DeleteTravelSectorCollectionModal,
     NewTravelSectorModal,
     EditTravelSectorModal,
-    DeleteTravelSectorModal
+    DeleteTravelSectorModal,
+    DeleteBidirectionModal
   },
   apollo: {
     travelSectorCollectionList: {

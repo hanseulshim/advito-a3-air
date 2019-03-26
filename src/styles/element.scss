@@ -57,3 +57,13 @@
     font-weight: 400;
   }
 }
+
+// Tooltip Styles
+.el-tooltip__popper.is-light {
+  border-color: $monza !important;
+  color: $monza !important;
+  border-radius: 10px;
+  .popper__arrow {
+    border-top-color: $monza !important;
+  }
+}

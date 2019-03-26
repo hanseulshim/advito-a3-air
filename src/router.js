@@ -23,10 +23,6 @@ export default new Router({
           path: 'program-settings',
           component: ProjectSettings
         }
-        // {
-        //   path: 'default-data',
-        //   component: DefaultData
-        // }
       ]
     }
   ]

@@ -15,11 +15,13 @@
         :width="tableColumnWidth.name"
       >
         <template slot-scope="scope">
-          <div>{{ scope.row.name }}</div>
+          <div class="project-name" @click="updateProject(scope.row)">
+            {{ scope.row.name }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column
-        label="Project Date Range"
+        label=" Date Range"
         :width="tableColumnWidth.dateRange"
         :formatter="formatDate"
         sortable
@@ -73,7 +75,8 @@
 import { formatDate, pluralize } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
-import { GET_USER } from '@/graphql/queries';
+import { GET_CLIENTS, GET_USER } from '@/graphql/queries';
+import { UPDATE_CLIENT, UPDATE_PROJECT } from '@/graphql/mutations';
 export default {
   name: 'TotalProjects',
   props: {
@@ -85,6 +88,9 @@ export default {
   apollo: {
     user: {
       query: GET_USER
+    },
+    clientList: {
+      query: GET_CLIENTS
     }
   },
   data() {
@@ -126,6 +132,19 @@ export default {
       } catch (error) {
         return 'this was an error';
       }
+    },
+    updateProject(project) {
+      const client = this.clientList.filter(
+        client => client.id === project.clientId
+      )[0];
+      this.$apollo.mutate({
+        mutation: UPDATE_CLIENT,
+        variables: { client }
+      });
+      this.$apollo.mutate({
+        mutation: UPDATE_PROJECT,
+        variables: { project }
+      });
     }
   }
 };
@@ -135,5 +154,11 @@ export default {
 @import '@/styles/global.scss';
 .all-projects-container {
   margin-top: 3em;
+}
+.project-name {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>

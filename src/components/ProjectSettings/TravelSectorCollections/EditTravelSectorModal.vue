@@ -70,7 +70,7 @@
             >Exclude</el-checkbox
           >
           <button class="button bidirectional-spacer" @click="addGeography">
-            ADD
+            Add Bidirection
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import defaults from './defaults';
 import router from '../router';
+import { GET_PROJECT_STATUS_LIST } from './queries';
 
 export default {
   Mutation: {
@@ -26,6 +27,21 @@ export default {
           }
         }
       });
+      return null;
+    },
+    updateProjectStatus: (_, { id, status }, { cache }) => {
+      const data = cache.readQuery({
+        query: GET_PROJECT_STATUS_LIST
+      });
+      const project = data.projectStatusList.filter(p => p.id === id)[0];
+      if (project.status !== status) {
+        project.status = status;
+        cache.writeData({
+          data: {
+            projectStatusList: data.projectStatusList
+          }
+        });
+      }
       return null;
     }
   }

@@ -8,14 +8,14 @@
       >
         Airport Listing
       </button>
-      <button class="button" @click="toggleBookingClass">
+      <button class="button long" @click="toggleBookingClass">
         Booking Class Mappings
       </button>
     </div>
     <LocationCollections />
     <TravelSectorCollections />
     <AirlineGroupCollections />
-    <PreferredAirlineCollections />
+    <PreferredAirlineCollections @check-status="checkStatus" />
     <AirportListingModal />
     <BookingClassModal />
   </div>
@@ -28,6 +28,7 @@ import AirlineGroupCollections from './AirlineGroupCollections';
 import PreferredAirlineCollections from './PreferredAirlineCollections';
 import AirportListingModal from '@/components/Library/AirportListingModal';
 import BookingClassModal from '@/components/Library/BookingClassModal';
+import { UPDATE_PROJECT_STATUS } from '@/graphql/mutations';
 export default {
   name: 'ProjectSettings',
   components: {
@@ -44,6 +45,15 @@ export default {
     },
     toggleBookingClass() {
       this.$modal.show('booking-class');
+    },
+    checkStatus(status) {
+      this.$apollo.mutate({
+        mutation: UPDATE_PROJECT_STATUS,
+        variables: {
+          id: 1,
+          status
+        }
+      });
     }
   }
 };
