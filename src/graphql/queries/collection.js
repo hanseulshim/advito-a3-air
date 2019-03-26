@@ -11,6 +11,7 @@ export const GET_LOCATION_COLLECTION_LIST = gql`
       regionList {
         id
         name
+        code
         countryList {
           id
           regionId

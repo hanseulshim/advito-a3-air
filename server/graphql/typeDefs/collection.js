@@ -10,6 +10,7 @@ type LocationCollection {
 type Region {
   id: Int
   name: String
+  code: String
   countryList: [Country]
 }
 type Country {
@@ -128,7 +129,7 @@ extend type Mutation {
   editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   deleteLocationCollection(id: Int!): Int @auth
   toggleLocationCollection(id: Int!): [LocationCollection] @auth
-  addRegion(id: Int!, name: String!): LocationCollection @auth
+  addRegion(id: Int!, name: String!, code: String!): LocationCollection @auth
   deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
   moveCountries(id: Int!, collectionId: Int!, countryList: [MoveCountry]): LocationCollection @auth
 

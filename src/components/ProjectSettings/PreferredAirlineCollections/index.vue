@@ -10,9 +10,6 @@
           )
         }}</span>
       </div>
-      <button class="button" @click="showNewPreferredAirline">
-        + NEW AIRLINE
-      </button>
     </div>
     <el-table
       ref="preferredAirlineCollection"
@@ -20,6 +17,12 @@
     >
       <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
+          <button
+            class="button collection-add"
+            @click="showNewPreferredAirline(props.row)"
+          >
+            + NEW AIRLINE
+          </button>
           <AirlineTable
             :airline-list="props.row.airlineList"
             :collection-id="props.row.id"
@@ -129,8 +132,8 @@ export default {
     formatDate(row) {
       return formatDate(row.dateUpdated);
     },
-    showNewPreferredAirline() {
-      this.$modal.show('new-preferred-airline');
+    showNewPreferredAirline(collection) {
+      this.$modal.show('new-preferred-airline', { collection });
     },
     showEditPreferredAirlineCollection(collection) {
       this.$modal.show('edit-preferred-airline-collection', { collection });

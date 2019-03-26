@@ -11,6 +11,7 @@ exports.locationCollectionList = [
       {
         id: 1,
         name: 'Africa',
+        code: 'AF',
         countryList: [
           { id: 1, regionId: 1, name: 'Algeria' },
           { id: 2, regionId: 1, name: 'Angola' },
@@ -75,6 +76,7 @@ exports.locationCollectionList = [
       {
         id: 2,
         name: 'Antarctica',
+        code: 'AN',
         countryList: [
           { id: 59, regionId: 2, name: 'French Southern Territories' }
         ]
@@ -82,6 +84,7 @@ exports.locationCollectionList = [
       {
         id: 3,
         name: 'Asia',
+        code: 'AS',
         countryList: [
           { id: 60, regionId: 3, name: 'Bangladesh' },
           { id: 61, regionId: 3, name: 'Bhutan' },
@@ -122,6 +125,7 @@ exports.locationCollectionList = [
       {
         id: 4,
         name: 'Europe',
+        code: 'EU',
         countryList: [
           { id: 90, regionId: 4, name: 'Aland Islands' },
           { id: 91, regionId: 4, name: 'Albania' },
@@ -182,6 +186,7 @@ exports.locationCollectionList = [
       {
         id: 5,
         name: 'Latin America',
+        code: 'LA',
         countryList: [
           { id: 144, regionId: 5, name: 'Anguilla' },
           { id: 145, regionId: 5, name: 'Antigua And Barbuda' },
@@ -231,6 +236,7 @@ exports.locationCollectionList = [
       {
         id: 6,
         name: 'Middle East',
+        code: 'ME',
         countryList: [
           { id: 187, regionId: 6, name: 'Afghanistan' },
           { id: 188, regionId: 6, name: 'Azerbaijan' },
@@ -254,6 +260,7 @@ exports.locationCollectionList = [
       {
         id: 7,
         name: 'North America',
+        code: 'NA',
         countryList: [
           { id: 204, regionId: 7, name: 'Canada' },
           { id: 205, regionId: 7, name: 'Greenland' },
@@ -264,6 +271,7 @@ exports.locationCollectionList = [
       {
         id: 8,
         name: 'South Pacific',
+        code: 'SP',
         countryList: [
           { id: 208, regionId: 8, name: 'American Samoa' },
           { id: 209, regionId: 8, name: 'Australia' },

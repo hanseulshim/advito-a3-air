@@ -68,12 +68,13 @@ export const TOGGLE_LOCATION_COLLECTION = gql`
 `;
 
 export const ADD_REGION = gql`
-  mutation addRegion($id: Int!, $name: String!) {
-    addRegion(id: $id, name: $name) {
+  mutation addRegion($id: Int!, $name: String!, $code: String!) {
+    addRegion(id: $id, name: $name, code: $code) {
       id
       regionList {
         id
         name
+        code
         countryList {
           id
           regionId

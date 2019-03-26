@@ -18,6 +18,7 @@ exports.collection = {
         regionList {
           id
           name
+          code
           countryList {
             id
             regionId

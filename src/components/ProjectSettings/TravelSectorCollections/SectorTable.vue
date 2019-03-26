@@ -45,10 +45,12 @@
     <el-table-column label="Actions" :width="tableColumnWidth.actions">
       <template slot-scope="scope">
         <i
+          v-if="collectionId !== 1"
           class="fas fa-pencil-alt icon-spacer"
           @click="showEditTravelSector(scope.row)"
         ></i>
         <i
+          v-if="collectionId !== 1"
           class="fas fa-trash-alt"
           @click="showDeleteTravelSector(scope.row)"
         ></i>

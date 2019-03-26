@@ -87,18 +87,28 @@ exports.locationCollection = {
       locationCollection.dateUpdated = new Date();
       return locationCollectionList;
     },
-    addRegion: (_, { id, name }) => {
+    addRegion: (_, { id, name, code }) => {
       const locationCollection = locationCollectionList.filter(
         collection => collection.id === id
       )[0];
       if (!locationCollection) {
         throw new ApolloError('Location Collection not found', 400);
       }
+      const checkNames = locationCollection.regionList.some(
+        region => region.name === name || region.code === code
+      );
+      if (checkNames) {
+        throw new ApolloError(
+          'Region name/code already exists. Please input a unique region name/code.',
+          400
+        );
+      }
       const maxId =
         Math.max(...locationCollection.regionList.map(region => region.id)) + 1;
       const region = {
         id: maxId,
         name,
+        code,
         countryList: []
       };
       locationCollection.regionList.push(region);

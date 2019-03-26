@@ -6,12 +6,19 @@
     <el-table ref="locationCollection" :data="locationCollectionList">
       <el-table-column type="expand" :width="tableColumnWidth.expand">
         <template slot-scope="props">
+          <button
+            v-if="props.row.id !== 1"
+            class="button collection-add"
+            @click="showNewRegionCollection(props.row)"
+          >
+            + NEW REGION
+          </button>
           <el-table :data="props.row.regionList" class="level-two-table">
-            <el-table-column
-              prop="name"
-              label="Region"
-              :width="tableColumnWidth.name"
-            />
+            <el-table-column label="Region" :width="tableColumnWidth.name">
+              <template slot-scope="scope">
+                {{ scope.row.name }} ({{ scope.row.code }})
+              </template>
+            </el-table-column>
             <el-table-column
               prop="countryList.length"
               label="Countries"
@@ -25,10 +32,12 @@
             <el-table-column label="Actions" :width="tableColumnWidth.actions">
               <template slot-scope="scope">
                 <i
+                  v-if="props.row.id !== 1"
                   class="fas fa-pencil-alt icon-spacer"
                   @click="showEditRegionModal(props.row, scope.row)"
                 />
                 <i
+                  v-if="props.row.id !== 1"
                   class="fas fa-trash-alt"
                   @click="showDeleteRegionModal(props.row, scope.row)"
                 ></i>
@@ -87,6 +96,7 @@
     <NewLocationCollectionModal @toggle-row="toggleRow" />
     <EditLocationCollectionModal @toggle-row="toggleRow" />
     <DeleteLocationCollectionModal />
+    <NewRegionModal @toggle-row="toggleRow" />
     <EditRegionModal @toggle-row="toggleRow" />
     <DeleteRegionModal @toggle-row="toggleRow" />
   </div>
@@ -100,6 +110,7 @@ import { TOGGLE_LOCATION_COLLECTION } from '@/graphql/mutations';
 import NewLocationCollectionModal from './NewLocationCollectionModal';
 import EditLocationCollectionModal from './EditLocationCollectionModal';
 import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
+import NewRegionModal from './NewRegionModal';
 import EditRegionModal from './EditRegionModal';
 import DeleteRegionModal from './DeleteRegionModal';
 
@@ -109,6 +120,7 @@ export default {
     NewLocationCollectionModal,
     EditLocationCollectionModal,
     DeleteLocationCollectionModal,
+    NewRegionModal,
     EditRegionModal,
     DeleteRegionModal
   },
@@ -138,6 +150,9 @@ export default {
     },
     showNewLocationCollection(collection) {
       this.$modal.show('new-location-collection', { collection });
+    },
+    showNewRegionCollection(collection) {
+      this.$modal.show('new-region', { collection });
     },
     showEditLocationCollection(collection) {
       this.$modal.show('edit-location-collection', { collection });
@@ -170,3 +185,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.collection-add {
+  margin-bottom: 2em;
+}
+</style>

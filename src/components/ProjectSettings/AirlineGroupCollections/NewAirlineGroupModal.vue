@@ -4,6 +4,7 @@
     name="new-airline-group"
     height="auto"
     :width="700"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
@@ -19,7 +20,7 @@
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
       <el-form-item label="Collection Name *" prop="id">
-        <el-select v-model="form.id" class="select-modal">
+        <el-select v-model="form.id" class="select-modal" disabled>
           <el-option
             v-for="item in airlineGroupCollectionList"
             :key="item.id"
@@ -233,6 +234,10 @@ export default {
           message: 'Failed to create airline group. Please try again.'
         });
       }
+    },
+    beforeOpen(event) {
+      const collection = event.params.collection;
+      this.form.id = collection.id;
     },
     beforeClose() {
       this.form.id = null;
