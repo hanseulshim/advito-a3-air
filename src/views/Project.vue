@@ -38,7 +38,7 @@ export default {
         },
         {
           id: 2,
-          link: '/project/data',
+          link: '/project/data/pos-trends',
           title: 'data'
         },
         {
@@ -101,7 +101,7 @@ export default {
   flex: 1;
   text-align: center;
   font-weight: 500;
-  color: #000;
+  color: $black;
   text-transform: uppercase;
   text-decoration: none;
   padding: 1em;

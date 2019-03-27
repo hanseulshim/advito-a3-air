@@ -1,11 +1,32 @@
 <template>
   <div class="navigation-container">
-    <div><i class="fas fa-gopuram data-icon" />PoS Trends</div>
-    <div><i class="fas fa-ticket-alt data-icon" />Division Trends</div>
-    <div><i class="fas fa-file-alt data-icon" />Import Errors</div>
+    <router-link
+      class="nav-item"
+      to="pos-trends"
+      :class="{ active: $route.path === '/project/data/pos-trends' }"
+      ><i class="far fa-building data-icon" /><span
+        >PoS Trends</span
+      ></router-link
+    >
+    <router-link
+      class="nav-item"
+      to="division-trends"
+      :class="{ active: $route.path === '/project/data/division-trends' }"
+      ><i class="far fa-newspaper data-icon" /><span
+        >Division Trends</span
+      ></router-link
+    >
+    <router-link
+      class="nav-item"
+      to="import-errors"
+      :class="{ active: $route.path === '/project/data/import-errors' }"
+      ><i class="far fa-file-alt data-icon" /><span
+        >Import Errors</span
+      ></router-link
+    >
     <button class="button long annualization">ANNUALIZATION</button>
     <div class="dataset">
-      <el-select placeholder="Select Client">
+      <el-select :value="null" placeholder="Select Client">
         <!-- <el-option
           v-for="item in clientList"
           :key="item.value"
@@ -39,9 +60,29 @@ export default {
 .dataset {
   grid-area: dataset;
 }
+.nav-item {
+  text-decoration: none;
+  color: initial;
+  &.active {
+    span {
+      color: $tradewind;
+    }
+    .data-icon {
+      border-color: $tradewind;
+    }
+  }
+  &:hover {
+    span {
+      color: $tradewind;
+    }
+    .data-icon {
+      border-color: $tradewind;
+    }
+  }
+}
 .data-icon {
   font-size: 1.5em;
-  border: 1px solid $gray-nurse;
+  border: 1px solid $gray;
   border-radius: 100%;
   padding: 10px;
   margin-right: 5px;
