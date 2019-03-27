@@ -1,5 +1,6 @@
 <template>
   <div class="import-errors">
+    <i class="fas fa-chevron-up"></i>
     <router-link
       class="nav-item"
       to="/project/data/import-errors/imported-tickets"

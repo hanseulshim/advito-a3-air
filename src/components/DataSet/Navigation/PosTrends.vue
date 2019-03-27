@@ -1,5 +1,6 @@
 <template>
   <div>
+    <i class="fas fa-chevron-up"></i>
     <router-link
       class="nav-item"
       to="/project/data/pos-trends/tickets"

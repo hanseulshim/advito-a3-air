@@ -115,14 +115,28 @@ export default {
   border-top: 1px solid $tradewind;
   margin-top: 10px;
   padding-top: 10px;
+  position: relative;
   .division-trends {
     margin-left: 15%;
+    .fa-chevron-up {
+      left: calc(15% + 1em + 18px);
+    }
   }
   .import-errors {
     margin-left: 30%;
+    .fa-chevron-up {
+      left: calc(30% + 2em + 18px);
+    }
   }
   .spacer {
     margin: 0 10px;
+  }
+  .fa-chevron-up {
+    position: absolute;
+    top: -10px;
+    background: $white;
+    color: $tradewind;
+    left: 18px;
   }
 }
 </style>
