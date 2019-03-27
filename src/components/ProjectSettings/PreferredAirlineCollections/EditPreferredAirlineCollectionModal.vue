@@ -100,8 +100,7 @@ export default {
         });
       } catch (error) {
         this.$modal.show('error', {
-          message:
-            'Failed to edit preferred airline collection. Please try again.'
+          message: error.message
         });
       }
     },

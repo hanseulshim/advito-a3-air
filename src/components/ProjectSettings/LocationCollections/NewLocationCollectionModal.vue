@@ -118,7 +118,7 @@ export default {
         });
       } catch (error) {
         this.$modal.show('error', {
-          message: 'Failed to create location collection. Please try again.'
+          message: error.message
         });
       }
     },

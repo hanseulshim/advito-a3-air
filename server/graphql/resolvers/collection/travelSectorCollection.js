@@ -12,21 +12,30 @@ exports.travelSectorCollection = {
   },
   Mutation: {
     createTravelSectorCollection: (_, { id, name, description }) => {
+      const travelSectorCollection = travelSectorCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!travelSectorCollection) {
+        throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      const checkNames = travelSectorCollectionList.some(
+        collection => collection.name === name
+      );
+      if (checkNames) {
+        throw new ApolloError(
+          'A duplicate collection name already exists. Please input a unique collection name.',
+          400
+        );
+      }
       const maxId =
         Math.max(
           ...travelSectorCollectionList.map(collection => collection.id)
         ) + 1;
-      const copyTravelSectorCollection = travelSectorCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!copyTravelSectorCollection) {
-        throw new ApolloError('Travel Sector Collection not found', 400);
-      }
       travelSectorCollectionList.forEach(collection => {
         collection.active = false;
       });
       const newTravelSectorCollection = {
-        ...copyTravelSectorCollection,
+        ...travelSectorCollection,
         id: maxId,
         name,
         description,
@@ -42,6 +51,15 @@ exports.travelSectorCollection = {
       )[0];
       if (!travelSectorCollection) {
         throw new ApolloError('Travel Sector Collection not found', 400);
+      }
+      const checkNames = travelSectorCollectionList.some(
+        collection => collection.name === name && collection.id !== id
+      );
+      if (checkNames) {
+        throw new ApolloError(
+          'A duplicate collection name already exists. Please input a unique collection name.',
+          400
+        );
       }
       travelSectorCollection.name = name;
       travelSectorCollection.description = description;

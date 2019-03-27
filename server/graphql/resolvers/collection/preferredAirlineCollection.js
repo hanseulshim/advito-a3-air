@@ -21,6 +21,15 @@ exports.preferredAirlineCollection = {
       if (!preferredAirlineCollection) {
         throw new ApolloError('Preferred Airline Collection not found', 400);
       }
+      const checkNames = preferredAirlineCollectionList.some(
+        collection => collection.name === name && collection.id !== id
+      );
+      if (checkNames) {
+        throw new ApolloError(
+          'A duplicate collection name already exists. Please input a unique collection name.',
+          400
+        );
+      }
       preferredAirlineCollection.name = name;
       preferredAirlineCollection.description = description;
       preferredAirlineCollection.dateUpdated = new Date();

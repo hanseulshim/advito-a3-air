@@ -21,6 +21,15 @@ exports.airlineGroupCollection = {
       if (!airGroupCollection) {
         throw new ApolloError('Airline Group Collection not found', 400);
       }
+      const checkNames = airlineGroupCollectionList.some(
+        collection => collection.name === name && collection.id !== id
+      );
+      if (checkNames) {
+        throw new ApolloError(
+          'A duplicate collection name already exists. Please input a unique collection name.',
+          400
+        );
+      }
       airGroupCollection.name = name;
       airGroupCollection.description = description;
       airGroupCollection.effectiveStartDate = new Date(effectiveStartDate);
