@@ -12,20 +12,29 @@ exports.locationCollection = {
   },
   Mutation: {
     createLocationCollection: (_, { id, name, description }) => {
+      const locationCollection = locationCollectionList.filter(
+        collection => collection.id === id
+      )[0];
+      if (!locationCollection) {
+        throw new ApolloError('Location Collection not found', 400);
+      }
+      const checkNames = locationCollectionList.some(
+        collection => collection.name === name
+      );
+      if (checkNames) {
+        throw new ApolloError(
+          'A duplicate collection name already exists. Please input a unique collection name.',
+          400
+        );
+      }
       const maxId =
         Math.max(...locationCollectionList.map(collection => collection.id)) +
         1;
-      const copyLocationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!copyLocationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
       locationCollectionList.forEach(collection => {
         collection.active = false;
       });
       const newLocationCollection = {
-        ...copyLocationCollection,
+        ...locationCollection,
         id: maxId,
         name,
         description,
@@ -41,6 +50,15 @@ exports.locationCollection = {
       )[0];
       if (!locationCollection) {
         throw new ApolloError('Location Collection not found', 400);
+      }
+      const checkNames = locationCollectionList.some(
+        collection => collection.name === name && collection.id !== id
+      );
+      if (checkNames) {
+        throw new ApolloError(
+          'A duplicate collection name already exists. Please input a unique collection name.',
+          400
+        );
       }
       locationCollection.name = name;
       locationCollection.description = description;

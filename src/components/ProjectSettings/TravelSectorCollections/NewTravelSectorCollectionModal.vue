@@ -119,8 +119,7 @@ export default {
         });
       } catch (error) {
         this.$modal.show('error', {
-          message:
-            'Failed to create travel sector collection. Please try again.'
+          message: error.message
         });
       }
     },

@@ -51,9 +51,9 @@
 .el-select {
   width: 100%;
 }
-.el-select-dropdown {
+.el-select-dropdown, .el-select-dropdown.is-multiple {
   .el-select-dropdown__item.selected {
-    color: $black;
+    color: $black !important;
     font-weight: 400;
   }
 }

@@ -100,7 +100,7 @@ export default {
         });
       } catch (error) {
         this.$modal.show('error', {
-          message: 'Failed to edit travel sector collection. Please try again.'
+          message: error.message
         });
       }
     },

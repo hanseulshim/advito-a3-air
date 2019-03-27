@@ -18,22 +18,17 @@
         <div class="section-header">new preferred airline</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
-      <el-form-item label="Collection Name *" prop="id">
-        <el-select v-model="form.id" class="select-modal" disabled>
-          <el-option
-            v-for="item in preferredAirlineCollectionList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+      <div>
+        <div class="form-label-no-select">Collection Name</div>
+        <span>{{ collectionName }}</span>
+      </div>
       <div class="airline-group-item">
         <div class="airline-group-label">Airline Name *</div>
         <el-select
-          v-model="airlineId"
+          v-model="airlineIdList"
           class="select-modal airline-group-content"
           filterable
+          multiple
         >
           <el-option
             v-for="item in airlineGroupAirlineList"
@@ -143,7 +138,8 @@ export default {
         id: null,
         airlineList: []
       },
-      airlineId: null,
+      collectionName: null,
+      airlineIdList: [],
       posId: null,
       preferenceLevelId: null,
       rules: {
@@ -174,14 +170,14 @@ export default {
       });
     },
     addAirline() {
-      if (this.airlineId && this.posId && this.preferenceLevelId) {
-        const airline = {
-          id: this.airlineId,
+      if (this.airlineIdList.length && this.posId && this.preferenceLevelId) {
+        const airlineList = this.airlineIdList.map(id => ({
+          id,
           posId: this.posId,
           preferenceLevelId: this.preferenceLevelId
-        };
-        this.form.airlineList.push(airline);
-        this.airlineId = null;
+        }));
+        this.form.airlineList.push(...airlineList);
+        this.airlineIdList = [];
         this.posId = null;
         this.preferenceLevelId = null;
       }
@@ -215,14 +211,16 @@ export default {
     },
     beforeOpen(event) {
       const collection = event.params.collection;
+      this.collectionName = collection.name;
       this.form.id = collection.id;
     },
     beforeClose() {
       this.form.id = null;
       this.form.airlineList = [];
-      this.airlineId = null;
+      this.airlineIdList = [];
       this.posId = null;
       this.preferenceLevelId = null;
+      this.collectionName = null;
     }
   }
 };
