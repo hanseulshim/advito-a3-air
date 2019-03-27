@@ -1,6 +1,7 @@
 <template>
   <div>
     import errors
+    <router-view />
   </div>
 </template>
 

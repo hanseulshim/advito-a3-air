@@ -1,16 +1,16 @@
 <template>
   <div>
-    <DataNavigation />
-    <router-view></router-view>
+    <Navigation />
+    <router-view />
   </div>
 </template>
 
 <script>
-import DataNavigation from './DataNavigation';
+import Navigation from './Navigation';
 export default {
   name: 'DataSet',
   components: {
-    DataNavigation
+    Navigation
   }
 };
 </script>

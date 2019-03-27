@@ -1,6 +1,7 @@
 <template>
   <div>
     division trends
+    <router-view />
   </div>
 </template>
 
