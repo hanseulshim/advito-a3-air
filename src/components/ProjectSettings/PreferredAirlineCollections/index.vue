@@ -2,7 +2,14 @@
   <div class="table-spacer">
     <div class="section-header title-row space-between">
       <div>
-        <i v-if="checkAirlineWarning()" class="fas fa-exclamation-circle" />
+        <el-tooltip v-if="checkAirlineWarning()" placement="top" effect="light">
+          <div slot="content">
+            You have to have at<br />least one Preferred<br />Airline or this
+            Collection<br />
+            will be deleted in 48<br />hours.
+          </div>
+          <i class="fas fa-exclamation-circle" />
+        </el-tooltip>
         <span>{{
           pluralize(
             'preferred airline collection',
@@ -41,19 +48,9 @@
         sortable
       >
         <template slot-scope="scope">
-          <el-tooltip
-            v-if="!scope.row.airlineList.length"
-            placement="top"
-            effect="light"
-          >
-            <div slot="content">
-              You have to have at<br />least one Preferred<br />Airline or this
-              Collection<br />
-              will be deleted in 48<br />hours.
-            </div>
-            <span style="color: red">{{ scope.row.airlineList.length }}</span>
-          </el-tooltip>
-          <span v-else>{{ scope.row.airlineList.length }}</span>
+          <span :class="{ warning: !scope.row.airlineList.length }">{{
+            scope.row.airlineList.length
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="description" label="Description" />
@@ -167,3 +164,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import '@/styles/global.scss';
+.warning {
+  color: $monza;
+}
+</style>
