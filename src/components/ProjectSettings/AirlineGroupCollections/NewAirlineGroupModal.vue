@@ -50,9 +50,10 @@
       <div class="airline-group-item">
         <div class="airline-group-label">Airline Name *</div>
         <el-select
-          v-model="airlineId"
+          v-model="airlineIdList"
           class="select-modal airline-group-content"
           filterable
+          multiple
         >
           <el-option
             v-for="item in airlineGroupAirlineList"
@@ -83,28 +84,30 @@
         ADD
       </button>
       <div class="airline-group-spacer" />
-      <div
-        v-for="(airline, index) in form.airlineList"
-        :key="index"
-        class="airline-group-item"
-      >
-        <div class="airline-group-label">
-          <i class="fas fa-times" @click="removeAirline(index)" />
-          {{ getAirline(airline.id) }}
-        </div>
-        <div class="date-picker-container airline-group-content">
-          <el-date-picker
-            v-model="airline.effectiveStartDate"
-            type="date"
-            format="dd MMM yyyy"
-            class="date-picker"
-          />
-          <el-date-picker
-            v-model="airline.effectiveEndDate"
-            type="date"
-            format="dd MMM yyyy"
-            class="date-picker"
-          />
+      <div class="airline-group-container">
+        <div
+          v-for="(airline, index) in form.airlineList"
+          :key="index"
+          class="airline-group-item"
+        >
+          <div class="airline-group-label">
+            <i class="fas fa-times" @click="removeAirline(index)" />
+            {{ getAirline(airline.id) }}
+          </div>
+          <div class="date-picker-container airline-group-content">
+            <el-date-picker
+              v-model="airline.effectiveStartDate"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+            <el-date-picker
+              v-model="airline.effectiveEndDate"
+              type="date"
+              format="dd MMM yyyy"
+              class="date-picker"
+            />
+          </div>
         </div>
       </div>
       <el-form-item class="save-container">
@@ -140,7 +143,7 @@ export default {
         airlineList: []
       },
       collectionName: null,
-      airlineId: null,
+      airlineIdList: [],
       effectiveStartDate: null,
       effectiveEndDate: null,
       rules: {
@@ -191,14 +194,18 @@ export default {
       });
     },
     addAirline() {
-      if (this.airlineId && this.effectiveStartDate && this.effectiveEndDate) {
-        const airline = {
-          id: this.airlineId,
+      if (
+        this.airlineIdList.length &&
+        this.effectiveStartDate &&
+        this.effectiveEndDate
+      ) {
+        const airlineList = this.airlineIdList.map(id => ({
+          id,
           effectiveStartDate: this.effectiveStartDate,
           effectiveEndDate: this.effectiveEndDate
-        };
-        this.form.airlineList.push(airline);
-        this.airlineId = null;
+        }));
+        this.form.airlineList.push(...airlineList);
+        this.airlineIdList = [];
         this.effectiveStartDate = null;
         this.effectiveEndDate = null;
       }
@@ -241,7 +248,7 @@ export default {
       this.form.effectiveStartDate = null;
       this.form.effectiveEndDate = null;
       this.form.airlineList = [];
-      this.airlineId = null;
+      this.airlineIdList = [];
       this.effectiveStartDate = null;
       this.effectiveEndDate = null;
       this.collectionName = null;
@@ -259,6 +266,10 @@ export default {
   width: 200px;
   border: 1px solid $gray-nurse;
   margin: 2em 0;
+}
+.airline-group-container {
+  max-height: 300px;
+  overflow: auto;
 }
 .airline-group-item {
   display: flex;
