@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <div>pos trends</div>
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <script>
@@ -10,5 +7,3 @@ export default {
   name: 'PosTrends'
 };
 </script>
-
-<style lang="scss" scoped></style>

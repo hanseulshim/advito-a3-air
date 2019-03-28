@@ -5,14 +5,53 @@ exports.dataSet = {
     headers: { sessiontoken: 'advitoValidToken' },
     query: `
     {
-      dataSetList {
+      posTrendList {
         id
-        ticketingTo
-        ticketingFrom
-        uploadDate
-        qc
-        records
-        status
+        name
+        ticketsTotal
+        segmentsTotal
+        farePaidTotal
+        columns {
+          id
+          name
+          tickets
+          segments
+          farePaid
+          dateUpdated
+          status
+        }
+      }
+      divisionTrendList {
+        id
+        name
+        ticketsTotal
+        segmentsTotal
+        farePaidTotal
+        columns {
+          id
+          name
+          tickets
+          segments
+          farePaid
+          dateUpdated
+          status
+        }
+      }
+      importErrorList {
+        id
+        name
+        importedTicketsTotal
+        errorTicketsTotal
+        errorRatioTotal
+        columns {
+          id
+          name
+          importedTickets
+          errorTickets
+          errorRatio
+          dateUpdated
+          status
+        }
       }
     }`
   },
