@@ -5,15 +5,12 @@ import Project from './views/Project';
 import ProjectSettings from '@/components/ProjectSettings';
 
 import DataSet from '@/components/DataSet';
-import PosTrends from '@/components/DataSet/PosTrends';
 import PosTickets from '@/components/DataSet/PosTrends/Tickets';
 import PosSegments from '@/components/DataSet/PosTrends/Segments';
 import PosFarePaid from '@/components/DataSet/PosTrends/FarePaid';
-import DivisionTrends from '@/components/DataSet/DivisionTrends';
 import DivisionTickets from '@/components/DataSet/DivisionTrends/Tickets';
 import DivisionSegments from '@/components/DataSet/DivisionTrends/Segments';
 import DivisionFarePaid from '@/components/DataSet/DivisionTrends/FarePaid';
-import ImportErrors from '@/components/DataSet/ImportErrors';
 import ImportedTickets from '@/components/DataSet/ImportErrors/ImportedTickets';
 import ErrorTickets from '@/components/DataSet/ImportErrors/ErrorTickets';
 import ErrorRatio from '@/components/DataSet/ImportErrors/ErrorRatio';
@@ -41,58 +38,40 @@ export default new Router({
           component: DataSet,
           children: [
             {
-              path: 'pos-trends',
-              component: PosTrends,
-              children: [
-                {
-                  path: 'tickets',
-                  component: PosTickets
-                },
-                {
-                  path: 'segments',
-                  component: PosSegments
-                },
-                {
-                  path: 'fare-paid',
-                  component: PosFarePaid
-                }
-              ]
+              path: 'pos-trends/tickets',
+              component: PosTickets
             },
             {
-              path: 'division-trends',
-              component: DivisionTrends,
-              children: [
-                {
-                  path: 'tickets',
-                  component: DivisionTickets
-                },
-                {
-                  path: 'segments',
-                  component: DivisionSegments
-                },
-                {
-                  path: 'fare-paid',
-                  component: DivisionFarePaid
-                }
-              ]
+              path: 'pos-trends/segments',
+              component: PosSegments
             },
             {
-              path: 'import-errors',
-              component: ImportErrors,
-              children: [
-                {
-                  path: 'imported-tickets',
-                  component: ImportedTickets
-                },
-                {
-                  path: 'error-tickets',
-                  component: ErrorTickets
-                },
-                {
-                  path: 'error-ratio',
-                  component: ErrorRatio
-                }
-              ]
+              path: 'pos-trends/fare-paid',
+              component: PosFarePaid
+            },
+            {
+              path: 'division-trends/tickets',
+              component: DivisionTickets
+            },
+            {
+              path: 'division-trends/segments',
+              component: DivisionSegments
+            },
+            {
+              path: 'division-trends/fare-paid',
+              component: DivisionFarePaid
+            },
+            {
+              path: 'import-errors/imported-tickets',
+              component: ImportedTickets
+            },
+            {
+              path: 'import-errors/error-tickets',
+              component: ErrorTickets
+            },
+            {
+              path: 'import-errors/error-ratio',
+              component: ErrorRatio
             }
           ]
         }
