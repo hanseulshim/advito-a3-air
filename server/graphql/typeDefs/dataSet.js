@@ -1,20 +1,25 @@
 exports.dataSetDefs = `
-type PosTrend {
+type TrendCategory {
   id: Int
   name: String
   ticketsTotal: Int
   segmentsTotal: Int
   farePaidTotal: Int
-  columns: [PosTrendColumn]
 }
 type PosTrendColumn {
   id: Int
   name: String
+  dateUpdated: Date
+  status: String
+  data: [PosTrend]
+}
+type PosTrend {
+  id: Int
+  countryId: Int
+  name: String
   tickets: Int
   segments: Int
   farePaid: Int
-  dateUpdated: Date
-  status: String
 }
 type DivisionTrend {
   id: Int
@@ -51,8 +56,12 @@ type ImportErrorColumn {
   status: String
 }
 extend type Query {
-  posTrendList: [PosTrend] @auth
+  posTrendsCountryList: [TrendCategory] @auth
+  posTrendsColumnList: [PosTrendColumn] @auth
   divisionTrendList: [DivisionTrend] @auth
   importErrorList: [ImportError] @auth
+}
+extend type Mutation {
+  togglePosTrend(id: Int!): PosTrendColumn @auth
 }
 `;

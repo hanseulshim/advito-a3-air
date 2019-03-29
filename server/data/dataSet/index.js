@@ -1,9 +1,10 @@
-const { posTrends } = require('./posTrends');
+const { posTrendsCountryList, posTrendsColumnList } = require('./posTrends');
 const { divisionTrends } = require('./divisionTrends');
 const { importErrors } = require('./importErrors');
 
 exports.dataSet = {
-  posTrends,
+  posTrendsCountryList,
+  posTrendsColumnList,
   divisionTrends,
   importErrors
 };

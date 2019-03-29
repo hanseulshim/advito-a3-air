@@ -1,21 +1,31 @@
 import gql from 'graphql-tag';
 
-export const GET_POS_TREND_LIST = gql`
+export const GET_POS_TRENDS_COUNTRY_LIST = gql`
   {
-    posTrendList {
+    posTrendsCountryList {
       id
       name
       ticketsTotal
       segmentsTotal
       farePaidTotal
-      columns {
+    }
+  }
+`;
+
+export const GET_POS_TRENDS_COLUMN_LIST = gql`
+  {
+    posTrendsColumnList {
+      id
+      name
+      dateUpdated
+      status
+      data {
         id
+        countryId
         name
         tickets
         segments
         farePaid
-        dateUpdated
-        status
       }
     }
   }

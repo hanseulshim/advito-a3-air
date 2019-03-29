@@ -25,6 +25,11 @@
     .expanded > td {
       border-bottom: none;
     }
+    .el-table__footer-wrapper tbody td {
+      background-color: $gallery;
+      color: $black;
+      font-weight: 500;
+    }
   }
   .table-toggle-icon {
     cursor: pointer;

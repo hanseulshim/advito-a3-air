@@ -29,13 +29,17 @@
       >
       <button class="button long annualization">ANNUALIZATION</button>
       <div class="dataset">
-        <el-select :value="null" placeholder="Select Client">
-          <!-- <el-option
-          v-for="item in clientList"
-          :key="item.value"
-          :label="item.name"
-          :value="item.id"
-        ></el-option> -->
+        <el-select
+          :value="selectedFilter"
+          placeholder="Select Client"
+          @change="updateFilter"
+        >
+          <el-option
+            v-for="item in filterSelectList"
+            :key="item.value"
+            :label="item.name"
+            :value="item.value"
+          ></el-option>
         </el-select>
       </div>
     </div>
@@ -61,6 +65,21 @@ export default {
     PosTrends,
     DivisionTrends,
     ImportErrors
+  },
+  props: {
+    filterSelectList: {
+      required: true,
+      type: Array
+    },
+    selectedFilter: {
+      required: true,
+      type: String
+    }
+  },
+  methods: {
+    updateFilter(value) {
+      this.$emit('update-filter', value);
+    }
   }
 };
 </script>
