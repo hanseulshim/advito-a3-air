@@ -1,11 +1,9 @@
 <template>
-  <div>
-    pos trends
-  </div>
+  <div>Segments</div>
 </template>
 
 <script>
 export default {
-  name: 'PosTrends'
+  name: 'Segments'
 };
 </script>

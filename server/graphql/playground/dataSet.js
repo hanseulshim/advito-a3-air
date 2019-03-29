@@ -5,14 +5,58 @@ exports.dataSet = {
     headers: { sessiontoken: 'advitoValidToken' },
     query: `
     {
-      dataSetList {
+      posTrendsCountryList {
         id
-        ticketingTo
-        ticketingFrom
-        uploadDate
-        qc
-        records
+        name
+        ticketsTotal
+        segmentsTotal
+        farePaidTotal
+      }
+      posTrendsColumnList {
+        id
+        name
+        dateUpdated
         status
+        data {
+          id
+          countryId
+          name
+          tickets
+          segments
+          farePaid
+        }
+      }
+      divisionTrendList {
+        id
+        name
+        ticketsTotal
+        segmentsTotal
+        farePaidTotal
+        columns {
+          id
+          name
+          tickets
+          segments
+          farePaid
+          dateUpdated
+          status
+        }
+      }
+      importErrorList {
+        id
+        name
+        importedTicketsTotal
+        errorTicketsTotal
+        errorRatioTotal
+        columns {
+          id
+          name
+          importedTickets
+          errorTickets
+          errorRatio
+          dateUpdated
+          status
+        }
       }
     }`
   },
@@ -22,13 +66,19 @@ exports.dataSet = {
     headers: { sessiontoken: 'advitoValidToken' },
     query: `
     mutation {
-      acceptDataSet(id: 52933) {
+      togglePosTrend(id: 1) {
         id
+        name
+        dateUpdated
         status
-      }
-      rejectDataSet(id: 52933) {
-        id
-        status
+        data {
+          id
+          countryId
+          name
+          tickets
+          segments
+          farePaid
+        }
       }
     }
     `

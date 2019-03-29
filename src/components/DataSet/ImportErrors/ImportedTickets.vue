@@ -1,11 +1,9 @@
 <template>
-  <div>
-    division trends
-  </div>
+  <div>ImportedTickets</div>
 </template>
 
 <script>
 export default {
-  name: 'DivisionTrends'
+  name: 'ImportedTickets'
 };
 </script>

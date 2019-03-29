@@ -6,7 +6,7 @@
         :key="nav.title"
         :to="nav.link"
         class="nav-item"
-        :class="{ active: $route.path === nav.link }"
+        :class="{ active: $route.path.includes(nav.path) }"
         ><i class="fas fa-circle" :class="getStatus(nav.id)" />{{
           nav.title
         }}</router-link
@@ -14,7 +14,7 @@
     </div>
     <div class="content-container">
       <ProjectInfo />
-      <router-view></router-view>
+      <router-view />
     </div>
   </div>
 </template>
@@ -34,26 +34,31 @@ export default {
         {
           id: 1,
           link: '/project/program-settings',
+          path: '/project/program-settings',
           title: 'project settings'
         },
         {
           id: 2,
-          link: '/project/data',
+          link: '/project/data/pos-trends/tickets',
+          path: '/project/data',
           title: 'data'
         },
         {
           id: 3,
           link: '/project/default-contracts',
+          path: '/project/default-contracts',
           title: 'default contracts'
         },
         {
           id: 4,
           link: '/project/scenario-settings',
+          path: '/project/scenario-settings',
           title: 'scenario settings'
         },
         {
           id: 5,
           link: '/project/process',
+          path: '/project/process',
           title: 'process'
         }
       ],
@@ -101,9 +106,8 @@ export default {
   flex: 1;
   text-align: center;
   font-weight: 500;
-  color: #000;
+  color: $black;
   text-transform: uppercase;
-  text-decoration: none;
   padding: 1em;
   border-top-left-radius: 1em;
   border-top-right-radius: 1em;

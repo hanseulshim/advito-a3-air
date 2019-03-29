@@ -1,11 +1,9 @@
 <template>
-  <div>
-    import errors
-  </div>
+  <div>Segments</div>
 </template>
 
 <script>
 export default {
-  name: 'ImportErrors'
+  name: 'Segments'
 };
 </script>

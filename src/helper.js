@@ -1,4 +1,5 @@
 import moment from 'moment';
+import numeral from 'numeral';
 
 export const formatDate = date => {
   return date
@@ -7,6 +8,16 @@ export const formatDate = date => {
         .toUpperCase()
     : '';
 };
+
+export const formatDataSetCol = date => {
+  return date ? moment(date, 'MM/DD/YYYY').format('YYYY-MM') : '';
+};
+
+export const formatDataSetUpdated = date => {
+  return date ? moment(date).format('DD MMM YYYY H:mm') : '';
+};
+
+export const formatNumber = num => numeral(num).format('0,0');
 
 export const pluralize = (word, count) => {
   return count > 1 ? `${count} ${word}s` : `${count} ${word}`;

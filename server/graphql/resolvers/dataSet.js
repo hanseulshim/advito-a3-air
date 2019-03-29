@@ -1,26 +1,27 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { dataSetList } = require('../../data/dataSet');
+const { dataSet } = require('../../data/dataSet');
 
 exports.dataSetResolvers = {
   Query: {
-    dataSetList: () => dataSetList
+    posTrendsCountryList: () => dataSet.posTrendsCountryList,
+    posTrendsColumnList: () => dataSet.posTrendsColumnList,
+    divisionTrendList: () => dataSet.divisionTrends,
+    importErrorList: () => dataSet.importErrors
   },
   Mutation: {
-    acceptDataSet: (_, { id }) => {
-      const dataSet = dataSetList.filter(dataSet => dataSet.id === id)[0];
-      if (!dataSet) {
+    togglePosTrend: (_, { id }) => {
+      const posTrend = dataSet.posTrendsColumnList.filter(
+        trend => trend.id === id
+      )[0];
+      if (!posTrend) {
         throw new ApolloError('Project not found', 400);
       }
-      dataSet.status = 'accept';
-      return dataSet;
-    },
-    rejectDataSet: (_, { id }) => {
-      const dataSet = dataSetList.filter(dataSet => dataSet.id === id)[0];
-      if (!dataSet) {
-        throw new ApolloError('Project not found', 400);
+      if (posTrend.status === null || posTrend.status === 'reject') {
+        posTrend.status = 'accept';
+      } else if (posTrend.status === 'accept') {
+        posTrend.status = 'reject';
       }
-      dataSet.status = 'reject';
-      return dataSet;
+      return posTrend;
     }
   }
 };
