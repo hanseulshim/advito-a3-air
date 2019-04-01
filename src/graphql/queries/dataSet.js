@@ -31,22 +31,32 @@ export const GET_POS_TRENDS_COLUMN_LIST = gql`
   }
 `;
 
-export const GET_DIVISION_TREND_LIST = gql`
+export const GET_DIVISION_TRENDS_LIST = gql`
   {
-    divisionTrendList {
+    divisionTrendsList {
       id
       name
       ticketsTotal
       segmentsTotal
       farePaidTotal
-      columns {
+    }
+  }
+`;
+
+export const GET_DIVISION_TRENDS_COLUMN_LIST = gql`
+  {
+    divisionTrendsColumnList {
+      id
+      name
+      dateUpdated
+      status
+      data {
         id
+        divisionId
         name
         tickets
         segments
         farePaid
-        dateUpdated
-        status
       }
     }
   }

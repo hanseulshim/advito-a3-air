@@ -18,3 +18,22 @@ export const TOGGLE_POS_TREND = gql`
     }
   }
 `;
+
+export const TOGGLE_DIVISION_TREND = gql`
+  mutation toggleDivisionTrend($id: Int!) {
+    toggleDivisionTrend(id: $id) {
+      id
+      name
+      dateUpdated
+      status
+      data {
+        id
+        divisionId
+        name
+        tickets
+        segments
+        farePaid
+      }
+    }
+  }
+`;

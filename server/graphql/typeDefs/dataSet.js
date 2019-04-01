@@ -21,22 +21,20 @@ type PosTrend {
   segments: Int
   farePaid: Int
 }
-type DivisionTrend {
-  id: Int
-  name: String
-  ticketsTotal: Int
-  segmentsTotal: Int
-  farePaidTotal: Int
-  columns: [DivisionTrendColumn]
-}
 type DivisionTrendColumn {
   id: Int
+  name: String
+  dateUpdated: Date
+  status: String
+  data: [DivisionTrend]
+}
+type DivisionTrend {
+  id: Int
+  divisionId: Int
   name: String
   tickets: Int
   segments: Int
   farePaid: Int
-  dateUpdated: Date
-  status: String
 }
 type ImportError {
   id: Int
@@ -58,10 +56,12 @@ type ImportErrorColumn {
 extend type Query {
   posTrendsCountryList: [TrendCategory] @auth
   posTrendsColumnList: [PosTrendColumn] @auth
-  divisionTrendList: [DivisionTrend] @auth
+  divisionTrendsList: [TrendCategory] @auth
+  divisionTrendsColumnList: [DivisionTrendColumn] @auth
   importErrorList: [ImportError] @auth
 }
 extend type Mutation {
   togglePosTrend(id: Int!): PosTrendColumn @auth
+  toggleDivisionTrend(id: Int!): DivisionTrendColumn @auth
 }
 `;

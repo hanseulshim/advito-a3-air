@@ -77,7 +77,6 @@
 
 <script>
 import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
-import { tableColumnWidth } from '@/config';
 import { GET_POS_TRENDS_COUNTRY_LIST } from '@/graphql/queries';
 import { TOGGLE_POS_TREND } from '@/graphql/mutations';
 export default {
@@ -95,8 +94,7 @@ export default {
   },
   data() {
     return {
-      posTrendsColumnList: [],
-      tableColumnWidth
+      posTrendsCountryList: []
     };
   },
   methods: {

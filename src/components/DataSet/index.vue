@@ -11,7 +11,10 @@
 
 <script>
 import Navigation from './Navigation';
-import { GET_POS_TRENDS_COLUMN_LIST } from '@/graphql/queries';
+import {
+  GET_POS_TRENDS_COLUMN_LIST,
+  GET_DIVISION_TRENDS_COLUMN_LIST
+} from '@/graphql/queries';
 export default {
   name: 'DataSet',
   components: {
@@ -20,11 +23,15 @@ export default {
   apollo: {
     posTrendsColumnList: {
       query: GET_POS_TRENDS_COLUMN_LIST
+    },
+    divisionTrendsColumnList: {
+      query: GET_DIVISION_TRENDS_COLUMN_LIST
     }
   },
   data() {
     return {
       posTrendsColumnList: [],
+      divisionTrendsColumnList: [],
       selectedFilter: 'all'
     };
   },
@@ -32,6 +39,8 @@ export default {
     dataSetList() {
       if (this.$route.path.includes('pos-trends')) {
         return this.posTrendsColumnList.slice();
+      } else if (this.$route.path.includes('division-trends')) {
+        return this.divisionTrendsColumnList.slice();
       }
       return [];
     },

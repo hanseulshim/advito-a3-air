@@ -26,20 +26,25 @@ exports.dataSet = {
           farePaid
         }
       }
-      divisionTrendList {
+      divisionTrendsList {
         id
         name
         ticketsTotal
         segmentsTotal
         farePaidTotal
-        columns {
+      }
+      divisionTrendsColumnList {
+        id
+        name
+        dateUpdated
+        status
+        data {
           id
+          divisionId
           name
           tickets
           segments
           farePaid
-          dateUpdated
-          status
         }
       }
       importErrorList {
@@ -74,6 +79,20 @@ exports.dataSet = {
         data {
           id
           countryId
+          name
+          tickets
+          segments
+          farePaid
+        }
+      }
+      toggleDivisionTrend(id: 1) {
+        id
+        name
+        dateUpdated
+        status
+        data {
+          id
+          divisionId
           name
           tickets
           segments
