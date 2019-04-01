@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     dataSetList() {
-      if (this.$route.path.includes('pos-trends/tickets')) {
+      if (this.$route.path.includes('pos-trends')) {
         return this.posTrendsColumnList.slice();
       }
       return [];

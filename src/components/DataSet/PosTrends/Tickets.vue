@@ -2,7 +2,11 @@
   <div class="data-set-table-container">
     <div class="fixed-table-container">
       <div class="icon-container" />
-      <el-table :data="posTrendsCountryList" show-summary sum-text="TOTAL">
+      <el-table
+        :data="posTrendsCountryList"
+        show-summary
+        :summary-method="getTotal"
+      >
         <el-table-column prop="name" label="Countries">
           <template slot="header">
             <span class="header-container">
@@ -111,6 +115,19 @@ export default {
         return this.formatNumber(
           data.reduce((a, b) => {
             return a + b.tickets;
+          }, 0)
+        );
+      });
+    },
+    getTotal(param) {
+      const { columns, data } = param;
+      return columns.map((col, i) => {
+        if (i === 0) {
+          return 'TOTAL';
+        }
+        return this.formatNumber(
+          data.reduce((a, b) => {
+            return a + b.ticketsTotal;
           }, 0)
         );
       });
