@@ -49,6 +49,7 @@ body {
   padding: 2em 4em;
   font-family: 'Rubik', sans-serif;
   max-width: 1600px;
+  min-width: 1336px;
   margin: auto;
   display: flex;
   flex-direction: column;
