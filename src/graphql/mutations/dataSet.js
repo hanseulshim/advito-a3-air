@@ -37,3 +37,22 @@ export const TOGGLE_DIVISION_TREND = gql`
     }
   }
 `;
+
+export const TOGGLE_IMPORT_ERROR = gql`
+  mutation toggleImportError($id: Int!) {
+    toggleImportError(id: $id) {
+      id
+      name
+      dateUpdated
+      status
+      data {
+        id
+        countryId
+        name
+        importedTickets
+        errorTickets
+        errorRatio
+      }
+    }
+  }
+`;

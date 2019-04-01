@@ -1,9 +1,143 @@
 <template>
-  <div>ErrorTickets</div>
+  <div class="data-set-table-container">
+    <div class="fixed-table-container">
+      <div class="icon-container" />
+      <el-table
+        :data="importErrorsCountryList"
+        show-summary
+        :summary-method="getTotal"
+      >
+        <el-table-column prop="name" label="Countries">
+          <template slot="header">
+            <span class="header-container">
+              <div class="updated-date" />
+              <span class="header-text">
+                Countries
+              </span>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="errorTicketsTotal"
+          align="right"
+          :formatter="row => formatNumber(row.errorTicketsTotal)"
+        >
+          <template slot="header">
+            <span class="header-container">
+              <div class="updated-date" />
+              <span class="header-text">
+                Tickets
+              </span>
+            </span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="column-table-container">
+      <div
+        v-for="column in filteredDataSetList"
+        :key="column.id"
+        class="column-table"
+      >
+        <div class="icon-container" @click="toggleImportError(column.id)">
+          <i v-if="column.status === null" class="fas fa-circle"></i>
+          <el-switch
+            v-else
+            :value="column.status === 'accept'"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
+        </div>
+        <el-table
+          :data="column.data"
+          show-summary
+          :summary-method="getSummaries"
+        >
+          <el-table-column
+            align="center"
+            :formatter="row => formatNumber(row.errorTickets)"
+          >
+            <template slot="header">
+              <span class="header-container content">
+                <span class="updated-date">
+                  {{ formatDataSetUpdated(column.dateUpdated) }}
+                </span>
+                <span class="header-text">
+                  {{ formatDataSetCol(column.name) }}
+                </span>
+              </span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
+import { GET_IMPORT_ERRORS_COUNTRY_LIST } from '@/graphql/queries';
+import { TOGGLE_IMPORT_ERROR } from '@/graphql/mutations';
 export default {
-  name: 'ErrorTickets'
+  name: 'ErrorTickets',
+  props: {
+    filteredDataSetList: {
+      required: true,
+      type: Array
+    }
+  },
+  apollo: {
+    importErrorsCountryList: {
+      query: GET_IMPORT_ERRORS_COUNTRY_LIST
+    }
+  },
+  data() {
+    return {
+      importErrorsCountryList: []
+    };
+  },
+  methods: {
+    formatDataSetCol(date) {
+      return formatDataSetCol(date);
+    },
+    formatDataSetUpdated(date) {
+      return formatDataSetUpdated(date);
+    },
+    formatNumber(num) {
+      return formatNumber(num);
+    },
+    getSummaries(param) {
+      const { columns, data } = param;
+      return columns.map(() => {
+        return this.formatNumber(
+          data.reduce((a, b) => {
+            return a + b.errorTickets;
+          }, 0)
+        );
+      });
+    },
+    getTotal(param) {
+      const { columns, data } = param;
+      return columns.map((col, i) => {
+        if (i === 0) {
+          return 'TOTAL';
+        }
+        return this.formatNumber(
+          data.reduce((a, b) => {
+            return a + b.errorTicketsTotal;
+          }, 0)
+        );
+      });
+    },
+    toggleImportError(id) {
+      this.$apollo.mutate({
+        mutation: TOGGLE_IMPORT_ERROR,
+        variables: {
+          id
+        }
+      });
+    }
+  }
 };
 </script>

@@ -47,20 +47,25 @@ exports.dataSet = {
           farePaid
         }
       }
-      importErrorList {
+      importErrorsCountryList {
         id
         name
         importedTicketsTotal
         errorTicketsTotal
         errorRatioTotal
-        columns {
+      }
+      importErrorsColumnList {
+        id
+        name
+        dateUpdated
+        status
+        data {
           id
+          countryId
           name
           importedTickets
           errorTickets
           errorRatio
-          dateUpdated
-          status
         }
       }
     }`
@@ -97,6 +102,20 @@ exports.dataSet = {
           tickets
           segments
           farePaid
+        }
+      }
+      toggleImportError(id: 1) {
+        id
+        name
+        dateUpdated
+        status
+        data {
+          id
+          countryId
+          name
+          importedTickets
+          errorTickets
+          errorRatio
         }
       }
     }

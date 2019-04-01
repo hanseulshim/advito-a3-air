@@ -7,7 +7,8 @@ exports.dataSetResolvers = {
     posTrendsColumnList: () => dataSet.posTrendsColumnList,
     divisionTrendsList: () => dataSet.divisionTrendsList,
     divisionTrendsColumnList: () => dataSet.divisionTrendsColumnList,
-    importErrorList: () => dataSet.importErrors
+    importErrorsCountryList: () => dataSet.importErrorsCountryList,
+    importErrorsColumnList: () => dataSet.importErrorsColumnList
   },
   Mutation: {
     togglePosTrend: (_, { id }) => {
@@ -37,6 +38,20 @@ exports.dataSetResolvers = {
         divisionTrend.status = 'reject';
       }
       return divisionTrend;
+    },
+    toggleImportError: (_, { id }) => {
+      const importError = dataSet.importErrorsColumnList.filter(
+        err => err.id === id
+      )[0];
+      if (!importError) {
+        throw new ApolloError('Import Error not found', 400);
+      }
+      if (importError.status === null || importError.status === 'reject') {
+        importError.status = 'accept';
+      } else if (importError.status === 'accept') {
+        importError.status = 'reject';
+      }
+      return importError;
     }
   }
 };

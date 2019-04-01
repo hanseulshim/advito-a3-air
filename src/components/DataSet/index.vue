@@ -13,7 +13,8 @@
 import Navigation from './Navigation';
 import {
   GET_POS_TRENDS_COLUMN_LIST,
-  GET_DIVISION_TRENDS_COLUMN_LIST
+  GET_DIVISION_TRENDS_COLUMN_LIST,
+  GET_IMPORT_ERRORS_COLUMN_LIST
 } from '@/graphql/queries';
 export default {
   name: 'DataSet',
@@ -26,12 +27,16 @@ export default {
     },
     divisionTrendsColumnList: {
       query: GET_DIVISION_TRENDS_COLUMN_LIST
+    },
+    importErrorsColumnList: {
+      query: GET_IMPORT_ERRORS_COLUMN_LIST
     }
   },
   data() {
     return {
       posTrendsColumnList: [],
       divisionTrendsColumnList: [],
+      importErrorsColumnList: [],
       selectedFilter: 'all'
     };
   },
@@ -41,6 +46,8 @@ export default {
         return this.posTrendsColumnList.slice();
       } else if (this.$route.path.includes('division-trends')) {
         return this.divisionTrendsColumnList.slice();
+      } else if (this.$route.path.includes('import-errors')) {
+        return this.importErrorsColumnList.slice();
       }
       return [];
     },
