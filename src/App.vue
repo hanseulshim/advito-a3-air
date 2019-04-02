@@ -45,7 +45,6 @@ body {
 }
 
 #app {
-  display: grid;
   padding: 2em 4em;
   font-family: 'Rubik', sans-serif;
   max-width: 1600px;

@@ -5,28 +5,28 @@
         class="nav-item"
         to="/project/data/pos-trends/tickets"
         :class="{ active: $route.path.includes('/project/data/pos-trends') }"
-        ><i class="far fa-building data-icon" /><span
-          >PoS Trends</span
-        ></router-link
       >
+        <i class="far fa-building data-icon" />
+        <span>PoS Trends</span>
+      </router-link>
       <router-link
         class="nav-item"
         to="/project/data/division-trends/tickets"
         :class="{
           active: $route.path.includes('/project/data/division-trends')
         }"
-        ><i class="far fa-newspaper data-icon" /><span
-          >Division Trends</span
-        ></router-link
       >
+        <i class="far fa-newspaper data-icon" />
+        <span>Division Trends</span>
+      </router-link>
       <router-link
         class="nav-item"
         to="/project/data/import-errors/imported-tickets"
         :class="{ active: $route.path.includes('/project/data/import-errors') }"
-        ><i class="far fa-file-alt data-icon" /><span
-          >Import Errors</span
-        ></router-link
       >
+        <i class="far fa-file-alt data-icon" />
+        <span>Import Errors</span>
+      </router-link>
       <button class="button long annualization">ANNUALIZATION</button>
       <div class="dataset">
         <el-select
@@ -90,14 +90,23 @@ export default {
   display: grid;
   grid-template-areas: 'pos division import . annualization dataset';
   grid-template-columns: 15% 15% 15% auto 150px 200px;
+  -ms-grid-columns: 15% 1em 15% 1em 15% 1em auto 1em 150px 1em 200px;
   row-gap: 1em;
   column-gap: 1em;
   align-items: center;
 }
 .annualization {
+  -ms-grid-row: 1;
+  grid-row: 1;
+  -ms-grid-column: 9;
+  grid-column: 9;
   grid-area: annualization;
 }
 .dataset {
+  -ms-grid-row: 1;
+  grid-row: 1;
+  -ms-grid-column: 11;
+  grid-column: 11;
   grid-area: dataset;
 }
 .nav-item {
