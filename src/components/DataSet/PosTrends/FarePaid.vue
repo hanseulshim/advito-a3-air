@@ -55,7 +55,7 @@
           :summary-method="getSummaries"
         >
           <el-table-column
-            align="center"
+            align="right"
             :formatter="row => formatNumber(row.farePaid)"
           >
             <template slot="header">
