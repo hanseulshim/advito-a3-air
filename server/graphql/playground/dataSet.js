@@ -26,36 +26,46 @@ exports.dataSet = {
           farePaid
         }
       }
-      divisionTrendList {
+      divisionTrendsList {
         id
         name
         ticketsTotal
         segmentsTotal
         farePaidTotal
-        columns {
+      }
+      divisionTrendsColumnList {
+        id
+        name
+        dateUpdated
+        status
+        data {
           id
+          divisionId
           name
           tickets
           segments
           farePaid
-          dateUpdated
-          status
         }
       }
-      importErrorList {
+      importErrorsCountryList {
         id
         name
         importedTicketsTotal
         errorTicketsTotal
         errorRatioTotal
-        columns {
+      }
+      importErrorsColumnList {
+        id
+        name
+        dateUpdated
+        status
+        data {
           id
+          countryId
           name
           importedTickets
           errorTickets
           errorRatio
-          dateUpdated
-          status
         }
       }
     }`
@@ -78,6 +88,34 @@ exports.dataSet = {
           tickets
           segments
           farePaid
+        }
+      }
+      toggleDivisionTrend(id: 1) {
+        id
+        name
+        dateUpdated
+        status
+        data {
+          id
+          divisionId
+          name
+          tickets
+          segments
+          farePaid
+        }
+      }
+      toggleImportError(id: 1) {
+        id
+        name
+        dateUpdated
+        status
+        data {
+          id
+          countryId
+          name
+          importedTickets
+          errorTickets
+          errorRatio
         }
       }
     }

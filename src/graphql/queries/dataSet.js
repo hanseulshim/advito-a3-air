@@ -31,43 +31,63 @@ export const GET_POS_TRENDS_COLUMN_LIST = gql`
   }
 `;
 
-export const GET_DIVISION_TREND_LIST = gql`
+export const GET_DIVISION_TRENDS_LIST = gql`
   {
-    divisionTrendList {
+    divisionTrendsList {
       id
       name
       ticketsTotal
       segmentsTotal
       farePaidTotal
-      columns {
+    }
+  }
+`;
+
+export const GET_DIVISION_TRENDS_COLUMN_LIST = gql`
+  {
+    divisionTrendsColumnList {
+      id
+      name
+      dateUpdated
+      status
+      data {
         id
+        divisionId
         name
         tickets
         segments
         farePaid
-        dateUpdated
-        status
       }
     }
   }
 `;
 
-export const GET_IMPORT_ERROR_LIST = gql`
+export const GET_IMPORT_ERRORS_COUNTRY_LIST = gql`
   {
-    importErrorList {
+    importErrorsCountryList {
       id
       name
       importedTicketsTotal
       errorTicketsTotal
       errorRatioTotal
-      columns {
+    }
+  }
+`;
+
+export const GET_IMPORT_ERRORS_COLUMN_LIST = gql`
+  {
+    importErrorsColumnList {
+      id
+      name
+      dateUpdated
+      status
+      data {
         id
+        countryId
         name
         importedTickets
         errorTickets
         errorRatio
-        dateUpdated
-        status
       }
     }
   }

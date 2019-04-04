@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import fetch from 'unfetch';
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import App from './App.vue';
@@ -27,6 +28,7 @@ const apolloClient = new ApolloClient({
     defaults,
     resolvers
   },
+  fetch,
   request: operation => {
     // const sessiontoken = getToken();
     const sessiontoken = 'advitoValidToken';

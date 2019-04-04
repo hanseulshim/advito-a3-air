@@ -18,3 +18,41 @@ export const TOGGLE_POS_TREND = gql`
     }
   }
 `;
+
+export const TOGGLE_DIVISION_TREND = gql`
+  mutation toggleDivisionTrend($id: Int!) {
+    toggleDivisionTrend(id: $id) {
+      id
+      name
+      dateUpdated
+      status
+      data {
+        id
+        divisionId
+        name
+        tickets
+        segments
+        farePaid
+      }
+    }
+  }
+`;
+
+export const TOGGLE_IMPORT_ERROR = gql`
+  mutation toggleImportError($id: Int!) {
+    toggleImportError(id: $id) {
+      id
+      name
+      dateUpdated
+      status
+      data {
+        id
+        countryId
+        name
+        importedTickets
+        errorTickets
+        errorRatio
+      }
+    }
+  }
+`;
