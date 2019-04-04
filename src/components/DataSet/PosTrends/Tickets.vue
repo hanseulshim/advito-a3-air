@@ -53,6 +53,7 @@
           :data="column.data"
           show-summary
           :summary-method="getSummaries"
+          :row-class-name="tableRowClassName(column.status)"
         >
           <el-table-column
             align="right"
@@ -137,12 +138,19 @@ export default {
           id
         }
       });
+    },
+    tableRowClassName(status) {
+      if (status === null || status === 'reject') {
+        return 'need-qc-row';
+      }
+      return '';
     }
   }
 };
 </script>
 
 <style lang="scss">
+@import '@/styles/global.scss';
 .data-set-table-container {
   margin-top: 2em;
   display: flex;
@@ -165,6 +173,9 @@ export default {
         height: 19px;
         font-weight: 300;
       }
+    }
+    .need-qc-row {
+      background: $ebb;
     }
   }
   .fixed-table-container {

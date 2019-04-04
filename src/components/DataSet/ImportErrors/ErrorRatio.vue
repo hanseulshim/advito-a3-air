@@ -53,6 +53,7 @@
           :data="column.data"
           show-summary
           :summary-method="getSummaries"
+          :row-class-name="tableRowClassName(column.status)"
         >
           <el-table-column
             align="right"
@@ -137,6 +138,12 @@ export default {
           id
         }
       });
+    },
+    tableRowClassName(status) {
+      if (status === null || status === 'reject') {
+        return 'need-qc-row';
+      }
+      return '';
     }
   }
 };
