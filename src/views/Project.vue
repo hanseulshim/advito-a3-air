@@ -125,7 +125,7 @@ export default {
 }
 .content-container {
   background: $white;
-  padding: 2em;
+  padding: 3em;
   border: 1px solid $gray-nurse;
   border-top: none;
 }

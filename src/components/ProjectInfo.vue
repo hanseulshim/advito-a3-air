@@ -104,7 +104,7 @@ export default {
   grid-template-areas: 'projectName column1 column2 column3 buttons';
   grid-template-columns: 25% auto auto auto 75px;
   column-gap: 1em;
-  margin-bottom: 2em;
+  margin-bottom: 3em;
 }
 .project-name {
   grid-area: projectName;
