@@ -64,6 +64,11 @@
             Reject
             <i class="fas fa-circle reject" />
           </div>
+          <i
+            v-if="column.status === 'reject'"
+            class="fas fa-trash-alt"
+            @click="deletePosTrend(column.id)"
+          />
         </div>
         <el-table
           :data="column.data"
@@ -94,8 +99,11 @@
 
 <script>
 import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
-import { GET_POS_TRENDS_COUNTRY_LIST } from '@/graphql/queries';
-import { TOGGLE_POS_TREND } from '@/graphql/mutations';
+import {
+  GET_POS_TRENDS_COUNTRY_LIST,
+  GET_POS_TRENDS_COLUMN_LIST
+} from '@/graphql/queries';
+import { TOGGLE_POS_TREND, DELETE_POS_TREND } from '@/graphql/mutations';
 export default {
   name: 'Tickets',
   props: {
@@ -156,6 +164,27 @@ export default {
         }
       });
     },
+    deletePosTrend(id) {
+      this.$apollo.mutate({
+        mutation: DELETE_POS_TREND,
+        variables: { id },
+        update: (store, data) => {
+          const id = data.data.deletePosTrend;
+          const newData = store.readQuery({
+            query: GET_POS_TRENDS_COLUMN_LIST
+          });
+          const index = newData.posTrendsColumnList.filter(
+            col => col.id === id
+          )[0];
+          newData.posTrendsColumnList.splice(index, 1);
+          store.writeQuery({
+            query: GET_POS_TRENDS_COLUMN_LIST,
+            variables: { id },
+            data: newData
+          });
+        }
+      });
+    },
     tableRowClassName(status) {
       if (status === null || status === 'reject') {
         return 'need-qc-row';
@@ -210,6 +239,8 @@ export default {
     display: flex;
     height: 40px;
     justify-content: space-evenly;
+    align-items: flex-end;
+    margin-bottom: 5px;
     .icon-text-container {
       display: flex;
       flex-direction: column;

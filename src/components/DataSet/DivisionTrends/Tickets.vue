@@ -64,6 +64,11 @@
             Reject
             <i class="fas fa-circle reject" />
           </div>
+          <i
+            v-if="column.status === 'reject'"
+            class="fas fa-trash-alt"
+            @click="deleteDivisionTrend(column.id)"
+          />
         </div>
         <el-table
           :data="column.data"
@@ -94,8 +99,14 @@
 
 <script>
 import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
-import { GET_DIVISION_TRENDS_LIST } from '@/graphql/queries';
-import { TOGGLE_DIVISION_TREND } from '@/graphql/mutations';
+import {
+  GET_DIVISION_TRENDS_LIST,
+  GET_DIVISION_TRENDS_COLUMN_LIST
+} from '@/graphql/queries';
+import {
+  TOGGLE_DIVISION_TREND,
+  DELETE_DIVISION_TREND
+} from '@/graphql/mutations';
 export default {
   name: 'Tickets',
   props: {
@@ -153,6 +164,27 @@ export default {
         variables: {
           id,
           status
+        }
+      });
+    },
+    deleteDivisionTrend(id) {
+      this.$apollo.mutate({
+        mutation: DELETE_DIVISION_TREND,
+        variables: { id },
+        update: (store, data) => {
+          const id = data.data.deleteDivisionTrend;
+          const newData = store.readQuery({
+            query: GET_DIVISION_TRENDS_COLUMN_LIST
+          });
+          const index = newData.divisionTrendsColumnList.filter(
+            col => col.id === id
+          )[0];
+          newData.divisionTrendsColumnList.splice(index, 1);
+          store.writeQuery({
+            query: GET_DIVISION_TRENDS_COLUMN_LIST,
+            variables: { id },
+            data: newData
+          });
         }
       });
     },

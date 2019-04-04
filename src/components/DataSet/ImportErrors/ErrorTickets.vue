@@ -64,6 +64,11 @@
             Reject
             <i class="fas fa-circle reject" />
           </div>
+          <i
+            v-if="column.status === 'reject'"
+            class="fas fa-trash-alt"
+            @click="deleteImportError(column.id)"
+          />
         </div>
         <el-table
           :data="column.data"
@@ -94,8 +99,11 @@
 
 <script>
 import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
-import { GET_IMPORT_ERRORS_COUNTRY_LIST } from '@/graphql/queries';
-import { TOGGLE_IMPORT_ERROR } from '@/graphql/mutations';
+import {
+  GET_IMPORT_ERRORS_COUNTRY_LIST,
+  GET_IMPORT_ERRORS_COLUMN_LIST
+} from '@/graphql/queries';
+import { TOGGLE_IMPORT_ERROR, DELETE_IMPORT_ERROR } from '@/graphql/mutations';
 export default {
   name: 'ErrorTickets',
   props: {
@@ -153,6 +161,27 @@ export default {
         variables: {
           id,
           status
+        }
+      });
+    },
+    deleteImportError(id) {
+      this.$apollo.mutate({
+        mutation: DELETE_IMPORT_ERROR,
+        variables: { id },
+        update: (store, data) => {
+          const id = data.data.deleteImportError;
+          const newData = store.readQuery({
+            query: GET_IMPORT_ERRORS_COLUMN_LIST
+          });
+          const index = newData.importErrorsColumnList.filter(
+            col => col.id === id
+          )[0];
+          newData.importErrorsColumnList.splice(index, 1);
+          store.writeQuery({
+            query: GET_IMPORT_ERRORS_COLUMN_LIST,
+            variables: { id },
+            data: newData
+          });
         }
       });
     },
