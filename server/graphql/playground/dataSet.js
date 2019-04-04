@@ -118,6 +118,9 @@ exports.dataSet = {
           errorRatio
         }
       }
+      deletePosTrend(id: 1)
+      deleteDivisionTrend(id: 1)
+      deleteImportError(id: 1)
     }
     `
   }

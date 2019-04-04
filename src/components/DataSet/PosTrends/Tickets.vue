@@ -39,15 +39,31 @@
         :key="column.id"
         class="column-table"
       >
-        <div class="icon-container" @click="togglePosTrend(column.id)">
-          <i v-if="column.status === null" class="fas fa-circle"></i>
-          <el-switch
-            v-else
-            :value="column.status === 'accept'"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
+        <div class="icon-container">
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'accept' }"
+            @click="togglePosTrend(column.id, 'accept')"
           >
-          </el-switch>
+            Accept
+            <i class="fas fa-circle accept" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === null }"
+            @click="togglePosTrend(column.id, null)"
+          >
+            QC
+            <i class="fas fa-circle" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'reject' }"
+            @click="togglePosTrend(column.id, 'reject')"
+          >
+            Reject
+            <i class="fas fa-circle reject" />
+          </div>
         </div>
         <el-table
           :data="column.data"
@@ -131,11 +147,12 @@ export default {
         );
       });
     },
-    togglePosTrend(id) {
+    togglePosTrend(id, status) {
       this.$apollo.mutate({
         mutation: TOGGLE_POS_TREND,
         variables: {
-          id
+          id,
+          status
         }
       });
     },
@@ -191,10 +208,28 @@ export default {
   }
   .icon-container {
     display: flex;
-    justify-content: center;
-    height: 30px;
-    .fa-circle {
+    height: 40px;
+    justify-content: space-evenly;
+    .icon-text-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       cursor: pointer;
+      &.active {
+        font-weight: 400;
+        .fa-circle {
+          opacity: 1;
+        }
+      }
+    }
+    .fa-circle {
+      opacity: 0.4;
+      &.accept {
+        color: $wild-willow;
+      }
+      &.reject {
+        color: $monza;
+      }
     }
   }
 }

@@ -39,15 +39,31 @@
         :key="column.id"
         class="column-table"
       >
-        <div class="icon-container" @click="toggleDivisionTrend(column.id)">
-          <i v-if="column.status === null" class="fas fa-circle"></i>
-          <el-switch
-            v-else
-            :value="column.status === 'accept'"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
+        <div class="icon-container">
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'accept' }"
+            @click="toggleDivisionTrend(column.id, 'accept')"
           >
-          </el-switch>
+            Accept
+            <i class="fas fa-circle accept" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === null }"
+            @click="toggleDivisionTrend(column.id, null)"
+          >
+            QC
+            <i class="fas fa-circle" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'reject' }"
+            @click="toggleDivisionTrend(column.id, 'reject')"
+          >
+            Reject
+            <i class="fas fa-circle reject" />
+          </div>
         </div>
         <el-table
           :data="column.data"
@@ -131,11 +147,12 @@ export default {
         );
       });
     },
-    toggleDivisionTrend(id) {
+    toggleDivisionTrend(id, status) {
       this.$apollo.mutate({
         mutation: TOGGLE_DIVISION_TREND,
         variables: {
-          id
+          id,
+          status
         }
       });
     },

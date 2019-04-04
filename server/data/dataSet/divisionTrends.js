@@ -83,7 +83,8 @@ exports.divisionTrendsColumnList = [
       }
     ],
     dateUpdated: 'Mar 29 2019 12:47:54 GMT-0400 (Eastern Daylight Time)',
-    status: null
+    status: null,
+    isDeleted: false
   },
   {
     id: 2,
@@ -131,7 +132,8 @@ exports.divisionTrendsColumnList = [
       }
     ],
     dateUpdated: 'Feb 15 2019 4:25:54 GMT-0400 (Eastern Daylight Time)',
-    status: null
+    status: null,
+    isDeleted: false
   },
   {
     id: 3,
@@ -179,6 +181,7 @@ exports.divisionTrendsColumnList = [
       }
     ],
     dateUpdated: 'Jan 25 2019 15:30:54 GMT-0400 (Eastern Daylight Time)',
-    status: null
+    status: null,
+    isDeleted: false
   }
 ];

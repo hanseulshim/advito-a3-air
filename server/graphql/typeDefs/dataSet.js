@@ -67,8 +67,11 @@ extend type Query {
   importErrorsColumnList: [ImportErrorColumn] @auth
 }
 extend type Mutation {
-  togglePosTrend(id: Int!): PosTrendColumn @auth
-  toggleDivisionTrend(id: Int!): DivisionTrendColumn @auth
-  toggleImportError(id: Int!): ImportErrorColumn @auth
+  togglePosTrend(id: Int!, status: String): PosTrendColumn @auth
+  toggleDivisionTrend(id: Int!, status: String): DivisionTrendColumn @auth
+  toggleImportError(id: Int!, status: String): ImportErrorColumn @auth
+  deletePosTrend(id: Int!): Int @auth
+  deleteDivisionTrend(id: Int!): Int @auth
+  deleteImportError(id: Int!): Int @auth
 }
 `;
