@@ -7,7 +7,7 @@
         :class="{ active: $route.path.includes('/project/data/pos-trends') }"
       >
         <i class="far fa-building data-icon" />
-        <span>PoS Trends</span>
+        <span class="nav-title">PoS Trends</span>
       </router-link>
       <router-link
         class="nav-item"
@@ -17,7 +17,7 @@
         }"
       >
         <i class="far fa-newspaper data-icon" />
-        <span>Division Trends</span>
+        <span class="nav-title">Division Trends</span>
       </router-link>
       <router-link
         class="nav-item"
@@ -25,7 +25,7 @@
         :class="{ active: $route.path.includes('/project/data/import-errors') }"
       >
         <i class="far fa-file-alt data-icon" />
-        <span>Import Errors</span>
+        <span class="nav-title">Import Errors</span>
       </router-link>
       <button class="button long annualization">ANNUALIZATION</button>
       <div class="dataset">
@@ -110,6 +110,9 @@ export default {
   grid-area: dataset;
 }
 .nav-item {
+  .nav-title {
+    font-size: 16px;
+  }
   &.active {
     span {
       color: $tradewind;
@@ -128,10 +131,10 @@ export default {
   }
   .data-icon {
     font-size: 1.5em;
-    border: 1px solid $gray;
+    border: 1px solid $dusty-gray;
     border-radius: 100%;
-    padding: 10px;
-    margin-right: 5px;
+    padding: 15px;
+    margin-right: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -140,14 +143,14 @@ export default {
   }
 }
 .sub-navigation-container {
-  border-top: 1px solid $tradewind;
+  border-top: 2px solid $botticelli;
   margin-top: 10px;
   padding-top: 10px;
   position: relative;
   .division-trends {
     margin-left: 15%;
     .fa-chevron-up {
-      left: calc(15% + 1em + 18px);
+      left: calc(15% + 1em + 25px);
     }
   }
   .import-errors {
@@ -157,13 +160,13 @@ export default {
     }
   }
   .spacer {
-    margin: 0 10px;
+    margin: 0 15px;
   }
   .fa-chevron-up {
     position: absolute;
     top: -10px;
     background: $white;
-    color: $tradewind;
+    color: $botticelli;
     left: 18px;
   }
 }
