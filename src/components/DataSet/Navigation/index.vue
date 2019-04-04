@@ -2,29 +2,37 @@
   <div>
     <div class="navigation-container">
       <router-link
-        class="nav-item"
+        class="nav-item data-nav"
         to="/project/data/pos-trends/tickets"
         :class="{ active: $route.path.includes('/project/data/pos-trends') }"
       >
-        <i class="far fa-building data-icon" />
+        <img class="data-icon" alt="pos-trends" src="@/assets/posTrends.png" />
         <span class="nav-title">PoS Trends</span>
       </router-link>
       <router-link
-        class="nav-item"
+        class="nav-item data-nav"
         to="/project/data/division-trends/tickets"
         :class="{
           active: $route.path.includes('/project/data/division-trends')
         }"
       >
-        <i class="far fa-newspaper data-icon" />
+        <img
+          class="data-icon"
+          alt="division-trends"
+          src="@/assets/divisionTrends.png"
+        />
         <span class="nav-title">Division Trends</span>
       </router-link>
       <router-link
-        class="nav-item"
+        class="nav-item data-nav"
         to="/project/data/import-errors/imported-tickets"
         :class="{ active: $route.path.includes('/project/data/import-errors') }"
       >
-        <i class="far fa-file-alt data-icon" />
+        <img
+          class="data-icon"
+          alt="import-errors"
+          src="@/assets/importErrors.png"
+        />
         <span class="nav-title">Import Errors</span>
       </router-link>
       <button class="button long annualization">ANNUALIZATION</button>
@@ -110,6 +118,10 @@ export default {
   grid-area: dataset;
 }
 .nav-item {
+  &.data-nav {
+    display: flex;
+    align-items: center;
+  }
   .nav-title {
     font-size: 16px;
   }
@@ -130,16 +142,11 @@ export default {
     }
   }
   .data-icon {
-    font-size: 1.5em;
     border: 1px solid $dusty-gray;
     border-radius: 100%;
     padding: 15px;
     margin-right: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 25px;
-    height: 25px;
+    width: 30px;
   }
 }
 .sub-navigation-container {
