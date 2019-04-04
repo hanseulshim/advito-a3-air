@@ -162,7 +162,7 @@ export default {
         align-items: center;
       }
       .updated-date {
-        height: 25px;
+        height: 19px;
         font-weight: 300;
       }
     }
