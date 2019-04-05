@@ -39,7 +39,7 @@ export default {
         },
         {
           id: 2,
-          link: '/project/data/pos-trends/tickets',
+          link: '/project/data/import-errors/imported-tickets',
           path: '/project/data',
           title: 'data'
         },
@@ -125,7 +125,7 @@ export default {
 }
 .content-container {
   background: $white;
-  padding: 2em;
+  padding: 3em;
   border: 1px solid $gray-nurse;
   border-top: none;
 }

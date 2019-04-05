@@ -39,23 +39,45 @@
         :key="column.id"
         class="column-table"
       >
-        <div class="icon-container" @click="togglePosTrend(column.id)">
-          <i v-if="column.status === null" class="fas fa-circle"></i>
-          <el-switch
-            v-else
-            :value="column.status === 'accept'"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
+        <div class="icon-container">
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'accept' }"
+            @click="togglePosTrend(column.id, 'accept')"
           >
-          </el-switch>
+            Accept
+            <i class="fas fa-circle accept" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === null }"
+            @click="togglePosTrend(column.id, null)"
+          >
+            QC
+            <i class="fas fa-circle" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'reject' }"
+            @click="togglePosTrend(column.id, 'reject')"
+          >
+            Reject
+            <i class="fas fa-circle reject" />
+          </div>
+          <i
+            v-if="column.status === 'reject'"
+            class="fas fa-trash-alt"
+            @click="deletePosTrend(column.id)"
+          />
         </div>
         <el-table
           :data="column.data"
           show-summary
           :summary-method="getSummaries"
+          :row-class-name="tableRowClassName(column.status)"
         >
           <el-table-column
-            align="center"
+            align="right"
             :formatter="row => formatNumber(row.tickets)"
           >
             <template slot="header">
@@ -77,8 +99,11 @@
 
 <script>
 import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
-import { GET_POS_TRENDS_COUNTRY_LIST } from '@/graphql/queries';
-import { TOGGLE_POS_TREND } from '@/graphql/mutations';
+import {
+  GET_POS_TRENDS_COUNTRY_LIST,
+  GET_POS_TRENDS_COLUMN_LIST
+} from '@/graphql/queries';
+import { TOGGLE_POS_TREND, DELETE_POS_TREND } from '@/graphql/mutations';
 export default {
   name: 'Tickets',
   props: {
@@ -130,19 +155,48 @@ export default {
         );
       });
     },
-    togglePosTrend(id) {
+    togglePosTrend(id, status) {
       this.$apollo.mutate({
         mutation: TOGGLE_POS_TREND,
         variables: {
-          id
+          id,
+          status
         }
       });
+    },
+    deletePosTrend(id) {
+      this.$apollo.mutate({
+        mutation: DELETE_POS_TREND,
+        variables: { id },
+        update: (store, data) => {
+          const id = data.data.deletePosTrend;
+          const newData = store.readQuery({
+            query: GET_POS_TRENDS_COLUMN_LIST
+          });
+          const index = newData.posTrendsColumnList.filter(
+            col => col.id === id
+          )[0];
+          newData.posTrendsColumnList.splice(index, 1);
+          store.writeQuery({
+            query: GET_POS_TRENDS_COLUMN_LIST,
+            variables: { id },
+            data: newData
+          });
+        }
+      });
+    },
+    tableRowClassName(status) {
+      if (status === null || status === 'reject') {
+        return 'need-qc-row';
+      }
+      return '';
     }
   }
 };
 </script>
 
 <style lang="scss">
+@import '@/styles/global.scss';
 .data-set-table-container {
   margin-top: 2em;
   display: flex;
@@ -162,9 +216,12 @@ export default {
         align-items: center;
       }
       .updated-date {
-        height: 25px;
+        height: 19px;
         font-weight: 300;
       }
+    }
+    .need-qc-row {
+      background: $ebb;
     }
   }
   .fixed-table-container {
@@ -180,10 +237,30 @@ export default {
   }
   .icon-container {
     display: flex;
-    justify-content: center;
-    height: 30px;
-    .fa-circle {
+    height: 40px;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    margin-bottom: 5px;
+    .icon-text-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       cursor: pointer;
+      &.active {
+        font-weight: 400;
+        .fa-circle {
+          opacity: 1;
+        }
+      }
+    }
+    .fa-circle {
+      opacity: 0.4;
+      &.accept {
+        color: $wild-willow;
+      }
+      &.reject {
+        color: $monza;
+      }
     }
   }
 }

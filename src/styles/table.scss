@@ -2,12 +2,13 @@
   .el-table {
     width: 100%;
     color: $dove-gray;
+    font-size: 13px;
     thead tr th {
-      padding: 5px 0;
+      padding: 5px 0 0 0;
     }
     th > .cell {
       color: $black;
-      font-weight: 500;
+      font-weight: 400;
     }
     th {
       background-color: $gallery;

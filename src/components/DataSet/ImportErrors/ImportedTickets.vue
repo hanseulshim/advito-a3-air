@@ -39,23 +39,45 @@
         :key="column.id"
         class="column-table"
       >
-        <div class="icon-container" @click="toggleImportError(column.id)">
-          <i v-if="column.status === null" class="fas fa-circle"></i>
-          <el-switch
-            v-else
-            :value="column.status === 'accept'"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
+        <div class="icon-container">
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'accept' }"
+            @click="toggleImportError(column.id, 'accept')"
           >
-          </el-switch>
+            Accept
+            <i class="fas fa-circle accept" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === null }"
+            @click="toggleImportError(column.id, null)"
+          >
+            QC
+            <i class="fas fa-circle" />
+          </div>
+          <div
+            class="icon-text-container"
+            :class="{ active: column.status === 'reject' }"
+            @click="toggleImportError(column.id, 'reject')"
+          >
+            Reject
+            <i class="fas fa-circle reject" />
+          </div>
+          <i
+            v-if="column.status === 'reject'"
+            class="fas fa-trash-alt"
+            @click="deleteImportError(column.id)"
+          />
         </div>
         <el-table
           :data="column.data"
           show-summary
           :summary-method="getSummaries"
+          :row-class-name="tableRowClassName(column.status)"
         >
           <el-table-column
-            align="center"
+            align="right"
             :formatter="row => formatNumber(row.importedTickets)"
           >
             <template slot="header">
@@ -77,8 +99,11 @@
 
 <script>
 import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
-import { GET_IMPORT_ERRORS_COUNTRY_LIST } from '@/graphql/queries';
-import { TOGGLE_IMPORT_ERROR } from '@/graphql/mutations';
+import {
+  GET_IMPORT_ERRORS_COUNTRY_LIST,
+  GET_IMPORT_ERRORS_COLUMN_LIST
+} from '@/graphql/queries';
+import { TOGGLE_IMPORT_ERROR, DELETE_IMPORT_ERROR } from '@/graphql/mutations';
 export default {
   name: 'ImportedTickets',
   props: {
@@ -130,13 +155,41 @@ export default {
         );
       });
     },
-    toggleImportError(id) {
+    toggleImportError(id, status) {
       this.$apollo.mutate({
         mutation: TOGGLE_IMPORT_ERROR,
         variables: {
-          id
+          id,
+          status
         }
       });
+    },
+    deleteImportError(id) {
+      this.$apollo.mutate({
+        mutation: DELETE_IMPORT_ERROR,
+        variables: { id },
+        update: (store, data) => {
+          const id = data.data.deleteImportError;
+          const newData = store.readQuery({
+            query: GET_IMPORT_ERRORS_COLUMN_LIST
+          });
+          const index = newData.importErrorsColumnList.filter(
+            col => col.id === id
+          )[0];
+          newData.importErrorsColumnList.splice(index, 1);
+          store.writeQuery({
+            query: GET_IMPORT_ERRORS_COLUMN_LIST,
+            variables: { id },
+            data: newData
+          });
+        }
+      });
+    },
+    tableRowClassName(status) {
+      if (status === null || status === 'reject') {
+        return 'need-qc-row';
+      }
+      return '';
     }
   }
 };
