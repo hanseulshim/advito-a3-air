@@ -54,6 +54,12 @@ export default {
             required: true,
             message: 'Please input a region code.',
             trigger: 'change'
+          },
+          {
+            min: 2,
+            max: 2,
+            message: 'Region code should be two letters',
+            trigger: 'change'
           }
         ]
       }
