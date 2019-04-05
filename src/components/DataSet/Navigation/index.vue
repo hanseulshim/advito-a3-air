@@ -6,7 +6,9 @@
         to="/project/data/pos-trends/tickets"
         :class="{ active: $route.path.includes('/project/data/pos-trends') }"
       >
-        <img class="data-icon" alt="pos-trends" src="@/assets/posTrends.png" />
+        <span class="data-icon">
+          <img alt="pos-trends" src="@/assets/posTrends.png" />
+        </span>
         <span class="nav-title">PoS Trends</span>
       </router-link>
       <router-link
@@ -16,11 +18,9 @@
           active: $route.path.includes('/project/data/division-trends')
         }"
       >
-        <img
-          class="data-icon"
-          alt="division-trends"
-          src="@/assets/divisionTrends.png"
-        />
+        <span class="data-icon"
+          ><img alt="division-trends" src="@/assets/divisionTrends.png"
+        /></span>
         <span class="nav-title">Division Trends</span>
       </router-link>
       <router-link
@@ -28,11 +28,9 @@
         to="/project/data/import-errors/imported-tickets"
         :class="{ active: $route.path.includes('/project/data/import-errors') }"
       >
-        <img
-          class="data-icon"
-          alt="import-errors"
-          src="@/assets/importErrors.png"
-        />
+        <span class="data-icon">
+          <img alt="import-errors" src="@/assets/importErrors.png"
+        /></span>
         <span class="nav-title">Import Errors</span>
       </router-link>
       <button class="button long annualization">ANNUALIZATION</button>
@@ -144,9 +142,12 @@ export default {
   .data-icon {
     border: 1px solid $dusty-gray;
     border-radius: 100%;
-    padding: 15px;
+    padding: 10px;
     margin-right: 10px;
-    width: 30px;
+    width: 35px;
+    img {
+      width: 100%;
+    }
   }
 }
 .sub-navigation-container {
