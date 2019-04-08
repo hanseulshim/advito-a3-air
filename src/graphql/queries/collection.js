@@ -90,6 +90,7 @@ export const GET_AIRLINE_LIST = gql`
     airlineGroupAirlineList {
       id
       name
+      code
     }
   }
 `;

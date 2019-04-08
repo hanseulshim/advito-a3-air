@@ -59,10 +59,11 @@
           v-model="airlineIdList"
           class="select-modal airline-group-content"
           filterable
+          :filter-method="filterMethod"
           multiple
         >
           <el-option
-            v-for="item in airlineGroupAirlineList"
+            v-for="item in filteredOptions"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -136,7 +137,11 @@ export default {
       query: GET_AIRLINE_GROUP_COLLECTION_LIST
     },
     airlineGroupAirlineList: {
-      query: GET_AIRLINE_LIST
+      query: GET_AIRLINE_LIST,
+      update(data) {
+        this.filteredOptions = data.airlineGroupAirlineList;
+        return data.airlineGroupAirlineList;
+      }
     }
   },
   data() {
@@ -183,7 +188,8 @@ export default {
         ]
       },
       airlineGroupCollectionList: [],
-      airlineGroupAirlineList: []
+      airlineGroupAirlineList: [],
+      filteredOptions: []
     };
   },
   methods: {
@@ -242,6 +248,14 @@ export default {
           message: 'Failed to edit airline group. Please try again.'
         });
       }
+    },
+    filterMethod(value) {
+      this.filteredOptions = this.airlineGroupAirlineList.filter(option => {
+        return (
+          option.name.toLowerCase().includes(value) ||
+          option.code.toLowerCase().includes(value)
+        );
+      });
     },
     beforeOpen(event) {
       const airlineGroup = event.params.airlineGroup;

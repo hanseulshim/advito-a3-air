@@ -61,6 +61,7 @@ type AirlineGroup {
 type AirlineGroupAirline {
   id: Int
   name: String
+  code: String
   effectiveStartDate: Date
   effectiveEndDate: Date
 }

@@ -77,6 +77,7 @@ exports.collection = {
       airlineGroupAirlineList {
         id
         name
+        code
       }
       preferredAirlineCollectionList {
         id
