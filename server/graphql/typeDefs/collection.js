@@ -113,6 +113,8 @@ input PreferredAirlineInput {
   id: Int
   posId: Int
   preferenceLevelId: Int
+  effectiveStartDate: Date
+  effectiveEndDate: Date
 }
 
 extend type Query {

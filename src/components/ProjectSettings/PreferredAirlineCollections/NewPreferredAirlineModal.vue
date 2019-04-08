@@ -69,6 +69,23 @@
           ></el-option>
         </el-select>
       </div>
+      <div class="airline-group-item">
+        <div class="airline-group-label">Effective Dates *</div>
+        <div class="date-picker-container airline-group-content">
+          <el-date-picker
+            v-model="effectiveStartDate"
+            type="date"
+            format="dd MMM yyyy"
+            class="date-picker"
+          />
+          <el-date-picker
+            v-model="effectiveEndDate"
+            type="date"
+            format="dd MMM yyyy"
+            class="date-picker"
+          />
+        </div>
+      </div>
       <button class="button airline-group-button" @click="addAirline">
         ADD
       </button>
@@ -80,7 +97,28 @@
               <i class="fas fa-times" @click="removeAirline(index)" />
               {{ getAirline(airline.id) }}
             </div>
-            <el-select v-model="airline.posId" class="select-modal" filterable>
+            <div class="date-picker-container airline-group-content">
+              <el-date-picker
+                v-model="airline.effectiveStartDate"
+                type="date"
+                format="dd MMM yyyy"
+                class="date-picker"
+              />
+              <el-date-picker
+                v-model="airline.effectiveEndDate"
+                type="date"
+                format="dd MMM yyyy"
+                class="date-picker"
+              />
+            </div>
+          </div>
+          <div class="airline-group-item">
+            <div class="airline-group-label" />
+            <el-select
+              v-model="airline.posId"
+              class="select-modal airline-group-content"
+              filterable
+            >
               <el-option
                 v-for="item in preferredAirlineInfo.posList"
                 :key="item.id"
@@ -93,7 +131,7 @@
             <div class="airline-group-label" />
             <el-select
               v-model="airline.preferenceLevelId"
-              class="select-modal"
+              class="select-modal airline-group-content"
               filterable
             >
               <el-option
@@ -147,6 +185,8 @@ export default {
       airlineIdList: [],
       posId: null,
       preferenceLevelId: null,
+      effectiveStartDate: null,
+      effectiveEndDate: null,
       rules: {
         id: [
           {
@@ -176,16 +216,25 @@ export default {
       });
     },
     addAirline() {
-      if (this.airlineIdList.length && this.posId && this.preferenceLevelId) {
+      if (
+        this.airlineIdList.length &&
+        this.posId &&
+        this.preferenceLevelId &&
+        this.effectiveStartDate
+      ) {
         const airlineList = this.airlineIdList.map(id => ({
           id,
           posId: this.posId,
-          preferenceLevelId: this.preferenceLevelId
+          preferenceLevelId: this.preferenceLevelId,
+          effectiveStartDate: this.effectiveStartDate,
+          effectiveEndDate: this.effectiveEndDate
         }));
         this.form.airlineList.push(...airlineList);
         this.airlineIdList = [];
         this.posId = null;
         this.preferenceLevelId = null;
+        this.effectiveStartDate = null;
+        this.effectiveEndDate = null;
       }
     },
     removeAirline(index) {
