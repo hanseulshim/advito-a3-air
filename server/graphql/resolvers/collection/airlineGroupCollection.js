@@ -97,7 +97,10 @@ exports.airlineGroupCollection = {
         )[0].name;
         return {
           ...airline,
-          name
+          name,
+          effectiveEndDate: airline.effectiveEndDate
+            ? airline.effectiveEndDate
+            : new Date('31 DEC 9999')
         };
       });
       const airline = {
@@ -142,7 +145,10 @@ exports.airlineGroupCollection = {
         )[0];
         return {
           ...airline,
-          name: air.name
+          name: air.name,
+          effectiveEndDate: airline.effectiveEndDate
+            ? airline.effectiveEndDate
+            : new Date('31 DEC 9999')
         };
       });
       return airlineGroupCollection;

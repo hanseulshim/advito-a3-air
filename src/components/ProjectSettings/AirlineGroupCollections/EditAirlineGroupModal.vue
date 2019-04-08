@@ -206,11 +206,7 @@ export default {
       });
     },
     addAirline() {
-      if (
-        this.airlineIdList.length &&
-        this.effectiveStartDate &&
-        this.effectiveEndDate
-      ) {
+      if (this.airlineIdList.length && this.effectiveStartDate) {
         const airlineList = this.airlineIdList.map(id => ({
           id,
           effectiveStartDate: this.effectiveStartDate,
