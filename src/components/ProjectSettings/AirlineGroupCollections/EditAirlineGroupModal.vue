@@ -276,6 +276,7 @@ export default {
       this.airlineIdList = [];
       this.effectiveStartDate = null;
       this.effectiveEndDate = null;
+      this.filteredOptions = this.airlineGroupAirlineList;
     }
   }
 };

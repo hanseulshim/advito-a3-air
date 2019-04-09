@@ -307,6 +307,7 @@ export default {
       this.posId = null;
       this.posIdList = [];
       this.preferenceLevelId = null;
+      this.filteredOptions = this.airlineGroupAirlineList;
     }
   }
 };

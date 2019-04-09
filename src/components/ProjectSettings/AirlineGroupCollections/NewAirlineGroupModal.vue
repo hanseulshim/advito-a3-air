@@ -262,6 +262,7 @@ export default {
       this.effectiveStartDate = null;
       this.effectiveEndDate = null;
       this.collectionName = null;
+      this.filteredOptions = this.airlineGroupAirlineList;
     }
   }
 };
