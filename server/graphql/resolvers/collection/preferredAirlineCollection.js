@@ -87,7 +87,9 @@ exports.preferredAirlineCollection = {
         const name = airlineGroupAirlineList.filter(
           air => air.id === airline.id
         )[0].name;
-        const pos = posList.filter(p => p.id === airline.posId)[0].name;
+        const pos = posList
+          .filter(p => airline.posIdList.indexOf(p.id) !== -1)
+          .map(p => p.name);
         const preferenceLevel = preferenceLevelList.filter(
           p => p.id === airline.preferenceLevelId
         )[0].name;
@@ -96,8 +98,10 @@ exports.preferredAirlineCollection = {
           name,
           pos,
           preferenceLevel,
-          effectiveStartDate: null,
-          effectiveEndDate: null,
+          effectiveStartDate: airline.effectiveStartDate,
+          effectiveEndDate: airline.effectiveEndDate
+            ? airline.effectiveEndDate
+            : new Date('31 DEC 9999'),
           active: true
         });
       });
@@ -122,7 +126,9 @@ exports.preferredAirlineCollection = {
         const name = airlineGroupAirlineList.filter(
           air => air.id === airline.id
         )[0].name;
-        const pos = posList.filter(p => p.id === airline.posId)[0].name;
+        const pos = posList
+          .filter(p => airline.posIdList.indexOf(p.id) !== -1)
+          .map(p => p.name);
         const preferenceLevel = preferenceLevelList.filter(
           p => p.id === airline.preferenceLevelId
         )[0].name;
@@ -131,14 +137,22 @@ exports.preferredAirlineCollection = {
               ...airlineCopy,
               name,
               pos,
-              preferenceLevel
+              preferenceLevel,
+              effectiveStartDate: airline.effectiveStartDate,
+              effectiveEndDate: airline.effectiveEndDate
+                ? airline.effectiveEndDate
+                : new Date('31 DEC 9999')
             }
           : {
               id: airline.id,
               name,
               pos,
               preferenceLevel,
-              active: true
+              active: true,
+              effectiveStartDate: airline.effectiveStartDate,
+              effectiveEndDate: airline.effectiveEndDate
+                ? airline.effectiveEndDate
+                : new Date('31 DEC 9999')
             };
       });
       preferredAirlineCollection.airlineList = airlineListCopy;

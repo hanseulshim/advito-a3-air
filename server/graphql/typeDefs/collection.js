@@ -61,6 +61,7 @@ type AirlineGroup {
 type AirlineGroupAirline {
   id: Int
   name: String
+  code: String
   effectiveStartDate: Date
   effectiveEndDate: Date
 }
@@ -78,7 +79,7 @@ type PreferredAirline {
   preferenceLevel: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  pos: String
+  pos: [String]
   active: Boolean
 }
 type PreferredAirlineInfo {
@@ -110,8 +111,10 @@ input GroupAirline {
 }
 input PreferredAirlineInput {
   id: Int
-  posId: Int
+  posIdList: [Int]
   preferenceLevelId: Int
+  effectiveStartDate: Date
+  effectiveEndDate: Date
 }
 
 extend type Query {
