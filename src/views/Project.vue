@@ -45,9 +45,9 @@ export default {
         },
         {
           id: 3,
-          link: '/project/default-contracts',
-          path: '/project/default-contracts',
-          title: 'default contracts'
+          link: '/project/contracts',
+          path: '/project/contracts',
+          title: 'contracts'
         },
         {
           id: 4,

@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import AirManager from './views/AirManager';
 import Project from './views/Project';
 import ProjectSettings from '@/components/ProjectSettings';
+import Contracts from '@/components/Contracts';
 
 import DataSet from '@/components/DataSet';
 import PosTickets from '@/components/DataSet/PosTrends/Tickets';
@@ -32,6 +33,10 @@ export default new Router({
         {
           path: 'program-settings',
           component: ProjectSettings
+        },
+        {
+          path: 'contracts',
+          component: Contracts
         },
         {
           path: 'data',
