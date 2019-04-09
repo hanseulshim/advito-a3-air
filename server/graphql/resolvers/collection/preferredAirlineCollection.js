@@ -80,10 +80,6 @@ exports.preferredAirlineCollection = {
       preferredAirlineCollection.dateUpdated = new Date();
       const { posList, preferenceLevelList } = preferredAirlineInfo;
       airlineList.forEach(airline => {
-        const maxId =
-          Math.max(
-            ...preferredAirlineCollection.airlineList.map(airline => airline.id)
-          ) + 1;
         const name = airlineGroupAirlineList.filter(
           air => air.id === airline.id
         )[0].name;
@@ -94,7 +90,7 @@ exports.preferredAirlineCollection = {
           p => p.id === airline.preferenceLevelId
         )[0].name;
         preferredAirlineCollection.airlineList.push({
-          id: maxId,
+          id: airline.id,
           name,
           pos,
           preferenceLevel,
