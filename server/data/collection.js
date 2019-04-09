@@ -995,7 +995,7 @@ exports.preferredAirlineCollectionList = [
         name: 'Abu Dhabi Intl',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
-        effectiveEndDate: null,
+        effectiveEndDate: '12-31-9999',
         pos: ['EU'],
         active: true
       },
