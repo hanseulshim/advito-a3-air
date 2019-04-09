@@ -115,9 +115,10 @@
           <div class="airline-group-item">
             <div class="airline-group-label" />
             <el-select
-              v-model="airline.posId"
+              v-model="airline.posIdList"
               class="select-modal airline-group-content"
               filterable
+              multiple
             >
               <el-option
                 v-for="item in preferredAirlineInfo.posList"
@@ -184,6 +185,7 @@ export default {
       collectionName: null,
       airlineIdList: [],
       posId: null,
+      posIdList: [],
       preferenceLevelId: null,
       effectiveStartDate: null,
       effectiveEndDate: null,
@@ -224,7 +226,7 @@ export default {
       ) {
         const airlineList = this.airlineIdList.map(id => ({
           id,
-          posId: this.posId,
+          posIdList: [this.posId],
           preferenceLevelId: this.preferenceLevelId,
           effectiveStartDate: this.effectiveStartDate,
           effectiveEndDate: this.effectiveEndDate
@@ -232,6 +234,7 @@ export default {
         this.form.airlineList.push(...airlineList);
         this.airlineIdList = [];
         this.posId = null;
+        this.posIdList = [];
         this.preferenceLevelId = null;
         this.effectiveStartDate = null;
         this.effectiveEndDate = null;
@@ -282,6 +285,7 @@ export default {
       this.form.airlineList = [];
       this.airlineIdList = [];
       this.posId = null;
+      this.posIdList = [];
       this.preferenceLevelId = null;
       this.collectionName = null;
     }

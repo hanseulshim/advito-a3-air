@@ -87,7 +87,9 @@ exports.preferredAirlineCollection = {
         const name = airlineGroupAirlineList.filter(
           air => air.id === airline.id
         )[0].name;
-        const pos = posList.filter(p => p.id === airline.posId)[0].name;
+        const pos = posList
+          .filter(p => airline.posIdList.indexOf(p.id) !== -1)
+          .map(p => p.name);
         const preferenceLevel = preferenceLevelList.filter(
           p => p.id === airline.preferenceLevelId
         )[0].name;
@@ -124,7 +126,9 @@ exports.preferredAirlineCollection = {
         const name = airlineGroupAirlineList.filter(
           air => air.id === airline.id
         )[0].name;
-        const pos = posList.filter(p => p.id === airline.posId)[0].name;
+        const pos = posList
+          .filter(p => airline.posIdList.indexOf(p.id) !== -1)
+          .map(p => p.name);
         const preferenceLevel = preferenceLevelList.filter(
           p => p.id === airline.preferenceLevelId
         )[0].name;

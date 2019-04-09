@@ -121,9 +121,10 @@
           <div class="airline-group-item">
             <div class="airline-group-label" />
             <el-select
-              v-model="airline.posId"
+              v-model="airline.posIdList"
               class="select-modal airline-group-content"
               filterable
+              multiple
             >
               <el-option
                 v-for="item in preferredAirlineInfo.posList"
@@ -189,6 +190,7 @@ export default {
       },
       airlineIdList: [],
       posId: null,
+      posIdList: [],
       preferenceLevelId: null,
       effectiveStartDate: null,
       effectiveEndDate: null,
@@ -229,7 +231,7 @@ export default {
       ) {
         const airlineList = this.airlineIdList.map(id => ({
           id,
-          posId: this.posId,
+          posIdList: [this.posId],
           preferenceLevelId: this.preferenceLevelId,
           effectiveStartDate: this.effectiveStartDate,
           effectiveEndDate: this.effectiveEndDate
@@ -237,6 +239,7 @@ export default {
         this.form.airlineList.push(...airlineList);
         this.airlineIdList = [];
         this.posId = null;
+        this.posIdList = [];
         this.preferenceLevelId = null;
         this.effectiveStartDate = null;
         this.effectiveEndDate = null;
@@ -282,15 +285,15 @@ export default {
       const collectionId = event.params.collectionId;
       this.form.id = collectionId;
       this.form.airlineList = airlineList.map(airline => {
-        const posId = this.preferredAirlineInfo.posList.filter(
-          pos => pos.name === airline.pos
-        )[0].id;
+        const posIdList = this.preferredAirlineInfo.posList
+          .filter(pos => airline.pos.indexOf(pos.name) !== -1)
+          .map(pos => pos.id);
         const preferenceLevelId = this.preferredAirlineInfo.preferenceLevelList.filter(
           preferenceLevel => preferenceLevel.name === airline.preferenceLevel
         )[0].id;
         return {
           id: airline.id,
-          posId,
+          posIdList,
           preferenceLevelId,
           effectiveStartDate: airline.effectiveStartDate,
           effectiveEndDate: airline.effectiveEndDate
@@ -302,6 +305,7 @@ export default {
       this.form.airlineList = [];
       this.airlineIdList = [];
       this.posId = null;
+      this.posIdList = [];
       this.preferenceLevelId = null;
     }
   }

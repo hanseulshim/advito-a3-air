@@ -22,7 +22,11 @@
       :formatter="row => formatDate(row, 'effectiveEndDate')"
       :width="tableColumnWidth.date"
     />
-    <el-table-column prop="pos" label="PoS" />
+    <el-table-column label="PoS">
+      <template slot-scope="props">
+        {{ props.row.pos.join(', ') }}
+      </template>
+    </el-table-column>
     <el-table-column label="Status">
       <template slot-scope="props">
         {{ props.row.active ? 'Active' : 'Inactive' }}

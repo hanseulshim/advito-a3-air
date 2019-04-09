@@ -79,7 +79,7 @@ type PreferredAirline {
   preferenceLevel: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  pos: String
+  pos: [String]
   active: Boolean
 }
 type PreferredAirlineInfo {
@@ -111,7 +111,7 @@ input GroupAirline {
 }
 input PreferredAirlineInput {
   id: Int
-  posId: Int
+  posIdList: [Int]
   preferenceLevelId: Int
   effectiveStartDate: Date
   effectiveEndDate: Date

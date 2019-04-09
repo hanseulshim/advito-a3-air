@@ -987,7 +987,7 @@ exports.preferredAirlineCollectionList = [
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: '12-31-2019',
-        pos: 'EU',
+        pos: ['EU'],
         active: true
       },
       {
@@ -996,7 +996,7 @@ exports.preferredAirlineCollectionList = [
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: null,
-        pos: 'EU',
+        pos: ['EU'],
         active: true
       },
       {
@@ -1005,7 +1005,7 @@ exports.preferredAirlineCollectionList = [
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
         effectiveEndDate: '12-31-2019',
-        pos: 'EU',
+        pos: ['EU'],
         active: true
       }
     ]

@@ -13,8 +13,8 @@ exports.preferredAirlineCollection = {
       deletePreferredAirlineCollection(id: 1)
       addPreferredAirline(id: 1, airlineList: [
         {
-          id: 1,
-          posId: 1,
+          id: 104557,
+          posIdList: [1, 2, 3, 4],
           preferenceLevelId: 1
         }
       ]) {
@@ -35,8 +35,8 @@ exports.preferredAirlineCollection = {
       }
       editPreferredAirline(id: 1, airlineList: [
         {
-          id: 1,
-          posId: 1,
+          id: 104557,
+          posIdList: [2, 3],
           preferenceLevelId: 1
         }
       ]) {
