@@ -40,30 +40,21 @@
         class="column-table"
       >
         <div class="icon-container">
-          <div
-            class="icon-text-container"
+          <i
+            class="fas fa-check data-icon accept"
             :class="{ active: column.status === 'accept' }"
             @click="toggleDivisionTrend(column.id, 'accept')"
-          >
-            Accept
-            <i class="fas fa-circle accept" />
-          </div>
-          <div
-            class="icon-text-container"
+          />
+          <i
+            class="fas fa-minus data-icon qc"
             :class="{ active: column.status === null }"
             @click="toggleDivisionTrend(column.id, null)"
-          >
-            QC
-            <i class="fas fa-circle" />
-          </div>
-          <div
-            class="icon-text-container"
+          />
+          <i
+            class="fas fa-times data-icon reject"
             :class="{ active: column.status === 'reject' }"
             @click="toggleDivisionTrend(column.id, 'reject')"
-          >
-            Reject
-            <i class="fas fa-circle reject" />
-          </div>
+          />
           <i
             v-if="column.status === 'reject'"
             class="fas fa-trash-alt"
