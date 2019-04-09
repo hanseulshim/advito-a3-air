@@ -40,30 +40,21 @@
         class="column-table"
       >
         <div class="icon-container">
-          <div
-            class="icon-text-container"
+          <i
+            class="fas fa-check data-icon accept"
             :class="{ active: column.status === 'accept' }"
             @click="togglePosTrend(column.id, 'accept')"
-          >
-            Accept
-            <i class="fas fa-circle accept" />
-          </div>
-          <div
-            class="icon-text-container"
+          />
+          <i
+            class="fas fa-minus data-icon qc"
             :class="{ active: column.status === null }"
             @click="togglePosTrend(column.id, null)"
-          >
-            QC
-            <i class="fas fa-circle" />
-          </div>
-          <div
-            class="icon-text-container"
+          />
+          <i
+            class="fas fa-times data-icon reject"
             :class="{ active: column.status === 'reject' }"
             @click="togglePosTrend(column.id, 'reject')"
-          >
-            Reject
-            <i class="fas fa-circle reject" />
-          </div>
+          />
           <i
             v-if="column.status === 'reject'"
             class="fas fa-trash-alt"
@@ -239,27 +230,36 @@ export default {
     display: flex;
     height: 40px;
     justify-content: space-evenly;
-    align-items: flex-end;
-    margin-bottom: 5px;
-    .icon-text-container {
+    align-items: center;
+    .data-icon {
+      border: 1px solid;
+      padding: 5px;
+      border-radius: 100%;
+      width: 10px;
+      height: 10px;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       cursor: pointer;
-      &.active {
-        font-weight: 400;
-        .fa-circle {
-          opacity: 1;
-        }
-      }
-    }
-    .fa-circle {
-      opacity: 0.4;
       &.accept {
         color: $wild-willow;
+        border-color: $wild-willow;
       }
       &.reject {
         color: $monza;
+        border-color: $monza;
+      }
+      &.active {
+        color: $white;
+        &.qc {
+          background: $dove-gray;
+        }
+        &.accept {
+          background: $wild-willow;
+        }
+        &.reject {
+          background: $monza;
+        }
       }
     }
   }
