@@ -1,5 +1,6 @@
 exports.contractList = [
   {
+    id: 1,
     name: 'Contract_name',
     type: 'Contract',
     description: 'Text here',
@@ -15,6 +16,7 @@ exports.contractList = [
     isDeleted: false
   },
   {
+    id: 2,
     name: 'Contract_Name_goes_here_version1.pdf',
     type: 'Amendment',
     description: 'Lorem ipsum dolor sit amet, con adip elit...',
@@ -30,6 +32,7 @@ exports.contractList = [
     isDeleted: false
   },
   {
+    id: 3,
     name: 'Contract_Name_goes_here_version5.pdf',
     type: 'Proposal',
     description: 'text here, might get cut off if long...',
@@ -43,5 +46,20 @@ exports.contractList = [
     pointOfOriginList: ['US', 'CA', 'BR', 'KR', 'AU'],
     airlineList: ['AF'],
     isDeleted: false
+  }
+];
+
+exports.contractTypeList = [
+  {
+    id: 1,
+    name: 'Contract'
+  },
+  {
+    id: 2,
+    name: 'Proposal'
+  },
+  {
+    id: 3,
+    name: 'Amendment'
   }
 ];

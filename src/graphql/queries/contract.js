@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 export const GET_CONTRACT_LIST = gql`
   {
     contractList {
+      id
       name
       type
       description
@@ -15,6 +16,15 @@ export const GET_CONTRACT_LIST = gql`
       pointOfSaleList
       pointOfOriginList
       airlineList
+    }
+  }
+`;
+
+export const GET_CONTRACT_TYPE_LIST = gql`
+  {
+    contractTypeList {
+      id
+      name
     }
   }
 `;

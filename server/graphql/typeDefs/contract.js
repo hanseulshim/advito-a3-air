@@ -1,5 +1,6 @@
 exports.contract = `
 type Contract {
+  id: Int
   name: String
   type: String
   description: String
@@ -14,8 +15,13 @@ type Contract {
   airlineList: [String]
   isDeleted: Boolean
 }
+type ContractType {
+  id: Int
+  name: String
+}
 
 extend type Query {
   contractList: [Contract] @auth
+  contractTypeList: [ContractType] @auth
 }
 `;

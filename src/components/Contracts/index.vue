@@ -8,7 +8,9 @@
         </el-tooltip>
         <span>{{ pluralize('contract', contractList.length) }}</span>
       </div>
-      <button class="button long">+ NEW CONTRACT</button>
+      <button class="button long" @click="showNewContractModal">
+        + NEW CONTRACT
+      </button>
     </div>
     <el-table
       ref="contractList"
@@ -122,13 +124,14 @@
         </template>
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
-        <template slot-scope="scope">
+        <template>
           <i class="far fa-copy icon-spacer"></i>
           <i class="fas fa-pencil-alt icon-spacer"></i>
           <i class="fas fa-trash-alt"></i>
         </template>
       </el-table-column>
     </el-table>
+    <NewContractModal />
   </div>
 </template>
 
@@ -136,8 +139,12 @@
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { GET_CONTRACT_LIST } from '@/graphql/queries';
 import { tableColumnWidth } from '@/config';
+import NewContractModal from './NewContractModal';
 export default {
   name: 'Contracts',
+  components: {
+    NewContractModal
+  },
   apollo: {
     contractList: {
       query: GET_CONTRACT_LIST
@@ -164,6 +171,9 @@ export default {
     },
     checkErrorQc(qc) {
       return qc !== 1;
+    },
+    showNewContractModal() {
+      this.$modal.show('new-contract');
     }
   }
 };

@@ -6,6 +6,7 @@ exports.contract = {
     query: `
     {
       contractList {
+        id
         name
         type
         description
@@ -18,6 +19,10 @@ exports.contract = {
         pointOfSaleList
         pointOfOriginList
         airlineList
+      }
+      contractTypeList {
+        id
+        name
       }
     }`
   }
