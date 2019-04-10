@@ -2,7 +2,7 @@ const { ApolloError } = require('apollo-server-lambda');
 const {
   locationCollectionList,
   preferredAirlineCollectionList
-} = require('../../../data/collection');
+} = require('../../../data');
 
 exports.locationCollection = {
   Query: {

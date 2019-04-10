@@ -1,4 +1,4 @@
-exports.dataSetDefs = `
+exports.dataSet = `
 type TrendCategory {
   id: Int
   name: String
