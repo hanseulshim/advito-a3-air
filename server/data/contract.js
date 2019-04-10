@@ -13,6 +13,7 @@ exports.contractList = [
     pointOfSaleList: ['US', 'CA', 'CN'],
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
+    division: null,
     isDeleted: false
   },
   {
@@ -29,6 +30,7 @@ exports.contractList = [
     pointOfSaleList: ['US', 'EU', 'RU', 'JP'],
     pointOfOriginList: ['US'],
     airlineList: ['AA'],
+    division: null,
     isDeleted: false
   },
   {
@@ -45,6 +47,7 @@ exports.contractList = [
     pointOfSaleList: ['US', 'EU', 'UK'],
     pointOfOriginList: ['US', 'CA', 'BR', 'KR', 'AU'],
     airlineList: ['AF'],
+    division: null,
     isDeleted: false
   }
 ];

@@ -14,6 +14,7 @@ exports.playground = {
     dataSet.queries,
     dataSet.mutations,
     library,
-    contract.queries
+    contract.queries,
+    contract.mutations
   ]
 };

@@ -1,7 +1,12 @@
 <template>
-  <modal classes="modal-container" name="new-contract" height="auto">
+  <modal
+    classes="modal-container"
+    name="new-contract"
+    height="auto"
+    @before-close="beforeClose"
+  >
     <el-form
-      ref="newLocationCollection"
+      ref="newContract"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -51,6 +56,9 @@
       <el-form-item label="Description">
         <el-input v-model="form.description" type="textarea" />
       </el-form-item>
+      <el-form-item label="Division">
+        <el-input v-model="form.division" type="textarea" />
+      </el-form-item>
       <el-form-item class="save-container">
         <button class="button" @click="validateForm">SAVE</button>
       </el-form-item>
@@ -59,11 +67,8 @@
 </template>
 
 <script>
-import {
-  GET_LOCATION_COLLECTION_LIST,
-  GET_CONTRACT_TYPE_LIST
-} from '@/graphql/queries';
-import { CREATE_LOCATION_COLLECTION } from '@/graphql/mutations';
+import { GET_CONTRACT_LIST, GET_CONTRACT_TYPE_LIST } from '@/graphql/queries';
+import { CREATE_CONTRACT } from '@/graphql/mutations';
 export default {
   name: 'NewContractModal',
   apollo: {
@@ -79,7 +84,8 @@ export default {
         round: null,
         effectiveStartDate: null,
         effectiveEndDate: null,
-        description: null
+        description: null,
+        division: null
       },
       contractTypeList: [],
       rules: {
@@ -111,62 +117,61 @@ export default {
             message: 'Please select a start date',
             trigger: 'change'
           }
-        ],
-        effectiveEndDate: [
-          {
-            required: true,
-            message: 'Please select an end date',
-            trigger: 'change'
-          }
         ]
       }
     };
   },
   methods: {
     hideModal() {
-      this.$modal.hide('new-location-collection');
+      this.$modal.hide('new-contract');
     },
     validateForm() {
-      this.$refs.newLocationCollection.validate(valid => {
+      this.$refs.newContract.validate(valid => {
         if (valid) {
-          this.createLocationCollection();
+          this.createContract();
         } else {
           return false;
         }
       });
     },
-    async createLocationCollection() {
+    async createContract() {
       try {
         const data = await this.$apollo.mutate({
-          mutation: CREATE_LOCATION_COLLECTION,
+          mutation: CREATE_CONTRACT,
           variables: {
             ...this.form
           },
           update: (store, data) => {
-            const locationCollection = data.data.createLocationCollection;
+            const contract = data.data.createContract;
             const newData = store.readQuery({
-              query: GET_LOCATION_COLLECTION_LIST
+              query: GET_CONTRACT_LIST
             });
-            newData.locationCollectionList.forEach(
-              collection => (collection.active = false)
-            );
-            newData.locationCollectionList.push(locationCollection);
+            newData.contractList.push(contract);
             store.writeQuery({
-              query: GET_LOCATION_COLLECTION_LIST,
+              query: GET_CONTRACT_LIST,
               data: newData
             });
           }
         });
-        this.$emit('toggle-row', data.data.createLocationCollection.id);
+        this.$emit('toggle-row', data.data.createContract.id);
         this.$modal.show('success', {
-          message: 'Location Collection successfully created.',
-          name: 'new-location-collection'
+          message: 'Contract successfully created.',
+          name: 'new-contract'
         });
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
         });
       }
+    },
+    beforeClose() {
+      this.form.name = null;
+      this.form.typeId = null;
+      this.form.round = null;
+      this.form.effectiveStartDate = null;
+      this.form.effectiveEndDate = null;
+      this.form.description = null;
+      this.form.division = null;
     }
   }
 };

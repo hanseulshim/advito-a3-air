@@ -13,6 +13,7 @@ type Contract {
   pointOfSaleList: [String]
   pointOfOriginList: [String]
   airlineList: [String]
+  division: String
   isDeleted: Boolean
 }
 type ContractType {
@@ -23,5 +24,17 @@ type ContractType {
 extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
+}
+
+extend type Mutation {
+  createContract(
+    name: String!
+    typeId: Int!
+    round: Int
+    effectiveStartDate: Date!
+    effectiveEndDate: Date
+    description: String
+    division: String
+  ): Contract @auth
 }
 `;

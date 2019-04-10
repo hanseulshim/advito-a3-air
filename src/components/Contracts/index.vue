@@ -91,17 +91,19 @@
               PoO: {{ props.row.pointOfOriginList.join(', ') }}
             </div>
             <span>
-              {{
-                props.row.pointOfSaleList.length > 1
-                  ? props.row.pointOfSaleList.length
-                  : props.row.pointOfSaleList.join('')
-              }}
-              /
-              {{
+              <span>
+                {{
+                  props.row.pointOfSaleList.length > 1
+                    ? props.row.pointOfSaleList.length
+                    : props.row.pointOfSaleList.join('')
+                }}
+              </span>
+              <span v-if="props.row.pointOfOriginList.length"> / </span>
+              <span>{{
                 props.row.pointOfOriginList.length > 1
                   ? props.row.pointOfOriginList.length
                   : props.row.pointOfOriginList.join('')
-              }}
+              }}</span>
             </span>
           </el-tooltip>
         </template>
