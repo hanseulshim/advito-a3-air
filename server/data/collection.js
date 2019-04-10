@@ -995,7 +995,7 @@ exports.preferredAirlineCollectionList = [
         name: 'Hong Kong Express',
         preferenceLevel: 'Primary',
         effectiveStartDate: '01-01-2019',
-        effectiveEndDate: '12-31-9999',
+        effectiveEndDate: 253402232400000,
         pos: ['EU'],
         active: true
       },

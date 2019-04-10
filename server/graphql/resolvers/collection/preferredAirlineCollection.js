@@ -97,7 +97,7 @@ exports.preferredAirlineCollection = {
           effectiveStartDate: airline.effectiveStartDate,
           effectiveEndDate: airline.effectiveEndDate
             ? airline.effectiveEndDate
-            : new Date('31 DEC 9999'),
+            : new Date(253402232400000),
           active: true
         });
       });
@@ -137,7 +137,7 @@ exports.preferredAirlineCollection = {
               effectiveStartDate: airline.effectiveStartDate,
               effectiveEndDate: airline.effectiveEndDate
                 ? airline.effectiveEndDate
-                : new Date('31 DEC 9999')
+                : new Date(253402232400000)
             }
           : {
               id: airline.id,
@@ -148,7 +148,7 @@ exports.preferredAirlineCollection = {
               effectiveStartDate: airline.effectiveStartDate,
               effectiveEndDate: airline.effectiveEndDate
                 ? airline.effectiveEndDate
-                : new Date('31 DEC 9999')
+                : new Date(253402232400000)
             };
       });
       preferredAirlineCollection.airlineList = airlineListCopy;

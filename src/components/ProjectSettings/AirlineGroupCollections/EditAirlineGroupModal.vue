@@ -90,7 +90,6 @@
       <button class="button airline-group-button" @click="addAirline">
         ADD
       </button>
-      <div class="airline-group-spacer" />
       <div class="airline-group-container">
         <div
           v-for="(airline, index) in form.airlineList"

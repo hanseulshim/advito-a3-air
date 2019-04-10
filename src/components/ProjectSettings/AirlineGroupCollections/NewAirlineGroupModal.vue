@@ -84,7 +84,6 @@
       <button class="button airline-group-button" @click="addAirline">
         ADD
       </button>
-      <div class="airline-group-spacer" />
       <div class="airline-group-container">
         <div
           v-for="(airline, index) in form.airlineList"
@@ -279,12 +278,16 @@ export default {
   margin: 2em 0;
 }
 .airline-group-container {
-  max-height: 300px;
+  min-height: 100px;
+  max-height: 330px;
   overflow: auto;
+  border: 1px solid $gray-nurse;
+  padding: 0 1em;
+  margin-top: 2em;
 }
 .airline-group-item {
   display: flex;
-  margin-top: 1em;
+  margin: 1em 0;
   align-items: center;
   .airline-group-label {
     width: 200px;
