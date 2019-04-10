@@ -3,6 +3,7 @@ const { collection } = require('./collection');
 const { project } = require('./project');
 const { dataSet } = require('./dataSet');
 const { libraryQueries } = require('./library');
+const { contract } = require('./contract');
 exports.playground = {
   tabs: [
     client,
@@ -12,6 +13,7 @@ exports.playground = {
     ...collection.mutations,
     dataSet.queries,
     dataSet.mutations,
-    libraryQueries
+    libraryQueries,
+    contract.queries
   ]
 };

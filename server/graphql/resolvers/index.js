@@ -6,6 +6,7 @@ const { clientResolvers } = require('./client');
 const { collectionResolvers } = require('./collection');
 const { dataSetResolvers } = require('./dataSet');
 const { libraryResolvers } = require('./library');
+const { contractResolvers } = require('./contract');
 
 exports.resolvers = {
   ...merge(
@@ -13,7 +14,8 @@ exports.resolvers = {
     clientResolvers,
     collectionResolvers,
     dataSetResolvers,
-    libraryResolvers
+    libraryResolvers,
+    contractResolvers
   ),
   Date: new GraphQLScalarType({
     name: 'Date',
