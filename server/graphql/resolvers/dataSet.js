@@ -1,7 +1,7 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { dataSet } = require('../../data/dataSet');
+const { dataSet } = require('../../data');
 
-exports.dataSetResolvers = {
+exports.dataSet = {
   Query: {
     posTrendsCountryList: () => dataSet.posTrendsCountryList,
     posTrendsColumnList: () =>

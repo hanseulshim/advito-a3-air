@@ -1,6 +1,6 @@
-const { airportList, bookingClassList } = require('../../data/library');
+const { airportList, bookingClassList } = require('../../data');
 
-exports.libraryResolvers = {
+exports.library = {
   Query: {
     airportList: () => airportList,
     bookingClassList: () => bookingClassList

@@ -1,10 +1,10 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { projectList } = require('../../data/project');
-const { clientList } = require('../../data/client');
-const { projectData } = require('../../data/projectData');
+const { projectList } = require('../../data');
+const { clientList } = require('../../data');
+const { projectData } = require('../../data');
 const { getProjectName } = require('../helper');
 
-exports.projectResolvers = {
+exports.project = {
   Query: {
     projectList: (_, payload) => {
       const projectListFiltered = payload.clientId

@@ -1,17 +1,17 @@
 const { gql } = require('apollo-server-lambda');
-const { projectDefs } = require('./project');
-const { clientDefs } = require('./client');
-const { collectionDefs } = require('./collection');
-const { dataSetDefs } = require('./dataSet');
-const { libraryDefs } = require('./library');
+const { project } = require('./project');
+const { client } = require('./client');
+const { collection } = require('./collection');
+const { dataSet } = require('./dataSet');
+const { library } = require('./library');
 
 exports.typeDefs = gql`
   directive @auth on FIELD_DEFINITION
-  ${projectDefs}
-  ${clientDefs}
-  ${collectionDefs}
-  ${dataSetDefs}
-  ${libraryDefs}
+  ${project}
+  ${client}
+  ${collection}
+  ${dataSet}
+  ${library}
   type Query {
     _empty: String
   }

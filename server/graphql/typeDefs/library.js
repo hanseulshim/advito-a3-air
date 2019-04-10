@@ -1,4 +1,4 @@
-exports.libraryDefs = `
+exports.library = `
 type Airport {
   countryName: String,
   cityCode: String,

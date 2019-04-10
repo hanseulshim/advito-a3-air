@@ -1,4 +1,4 @@
-exports.collectionDefs = `
+exports.collection = `
 type LocationCollection {
   id: Int
   name: String

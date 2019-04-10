@@ -1,4 +1,4 @@
-exports.projectDefs = `
+exports.project = `
 scalar Date
 
 type Project {

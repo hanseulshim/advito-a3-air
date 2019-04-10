@@ -3,7 +3,7 @@ const {
   preferredAirlineCollectionList,
   preferredAirlineInfo,
   airlineGroupAirlineList
-} = require('../../../data/collection');
+} = require('../../../data');
 
 exports.preferredAirlineCollection = {
   Query: {

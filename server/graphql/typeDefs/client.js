@@ -1,4 +1,4 @@
-exports.clientDefs = `
+exports.client = `
 type Client {
   id: Int,
   name: String,

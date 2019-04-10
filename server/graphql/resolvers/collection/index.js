@@ -4,7 +4,7 @@ const { travelSectorCollection } = require('./travelSectorCollection');
 const { airlineGroupCollection } = require('./airlineGroupCollection');
 const { preferredAirlineCollection } = require('./preferredAirlineCollection');
 
-exports.collectionResolvers = {
+exports.collection = {
   ...merge(
     locationCollection,
     travelSectorCollection,

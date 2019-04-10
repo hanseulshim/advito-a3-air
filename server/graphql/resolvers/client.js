@@ -1,6 +1,6 @@
-const { clientList } = require('../../data/client');
+const { clientList } = require('../../data');
 
-exports.clientResolvers = {
+exports.client = {
   Query: {
     clientList: () => clientList
   }
