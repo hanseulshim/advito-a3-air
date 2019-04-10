@@ -89,8 +89,7 @@
       <button class="button airline-group-button" @click="addAirline">
         ADD
       </button>
-      <div class="airline-group-spacer" />
-      <div class="preferred-airline-list-container">
+      <div class="airline-group-container">
         <div v-for="(airline, index) in form.airlineList" :key="index">
           <div class="airline-group-item">
             <div class="airline-group-label">
@@ -293,10 +292,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.preferred-airline-list-container {
-  max-height: 400px;
-  overflow: auto;
-}
-</style>

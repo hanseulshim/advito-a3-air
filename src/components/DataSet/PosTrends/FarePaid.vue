@@ -40,26 +40,31 @@
         class="column-table"
       >
         <div class="icon-container">
-          <i
-            class="fas fa-check data-icon accept"
-            :class="{ active: column.status === 'accept' }"
-            @click="togglePosTrend(column.id, 'accept')"
-          />
-          <i
-            class="fas fa-minus data-icon qc"
-            :class="{ active: column.status === null }"
-            @click="togglePosTrend(column.id, null)"
-          />
-          <i
-            class="fas fa-times data-icon reject"
-            :class="{ active: column.status === 'reject' }"
-            @click="togglePosTrend(column.id, 'reject')"
-          />
+          <el-tooltip effect="dark" content="Accept" placement="top">
+            <i
+              class="fas fa-check data-icon accept"
+              :class="{ active: column.status === 'accept' }"
+              @click="togglePosTrend(column.id, 'accept')"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Need QC" placement="top">
+            <i
+              class="fas fa-minus data-icon qc"
+              :class="{ active: column.status === null }"
+              @click="togglePosTrend(column.id, null)"
+          /></el-tooltip>
+          <el-tooltip effect="dark" content="Reject" placement="top">
+            <i
+              class="fas fa-times data-icon reject"
+              :class="{ active: column.status === 'reject' }"
+              @click="togglePosTrend(column.id, 'reject')"
+          /></el-tooltip>
           <i
             v-if="column.status === 'reject'"
-            class="fas fa-trash-alt"
+            class="fas fa-trash-alt delete"
             @click="deletePosTrend(column.id)"
           />
+          <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table
           :data="column.data"

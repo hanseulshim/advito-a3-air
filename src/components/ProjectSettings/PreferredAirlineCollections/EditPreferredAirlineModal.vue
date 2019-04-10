@@ -95,8 +95,7 @@
       <button class="button airline-group-button" @click="addAirline">
         ADD
       </button>
-      <div class="airline-group-spacer" />
-      <div class="preferred-airline-list-container">
+      <div class="airline-group-container">
         <div v-for="(airline, index) in form.airlineList" :key="index">
           <div class="airline-group-item">
             <div class="airline-group-label">
@@ -281,24 +280,27 @@ export default {
       });
     },
     beforeOpen(event) {
-      const airlineList = event.params.airlineList;
-      const collectionId = event.params.collectionId;
+      const { airlineList, collectionId, id } = event.params;
       this.form.id = collectionId;
-      this.form.airlineList = airlineList.map(airline => {
-        const posIdList = this.preferredAirlineInfo.posList
-          .filter(pos => airline.pos.indexOf(pos.name) !== -1)
-          .map(pos => pos.id);
-        const preferenceLevelId = this.preferredAirlineInfo.preferenceLevelList.filter(
-          preferenceLevel => preferenceLevel.name === airline.preferenceLevel
-        )[0].id;
-        return {
-          id: airline.id,
-          posIdList,
-          preferenceLevelId,
-          effectiveStartDate: airline.effectiveStartDate,
-          effectiveEndDate: airline.effectiveEndDate
-        };
-      });
+      this.form.airlineList = airlineList
+        .map(airline => {
+          const posIdList = this.preferredAirlineInfo.posList
+            .filter(pos => airline.pos.indexOf(pos.name) !== -1)
+            .map(pos => pos.id);
+          const preferenceLevelId = this.preferredAirlineInfo.preferenceLevelList.filter(
+            preferenceLevel => preferenceLevel.name === airline.preferenceLevel
+          )[0].id;
+          return {
+            id: airline.id,
+            posIdList,
+            preferenceLevelId,
+            effectiveStartDate: airline.effectiveStartDate,
+            effectiveEndDate: airline.effectiveEndDate
+          };
+        })
+        .sort((a, b) => {
+          return a.id === id ? -1 : 1;
+        });
     },
     beforeClose() {
       this.form.id = null;

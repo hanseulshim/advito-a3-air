@@ -36,7 +36,7 @@
       <template slot-scope="scope">
         <i
           class="fas fa-pencil-alt icon-spacer"
-          @click="showEditPreferredAirline(airlineList)"
+          @click="showEditPreferredAirline(airlineList, scope.row.id)"
         ></i>
         <i
           class="fas fa-trash-alt"
@@ -71,10 +71,11 @@ export default {
     formatDate(row, param) {
       return row[param] ? formatDate(row[param]) : 'Undefined';
     },
-    showEditPreferredAirline(airlineList) {
+    showEditPreferredAirline(airlineList, id) {
       this.$modal.show('edit-preferred-airline', {
         airlineList,
-        collectionId: this.collectionId
+        collectionId: this.collectionId,
+        id
       });
     },
     showDeletePreferredAirline(airline) {
