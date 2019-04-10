@@ -57,9 +57,10 @@
           />
           <i
             v-if="column.status === 'reject'"
-            class="fas fa-trash-alt"
+            class="fas fa-trash-alt delete"
             @click="deletePosTrend(column.id)"
           />
+          <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table
           :data="column.data"
@@ -231,6 +232,12 @@ export default {
     height: 40px;
     justify-content: space-evenly;
     align-items: center;
+    .delete {
+      cursor: pointer;
+    }
+    .reject-hide {
+      opacity: 0;
+    }
     .data-icon {
       border: 1px solid;
       padding: 5px;
@@ -241,6 +248,7 @@ export default {
       justify-content: center;
       align-items: center;
       cursor: pointer;
+      opacity: 0.7;
       &.accept {
         color: $wild-willow;
         border-color: $wild-willow;
@@ -251,6 +259,7 @@ export default {
       }
       &.active {
         color: $white;
+        opacity: 1;
         &.qc {
           background: $dove-gray;
         }

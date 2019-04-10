@@ -57,9 +57,10 @@
           />
           <i
             v-if="column.status === 'reject'"
-            class="fas fa-trash-alt"
+            class="fas fa-trash-alt delete"
             @click="deletePosTrend(column.id)"
           />
+          <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table
           :data="column.data"
