@@ -298,7 +298,7 @@ export default {
             effectiveEndDate: airline.effectiveEndDate
           };
         })
-        .sort((a, b) => {
+        .sort(a => {
           return a.id === id ? -1 : 1;
         });
     },
