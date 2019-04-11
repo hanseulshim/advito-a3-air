@@ -36,5 +36,10 @@ extend type Mutation {
     description: String
     division: String
   ): Contract @auth
+
+  copyContract(
+    id: Int!
+    name: String!
+  ): Contract @auth
 }
 `;

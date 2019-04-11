@@ -35,3 +35,23 @@ export const CREATE_CONTRACT = gql`
     }
   }
 `;
+
+export const COPY_CONTRACT = gql`
+  mutation copyContract($id: Int!, $name: String!) {
+    copyContract(id: $id, name: $name) {
+      id
+      name
+      type
+      description
+      round
+      effectiveStartDate
+      effectiveEndDate
+      qc
+      pricingTermTotal
+      targetTermTotal
+      pointOfSaleList
+      pointOfOriginList
+      airlineList
+    }
+  }
+`;

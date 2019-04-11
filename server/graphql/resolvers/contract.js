@@ -42,6 +42,20 @@ exports.contract = {
       };
       contractList.push(contract);
       return contract;
+    },
+    copyContract: (_, { id, name }) => {
+      const contract = contractList.filter(c => c.id === id)[0];
+      if (!contract) {
+        throw new ApolloError('Contract not found', 400);
+      }
+      const maxId = Math.max(...contractList.map(contract => contract.id)) + 1;
+      const copyContract = {
+        ...contract,
+        id: maxId,
+        name
+      };
+      contractList.push(copyContract);
+      return copyContract;
     }
   }
 };

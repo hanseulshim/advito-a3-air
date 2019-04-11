@@ -126,14 +126,18 @@
         </template>
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
-        <template>
-          <i class="far fa-copy icon-spacer"></i>
-          <i class="fas fa-pencil-alt icon-spacer"></i>
-          <i class="fas fa-trash-alt"></i>
+        <template slot-scope="props">
+          <i
+            class="far fa-copy icon-spacer"
+            @click="showCopyContractModal(props.row.id)"
+          />
+          <i class="fas fa-pencil-alt icon-spacer" />
+          <i class="fas fa-trash-alt" />
         </template>
       </el-table-column>
     </el-table>
     <NewContractModal />
+    <CopyContractModal />
   </div>
 </template>
 
@@ -142,10 +146,12 @@ import { pluralize, formatDate, formatPercent } from '@/helper';
 import { GET_CONTRACT_LIST } from '@/graphql/queries';
 import { tableColumnWidth } from '@/config';
 import NewContractModal from './NewContractModal';
+import CopyContractModal from './CopyContractModal';
 export default {
   name: 'Contracts',
   components: {
-    NewContractModal
+    NewContractModal,
+    CopyContractModal
   },
   apollo: {
     contractList: {
@@ -176,6 +182,9 @@ export default {
     },
     showNewContractModal() {
       this.$modal.show('new-contract');
+    },
+    showCopyContractModal(id) {
+      this.$modal.show('copy-contract', { id });
     }
   }
 };

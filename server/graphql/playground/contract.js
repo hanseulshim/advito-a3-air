@@ -47,6 +47,21 @@ exports.contract = {
         pointOfOriginList
         airlineList
       }
+      copyContract(id: 1, name: "copy contract") {
+        id
+        name
+        type
+        description
+        round
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        pricingTermTotal
+        targetTermTotal
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+      }
     }
     `
   }
