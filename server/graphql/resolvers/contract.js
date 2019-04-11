@@ -15,8 +15,8 @@ exports.contract = {
         round,
         effectiveStartDate,
         effectiveEndDate,
-        description,
-        division
+        division,
+        description
       }
     ) => {
       const maxId = Math.max(...contractList.map(contract => contract.id)) + 1;

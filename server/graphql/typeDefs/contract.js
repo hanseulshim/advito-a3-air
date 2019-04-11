@@ -33,13 +33,17 @@ extend type Mutation {
     round: Int
     effectiveStartDate: Date!
     effectiveEndDate: Date
-    description: String
     division: String
+    description: String
   ): Contract @auth
 
   copyContract(
     id: Int!
     name: String!
   ): Contract @auth
+
+  editContract(
+    id: Int!,
+  )
 }
 `;

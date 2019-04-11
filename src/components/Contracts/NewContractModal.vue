@@ -57,11 +57,11 @@
           </el-form-item>
         </div>
       </el-form-item>
+      <el-form-item label="Division">
+        <el-input v-model="form.division" />
+      </el-form-item>
       <el-form-item label="Description">
         <el-input v-model="form.description" type="textarea" />
-      </el-form-item>
-      <el-form-item label="Division">
-        <el-input v-model="form.division" type="textarea" />
       </el-form-item>
       <el-form-item class="save-container">
         <button class="button" @click="validateForm">SAVE</button>
