@@ -84,7 +84,11 @@
       </el-table-column>
       <el-table-column label="PoS/PoO" :width="tableColumnWidth.count">
         <template slot-scope="props">
-          <el-tooltip effect="dark" placement="top">
+          <el-tooltip
+            effect="dark"
+            placement="top"
+            popper-class="pos-popup-container"
+          >
             <div slot="content">
               PoS: {{ props.row.pointOfSaleList.join(', ') }}
               <br />
@@ -190,9 +194,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/styles/global.scss';
 .error-qc {
   color: $monza;
+}
+.pos-popup-container {
+  max-width: 300px;
+  &.el-tooltip__popper {
+    line-height: 1.5;
+  }
 }
 </style>
