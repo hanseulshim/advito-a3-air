@@ -15,7 +15,7 @@
     <el-table
       ref="contractList"
       :data="contractList"
-      :default-sort="{ prop: 'name', order: 'descending' }"
+      :default-sort="{ prop: 'name', order: 'ascending' }"
     >
       <el-table-column
         prop="name"

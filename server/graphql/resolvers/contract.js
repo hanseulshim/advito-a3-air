@@ -40,7 +40,7 @@ exports.contract = {
         division,
         isDeleted: false
       };
-      contractTypeList.push(contract);
+      contractList.push(contract);
       return contract;
     }
   }

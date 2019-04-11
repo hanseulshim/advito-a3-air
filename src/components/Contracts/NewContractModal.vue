@@ -21,7 +21,11 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="Type *" prop="typeId">
-        <el-select v-model="form.typeId" class="select-modal">
+        <el-select
+          v-model="form.typeId"
+          class="select-modal"
+          @change="updateType"
+        >
           <el-option
             v-for="item in contractTypeList"
             :key="item.id"
@@ -162,6 +166,11 @@ export default {
         this.$modal.show('error', {
           message: error.message
         });
+      }
+    },
+    updateType(value) {
+      if (value !== 2) {
+        this.form.round = null;
       }
     },
     beforeClose() {
