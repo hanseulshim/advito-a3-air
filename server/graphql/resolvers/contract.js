@@ -56,6 +56,43 @@ exports.contract = {
       };
       contractList.push(copyContract);
       return copyContract;
+    },
+    editContract: (
+      _,
+      {
+        id,
+        name,
+        typeId,
+        round,
+        effectiveStartDate,
+        effectiveEndDate,
+        division,
+        description
+      }
+    ) => {
+      const contract = contractList.filter(c => c.id === id)[0];
+      if (!contract) {
+        throw new ApolloError('Contract not found', 400);
+      }
+      const type = contractTypeList.filter(type => type.id === typeId)[0].name;
+      contract.name = name;
+      contract.type = type;
+      contract.round = round;
+      contract.effectiveStartDate = new Date(effectiveStartDate);
+      contract.effectiveEndDate = effectiveEndDate
+        ? new Date(effectiveEndDate)
+        : new Date(253402232400000);
+      contract.division = division;
+      contract.description = description;
+      return contract;
+    },
+    deleteContract: (_, { id }) => {
+      const contract = contractList.filter(c => c.id === id)[0];
+      if (!contract) {
+        throw new ApolloError('Contract not found', 400);
+      }
+      contract.isDeleted = true;
+      return id;
     }
   }
 };

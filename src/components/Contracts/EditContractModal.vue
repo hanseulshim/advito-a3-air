@@ -1,12 +1,13 @@
 <template>
   <modal
     classes="modal-container"
-    name="new-contract"
+    name="edit-contract"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
-      ref="newContract"
+      ref="editContract"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -14,7 +15,7 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">new contract</div>
+        <div class="section-header">edit contract</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
       <el-form-item label="Name *" prop="name">
@@ -71,10 +72,10 @@
 </template>
 
 <script>
-import { GET_CONTRACT_LIST, GET_CONTRACT_TYPE_LIST } from '@/graphql/queries';
-import { CREATE_CONTRACT } from '@/graphql/mutations';
+import { GET_CONTRACT_TYPE_LIST } from '@/graphql/queries';
+import { EDIT_CONTRACT } from '@/graphql/mutations';
 export default {
-  name: 'NewContractModal',
+  name: 'EditContractModal',
   apollo: {
     contractTypeList: {
       query: GET_CONTRACT_TYPE_LIST
@@ -83,6 +84,7 @@ export default {
   data() {
     return {
       form: {
+        id: null,
         name: null,
         typeId: null,
         round: null,
@@ -127,39 +129,28 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('new-contract');
+      this.$modal.hide('edit-contract');
     },
     validateForm() {
-      this.$refs.newContract.validate(valid => {
+      this.$refs.editContract.validate(valid => {
         if (valid) {
-          this.createContract();
+          this.editContract();
         } else {
           return false;
         }
       });
     },
-    async createContract() {
+    async editContract() {
       try {
         await this.$apollo.mutate({
-          mutation: CREATE_CONTRACT,
+          mutation: EDIT_CONTRACT,
           variables: {
             ...this.form
-          },
-          update: (store, data) => {
-            const contract = data.data.createContract;
-            const newData = store.readQuery({
-              query: GET_CONTRACT_LIST
-            });
-            newData.contractList.push(contract);
-            store.writeQuery({
-              query: GET_CONTRACT_LIST,
-              data: newData
-            });
           }
         });
         this.$modal.show('success', {
-          message: 'Contract successfully created.',
-          name: 'new-contract'
+          message: 'Contract successfully edited.',
+          name: 'edit-contract'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -172,7 +163,22 @@ export default {
         this.form.round = null;
       }
     },
+    beforeOpen(event) {
+      const contract = event.params.contract;
+      const typeId = this.contractTypeList.filter(
+        c => c.name === contract.type
+      )[0].id;
+      this.form.id = contract.id;
+      this.form.name = contract.name;
+      this.form.typeId = typeId;
+      this.form.round = contract.round;
+      this.form.effectiveStartDate = contract.effectiveStartDate;
+      this.form.effectiveEndDate = contract.effectiveEndDate;
+      this.form.description = contract.description;
+      this.form.division = contract.division;
+    },
     beforeClose() {
+      this.form.id = null;
       this.form.name = null;
       this.form.typeId = null;
       this.form.round = null;

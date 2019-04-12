@@ -44,6 +44,17 @@ extend type Mutation {
 
   editContract(
     id: Int!,
-  )
+    name: String!
+    typeId: Int!
+    round: Int
+    effectiveStartDate: Date!
+    effectiveEndDate: Date
+    division: String
+    description: String
+  ): Contract @auth
+
+  deleteContract(
+    id: Int!
+  ): Int @auth
 }
 `;

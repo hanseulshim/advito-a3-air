@@ -135,13 +135,21 @@
             class="far fa-copy icon-spacer"
             @click="showCopyContractModal(props.row.id)"
           />
-          <i class="fas fa-pencil-alt icon-spacer" />
-          <i class="fas fa-trash-alt" />
+          <i
+            class="fas fa-pencil-alt icon-spacer"
+            @click="showEditContractModal(props.row)"
+          />
+          <i
+            class="fas fa-trash-alt"
+            @click="showDeleteContractModal(props.row.id)"
+          />
         </template>
       </el-table-column>
     </el-table>
     <NewContractModal />
     <CopyContractModal />
+    <EditContractModal />
+    <DeleteContractModal />
   </div>
 </template>
 
@@ -151,11 +159,15 @@ import { GET_CONTRACT_LIST } from '@/graphql/queries';
 import { tableColumnWidth } from '@/config';
 import NewContractModal from './NewContractModal';
 import CopyContractModal from './CopyContractModal';
+import EditContractModal from './EditContractModal';
+import DeleteContractModal from './DeleteContractModal';
 export default {
   name: 'Contracts',
   components: {
     NewContractModal,
-    CopyContractModal
+    CopyContractModal,
+    EditContractModal,
+    DeleteContractModal
   },
   apollo: {
     contractList: {
@@ -189,6 +201,12 @@ export default {
     },
     showCopyContractModal(id) {
       this.$modal.show('copy-contract', { id });
+    },
+    showEditContractModal(contract) {
+      this.$modal.show('edit-contract', { contract });
+    },
+    showDeleteContractModal(id) {
+      this.$modal.show('delete-contract', { id });
     }
   }
 };

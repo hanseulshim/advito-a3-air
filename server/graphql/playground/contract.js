@@ -62,6 +62,21 @@ exports.contract = {
         pointOfOriginList
         airlineList
       }
+      editContract(id: 1, name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
+        id
+        name
+        type
+        description
+        round
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        pricingTermTotal
+        targetTermTotal
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+      }
     }
     `
   }

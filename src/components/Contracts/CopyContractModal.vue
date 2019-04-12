@@ -65,7 +65,7 @@ export default {
     },
     async copyContract() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: COPY_CONTRACT,
           variables: {
             ...this.form
@@ -82,7 +82,6 @@ export default {
             });
           }
         });
-        this.$emit('toggle-row', data.data.copyContract.id);
         this.$modal.show('success', {
           message: 'Contract successfully copied.',
           name: 'copy-contract'
