@@ -19,6 +19,8 @@ export const formatDataSetUpdated = date => {
 
 export const formatNumber = num => numeral(num).format('0,0');
 
+export const formatPercent = num => numeral(num).format('0%');
+
 export const pluralize = (word, count) => {
   return count > 1 ? `${count} ${word}s` : `${count} ${word}`;
 };

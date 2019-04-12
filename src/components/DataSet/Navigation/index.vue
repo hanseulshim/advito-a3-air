@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="navigation-container">
+    <div class="data-navigation-container">
       <router-link
-        class="nav-item data-nav"
+        class="data-nav-item nav-item data-nav"
         to="/project/data/pos-trends/tickets"
         :class="{ active: $route.path.includes('/project/data/pos-trends') }"
       >
@@ -12,7 +12,7 @@
         <span class="nav-title">PoS Trends</span>
       </router-link>
       <router-link
-        class="nav-item data-nav"
+        class="data-nav-item nav-item data-nav"
         to="/project/data/division-trends/tickets"
         :class="{
           active: $route.path.includes('/project/data/division-trends')
@@ -24,7 +24,7 @@
         <span class="nav-title">Division Trends</span>
       </router-link>
       <router-link
-        class="nav-item data-nav"
+        class="data-nav-item nav-item data-nav"
         to="/project/data/import-errors/imported-tickets"
         :class="{ active: $route.path.includes('/project/data/import-errors') }"
       >
@@ -92,7 +92,7 @@ export default {
 
 <style lang="scss">
 @import '@/styles/global.scss';
-.navigation-container {
+.data-navigation-container {
   display: grid;
   grid-template-areas: 'pos division import . annualization dataset';
   grid-template-columns: 15% 15% 15% auto 150px 200px;
@@ -115,7 +115,7 @@ export default {
   grid-column: 11;
   grid-area: dataset;
 }
-.nav-item {
+.data-nav-item {
   &.data-nav {
     display: flex;
     align-items: center;

@@ -15,6 +15,11 @@ import ImportedTickets from '@/components/DataSet/ImportErrors/ImportedTickets';
 import ErrorTickets from '@/components/DataSet/ImportErrors/ErrorTickets';
 import ErrorRatio from '@/components/DataSet/ImportErrors/ErrorRatio';
 
+import Contracts from '@/components/Contracts';
+import ContractList from '@/components/Contracts/ContractList';
+import PricingTerms from '@/components/Contracts/PricingTerms';
+import TargetTerms from '@/components/Contracts/TargetTerms';
+
 Vue.use(Router);
 
 export default new Router({
@@ -32,6 +37,24 @@ export default new Router({
         {
           path: 'program-settings',
           component: ProjectSettings
+        },
+        {
+          path: 'contracts',
+          component: Contracts,
+          children: [
+            {
+              path: '',
+              component: ContractList
+            },
+            {
+              path: 'pricing-terms',
+              component: PricingTerms
+            },
+            {
+              path: 'target-terms',
+              component: TargetTerms
+            }
+          ]
         },
         {
           path: 'data',

@@ -12,6 +12,7 @@ const {
 } = require('./collection');
 const { airportList, bookingClassList } = require('./library');
 const { dataSet } = require('./dataSet');
+const { contractList, contractTypeList } = require('./contract');
 
 module.exports = {
   clientList,
@@ -26,5 +27,7 @@ module.exports = {
   preferredAirlineCollectionList,
   preferredAirlineInfo,
   travelSectorCollectionList,
-  travelSectorRegionList
+  travelSectorRegionList,
+  contractList,
+  contractTypeList
 };
