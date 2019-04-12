@@ -60,26 +60,21 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="Pricing Terms" :width="tableColumnWidth.count">
+      <el-table-column label="Airlines" :width="tableColumnWidth.count">
         <template slot-scope="props">
           <el-tooltip
+            v-if="props.row.airlineList.length > 1"
             effect="dark"
-            content="View Pricing Terms"
             placement="top"
           >
-            <button class="button number">
-              {{ props.row.pricingTermTotal }}
-            </button>
+            <div slot="content">{{ props.row.airlineList.join(', ') }}</div>
+            <span>
+              {{ props.row.airlineList.length }}
+            </span>
           </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column label="Target Terms" :width="tableColumnWidth.count">
-        <template slot-scope="props">
-          <el-tooltip effect="dark" content="View Target Terms" placement="top">
-            <button class="button number">
-              {{ props.row.targetTermTotal }}
-            </button>
-          </el-tooltip>
+          <span v-else>
+            {{ props.row.airlineList.join('') }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="PoS/PoO" :width="tableColumnWidth.count">
@@ -112,21 +107,26 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="Airlines" :width="tableColumnWidth.count">
+      <el-table-column label="Pricing Terms" :width="tableColumnWidth.count">
         <template slot-scope="props">
           <el-tooltip
-            v-if="props.row.airlineList.length > 1"
             effect="dark"
+            content="View Pricing Terms"
             placement="top"
           >
-            <div slot="content">{{ props.row.airlineList.join(', ') }}</div>
-            <span>
-              {{ props.row.airlineList.length }}
-            </span>
+            <button class="button number">
+              {{ props.row.pricingTermTotal }}
+            </button>
           </el-tooltip>
-          <span v-else>
-            {{ props.row.airlineList.join('') }}
-          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="Target Terms" :width="tableColumnWidth.count">
+        <template slot-scope="props">
+          <el-tooltip effect="dark" content="View Target Terms" placement="top">
+            <button class="button number">
+              {{ props.row.targetTermTotal }}
+            </button>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="Actions" :width="tableColumnWidth.actions">
