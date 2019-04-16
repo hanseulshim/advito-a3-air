@@ -99,3 +99,91 @@ export const DELETE_CONTRACT = gql`
     deleteContract(id: $id)
   }
 `;
+
+export const CREATE_PRICING_TERM = gql`
+  mutation createPricingTerm(
+    $name: String!
+    $ignore: Boolean!
+    $airlineIdList: [Int]!
+    $pointOfSaleIdList: [Int]!
+  ) {
+    createPricingTerm(
+      name: $name
+      ignore: $ignore
+      airlineIdList: $airlineIdList
+      pointOfSaleIdList: $pointOfSaleIdList
+    ) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      qc
+      discountList
+      pointOfSaleList
+      pointOfOriginList
+      airlineList
+      note
+      ignore
+    }
+  }
+`;
+
+export const COPY_PRICING_TERM = gql`
+  mutation copyPricingTerm($id: Int!, $name: String!) {
+    copyPricingTerm(id: $id, name: $name) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      qc
+      discountList
+      pointOfSaleList
+      pointOfOriginList
+      airlineList
+      note
+      ignore
+    }
+  }
+`;
+
+export const EDIT_PRICING_TERM = gql`
+  mutation editPricingTerm(
+    $id: Int!
+    $name: String!
+    $ignore: Boolean!
+    $airlineIdList: [Int]!
+    $pointOfSaleIdList: [Int]!
+  ) {
+    editPricingTerm(
+      id: $id
+      name: $name
+      ignore: $ignore
+      airlineIdList: $airlineIdList
+      pointOfSaleIdList: $pointOfSaleIdList
+    ) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      qc
+      discountList
+      pointOfSaleList
+      pointOfOriginList
+      airlineList
+      note
+      ignore
+    }
+  }
+`;
+
+export const DELETE_PRICING_TERM = gql`
+  mutation deletePricingTerm($pricingTermIdList: [Int]!) {
+    deletePricingTerm(pricingTermIdList: $pricingTermIdList)
+  }
+`;

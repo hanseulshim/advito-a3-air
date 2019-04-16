@@ -33,6 +33,7 @@ type PricingTerm {
   pointOfOriginList: [String]
   airlineList: [String]
   ignore: Boolean
+  isDeleted: Boolean
   note: String
 }
 
@@ -76,8 +77,20 @@ extend type Mutation {
   createPricingTerm(
     name: String!
     ignore: Boolean!
-    airlineList: [Int]!
-    pointOfSaleList: [Int]!
+    airlineIdList: [Int]!
+    pointOfSaleIdList: [Int]!
   ): PricingTerm @auth
+
+  copyPricingTerm(id: Int!, name: String!): PricingTerm @auth
+
+  editPricingTerm(
+    id: Int!
+    name: String!
+    ignore: Boolean!
+    airlineIdList: [Int]!
+    pointOfSaleIdList: [Int]!
+  ): PricingTerm @auth
+
+  deletePricingTerms(pricingTermIdList: [Int]!): [Int] @auth
 }
 `;

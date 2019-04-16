@@ -81,7 +81,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: null
+    note: null,
+    isDeleted: false
   },
   {
     id: 2,
@@ -96,7 +97,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: null
+    note: null,
+    isDeleted: false
   },
   {
     id: 3,
@@ -111,7 +113,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: null
+    note: null,
+    isDeleted: false
   },
   {
     id: 4,
@@ -126,7 +129,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note'
+    note: 'note',
+    isDeleted: false
   },
   {
     id: 5,
@@ -141,7 +145,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note'
+    note: 'note',
+    isDeleted: false
   },
   {
     id: 6,
@@ -156,7 +161,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note'
+    note: 'note',
+    isDeleted: false
   },
   {
     id: 7,
@@ -171,7 +177,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: null
+    note: null,
+    isDeleted: false
   },
   {
     id: 8,
@@ -186,7 +193,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'important'
+    note: 'important',
+    isDeleted: false
   },
   {
     id: 9,
@@ -201,7 +209,8 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note'
+    note: 'note',
+    isDeleted: false
   },
   {
     id: 10,
@@ -216,6 +225,7 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note'
+    note: 'note',
+    isDeleted: false
   }
 ];

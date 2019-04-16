@@ -44,6 +44,7 @@ export const GET_PRICING_TERM_LIST = gql`
       pointOfOriginList
       airlineList
       note
+      ignore
     }
   }
 `;

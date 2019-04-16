@@ -2,14 +2,16 @@ const { ApolloError } = require('apollo-server-lambda');
 const {
   contractList,
   contractTypeList,
-  pricingTermList
+  pricingTermList,
+  airlineGroupAirlineList,
+  posList
 } = require('../../data');
 
 exports.contract = {
   Query: {
     contractList: () => contractList.filter(contract => !contract.isDeleted),
     contractTypeList: () => contractTypeList,
-    pricingTermList: () => pricingTermList
+    pricingTermList: () => pricingTermList.filter(term => !term.isDeleted)
   },
   Mutation: {
     createContract: (
@@ -99,12 +101,21 @@ exports.contract = {
       contract.isDeleted = true;
       return id;
     },
-    createPricingTerm: (_, { name, ignore, airlineList, pointOfSaleList }) => {
+    createPricingTerm: (
+      _,
+      { name, ignore, airlineIdList, pointOfSaleIdList }
+    ) => {
       const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
       const maxContractOrder =
         Math.max(...pricingTermList.map(term => term.id)) + 1;
       const maxAppliedOrder =
         Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const airlineList = airlineIdList.map(
+        id => airlineGroupAirlineList.filter(air => air.id === id)[0].name
+      );
+      const pointOfSaleList = pointOfSaleIdList.map(
+        id => posList.filter(pos => pos.id === id)[0].name
+      );
       const pricingTerm = {
         id: maxId,
         contractOrder: maxContractOrder,
@@ -114,7 +125,52 @@ exports.contract = {
         airlineList,
         pointOfSaleList
       };
-      return null;
+      pricingTermList.push(pricingTerm);
+      return pricingTerm;
+    },
+    copyPricingTerm: (_, { id, name }) => {
+      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const copyPricingTerm = {
+        ...pricingTerm,
+        id: maxId,
+        name
+      };
+      pricingTermList.push(copyPricingTerm);
+      return copyPricingTerm;
+    },
+    editPricingTerm: (
+      _,
+      { id, name, ignore, airlineIdList, pointOfSaleIdList }
+    ) => {
+      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const airlineList = airlineIdList.map(
+        id => airlineGroupAirlineList.filter(air => air.id === id)[0].name
+      );
+      const pointOfSaleList = pointOfSaleIdList.map(
+        id => posList.filter(pos => pos.id === id)[0].name
+      );
+      pricingTerm.name = name;
+      pricingTerm.ignore = ignore;
+      pricingTerm.airlineList = airlineList;
+      pricingTerm.pointOfSaleList = pointOfSaleList;
+      return pricingTerm;
+    },
+    deletePricingTerms: (_, { pricingTermIdList }) => {
+      pricingTermIdList.forEach(id => {
+        const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+        if (!pricingTerm) {
+          throw new ApolloError('Pricing Term not found', 400);
+        }
+        pricingTerm.isDeleted = true;
+      });
+      return pricingTermIdList;
     }
   }
 };

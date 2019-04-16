@@ -37,6 +37,7 @@ exports.contract = {
         pointOfOriginList
         airlineList
         note
+        ignore
       }
     }`
   },
@@ -91,6 +92,52 @@ exports.contract = {
         pointOfOriginList
         airlineList
       }
+      createPricingTerm(name: "term 1", ignore: false, airlineIdList: [886,1209,1313], pointOfSaleIdList: [1,2]) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
+      copyPricingTerm(id: 1, name: "copy term") {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
+      editPricingTerm(id: 1, name: "term edit", ignore: true, airlineIdList: [1521,656,857], pointOfSaleIdList: [2, 3]) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
+      deletePricingTerms(pricingTermIdList: [1, 2, 3])
     }
     `
   }
