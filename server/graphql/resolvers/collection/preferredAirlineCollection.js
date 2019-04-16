@@ -1,8 +1,9 @@
 const { ApolloError } = require('apollo-server-lambda');
 const {
   preferredAirlineCollectionList,
-  preferredAirlineInfo,
-  airlineGroupAirlineList
+  preferenceLevelList,
+  airlineGroupAirlineList,
+  posList
 } = require('../../../data');
 
 exports.preferredAirlineCollection = {
@@ -11,7 +12,8 @@ exports.preferredAirlineCollection = {
       preferredAirlineCollectionList.filter(
         collection => !collection.isDeleted
       ),
-    preferredAirlineInfo: () => preferredAirlineInfo
+    posList: () => posList,
+    preferenceLevelList: () => preferenceLevelList
   },
   Mutation: {
     editPreferredAirlineCollection: (_, { id, name, description }) => {
@@ -78,7 +80,6 @@ exports.preferredAirlineCollection = {
         throw new ApolloError('Preferred Airline Collection not found', 400);
       }
       preferredAirlineCollection.dateUpdated = new Date();
-      const { posList, preferenceLevelList } = preferredAirlineInfo;
       airlineList.forEach(airline => {
         const name = airlineGroupAirlineList.filter(
           air => air.id === airline.id
@@ -111,7 +112,6 @@ exports.preferredAirlineCollection = {
         throw new ApolloError('Preferred Airline Collection not found', 400);
       }
       preferredAirlineCollection.dateUpdated = new Date();
-      const { posList, preferenceLevelList } = preferredAirlineInfo;
       const airlineListCopy = airlineList.map(airline => {
         const airlineCopyArray = preferredAirlineCollection.airlineList.filter(
           air => air.id === airline.id

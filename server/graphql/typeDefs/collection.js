@@ -82,10 +82,6 @@ type PreferredAirline {
   pos: [String]
   active: Boolean
 }
-type PreferredAirlineInfo {
-  posList: [PreferredAirlinePos]
-  preferenceLevelList: [PreferredAirlinePreference]
-}
 type PreferredAirlinePos {
   id: Int
   name: String
@@ -124,7 +120,8 @@ extend type Query {
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
   airlineGroupAirlineList: [AirlineGroupAirline] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
-  preferredAirlineInfo: PreferredAirlineInfo @auth
+  posList: [PreferredAirlinePos]
+  preferenceLevelList: [PreferredAirlinePreference] @auth
 }
 
 extend type Mutation {

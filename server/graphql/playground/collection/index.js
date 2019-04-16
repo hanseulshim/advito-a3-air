@@ -94,15 +94,13 @@ exports.collection = {
           active
         }
       }
-      preferredAirlineInfo {
-        posList {
-          id
-          name
-        }
-        preferenceLevelList {
-          id
-          name
-        }
+      posList {
+        id
+        name
+      }
+      preferenceLevelList {
+        id
+        name
       }
     }`
   },

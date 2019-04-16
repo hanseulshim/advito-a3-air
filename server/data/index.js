@@ -6,7 +6,8 @@ const {
   airlineGroupCollectionList,
   locationCollectionList,
   preferredAirlineCollectionList,
-  preferredAirlineInfo,
+  preferenceLevelList,
+  posList,
   travelSectorCollectionList,
   travelSectorRegionList
 } = require('./collection');
@@ -29,7 +30,8 @@ module.exports = {
   airlineGroupCollectionList,
   locationCollectionList,
   preferredAirlineCollectionList,
-  preferredAirlineInfo,
+  preferenceLevelList,
+  posList,
   travelSectorCollectionList,
   travelSectorRegionList,
   contractList,
