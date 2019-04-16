@@ -20,10 +20,26 @@ type ContractType {
   id: Int
   name: String
 }
+type PricingTerm {
+  id: Int
+  contractOrder: Int
+  appliedOrder: Int
+  name: String
+  effectiveStartDate: Date
+  effectiveEndDate: Date
+  qc: Float
+  discountList: Int
+  pointOfSaleList: [String]
+  pointOfOriginList: [String]
+  airlineList: [String]
+  ignore: Boolean
+  note: String
+}
 
 extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
+  pricingTermList: [PricingTerm] @auth
 }
 
 extend type Mutation {
@@ -56,5 +72,12 @@ extend type Mutation {
   deleteContract(
     id: Int!
   ): Int @auth
+
+  createPricingTerm(
+    name: String!
+    ignore: Boolean!
+    airlineList: [Int]!
+    pointOfSaleList: [Int]!
+  ): PricingTerm @auth
 }
 `;

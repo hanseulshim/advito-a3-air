@@ -24,6 +24,20 @@ exports.contract = {
         id
         name
       }
+      pricingTermList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+      }
     }`
   },
   mutations: {

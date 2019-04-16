@@ -8,5 +8,5 @@ export const tableColumnWidth = {
   expand: 35,
   count: 100,
   code: 140,
-  short: 75
+  short: 85
 };

@@ -21,7 +21,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label=" Date Range"
+        label="Date Range"
         :width="tableColumnWidth.dateRange"
         :formatter="formatDate"
         sortable

@@ -1,10 +1,15 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { contractList, contractTypeList } = require('../../data');
+const {
+  contractList,
+  contractTypeList,
+  pricingTermList
+} = require('../../data');
 
 exports.contract = {
   Query: {
     contractList: () => contractList.filter(contract => !contract.isDeleted),
-    contractTypeList: () => contractTypeList
+    contractTypeList: () => contractTypeList,
+    pricingTermList: () => pricingTermList
   },
   Mutation: {
     createContract: (
@@ -93,6 +98,23 @@ exports.contract = {
       }
       contract.isDeleted = true;
       return id;
+    },
+    createPricingTerm: (_, { name, ignore, airlineList, pointOfSaleList }) => {
+      const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const maxContractOrder =
+        Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const maxAppliedOrder =
+        Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const pricingTerm = {
+        id: maxId,
+        contractOrder: maxContractOrder,
+        appliedOrder: maxAppliedOrder,
+        name,
+        ignore,
+        airlineList,
+        pointOfSaleList
+      };
+      return null;
     }
   }
 };

@@ -12,7 +12,11 @@ const {
 } = require('./collection');
 const { airportList, bookingClassList } = require('./library');
 const { dataSet } = require('./dataSet');
-const { contractList, contractTypeList } = require('./contract');
+const {
+  contractList,
+  contractTypeList,
+  pricingTermList
+} = require('./contract');
 
 module.exports = {
   clientList,
@@ -29,5 +33,6 @@ module.exports = {
   travelSectorCollectionList,
   travelSectorRegionList,
   contractList,
-  contractTypeList
+  contractTypeList,
+  pricingTermList
 };
