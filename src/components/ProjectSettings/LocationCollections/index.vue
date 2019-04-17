@@ -4,19 +4,21 @@
       <div>
         {{ pluralize('location collection', locationCollectionList.length) }}
       </div>
-      <div>
-        <img
-          :style="{ cursor: 'pointer' }"
-          alt="import-errors"
-          src="@/assets/airportListing.png"
-          @click="toggleAirportListing"
-        />
-        <img
-          :style="{ cursor: 'pointer' }"
-          alt="import-errors"
-          src="@/assets/bookingClassMappings.png"
-          @click="toggleBookingClass"
-        />
+      <div class="library-icon-container">
+        <div class="library-icon">
+          <img
+            alt="import-errors"
+            src="@/assets/airportListing.png"
+            @click="toggleAirportListing"
+          />
+        </div>
+        <div class="library-icon">
+          <img
+            alt="import-errors"
+            src="@/assets/bookingClassMappings.png"
+            @click="toggleBookingClass"
+          />
+        </div>
       </div>
     </div>
     <el-table ref="locationCollection" :data="locationCollectionList">
@@ -209,7 +211,23 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/styles/global.scss';
 .collection-add {
   margin-bottom: 2em;
+}
+.library-icon-container {
+  display: flex;
+  .library-icon {
+    border: 1px solid $tree-poppy;
+    border-radius: 100%;
+    padding: 10px;
+    margin-right: 10px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    img {
+      width: 100%;
+    }
+  }
 }
 </style>
