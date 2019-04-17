@@ -21,6 +21,8 @@
             v-model="bulkActionId"
             placeholder="Bulk Actions"
             filterable
+            clearable
+            @change="bulkAction"
           >
             <el-option
               v-for="item in bulkActionList"
@@ -180,7 +182,7 @@
     <NewPricingTermModal />
     <CopyPricingTermModal />
     <EditPricingTermModal />
-    <DeletePricingTermModal />
+    <DeletePricingTermModal @clear-bulk-actions="clearBulkActions" />
   </div>
 </template>
 
@@ -295,6 +297,15 @@ export default {
     },
     showDeletePricingTermModal(idList) {
       this.$modal.show('delete-pricing-term', { idList });
+    },
+    bulkAction(value) {
+      if (value === 1) {
+        this.showDeletePricingTermModal(this.bulkIdList);
+      }
+    },
+    clearBulkActions() {
+      this.bulkIdList = [];
+      this.bulkActionId = null;
     }
   }
 };

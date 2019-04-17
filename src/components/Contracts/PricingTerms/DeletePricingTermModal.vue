@@ -7,7 +7,11 @@
     @before-close="beforeClose"
   >
     <div class="delete-modal-text">
-      Are you sure you want to delete this pricing term?
+      {{
+        idList
+          ? 'Are you sure you want to delete these pricing terms?'
+          : 'Are you sure you want to delete this pricing term?'
+      }}
     </div>
     <div class="delete-modal-button-container">
       <button class="button" @click="deletePricingTerm">Yes</button>
@@ -54,6 +58,7 @@ export default {
             });
           }
         });
+        this.$emit('clear-bulk-actions');
         this.$modal.show('success', {
           message: 'Pricing Term successfully deleted.',
           name: 'delete-pricing-term'
