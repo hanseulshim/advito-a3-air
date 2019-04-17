@@ -24,6 +24,21 @@ exports.contract = {
         id
         name
       }
+      pricingTermList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
     }`
   },
   mutations: {
@@ -77,6 +92,52 @@ exports.contract = {
         pointOfOriginList
         airlineList
       }
+      createPricingTerm(name: "term 1", ignore: false) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
+      copyPricingTerm(id: 1, name: "copy term") {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
+      editPricingTerm(id: 1, name: "term edit", ignore: true) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
+      deletePricingTerms(idList: [1, 2, 3])
     }
     `
   }

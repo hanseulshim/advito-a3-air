@@ -1,10 +1,15 @@
 const { ApolloError } = require('apollo-server-lambda');
-const { contractList, contractTypeList } = require('../../data');
+const {
+  contractList,
+  contractTypeList,
+  pricingTermList
+} = require('../../data');
 
 exports.contract = {
   Query: {
     contractList: () => contractList.filter(contract => !contract.isDeleted),
-    contractTypeList: () => contractTypeList
+    contractTypeList: () => contractTypeList,
+    pricingTermList: () => pricingTermList.filter(term => !term.isDeleted)
   },
   Mutation: {
     createContract: (
@@ -93,6 +98,71 @@ exports.contract = {
       }
       contract.isDeleted = true;
       return id;
+    },
+    createPricingTerm: (_, { name, ignore }) => {
+      const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const maxContractOrder =
+        Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const maxAppliedOrder =
+        Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const pricingTerm = {
+        id: maxId,
+        contractOrder: maxContractOrder,
+        appliedOrder: maxAppliedOrder,
+        name,
+        effectiveStartDate: new Date(),
+        effectiveEndDate: new Date(253402232400000),
+        qc: 0,
+        discountList: 0,
+        pointOfSaleList: [],
+        pointOfOriginList: [],
+        airlineList: [],
+        ignore,
+        isDeleted: false,
+        note: null
+      };
+      pricingTermList.push(pricingTerm);
+      return pricingTerm;
+    },
+    copyPricingTerm: (_, { id, name, ignore }) => {
+      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const maxContractOrder =
+        Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const maxAppliedOrder =
+        Math.max(...pricingTermList.map(term => term.id)) + 1;
+      const copyPricingTerm = {
+        ...pricingTerm,
+        id: maxId,
+        contractOrder: maxContractOrder,
+        appliedOrder: maxAppliedOrder,
+        name,
+        ignore
+      };
+      pricingTermList.push(copyPricingTerm);
+      return copyPricingTerm;
+    },
+    editPricingTerm: (_, { id, name, ignore }) => {
+      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      pricingTerm.name = name;
+      pricingTerm.ignore = ignore;
+      return pricingTerm;
+    },
+    deletePricingTerms: (_, { idList }) => {
+      idList.forEach(id => {
+        const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+        if (!pricingTerm) {
+          throw new ApolloError('Pricing Term not found', 400);
+        }
+        pricingTerm.isDeleted = true;
+      });
+      return idList;
     }
   }
 };

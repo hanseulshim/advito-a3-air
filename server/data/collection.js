@@ -1012,37 +1012,36 @@ exports.preferredAirlineCollectionList = [
   }
 ];
 
-exports.preferredAirlineInfo = {
-  posList: [
-    {
-      id: 1,
-      name: 'EU'
-    },
-    {
-      id: 2,
-      name: 'US'
-    },
-    {
-      id: 3,
-      name: 'FR'
-    },
-    {
-      id: 4,
-      name: 'Various'
-    }
-  ],
-  preferenceLevelList: [
-    {
-      id: 1,
-      name: 'Primary'
-    },
-    {
-      id: 2,
-      name: 'Secondary'
-    },
-    {
-      id: 3,
-      name: 'Tertiary'
-    }
-  ]
-};
+exports.preferenceLevelList = [
+  {
+    id: 1,
+    name: 'Primary'
+  },
+  {
+    id: 2,
+    name: 'Secondary'
+  },
+  {
+    id: 3,
+    name: 'Tertiary'
+  }
+];
+
+exports.posList = [
+  {
+    id: 1,
+    name: 'EU'
+  },
+  {
+    id: 2,
+    name: 'US'
+  },
+  {
+    id: 3,
+    name: 'FR'
+  },
+  {
+    id: 4,
+    name: 'Various'
+  }
+];

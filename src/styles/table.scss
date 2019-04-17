@@ -34,15 +34,19 @@
     .fa-pencil-alt,
     .fa-trash-alt,
     .fa-copy,
+    .fa-sticky-note,
     .fa-star {
       cursor: pointer;
+    }
+    .inactive-row {
+      opacity: 0.6;
     }
   }
   .table-toggle-icon {
     cursor: pointer;
     color: $tree-poppy;
   }
-  .fa-copy {
+  .fa-copy, .fa-sticky-note {
     font-size: 20px;
   }
   .icon-spacer {

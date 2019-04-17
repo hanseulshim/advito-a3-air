@@ -78,13 +78,12 @@ export default {
   },
   computed: {
     filteredProjectList: function() {
-      return this.projectList.filter(project => {
-        return (
+      return this.projectList.filter(
+        project =>
           project.reportTo === null ||
           this.showInactive ||
           project.reportTo > new Date()
-        );
-      });
+      );
     },
     favoriteProjectList: function() {
       return this.filteredProjectList.filter(

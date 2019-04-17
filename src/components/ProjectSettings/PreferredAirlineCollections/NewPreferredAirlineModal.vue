@@ -47,7 +47,7 @@
           filterable
         >
           <el-option
-            v-for="item in preferredAirlineInfo.posList"
+            v-for="item in posList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -62,7 +62,7 @@
           filterable
         >
           <el-option
-            v-for="item in preferredAirlineInfo.preferenceLevelList"
+            v-for="item in preferenceLevelList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -120,7 +120,7 @@
               multiple
             >
               <el-option
-                v-for="item in preferredAirlineInfo.posList"
+                v-for="item in posList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -135,7 +135,7 @@
               filterable
             >
               <el-option
-                v-for="item in preferredAirlineInfo.preferenceLevelList"
+                v-for="item in preferenceLevelList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -153,7 +153,8 @@
 
 <script>
 import {
-  GET_PREFERRED_AIRLINE_INFO,
+  GET_POS_LIST,
+  GET_PREFERENCE_LEVEL_LIST,
   GET_PREFERRED_AIRLINE_COLLECTION_LIST,
   GET_AIRLINE_LIST
 } from '@/graphql/queries';
@@ -164,8 +165,11 @@ export default {
     preferredAirlineCollectionList: {
       query: GET_PREFERRED_AIRLINE_COLLECTION_LIST
     },
-    preferredAirlineInfo: {
-      query: GET_PREFERRED_AIRLINE_INFO
+    posList: {
+      query: GET_POS_LIST
+    },
+    preferenceLevelList: {
+      query: GET_PREFERENCE_LEVEL_LIST
     },
     airlineGroupAirlineList: {
       query: GET_AIRLINE_LIST,
@@ -199,7 +203,8 @@ export default {
       },
       preferredAirlineCollectionList: [],
       airlineGroupAirlineList: [],
-      preferredAirlineInfo: {},
+      posList: [],
+      preferenceLevelList: [],
       filteredOptions: []
     };
   },

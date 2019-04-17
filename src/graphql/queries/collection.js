@@ -116,17 +116,20 @@ export const GET_PREFERRED_AIRLINE_COLLECTION_LIST = gql`
   }
 `;
 
-export const GET_PREFERRED_AIRLINE_INFO = gql`
+export const GET_POS_LIST = gql`
   {
-    preferredAirlineInfo {
-      posList {
-        id
-        name
-      }
-      preferenceLevelList {
-        id
-        name
-      }
+    posList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_PREFERENCE_LEVEL_LIST = gql`
+  {
+    preferenceLevelList {
+      id
+      name
     }
   }
 `;
