@@ -2,9 +2,7 @@ const { ApolloError } = require('apollo-server-lambda');
 const {
   contractList,
   contractTypeList,
-  pricingTermList,
-  airlineGroupAirlineList,
-  posList
+  pricingTermList
 } = require('../../data');
 
 exports.contract = {
