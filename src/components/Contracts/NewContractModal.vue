@@ -96,7 +96,7 @@ export default {
         name: [
           {
             required: true,
-            message: 'Please input a collection name.',
+            message: 'Please input a contract name.',
             trigger: 'change'
           }
         ],

@@ -291,8 +291,6 @@ export default {
         .map(airline => {
           const posIdList = this.posList
             .filter(pos => {
-              console.log(airline.pos);
-              console.log(pos.name);
               return airline.pos.indexOf(pos.name) !== -1;
             })
             .map(pos => pos.id);

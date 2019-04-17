@@ -92,7 +92,7 @@ exports.contract = {
         pointOfOriginList
         airlineList
       }
-      createPricingTerm(name: "term 1", ignore: false, airlineIdList: [886,1209,1313], pointOfSaleIdList: [1,2]) {
+      createPricingTerm(name: "term 1", ignore: false) {
         id
         contractOrder
         appliedOrder
@@ -122,7 +122,7 @@ exports.contract = {
         note
         ignore
       }
-      editPricingTerm(id: 1, name: "term edit", ignore: true, airlineIdList: [1521,656,857], pointOfSaleIdList: [2, 3]) {
+      editPricingTerm(id: 1, name: "term edit", ignore: true) {
         id
         contractOrder
         appliedOrder
@@ -137,7 +137,7 @@ exports.contract = {
         note
         ignore
       }
-      deletePricingTerms(pricingTermIdList: [1, 2, 3])
+      deletePricingTerms(idList: [1, 2, 3])
     }
     `
   }

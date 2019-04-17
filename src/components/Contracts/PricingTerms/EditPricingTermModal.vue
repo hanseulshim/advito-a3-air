@@ -1,13 +1,13 @@
 <template>
   <modal
     classes="modal-container"
-    name="copy-contract"
+    name="edit-pricing-term"
     height="auto"
     @before-close="beforeClose"
     @before-open="beforeOpen"
   >
     <el-form
-      ref="copyContract"
+      ref="editPricingTerm"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -15,11 +15,14 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">copy contract</div>
+        <div class="section-header">edit pricing term</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
-      <el-form-item label="Name *" prop="name">
+      <el-form-item label="Term Name *" prop="name">
         <el-input v-model="form.name" />
+      </el-form-item>
+      <el-form-item label="Ignore *">
+        <el-checkbox v-model="form.ignore" />
       </el-form-item>
       <el-form-item class="save-container">
         <button class="button" @click="validateForm">SAVE</button>
@@ -29,21 +32,21 @@
 </template>
 
 <script>
-import { GET_CONTRACT_LIST } from '@/graphql/queries';
-import { COPY_CONTRACT } from '@/graphql/mutations';
+import { EDIT_PRICING_TERM } from '@/graphql/mutations';
 export default {
-  name: 'CopyContractModal',
+  name: 'EditPricingTermModal',
   data() {
     return {
       form: {
         id: null,
-        name: null
+        name: null,
+        ignore: false
       },
       rules: {
         name: [
           {
             required: true,
-            message: 'Please input a contract name.',
+            message: 'Please input a pricing term name.',
             trigger: 'change'
           }
         ]
@@ -52,39 +55,28 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('copy-contract');
+      this.$modal.hide('edit-pricing-term');
     },
     validateForm() {
-      this.$refs.copyContract.validate(valid => {
+      this.$refs.editPricingTerm.validate(valid => {
         if (valid) {
-          this.copyContract();
+          this.editPricingTerm();
         } else {
           return false;
         }
       });
     },
-    async copyContract() {
+    async editPricingTerm() {
       try {
         await this.$apollo.mutate({
-          mutation: COPY_CONTRACT,
+          mutation: EDIT_PRICING_TERM,
           variables: {
             ...this.form
-          },
-          update: (store, data) => {
-            const contract = data.data.copyContract;
-            const newData = store.readQuery({
-              query: GET_CONTRACT_LIST
-            });
-            newData.contractList.push(contract);
-            store.writeQuery({
-              query: GET_CONTRACT_LIST,
-              data: newData
-            });
           }
         });
         this.$modal.show('success', {
-          message: 'Contract successfully copied.',
-          name: 'copy-contract'
+          message: 'Pricing Term successfully edited.',
+          name: 'edit-pricing-term'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -93,11 +85,15 @@ export default {
       }
     },
     beforeOpen(event) {
-      this.form.id = event.params.id;
+      const { id, name, ignore } = event.params.pricingTerm;
+      this.form.id = id;
+      this.form.name = name;
+      this.form.ignore = ignore;
     },
     beforeClose() {
       this.form.id = null;
       this.form.name = null;
+      this.form.ignore = false;
     }
   }
 };

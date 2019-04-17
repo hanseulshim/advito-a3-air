@@ -101,18 +101,8 @@ export const DELETE_CONTRACT = gql`
 `;
 
 export const CREATE_PRICING_TERM = gql`
-  mutation createPricingTerm(
-    $name: String!
-    $ignore: Boolean!
-    $airlineIdList: [Int]!
-    $pointOfSaleIdList: [Int]!
-  ) {
-    createPricingTerm(
-      name: $name
-      ignore: $ignore
-      airlineIdList: $airlineIdList
-      pointOfSaleIdList: $pointOfSaleIdList
-    ) {
+  mutation createPricingTerm($name: String!, $ignore: Boolean!) {
+    createPricingTerm(name: $name, ignore: $ignore) {
       id
       contractOrder
       appliedOrder
@@ -131,8 +121,8 @@ export const CREATE_PRICING_TERM = gql`
 `;
 
 export const COPY_PRICING_TERM = gql`
-  mutation copyPricingTerm($id: Int!, $name: String!) {
-    copyPricingTerm(id: $id, name: $name) {
+  mutation copyPricingTerm($id: Int!, $name: String!, $ignore: Boolean!) {
+    copyPricingTerm(id: $id, name: $name, ignore: $ignore) {
       id
       contractOrder
       appliedOrder
@@ -151,20 +141,8 @@ export const COPY_PRICING_TERM = gql`
 `;
 
 export const EDIT_PRICING_TERM = gql`
-  mutation editPricingTerm(
-    $id: Int!
-    $name: String!
-    $ignore: Boolean!
-    $airlineIdList: [Int]!
-    $pointOfSaleIdList: [Int]!
-  ) {
-    editPricingTerm(
-      id: $id
-      name: $name
-      ignore: $ignore
-      airlineIdList: $airlineIdList
-      pointOfSaleIdList: $pointOfSaleIdList
-    ) {
+  mutation editPricingTerm($id: Int!, $name: String!, $ignore: Boolean!) {
+    editPricingTerm(id: $id, name: $name, ignore: $ignore) {
       id
       contractOrder
       appliedOrder
@@ -182,8 +160,8 @@ export const EDIT_PRICING_TERM = gql`
   }
 `;
 
-export const DELETE_PRICING_TERM = gql`
-  mutation deletePricingTerm($pricingTermIdList: [Int]!) {
-    deletePricingTerm(pricingTermIdList: $pricingTermIdList)
+export const DELETE_PRICING_TERMS = gql`
+  mutation deletePricingTerms($idList: [Int]!) {
+    deletePricingTerms(idList: $idList)
   }
 `;

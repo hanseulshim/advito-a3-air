@@ -30,7 +30,7 @@
             />
           </el-select>
         </div>
-        <button class="button long">
+        <button class="button long" @click="showNewPricingTermModal">
           + NEW PRICING TERM
         </button>
       </div>
@@ -100,7 +100,9 @@
             </span>
           </el-tooltip>
           <span v-else>
-            {{ props.row.airlineList.join('') }}
+            {{
+              props.row.airlineList.length ? props.row.airlineList.join('') : 0
+            }}
           </span>
         </template>
       </el-table-column>
@@ -119,14 +121,23 @@
             <span>
               <span>
                 {{
-                  props.row.pointOfSaleList.length > 1
+                  props.row.pointOfSaleList.length > 1 ||
+                  !props.row.pointOfSaleList.length
                     ? props.row.pointOfSaleList.length
                     : props.row.pointOfSaleList.join('')
                 }}
               </span>
-              <span v-if="props.row.pointOfOriginList.length"> / </span>
+              <span
+                v-if="
+                  props.row.pointOfOriginList.length > 1 ||
+                    !props.row.pointOfOriginList.length
+                "
+              >
+                /
+              </span>
               <span>{{
-                props.row.pointOfOriginList.length > 1
+                props.row.pointOfOriginList.length > 1 ||
+                !props.row.pointOfOriginList.length
                   ? props.row.pointOfOriginList.length
                   : props.row.pointOfOriginList.join('')
               }}</span>
@@ -153,31 +164,43 @@
         <template slot-scope="props">
           <i
             class="far fa-copy icon-spacer"
-            @click="showCopyContractModal(props.row.id)"
+            @click="showCopyPricingTermModal(props.row)"
           />
           <i
             class="fas fa-pencil-alt icon-spacer"
-            @click="showEditContractModal(props.row)"
+            @click="showEditPricingTermModal(props.row)"
           />
           <i
             class="fas fa-trash-alt"
-            @click="showDeleteContractModal(props.row.id)"
+            @click="showDeletePricingTermModal([props.row.id])"
           />
         </template>
       </el-table-column>
     </el-table>
+    <NewPricingTermModal />
+    <CopyPricingTermModal />
+    <EditPricingTermModal />
+    <DeletePricingTermModal />
   </div>
 </template>
 
 <script>
-import Navigation from './Navigation';
+import Navigation from '../Navigation';
 import { pluralize, formatDate } from '@/helper';
 import { tableColumnWidth } from '@/config';
 import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import CopyPricingTermModal from './CopyPricingTermModal';
+import NewPricingTermModal from './NewPricingTermModal';
+import EditPricingTermModal from './EditPricingTermModal';
+import DeletePricingTermModal from './DeletePricingTermModal';
 export default {
   name: 'PricingTerms',
   components: {
-    Navigation
+    Navigation,
+    CopyPricingTermModal,
+    NewPricingTermModal,
+    EditPricingTermModal,
+    DeletePricingTermModal
   },
   apollo: {
     pricingTermList: {
@@ -260,6 +283,18 @@ export default {
       } else {
         this.bulkIdList.splice(index, 1);
       }
+    },
+    showNewPricingTermModal() {
+      this.$modal.show('new-pricing-term');
+    },
+    showCopyPricingTermModal(pricingTerm) {
+      this.$modal.show('copy-pricing-term', { pricingTerm });
+    },
+    showEditPricingTermModal(pricingTerm) {
+      this.$modal.show('edit-pricing-term', { pricingTerm });
+    },
+    showDeletePricingTermModal(idList) {
+      this.$modal.show('delete-pricing-term', { idList });
     }
   }
 };

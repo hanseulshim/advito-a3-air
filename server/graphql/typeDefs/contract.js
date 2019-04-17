@@ -54,10 +54,7 @@ extend type Mutation {
     description: String
   ): Contract @auth
 
-  copyContract(
-    id: Int!
-    name: String!
-  ): Contract @auth
+  copyContract(id: Int!, name: String!): Contract @auth
 
   editContract(
     id: Int!,
@@ -70,27 +67,14 @@ extend type Mutation {
     description: String
   ): Contract @auth
 
-  deleteContract(
-    id: Int!
-  ): Int @auth
+  deleteContract(id: Int!): Int @auth
 
-  createPricingTerm(
-    name: String!
-    ignore: Boolean!
-    airlineIdList: [Int]!
-    pointOfSaleIdList: [Int]!
-  ): PricingTerm @auth
+  createPricingTerm(name: String!, ignore: Boolean!): PricingTerm @auth
 
-  copyPricingTerm(id: Int!, name: String!): PricingTerm @auth
+  copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
 
-  editPricingTerm(
-    id: Int!
-    name: String!
-    ignore: Boolean!
-    airlineIdList: [Int]!
-    pointOfSaleIdList: [Int]!
-  ): PricingTerm @auth
+  editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
 
-  deletePricingTerms(pricingTermIdList: [Int]!): [Int] @auth
+  deletePricingTerms(idList: [Int]!): [Int] @auth
 }
 `;
