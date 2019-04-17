@@ -1,7 +1,23 @@
 <template>
   <div>
     <div class="section-header title-row space-between">
-      {{ pluralize('location collection', locationCollectionList.length) }}
+      <div>
+        {{ pluralize('location collection', locationCollectionList.length) }}
+      </div>
+      <div>
+        <img
+          :style="{ cursor: 'pointer' }"
+          alt="import-errors"
+          src="@/assets/airportListing.png"
+          @click="toggleAirportListing"
+        />
+        <img
+          :style="{ cursor: 'pointer' }"
+          alt="import-errors"
+          src="@/assets/bookingClassMappings.png"
+          @click="toggleBookingClass"
+        />
+      </div>
     </div>
     <el-table ref="locationCollection" :data="locationCollectionList">
       <el-table-column type="expand" :width="tableColumnWidth.expand">
@@ -181,6 +197,12 @@ export default {
           }
         });
       }
+    },
+    toggleAirportListing() {
+      this.$modal.show('airport-listing');
+    },
+    toggleBookingClass() {
+      this.$modal.show('booking-class');
     }
   }
 };
