@@ -29,17 +29,17 @@
       </div>
     </div>
     <el-table ref="discountList" :data="discountList" class="level-two-table">
-      <el-table-column prop="contractOrder" :width="tableColumnWidth.short">
+      <el-table-column prop="contractOrder" :width="tableColumnWidth.bulk">
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :width="tableColumnWidth.short">
+      <el-table-column prop="appliedOrder" :width="tableColumnWidth.bulk">
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column label="Bulk" :width="tableColumnWidth.short">
+      <el-table-column label="Bulk" :width="tableColumnWidth.bulk">
         <template slot-scope="props">
           <el-checkbox
             :value="bulkIdList.includes(props.row.id)"
