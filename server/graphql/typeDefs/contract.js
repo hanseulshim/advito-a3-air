@@ -28,13 +28,28 @@ type PricingTerm {
   effectiveStartDate: Date
   effectiveEndDate: Date
   qc: Float
-  discountList: Int
+  discountList: [Discount]
   pointOfSaleList: [String]
   pointOfOriginList: [String]
   airlineList: [String]
   ignore: Boolean
   isDeleted: Boolean
   note: String
+}
+type Discount {
+  id: Int
+  contractOrder: Int
+  appliedOrder: Int
+  name: String
+  effectiveStartDate: Date
+  effectiveEndDate: Date
+  discountType: String
+  discountValue: Float
+  journeyType: String
+  directionType: String
+  normalizationList: Int
+  note: String
+  isDeleted: Boolean
 }
 
 extend type Query {
@@ -53,9 +68,7 @@ extend type Mutation {
     division: String
     description: String
   ): Contract @auth
-
   copyContract(id: Int!, name: String!): Contract @auth
-
   editContract(
     id: Int!,
     name: String!
@@ -66,15 +79,11 @@ extend type Mutation {
     division: String
     description: String
   ): Contract @auth
-
   deleteContract(id: Int!): Int @auth
 
   createPricingTerm(name: String!, ignore: Boolean!): PricingTerm @auth
-
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
-
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
-
   deletePricingTerms(idList: [Int]!): [Int] @auth
 }
 `;

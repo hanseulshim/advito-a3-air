@@ -19,8 +19,8 @@
     >
       <el-table-column
         prop="name"
-        label="Airline Name"
-        :width="tableColumnWidth.code"
+        label="Name"
+        :width="tableColumnWidth.shortName"
         sortable
       />
       <el-table-column
@@ -32,7 +32,7 @@
       <el-table-column prop="description" label="Description" />
       <el-table-column
         label="Round"
-        :width="tableColumnWidth.count"
+        :width="tableColumnWidth.short"
         sortable
         sort-by="round"
       >
@@ -107,7 +107,10 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="Pricing Terms" :width="tableColumnWidth.count">
+      <el-table-column
+        label="Pricing Terms"
+        :width="tableColumnWidth.nestedActions"
+      >
         <template slot-scope="props">
           <el-tooltip
             effect="dark"
@@ -122,7 +125,10 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="Target Terms" :width="tableColumnWidth.count">
+      <el-table-column
+        label="Target Terms"
+        :width="tableColumnWidth.nestedActions"
+      >
         <template slot-scope="props">
           <el-tooltip effect="dark" content="View Target Terms" placement="top">
             <router-link to="/project/contracts/target-terms">

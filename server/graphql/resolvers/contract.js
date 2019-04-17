@@ -113,7 +113,7 @@ exports.contract = {
         effectiveStartDate: new Date(),
         effectiveEndDate: new Date(253402232400000),
         qc: 0,
-        discountList: 0,
+        discountList: [],
         pointOfSaleList: [],
         pointOfOriginList: [],
         airlineList: [],
@@ -139,6 +139,7 @@ exports.contract = {
         id: maxId,
         contractOrder: maxContractOrder,
         appliedOrder: maxAppliedOrder,
+        discountList: [],
         name,
         ignore
       };

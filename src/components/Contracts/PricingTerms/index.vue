@@ -42,6 +42,14 @@
       :data="filteredPricingTermList"
       :row-class-name="tableRowClassName"
     >
+      <el-table-column type="expand" :width="tableColumnWidth.expand">
+        <template slot-scope="props">
+          <Discounts
+            :discount-list="props.row.discountList"
+            :pricing-term-id="props.row.id"
+          />
+        </template>
+      </el-table-column>
       <el-table-column prop="contractOrder" :width="tableColumnWidth.short">
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
@@ -60,7 +68,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Airline Name" sortable>
+      <el-table-column label="Term Name" sortable sort-by="name">
         <template slot-scope="props">
           <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">
             {{ props.row.name }}
@@ -68,7 +76,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Date Range"
+        label="Effective Dates"
         :width="tableColumnWidth.dateRange"
         :formatter="formatDate"
         sortable
@@ -84,11 +92,11 @@
           <el-checkbox :value="props.row.qc === 1" />
         </template>
       </el-table-column>
-      <el-table-column
-        prop="discountList"
-        label="Discounts"
-        :width="tableColumnWidth.count"
-      />
+      <el-table-column label="Discounts" :width="tableColumnWidth.count">
+        <template slot-scope="props">
+          {{ props.row.discountList.length }}
+        </template>
+      </el-table-column>
       <el-table-column label="Airlines" :width="tableColumnWidth.count">
         <template slot-scope="props">
           <el-tooltip
@@ -195,6 +203,7 @@ import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
 import DeletePricingTermModal from './DeletePricingTermModal';
+import Discounts from './Discounts';
 export default {
   name: 'PricingTerms',
   components: {
@@ -202,7 +211,8 @@ export default {
     CopyPricingTermModal,
     NewPricingTermModal,
     EditPricingTermModal,
-    DeletePricingTermModal
+    DeletePricingTermModal,
+    Discounts
   },
   apollo: {
     pricingTermList: {
