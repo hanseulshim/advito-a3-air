@@ -2,14 +2,20 @@ const { ApolloError } = require('apollo-server-lambda');
 const {
   contractList,
   contractTypeList,
-  pricingTermList
+  pricingTermList,
+  discountTypeList,
+  journeyTypeList,
+  directionTypeList
 } = require('../../data');
 
 exports.contract = {
   Query: {
     contractList: () => contractList.filter(contract => !contract.isDeleted),
     contractTypeList: () => contractTypeList,
-    pricingTermList: () => pricingTermList.filter(term => !term.isDeleted)
+    pricingTermList: () => pricingTermList.filter(term => !term.isDeleted),
+    discountTypeList: () => discountTypeList,
+    journeyTypeList: () => journeyTypeList,
+    directionTypeList: () => directionTypeList
   },
   Mutation: {
     createContract: (
@@ -134,12 +140,21 @@ exports.contract = {
         Math.max(...pricingTermList.map(term => term.id)) + 1;
       const maxAppliedOrder =
         Math.max(...pricingTermList.map(term => term.id)) + 1;
+      let maxDiscountId = Math.max(
+        ...pricingTermList.map(
+          term => Math.max(...term.discountList.map(term => term.id)) + 1
+        )
+      );
+      const copyDiscountList = pricingTerm.discountList.map(discount => ({
+        ...discount,
+        id: maxDiscountId++
+      }));
       const copyPricingTerm = {
         ...pricingTerm,
         id: maxId,
         contractOrder: maxContractOrder,
         appliedOrder: maxAppliedOrder,
-        discountList: [],
+        discountList: copyDiscountList,
         name,
         ignore
       };
@@ -162,6 +177,185 @@ exports.contract = {
           throw new ApolloError('Pricing Term not found', 400);
         }
         pricingTerm.isDeleted = true;
+      });
+      return idList;
+    },
+    createDiscount: (
+      _,
+      {
+        id,
+        name,
+        discountTypeId,
+        discountValue,
+        journeyTypeId,
+        directionTypeId
+      }
+    ) => {
+      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const maxId = Math.max(
+        ...pricingTermList.map(
+          term => Math.max(...term.discountList.map(term => term.id)) + 1
+        )
+      );
+      const maxContractOrder =
+        Math.max(
+          ...pricingTerm.discountList.map(discount => discount.contractOrder)
+        ) + 1;
+      const maxAppliedOrder =
+        Math.max(
+          ...pricingTerm.discountList.map(discount => discount.appliedOrder)
+        ) + 1;
+      const discountType = discountTypeId
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        : null;
+      const journeyType = journeyTypeId
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        : null;
+      const directionType = directionTypeId
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        : null;
+      const discount = {
+        id: maxId,
+        contractOrder: maxContractOrder,
+        appliedOrder: maxAppliedOrder,
+        name,
+        effectiveStartDate: new Date(),
+        effectiveEndDate: new Date(253402232400000),
+        discountType,
+        discountValue,
+        journeyType,
+        directionType,
+        normalizationList: 0,
+        note: null,
+        isDeleted: false
+      };
+      pricingTerm.discountList.push(discount);
+      return discount;
+    },
+    copyDiscount: (
+      _,
+      {
+        pricingTermId,
+        id,
+        name,
+        discountTypeId,
+        discountValue,
+        journeyTypeId,
+        directionTypeId
+      }
+    ) => {
+      const pricingTerm = pricingTermList.filter(
+        term => term.id === pricingTermId
+      )[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const discount = pricingTerm.discountList.filter(
+        discount => discount.id === id
+      )[0];
+      if (!discount) {
+        throw new ApolloError('Discount not found', 400);
+      }
+      const maxId = Math.max(
+        ...pricingTermList.map(
+          term => Math.max(...term.discountList.map(term => term.id)) + 1
+        )
+      );
+      const maxContractOrder =
+        Math.max(
+          ...pricingTerm.discountList.map(discount => discount.contractOrder)
+        ) + 1;
+      const maxAppliedOrder =
+        Math.max(
+          ...pricingTerm.discountList.map(discount => discount.appliedOrder)
+        ) + 1;
+      const discountType = discountTypeId
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        : null;
+      const journeyType = journeyTypeId
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        : null;
+      const directionType = directionTypeId
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        : null;
+      const discountCopy = {
+        id: maxId,
+        contractOrder: maxContractOrder,
+        appliedOrder: maxAppliedOrder,
+        name,
+        effectiveStartDate: new Date(),
+        effectiveEndDate: new Date(253402232400000),
+        discountType,
+        discountValue,
+        journeyType,
+        directionType,
+        normalizationList: 0,
+        note: null,
+        isDeleted: false
+      };
+      pricingTerm.discountList.push(discountCopy);
+      return discountCopy;
+    },
+    editDiscount: (
+      _,
+      {
+        pricingTermId,
+        id,
+        name,
+        discountTypeId,
+        discountValue,
+        journeyTypeId,
+        directionTypeId
+      }
+    ) => {
+      const pricingTerm = pricingTermList.filter(
+        term => term.id === pricingTermId
+      )[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const discount = pricingTerm.discountList.filter(
+        discount => discount.id === id
+      )[0];
+      if (!discount) {
+        throw new ApolloError('Discount not found', 400);
+      }
+      const discountType = discountTypeId
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        : null;
+      const journeyType = journeyTypeId
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        : null;
+      const directionType = directionTypeId
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        : null;
+
+      discount.name = name;
+      discount.discountType = discountType;
+      discount.discountValue = discountValue;
+      discount.journeyType = journeyType;
+      discount.directionType = directionType;
+
+      return discount;
+    },
+    deleteDiscounts: (_, { pricingTermId, idList }) => {
+      const pricingTerm = pricingTermList.filter(
+        term => term.id === pricingTermId
+      )[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      idList.forEach(id => {
+        const discount = pricingTerm.discountList.filter(
+          discount => discount.id === id
+        )[0];
+        if (!discount) {
+          throw new ApolloError('Discount not found', 400);
+        }
+        discount.isDeleted = true;
       });
       return idList;
     }

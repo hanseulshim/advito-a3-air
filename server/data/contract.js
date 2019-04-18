@@ -86,7 +86,7 @@ exports.pricingTermList = [
       {
         id: 1,
         contractOrder: 1,
-        appliedOrder: 30,
+        appliedOrder: 3,
         name: 'Temp',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -101,7 +101,7 @@ exports.pricingTermList = [
       {
         id: 2,
         contractOrder: 2,
-        appliedOrder: 29,
+        appliedOrder: 2,
         name: 'Ronstring',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -116,7 +116,7 @@ exports.pricingTermList = [
       {
         id: 3,
         contractOrder: 3,
-        appliedOrder: 28,
+        appliedOrder: 1,
         name: 'Pannier',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -147,8 +147,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 4,
-        contractOrder: 4,
-        appliedOrder: 27,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Bitwolf',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -162,8 +162,8 @@ exports.pricingTermList = [
       },
       {
         id: 5,
-        contractOrder: 5,
-        appliedOrder: 26,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Fintone',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -177,8 +177,8 @@ exports.pricingTermList = [
       },
       {
         id: 6,
-        contractOrder: 6,
-        appliedOrder: 25,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'Prodder',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -209,8 +209,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 7,
-        contractOrder: 7,
-        appliedOrder: 24,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Voyatouch',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -224,8 +224,8 @@ exports.pricingTermList = [
       },
       {
         id: 8,
-        contractOrder: 8,
-        appliedOrder: 23,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Sonair',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -239,8 +239,8 @@ exports.pricingTermList = [
       },
       {
         id: 9,
-        contractOrder: 9,
-        appliedOrder: 22,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'Sub-Ex',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -271,8 +271,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 10,
-        contractOrder: 10,
-        appliedOrder: 21,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Kanlam',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -286,8 +286,8 @@ exports.pricingTermList = [
       },
       {
         id: 11,
-        contractOrder: 11,
-        appliedOrder: 20,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Ronstring',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -301,8 +301,8 @@ exports.pricingTermList = [
       },
       {
         id: 12,
-        contractOrder: 12,
-        appliedOrder: 19,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'Wrapsafe',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -333,8 +333,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 13,
-        contractOrder: 13,
-        appliedOrder: 18,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Matsoft',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -348,8 +348,8 @@ exports.pricingTermList = [
       },
       {
         id: 14,
-        contractOrder: 14,
-        appliedOrder: 17,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Bitchip',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -363,8 +363,8 @@ exports.pricingTermList = [
       },
       {
         id: 15,
-        contractOrder: 15,
-        appliedOrder: 16,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'Tres-Zap',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -395,8 +395,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 16,
-        contractOrder: 16,
-        appliedOrder: 15,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Biodex',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -410,8 +410,8 @@ exports.pricingTermList = [
       },
       {
         id: 17,
-        contractOrder: 17,
-        appliedOrder: 14,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Domainer',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -425,8 +425,8 @@ exports.pricingTermList = [
       },
       {
         id: 18,
-        contractOrder: 18,
-        appliedOrder: 13,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'Home Ing',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -457,8 +457,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 19,
-        contractOrder: 19,
-        appliedOrder: 12,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Cookley',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -472,8 +472,8 @@ exports.pricingTermList = [
       },
       {
         id: 20,
-        contractOrder: 20,
-        appliedOrder: 11,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Overhold',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -487,8 +487,8 @@ exports.pricingTermList = [
       },
       {
         id: 21,
-        contractOrder: 21,
-        appliedOrder: 10,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'It',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -519,8 +519,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 22,
-        contractOrder: 22,
-        appliedOrder: 9,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Bamity',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -534,13 +534,13 @@ exports.pricingTermList = [
       },
       {
         id: 23,
-        contractOrder: 23,
-        appliedOrder: 8,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Prodder',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
         discountType: 'Fixed',
-        discountValue: 0.0,
+        discountValue: 0,
         journeyType: 'Return',
         directionType: 'Directional',
         normalizationList: 10,
@@ -549,8 +549,8 @@ exports.pricingTermList = [
       },
       {
         id: 24,
-        contractOrder: 24,
-        appliedOrder: 7,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'Zamit',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -581,8 +581,8 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 25,
-        contractOrder: 25,
-        appliedOrder: 6,
+        contractOrder: 1,
+        appliedOrder: 3,
         name: 'Mat Lam Tam',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -596,8 +596,8 @@ exports.pricingTermList = [
       },
       {
         id: 26,
-        contractOrder: 26,
-        appliedOrder: 5,
+        contractOrder: 2,
+        appliedOrder: 2,
         name: 'Vagram',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -611,8 +611,8 @@ exports.pricingTermList = [
       },
       {
         id: 27,
-        contractOrder: 27,
-        appliedOrder: 4,
+        contractOrder: 3,
+        appliedOrder: 1,
         name: 'Veribet',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
@@ -643,7 +643,7 @@ exports.pricingTermList = [
     discountList: [
       {
         id: 28,
-        contractOrder: 28,
+        contractOrder: 1,
         appliedOrder: 3,
         name: 'Konklab',
         effectiveStartDate: '03/15/2019',
@@ -658,7 +658,7 @@ exports.pricingTermList = [
       },
       {
         id: 29,
-        contractOrder: 29,
+        contractOrder: 2,
         appliedOrder: 2,
         name: 'Hatity',
         effectiveStartDate: '03/15/2019',
@@ -673,7 +673,7 @@ exports.pricingTermList = [
       },
       {
         id: 30,
-        contractOrder: 30,
+        contractOrder: 3,
         appliedOrder: 1,
         name: 'Cookley',
         effectiveStartDate: '03/15/2019',
@@ -687,5 +687,44 @@ exports.pricingTermList = [
         isDeleted: false
       }
     ]
+  }
+];
+
+exports.discountTypeList = [
+  {
+    id: 1,
+    name: 'Fixed'
+  },
+  {
+    id: 2,
+    name: 'Percentage'
+  },
+  {
+    id: 3,
+    name: 'Subtraction'
+  }
+];
+exports.journeyTypeList = [
+  {
+    id: 1,
+    name: 'Oneway'
+  },
+  {
+    id: 2,
+    name: 'Return'
+  },
+  {
+    id: 3,
+    name: 'OW/RT'
+  }
+];
+exports.directionTypeList = [
+  {
+    id: 1,
+    name: 'Directional'
+  },
+  {
+    id: 2,
+    name: 'Bidirectional'
   }
 ];

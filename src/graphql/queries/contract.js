@@ -61,3 +61,30 @@ export const GET_PRICING_TERM_LIST = gql`
     }
   }
 `;
+
+export const GET_DISCOUNT_TYPE_LIST = gql`
+  {
+    discountTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_JOURNEY_TYPE_LIST = gql`
+  {
+    journeyTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_DIRECTION_TYPE_LIST = gql`
+  {
+    directionTypeList {
+      id
+      name
+    }
+  }
+`;

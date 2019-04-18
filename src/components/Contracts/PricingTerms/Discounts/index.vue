@@ -14,6 +14,7 @@
             placeholder="Bulk Actions"
             filterable
             clearable
+            @change="bulkAction"
           >
             <el-option
               v-for="item in bulkActionList"
@@ -114,27 +115,32 @@
         <template slot-scope="props">
           <i
             class="far fa-copy icon-spacer"
-            @click="showCopyPricingTermModal(props.row)"
+            @click="showCopyDiscountModal(props.row)"
           />
           <i
             class="fas fa-pencil-alt icon-spacer"
-            @click="showEditPricingTermModal(props.row)"
+            @click="showEditDiscountModal(props.row)"
           />
           <i
             class="fas fa-trash-alt"
-            @click="showDeletePricingTermModal([props.row.id])"
+            @click="showDeleteDiscountModal([props.row.id])"
           />
         </template>
       </el-table-column>
     </el-table>
+    <DeleteDiscountModal @clear-bulk-actions="clearBulkActions" />
   </div>
 </template>
 
 <script>
 import { formatDate, pluralize } from '@/helper';
 import { tableColumnWidth } from '@/config';
+import DeleteDiscountModal from './DeleteDiscountModal';
 export default {
   name: 'Discounts',
+  components: {
+    DeleteDiscountModal
+  },
   props: {
     discountList: {
       type: Array,
@@ -195,8 +201,36 @@ export default {
         this.bulkIdList.splice(index, 1);
       }
     },
+    bulkAction(value) {
+      if (value === 1) {
+        this.showDeleteDiscountModal(this.bulkIdList);
+      }
+    },
+    clearBulkActions() {
+      this.bulkIdList = [];
+      this.bulkActionId = null;
+      this.$emit('toggle-row', this.pricingTermId);
+    },
     showNewDiscountModal() {
-      this.$modal.show('new-pricing-term');
+      this.$modal.show('new-discount', { id: this.pricingTermId });
+    },
+    showCopyDiscountModal(discount) {
+      this.$modal.show('copy-discount', {
+        discount,
+        pricingTermId: this.pricingTermId
+      });
+    },
+    showDeleteDiscountModal(idList) {
+      this.$modal.show('delete-discount', {
+        pricingTermId: this.pricingTermId,
+        idList
+      });
+    },
+    showEditDiscountModal(discount) {
+      this.$modal.show('edit-discount', {
+        discount,
+        pricingTermId: this.pricingTermId
+      });
     }
   }
 };

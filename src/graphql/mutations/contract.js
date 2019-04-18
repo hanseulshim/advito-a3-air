@@ -110,7 +110,20 @@ export const CREATE_PRICING_TERM = gql`
       effectiveStartDate
       effectiveEndDate
       qc
-      discountList
+      discountList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
       pointOfSaleList
       pointOfOriginList
       airlineList
@@ -130,7 +143,20 @@ export const COPY_PRICING_TERM = gql`
       effectiveStartDate
       effectiveEndDate
       qc
-      discountList
+      discountList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
       pointOfSaleList
       pointOfOriginList
       airlineList
@@ -150,7 +176,20 @@ export const EDIT_PRICING_TERM = gql`
       effectiveStartDate
       effectiveEndDate
       qc
-      discountList
+      discountList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
       pointOfSaleList
       pointOfOriginList
       airlineList
@@ -163,5 +202,114 @@ export const EDIT_PRICING_TERM = gql`
 export const DELETE_PRICING_TERMS = gql`
   mutation deletePricingTerms($idList: [Int]!) {
     deletePricingTerms(idList: $idList)
+  }
+`;
+
+export const CREATE_DISCOUNT = gql`
+  mutation createDiscount(
+    $id: Int!
+    $name: String!
+    $discountTypeId: Int
+    $discountValue: Float!
+    $journeyTypeId: Int
+    $directionTypeId: Int
+  ) {
+    createDiscount(
+      id: $id
+      name: $name
+      discountTypeId: $discountTypeId
+      discountValue: $discountValue
+      journeyTypeId: $journeyTypeId
+      directionTypeId: $directionTypeId
+    ) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      discountType
+      discountValue
+      journeyType
+      directionType
+      normalizationList
+      note
+    }
+  }
+`;
+
+export const COPY_DISCOUNT = gql`
+  mutation copyDiscount(
+    $pricingTermId: Int!
+    $id: Int!
+    $name: String!
+    $discountTypeId: Int
+    $discountValue: Float!
+    $journeyTypeId: Int
+    $directionTypeId: Int
+  ) {
+    copyDiscount(
+      pricingTermId: $pricingTermId
+      id: $id
+      name: $name
+      discountTypeId: $discountTypeId
+      discountValue: $discountValue
+      journeyTypeId: $journeyTypeId
+      directionTypeId: $directionTypeId
+    ) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      discountType
+      discountValue
+      journeyType
+      directionType
+      normalizationList
+      note
+    }
+  }
+`;
+
+export const EDIT_DISCOUNT = gql`
+  mutation editDiscount(
+    $pricingTermId: Int!
+    $id: Int!
+    $name: String!
+    $discountTypeId: Int
+    $discountValue: Float!
+    $journeyTypeId: Int
+    $directionTypeId: Int
+  ) {
+    editDiscount(
+      pricingTermId: $pricingTermId
+      id: $id
+      name: $name
+      discountTypeId: $discountTypeId
+      discountValue: $discountValue
+      journeyTypeId: $journeyTypeId
+      directionTypeId: $directionTypeId
+    ) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      discountType
+      discountValue
+      journeyType
+      directionType
+      normalizationList
+      note
+    }
+  }
+`;
+
+export const DELETE_DISCOUNTS = gql`
+  mutation deleteDiscounts($pricingTermId: Int!, $idList: [Int]!) {
+    deleteDiscounts(pricingTermId: $pricingTermId, idList: $idList)
   }
 `;

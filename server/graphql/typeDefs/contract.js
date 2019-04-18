@@ -51,11 +51,26 @@ type Discount {
   note: String
   isDeleted: Boolean
 }
+type DiscountType {
+  id: Int
+  name: String
+}
+type JourneyType {
+  id: Int
+  name: String
+}
+type DirectionType {
+  id: Int
+  name: String
+}
 
 extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
   pricingTermList: [PricingTerm] @auth
+  discountTypeList: [DiscountType] @auth
+  journeyTypeList: [JourneyType] @auth
+  directionTypeList: [DirectionType] @auth
 }
 
 extend type Mutation {
@@ -85,5 +100,33 @@ extend type Mutation {
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   deletePricingTerms(idList: [Int]!): [Int] @auth
+
+  createDiscount(
+    id: Int!
+    name: String!
+    discountTypeId: Int
+    discountValue: Float!
+    journeyTypeId: Int
+    directionTypeId: Int
+  ): Discount @auth
+  copyDiscount(
+    pricingTermId: Int!
+    id: Int!
+    name: String!
+    discountTypeId: Int
+    discountValue: Float!
+    journeyTypeId: Int
+    directionTypeId: Int
+  ): Discount @auth
+  editDiscount(
+    pricingTermId: Int!
+    id: Int!
+    name: String!
+    discountTypeId: Int
+    discountValue: Float!
+    journeyTypeId: Int
+    directionTypeId: Int
+  ): Discount @auth
+  deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
 }
 `;

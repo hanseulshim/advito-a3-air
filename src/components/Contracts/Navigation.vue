@@ -65,6 +65,8 @@ export default {
 .contract-name {
   text-align: right;
   grid-area: contract-name;
+  font-weight: 400;
+  color: $black;
 }
 .contract-item {
   display: flex;

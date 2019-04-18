@@ -47,6 +47,7 @@
           <Discounts
             :discount-list="props.row.discountList"
             :pricing-term-id="props.row.id"
+            @toggle-row="toggleRow"
           />
         </template>
       </el-table-column>
@@ -191,6 +192,9 @@
     <CopyPricingTermModal />
     <EditPricingTermModal />
     <DeletePricingTermModal @clear-bulk-actions="clearBulkActions" />
+    <NewDiscountModal @toggle-row="toggleRow" />
+    <CopyDiscountModal @toggle-row="toggleRow" />
+    <EditDiscountModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -203,16 +207,22 @@ import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
 import DeletePricingTermModal from './DeletePricingTermModal';
+import NewDiscountModal from './Discounts/NewDiscountModal';
+import CopyDiscountModal from './Discounts/CopyDiscountModal';
+import EditDiscountModal from './Discounts/EditDiscountModal';
 import Discounts from './Discounts';
 export default {
   name: 'PricingTerms',
   components: {
     Navigation,
+    Discounts,
     CopyPricingTermModal,
     NewPricingTermModal,
     EditPricingTermModal,
     DeletePricingTermModal,
-    Discounts
+    NewDiscountModal,
+    CopyDiscountModal,
+    EditDiscountModal
   },
   apollo: {
     pricingTermList: {
@@ -316,6 +326,12 @@ export default {
     clearBulkActions() {
       this.bulkIdList = [];
       this.bulkActionId = null;
+    },
+    toggleRow(id) {
+      const row = this.$refs.pricingTermList.data.filter(
+        term => term.id === id
+      )[0];
+      this.$refs.pricingTermList.toggleRowExpansion(row);
     }
   }
 };

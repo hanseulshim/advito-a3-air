@@ -1,7 +1,7 @@
 <template>
   <modal
     classes="modal-container"
-    name="delete-pricing-term"
+    name="delete-discount"
     height="auto"
     @before-open="beforeOpen"
     @before-close="beforeClose"
@@ -9,12 +9,12 @@
     <div class="delete-modal-text">
       {{
         idList.length > 1
-          ? 'Are you sure you want to delete these pricing terms?'
-          : 'Are you sure you want to delete this pricing term?'
+          ? 'Are you sure you want to delete these discounts?'
+          : 'Are you sure you want to delete this discount?'
       }}
     </div>
     <div class="delete-modal-button-container">
-      <button class="button" @click="deletePricingTerm">Yes</button>
+      <button class="button" @click="deleteDiscount">Yes</button>
       <button class="button" @click="hideModal">No</button>
     </div>
   </modal>
@@ -22,46 +22,56 @@
 
 <script>
 import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
-import { DELETE_PRICING_TERMS } from '@/graphql/mutations';
+import { DELETE_DISCOUNTS } from '@/graphql/mutations';
 export default {
-  name: 'DeletePricingTermModal',
+  name: 'DeleteDiscountModal',
   data() {
     return {
-      idList: []
+      idList: [],
+      pricingTermId: null
     };
   },
   methods: {
     hideModal() {
-      this.$modal.hide('delete-pricing-term');
+      this.$modal.hide('delete-discount');
     },
-    async deletePricingTerm() {
+    async deleteDiscount() {
       try {
         await this.$apollo.mutate({
-          mutation: DELETE_PRICING_TERMS,
+          mutation: DELETE_DISCOUNTS,
           variables: {
-            idList: this.idList
+            idList: this.idList,
+            pricingTermId: this.pricingTermId
           },
           update: (store, data) => {
-            const idList = data.data.deletePricingTerms;
+            const idList = data.data.deleteDiscounts;
             const newData = store.readQuery({
               query: GET_PRICING_TERM_LIST
             });
-            const indexList = newData.pricingTermList.filter(
-              term => idList.indexOf(term.id) !== -1
+            const pricingTermIndex = newData.pricingTermList.findIndex(
+              term => term.id === this.pricingTermId
+            );
+            const indexList = newData.pricingTermList[
+              pricingTermIndex
+            ].discountList.filter(
+              discount => idList.indexOf(discount.id) !== -1
             );
             indexList.forEach(index => {
-              newData.pricingTermList.splice(index, 1);
+              newData.pricingTermList[pricingTermIndex].discountList.splice(
+                index,
+                1
+              );
             });
             store.writeQuery({
               query: GET_PRICING_TERM_LIST,
               data: newData
             });
+            this.$emit('clear-bulk-actions');
           }
         });
-        this.$emit('clear-bulk-actions');
         this.$modal.show('success', {
-          message: 'Pricing Term successfully deleted.',
-          name: 'delete-pricing-term'
+          message: 'Discount(s) successfully deleted.',
+          name: 'delete-discount'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -71,9 +81,11 @@ export default {
     },
     beforeOpen(event) {
       this.idList = event.params.idList;
+      this.pricingTermId = event.params.pricingTermId;
     },
     beforeClose() {
       this.idList = [];
+      this.pricingTermId = null;
     }
   }
 };
