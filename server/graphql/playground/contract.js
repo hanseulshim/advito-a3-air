@@ -32,12 +32,25 @@ exports.contract = {
         effectiveStartDate
         effectiveEndDate
         qc
-        discountList
         pointOfSaleList
         pointOfOriginList
         airlineList
         note
         ignore
+        discountList {
+          id
+          contractOrder
+          appliedOrder
+          name
+          effectiveStartDate
+          effectiveEndDate
+          discountType
+          discountValue
+          journeyType
+          directionType
+          normalizationList
+          note
+        }
       }
     }`
   },
@@ -100,14 +113,27 @@ exports.contract = {
         effectiveStartDate
         effectiveEndDate
         qc
-        discountList
+        discountList {
+          id
+          contractOrder
+          appliedOrder
+          name
+          effectiveStartDate
+          effectiveEndDate
+          discountType
+          discountValue
+          journeyType
+          directionType
+          normalizationList
+          note
+        }
         pointOfSaleList
         pointOfOriginList
         airlineList
         note
         ignore
       }
-      copyPricingTerm(id: 1, name: "copy term") {
+      copyPricingTerm(id: 1, name: "copy term", ignore: false) {
         id
         contractOrder
         appliedOrder
@@ -115,7 +141,20 @@ exports.contract = {
         effectiveStartDate
         effectiveEndDate
         qc
-        discountList
+        discountList {
+          id
+          contractOrder
+          appliedOrder
+          name
+          effectiveStartDate
+          effectiveEndDate
+          discountType
+          discountValue
+          journeyType
+          directionType
+          normalizationList
+          note
+        }
         pointOfSaleList
         pointOfOriginList
         airlineList
@@ -130,7 +169,20 @@ exports.contract = {
         effectiveStartDate
         effectiveEndDate
         qc
-        discountList
+        discountList {
+          id
+          contractOrder
+          appliedOrder
+          name
+          effectiveStartDate
+          effectiveEndDate
+          discountType
+          discountValue
+          journeyType
+          directionType
+          normalizationList
+          note
+        }
         pointOfSaleList
         pointOfOriginList
         airlineList
@@ -138,6 +190,50 @@ exports.contract = {
         ignore
       }
       deletePricingTerms(idList: [1, 2, 3])
+
+      createDiscount(id: 1, name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
+      copyDiscount(pricingTermId: 1, id: 1  name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
+      editDiscount(pricingTermId: 1, id: 1  name: "edit discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
+      deleteDiscounts(pricingTermId: 1, idList: [1, 2, 3])
     }
     `
   }

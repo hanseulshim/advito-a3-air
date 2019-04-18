@@ -39,12 +39,52 @@ export const GET_PRICING_TERM_LIST = gql`
       effectiveStartDate
       effectiveEndDate
       qc
-      discountList
       pointOfSaleList
       pointOfOriginList
       airlineList
       note
       ignore
+      discountList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
+    }
+  }
+`;
+
+export const GET_DISCOUNT_TYPE_LIST = gql`
+  {
+    discountTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_JOURNEY_TYPE_LIST = gql`
+  {
+    journeyTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_DIRECTION_TYPE_LIST = gql`
+  {
+    directionTypeList {
+      id
+      name
     }
   }
 `;

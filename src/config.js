@@ -5,8 +5,10 @@ export const tableColumnWidth = {
   date: 175,
   icon: 100,
   actions: 100,
+  nestedActions: 125,
   expand: 35,
   count: 100,
   code: 140,
-  short: 85
+  short: 85,
+  bulk: 70
 };

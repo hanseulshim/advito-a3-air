@@ -10,7 +10,7 @@
         :class="{ active: $route.path.includes('pricing-terms') }"
       >
         <span class="data-icon">
-          <img alt="division-trends" src="@/assets/divisionTrends.png" />
+          <img alt="division-trends" src="@/assets/pricingTerms.png" />
         </span>
         <span class="nav-title">Pricing Terms</span>
       </router-link>
@@ -20,7 +20,7 @@
         :class="{ active: $route.path.includes('target-terms') }"
       >
         <span class="data-icon">
-          <img alt="import-errors" src="@/assets/importErrors.png" />
+          <img alt="import-errors" src="@/assets/targetTerms.png" />
         </span>
         <span class="nav-title">Target Terms</span>
       </router-link>
@@ -65,6 +65,8 @@ export default {
 .contract-name {
   text-align: right;
   grid-area: contract-name;
+  font-weight: 400;
+  color: $black;
 }
 .contract-item {
   display: flex;

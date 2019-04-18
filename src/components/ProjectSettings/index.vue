@@ -1,17 +1,5 @@
 <template>
   <div>
-    <div style="margin-bottom: 3em">
-      <button
-        style="margin-right: 1em"
-        class="button"
-        @click="toggleAirportListing"
-      >
-        Airport Listing
-      </button>
-      <button class="button long" @click="toggleBookingClass">
-        Booking Class Mappings
-      </button>
-    </div>
     <LocationCollections />
     <TravelSectorCollections />
     <AirlineGroupCollections />

@@ -16,7 +16,10 @@ const { dataSet } = require('./dataSet');
 const {
   contractList,
   contractTypeList,
-  pricingTermList
+  pricingTermList,
+  discountTypeList,
+  journeyTypeList,
+  directionTypeList
 } = require('./contract');
 
 module.exports = {
@@ -36,5 +39,8 @@ module.exports = {
   travelSectorRegionList,
   contractList,
   contractTypeList,
-  pricingTermList
+  pricingTermList,
+  discountTypeList,
+  journeyTypeList,
+  directionTypeList
 };

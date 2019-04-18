@@ -42,17 +42,26 @@
       :data="filteredPricingTermList"
       :row-class-name="tableRowClassName"
     >
-      <el-table-column prop="contractOrder" :width="tableColumnWidth.short">
+      <el-table-column type="expand" :width="tableColumnWidth.expand">
+        <template slot-scope="props">
+          <Discounts
+            :discount-list="props.row.discountList"
+            :pricing-term-id="props.row.id"
+            @toggle-row="toggleRow"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column prop="contractOrder" :width="tableColumnWidth.bulk">
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :width="tableColumnWidth.short">
+      <el-table-column prop="appliedOrder" :width="tableColumnWidth.bulk">
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column label="Bulk" :width="tableColumnWidth.short">
+      <el-table-column label="Bulk" :width="tableColumnWidth.bulk">
         <template slot-scope="props">
           <el-checkbox
             :value="bulkIdList.includes(props.row.id)"
@@ -60,7 +69,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Airline Name" sortable>
+      <el-table-column label="Term Name" sortable sort-by="name">
         <template slot-scope="props">
           <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">
             {{ props.row.name }}
@@ -68,7 +77,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Date Range"
+        label="Effective Dates"
         :width="tableColumnWidth.dateRange"
         :formatter="formatDate"
         sortable
@@ -84,11 +93,11 @@
           <el-checkbox :value="props.row.qc === 1" />
         </template>
       </el-table-column>
-      <el-table-column
-        prop="discountList"
-        label="Discounts"
-        :width="tableColumnWidth.count"
-      />
+      <el-table-column label="Discounts" :width="tableColumnWidth.count">
+        <template slot-scope="props">
+          {{ props.row.discountList.length }}
+        </template>
+      </el-table-column>
       <el-table-column label="Airlines" :width="tableColumnWidth.count">
         <template slot-scope="props">
           <el-tooltip
@@ -183,6 +192,9 @@
     <CopyPricingTermModal />
     <EditPricingTermModal />
     <DeletePricingTermModal @clear-bulk-actions="clearBulkActions" />
+    <NewDiscountModal @toggle-row="toggleRow" />
+    <CopyDiscountModal @toggle-row="toggleRow" />
+    <EditDiscountModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -195,14 +207,22 @@ import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
 import DeletePricingTermModal from './DeletePricingTermModal';
+import NewDiscountModal from './Discounts/NewDiscountModal';
+import CopyDiscountModal from './Discounts/CopyDiscountModal';
+import EditDiscountModal from './Discounts/EditDiscountModal';
+import Discounts from './Discounts';
 export default {
   name: 'PricingTerms',
   components: {
     Navigation,
+    Discounts,
     CopyPricingTermModal,
     NewPricingTermModal,
     EditPricingTermModal,
-    DeletePricingTermModal
+    DeletePricingTermModal,
+    NewDiscountModal,
+    CopyDiscountModal,
+    EditDiscountModal
   },
   apollo: {
     pricingTermList: {
@@ -306,6 +326,12 @@ export default {
     clearBulkActions() {
       this.bulkIdList = [];
       this.bulkActionId = null;
+    },
+    toggleRow(id) {
+      const row = this.$refs.pricingTermList.data.filter(
+        term => term.id === id
+      )[0];
+      this.$refs.pricingTermList.toggleRowExpansion(row);
     }
   }
 };
