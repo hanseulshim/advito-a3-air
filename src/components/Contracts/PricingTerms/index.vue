@@ -90,7 +90,10 @@
         :width="tableColumnWidth.short"
       >
         <template slot-scope="props">
-          <el-checkbox :value="props.row.qc === 1" />
+          <el-checkbox
+            :class="{ invalid: props.row.qc !== 1 }"
+            :value="props.row.qc === 1"
+          />
         </template>
       </el-table-column>
       <el-table-column label="Discounts" :width="tableColumnWidth.count">
@@ -353,6 +356,13 @@ export default {
 .fa-sticky-note {
   &.important {
     color: $tree-poppy;
+  }
+}
+#app {
+  .invalid {
+    .el-checkbox__inner {
+      border-color: $monza;
+    }
   }
 }
 </style>
