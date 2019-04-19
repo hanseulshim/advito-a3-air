@@ -51,10 +51,10 @@ export default {
             const pricingTermIndex = newData.pricingTermList.findIndex(
               term => term.id === this.pricingTermId
             );
-            const indexList = newData.pricingTermList[
-              pricingTermIndex
-            ].discountList.filter(
-              discount => idList.indexOf(discount.id) !== -1
+            const indexList = idList.map(id =>
+              newData.pricingTermList[pricingTermIndex].discountList.findIndex(
+                discount => discount.id === id
+              )
             );
             indexList.forEach(index => {
               newData.pricingTermList[pricingTermIndex].discountList.splice(
