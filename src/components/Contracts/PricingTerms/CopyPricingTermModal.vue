@@ -21,7 +21,7 @@
       <el-form-item label="Term Name *" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="Ignore *">
+      <el-form-item label="Ignore">
         <el-checkbox v-model="form.ignore" />
       </el-form-item>
       <el-form-item class="save-container">
