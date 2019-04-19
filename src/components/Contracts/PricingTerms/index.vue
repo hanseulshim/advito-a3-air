@@ -194,7 +194,7 @@
     <DeletePricingTermModal @clear-bulk-actions="clearBulkActions" />
     <NewDiscountModal @toggle-row="toggleRow" />
     <CopyDiscountModal @toggle-row="toggleRow" />
-    <EditDiscountModal @toggle-row="toggleRow" />
+    <EditDiscountModal />
   </div>
 </template>
 
