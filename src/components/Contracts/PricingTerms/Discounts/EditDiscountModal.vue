@@ -136,7 +136,6 @@ export default {
             ...this.form
           }
         });
-        this.$emit('toggle-row', this.form.id);
         this.$modal.show('success', {
           message: 'Discount successfully updated.',
           name: 'edit-discount'

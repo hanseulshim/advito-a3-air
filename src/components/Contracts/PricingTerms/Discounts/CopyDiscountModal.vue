@@ -143,7 +143,7 @@ export default {
               query: GET_PRICING_TERM_LIST
             });
             const index = newData.pricingTermList.findIndex(
-              term => term.id === this.form.id
+              term => term.id === this.form.pricingTermId
             );
             newData.pricingTermList[index].discountList.push(discount);
             store.writeQuery({
@@ -152,7 +152,7 @@ export default {
             });
           }
         });
-        this.$emit('toggle-row', this.form.id);
+        this.$emit('toggle-row', this.form.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully copied.',
           name: 'copy-discount'

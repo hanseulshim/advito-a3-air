@@ -159,13 +159,13 @@ export default {
   .division-trends {
     margin-left: 15%;
     .fa-chevron-up {
-      left: calc(15% + 1em + 25px);
+      left: calc(15% + 1em + 22.375px);
     }
   }
   .import-errors {
     margin-left: 30%;
     .fa-chevron-up {
-      left: calc(30% + 2em + 18px);
+      left: calc(30% + 2em + 22.375px);
     }
   }
   .spacer {
@@ -176,7 +176,7 @@ export default {
     top: -10px;
     background: $white;
     color: $botticelli;
-    left: 18px;
+    left: 22.375px;
   }
 }
 </style>

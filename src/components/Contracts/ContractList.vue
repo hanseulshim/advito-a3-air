@@ -20,19 +20,23 @@
       <el-table-column
         prop="name"
         label="Name"
-        :width="tableColumnWidth.shortName"
+        :min-width="contract.name"
         sortable
       />
       <el-table-column
         prop="type"
         label="Type"
-        :width="tableColumnWidth.count"
+        :min-width="contract.type"
         sortable
       />
-      <el-table-column prop="description" label="Description" />
+      <el-table-column
+        prop="description"
+        label="Description"
+        :min-width="contract.description"
+      />
       <el-table-column
         label="Round"
-        :width="tableColumnWidth.short"
+        :min-width="contract.round"
         sortable
         sort-by="round"
       >
@@ -42,14 +46,14 @@
       </el-table-column>
       <el-table-column
         label="Effective Dates"
-        :width="tableColumnWidth.date"
+        :min-width="contract.effectiveDates"
         :formatter="formatDate"
         sortable
         sort-by="effectiveEndDate"
       />
       <el-table-column
         label="QC"
-        :width="tableColumnWidth.short"
+        :min-width="contract.qc"
         sortable
         sort-by="qc"
         :formatter="formatPercent"
@@ -60,7 +64,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="Airlines" :width="tableColumnWidth.count">
+      <el-table-column label="Airlines" :min-width="contract.airlines">
         <template slot-scope="props">
           <el-tooltip
             v-if="props.row.airlineList.length > 1"
@@ -77,7 +81,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="PoS/PoO" :width="tableColumnWidth.count">
+      <el-table-column label="PoS/PoO" :min-width="contract.pos">
         <template slot-scope="props">
           <el-tooltip
             effect="dark"
@@ -107,10 +111,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column
-        label="Pricing Terms"
-        :width="tableColumnWidth.nestedActions"
-      >
+      <el-table-column label="Pricing Terms" :min-width="contract.pricingTerms">
         <template slot-scope="props">
           <el-tooltip
             effect="dark"
@@ -125,10 +126,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column
-        label="Target Terms"
-        :width="tableColumnWidth.nestedActions"
-      >
+      <el-table-column label="Target Terms" :min-width="contract.targetTerms">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="View Target Terms" placement="top">
             <router-link to="/project/contracts/target-terms">
@@ -139,7 +137,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" :width="tableColumnWidth.actions">
+      <el-table-column label="Actions" :min-width="contract.actions">
         <template slot-scope="props">
           <i
             class="far fa-copy icon-spacer"
@@ -166,7 +164,7 @@
 <script>
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { GET_CONTRACT_LIST } from '@/graphql/queries';
-import { tableColumnWidth } from '@/config';
+import { contract } from '@/config';
 import NewContractModal from './NewContractModal';
 import CopyContractModal from './CopyContractModal';
 import EditContractModal from './EditContractModal';
@@ -187,7 +185,7 @@ export default {
   data() {
     return {
       contractList: [],
-      tableColumnWidth
+      contract
     };
   },
   methods: {

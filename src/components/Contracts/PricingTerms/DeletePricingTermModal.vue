@@ -46,8 +46,8 @@ export default {
             const newData = store.readQuery({
               query: GET_PRICING_TERM_LIST
             });
-            const indexList = newData.pricingTermList.filter(
-              term => idList.indexOf(term.id) !== -1
+            const indexList = idList.map(id =>
+              newData.pricingTermList.findIndex(term => term.id === id)
             );
             indexList.forEach(index => {
               newData.pricingTermList.splice(index, 1);
