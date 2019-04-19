@@ -1,4 +1,21 @@
 exports.dataSet = `
+type DataSetCountry {
+  id: Int
+  name: String
+  ticketsTotal: Int
+  segmentsTotal: Int
+  farePaidTotal: Int
+  importedTicketsTotal: Int
+  errorTicketsTotal: Int
+  errorRatioTotal: Int
+}
+type DataSetDivision {
+  id: Int
+  name: String
+  ticketsTotal: Int
+  segmentsTotal: Int
+  farePaidTotal: Int
+}
 type TrendCategory {
   id: Int
   name: String
