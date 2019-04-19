@@ -32,12 +32,12 @@ export const discount = {
   appliedOrder: 60,
   bulk: 70,
   name: 135,
-  effectiveDates: 210,
+  effectiveDates: 220,
   discountType: 125,
   discountValue: 155,
   journeyType: 90,
   directionType: 115,
   normalization: 120,
   note: 100,
-  actions: 115
+  actions: 120
 };
