@@ -9,38 +9,43 @@
       <div class="section-header">airport listing</div>
       <i class="fas fa-times close-modal-button" @click="hideModal"></i>
     </div>
-    <el-table :data="airportList" :max-height="750">
+    <el-table :data="airportList" :max-height="700">
       <el-table-column
         prop="countryName"
         label="Country"
         sortable
-        :width="tableColumnWidth.shortName"
+        :min-width="airport.country"
       />
       <el-table-column
         prop="cityCode"
         label="City Code"
         sortable
-        :width="tableColumnWidth.code"
+        :min-width="airport.code"
       />
       <el-table-column
         prop="cityName"
         label="City Name"
         sortable
-        :width="tableColumnWidth.shortName"
+        :min-width="airport.city"
       />
       <el-table-column
         prop="airportCode"
         label="Airport Code"
         sortable
-        :width="tableColumnWidth.code"
+        :min-width="airport.code"
       />
-      <el-table-column prop="airportName" label="Airport Name" sortable />
+      <el-table-column
+        prop="airportName"
+        label="Airport Name"
+        sortable
+        :min-width="airport.name"
+      />
     </el-table>
   </modal>
 </template>
 
 <script>
-import { tableColumnWidth } from '@/config';
+import { airport } from '@/config';
 import { GET_AIRPORT_LIST } from '@/graphql/queries';
 export default {
   name: 'AirportListingModal',
@@ -52,7 +57,7 @@ export default {
   data() {
     return {
       airportList: [],
-      tableColumnWidth
+      airport
     };
   },
   methods: {

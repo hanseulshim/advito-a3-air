@@ -1,6 +1,6 @@
 <template>
   <el-table ref="sectorList" :data="sectorList" class="level-two-table">
-    <el-table-column type="expand" :width="tableColumnWidth.expand">
+    <el-table-column type="expand">
       <template slot-scope="scope">
         <el-table
           ref="geographyList"
@@ -20,7 +20,7 @@
               <el-checkbox :value="prop.row.exclude" />
             </template>
           </el-table-column>
-          <el-table-column :width="tableColumnWidth.actions">
+          <el-table-column :width="sector.actions">
             <template slot-scope="bidirection">
               <i
                 class="fas fa-trash-alt"
@@ -34,15 +34,19 @@
     <el-table-column
       prop="name"
       label="Travel Sector"
-      :width="tableColumnWidth.name"
+      :min-width="sector.name"
     />
     <el-table-column
       prop="shortName"
       label="Short Name"
-      :width="tableColumnWidth.name"
+      :min-width="sector.shortName"
     />
-    <el-table-column prop="geographyList.length" label="Geographies" />
-    <el-table-column label="Actions" :width="tableColumnWidth.actions">
+    <el-table-column
+      prop="geographyList.length"
+      label="Geographies"
+      :min-width="sector.geographies"
+    />
+    <el-table-column label="Actions" :min-width="sector.actions">
       <template slot-scope="scope">
         <i
           v-if="collectionId !== 1"
@@ -60,7 +64,7 @@
 </template>
 
 <script>
-import { tableColumnWidth } from '@/config';
+import { sector } from '@/config';
 export default {
   name: 'SectorTable',
   props: {
@@ -75,7 +79,7 @@ export default {
   },
   data() {
     return {
-      tableColumnWidth
+      sector
     };
   },
   methods: {

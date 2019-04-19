@@ -22,7 +22,7 @@
       </div>
     </div>
     <el-table ref="locationCollection" :data="locationCollectionList">
-      <el-table-column type="expand" :width="tableColumnWidth.expand">
+      <el-table-column type="expand">
         <template slot-scope="props">
           <button
             v-if="props.row.id !== 1"
@@ -32,7 +32,7 @@
             + NEW REGION
           </button>
           <el-table :data="props.row.regionList" class="level-two-table">
-            <el-table-column label="Region" :width="tableColumnWidth.name">
+            <el-table-column label="Region" :min-width="region.name">
               <template slot-scope="scope">
                 {{ scope.row.name }} ({{ scope.row.code }})
               </template>
@@ -40,14 +40,17 @@
             <el-table-column
               prop="countryList.length"
               label="Countries"
-              :width="tableColumnWidth.code"
+              :min-width="region.countries"
             />
-            <el-table-column label="Country Name">
+            <el-table-column
+              label="Country Name"
+              :min-width="region.countryName"
+            >
               <template slot-scope="scope">
                 {{ getCountryNames(scope.row.countryList) }}
               </template>
             </el-table-column>
-            <el-table-column label="Actions" :width="tableColumnWidth.actions">
+            <el-table-column label="Actions" :min-width="region.actions">
               <template slot-scope="scope">
                 <i
                   v-if="props.row.id !== 1"
@@ -67,24 +70,28 @@
       <el-table-column
         prop="name"
         label="Location Collection"
-        :width="tableColumnWidth.name"
+        :min-width="collection.name"
         sortable
       />
       <el-table-column
         prop="regionList.length"
         label="Regions"
-        :width="tableColumnWidth.count"
+        :min-width="collection.count"
         sortable
       />
-      <el-table-column prop="description" label="Description" />
+      <el-table-column
+        prop="description"
+        label="Description"
+        :min-width="collection.description"
+      />
       <el-table-column
         prop="dateUpdated"
         label="Date Updated"
         sortable
         :formatter="formatDate"
-        :width="tableColumnWidth.date"
+        :min-width="collection.dateUpdated"
       />
-      <el-table-column label="Status" :width="tableColumnWidth.icon">
+      <el-table-column label="Status" :min-width="collection.status">
         <template slot-scope="scope">
           <el-switch
             :value="scope.row.active"
@@ -92,7 +99,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Actions" :width="tableColumnWidth.actions">
+      <el-table-column label="Actions" :min-width="collection.actions">
         <template slot-scope="scope">
           <i
             class="far fa-copy icon-spacer"
@@ -122,7 +129,7 @@
 
 <script>
 import { pluralize, formatDate } from '@/helper';
-import { tableColumnWidth } from '@/config';
+import { collection, region } from '@/config';
 import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
 import { TOGGLE_LOCATION_COLLECTION } from '@/graphql/mutations';
 import NewLocationCollectionModal from './NewLocationCollectionModal';
@@ -150,7 +157,8 @@ export default {
   data() {
     return {
       locationCollectionList: [],
-      tableColumnWidth
+      collection,
+      region
     };
   },
   methods: {

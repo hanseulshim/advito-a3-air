@@ -22,7 +22,7 @@
       ref="preferredAirlineCollection"
       :data="preferredAirlineCollectionList"
     >
-      <el-table-column type="expand" :width="tableColumnWidth.expand">
+      <el-table-column type="expand">
         <template slot-scope="props">
           <button
             class="button collection-add"
@@ -39,29 +39,29 @@
       <el-table-column
         prop="name"
         label="Preferred Airline Collection"
-        :width="tableColumnWidth.name"
+        :min-width="collection.name"
         sortable
       />
-      <el-table-column
-        label="Airlines"
-        :width="tableColumnWidth.count"
-        sortable
-      >
+      <el-table-column label="Airlines" :min-width="collection.count" sortable>
         <template slot-scope="scope">
           <span :class="{ warning: !scope.row.airlineList.length }">{{
             scope.row.airlineList.length
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="Description" />
+      <el-table-column
+        prop="description"
+        label="Description"
+        :min-width="collection.description"
+      />
       <el-table-column
         prop="dateUpdated"
         label="Date Updated"
         sortable
         :formatter="formatDate"
-        :width="tableColumnWidth.date"
+        :min-width="collection.dateUpdated"
       />
-      <el-table-column label="Status" :width="tableColumnWidth.icon">
+      <el-table-column label="Status" :min-width="collection.status">
         <template slot-scope="scope">
           <el-switch
             :value="scope.row.active"
@@ -69,7 +69,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Actions" :width="tableColumnWidth.actions">
+      <el-table-column label="Actions" :min-width="collection.actions">
         <template slot-scope="scope">
           <i
             class="fas fa-pencil-alt icon-spacer"
@@ -92,7 +92,7 @@
 
 <script>
 import { pluralize, formatDate } from '@/helper';
-import { tableColumnWidth } from '@/config';
+import { collection } from '@/config';
 import { GET_PREFERRED_AIRLINE_COLLECTION_LIST } from '@/graphql/queries';
 import { TOGGLE_PREFERRED_AIRLINE_COLLECTION } from '@/graphql/mutations';
 import AirlineTable from './AirlineTable';
@@ -119,7 +119,7 @@ export default {
   data() {
     return {
       preferredAirlineCollectionList: [],
-      tableColumnWidth
+      collection
     };
   },
   methods: {

@@ -3,36 +3,36 @@
     <el-table-column
       prop="name"
       label="Airline Name"
-      :width="tableColumnWidth.name"
+      :min-width="airline.name"
     />
     <el-table-column
       prop="preferenceLevel"
       label="Preference Level"
-      :width="tableColumnWidth.name"
+      :min-width="airline.preferenceLevel"
     />
     <el-table-column
       prop="effectiveStartDate"
       label="Effective Start Date"
       :formatter="row => formatDate(row, 'effectiveStartDate')"
-      :width="tableColumnWidth.date"
+      :width="airline.date"
     />
     <el-table-column
       prop="effectiveEndDate"
       label="Effective End Date"
       :formatter="row => formatDate(row, 'effectiveEndDate')"
-      :width="tableColumnWidth.date"
+      :width="airline.date"
     />
-    <el-table-column label="PoS">
+    <el-table-column label="PoS" :min-width="airline.pos">
       <template slot-scope="props">
         {{ props.row.pos.join(', ') }}
       </template>
     </el-table-column>
-    <el-table-column label="Status">
+    <el-table-column label="Status" :min-width="airline.status">
       <template slot-scope="props">
         {{ props.row.active ? 'Active' : 'Inactive' }}
       </template>
     </el-table-column>
-    <el-table-column label="Actions" :width="tableColumnWidth.actions">
+    <el-table-column label="Actions" :width="airline.actions">
       <template slot-scope="scope">
         <i
           class="fas fa-pencil-alt icon-spacer"
@@ -49,7 +49,7 @@
 
 <script>
 import { formatDate } from '@/helper';
-import { tableColumnWidth } from '@/config';
+import { airline } from '@/config';
 export default {
   name: 'AirlineTable',
   props: {
@@ -64,7 +64,7 @@ export default {
   },
   data() {
     return {
-      tableColumnWidth
+      airline
     };
   },
   methods: {
