@@ -30,17 +30,17 @@
       </div>
     </div>
     <el-table ref="discountList" :data="discountList" class="level-two-table">
-      <el-table-column prop="contractOrder" :width="tableColumnWidth.bulk">
+      <el-table-column prop="contractOrder" :min-width="discount.contractOrder">
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :width="tableColumnWidth.bulk">
+      <el-table-column prop="appliedOrder" :min-width="discount.appliedOrder">
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column label="Bulk" :width="tableColumnWidth.bulk">
+      <el-table-column label="Bulk" :min-width="discount.bulk">
         <template slot-scope="props">
           <el-checkbox
             :value="bulkIdList.includes(props.row.id)"
@@ -48,11 +48,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column
-        label="Term Name"
-        sortable
-        :width="tableColumnWidth.shortName"
-      >
+      <el-table-column label="Term Name" sortable :min-width="discount.name">
         <template slot-scope="props">
           <div class="discount-name">
             {{ props.row.name }}
@@ -61,7 +57,7 @@
       </el-table-column>
       <el-table-column
         label="Effective Dates"
-        :width="tableColumnWidth.dateRange"
+        :min-width="discount.effectiveDates"
         :formatter="formatDate"
         sortable
         sort-by="effectiveEndDate"
@@ -69,11 +65,11 @@
       <el-table-column
         prop="discountType"
         label="Discount Type"
-        :width="tableColumnWidth.code"
+        :min-width="discount.discountType"
       />
       <el-table-column
-        label="Discount Type"
-        :width="150"
+        label="Discount Value"
+        :min-width="discount.discountValue"
         sortable
         sort-by="discountValue"
       >
@@ -84,23 +80,23 @@
       <el-table-column
         prop="journeyType"
         label="Journey"
-        :width="tableColumnWidth.code"
+        :min-width="discount.journeyType"
       />
       <el-table-column
         prop="directionType"
         label="Direction"
-        :width="tableColumnWidth.code"
+        :min-width="discount.directionType"
       />
       <el-table-column
         prop="normalizationList"
         label="Normalization"
-        :width="tableColumnWidth.code"
+        :min-width="discount.normalization"
       />
       <el-table-column
         label="Notes"
         sortable
         sort-by="note"
-        :width="tableColumnWidth.count"
+        :min-width="discount.note"
       >
         <template slot-scope="props">
           <i v-if="!props.row.note" class="far fa-sticky-note" />
@@ -111,7 +107,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Actions" :width="tableColumnWidth.nestedActions">
+      <el-table-column label="Actions" :min-width="discount.actions">
         <template slot-scope="props">
           <i
             class="far fa-copy icon-spacer"
@@ -134,7 +130,7 @@
 
 <script>
 import { formatDate, pluralize } from '@/helper';
-import { tableColumnWidth } from '@/config';
+import { discount } from '@/config';
 import DeleteDiscountModal from './DeleteDiscountModal';
 export default {
   name: 'Discounts',
@@ -154,7 +150,7 @@ export default {
   data() {
     return {
       bulkActionId: null,
-      tableColumnWidth,
+      discount,
       bulkIdList: [],
       bulkActionList: [
         {
