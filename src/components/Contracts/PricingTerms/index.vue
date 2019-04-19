@@ -42,7 +42,7 @@
       :data="filteredPricingTermList"
       :row-class-name="tableRowClassName"
     >
-      <el-table-column type="expand" :width="tableColumnWidth.expand">
+      <el-table-column type="expand">
         <template slot-scope="props">
           <Discounts
             :discount-list="props.row.discountList"
@@ -51,17 +51,17 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="contractOrder" :width="tableColumnWidth.bulk">
+      <el-table-column prop="contractOrder" :min-width="term.contractOrder">
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :width="tableColumnWidth.bulk">
+      <el-table-column prop="appliedOrder" :min-width="term.appliedOrder">
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column label="Bulk" :width="tableColumnWidth.bulk">
+      <el-table-column label="Bulk" :min-width="term.bulk">
         <template slot-scope="props">
           <el-checkbox
             :value="bulkIdList.includes(props.row.id)"
@@ -69,7 +69,12 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Term Name" sortable sort-by="name">
+      <el-table-column
+        label="Term Name"
+        sortable
+        sort-by="name"
+        :min-width="term.name"
+      >
         <template slot-scope="props">
           <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">
             {{ props.row.name }}
@@ -78,17 +83,12 @@
       </el-table-column>
       <el-table-column
         label="Effective Dates"
-        :width="tableColumnWidth.dateRange"
+        :min-width="term.effectiveDates"
         :formatter="formatDate"
         sortable
         sort-by="effectiveEndDate"
       />
-      <el-table-column
-        label="QC"
-        sortable
-        sort-by="qc"
-        :width="tableColumnWidth.short"
-      >
+      <el-table-column label="QC" sortable sort-by="qc" :min-width="term.qc">
         <template slot-scope="props">
           <el-checkbox
             :class="{ invalid: props.row.qc !== 1 }"
@@ -96,12 +96,12 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Discounts" :width="tableColumnWidth.count">
+      <el-table-column label="Discounts" :min-width="term.discounts">
         <template slot-scope="props">
           {{ props.row.discountList.length }}
         </template>
       </el-table-column>
-      <el-table-column label="Airlines" :width="tableColumnWidth.count">
+      <el-table-column label="Airlines" :min-width="term.airlines">
         <template slot-scope="props">
           <el-tooltip
             v-if="props.row.airlineList.length > 1"
@@ -120,7 +120,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="PoS/PoO" :width="tableColumnWidth.count">
+      <el-table-column label="PoS/PoO" :min-width="term.pos">
         <template slot-scope="props">
           <el-tooltip
             effect="dark"
@@ -163,7 +163,7 @@
         label="Notes"
         sortable
         sort-by="note"
-        :width="tableColumnWidth.count"
+        :min-width="term.note"
       >
         <template slot-scope="props">
           <i v-if="!props.row.note" class="far fa-sticky-note" />
@@ -174,7 +174,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Actions" :width="tableColumnWidth.actions">
+      <el-table-column label="Actions" :min-width="term.actions">
         <template slot-scope="props">
           <i
             class="far fa-copy icon-spacer"
@@ -204,7 +204,7 @@
 <script>
 import Navigation from '../Navigation';
 import { pluralize, formatDate } from '@/helper';
-import { tableColumnWidth } from '@/config';
+import { term } from '@/config';
 import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
@@ -243,7 +243,7 @@ export default {
       pricingTermList: [],
       showInactive: false,
       bulkActionId: null,
-      tableColumnWidth,
+      term,
       bulkIdList: [],
       bulkActionList: [
         {

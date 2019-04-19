@@ -12,7 +12,7 @@
         prop="name"
         label="Project Name"
         sortable
-        :width="tableColumnWidth.name"
+        :min-width="project.name"
       >
         <template slot-scope="scope">
           <div class="project-name" @click="updateProject(scope.row)">
@@ -22,14 +22,18 @@
       </el-table-column>
       <el-table-column
         label="Date Range"
-        :width="tableColumnWidth.dateRange"
+        :min-width="project.date"
         :formatter="formatDate"
         sortable
         sort-by="effectiveFrom"
       />
-      <el-table-column prop="description" label="Description" />
       <el-table-column
-        :width="tableColumnWidth.icon"
+        prop="description"
+        label="Description"
+        :min-width="project.description"
+      />
+      <el-table-column
+        :width="project.role"
         label="My Role"
         prop="projectManagerEmail"
         sortable
@@ -49,7 +53,7 @@
       <el-table-column
         prop="favorite"
         label="Favorite"
-        :width="tableColumnWidth.icon"
+        :width="project.favorite"
       >
         <template slot-scope="scope">
           <i
@@ -58,7 +62,7 @@
           ></i>
         </template>
       </el-table-column>
-      <el-table-column :width="tableColumnWidth.actions" label="Edit">
+      <el-table-column :width="project.actions" label="Edit">
         <template slot-scope="scope">
           <i
             class="fas fa-pencil-alt icon-spacer"
@@ -73,7 +77,7 @@
 
 <script>
 import { formatDate, pluralize } from '@/helper';
-import { tableColumnWidth } from '@/config';
+import { project } from '@/config';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
 import { GET_CLIENTS, GET_USER } from '@/graphql/queries';
 import { UPDATE_CLIENT, UPDATE_PROJECT } from '@/graphql/mutations';
@@ -96,7 +100,7 @@ export default {
   data() {
     return {
       user: null,
-      tableColumnWidth
+      project
     };
   },
   methods: {
