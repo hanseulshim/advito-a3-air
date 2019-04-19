@@ -18,7 +18,7 @@ exports.contractList = [
   },
   {
     id: 2,
-    name: 'Contract_Name_goes_here_version1.pdf',
+    name: 'Contract_Name_goes_here_version1',
     type: 'Amendment',
     description: 'Lorem ipsum dolor sit amet, con adip elit...',
     round: null,
@@ -35,7 +35,7 @@ exports.contractList = [
   },
   {
     id: 3,
-    name: 'Contract_Name_goes_here_version5.pdf',
+    name: 'Contract_Name_goes_here_version5',
     type: 'Proposal',
     description: 'text here, might get cut off if long...',
     round: 2,
