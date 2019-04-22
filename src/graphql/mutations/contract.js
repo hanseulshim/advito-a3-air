@@ -199,6 +199,39 @@ export const EDIT_PRICING_TERM = gql`
   }
 `;
 
+export const TOGGLE_PRICING_TERM_QC = gql`
+  mutation togglePricingTermQC($id: Int!) {
+    togglePricingTermQC(id: $id) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      qc
+      discountList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType
+        discountValue
+        journeyType
+        directionType
+        normalizationList
+        note
+      }
+      pointOfSaleList
+      pointOfOriginList
+      airlineList
+      note
+      ignore
+    }
+  }
+`;
+
 export const DELETE_PRICING_TERMS = gql`
   mutation deletePricingTerms($idList: [Int]!) {
     deletePricingTerms(idList: $idList)

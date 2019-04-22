@@ -100,6 +100,7 @@
           <el-checkbox
             :class="{ invalid: props.row.qc !== 1 }"
             :value="props.row.qc === 1"
+            @change="togglePricingTermQC(props.row.id)"
           />
         </template>
       </el-table-column>
@@ -214,6 +215,7 @@ import Navigation from '../Navigation';
 import { pluralize, formatDate } from '@/helper';
 import { term } from '@/config';
 import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
@@ -345,6 +347,20 @@ export default {
         term => term.id === id
       )[0];
       this.$refs.pricingTermList.toggleRowExpansion(row);
+    },
+    async togglePricingTermQC(id) {
+      try {
+        await this.$apollo.mutate({
+          mutation: TOGGLE_PRICING_TERM_QC,
+          variables: {
+            id
+          }
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     }
   }
 };

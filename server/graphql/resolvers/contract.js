@@ -170,6 +170,18 @@ exports.contract = {
       pricingTerm.ignore = ignore;
       return pricingTerm;
     },
+    togglePricingTermQC: (_, { id }) => {
+      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      if (pricingTerm.qc === 0) {
+        pricingTerm.qc = 1;
+      } else {
+        pricingTerm.qc = 0;
+      }
+      return pricingTerm;
+    },
     deletePricingTerms: (_, { idList }) => {
       idList.forEach(id => {
         const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
