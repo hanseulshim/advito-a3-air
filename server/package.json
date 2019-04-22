@@ -6,6 +6,7 @@
     "start": "sls offline",
     "alpha": "sls deploy -s alpha",
     "beta": "sls deploy -s beta",
+    "dev": "sls deploy -s dev",
     "test": "sls deploy -s test"
   },
   "license": "MIT",
