@@ -30,12 +30,20 @@
       </div>
     </div>
     <el-table ref="discountList" :data="discountList" class="level-two-table">
-      <el-table-column prop="contractOrder" :min-width="discount.contractOrder">
+      <el-table-column
+        prop="contractOrder"
+        sortable
+        :min-width="discount.contractOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :min-width="discount.appliedOrder">
+      <el-table-column
+        prop="appliedOrder"
+        sortable
+        :min-width="discount.appliedOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>

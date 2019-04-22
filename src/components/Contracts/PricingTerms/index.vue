@@ -50,12 +50,20 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="contractOrder" :min-width="term.contractOrder">
+      <el-table-column
+        prop="contractOrder"
+        sortable
+        :min-width="term.contractOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :min-width="term.appliedOrder">
+      <el-table-column
+        prop="appliedOrder"
+        sortable
+        :min-width="term.appliedOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>
@@ -354,6 +362,9 @@ export default {
 }
 .sort-icon {
   font-size: 1.5em;
+  + .caret-wrapper {
+    display: none !important;
+  }
 }
 .fa-sticky-note {
   &.important {
