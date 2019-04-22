@@ -99,6 +99,7 @@ extend type Mutation {
   createPricingTerm(name: String!, ignore: Boolean!): PricingTerm @auth
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
+  togglePricingTermQC(id: Int!): PricingTerm @auth
   deletePricingTerms(idList: [Int]!): [Int] @auth
 
   createDiscount(

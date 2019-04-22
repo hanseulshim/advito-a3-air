@@ -30,12 +30,20 @@
       </div>
     </div>
     <el-table ref="discountList" :data="discountList" class="level-two-table">
-      <el-table-column prop="contractOrder" :min-width="discount.contractOrder">
+      <el-table-column
+        prop="contractOrder"
+        sortable
+        :min-width="discount.contractOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :min-width="discount.appliedOrder">
+      <el-table-column
+        prop="appliedOrder"
+        sortable
+        :min-width="discount.appliedOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>
@@ -48,20 +56,17 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Term Name" sortable :min-width="discount.name">
+      <el-table-column
+        label="Discount Name"
+        sortable
+        :min-width="discount.name"
+      >
         <template slot-scope="props">
           <div class="discount-name">
             {{ props.row.name }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        label="Effective Dates"
-        :min-width="discount.effectiveDates"
-        :formatter="formatDate"
-        sortable
-        sort-by="effectiveEndDate"
-      />
       <el-table-column
         prop="discountType"
         label="Discount Type"
@@ -74,7 +79,7 @@
         sort-by="discountValue"
       >
         <template slot-scope="props">
-          {{ props.row.discountValue * 10 }}%
+          {{ formatPercent(props.row.discountValue) }}
         </template>
       </el-table-column>
       <el-table-column
@@ -124,19 +129,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <DeleteDiscountModal @clear-bulk-actions="clearBulkActions" />
   </div>
 </template>
 
 <script>
-import { formatDate, pluralize } from '@/helper';
+import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
-import DeleteDiscountModal from './DeleteDiscountModal';
 export default {
   name: 'Discounts',
-  components: {
-    DeleteDiscountModal
-  },
   props: {
     discountList: {
       type: Array,
@@ -189,6 +189,9 @@ export default {
         row.effectiveEndDate
       )}`;
     },
+    formatPercent(num) {
+      return formatPercent(num);
+    },
     toggleSelection(id) {
       const index = this.bulkIdList.indexOf(id);
       if (index === -1) {
@@ -201,11 +204,6 @@ export default {
       if (value === 1) {
         this.showDeleteDiscountModal(this.bulkIdList);
       }
-    },
-    clearBulkActions() {
-      this.bulkIdList = [];
-      this.bulkActionId = null;
-      this.$emit('toggle-row', this.pricingTermId);
     },
     showNewDiscountModal() {
       this.$modal.show('new-discount', { id: this.pricingTermId });

@@ -189,6 +189,34 @@ exports.contract = {
         note
         ignore
       }
+      togglePricingTermQC(id: 1) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        discountList {
+          id
+          contractOrder
+          appliedOrder
+          name
+          effectiveStartDate
+          effectiveEndDate
+          discountType
+          discountValue
+          journeyType
+          directionType
+          normalizationList
+          note
+        }
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note
+        ignore
+      }
       deletePricingTerms(idList: [1, 2, 3])
 
       createDiscount(id: 1, name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {

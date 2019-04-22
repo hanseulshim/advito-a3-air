@@ -47,16 +47,23 @@
           <Discounts
             :discount-list="props.row.discountList"
             :pricing-term-id="props.row.id"
-            @toggle-row="toggleRow"
           />
         </template>
       </el-table-column>
-      <el-table-column prop="contractOrder" :min-width="term.contractOrder">
+      <el-table-column
+        prop="contractOrder"
+        sortable
+        :min-width="term.contractOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ol sort-icon" />
         </template>
       </el-table-column>
-      <el-table-column prop="appliedOrder" :min-width="term.appliedOrder">
+      <el-table-column
+        prop="appliedOrder"
+        sortable
+        :min-width="term.appliedOrder"
+      >
         <template slot="header">
           <i class="fas fa-list-ul sort-icon" />
         </template>
@@ -93,6 +100,7 @@
           <el-checkbox
             :class="{ invalid: props.row.qc !== 1 }"
             :value="props.row.qc === 1"
+            @change="togglePricingTermQC(props.row.id)"
           />
         </template>
       </el-table-column>
@@ -198,6 +206,7 @@
     <NewDiscountModal @toggle-row="toggleRow" />
     <CopyDiscountModal @toggle-row="toggleRow" />
     <EditDiscountModal />
+    <DeleteDiscountModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -206,6 +215,7 @@ import Navigation from '../Navigation';
 import { pluralize, formatDate } from '@/helper';
 import { term } from '@/config';
 import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
@@ -213,6 +223,7 @@ import DeletePricingTermModal from './DeletePricingTermModal';
 import NewDiscountModal from './Discounts/NewDiscountModal';
 import CopyDiscountModal from './Discounts/CopyDiscountModal';
 import EditDiscountModal from './Discounts/EditDiscountModal';
+import DeleteDiscountModal from './Discounts/DeleteDiscountModal';
 import Discounts from './Discounts';
 export default {
   name: 'PricingTerms',
@@ -225,7 +236,8 @@ export default {
     DeletePricingTermModal,
     NewDiscountModal,
     CopyDiscountModal,
-    EditDiscountModal
+    EditDiscountModal,
+    DeleteDiscountModal
   },
   apollo: {
     pricingTermList: {
@@ -335,6 +347,20 @@ export default {
         term => term.id === id
       )[0];
       this.$refs.pricingTermList.toggleRowExpansion(row);
+    },
+    async togglePricingTermQC(id) {
+      try {
+        await this.$apollo.mutate({
+          mutation: TOGGLE_PRICING_TERM_QC,
+          variables: {
+            id
+          }
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     }
   }
 };
@@ -352,6 +378,9 @@ export default {
 }
 .sort-icon {
   font-size: 1.5em;
+  + .caret-wrapper {
+    display: none !important;
+  }
 }
 .fa-sticky-note {
   &.important {
