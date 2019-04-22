@@ -47,7 +47,6 @@
           <Discounts
             :discount-list="props.row.discountList"
             :pricing-term-id="props.row.id"
-            @toggle-row="toggleRow"
           />
         </template>
       </el-table-column>
@@ -198,6 +197,7 @@
     <NewDiscountModal @toggle-row="toggleRow" />
     <CopyDiscountModal @toggle-row="toggleRow" />
     <EditDiscountModal />
+    <DeleteDiscountModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -213,6 +213,7 @@ import DeletePricingTermModal from './DeletePricingTermModal';
 import NewDiscountModal from './Discounts/NewDiscountModal';
 import CopyDiscountModal from './Discounts/CopyDiscountModal';
 import EditDiscountModal from './Discounts/EditDiscountModal';
+import DeleteDiscountModal from './Discounts/DeleteDiscountModal';
 import Discounts from './Discounts';
 export default {
   name: 'PricingTerms',
@@ -225,7 +226,8 @@ export default {
     DeletePricingTermModal,
     NewDiscountModal,
     CopyDiscountModal,
-    EditDiscountModal
+    EditDiscountModal,
+    DeleteDiscountModal
   },
   apollo: {
     pricingTermList: {

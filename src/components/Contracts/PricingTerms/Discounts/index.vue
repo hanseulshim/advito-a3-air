@@ -121,19 +121,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <DeleteDiscountModal @clear-bulk-actions="clearBulkActions" />
   </div>
 </template>
 
 <script>
 import { formatDate, pluralize } from '@/helper';
 import { discount } from '@/config';
-import DeleteDiscountModal from './DeleteDiscountModal';
 export default {
   name: 'Discounts',
-  components: {
-    DeleteDiscountModal
-  },
   props: {
     discountList: {
       type: Array,
@@ -198,11 +193,6 @@ export default {
       if (value === 1) {
         this.showDeleteDiscountModal(this.bulkIdList);
       }
-    },
-    clearBulkActions() {
-      this.bulkIdList = [];
-      this.bulkActionId = null;
-      this.$emit('toggle-row', this.pricingTermId);
     },
     showNewDiscountModal() {
       this.$modal.show('new-discount', { id: this.pricingTermId });
