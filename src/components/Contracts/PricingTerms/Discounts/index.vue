@@ -71,7 +71,7 @@
         sort-by="discountValue"
       >
         <template slot-scope="props">
-          {{ props.row.discountValue * 10 }}%
+          {{ formatPercent(props.row.discountValue) }}
         </template>
       </el-table-column>
       <el-table-column
@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { formatDate, pluralize } from '@/helper';
+import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
 export default {
   name: 'Discounts',
@@ -180,6 +180,9 @@ export default {
       return `${formatDate(row.effectiveStartDate)} — ${formatDate(
         row.effectiveEndDate
       )}`;
+    },
+    formatPercent(num) {
+      return formatPercent(num);
     },
     toggleSelection(id) {
       const index = this.bulkIdList.indexOf(id);
