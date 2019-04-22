@@ -48,20 +48,17 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Term Name" sortable :min-width="discount.name">
+      <el-table-column
+        label="Discount Name"
+        sortable
+        :min-width="discount.name"
+      >
         <template slot-scope="props">
           <div class="discount-name">
             {{ props.row.name }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        label="Effective Dates"
-        :min-width="discount.effectiveDates"
-        :formatter="formatDate"
-        sortable
-        sort-by="effectiveEndDate"
-      />
       <el-table-column
         prop="discountType"
         label="Discount Type"
