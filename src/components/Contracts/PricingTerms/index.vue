@@ -56,7 +56,9 @@
         :min-width="term.contractOrder"
       >
         <template slot="header">
-          <i class="fas fa-list-ol sort-icon" />
+          <el-tooltip content="Read Order" placement="top" effect="dark">
+            <i class="fas fa-list-ol sort-icon" />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column
@@ -65,7 +67,9 @@
         :min-width="term.appliedOrder"
       >
         <template slot="header">
-          <i class="fas fa-list-ul sort-icon" />
+          <el-tooltip content="Applied Order" placement="top" effect="dark">
+            <i class="fas fa-list-ul sort-icon" />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="Bulk" :min-width="term.bulk">
