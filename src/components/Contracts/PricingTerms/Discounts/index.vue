@@ -36,7 +36,9 @@
         :min-width="discount.contractOrder"
       >
         <template slot="header">
-          <i class="fas fa-list-ol sort-icon" />
+          <el-tooltip content="Read Order" placement="top" effect="dark">
+            <i class="fas fa-list-ol sort-icon" />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column
@@ -45,7 +47,9 @@
         :min-width="discount.appliedOrder"
       >
         <template slot="header">
-          <i class="fas fa-list-ul sort-icon" />
+          <el-tooltip content="Applied Order" placement="top" effect="dark">
+            <i class="fas fa-list-ul sort-icon" />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="Bulk" :min-width="discount.bulk">
@@ -56,11 +60,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column
-        label="Discount Name"
-        sortable
-        :min-width="discount.name"
-      >
+      <el-table-column label="Name" sortable :min-width="discount.name">
         <template slot-scope="props">
           <div class="discount-name">
             {{ props.row.name }}
@@ -69,11 +69,12 @@
       </el-table-column>
       <el-table-column
         prop="discountType"
-        label="Discount Type"
+        label="Type"
+        sortable
         :min-width="discount.discountType"
       />
       <el-table-column
-        label="Discount Value"
+        label="Value"
         :min-width="discount.discountValue"
         sortable
         sort-by="discountValue"

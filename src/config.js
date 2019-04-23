@@ -69,18 +69,18 @@ export const term = {
 };
 
 export const discount = {
-  contractOrder: 55,
-  appliedOrder: 55,
-  bulk: 55,
-  name: 150,
+  contractOrder: 60,
+  appliedOrder: 60,
+  bulk: 70,
+  name: 125,
   effectiveDates: 220,
-  discountType: 125,
-  discountValue: 155,
+  discountType: 110,
+  discountValue: 90,
   journeyType: 90,
   directionType: 115,
   normalization: 125,
   note: 100,
-  actions: 100
+  actions: 120
 };
 
 export const airport = {
