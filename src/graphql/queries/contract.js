@@ -42,7 +42,20 @@ export const GET_PRICING_TERM_LIST = gql`
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
       discountList {
         id

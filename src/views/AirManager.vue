@@ -49,7 +49,11 @@ export default {
   },
   apollo: {
     user: {
-      query: GET_USER
+      query: GET_USER,
+      update(data) {
+        this.selectedUser = data.user;
+        return data.user;
+      }
     },
     client: {
       query: GET_CLIENT
@@ -118,9 +122,6 @@ export default {
           return a.name.localeCompare(b.name);
         });
     }
-  },
-  mounted() {
-    this.selectedUser = this.user.email;
   },
   methods: {
     pluralize(word, count) {

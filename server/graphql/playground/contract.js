@@ -24,6 +24,11 @@ exports.contract = {
         id
         name
       }
+      userList {
+        id
+        name
+        email
+      }
       pricingTermList {
         id
         contractOrder
@@ -35,7 +40,20 @@ exports.contract = {
         pointOfSaleList
         pointOfOriginList
         airlineList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
         ignore
         discountList {
           id
@@ -130,7 +148,20 @@ exports.contract = {
         pointOfSaleList
         pointOfOriginList
         airlineList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
         ignore
       }
       copyPricingTerm(id: 1, name: "copy term", ignore: false) {
@@ -158,7 +189,20 @@ exports.contract = {
         pointOfSaleList
         pointOfOriginList
         airlineList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
         ignore
       }
       editPricingTerm(id: 1, name: "term edit", ignore: true) {
@@ -186,7 +230,20 @@ exports.contract = {
         pointOfSaleList
         pointOfOriginList
         airlineList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
         ignore
       }
       togglePricingTermQC(id: 1) {
@@ -214,7 +271,20 @@ exports.contract = {
         pointOfSaleList
         pointOfOriginList
         airlineList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
         ignore
       }
       deletePricingTerms(idList: [1, 2, 3])
@@ -262,6 +332,16 @@ exports.contract = {
         note
       }
       deleteDiscounts(pricingTermId: 1, idList: [1, 2, 3])
+
+      saveNote(pricingTermId: 1, important: true, message: "this is my first note", assigneeId: 2) {
+        important
+        noteList {
+          author
+          date
+          assignee
+          message
+        }
+      }
     }
     `
   }

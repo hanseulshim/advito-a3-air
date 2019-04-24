@@ -80,7 +80,24 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: null,
+    note: {
+      important: false,
+      noteList: [
+        {
+          author: {
+            id: 3,
+            name: 'Scott Cashon',
+            email: 'scott.cashon@boostlabs.com'
+          },
+          date: new Date('08-03-2018'),
+          assignee: {
+            id: 2,
+            name: 'Kevin Ingalls',
+            email: 'kevin.ingalls@boostlabs.com'
+          }
+        }
+      ]
+    },
     isDeleted: false,
     discountList: [
       {
@@ -125,7 +142,7 @@ exports.pricingTermList = [
         journeyType: 'Return',
         directionType: 'Directional',
         normalizationList: 0,
-        note: 'note',
+        note: null,
         isDeleted: false
       }
     ]
@@ -157,7 +174,7 @@ exports.pricingTermList = [
         journeyType: 'OW/RT',
         directionType: 'Directional',
         normalizationList: 8,
-        note: 'important',
+        note: null,
         isDeleted: false
       },
       {
@@ -187,7 +204,7 @@ exports.pricingTermList = [
         journeyType: 'OW/RT',
         directionType: 'Directional',
         normalizationList: 10,
-        note: 'note',
+        note: null,
         isDeleted: false
       }
     ]
@@ -234,7 +251,7 @@ exports.pricingTermList = [
         journeyType: 'Return',
         directionType: 'Bidirectional',
         normalizationList: 1,
-        note: 'note',
+        note: null,
         isDeleted: false
       },
       {
@@ -249,7 +266,7 @@ exports.pricingTermList = [
         journeyType: 'OW/RT',
         directionType: 'Directional',
         normalizationList: 10,
-        note: 'note',
+        note: null,
         isDeleted: false
       }
     ]
@@ -266,7 +283,7 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note',
+    note: null,
     isDeleted: false,
     discountList: [
       {
@@ -281,7 +298,7 @@ exports.pricingTermList = [
         journeyType: 'Return',
         directionType: 'Bidirectional',
         normalizationList: 1,
-        note: 'note',
+        note: null,
         isDeleted: false
       },
       {
@@ -296,7 +313,7 @@ exports.pricingTermList = [
         journeyType: 'Return',
         directionType: 'Directional',
         normalizationList: 7,
-        note: 'important',
+        note: null,
         isDeleted: false
       },
       {
@@ -311,7 +328,7 @@ exports.pricingTermList = [
         journeyType: 'Return',
         directionType: 'Bidirectional',
         normalizationList: 9,
-        note: 'important',
+        note: null,
         isDeleted: false
       }
     ]
@@ -328,7 +345,7 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note',
+    note: null,
     isDeleted: false,
     discountList: [
       {
@@ -343,7 +360,7 @@ exports.pricingTermList = [
         journeyType: 'Oneway',
         directionType: 'Directional',
         normalizationList: 6,
-        note: 'important',
+        note: null,
         isDeleted: false
       },
       {
@@ -358,7 +375,7 @@ exports.pricingTermList = [
         journeyType: 'OW/RT',
         directionType: 'Directional',
         normalizationList: 2,
-        note: 'important',
+        note: null,
         isDeleted: false
       },
       {
@@ -390,7 +407,7 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note',
+    note: null,
     isDeleted: false,
     discountList: [
       {
@@ -420,7 +437,7 @@ exports.pricingTermList = [
         journeyType: 'OW/RT',
         directionType: 'Bidirectional',
         normalizationList: 6,
-        note: 'important',
+        note: null,
         isDeleted: false
       },
       {
@@ -435,7 +452,7 @@ exports.pricingTermList = [
         journeyType: 'Oneway',
         directionType: 'Directional',
         normalizationList: 3,
-        note: 'important',
+        note: null,
         isDeleted: false
       }
     ]
@@ -514,7 +531,7 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'important',
+    note: null,
     isDeleted: false,
     discountList: [
       {
@@ -576,7 +593,7 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note',
+    note: null,
     isDeleted: false,
     discountList: [
       {
@@ -606,7 +623,7 @@ exports.pricingTermList = [
         journeyType: 'Oneway',
         directionType: 'Bidirectional',
         normalizationList: 8,
-        note: 'important',
+        note: null,
         isDeleted: false
       },
       {
@@ -638,7 +655,7 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: 'note',
+    note: null,
     isDeleted: false,
     discountList: [
       {
@@ -683,7 +700,7 @@ exports.pricingTermList = [
         journeyType: 'OW/RT',
         directionType: 'Directional',
         normalizationList: 2,
-        note: 'note',
+        note: null,
         isDeleted: false
       }
     ]

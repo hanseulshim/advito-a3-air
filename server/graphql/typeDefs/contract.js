@@ -34,7 +34,7 @@ type PricingTerm {
   airlineList: [String]
   ignore: Boolean
   isDeleted: Boolean
-  note: String
+  note: Note
 }
 type Discount {
   id: Int
@@ -62,6 +62,16 @@ type JourneyType {
 type DirectionType {
   id: Int
   name: String
+}
+type Note {
+  important: Boolean
+  noteList: [NoteContent]
+}
+type NoteContent {
+  author: User
+  message: String
+  date: Date
+  assignee: User
 }
 
 extend type Query {
@@ -129,5 +139,12 @@ extend type Mutation {
     directionTypeId: Int
   ): Discount @auth
   deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
+
+  saveNote(
+    pricingTermId: Int!
+    important: Boolean
+    message: String
+    assigneeId: Int!
+  ): Note
 }
 `;

@@ -127,7 +127,20 @@ export const CREATE_PRICING_TERM = gql`
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }
@@ -160,7 +173,20 @@ export const COPY_PRICING_TERM = gql`
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }
@@ -193,7 +219,20 @@ export const EDIT_PRICING_TERM = gql`
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }
@@ -226,7 +265,20 @@ export const TOGGLE_PRICING_TERM_QC = gql`
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }

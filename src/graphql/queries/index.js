@@ -8,11 +8,10 @@ export * from './contract';
 
 export const GET_USER = gql`
   {
-    user @client {
+    user {
+      id
       name
       email
-      clientId
-      sessionToken
     }
   }
 `;

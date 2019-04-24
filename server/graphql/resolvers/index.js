@@ -7,9 +7,10 @@ const { collection } = require('./collection');
 const { dataSet } = require('./dataSet');
 const { library } = require('./library');
 const { contract } = require('./contract');
+const { user } = require('./user');
 
 exports.resolvers = {
-  ...merge(project, client, collection, dataSet, library, contract),
+  ...merge(project, client, collection, dataSet, library, contract, user),
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Date custom scalar type',
