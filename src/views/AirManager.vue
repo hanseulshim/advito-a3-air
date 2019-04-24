@@ -80,9 +80,9 @@ export default {
     filteredProjectList: function() {
       return this.projectList.filter(
         project =>
-          project.reportTo === null ||
+          project.effectiveTo === null ||
           this.showInactive ||
-          project.reportTo > new Date()
+          project.effectiveTo > new Date()
       );
     },
     favoriteProjectList: function() {
