@@ -67,10 +67,19 @@ export const GET_PRICING_TERM_LIST = gql`
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }

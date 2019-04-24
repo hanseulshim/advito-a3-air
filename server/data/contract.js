@@ -116,10 +116,19 @@ exports.pricingTermList = [
         name: 'Temp',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.02,
-        journeyType: 'Return',
-        directionType: 'Directional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 8,
         note: null,
         isDeleted: false
@@ -131,10 +140,19 @@ exports.pricingTermList = [
         name: 'Ronstring',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.77,
-        journeyType: 'Return',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 1,
         note: null,
         isDeleted: false
@@ -146,10 +164,19 @@ exports.pricingTermList = [
         name: 'Pannier',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.16,
-        journeyType: 'Return',
-        directionType: 'Directional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 0,
         note: null,
         isDeleted: false
@@ -178,10 +205,19 @@ exports.pricingTermList = [
         name: 'Bitwolf',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.41,
-        journeyType: 'OW/RT',
-        directionType: 'Directional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 8,
         note: null,
         isDeleted: false
@@ -193,10 +229,19 @@ exports.pricingTermList = [
         name: 'Fintone',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.97,
-        journeyType: 'Oneway',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 5,
         note: null,
         isDeleted: false
@@ -208,10 +253,19 @@ exports.pricingTermList = [
         name: 'Prodder',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.56,
-        journeyType: 'OW/RT',
-        directionType: 'Directional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 10,
         note: null,
         isDeleted: false
@@ -240,10 +294,19 @@ exports.pricingTermList = [
         name: 'Voyatouch',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.04,
-        journeyType: 'Return',
-        directionType: 'Directional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 0,
         note: null,
         isDeleted: false
@@ -255,10 +318,19 @@ exports.pricingTermList = [
         name: 'Sonair',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.44,
-        journeyType: 'Return',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 1,
         note: null,
         isDeleted: false
@@ -270,10 +342,19 @@ exports.pricingTermList = [
         name: 'Sub-Ex',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.11,
-        journeyType: 'OW/RT',
-        directionType: 'Directional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 10,
         note: null,
         isDeleted: false
@@ -302,10 +383,19 @@ exports.pricingTermList = [
         name: 'Kanlam',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.28,
-        journeyType: 'Return',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 1,
         note: null,
         isDeleted: false
@@ -317,10 +407,19 @@ exports.pricingTermList = [
         name: 'Ronstring',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.17,
-        journeyType: 'Return',
-        directionType: 'Directional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 7,
         note: null,
         isDeleted: false
@@ -332,10 +431,19 @@ exports.pricingTermList = [
         name: 'Wrapsafe',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.68,
-        journeyType: 'Return',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 9,
         note: null,
         isDeleted: false
@@ -364,10 +472,19 @@ exports.pricingTermList = [
         name: 'Matsoft',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.75,
-        journeyType: 'Oneway',
-        directionType: 'Directional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 6,
         note: null,
         isDeleted: false
@@ -379,10 +496,19 @@ exports.pricingTermList = [
         name: 'Bitchip',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.93,
-        journeyType: 'OW/RT',
-        directionType: 'Directional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 2,
         note: null,
         isDeleted: false
@@ -394,10 +520,19 @@ exports.pricingTermList = [
         name: 'Tres-Zap',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.2,
-        journeyType: 'Oneway',
-        directionType: 'Directional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 2,
         note: null,
         isDeleted: false
@@ -426,10 +561,19 @@ exports.pricingTermList = [
         name: 'Biodex',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.16,
-        journeyType: 'Oneway',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 7,
         note: null,
         isDeleted: false
@@ -441,10 +585,19 @@ exports.pricingTermList = [
         name: 'Domainer',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.52,
-        journeyType: 'OW/RT',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 6,
         note: null,
         isDeleted: false
@@ -456,10 +609,19 @@ exports.pricingTermList = [
         name: 'Home Ing',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.26,
-        journeyType: 'Oneway',
-        directionType: 'Directional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 3,
         note: null,
         isDeleted: false
@@ -488,10 +650,19 @@ exports.pricingTermList = [
         name: 'Cookley',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.6,
-        journeyType: 'Oneway',
-        directionType: 'Directional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 3,
         note: null,
         isDeleted: false
@@ -503,10 +674,19 @@ exports.pricingTermList = [
         name: 'Overhold',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.77,
-        journeyType: 'Oneway',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 10,
         note: null,
         isDeleted: false
@@ -518,10 +698,19 @@ exports.pricingTermList = [
         name: 'It',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.77,
-        journeyType: 'Return',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 10,
         note: null,
         isDeleted: false
@@ -550,10 +739,19 @@ exports.pricingTermList = [
         name: 'Bamity',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.84,
-        journeyType: 'Return',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 5,
         note: null,
         isDeleted: false
@@ -565,10 +763,19 @@ exports.pricingTermList = [
         name: 'Prodder',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0,
-        journeyType: 'Return',
-        directionType: 'Directional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 10,
         note: null,
         isDeleted: false
@@ -580,10 +787,19 @@ exports.pricingTermList = [
         name: 'Zamit',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.01,
-        journeyType: 'Return',
-        directionType: 'Directional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 2,
         note: null,
         isDeleted: false
@@ -612,10 +828,19 @@ exports.pricingTermList = [
         name: 'Mat Lam Tam',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.92,
-        journeyType: 'Oneway',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 2,
         note: null,
         isDeleted: false
@@ -627,10 +852,19 @@ exports.pricingTermList = [
         name: 'Vagram',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.56,
-        journeyType: 'Oneway',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 1,
+          name: 'Oneway'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 8,
         note: null,
         isDeleted: false
@@ -642,10 +876,19 @@ exports.pricingTermList = [
         name: 'Veribet',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Fixed',
+        discountType: {
+          id: 1,
+          name: 'Fixed'
+        },
         discountValue: 0.17,
-        journeyType: 'OW/RT',
-        directionType: 'Directional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 9,
         note: null,
         isDeleted: false
@@ -674,10 +917,19 @@ exports.pricingTermList = [
         name: 'Konklab',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.7,
-        journeyType: 'Return',
-        directionType: 'Bidirectional',
+        journeyType: {
+          id: 2,
+          name: 'Return'
+        },
+        directionType: {
+          id: 2,
+          name: 'Bidirectional'
+        },
         normalizationList: 2,
         note: null,
         isDeleted: false
@@ -689,10 +941,19 @@ exports.pricingTermList = [
         name: 'Hatity',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Subtraction',
+        discountType: {
+          id: 3,
+          name: 'Subtraction'
+        },
         discountValue: 0.77,
-        journeyType: 'OW/RT',
-        directionType: 'Directional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 2,
         note: null,
         isDeleted: false
@@ -704,10 +965,19 @@ exports.pricingTermList = [
         name: 'Cookley',
         effectiveStartDate: '03/15/2019',
         effectiveEndDate: '12/31/2019',
-        discountType: 'Percentage',
+        discountType: {
+          id: 2,
+          name: 'Percentage'
+        },
         discountValue: 0.43,
-        journeyType: 'OW/RT',
-        directionType: 'Directional',
+        journeyType: {
+          id: 3,
+          name: 'OW/RT'
+        },
+        directionType: {
+          id: 1,
+          name: 'Directional'
+        },
         normalizationList: 2,
         note: null,
         isDeleted: false

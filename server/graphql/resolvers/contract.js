@@ -222,13 +222,13 @@ exports.contract = {
           ...pricingTerm.discountList.map(discount => discount.appliedOrder)
         ) + 1;
       const discountType = discountTypeId
-        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0]
         : null;
       const journeyType = journeyTypeId
-        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0]
         : null;
       const directionType = directionTypeId
-        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0]
         : null;
       const discount = {
         id: maxId,
@@ -286,13 +286,13 @@ exports.contract = {
           ...pricingTerm.discountList.map(discount => discount.appliedOrder)
         ) + 1;
       const discountType = discountTypeId
-        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0]
         : null;
       const journeyType = journeyTypeId
-        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0]
         : null;
       const directionType = directionTypeId
-        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0]
         : null;
       const discountCopy = {
         id: maxId,
@@ -337,13 +337,13 @@ exports.contract = {
         throw new ApolloError('Discount not found', 400);
       }
       const discountType = discountTypeId
-        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0]
         : null;
       const journeyType = journeyTypeId
-        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0]
         : null;
       const directionType = directionTypeId
-        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0]
         : null;
 
       discount.name = name;

@@ -65,10 +65,19 @@ exports.contract = {
           name
           effectiveStartDate
           effectiveEndDate
-          discountType
+          discountType {
+            id
+            name
+          }
           discountValue
-          journeyType
-          directionType
+          journeyType {
+            id
+            name
+          }
+          directionType {
+            id
+            name
+          }
           normalizationList
           note
         }
@@ -84,7 +93,10 @@ exports.contract = {
       createContract(name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
         id
         name
-        type
+        type {
+          id
+          name
+        }
         description
         round
         effectiveStartDate
@@ -99,7 +111,10 @@ exports.contract = {
       copyContract(id: 1, name: "copy contract") {
         id
         name
-        type
+        type {
+          id
+          name
+        }
         description
         round
         effectiveStartDate
@@ -114,7 +129,10 @@ exports.contract = {
       editContract(id: 1, name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
         id
         name
-        type
+        type {
+          id
+          name
+        }
         description
         round
         effectiveStartDate
@@ -141,10 +159,19 @@ exports.contract = {
           name
           effectiveStartDate
           effectiveEndDate
-          discountType
+          discountType {
+            id
+            name
+          }
           discountValue
-          journeyType
-          directionType
+          journeyType {
+            id
+            name
+          }
+          directionType {
+            id
+            name
+          }
           normalizationList
           note
         }
@@ -182,10 +209,19 @@ exports.contract = {
           name
           effectiveStartDate
           effectiveEndDate
-          discountType
+          discountType {
+            id
+            name
+          }
           discountValue
-          journeyType
-          directionType
+          journeyType {
+            id
+            name
+          }
+          directionType {
+            id
+            name
+          }
           normalizationList
           note
         }
@@ -223,10 +259,19 @@ exports.contract = {
           name
           effectiveStartDate
           effectiveEndDate
-          discountType
+          discountType {
+            id
+            name
+          }
           discountValue
-          journeyType
-          directionType
+          journeyType {
+            id
+            name
+          }
+          directionType {
+            id
+            name
+          }
           normalizationList
           note
         }
@@ -264,10 +309,19 @@ exports.contract = {
           name
           effectiveStartDate
           effectiveEndDate
-          discountType
+          discountType {
+            id
+            name
+          }
           discountValue
-          journeyType
-          directionType
+          journeyType {
+            id
+            name
+          }
+          directionType {
+            id
+            name
+          }
           normalizationList
           note
         }
@@ -299,10 +353,19 @@ exports.contract = {
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }
@@ -313,10 +376,19 @@ exports.contract = {
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }
@@ -327,10 +399,19 @@ exports.contract = {
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }

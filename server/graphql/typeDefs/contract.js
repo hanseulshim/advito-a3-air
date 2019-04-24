@@ -43,10 +43,10 @@ type Discount {
   name: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  discountType: String
+  discountType: DiscountType
   discountValue: Float
-  journeyType: String
-  directionType: String
+  journeyType: JourneyType
+  directionType: DirectionType
   normalizationList: Int
   note: String
   isDeleted: Boolean

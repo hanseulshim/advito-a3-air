@@ -68,7 +68,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="discountType"
+        prop="discountType.name"
         label="Type"
         sortable
         :min-width="discount.discountType"
@@ -84,12 +84,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="journeyType"
+        prop="journeyType.name"
         label="Journey"
         :min-width="discount.journeyType"
       />
       <el-table-column
-        prop="directionType"
+        prop="directionType.name"
         label="Direction"
         :min-width="discount.directionType"
       />
