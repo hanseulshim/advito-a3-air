@@ -53,6 +53,7 @@ export const GET_PRICING_TERM_LIST = gql`
             name
           }
           date
+          message
           assignee {
             id
             name

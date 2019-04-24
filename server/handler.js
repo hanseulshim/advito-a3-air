@@ -12,7 +12,7 @@ const server = new ApolloServer({
     const user =
       sessionToken === 'advitoValidToken'
         ? {
-            id: 1,
+            id: 3,
             name: 'Scott Cashon',
             email: 'scott.cashon@boostlabs.com'
           }

@@ -470,3 +470,33 @@ export const DELETE_DISCOUNTS = gql`
     deleteDiscounts(pricingTermId: $pricingTermId, idList: $idList)
   }
 `;
+
+export const SAVE_NOTE = gql`
+  mutation saveNote(
+    $pricingTermId: Int!
+    $important: Boolean!
+    $message: String
+    $assigneeId: Int!
+  ) {
+    saveNote(
+      pricingTermId: $pricingTermId
+      important: $important
+      message: $message
+      assigneeId: $assigneeId
+    ) {
+      important
+      noteList {
+        author {
+          id
+          name
+        }
+        date
+        assignee {
+          id
+          name
+        }
+        message
+      }
+    }
+  }
+`;

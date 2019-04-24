@@ -383,7 +383,7 @@ exports.contract = {
       if (!pricingTerm) {
         throw new ApolloError('Pricing Term not found', 400);
       }
-      const assignee = userList.filter(user => user.id === assigneeId)[0].name;
+      const assignee = userList.filter(user => user.id === assigneeId)[0];
       const note =
         pricingTerm.note === null
           ? {
@@ -392,13 +392,15 @@ exports.contract = {
             }
           : pricingTerm.note;
       note.important = important;
-      const content = {
-        author: user.name,
-        date: new Date(),
-        assignee,
-        message
-      };
-      note.noteList.push(content);
+      if (message) {
+        const content = {
+          author: user,
+          date: new Date(),
+          assignee,
+          message
+        };
+        note.noteList.push(content);
+      }
       return note;
     }
   }

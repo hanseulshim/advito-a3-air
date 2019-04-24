@@ -99,6 +99,64 @@ exports.pricingTermList = [
             email: 'scott.cashon@boostlabs.com'
           },
           date: new Date('08-03-2018'),
+          message: 'First message',
+          assignee: {
+            id: 2,
+            name: 'Kevin Ingalls',
+            email: 'kevin.ingalls@boostlabs.com'
+          }
+        },
+        {
+          author: {
+            id: 3,
+            name: 'Scott Cashon',
+            email: 'scott.cashon@boostlabs.com'
+          },
+          date: new Date('08-03-2018'),
+          message: 'Second message',
+          assignee: {
+            id: 2,
+            name: 'Kevin Ingalls',
+            email: 'kevin.ingalls@boostlabs.com'
+          }
+        },
+        {
+          author: {
+            id: 3,
+            name: 'Scott Cashon',
+            email: 'scott.cashon@boostlabs.com'
+          },
+          date: new Date('08-03-2018'),
+          message: 'Third message',
+          assignee: {
+            id: 2,
+            name: 'Kevin Ingalls',
+            email: 'kevin.ingalls@boostlabs.com'
+          }
+        },
+        {
+          author: {
+            id: 3,
+            name: 'Scott Cashon',
+            email: 'scott.cashon@boostlabs.com'
+          },
+          date: new Date('08-03-2018'),
+          message: 'Fourth message',
+          assignee: {
+            id: 2,
+            name: 'Kevin Ingalls',
+            email: 'kevin.ingalls@boostlabs.com'
+          }
+        },
+        {
+          author: {
+            id: 3,
+            name: 'Scott Cashon',
+            email: 'scott.cashon@boostlabs.com'
+          },
+          date: new Date('08-03-2018'),
+          message:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
           assignee: {
             id: 2,
             name: 'Kevin Ingalls',
@@ -640,7 +698,25 @@ exports.pricingTermList = [
     pointOfOriginList: ['US', 'CA', 'CN', 'EU'],
     airlineList: ['DL', 'AA', 'AF', 'LH'],
     ignore: false,
-    note: null,
+    note: {
+      important: true,
+      noteList: [
+        {
+          author: {
+            id: 3,
+            name: 'Scott Cashon',
+            email: 'scott.cashon@boostlabs.com'
+          },
+          date: new Date('08-03-2018'),
+          message: 'This is a message that is assigned to Kevin',
+          assignee: {
+            id: 2,
+            name: 'Kevin Ingalls',
+            email: 'kevin.ingalls@boostlabs.com'
+          }
+        }
+      ]
+    },
     isDeleted: false,
     discountList: [
       {

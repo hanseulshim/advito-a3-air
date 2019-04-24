@@ -142,7 +142,7 @@ extend type Mutation {
 
   saveNote(
     pricingTermId: Int!
-    important: Boolean
+    important: Boolean!
     message: String
     assigneeId: Int!
   ): Note

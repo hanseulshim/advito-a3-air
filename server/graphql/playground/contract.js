@@ -51,6 +51,7 @@ exports.contract = {
               name
             }
             date
+            message
             assignee {
               id
               name
@@ -420,9 +421,15 @@ exports.contract = {
       saveNote(pricingTermId: 1, important: true, message: "this is my first note", assigneeId: 2) {
         important
         noteList {
-          author
+          author {
+            id
+            name
+          }
           date
-          assignee
+          assignee {
+            id
+            name
+          }
           message
         }
       }
