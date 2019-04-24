@@ -8,7 +8,10 @@ exports.contract = {
       contractList {
         id
         name
-        type
+        type {
+          id
+          name
+        }
         description
         round
         effectiveStartDate

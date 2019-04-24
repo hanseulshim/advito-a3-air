@@ -5,7 +5,10 @@ export const GET_CONTRACT_LIST = gql`
     contractList {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate

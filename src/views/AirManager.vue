@@ -76,7 +76,9 @@ export default {
       showInactive: false,
       projectList: [],
       clientList: [],
-      user: null,
+      user: {
+        email: null
+      },
       client: null
     };
   },

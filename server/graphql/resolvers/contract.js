@@ -32,7 +32,7 @@ exports.contract = {
       }
     ) => {
       const maxId = Math.max(...contractList.map(contract => contract.id)) + 1;
-      const type = contractTypeList.filter(type => type.id === typeId)[0].name;
+      const type = contractTypeList.filter(type => type.id === typeId)[0];
       const contract = {
         id: maxId,
         name,
@@ -86,7 +86,7 @@ exports.contract = {
       if (!contract) {
         throw new ApolloError('Contract not found', 400);
       }
-      const type = contractTypeList.filter(type => type.id === typeId)[0].name;
+      const type = contractTypeList.filter(type => type.id === typeId)[0];
       contract.name = name;
       contract.type = type;
       contract.round = round;

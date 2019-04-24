@@ -24,7 +24,7 @@
         sortable
       />
       <el-table-column
-        prop="type"
+        prop="type.name"
         label="Type"
         :min-width="contract.type"
         sortable

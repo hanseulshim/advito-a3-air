@@ -21,7 +21,10 @@ export const CREATE_CONTRACT = gql`
     ) {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate
@@ -41,7 +44,10 @@ export const COPY_CONTRACT = gql`
     copyContract(id: $id, name: $name) {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate
@@ -79,7 +85,10 @@ export const EDIT_CONTRACT = gql`
     ) {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate

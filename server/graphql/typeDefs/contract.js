@@ -2,7 +2,7 @@ exports.contract = `
 type Contract {
   id: Int
   name: String
-  type: String
+  type: ContractType
   description: String
   round: Int
   effectiveStartDate: Date

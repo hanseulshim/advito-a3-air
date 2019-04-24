@@ -2,7 +2,10 @@ exports.contractList = [
   {
     id: 1,
     name: 'Contract_name',
-    type: 'Contract',
+    type: {
+      id: 1,
+      name: 'Contract'
+    },
     description: 'Text here',
     round: null,
     effectiveStartDate: '01/25/2019',
@@ -19,7 +22,10 @@ exports.contractList = [
   {
     id: 2,
     name: 'Contract_Name_goes_here_version1',
-    type: 'Amendment',
+    type: {
+      id: 3,
+      name: 'Amendment'
+    },
     description: 'Lorem ipsum dolor sit amet, con adip elit...',
     round: null,
     effectiveStartDate: '03/03/2019',
@@ -36,8 +42,11 @@ exports.contractList = [
   {
     id: 3,
     name: 'Contract_Name_goes_here_version5',
-    type: 'Proposal',
-    description: 'text here, might get cut off if long...',
+    type: {
+      id: 2,
+      name: 'Proposal'
+    },
+    description: 'Lorem ipsum dolor sit amet, con adip elit...',
     round: 2,
     effectiveStartDate: '03/28/2019',
     effectiveEndDate: '03/28/2020',
