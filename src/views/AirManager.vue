@@ -51,7 +51,7 @@ export default {
     user: {
       query: GET_USER,
       update(data) {
-        this.selectedUser = data.user;
+        this.selectedUser = data.user.email;
         return data.user;
       }
     },
