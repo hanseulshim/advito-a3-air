@@ -179,7 +179,7 @@
       >
         <template slot-scope="props">
           <i
-            v-if="props.row.note && props.row.note.noteList"
+            v-if="props.row.note && props.row.note.noteList.length"
             class="fas fa-sticky-note"
             :class="{ important: props.row.note.important }"
             @click="toggleNoteModal(props.row)"
@@ -187,6 +187,7 @@
           <i
             v-else
             class="far fa-sticky-note"
+            :class="{ important: props.row.note && props.row.note.important }"
             @click="toggleNoteModal(props.row)"
           />
         </template>
