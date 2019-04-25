@@ -33,6 +33,7 @@
       <el-table-column
         prop="contractOrder"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="discount.contractOrder"
       >
         <template slot="header">
@@ -44,6 +45,7 @@
       <el-table-column
         prop="appliedOrder"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="discount.appliedOrder"
       >
         <template slot="header">
@@ -60,7 +62,12 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Name" sortable :min-width="discount.name">
+      <el-table-column
+        label="Name"
+        sortable
+        :sort-orders="['ascending', 'descending']"
+        :min-width="discount.name"
+      >
         <template slot-scope="props">
           <div class="discount-name">
             {{ props.row.name }}
@@ -71,12 +78,14 @@
         prop="discountType.name"
         label="Type"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="discount.discountType"
       />
       <el-table-column
         label="Value"
         :min-width="discount.discountValue"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="discountValue"
       >
         <template slot-scope="props">
@@ -101,6 +110,7 @@
       <el-table-column
         label="Notes"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="note"
         :min-width="discount.note"
       >

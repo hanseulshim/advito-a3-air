@@ -72,12 +72,14 @@
         label="Location Collection"
         :min-width="collection.name"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="regionList.length"
         label="Regions"
         :min-width="collection.count"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="description"
@@ -88,6 +90,7 @@
         prop="dateUpdated"
         label="Date Updated"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :formatter="formatDate"
         :min-width="collection.dateUpdated"
       />

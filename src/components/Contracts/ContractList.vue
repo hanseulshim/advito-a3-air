@@ -22,12 +22,14 @@
         label="Name"
         :min-width="contract.name"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="type.name"
         label="Type"
         :min-width="contract.type"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="description"
@@ -38,6 +40,7 @@
         label="Round"
         :min-width="contract.round"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="round"
       >
         <template slot-scope="props">{{
@@ -49,12 +52,14 @@
         :min-width="contract.effectiveDates"
         :formatter="formatDate"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="effectiveEndDate"
       />
       <el-table-column
         label="QC"
         :min-width="contract.qc"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="qc"
         :formatter="formatPercent"
       >

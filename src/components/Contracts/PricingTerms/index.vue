@@ -53,6 +53,7 @@
       <el-table-column
         prop="contractOrder"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="term.contractOrder"
       >
         <template slot="header">
@@ -64,6 +65,7 @@
       <el-table-column
         prop="appliedOrder"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="term.appliedOrder"
       >
         <template slot="header">
@@ -83,6 +85,7 @@
       <el-table-column
         label="Term Name"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="name"
         :min-width="term.name"
       >
@@ -97,9 +100,16 @@
         :min-width="term.effectiveDates"
         :formatter="formatDate"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="effectiveEndDate"
       />
-      <el-table-column label="QC" sortable sort-by="qc" :min-width="term.qc">
+      <el-table-column
+        label="QC"
+        sortable
+        :sort-orders="['ascending', 'descending']"
+        sort-by="qc"
+        :min-width="term.qc"
+      >
         <template slot-scope="props">
           <el-checkbox
             :class="{ invalid: props.row.qc !== 1 }"
@@ -176,6 +186,7 @@
         sortable
         :sort-method="sortByNote"
         :min-width="term.note"
+        :sort-orders="['ascending', 'descending']"
       >
         <template slot-scope="props">
           <i

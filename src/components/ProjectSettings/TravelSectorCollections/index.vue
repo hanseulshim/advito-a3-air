@@ -26,12 +26,14 @@
         label="Travel Sector Collection"
         :min-width="collection.name"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="sectorList.length"
         label="Sectors"
         :min-width="collection.count"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="description"
@@ -42,6 +44,7 @@
         prop="dateUpdated"
         label="Date Updated"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :formatter="formatDate"
         :min-width="collection.dateUpdated"
       />

@@ -26,12 +26,14 @@
         label="Airline Group Collection"
         :min-width="collection.name"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="airlineGroupList.length"
         label="Groups"
         :min-width="collection.count"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         prop="description"
@@ -42,6 +44,7 @@
         prop="dateUpdated"
         label="Date Updated"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :formatter="formatDate"
         :min-width="collection.dateUpdated"
       />

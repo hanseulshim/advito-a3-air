@@ -41,8 +41,14 @@
         label="Preferred Airline Collection"
         :min-width="collection.name"
         sortable
+        :sort-orders="['ascending', 'descending']"
       />
-      <el-table-column label="Airlines" :min-width="collection.count" sortable>
+      <el-table-column
+        label="Airlines"
+        :min-width="collection.count"
+        sortable
+        :sort-orders="['ascending', 'descending']"
+      >
         <template slot-scope="scope">
           <span :class="{ warning: !scope.row.airlineList.length }">{{
             scope.row.airlineList.length
@@ -58,6 +64,7 @@
         prop="dateUpdated"
         label="Date Updated"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :formatter="formatDate"
         :min-width="collection.dateUpdated"
       />
