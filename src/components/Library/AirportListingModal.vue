@@ -14,30 +14,35 @@
         prop="countryName"
         label="Country"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="airport.country"
       />
       <el-table-column
         prop="cityCode"
         label="City Code"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="airport.code"
       />
       <el-table-column
         prop="cityName"
         label="City Name"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="airport.city"
       />
       <el-table-column
         prop="airportCode"
         label="Airport Code"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="airport.code"
       />
       <el-table-column
         prop="airportName"
         label="Airport Name"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="airport.name"
       />
     </el-table>

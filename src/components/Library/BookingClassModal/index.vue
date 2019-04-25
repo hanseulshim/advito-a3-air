@@ -21,18 +21,21 @@
         prop="class"
         label="Class"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :width="bookingClass.count"
       />
       <el-table-column
         prop="defaultFareCategory"
         label="Default Fare Category"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="bookingClass.category"
       />
       <el-table-column
         prop="dateUpdated"
         label="Date Updated"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :formatter="formatDate"
         :width="bookingClass.date"
       />

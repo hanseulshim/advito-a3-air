@@ -12,6 +12,7 @@
         prop="name"
         label="Project Name"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :min-width="project.name"
       >
         <template slot-scope="scope">
@@ -25,6 +26,7 @@
         :min-width="project.date"
         :formatter="formatDate"
         sortable
+        :sort-orders="['ascending', 'descending']"
         sort-by="effectiveFrom"
       />
       <el-table-column
@@ -37,6 +39,7 @@
         label="My Role"
         prop="projectManagerEmail"
         sortable
+        :sort-orders="['ascending', 'descending']"
         :sort-method="sortByRole"
       >
         <template slot-scope="scope">

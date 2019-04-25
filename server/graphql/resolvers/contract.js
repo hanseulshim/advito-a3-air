@@ -401,6 +401,7 @@ exports.contract = {
         };
         note.noteList.push(content);
       }
+      pricingTerm.note = note;
       return note;
     }
   }
