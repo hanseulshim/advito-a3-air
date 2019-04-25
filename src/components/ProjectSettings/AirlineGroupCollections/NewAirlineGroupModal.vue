@@ -292,7 +292,6 @@ export default {
   .airline-group-label {
     width: 200px;
     .fa-times {
-      cursor: pointer;
       margin-right: 5px;
     }
   }
