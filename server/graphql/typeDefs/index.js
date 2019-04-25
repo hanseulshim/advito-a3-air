@@ -5,6 +5,7 @@ const { collection } = require('./collection');
 const { dataSet } = require('./dataSet');
 const { library } = require('./library');
 const { contract } = require('./contract');
+const { user } = require('./user');
 
 exports.typeDefs = gql`
   directive @auth on FIELD_DEFINITION
@@ -14,6 +15,7 @@ exports.typeDefs = gql`
   ${dataSet}
   ${library}
   ${contract}
+  ${user}
   type Query {
     _empty: String
   }

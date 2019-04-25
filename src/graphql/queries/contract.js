@@ -5,7 +5,10 @@ export const GET_CONTRACT_LIST = gql`
     contractList {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate
@@ -42,7 +45,21 @@ export const GET_PRICING_TERM_LIST = gql`
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          message
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
       discountList {
         id
@@ -51,10 +68,19 @@ export const GET_PRICING_TERM_LIST = gql`
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }

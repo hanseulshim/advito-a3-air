@@ -2,7 +2,7 @@ exports.contract = `
 type Contract {
   id: Int
   name: String
-  type: String
+  type: ContractType
   description: String
   round: Int
   effectiveStartDate: Date
@@ -34,7 +34,7 @@ type PricingTerm {
   airlineList: [String]
   ignore: Boolean
   isDeleted: Boolean
-  note: String
+  note: Note
 }
 type Discount {
   id: Int
@@ -43,10 +43,10 @@ type Discount {
   name: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  discountType: String
+  discountType: DiscountType
   discountValue: Float
-  journeyType: String
-  directionType: String
+  journeyType: JourneyType
+  directionType: DirectionType
   normalizationList: Int
   note: String
   isDeleted: Boolean
@@ -62,6 +62,16 @@ type JourneyType {
 type DirectionType {
   id: Int
   name: String
+}
+type Note {
+  important: Boolean
+  noteList: [NoteContent]
+}
+type NoteContent {
+  author: User
+  message: String
+  date: Date
+  assignee: User
 }
 
 extend type Query {
@@ -129,5 +139,12 @@ extend type Mutation {
     directionTypeId: Int
   ): Discount @auth
   deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
+
+  saveNote(
+    pricingTermId: Int!
+    important: Boolean!
+    message: String
+    assigneeId: Int!
+  ): Note
 }
 `;

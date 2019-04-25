@@ -165,12 +165,9 @@ export default {
     },
     beforeOpen(event) {
       const contract = event.params.contract;
-      const typeId = this.contractTypeList.filter(
-        c => c.name === contract.type
-      )[0].id;
       this.form.id = contract.id;
       this.form.name = contract.name;
-      this.form.typeId = typeId;
+      this.form.typeId = contract.type.id;
       this.form.round = contract.round;
       this.form.effectiveStartDate = contract.effectiveStartDate;
       this.form.effectiveEndDate = contract.effectiveEndDate;

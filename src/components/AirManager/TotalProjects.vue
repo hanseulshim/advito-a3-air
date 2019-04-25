@@ -99,7 +99,9 @@ export default {
   },
   data() {
     return {
-      user: null,
+      user: {
+        email: null
+      },
       project
     };
   },

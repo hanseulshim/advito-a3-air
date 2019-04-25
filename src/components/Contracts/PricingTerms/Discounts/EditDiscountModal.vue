@@ -136,6 +136,7 @@ export default {
             ...this.form
           }
         });
+        this.$emit('toggle-row', this.form.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully updated.',
           name: 'edit-discount'
@@ -155,23 +156,13 @@ export default {
         journeyType,
         directionType
       } = event.params.discount;
-      const discountTypeId = discountType
-        ? this.discountTypeList.filter(type => type.name === discountType)[0].id
-        : null;
-      const journeyTypeId = journeyType
-        ? this.journeyTypeList.filter(type => type.name === journeyType)[0].id
-        : null;
-      const directionTypeId = directionType
-        ? this.directionTypeList.filter(type => type.name === directionType)[0]
-            .id
-        : null;
       this.form.pricingTermId = event.params.pricingTermId;
       this.form.id = id;
       this.form.name = name;
-      this.form.discountTypeId = discountTypeId;
+      this.form.discountTypeId = discountType.id;
       this.form.discountValue = discountValue;
-      this.form.journeyTypeId = journeyTypeId;
-      this.form.directionTypeId = directionTypeId;
+      this.form.journeyTypeId = journeyType.id;
+      this.form.directionTypeId = directionType.id;
     },
     beforeClose() {
       this.form.pricingTermId = null;

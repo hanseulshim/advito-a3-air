@@ -174,15 +174,20 @@
       <el-table-column
         label="Notes"
         sortable
-        sort-by="note"
+        :sort-method="sortByNote"
         :min-width="term.note"
       >
         <template slot-scope="props">
-          <i v-if="!props.row.note" class="far fa-sticky-note" />
+          <i
+            v-if="props.row.note && props.row.note.noteList"
+            class="fas fa-sticky-note"
+            :class="{ important: props.row.note.important }"
+            @click="toggleNoteModal(props.row)"
+          />
           <i
             v-else
-            class="fas fa-sticky-note"
-            :class="{ important: props.row.note === 'important' }"
+            class="far fa-sticky-note"
+            @click="toggleNoteModal(props.row)"
           />
         </template>
       </el-table-column>
@@ -209,8 +214,9 @@
     <DeletePricingTermModal @clear-bulk-actions="clearBulkActions" />
     <NewDiscountModal @toggle-row="toggleRow" />
     <CopyDiscountModal @toggle-row="toggleRow" />
-    <EditDiscountModal />
+    <EditDiscountModal @toggle-row="toggleRow" />
     <DeleteDiscountModal @toggle-row="toggleRow" />
+    <NoteModal />
   </div>
 </template>
 
@@ -228,6 +234,7 @@ import NewDiscountModal from './Discounts/NewDiscountModal';
 import CopyDiscountModal from './Discounts/CopyDiscountModal';
 import EditDiscountModal from './Discounts/EditDiscountModal';
 import DeleteDiscountModal from './Discounts/DeleteDiscountModal';
+import NoteModal from './NoteModal';
 import Discounts from './Discounts';
 export default {
   name: 'PricingTerms',
@@ -241,6 +248,7 @@ export default {
     NewDiscountModal,
     CopyDiscountModal,
     EditDiscountModal,
+    NoteModal,
     DeleteDiscountModal
   },
   apollo: {
@@ -337,6 +345,12 @@ export default {
     showDeletePricingTermModal(idList) {
       this.$modal.show('delete-pricing-term', { idList });
     },
+    toggleNoteModal(pricingTerm) {
+      this.$modal.show('save-note', {
+        pricingTermId: pricingTerm.id,
+        note: pricingTerm.note
+      });
+    },
     bulkAction(value) {
       if (value === 1) {
         this.showDeletePricingTermModal(this.bulkIdList);
@@ -364,6 +378,26 @@ export default {
         this.$modal.show('error', {
           message: error.message
         });
+      }
+    },
+    sortByNote(a, b) {
+      if (a.note === null && b.note === null) {
+        return 0;
+      }
+      if (b.note === null && a.note !== null) {
+        return -1;
+      }
+      if (a.note === null && b.note !== null) {
+        return 1;
+      }
+      if (a.note.important && !b.note.important) {
+        return -1;
+      }
+      if (!a.note.important && b.note.important) {
+        return 1;
+      }
+      if (a.note.length > b.note.length) {
+        return -1;
       }
     }
   }

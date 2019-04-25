@@ -5,7 +5,8 @@ const {
   pricingTermList,
   discountTypeList,
   journeyTypeList,
-  directionTypeList
+  directionTypeList,
+  userList
 } = require('../../data');
 
 exports.contract = {
@@ -31,7 +32,7 @@ exports.contract = {
       }
     ) => {
       const maxId = Math.max(...contractList.map(contract => contract.id)) + 1;
-      const type = contractTypeList.filter(type => type.id === typeId)[0].name;
+      const type = contractTypeList.filter(type => type.id === typeId)[0];
       const contract = {
         id: maxId,
         name,
@@ -85,7 +86,7 @@ exports.contract = {
       if (!contract) {
         throw new ApolloError('Contract not found', 400);
       }
-      const type = contractTypeList.filter(type => type.id === typeId)[0].name;
+      const type = contractTypeList.filter(type => type.id === typeId)[0];
       contract.name = name;
       contract.type = type;
       contract.round = round;
@@ -221,13 +222,13 @@ exports.contract = {
           ...pricingTerm.discountList.map(discount => discount.appliedOrder)
         ) + 1;
       const discountType = discountTypeId
-        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0]
         : null;
       const journeyType = journeyTypeId
-        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0]
         : null;
       const directionType = directionTypeId
-        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0]
         : null;
       const discount = {
         id: maxId,
@@ -285,13 +286,13 @@ exports.contract = {
           ...pricingTerm.discountList.map(discount => discount.appliedOrder)
         ) + 1;
       const discountType = discountTypeId
-        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0]
         : null;
       const journeyType = journeyTypeId
-        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0]
         : null;
       const directionType = directionTypeId
-        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0]
         : null;
       const discountCopy = {
         id: maxId,
@@ -336,13 +337,13 @@ exports.contract = {
         throw new ApolloError('Discount not found', 400);
       }
       const discountType = discountTypeId
-        ? discountTypeList.filter(type => type.id === discountTypeId)[0].name
+        ? discountTypeList.filter(type => type.id === discountTypeId)[0]
         : null;
       const journeyType = journeyTypeId
-        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0].name
+        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0]
         : null;
       const directionType = directionTypeId
-        ? directionTypeList.filter(type => type.id === directionTypeId)[0].name
+        ? directionTypeList.filter(type => type.id === directionTypeId)[0]
         : null;
 
       discount.name = name;
@@ -370,6 +371,37 @@ exports.contract = {
         discount.isDeleted = true;
       });
       return idList;
+    },
+    saveNote: (
+      _,
+      { pricingTermId, important, message, assigneeId },
+      { user }
+    ) => {
+      const pricingTerm = pricingTermList.filter(
+        term => term.id === pricingTermId
+      )[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const assignee = userList.filter(user => user.id === assigneeId)[0];
+      const note =
+        pricingTerm.note === null
+          ? {
+              important: false,
+              noteList: []
+            }
+          : pricingTerm.note;
+      note.important = important;
+      if (message) {
+        const content = {
+          author: user,
+          date: new Date(),
+          assignee,
+          message
+        };
+        note.noteList.push(content);
+      }
+      return note;
     }
   }
 };

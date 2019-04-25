@@ -21,7 +21,10 @@ export const CREATE_CONTRACT = gql`
     ) {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate
@@ -41,7 +44,10 @@ export const COPY_CONTRACT = gql`
     copyContract(id: $id, name: $name) {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate
@@ -79,7 +85,10 @@ export const EDIT_CONTRACT = gql`
     ) {
       id
       name
-      type
+      type {
+        id
+        name
+      }
       description
       round
       effectiveStartDate
@@ -117,17 +126,39 @@ export const CREATE_PRICING_TERM = gql`
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }
@@ -150,17 +181,39 @@ export const COPY_PRICING_TERM = gql`
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }
@@ -183,17 +236,39 @@ export const EDIT_PRICING_TERM = gql`
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }
@@ -216,17 +291,39 @@ export const TOGGLE_PRICING_TERM_QC = gql`
         name
         effectiveStartDate
         effectiveEndDate
-        discountType
+        discountType {
+          id
+          name
+        }
         discountValue
-        journeyType
-        directionType
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
         normalizationList
         note
       }
       pointOfSaleList
       pointOfOriginList
       airlineList
-      note
+      note {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
       ignore
     }
   }
@@ -261,10 +358,19 @@ export const CREATE_DISCOUNT = gql`
       name
       effectiveStartDate
       effectiveEndDate
-      discountType
+      discountType {
+        id
+        name
+      }
       discountValue
-      journeyType
-      directionType
+      journeyType {
+        id
+        name
+      }
+      directionType {
+        id
+        name
+      }
       normalizationList
       note
     }
@@ -296,10 +402,19 @@ export const COPY_DISCOUNT = gql`
       name
       effectiveStartDate
       effectiveEndDate
-      discountType
+      discountType {
+        id
+        name
+      }
       discountValue
-      journeyType
-      directionType
+      journeyType {
+        id
+        name
+      }
+      directionType {
+        id
+        name
+      }
       normalizationList
       note
     }
@@ -331,10 +446,19 @@ export const EDIT_DISCOUNT = gql`
       name
       effectiveStartDate
       effectiveEndDate
-      discountType
+      discountType {
+        id
+        name
+      }
       discountValue
-      journeyType
-      directionType
+      journeyType {
+        id
+        name
+      }
+      directionType {
+        id
+        name
+      }
       normalizationList
       note
     }
@@ -344,5 +468,35 @@ export const EDIT_DISCOUNT = gql`
 export const DELETE_DISCOUNTS = gql`
   mutation deleteDiscounts($pricingTermId: Int!, $idList: [Int]!) {
     deleteDiscounts(pricingTermId: $pricingTermId, idList: $idList)
+  }
+`;
+
+export const SAVE_NOTE = gql`
+  mutation saveNote(
+    $pricingTermId: Int!
+    $important: Boolean!
+    $message: String
+    $assigneeId: Int!
+  ) {
+    saveNote(
+      pricingTermId: $pricingTermId
+      important: $important
+      message: $message
+      assigneeId: $assigneeId
+    ) {
+      important
+      noteList {
+        author {
+          id
+          name
+        }
+        date
+        assignee {
+          id
+          name
+        }
+        message
+      }
+    }
   }
 `;
