@@ -500,3 +500,35 @@ export const SAVE_NOTE = gql`
     }
   }
 `;
+
+export const SAVE_DISCOUNT_NOTE = gql`
+  mutation saveDiscountNote(
+    $pricingTermId: Int!
+    $discountId: Int!
+    $important: Boolean!
+    $message: String
+    $assigneeId: Int!
+  ) {
+    saveDiscountNote(
+      pricingTermId: $pricingTermId
+      discountId: $discountId
+      important: $important
+      message: $message
+      assigneeId: $assigneeId
+    ) {
+      important
+      noteList {
+        author {
+          id
+          name
+        }
+        date
+        assignee {
+          id
+          name
+        }
+        message
+      }
+    }
+  }
+`;

@@ -80,7 +80,20 @@ exports.contract = {
             name
           }
           normalizationList
-          note
+          note {
+            important
+            noteList {
+              author {
+                id
+                name
+              }
+              date
+              assignee {
+                id
+                name
+              }
+            }
+          }
         }
       }
     }`
@@ -174,7 +187,20 @@ exports.contract = {
             name
           }
           normalizationList
-          note
+          note {
+            important
+            noteList {
+              author {
+                id
+                name
+              }
+              date
+              assignee {
+                id
+                name
+              }
+            }
+          }
         }
         pointOfSaleList
         pointOfOriginList
@@ -224,7 +250,20 @@ exports.contract = {
             name
           }
           normalizationList
-          note
+          note {
+            important
+            noteList {
+              author {
+                id
+                name
+              }
+              date
+              assignee {
+                id
+                name
+              }
+            }
+          }
         }
         pointOfSaleList
         pointOfOriginList
@@ -274,7 +313,20 @@ exports.contract = {
             name
           }
           normalizationList
-          note
+          note {
+            important
+            noteList {
+              author {
+                id
+                name
+              }
+              date
+              assignee {
+                id
+                name
+              }
+            }
+          }
         }
         pointOfSaleList
         pointOfOriginList
@@ -324,7 +376,20 @@ exports.contract = {
             name
           }
           normalizationList
-          note
+          note {
+            important
+            noteList {
+              author {
+                id
+                name
+              }
+              date
+              assignee {
+                id
+                name
+              }
+            }
+          }
         }
         pointOfSaleList
         pointOfOriginList
@@ -368,7 +433,20 @@ exports.contract = {
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
       copyDiscount(pricingTermId: 1, id: 1  name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
         id
@@ -391,7 +469,20 @@ exports.contract = {
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
       editDiscount(pricingTermId: 1, id: 1  name: "edit discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
         id
@@ -414,11 +505,39 @@ exports.contract = {
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
       deleteDiscounts(pricingTermId: 1, idList: [1, 2, 3])
 
       saveNote(pricingTermId: 1, important: true, message: "this is my first note", assigneeId: 2) {
+        important
+        noteList {
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }
+      }
+      saveDiscountNote(pricingTermId: 1, discountId: 1, important: true, message: "this is my first note", assigneeId: 2) {
         important
         noteList {
           author {

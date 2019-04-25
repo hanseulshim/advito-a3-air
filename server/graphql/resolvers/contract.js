@@ -403,6 +403,44 @@ exports.contract = {
       }
       pricingTerm.note = note;
       return note;
+    },
+    saveDiscountNote: (
+      _,
+      { pricingTermId, discountId, important, message, assigneeId },
+      { user }
+    ) => {
+      const pricingTerm = pricingTermList.filter(
+        term => term.id === pricingTermId
+      )[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const discount = pricingTerm.discountList.filter(
+        discount => discount.id === discountId
+      )[0];
+      if (!discount) {
+        throw new ApolloError('Discount not found', 400);
+      }
+      const assignee = userList.filter(user => user.id === assigneeId)[0];
+      const note =
+        discount.note === null
+          ? {
+              important: false,
+              noteList: []
+            }
+          : discount.note;
+      note.important = important;
+      if (message) {
+        const content = {
+          author: user,
+          date: new Date(),
+          assignee,
+          message
+        };
+        note.noteList.push(content);
+      }
+      discount.note = note;
+      return note;
     }
   }
 };

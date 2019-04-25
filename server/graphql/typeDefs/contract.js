@@ -48,7 +48,7 @@ type Discount {
   journeyType: JourneyType
   directionType: DirectionType
   normalizationList: Int
-  note: String
+  note: Note
   isDeleted: Boolean
 }
 type DiscountType {
@@ -142,6 +142,13 @@ extend type Mutation {
 
   saveNote(
     pricingTermId: Int!
+    important: Boolean!
+    message: String
+    assigneeId: Int!
+  ): Note
+  saveDiscountNote(
+    pricingTermId: Int!
+    discountId: Int!
     important: Boolean!
     message: String
     assigneeId: Int!

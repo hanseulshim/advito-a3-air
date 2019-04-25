@@ -829,7 +829,25 @@ exports.pricingTermList = [
           name: 'Bidirectional'
         },
         normalizationList: 5,
-        note: null,
+        note: {
+          important: true,
+          noteList: [
+            {
+              author: {
+                id: 3,
+                name: 'Scott Cashon',
+                email: 'scott.cashon@boostlabs.com'
+              },
+              date: new Date('08-03-2018'),
+              message: 'This is a message that is assigned to Kevin',
+              assignee: {
+                id: 2,
+                name: 'Kevin Ingalls',
+                email: 'kevin.ingalls@boostlabs.com'
+              }
+            }
+          ]
+        },
         isDeleted: false
       },
       {
