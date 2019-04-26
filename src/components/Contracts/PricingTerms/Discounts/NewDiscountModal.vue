@@ -16,7 +16,9 @@
     >
       <div class="title-row space-between">
         <div class="section-header">new discount</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
+        </el-tooltip>
       </div>
       <el-form-item label="Term Name *" prop="name">
         <el-input v-model="form.name" />

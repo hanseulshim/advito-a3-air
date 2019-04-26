@@ -7,7 +7,9 @@
   >
     <div class="title-row space-between">
       <div class="section-header">booking class mappings</div>
-      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      </el-tooltip>
     </div>
     <el-table :data="bookingClassList" :max-height="700">
       <el-table-column type="expand">

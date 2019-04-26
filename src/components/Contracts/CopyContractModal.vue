@@ -16,7 +16,9 @@
     >
       <div class="title-row space-between">
         <div class="section-header">copy contract</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        </el-tooltip>
       </div>
       <el-form-item label="Name *" prop="name">
         <el-input v-model="form.name" />

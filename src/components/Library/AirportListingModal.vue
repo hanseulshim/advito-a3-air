@@ -7,7 +7,9 @@
   >
     <div class="title-row space-between">
       <div class="section-header">airport listing</div>
-      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="hideModal" />
+      </el-tooltip>
     </div>
     <el-table :data="airportList" :max-height="700">
       <el-table-column

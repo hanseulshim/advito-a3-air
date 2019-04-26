@@ -45,8 +45,12 @@
         <div class="description">{{ project.description }}</div>
       </div>
       <div class="favorite-project-footer">
-        <i class="fas fa-pencil-alt" @click="editProject(project)"></i>
-        <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
+        <el-tooltip effect="dark" content="Edit Project" placement="top">
+          <i class="fas fa-pencil-alt" @click="editProject(project)"></i>
+        </el-tooltip>
+        <el-tooltip effect="dark" content="Delete Project" placement="top">
+          <i class="fas fa-trash-alt" @click="deleteProject(project.id)"></i>
+        </el-tooltip>
       </div>
     </div>
   </div>

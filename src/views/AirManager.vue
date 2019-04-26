@@ -14,7 +14,13 @@
         />
       </el-select>
       <button class="button long" @click="showNewProject">+ NEW PROJECT</button>
-      <i class="fas fa-info project-top-item" @click="showInfoModal" />
+      <el-tooltip
+        effect="dark"
+        content="Show Project Information"
+        placement="top"
+      >
+        <i class="fas fa-info project-top-item" @click="showInfoModal" />
+      </el-tooltip>
     </div>
     <FavoriteProjects :favorite-project-list="favoriteProjectList" />
     <TotalProjects :total-project-list="totalProjectList" />

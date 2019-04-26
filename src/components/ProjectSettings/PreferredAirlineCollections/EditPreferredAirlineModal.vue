@@ -16,7 +16,9 @@
     >
       <div class="title-row space-between">
         <div class="section-header">edit preferred airline</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
+        </el-tooltip>
       </div>
       <el-form-item label="Collection Name *" prop="id">
         <el-select v-model="form.id" class="select-modal" disabled>
@@ -99,7 +101,9 @@
         <div v-for="(airline, index) in form.airlineList" :key="index">
           <div class="airline-group-item">
             <div class="airline-group-label">
-              <i class="fas fa-times" @click="removeAirline(index)" />
+              <el-tooltip effect="dark" content="Delete" placement="top">
+                <i class="fas fa-times" @click="removeAirline(index)" />
+              </el-tooltip>
               {{ getAirline(airline.id) }}
             </div>
             <div class="date-picker-container airline-group-content">

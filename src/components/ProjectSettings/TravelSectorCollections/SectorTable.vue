@@ -22,10 +22,12 @@
           </el-table-column>
           <el-table-column :width="sector.actions">
             <template slot-scope="bidirection">
-              <i
-                class="fas fa-trash-alt"
-                @click="showDeleteBidirection(scope.row.id, bidirection)"
-              ></i>
+              <el-tooltip effect="dark" content="Delete" placement="top">
+                <i
+                  class="fas fa-trash-alt"
+                  @click="showDeleteBidirection(scope.row.id, bidirection)"
+                />
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -48,16 +50,20 @@
     />
     <el-table-column label="Actions" :min-width="sector.actions">
       <template slot-scope="scope">
-        <i
-          v-if="collectionId !== 1"
-          class="fas fa-pencil-alt icon-spacer"
-          @click="showEditTravelSector(scope.row)"
-        ></i>
-        <i
-          v-if="collectionId !== 1"
-          class="fas fa-trash-alt"
-          @click="showDeleteTravelSector(scope.row)"
-        ></i>
+        <el-tooltip effect="dark" content="Edit" placement="top">
+          <i
+            v-if="collectionId !== 1"
+            class="fas fa-pencil-alt icon-spacer"
+            @click="showEditTravelSector(scope.row)"
+          ></i>
+        </el-tooltip>
+        <el-tooltip effect="dark" content="Delete" placement="top">
+          <i
+            v-if="collectionId !== 1"
+            class="fas fa-trash-alt"
+            @click="showDeleteTravelSector(scope.row)"
+          ></i>
+        </el-tooltip>
       </template>
     </el-table-column>
   </el-table>

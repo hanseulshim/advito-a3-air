@@ -189,34 +189,51 @@
         :sort-orders="['ascending', 'descending']"
       >
         <template slot-scope="props">
-          <i
+          <el-tooltip
             v-if="props.row.note && props.row.note.noteList.length"
-            class="fas fa-sticky-note"
-            :class="{ important: props.row.note.important }"
-            @click="toggleNoteModal(props.row)"
-          />
-          <i
-            v-else
-            class="far fa-sticky-note"
-            :class="{ important: props.row.note && props.row.note.important }"
-            @click="toggleNoteModal(props.row)"
-          />
+            effect="dark"
+            content="Show Note"
+            placement="top"
+          >
+            <i
+              class="fas fa-sticky-note"
+              :class="{ important: props.row.note.important }"
+              @click="toggleNoteModal(props.row)"
+            />
+          </el-tooltip>
+          <el-tooltip v-else effect="dark" content="Show Note" placement="top">
+            <i
+              class="far fa-sticky-note"
+              :class="{ important: props.row.note && props.row.note.important }"
+              @click="toggleNoteModal(props.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="Actions" :min-width="term.actions">
         <template slot-scope="props">
-          <i
-            class="far fa-copy icon-spacer"
-            @click="showCopyPricingTermModal(props.row)"
-          />
-          <i
-            class="fas fa-pencil-alt icon-spacer"
-            @click="showEditPricingTermModal(props.row)"
-          />
-          <i
-            class="fas fa-trash-alt"
-            @click="showDeletePricingTermModal([props.row.id])"
-          />
+          <el-tooltip effect="dark" content="Copy Pricing Term" placement="top">
+            <i
+              class="far fa-copy icon-spacer"
+              @click="showCopyPricingTermModal(props.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Edit Pricing Term" placement="top">
+            <i
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditPricingTermModal(props.row)"
+            />
+          </el-tooltip>
+          <el-tooltip
+            effect="dark"
+            content="Delete Pricing Term"
+            placement="top"
+          >
+            <i
+              class="fas fa-trash-alt"
+              @click="showDeletePricingTermModal([props.row.id])"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>

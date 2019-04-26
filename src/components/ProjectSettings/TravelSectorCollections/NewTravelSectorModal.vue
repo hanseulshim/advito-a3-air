@@ -16,7 +16,9 @@
     >
       <div class="title-row space-between">
         <div class="section-header">new travel sector</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
+        </el-tooltip>
       </div>
       <div>
         <div class="form-label-no-select">Client</div>
@@ -79,7 +81,9 @@
         >
           {{ getRegion(geography.origin) }} &lt;—&gt;
           {{ getRegion(geography.destination) }}
-          <i class="fas fa-times" @click="removeGeography(index)" />
+          <el-tooltip effect="dark" content="Delete" placement="top">
+            <i class="fas fa-times" @click="removeGeography(index)" />
+          </el-tooltip>
         </div>
       </div>
       <el-form-item class="save-container">

@@ -54,11 +54,15 @@
       </div>
     </div>
     <div class="project-column icon-container">
-      <i
-        class="fas fa-pencil-alt project-info-icon"
-        @click="editProject(project)"
-      ></i>
-      <i class="fas fa-info project-info-icon" @click="showInfoModal" />
+      <el-tooltip effect="dark" content="Edit Project" placement="top">
+        <i
+          class="fas fa-pencil-alt project-info-icon"
+          @click="editProject(project)"
+        />
+      </el-tooltip>
+      <el-tooltip effect="dark" content="Show Info" placement="top">
+        <i class="fas fa-info project-info-icon" @click="showInfoModal" />
+      </el-tooltip>
     </div>
     <EditProjectModal />
   </div>

@@ -16,7 +16,9 @@
     >
       <div class="title-row space-between">
         <div class="section-header">edit location collection</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
+        </el-tooltip>
       </div>
       <div>
         <div class="form-label-no-select">Client</div>

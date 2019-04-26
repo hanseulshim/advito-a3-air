@@ -8,7 +8,9 @@
   >
     <div class="title-row space-between">
       <div class="section-header">note</div>
-      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      </el-tooltip>
     </div>
     <el-checkbox v-model="important" class="note-vertical-space"
       >Mark as important</el-checkbox
@@ -27,11 +29,18 @@
             to {{ note.assignee.name }}</span
           >
           <div v-if="!editMode || note.id !== noteId">
-            <i
-              class="fas fa-pencil-alt icon-spacer"
-              @click="enableEditMode(note.message, note.assignee.id, note.id)"
-            />
-            <i class="fas fa-trash-alt" @click="deleteDiscountNote(note.id)" />
+            <el-tooltip effect="dark" content="Edit Note" placement="top">
+              <i
+                class="fas fa-pencil-alt icon-spacer"
+                @click="enableEditMode(note.message, note.assignee.id, note.id)"
+              />
+            </el-tooltip>
+            <el-tooltip effect="dark" content="Delete Note" placement="top">
+              <i
+                class="fas fa-trash-alt"
+                @click="deleteDiscountNote(note.id)"
+              />
+            </el-tooltip>
           </div>
         </div>
       </div>

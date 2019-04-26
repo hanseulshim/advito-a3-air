@@ -58,16 +58,20 @@
       </el-table-column>
       <el-table-column label="Actions" :min-width="collection.actions">
         <template slot-scope="scope">
-          <i
-            v-if="scope.row.id !== 1"
-            class="fas fa-pencil-alt icon-spacer"
-            @click="showEditAirlineGroupCollection(scope.row)"
-          ></i>
-          <i
-            v-if="scope.row.id !== 1"
-            class="fas fa-trash-alt icon-spacer"
-            @click="showDeleteAirlineGroupCollection(scope.row)"
-          ></i>
+          <el-tooltip effect="dark" content="Edit" placement="top">
+            <i
+              v-if="scope.row.id !== 1"
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditAirlineGroupCollection(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Delete" placement="top">
+            <i
+              v-if="scope.row.id !== 1"
+              class="fas fa-trash-alt icon-spacer"
+              @click="showDeleteAirlineGroupCollection(scope.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>

@@ -34,14 +34,18 @@
     </el-table-column>
     <el-table-column label="Actions" :width="airline.actions">
       <template slot-scope="scope">
-        <i
-          class="fas fa-pencil-alt icon-spacer"
-          @click="showEditPreferredAirline(airlineList, scope.row.id)"
-        ></i>
-        <i
-          class="fas fa-trash-alt"
-          @click="showDeletePreferredAirline(scope.row)"
-        ></i>
+        <el-tooltip effect="dark" content="Edit" placement="top">
+          <i
+            class="fas fa-pencil-alt icon-spacer"
+            @click="showEditPreferredAirline(airlineList, scope.row.id)"
+          />
+        </el-tooltip>
+        <el-tooltip effect="dark" content="Delete" placement="top">
+          <i
+            class="fas fa-trash-alt"
+            @click="showDeletePreferredAirline(scope.row)"
+          />
+        </el-tooltip>
       </template>
     </el-table-column>
   </el-table>
