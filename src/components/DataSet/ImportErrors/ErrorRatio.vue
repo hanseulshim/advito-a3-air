@@ -59,11 +59,17 @@
               :class="{ active: column.status === 'reject' }"
               @click="toggleImportError(column.id, 'reject')"
           /></el-tooltip>
-          <i
+          <el-tooltip
             v-if="column.status === 'reject'"
-            class="fas fa-trash-alt delete"
-            @click="deleteImportError(column.id)"
-          />
+            effect="dark"
+            content="Delete"
+            placement="top"
+          >
+            <i
+              class="fas fa-trash-alt delete"
+              @click="deleteImportError(column.id)"
+            />
+          </el-tooltip>
           <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table

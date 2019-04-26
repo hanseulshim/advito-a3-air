@@ -58,20 +58,26 @@
       </el-table-column>
       <el-table-column label="Actions" :min-width="collection.actions">
         <template slot-scope="scope">
-          <i
-            class="far fa-copy icon-spacer"
-            @click="showNewTravelSectorCollection(scope.row)"
-          ></i>
-          <i
-            v-if="scope.row.id !== 1"
-            class="fas fa-pencil-alt icon-spacer"
-            @click="showEditTravelSectorCollection(scope.row)"
-          ></i>
-          <i
-            v-if="scope.row.id !== 1"
-            class="fas fa-trash-alt"
-            @click="showDeleteTravelSectorCollection(scope.row)"
-          ></i>
+          <el-tooltip effect="dark" content="Copy" placement="top">
+            <i
+              class="far fa-copy icon-spacer"
+              @click="showNewTravelSectorCollection(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Edit" placement="top">
+            <i
+              v-if="scope.row.id !== 1"
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditTravelSectorCollection(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Delete" placement="top">
+            <i
+              v-if="scope.row.id !== 1"
+              class="fas fa-trash-alt"
+              @click="showDeleteTravelSectorCollection(scope.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>

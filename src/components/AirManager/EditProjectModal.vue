@@ -15,7 +15,9 @@
     >
       <div class="title-row space-between">
         <div class="section-header">edit project</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        </el-tooltip>
       </div>
       <el-form-item label="Client *">
         <el-input v-model="clientName" disabled></el-input>

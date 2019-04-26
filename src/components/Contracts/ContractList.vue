@@ -144,18 +144,21 @@
       </el-table-column>
       <el-table-column label="Actions" :min-width="contract.actions">
         <template slot-scope="props">
-          <i
-            class="far fa-copy icon-spacer"
-            @click="showCopyContractModal(props.row.id)"
-          />
-          <i
-            class="fas fa-pencil-alt icon-spacer"
-            @click="showEditContractModal(props.row)"
-          />
-          <i
-            class="fas fa-trash-alt"
-            @click="showDeleteContractModal(props.row.id)"
-          />
+          <el-tooltip effect="dark" content="Copy Contract" placement="top">
+            <i
+              class="far fa-copy icon-spacer"
+              @click="showCopyContractModal(props.row.id)"
+          /></el-tooltip>
+          <el-tooltip effect="dark" content="Edit Contract" placement="top">
+            <i
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditContractModal(props.row)"
+          /></el-tooltip>
+          <el-tooltip effect="dark" content="Delete Contract" placement="top">
+            <i
+              class="fas fa-trash-alt"
+              @click="showDeleteContractModal(props.row.id)"
+          /></el-tooltip>
         </template>
       </el-table-column>
     </el-table>

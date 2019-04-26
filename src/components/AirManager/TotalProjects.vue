@@ -59,19 +59,25 @@
         :width="project.favorite"
       >
         <template slot-scope="scope">
-          <i
-            class="far fa-star"
-            @click="toggleFavoriteProject(scope.row.id)"
-          ></i>
+          <el-tooltip effect="dark" content="Favorite Project" placement="top">
+            <i
+              class="far fa-star"
+              @click="toggleFavoriteProject(scope.row.id)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column :width="project.actions" label="Edit">
         <template slot-scope="scope">
-          <i
-            class="fas fa-pencil-alt icon-spacer"
-            @click="editProject(scope.row)"
-          ></i>
-          <i class="fas fa-trash-alt" @click="deleteProject(scope.row.id)"></i>
+          <el-tooltip effect="dark" content="Edit Project" placement="top">
+            <i
+              class="fas fa-pencil-alt icon-spacer"
+              @click="editProject(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Delete Project" placement="top">
+            <i class="fas fa-trash-alt" @click="deleteProject(scope.row.id)" />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -163,6 +169,9 @@ export default {
 @import '@/styles/global.scss';
 .all-projects-container {
   margin-top: 3em;
+}
+.fa-user {
+  cursor: default;
 }
 .project-name {
   cursor: pointer;

@@ -2,7 +2,9 @@
   <modal classes="modal-container" name="info" height="auto">
     <div class="title-row space-between">
       <div class="section-header">Info</div>
-      <i class="fas fa-times close-modal-button" @click="closeModal"></i>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="closeModal"></i>
+      </el-tooltip>
     </div>
     <div>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

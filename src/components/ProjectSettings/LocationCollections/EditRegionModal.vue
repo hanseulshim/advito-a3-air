@@ -8,7 +8,9 @@
   >
     <div class="title-row space-between">
       <div class="section-header">edit region</div>
-      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="hideModal" />
+      </el-tooltip>
     </div>
     <div style="margin-bottom: 5px">All Countries</div>
     <div class="country-list-container">

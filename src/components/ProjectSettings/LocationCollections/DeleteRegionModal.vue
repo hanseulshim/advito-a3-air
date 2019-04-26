@@ -8,7 +8,9 @@
   >
     <div class="title-row space-between">
       <div class="section-header">delete region</div>
-      <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="hideModal" />
+      </el-tooltip>
     </div>
     <div v-if="deleteRegionStatus" class="delete-modal-text">
       Are you sure you want to delete this region?

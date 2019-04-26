@@ -52,16 +52,20 @@
             </el-table-column>
             <el-table-column label="Actions" :min-width="region.actions">
               <template slot-scope="scope">
-                <i
-                  v-if="props.row.id !== 1"
-                  class="fas fa-pencil-alt icon-spacer"
-                  @click="showEditRegionModal(props.row, scope.row)"
-                />
-                <i
-                  v-if="props.row.id !== 1"
-                  class="fas fa-trash-alt"
-                  @click="showDeleteRegionModal(props.row, scope.row)"
-                ></i>
+                <el-tooltip effect="dark" content="Edit" placement="top">
+                  <i
+                    v-if="props.row.id !== 1"
+                    class="fas fa-pencil-alt icon-spacer"
+                    @click="showEditRegionModal(props.row, scope.row)"
+                  />
+                </el-tooltip>
+                <el-tooltip effect="dark" content="Delete" placement="top">
+                  <i
+                    v-if="props.row.id !== 1"
+                    class="fas fa-trash-alt"
+                    @click="showDeleteRegionModal(props.row, scope.row)"
+                  />
+                </el-tooltip>
               </template>
             </el-table-column>
           </el-table>
@@ -104,20 +108,26 @@
       </el-table-column>
       <el-table-column label="Actions" :min-width="collection.actions">
         <template slot-scope="scope">
-          <i
-            class="far fa-copy icon-spacer"
-            @click="showNewLocationCollection(scope.row)"
-          ></i>
-          <i
-            v-if="scope.row.id !== 1"
-            class="fas fa-pencil-alt icon-spacer"
-            @click="showEditLocationCollection(scope.row)"
-          ></i>
-          <i
-            v-if="scope.row.id !== 1"
-            class="fas fa-trash-alt"
-            @click="showDeleteLocationCollection(scope.row)"
-          ></i>
+          <el-tooltip effect="dark" content="Copy" placement="top">
+            <i
+              class="far fa-copy icon-spacer"
+              @click="showNewLocationCollection(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Edit" placement="top">
+            <i
+              v-if="scope.row.id !== 1"
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditLocationCollection(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Delete" placement="top">
+            <i
+              v-if="scope.row.id !== 1"
+              class="fas fa-trash-alt"
+              @click="showDeleteLocationCollection(scope.row)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
