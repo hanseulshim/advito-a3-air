@@ -48,6 +48,7 @@ export const GET_PRICING_TERM_LIST = gql`
       note {
         important
         noteList {
+          id
           author {
             id
             name
@@ -82,7 +83,22 @@ export const GET_PRICING_TERM_LIST = gql`
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            message
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
     }
   }

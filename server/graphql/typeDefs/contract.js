@@ -48,7 +48,7 @@ type Discount {
   journeyType: JourneyType
   directionType: DirectionType
   normalizationList: Int
-  note: String
+  note: Note
   isDeleted: Boolean
 }
 type DiscountType {
@@ -68,6 +68,7 @@ type Note {
   noteList: [NoteContent]
 }
 type NoteContent {
+  id: Int
   author: User
   message: String
   date: Date
@@ -145,6 +146,24 @@ extend type Mutation {
     important: Boolean!
     message: String
     assigneeId: Int!
+    noteId: Int
+  ): Note
+  deleteNote(
+    pricingTermId: Int!
+    noteId: Int!
+  ): Note
+  saveDiscountNote(
+    pricingTermId: Int!
+    discountId: Int!
+    important: Boolean!
+    message: String
+    assigneeId: Int!
+    noteId: Int
+  ): Note
+  deleteDiscountNote(
+    pricingTermId: Int!
+    discountId: Int!
+    noteId: Int!
   ): Note
 }
 `;

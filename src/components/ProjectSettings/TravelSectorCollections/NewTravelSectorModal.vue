@@ -254,7 +254,6 @@ export default {
     margin: 1em 0;
     .fa-times {
       margin-left: 10px;
-      cursor: pointer;
     }
   }
 }

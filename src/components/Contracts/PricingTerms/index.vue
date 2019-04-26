@@ -228,6 +228,7 @@
     <CopyDiscountModal @toggle-row="toggleRow" />
     <EditDiscountModal @toggle-row="toggleRow" />
     <DeleteDiscountModal @toggle-row="toggleRow" />
+    <DiscountNoteModal @toggle-row="toggleRow" />
     <NoteModal />
   </div>
 </template>
@@ -246,6 +247,7 @@ import NewDiscountModal from './Discounts/NewDiscountModal';
 import CopyDiscountModal from './Discounts/CopyDiscountModal';
 import EditDiscountModal from './Discounts/EditDiscountModal';
 import DeleteDiscountModal from './Discounts/DeleteDiscountModal';
+import DiscountNoteModal from './Discounts/DiscountNoteModal';
 import NoteModal from './NoteModal';
 import Discounts from './Discounts';
 export default {
@@ -261,7 +263,8 @@ export default {
     CopyDiscountModal,
     EditDiscountModal,
     NoteModal,
-    DeleteDiscountModal
+    DeleteDiscountModal,
+    DiscountNoteModal
   },
   apollo: {
     pricingTermList: {
@@ -376,7 +379,7 @@ export default {
       const row = this.$refs.pricingTermList.data.filter(
         term => term.id === id
       )[0];
-      this.$refs.pricingTermList.toggleRowExpansion(row);
+      this.$refs.pricingTermList.toggleRowExpansion(row, true);
     },
     async togglePricingTermQC(id) {
       try {

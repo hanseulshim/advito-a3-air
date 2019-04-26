@@ -111,15 +111,22 @@
         label="Notes"
         sortable
         :sort-orders="['ascending', 'descending']"
+        :sort-method="sortByNote"
         sort-by="note"
         :min-width="discount.note"
       >
         <template slot-scope="props">
-          <i v-if="!props.row.note" class="far fa-sticky-note" />
+          <i
+            v-if="props.row.note && props.row.note.noteList.length"
+            class="fas fa-sticky-note"
+            :class="{ important: props.row.note.important }"
+            @click="toggleNoteModal(props.row)"
+          />
           <i
             v-else
-            class="fas fa-sticky-note"
-            :class="{ important: props.row.note === 'important' }"
+            class="far fa-sticky-note"
+            :class="{ important: props.row.note && props.row.note.important }"
+            @click="toggleNoteModal(props.row)"
           />
         </template>
       </el-table-column>
@@ -236,6 +243,33 @@ export default {
         discount,
         pricingTermId: this.pricingTermId
       });
+    },
+    toggleNoteModal(discount) {
+      this.$modal.show('save-discount-note', {
+        pricingTermId: this.pricingTermId,
+        discountId: discount.id,
+        note: discount.note
+      });
+    },
+    sortByNote(a, b) {
+      if (a.note === null && b.note === null) {
+        return 0;
+      }
+      if (b.note === null && a.note !== null) {
+        return -1;
+      }
+      if (a.note === null && b.note !== null) {
+        return 1;
+      }
+      if (a.note.important && !b.note.important) {
+        return -1;
+      }
+      if (!a.note.important && b.note.important) {
+        return 1;
+      }
+      if (a.note.length > b.note.length) {
+        return -1;
+      }
     }
   }
 };

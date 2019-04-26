@@ -93,6 +93,7 @@ exports.pricingTermList = [
       important: false,
       noteList: [
         {
+          id: 1,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -107,6 +108,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 2,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -121,6 +123,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 3,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -135,6 +138,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 4,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -149,6 +153,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 5,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -702,6 +707,7 @@ exports.pricingTermList = [
       important: true,
       noteList: [
         {
+          id: 6,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -829,7 +835,26 @@ exports.pricingTermList = [
           name: 'Bidirectional'
         },
         normalizationList: 5,
-        note: null,
+        note: {
+          important: true,
+          noteList: [
+            {
+              id: 7,
+              author: {
+                id: 3,
+                name: 'Scott Cashon',
+                email: 'scott.cashon@boostlabs.com'
+              },
+              date: new Date('08-03-2018'),
+              message: 'This is a message that is assigned to Kevin',
+              assignee: {
+                id: 2,
+                name: 'Kevin Ingalls',
+                email: 'kevin.ingalls@boostlabs.com'
+              }
+            }
+          ]
+        },
         isDeleted: false
       },
       {

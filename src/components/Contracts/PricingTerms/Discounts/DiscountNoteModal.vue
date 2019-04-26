@@ -1,7 +1,7 @@
 <template>
   <modal
     classes="modal-container"
-    name="save-note"
+    name="save-discount-note"
     height="auto"
     @before-close="beforeClose"
     @before-open="beforeOpen"
@@ -31,7 +31,7 @@
               class="fas fa-pencil-alt icon-spacer"
               @click="enableEditMode(note.message, note.assignee.id, note.id)"
             />
-            <i class="fas fa-trash-alt" @click="deleteNote(note.id)" />
+            <i class="fas fa-trash-alt" @click="deleteDiscountNote(note.id)" />
           </div>
         </div>
       </div>
@@ -56,11 +56,11 @@
     </div>
     <div v-if="editMode" class="note-button-container">
       <button class="button" @click="disableEditMode">CANCEL</button>
-      <button class="button" @click="saveNote">UPDATE NOTE</button>
+      <button class="button" @click="saveDiscountNote">UPDATE NOTE</button>
     </div>
     <div v-else class="note-button-container">
       <button class="button">DELETE ALL</button>
-      <button class="button" @click="saveNote">SAVE</button>
+      <button class="button" @click="saveDiscountNote">SAVE</button>
     </div>
   </modal>
 </template>
@@ -71,7 +71,7 @@ import {
   GET_USER_LIST,
   GET_PRICING_TERM_LIST
 } from '@/graphql/queries';
-import { SAVE_NOTE, DELETE_NOTE } from '@/graphql/mutations';
+import { SAVE_DISCOUNT_NOTE, DELETE_DISCOUNT_NOTE } from '@/graphql/mutations';
 import { formatDate } from '@/helper';
 export default {
   name: 'NoteModal',
@@ -90,6 +90,7 @@ export default {
   data() {
     return {
       pricingTermId: null,
+      discountId: null,
       important: false,
       noteList: [],
       noteId: null,
@@ -117,37 +118,42 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('save-note');
+      this.$modal.hide('save-discount-note');
     },
-    async saveNote() {
+    async saveDiscountNote() {
       try {
         await this.$apollo.mutate({
-          mutation: SAVE_NOTE,
+          mutation: SAVE_DISCOUNT_NOTE,
           variables: {
             pricingTermId: this.pricingTermId,
+            discountId: this.discountId,
             important: this.important,
             message: this.message,
             assigneeId: this.assigneeId,
             noteId: this.noteId
           },
           update: (store, data) => {
-            const note = data.data.saveNote;
+            const note = data.data.saveDiscountNote;
             const newData = store.readQuery({
               query: GET_PRICING_TERM_LIST
             });
-            const index = newData.pricingTermList.findIndex(
+            const pricingTerm = newData.pricingTermList.filter(
               term => term.id === this.pricingTermId
+            )[0];
+            const index = pricingTerm.discountList.findIndex(
+              discount => discount.id === this.discountId
             );
-            newData.pricingTermList[index].note = note;
+            pricingTerm.discountList[index].note = note;
             store.writeQuery({
               query: GET_PRICING_TERM_LIST,
               data: newData
             });
           }
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Note saved.',
-          name: 'save-note'
+          name: 'save-discount-note'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -155,32 +161,37 @@ export default {
         });
       }
     },
-    async deleteNote(noteId) {
+    async deleteDiscountNote(noteId) {
       try {
         await this.$apollo.mutate({
-          mutation: DELETE_NOTE,
+          mutation: DELETE_DISCOUNT_NOTE,
           variables: {
             pricingTermId: this.pricingTermId,
+            discountId: this.discountId,
             noteId
           },
           update: (store, data) => {
-            const note = data.data.deleteNote;
+            const note = data.data.deleteDiscountNote;
             const newData = store.readQuery({
               query: GET_PRICING_TERM_LIST
             });
-            const index = newData.pricingTermList.findIndex(
+            const pricingTerm = newData.pricingTermList.filter(
               term => term.id === this.pricingTermId
+            )[0];
+            const index = pricingTerm.discountList.findIndex(
+              discount => discount.id === this.discountId
             );
-            newData.pricingTermList[index].note = note;
+            pricingTerm.discountList[index].note = note;
             store.writeQuery({
               query: GET_PRICING_TERM_LIST,
               data: newData
             });
           }
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Note deleted.',
-          name: 'save-note'
+          name: 'save-discount-note'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -194,6 +205,7 @@ export default {
     beforeOpen(event) {
       const note = event.params.note;
       this.pricingTermId = event.params.pricingTermId;
+      this.discountId = event.params.discountId;
       this.important = note ? note.important : false;
       this.noteList = note ? note.noteList : [];
       this.assigneeId = this.user.id;
@@ -220,45 +232,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import '@/styles/global.scss';
-.note-vertical-space {
-  margin-top: 1em;
-}
-.note-message-container {
-  max-height: 300px;
-  overflow: auto;
-  margin-top: 1em;
-  .edit-note {
-    border: 1px solid $tree-poppy;
-  }
-  .note-message-content {
-    background: $ebb;
-    padding: 1em;
-    margin: 0.5em 0;
-    .note-message-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 1.5em;
-    }
-  }
-}
-.note-assign-container {
-  display: flex;
-  align-items: center;
-  margin-top: 1em;
-  .note-assign-text {
-    width: 150px;
-  }
-}
-.note-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2em;
-  .button {
-    margin: 0 5px;
-  }
-}
-</style>

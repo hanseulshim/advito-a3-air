@@ -148,6 +148,7 @@ export const CREATE_PRICING_TERM = gql`
       note {
         important
         noteList {
+          id
           author {
             id
             name
@@ -203,6 +204,7 @@ export const COPY_PRICING_TERM = gql`
       note {
         important
         noteList {
+          id
           author {
             id
             name
@@ -258,6 +260,7 @@ export const EDIT_PRICING_TERM = gql`
       note {
         important
         noteList {
+          id
           author {
             id
             name
@@ -313,6 +316,7 @@ export const TOGGLE_PRICING_TERM_QC = gql`
       note {
         important
         noteList {
+          id
           author {
             id
             name
@@ -477,15 +481,103 @@ export const SAVE_NOTE = gql`
     $important: Boolean!
     $message: String
     $assigneeId: Int!
+    $noteId: Int
   ) {
     saveNote(
       pricingTermId: $pricingTermId
       important: $important
       message: $message
       assigneeId: $assigneeId
+      noteId: $noteId
     ) {
       important
       noteList {
+        id
+        author {
+          id
+          name
+        }
+        date
+        assignee {
+          id
+          name
+        }
+        message
+      }
+    }
+  }
+`;
+
+export const DELETE_NOTE = gql`
+  mutation deleteNote($pricingTermId: Int!, $noteId: Int!) {
+    deleteNote(pricingTermId: $pricingTermId, noteId: $noteId) {
+      important
+      noteList {
+        id
+        author {
+          id
+          name
+        }
+        date
+        assignee {
+          id
+          name
+        }
+        message
+      }
+    }
+  }
+`;
+
+export const SAVE_DISCOUNT_NOTE = gql`
+  mutation saveDiscountNote(
+    $pricingTermId: Int!
+    $discountId: Int!
+    $important: Boolean!
+    $message: String
+    $assigneeId: Int!
+    $noteId: Int
+  ) {
+    saveDiscountNote(
+      pricingTermId: $pricingTermId
+      discountId: $discountId
+      important: $important
+      message: $message
+      assigneeId: $assigneeId
+      noteId: $noteId
+    ) {
+      important
+      noteList {
+        id
+        author {
+          id
+          name
+        }
+        date
+        assignee {
+          id
+          name
+        }
+        message
+      }
+    }
+  }
+`;
+
+export const DELETE_DISCOUNT_NOTE = gql`
+  mutation deleteDiscountNote(
+    $pricingTermId: Int!
+    $discountId: Int!
+    $noteId: Int!
+  ) {
+    deleteDiscountNote(
+      pricingTermId: $pricingTermId
+      discountId: $discountId
+      noteId: $noteId
+    ) {
+      important
+      noteList {
+        id
         author {
           id
           name

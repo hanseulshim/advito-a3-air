@@ -150,9 +150,6 @@ export default {
   color: $tree-poppy;
   margin-bottom: 1em;
 }
-.fas {
-  cursor: pointer;
-}
 .value-row {
   display: flex;
   justify-content: space-between;
