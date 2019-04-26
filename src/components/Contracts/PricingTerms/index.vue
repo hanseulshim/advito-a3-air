@@ -195,18 +195,30 @@
             content="Show Note"
             placement="top"
           >
-            <i
-              class="fas fa-sticky-note"
-              :class="{ important: props.row.note.important }"
-              @click="toggleNoteModal(props.row)"
-            />
+            <div class="note-count-container">
+              <i
+                class="fas fa-sticky-note"
+                :class="{ important: props.row.note.important }"
+                @click="toggleNoteModal(props.row)"
+              />
+              <span class="note-count sub-content empty">{{
+                getNoteLength(props.row.discountList)
+              }}</span>
+            </div>
           </el-tooltip>
           <el-tooltip v-else effect="dark" content="Show Note" placement="top">
-            <i
-              class="far fa-sticky-note"
-              :class="{ important: props.row.note && props.row.note.important }"
-              @click="toggleNoteModal(props.row)"
-            />
+            <div class="note-count-container">
+              <i
+                class="far fa-sticky-note"
+                :class="{
+                  important: props.row.note && props.row.note.important
+                }"
+                @click="toggleNoteModal(props.row)"
+              />
+              <span class="note-count sub-content">{{
+                getNoteLength(props.row.discountList)
+              }}</span>
+            </div>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -431,6 +443,12 @@ export default {
       if (a.note.length > b.note.length) {
         return -1;
       }
+    },
+    getNoteLength(discountList) {
+      const length = discountList.filter(
+        discount => discount.note && discount.note.noteList.length
+      ).length;
+      return length ? length : null;
     }
   }
 };
@@ -461,6 +479,18 @@ export default {
   .invalid {
     .el-checkbox__inner {
       border-color: $monza;
+    }
+  }
+}
+.note-count-container {
+  position: relative;
+  .note-count {
+    position: absolute;
+    color: $dove-gray;
+    left: 4px;
+    top: 2px;
+    &.empty {
+      color: white;
     }
   }
 }
