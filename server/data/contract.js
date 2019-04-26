@@ -93,6 +93,7 @@ exports.pricingTermList = [
       important: false,
       noteList: [
         {
+          id: 1,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -107,6 +108,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 2,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -121,6 +123,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 3,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -135,6 +138,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 4,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -149,6 +153,7 @@ exports.pricingTermList = [
           }
         },
         {
+          id: 5,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -702,6 +707,7 @@ exports.pricingTermList = [
       important: true,
       noteList: [
         {
+          id: 6,
           author: {
             id: 3,
             name: 'Scott Cashon',
@@ -833,6 +839,7 @@ exports.pricingTermList = [
           important: true,
           noteList: [
             {
+              id: 7,
               author: {
                 id: 3,
                 name: 'Scott Cashon',

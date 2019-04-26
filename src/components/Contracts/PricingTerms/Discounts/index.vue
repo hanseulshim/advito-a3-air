@@ -147,19 +147,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <DiscountNoteModal />
   </div>
 </template>
 
 <script>
 import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
-import DiscountNoteModal from './DiscountNoteModal';
 export default {
   name: 'Discounts',
-  components: {
-    DiscountNoteModal
-  },
   props: {
     discountList: {
       type: Array,

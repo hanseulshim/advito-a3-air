@@ -374,7 +374,7 @@ exports.contract = {
     },
     saveNote: (
       _,
-      { pricingTermId, important, message, assigneeId },
+      { pricingTermId, important, message, assigneeId, noteId },
       { user }
     ) => {
       const pricingTerm = pricingTermList.filter(
@@ -393,20 +393,41 @@ exports.contract = {
           : pricingTerm.note;
       note.important = important;
       if (message) {
-        const content = {
-          author: user,
-          date: new Date(),
-          assignee,
-          message
-        };
-        note.noteList.push(content);
+        if (noteId) {
+          const noteContent = note.noteList.filter(n => n.id === noteId)[0];
+          noteContent.message = message;
+          noteContent.date = new Date();
+          noteContent.assignee = assignee;
+        } else {
+          const content = {
+            id: new Date().getUTCMilliseconds(),
+            author: user,
+            date: new Date(),
+            assignee,
+            message
+          };
+          note.noteList.push(content);
+        }
       }
       pricingTerm.note = note;
       return note;
     },
+    deleteNote: (_, { pricingTermId, noteId }) => {
+      const pricingTerm = pricingTermList.filter(
+        term => term.id === pricingTermId
+      )[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const noteIndex = pricingTerm.note.noteList.findIndex(
+        n => n.id === noteId
+      );
+      pricingTerm.note.noteList.splice(noteIndex, 1);
+      return pricingTerm.note;
+    },
     saveDiscountNote: (
       _,
-      { pricingTermId, discountId, important, message, assigneeId },
+      { pricingTermId, discountId, important, message, assigneeId, noteId },
       { user }
     ) => {
       const pricingTerm = pricingTermList.filter(
@@ -431,16 +452,41 @@ exports.contract = {
           : discount.note;
       note.important = important;
       if (message) {
-        const content = {
-          author: user,
-          date: new Date(),
-          assignee,
-          message
-        };
-        note.noteList.push(content);
+        if (noteId) {
+          const noteContent = note.noteList.filter(n => n.id === noteId)[0];
+          noteContent.message = message;
+          noteContent.date = new Date();
+          noteContent.assignee = assignee;
+        } else {
+          const content = {
+            id: new Date().getUTCMilliseconds(),
+            author: user,
+            date: new Date(),
+            assignee,
+            message
+          };
+          note.noteList.push(content);
+        }
       }
       discount.note = note;
       return note;
+    },
+    deleteDiscountNote: (_, { pricingTermId, discountId, noteId }) => {
+      const pricingTerm = pricingTermList.filter(
+        term => term.id === pricingTermId
+      )[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      const discount = pricingTerm.discountList.filter(
+        discount => discount.id === discountId
+      )[0];
+      if (!discount) {
+        throw new ApolloError('Discount not found', 400);
+      }
+      const noteIndex = discount.note.noteList.findIndex(n => n.id === noteId);
+      discount.note.noteList.splice(noteIndex, 1);
+      return discount.note;
     }
   }
 };

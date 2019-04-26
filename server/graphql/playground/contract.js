@@ -46,6 +46,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -83,6 +84,7 @@ exports.contract = {
           note {
             important
             noteList {
+              id
               author {
                 id
                 name
@@ -190,6 +192,7 @@ exports.contract = {
           note {
             important
             noteList {
+              id
               author {
                 id
                 name
@@ -208,6 +211,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -253,6 +257,7 @@ exports.contract = {
           note {
             important
             noteList {
+              id
               author {
                 id
                 name
@@ -271,6 +276,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -316,6 +322,7 @@ exports.contract = {
           note {
             important
             noteList {
+              id
               author {
                 id
                 name
@@ -334,6 +341,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -379,6 +387,7 @@ exports.contract = {
           note {
             important
             noteList {
+              id
               author {
                 id
                 name
@@ -397,6 +406,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -436,6 +446,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -472,6 +483,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -508,6 +520,7 @@ exports.contract = {
         note {
           important
           noteList {
+            id
             author {
               id
               name
@@ -525,6 +538,23 @@ exports.contract = {
       saveNote(pricingTermId: 1, important: true, message: "this is my first note", assigneeId: 2) {
         important
         noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }
+      }
+      deleteNote(pricingTermId: 1, noteId: 1) {
+        important
+        noteList {
+          id
           author {
             id
             name
@@ -540,6 +570,23 @@ exports.contract = {
       saveDiscountNote(pricingTermId: 1, discountId: 1, important: true, message: "this is my first note", assigneeId: 2) {
         important
         noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }
+      }
+      deleteDiscountNote(pricingTermId: 8, discountId: 22, noteId: 7) {
+        important
+        noteList {
+          id
           author {
             id
             name

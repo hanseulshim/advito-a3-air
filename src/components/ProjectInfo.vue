@@ -1,5 +1,5 @@
 <template>
-  <div class="project-info-container">
+  <div class="project-info-container sub-content">
     <div class="project-name">{{ project.name }}</div>
     <div class="project-column">
       <div class="project-line">
@@ -105,9 +105,7 @@ export default {
   grid-template-columns: auto 23% 23% 23% 75px;
   column-gap: 1em;
   margin-bottom: 3em;
-  font-size: 13px;
   color: $dove-gray;
-  line-height: 17px;
 }
 .project-name {
   grid-area: projectName;
