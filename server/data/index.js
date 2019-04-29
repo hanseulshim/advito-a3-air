@@ -12,7 +12,12 @@ const {
   travelSectorRegionList
 } = require('./collection');
 const { airportList, bookingClassList } = require('./library');
-const { dataSet } = require('./dataSet');
+const {
+  dataSet,
+  dataSetCountryList,
+  dataSetDivisionList,
+  dataSetColumnList
+} = require('./dataSet');
 const {
   contractList,
   contractTypeList,
@@ -30,6 +35,9 @@ module.exports = {
   airportList,
   bookingClassList,
   dataSet,
+  dataSetCountryList,
+  dataSetDivisionList,
+  dataSetColumnList,
   airlineGroupAirlineList,
   airlineGroupCollectionList,
   locationCollectionList,
