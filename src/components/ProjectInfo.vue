@@ -60,7 +60,7 @@
           @click="editProject(project)"
         />
       </el-tooltip>
-      <el-tooltip effect="dark" content="Show Info" placement="top">
+      <el-tooltip effect="dark" :content="path" placement="top">
         <i class="fas fa-info project-info-icon" @click="showInfoModal" />
       </el-tooltip>
     </div>
@@ -86,6 +86,21 @@ export default {
     return {
       project: null
     };
+  },
+  computed: {
+    path: function() {
+      const path = this.$route.path;
+      if (path.includes('program-settings')) {
+        return 'Show Settings Info';
+      } else if (path.includes('data')) {
+        return 'Show Data Info';
+      } else if (path.includes('pricing-terms')) {
+        return 'Show Pricing Terms Info';
+      } else if (path.includes('contracts')) {
+        return 'Show Contracts Info';
+      }
+      return 'Settings';
+    }
   },
   methods: {
     formatDate(date) {
