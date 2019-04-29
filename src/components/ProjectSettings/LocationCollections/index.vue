@@ -5,20 +5,28 @@
         {{ pluralize('location collection', locationCollectionList.length) }}
       </div>
       <div class="library-icon-container">
-        <div class="library-icon">
-          <img
-            alt="import-errors"
-            src="@/assets/airportListing.png"
-            @click="toggleAirportListing"
-          />
-        </div>
-        <div class="library-icon">
-          <img
-            alt="import-errors"
-            src="@/assets/bookingClassMappings.png"
-            @click="toggleBookingClass"
-          />
-        </div>
+        <el-tooltip effect="dark" content="Airport Listing" placement="top">
+          <div class="library-icon">
+            <img
+              alt="import-errors"
+              src="@/assets/airportListing.png"
+              @click="toggleAirportListing"
+            />
+          </div>
+        </el-tooltip>
+        <el-tooltip
+          effect="dark"
+          content="Booking Class Mapping"
+          placement="top"
+        >
+          <div class="library-icon">
+            <img
+              alt="import-errors"
+              src="@/assets/bookingClassMappings.png"
+              @click="toggleBookingClass"
+            />
+          </div>
+        </el-tooltip>
       </div>
     </div>
     <el-table ref="locationCollection" :data="locationCollectionList">

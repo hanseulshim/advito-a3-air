@@ -484,11 +484,12 @@ export default {
 }
 .note-count-container {
   position: relative;
+  display: inline;
   .note-count {
     position: absolute;
     color: $dove-gray;
     left: 4px;
-    top: 2px;
+    top: -2px;
     &.empty {
       color: white;
     }
