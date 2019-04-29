@@ -2,7 +2,7 @@
   <div class="import-errors">
     <i class="fas fa-chevron-up"></i>
     <router-link
-      class="nav-item"
+      class="nav-item data-nav-item"
       to="/project/data/import-errors/imported-tickets"
       :class="{
         active: $route.path === '/project/data/import-errors/imported-tickets'
@@ -11,7 +11,7 @@
     >
     <span class="spacer">|</span>
     <router-link
-      class="nav-item"
+      class="nav-item data-nav-item"
       to="/project/data/import-errors/error-tickets"
       :class="{
         active: $route.path === '/project/data/import-errors/error-tickets'
@@ -20,7 +20,7 @@
     >
     <span class="spacer">|</span>
     <router-link
-      class="nav-item"
+      class="nav-item data-nav-item"
       to="/project/data/import-errors/error-ratio"
       :class="{
         active: $route.path === '/project/data/import-errors/error-ratio'

@@ -16,19 +16,14 @@ type DataSetDivision {
   segmentsTotal: Int
   farePaidTotal: Int
 }
-type TrendCategory {
-  id: Int
-  name: String
-  ticketsTotal: Int
-  segmentsTotal: Int
-  farePaidTotal: Int
-}
-type PosTrendColumn {
+type DataSetColumn {
   id: Int
   name: String
   dateUpdated: Date
   status: String
-  data: [PosTrend]
+  posTrendList: [PosTrend]
+  divisionTrendList: [DivisionTrend]
+  importErrorsList: [ImportError]
 }
 type PosTrend {
   id: Int
@@ -38,13 +33,6 @@ type PosTrend {
   segments: Int
   farePaid: Int
 }
-type DivisionTrendColumn {
-  id: Int
-  name: String
-  dateUpdated: Date
-  status: String
-  data: [DivisionTrend]
-}
 type DivisionTrend {
   id: Int
   divisionId: Int
@@ -52,20 +40,6 @@ type DivisionTrend {
   tickets: Int
   segments: Int
   farePaid: Int
-}
-type ImportErrorCategory {
-  id: Int
-  name: String
-  importedTicketsTotal: Int
-  errorTicketsTotal: Int
-  errorRatioTotal: Int
-}
-type ImportErrorColumn {
-  id: Int
-  name: String
-  dateUpdated: Date
-  status: String
-  data: [ImportError]
 }
 type ImportError {
   id: Int
@@ -76,19 +50,12 @@ type ImportError {
   errorRatio: Int
 }
 extend type Query {
-  posTrendsCountryList: [TrendCategory] @auth
-  posTrendsColumnList: [PosTrendColumn] @auth
-  divisionTrendsList: [TrendCategory] @auth
-  divisionTrendsColumnList: [DivisionTrendColumn] @auth
-  importErrorsCountryList: [ImportErrorCategory] @auth
-  importErrorsColumnList: [ImportErrorColumn] @auth
+  dataSetCountryList: [DataSetCountry] @auth
+  dataSetDivisionList: [DataSetDivision] @auth
+  dataSetColumnList: [DataSetColumn] @auth
 }
 extend type Mutation {
-  togglePosTrend(id: Int!, status: String): PosTrendColumn @auth
-  toggleDivisionTrend(id: Int!, status: String): DivisionTrendColumn @auth
-  toggleImportError(id: Int!, status: String): ImportErrorColumn @auth
-  deletePosTrend(id: Int!): Int @auth
-  deleteDivisionTrend(id: Int!): Int @auth
-  deleteImportError(id: Int!): Int @auth
+  toggleDataSet(id: Int!, status: String): DataSetColumn @auth
+  deleteDataSet(id: Int!): Int @auth
 }
 `;

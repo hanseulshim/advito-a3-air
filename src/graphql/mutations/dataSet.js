@@ -1,13 +1,13 @@
 import gql from 'graphql-tag';
 
-export const TOGGLE_POS_TREND = gql`
-  mutation togglePosTrend($id: Int!, $status: String) {
-    togglePosTrend(id: $id, status: $status) {
+export const TOGGLE_DATA_SET = gql`
+  mutation toggleDataSet($id: Int!, $status: String) {
+    toggleDataSet(id: $id, status: $status) {
       id
       name
       dateUpdated
       status
-      data {
+      posTrendList {
         id
         countryId
         name
@@ -15,24 +15,7 @@ export const TOGGLE_POS_TREND = gql`
         segments
         farePaid
       }
-    }
-  }
-`;
-
-export const DELETE_POS_TREND = gql`
-  mutation deletePosTrend($id: Int!) {
-    deletePosTrend(id: $id)
-  }
-`;
-
-export const TOGGLE_DIVISION_TREND = gql`
-  mutation toggleDivisionTrend($id: Int!, $status: String) {
-    toggleDivisionTrend(id: $id, status: $status) {
-      id
-      name
-      dateUpdated
-      status
-      data {
+      divisionTrendList {
         id
         divisionId
         name
@@ -40,24 +23,7 @@ export const TOGGLE_DIVISION_TREND = gql`
         segments
         farePaid
       }
-    }
-  }
-`;
-
-export const DELETE_DIVISION_TREND = gql`
-  mutation deleteDivisionTrend($id: Int!) {
-    deleteDivisionTrend(id: $id)
-  }
-`;
-
-export const TOGGLE_IMPORT_ERROR = gql`
-  mutation toggleImportError($id: Int!, $status: String) {
-    toggleImportError(id: $id, status: $status) {
-      id
-      name
-      dateUpdated
-      status
-      data {
+      importErrorsList {
         id
         countryId
         name
@@ -69,8 +35,8 @@ export const TOGGLE_IMPORT_ERROR = gql`
   }
 `;
 
-export const DELETE_IMPORT_ERROR = gql`
-  mutation deleteImportError($id: Int!) {
-    deleteImportError(id: $id)
+export const DELETE_DATA_SET = gql`
+  mutation deleteDataSet($id: Int!) {
+    deleteDataSet(id: $id)
   }
 `;

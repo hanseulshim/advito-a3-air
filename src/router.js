@@ -5,15 +5,9 @@ import Project from './views/Project';
 import ProjectSettings from '@/components/ProjectSettings';
 
 import DataSet from '@/components/DataSet';
-import PosTickets from '@/components/DataSet/PosTrends/Tickets';
-import PosSegments from '@/components/DataSet/PosTrends/Segments';
-import PosFarePaid from '@/components/DataSet/PosTrends/FarePaid';
-import DivisionTickets from '@/components/DataSet/DivisionTrends/Tickets';
-import DivisionSegments from '@/components/DataSet/DivisionTrends/Segments';
-import DivisionFarePaid from '@/components/DataSet/DivisionTrends/FarePaid';
-import ImportedTickets from '@/components/DataSet/ImportErrors/ImportedTickets';
-import ErrorTickets from '@/components/DataSet/ImportErrors/ErrorTickets';
-import ErrorRatio from '@/components/DataSet/ImportErrors/ErrorRatio';
+import PosTrends from '@/components/DataSet/PosTrends';
+import DivisionTrends from '@/components/DataSet/DivisionTrends';
+import ImportErrors from '@/components/DataSet/ImportErrors';
 
 import Contracts from '@/components/Contracts';
 import ContractList from '@/components/Contracts/ContractList';
@@ -61,40 +55,16 @@ export default new Router({
           component: DataSet,
           children: [
             {
-              path: 'pos-trends/tickets',
-              component: PosTickets
+              path: 'import-errors/:path',
+              component: ImportErrors
             },
             {
-              path: 'pos-trends/segments',
-              component: PosSegments
+              path: 'division-trends/:path',
+              component: DivisionTrends
             },
             {
-              path: 'pos-trends/fare-paid',
-              component: PosFarePaid
-            },
-            {
-              path: 'division-trends/tickets',
-              component: DivisionTickets
-            },
-            {
-              path: 'division-trends/segments',
-              component: DivisionSegments
-            },
-            {
-              path: 'division-trends/fare-paid',
-              component: DivisionFarePaid
-            },
-            {
-              path: 'import-errors/imported-tickets',
-              component: ImportedTickets
-            },
-            {
-              path: 'import-errors/error-tickets',
-              component: ErrorTickets
-            },
-            {
-              path: 'import-errors/error-ratio',
-              component: ErrorRatio
+              path: 'pos-trends/:path',
+              component: PosTrends
             }
           ]
         }

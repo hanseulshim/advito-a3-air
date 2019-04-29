@@ -11,65 +11,46 @@
 
 <script>
 import Navigation from './Navigation';
-import {
-  GET_POS_TRENDS_COLUMN_LIST,
-  GET_DIVISION_TRENDS_COLUMN_LIST,
-  GET_IMPORT_ERRORS_COLUMN_LIST
-} from '@/graphql/queries';
+import { GET_DATA_SET_COLUMN_LIST } from '@/graphql/queries';
 export default {
   name: 'DataSet',
   components: {
     Navigation
   },
   apollo: {
-    posTrendsColumnList: {
-      query: GET_POS_TRENDS_COLUMN_LIST
-    },
-    divisionTrendsColumnList: {
-      query: GET_DIVISION_TRENDS_COLUMN_LIST
-    },
-    importErrorsColumnList: {
-      query: GET_IMPORT_ERRORS_COLUMN_LIST
+    dataSetColumnList: {
+      query: GET_DATA_SET_COLUMN_LIST
     }
   },
   data() {
     return {
-      posTrendsColumnList: [],
-      divisionTrendsColumnList: [],
-      importErrorsColumnList: [],
+      dataSetColumnList: [],
       selectedFilter: 'all'
     };
   },
   computed: {
-    dataSetList() {
-      if (this.$route.path.includes('pos-trends')) {
-        return this.posTrendsColumnList.slice();
-      } else if (this.$route.path.includes('division-trends')) {
-        return this.divisionTrendsColumnList.slice();
-      } else if (this.$route.path.includes('import-errors')) {
-        return this.importErrorsColumnList.slice();
-      }
-      return [];
-    },
     filteredDataSetList() {
       if (this.selectedFilter === 'all') {
-        return this.dataSetList;
+        return this.dataSetColumnList;
       } else if (this.selectedFilter === 'need') {
-        return this.dataSetList.filter(set => set.status === null);
+        return this.dataSetColumnList.filter(set => set.status === null);
       } else if (this.selectedFilter === 'accept') {
-        return this.dataSetList.filter(set => set.status === 'accept');
+        return this.dataSetColumnList.filter(set => set.status === 'accept');
       } else if (this.selectedFilter === 'reject') {
-        return this.dataSetList.filter(set => set.status === 'reject');
+        return this.dataSetColumnList.filter(set => set.status === 'reject');
       }
       return [];
     },
     filterSelectList() {
-      const all = this.dataSetList.length;
-      const need = this.dataSetList.filter(set => set.status === null).length;
-      const accepted = this.dataSetList.filter(set => set.status === 'accept')
+      const all = this.dataSetColumnList.length;
+      const need = this.dataSetColumnList.filter(set => set.status === null)
         .length;
-      const rejected = this.dataSetList.filter(set => set.status === 'reject')
-        .length;
+      const accepted = this.dataSetColumnList.filter(
+        set => set.status === 'accept'
+      ).length;
+      const rejected = this.dataSetColumnList.filter(
+        set => set.status === 'reject'
+      ).length;
       return [
         {
           value: 'all',
