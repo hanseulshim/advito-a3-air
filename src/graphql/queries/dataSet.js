@@ -1,72 +1,13 @@
 import gql from 'graphql-tag';
 
-export const GET_POS_TRENDS_COUNTRY_LIST = gql`
+export const GET_DATA_SET_COUNTRY_LIST = gql`
   {
-    posTrendsCountryList {
+    dataSetCountryList {
       id
       name
       ticketsTotal
       segmentsTotal
       farePaidTotal
-    }
-  }
-`;
-
-export const GET_POS_TRENDS_COLUMN_LIST = gql`
-  {
-    posTrendsColumnList {
-      id
-      name
-      dateUpdated
-      status
-      data {
-        id
-        countryId
-        name
-        tickets
-        segments
-        farePaid
-      }
-    }
-  }
-`;
-
-export const GET_DIVISION_TRENDS_LIST = gql`
-  {
-    divisionTrendsList {
-      id
-      name
-      ticketsTotal
-      segmentsTotal
-      farePaidTotal
-    }
-  }
-`;
-
-export const GET_DIVISION_TRENDS_COLUMN_LIST = gql`
-  {
-    divisionTrendsColumnList {
-      id
-      name
-      dateUpdated
-      status
-      data {
-        id
-        divisionId
-        name
-        tickets
-        segments
-        farePaid
-      }
-    }
-  }
-`;
-
-export const GET_IMPORT_ERRORS_COUNTRY_LIST = gql`
-  {
-    importErrorsCountryList {
-      id
-      name
       importedTicketsTotal
       errorTicketsTotal
       errorRatioTotal
@@ -74,14 +15,42 @@ export const GET_IMPORT_ERRORS_COUNTRY_LIST = gql`
   }
 `;
 
-export const GET_IMPORT_ERRORS_COLUMN_LIST = gql`
+export const GET_DATA_SET_DIVISION_LIST = gql`
   {
-    importErrorsColumnList {
+    dataSetDivisionList {
+      id
+      name
+      ticketsTotal
+      segmentsTotal
+      farePaidTotal
+    }
+  }
+`;
+
+export const GET_DATA_SET_COLUMN_LIST = gql`
+  {
+    dataSetColumnList {
       id
       name
       dateUpdated
       status
-      data {
+      posTrendList {
+        id
+        countryId
+        name
+        tickets
+        segments
+        farePaid
+      }
+      divisionTrendList {
+        id
+        divisionId
+        name
+        tickets
+        segments
+        farePaid
+      }
+      importErrorsList {
         id
         countryId
         name

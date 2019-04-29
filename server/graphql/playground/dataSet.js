@@ -5,19 +5,29 @@ exports.dataSet = {
     headers: { sessiontoken: 'advitoValidToken' },
     query: `
     {
-      posTrendsCountryList {
+      dataSetCountryList {
+        id
+        name
+        ticketsTotal
+        segmentsTotal
+        farePaidTotal
+        importedTicketsTotal
+        errorTicketsTotal
+        errorRatioTotal
+      }
+      dataSetDivisionList {
         id
         name
         ticketsTotal
         segmentsTotal
         farePaidTotal
       }
-      posTrendsColumnList {
+      dataSetColumnList {
         id
         name
         dateUpdated
         status
-        data {
+        posTrendList {
           id
           countryId
           name
@@ -25,20 +35,7 @@ exports.dataSet = {
           segments
           farePaid
         }
-      }
-      divisionTrendsList {
-        id
-        name
-        ticketsTotal
-        segmentsTotal
-        farePaidTotal
-      }
-      divisionTrendsColumnList {
-        id
-        name
-        dateUpdated
-        status
-        data {
+        divisionTrendList {
           id
           divisionId
           name
@@ -46,20 +43,7 @@ exports.dataSet = {
           segments
           farePaid
         }
-      }
-      importErrorsCountryList {
-        id
-        name
-        importedTicketsTotal
-        errorTicketsTotal
-        errorRatioTotal
-      }
-      importErrorsColumnList {
-        id
-        name
-        dateUpdated
-        status
-        data {
+        importErrorsList {
           id
           countryId
           name
@@ -76,12 +60,12 @@ exports.dataSet = {
     headers: { sessiontoken: 'advitoValidToken' },
     query: `
     mutation {
-      togglePosTrend(id: 1) {
+      toggleDataSet(id: 1) {
         id
         name
         dateUpdated
         status
-        data {
+        posTrendList {
           id
           countryId
           name
@@ -89,13 +73,7 @@ exports.dataSet = {
           segments
           farePaid
         }
-      }
-      toggleDivisionTrend(id: 1) {
-        id
-        name
-        dateUpdated
-        status
-        data {
+        divisionTrendList {
           id
           divisionId
           name
@@ -103,13 +81,7 @@ exports.dataSet = {
           segments
           farePaid
         }
-      }
-      toggleImportError(id: 1) {
-        id
-        name
-        dateUpdated
-        status
-        data {
+        importErrorsList {
           id
           countryId
           name
@@ -118,9 +90,7 @@ exports.dataSet = {
           errorRatio
         }
       }
-      deletePosTrend(id: 1)
-      deleteDivisionTrend(id: 1)
-      deleteImportError(id: 1)
+      deleteDataSet(id: 1)
     }
     `
   }
