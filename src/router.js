@@ -14,6 +14,8 @@ import ContractList from '@/components/Contracts/ContractList';
 import PricingTerms from '@/components/Contracts/PricingTerms';
 import TargetTerms from '@/components/Contracts/TargetTerms';
 
+import Process from '@/components/Process';
+
 Vue.use(Router);
 
 export default new Router({
@@ -67,6 +69,10 @@ export default new Router({
               component: PosTrends
             }
           ]
+        },
+        {
+          path: 'process',
+          component: Process
         }
       ]
     }

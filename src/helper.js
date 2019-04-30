@@ -9,20 +9,29 @@ export const formatDate = date => {
     : '';
 };
 
-export const formatDataSetCol = date => {
-  return date ? moment(date, 'MM/DD/YYYY').format('YYYY-MM') : '';
-};
+export const formatDataSetCol = date =>
+  date ? moment(date, 'MM/DD/YYYY').format('YYYY-MM') : '';
 
-export const formatDataSetUpdated = date => {
+export const formatDateFromNow = date => (date ? moment(date).fromNow() : '');
+
+export const formatDateTime = date => {
   return date ? moment(date).format('DD MMM YYYY H:mm') : '';
 };
 
 export const formatNumber = num => numeral(num).format('0,0');
 
+export const formatNumberLarge = num => numeral(num).format('0,0a');
+
+export const formatTime = num => numeral(num).format('00:00');
+
 export const formatPercent = num => numeral(num).format('0%');
 
 export const pluralize = (word, count) => {
-  return count > 1 ? `${count} ${word}s` : `${count} ${word}`;
+  return count > 1
+    ? word.substr(-2) === 'ss'
+      ? `${count} ${word}es`
+      : `${count} ${word}s`
+    : `${count} ${word}`;
 };
 
 export const checkToken = router => {

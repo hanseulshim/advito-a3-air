@@ -5,6 +5,8 @@ const { dataSet } = require('./dataSet');
 const { library } = require('./library');
 const { contract } = require('./contract');
 const { user } = require('./user');
+const { process } = require('./process');
+
 exports.playground = {
   tabs: [
     client,
@@ -17,6 +19,7 @@ exports.playground = {
     library,
     contract.queries,
     contract.mutations,
-    user.queries
+    user.queries,
+    process
   ]
 };

@@ -96,3 +96,13 @@ export const bookingClass = {
   date: 150,
   exceptions: 110
 };
+
+export const processCol = {
+  date: 100,
+  contracts: 75,
+  dataSets: 75,
+  records: 75,
+  processDuration: 80,
+  status: 100,
+  processedBy: 150
+};
