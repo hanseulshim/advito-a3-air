@@ -1,0 +1,48 @@
+<template>
+  <modal classes="modal-container" name="cancel-process" height="auto">
+    <div class="title-row space-between">
+      <div class="section-header">cancel process</div>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+      </el-tooltip>
+    </div>
+    <div>
+      All processed records will be deleted. Are you sure you would like to
+      cancel Processing?
+    </div>
+    <div class="delete-modal-button-container">
+      <button class="button" @click="hideModal">No</button>
+      <button class="button" @click="stopProcess">Yes</button>
+    </div>
+  </modal>
+</template>
+
+<script>
+import { GET_PROCESS } from '@/graphql/queries';
+import { STOP_PROCESS } from '@/graphql/mutations';
+export default {
+  name: 'CancelProcessModal',
+  methods: {
+    hideModal() {
+      this.$modal.hide('cancel-process');
+    },
+    stopProcess() {
+      this.$apollo.mutate({
+        mutation: STOP_PROCESS,
+        update: (store, data) => {
+          const stopProcess = data.data.stopProcess;
+          const newData = store.readQuery({
+            query: GET_PROCESS
+          });
+          newData.process = stopProcess;
+          store.writeQuery({
+            query: GET_PROCESS,
+            data: newData
+          });
+        }
+      });
+      this.hideModal();
+    }
+  }
+};
+</script>

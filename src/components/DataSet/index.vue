@@ -5,13 +5,17 @@
       :selected-filter="selectedFilter"
       @update-filter="updateFilter"
     />
-    <router-view :filtered-data-set-list="filteredDataSetList" />
+    <router-view
+      :filtered-data-set-list="filteredDataSetList"
+      :check-status="checkStatus"
+    />
   </div>
 </template>
 
 <script>
 import Navigation from './Navigation';
 import { GET_DATA_SET_COLUMN_LIST } from '@/graphql/queries';
+import { UPDATE_PROJECT_STATUS } from '@/graphql/mutations';
 export default {
   name: 'DataSet',
   components: {
@@ -19,7 +23,10 @@ export default {
   },
   apollo: {
     dataSetColumnList: {
-      query: GET_DATA_SET_COLUMN_LIST
+      query: GET_DATA_SET_COLUMN_LIST,
+      result({ data }) {
+        this.checkStatus(data.dataSetColumnList);
+      }
     }
   },
   data() {
@@ -74,6 +81,19 @@ export default {
   methods: {
     updateFilter(value) {
       this.selectedFilter = value;
+    },
+    checkStatus() {
+      const check = this.dataSetColumnList.every(
+        col => col.status === 'accept'
+      );
+      const status = check ? 'valid' : 'invalid';
+      this.$apollo.mutate({
+        mutation: UPDATE_PROJECT_STATUS,
+        variables: {
+          id: 2,
+          status
+        }
+      });
     }
   }
 };

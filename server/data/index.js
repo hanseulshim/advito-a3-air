@@ -27,6 +27,7 @@ const {
   directionTypeList
 } = require('./contract');
 const { userList } = require('./user');
+const { process } = require('./process');
 
 module.exports = {
   clientList,
@@ -52,5 +53,6 @@ module.exports = {
   discountTypeList,
   journeyTypeList,
   directionTypeList,
-  userList
+  userList,
+  process
 };

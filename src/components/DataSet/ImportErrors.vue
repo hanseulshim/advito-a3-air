@@ -85,7 +85,7 @@
             <template slot="header">
               <span class="header-container content">
                 <span class="updated-date">
-                  {{ formatDataSetUpdated(column.dateUpdated) }}
+                  {{ formatDateTime(column.dateUpdated) }}
                 </span>
                 <span class="header-text">
                   {{ formatDataSetCol(column.name) }}
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { formatNumber, formatDataSetCol, formatDataSetUpdated } from '@/helper';
+import { formatNumber, formatDataSetCol, formatDateTime } from '@/helper';
 import {
   GET_DATA_SET_COUNTRY_LIST,
   GET_DATA_SET_COLUMN_LIST
@@ -143,8 +143,8 @@ export default {
     formatDataSetCol(date) {
       return formatDataSetCol(date);
     },
-    formatDataSetUpdated(date) {
-      return formatDataSetUpdated(date);
+    formatDateTime(date) {
+      return formatDateTime(date);
     },
     formatNumber(num) {
       return formatNumber(num);
