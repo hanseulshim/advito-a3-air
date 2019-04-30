@@ -3,6 +3,8 @@ type Process {
   contracts: Int
   dataSets: Int
   records: Int
+  processing: Boolean
+  processStartDate: Date
   recentProcessList: [RecentProcess]
 }
 
@@ -18,5 +20,9 @@ type RecentProcess {
 
 extend type Query {
   process: Process @auth
+}
+extend type Mutation {
+  startProcess: Process @auth
+  stopProcess: Process @auth
 }
 `;

@@ -112,6 +112,10 @@ export default {
     filteredDataSetList: {
       required: true,
       type: Array
+    },
+    checkStatus: {
+      required: true,
+      type: Function
     }
   },
   apollo: {

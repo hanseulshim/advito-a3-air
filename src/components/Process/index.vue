@@ -14,40 +14,57 @@
           <span class="info-text-value">{{
             formatNumberLarge(process.records)
           }}</span>
-          <span class="info-text-label">RECORDS</span>
+          <span class="info-text-label">O&D RECORDS</span>
         </div>
         <div class="info-text">
           <span class="info-text-value processed">{{
-            lastProcessed && lastProcessed.contracts
+            process.processing ? '—' : lastProcessed && lastProcessed.contracts
           }}</span>
           <span class="info-text-label">Processed Contracts</span>
         </div>
         <div class="info-text">
           <span class="info-text-value processed">{{
-            lastProcessed && lastProcessed.dataSets
+            process.processing ? '—' : lastProcessed && lastProcessed.dataSets
           }}</span>
           <span class="info-text-label">Processed Datasets</span>
         </div>
         <div class="info-text">
           <span class="info-text-value processed">{{
-            lastProcessed && formatNumberLarge(lastProcessed.records)
+            process.processing
+              ? '—'
+              : lastProcessed && formatNumberLarge(lastProcessed.records)
           }}</span>
-          <span class="info-text-label">Processed Records</span>
+          <span class="info-text-label">Processed O&D Records</span>
         </div>
       </div>
       <div class="last-processed info-text">
-        <span>Last Processed</span>
-        <span class="processed">{{ lastProcessedDate }}</span>
+        <span>{{
+          process.processing ? 'Process Started:' : 'Last Processed:'
+        }}</span>
+        <span class="processed">{{
+          process.processing
+            ? getProcessDate(process.processStartDate)
+            : getProcessDate(lastProcessed && lastProcessed.date)
+        }}</span>
       </div>
     </div>
     <div class="progress-container">
       <el-progress
+        v-loading="process.processing"
         type="circle"
         color="#5AB7B2"
         :stroke-width="10"
-        :percentage="25"
+        :percentage="100"
+        :show-text="!process.processing"
       />
-      <button class="button">PROCESS</button>
+      <button
+        v-if="process.processing"
+        class="button"
+        @click="showCancelProcessModal"
+      >
+        CANCEL
+      </button>
+      <button v-else class="button" @click="startProcess">PROCESS</button>
       <div>* Data and Contracts have to be 100% QC'ed before Processing</div>
     </div>
     <div class="recent-container">
@@ -56,7 +73,10 @@
           {{ pluralize('recent process', process.recentProcessList.length) }}
         </div>
       </div>
-      <el-table :data="process.recentProcessList">
+      <el-table
+        :data="process.recentProcessList"
+        :default-sort="{ prop: 'date', order: 'descending' }"
+      >
         <el-table-column
           prop="date"
           label="Date"
@@ -76,11 +96,11 @@
           :min-width="processCol.dataSets"
         />
         <el-table-column
-          prop="totalRecords"
+          prop="records"
           label="Total records"
           align="right"
-          :formatter="row => formatNumber(row.totalRecords)"
-          :min-width="processCol.totalRecords"
+          :formatter="row => formatNumber(row.records)"
+          :min-width="processCol.records"
         />
         <el-table-column
           prop="processDuration"
@@ -102,11 +122,14 @@
         />
       </el-table>
     </div>
+    <CancelProcessModal />
   </div>
 </template>
 
 <script>
+import CancelProcessModal from './CancelProcessModal';
 import { GET_PROCESS } from '@/graphql/queries';
+import { START_PROCESS } from '@/graphql/mutations';
 import { processCol } from '@/config';
 import {
   formatNumber,
@@ -119,6 +142,9 @@ import {
 } from '@/helper';
 export default {
   name: 'Process',
+  components: {
+    CancelProcessModal
+  },
   apollo: {
     process: {
       query: GET_PROCESS
@@ -141,14 +167,6 @@ export default {
         ...this.process.recentProcessList.map(v => v.date)
       );
       return this.process.recentProcessList.filter(v => v.date === maxDate)[0];
-    },
-    lastProcessedDate: function() {
-      if (this.lastProcessed) {
-        return `${this.formatDateTime(
-          this.lastProcessed.date
-        )} (${formatDateFromNow(this.lastProcessed.date)})`;
-      }
-      return null;
     }
   },
   methods: {
@@ -172,6 +190,28 @@ export default {
     },
     formatStatus(status) {
       return `${formatPercent(status)} Complete`;
+    },
+    getProcessDate(date) {
+      return `${this.formatDateTime(date)} (${formatDateFromNow(date)})`;
+    },
+    startProcess() {
+      this.$apollo.mutate({
+        mutation: START_PROCESS,
+        update: (store, data) => {
+          const startProcess = data.data.startProcess;
+          const newData = store.readQuery({
+            query: GET_PROCESS
+          });
+          newData.process = startProcess;
+          store.writeQuery({
+            query: GET_PROCESS,
+            data: newData
+          });
+        }
+      });
+    },
+    showCancelProcessModal() {
+      this.$modal.show('cancel-process');
     }
   }
 };

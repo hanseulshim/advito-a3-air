@@ -20,6 +20,7 @@ exports.playground = {
     contract.queries,
     contract.mutations,
     user.queries,
-    process
+    process.queries,
+    process.mutations
   ]
 };

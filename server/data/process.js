@@ -2,6 +2,8 @@ exports.process = {
   contracts: 3,
   dataSets: 4,
   records: 1102000,
+  processing: false,
+  processingStartDate: null,
   recentProcessList: [
     {
       date: new Date('03/25/2019 3:56 PM'),

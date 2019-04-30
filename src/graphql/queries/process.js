@@ -6,6 +6,8 @@ export const GET_PROCESS = gql`
       contracts
       dataSets
       records
+      processing
+      processStartDate
       recentProcessList {
         date
         contracts
