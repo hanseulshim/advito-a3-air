@@ -140,7 +140,21 @@ export const CREATE_PRICING_TERM = gql`
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
       pointOfSaleList
       pointOfOriginList
@@ -196,7 +210,21 @@ export const COPY_PRICING_TERM = gql`
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
       pointOfSaleList
       pointOfOriginList
@@ -252,7 +280,21 @@ export const EDIT_PRICING_TERM = gql`
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
       pointOfSaleList
       pointOfOriginList
@@ -308,7 +350,21 @@ export const TOGGLE_PRICING_TERM_QC = gql`
           name
         }
         normalizationList
-        note
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
       }
       pointOfSaleList
       pointOfOriginList
@@ -376,7 +432,21 @@ export const CREATE_DISCOUNT = gql`
         name
       }
       normalizationList
-      note
+      note {
+        important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
     }
   }
 `;
@@ -420,7 +490,21 @@ export const COPY_DISCOUNT = gql`
         name
       }
       normalizationList
-      note
+      note {
+        important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
     }
   }
 `;
@@ -464,7 +548,21 @@ export const EDIT_DISCOUNT = gql`
         name
       }
       normalizationList
-      note
+      note {
+        important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
     }
   }
 `;
