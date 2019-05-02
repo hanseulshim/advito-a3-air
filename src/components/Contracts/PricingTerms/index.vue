@@ -13,7 +13,7 @@
       </div>
       <div class="menu-container">
         <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
-        <button class="button long">
+        <button class="button long" @click="showChangeAppliedOrderModal">
           Change Applied Order
         </button>
         <div class="bulk-action">
@@ -259,6 +259,7 @@
     <DeleteDiscountModal @toggle-row="toggleRow" />
     <DiscountNoteModal @toggle-row="toggleRow" />
     <NoteModal />
+    <ChangeAppliedOrderModal />
   </div>
 </template>
 
@@ -279,6 +280,7 @@ import DeleteDiscountModal from './Discounts/DeleteDiscountModal';
 import DiscountNoteModal from './Discounts/DiscountNoteModal';
 import NoteModal from './NoteModal';
 import Discounts from './Discounts';
+import ChangeAppliedOrderModal from './ChangeAppliedOrderModal';
 export default {
   name: 'PricingTerms',
   components: {
@@ -293,7 +295,8 @@ export default {
     EditDiscountModal,
     NoteModal,
     DeleteDiscountModal,
-    DiscountNoteModal
+    DiscountNoteModal,
+    ChangeAppliedOrderModal
   },
   apollo: {
     pricingTermList: {
@@ -388,6 +391,9 @@ export default {
     },
     showDeletePricingTermModal(idList) {
       this.$modal.show('delete-pricing-term', { idList });
+    },
+    showChangeAppliedOrderModal() {
+      this.$modal.show('change-pricing-term-order');
     },
     toggleNoteModal(pricingTerm) {
       this.$modal.show('save-note', {

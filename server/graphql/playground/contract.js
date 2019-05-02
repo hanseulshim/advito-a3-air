@@ -160,6 +160,83 @@ exports.contract = {
         pointOfOriginList
         airlineList
       }
+      updateAppliedOrder(
+        updatePricingTermList: [
+          {
+            id: 1,
+            appliedOrder: 5
+          },
+          {
+            id: 2,
+            appliedOrder: 6
+          }
+        ]
+      ) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            message
+            assignee {
+              id
+              name
+            }
+          }
+        }
+        ignore
+        discountList {
+          id
+          contractOrder
+          appliedOrder
+          name
+          effectiveStartDate
+          effectiveEndDate
+          discountType {
+            id
+            name
+          }
+          discountValue
+          journeyType {
+            id
+            name
+          }
+          directionType {
+            id
+            name
+          }
+          normalizationList
+          note {
+            important
+            noteList {
+              id
+              author {
+                id
+                name
+              }
+              date
+              assignee {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
       createPricingTerm(name: "term 1", ignore: false) {
         id
         contractOrder

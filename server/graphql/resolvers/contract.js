@@ -106,6 +106,13 @@ exports.contract = {
       contract.isDeleted = true;
       return id;
     },
+    updateAppliedOrder: (_, { updatePricingTermList }) => {
+      updatePricingTermList.forEach(term => {
+        const pricingTerm = pricingTermList.filter(t => t.id === term.id)[0];
+        pricingTerm.appliedOrder = term.appliedOrder;
+      });
+      return pricingTermList;
+    },
     createPricingTerm: (_, { name, ignore }) => {
       const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
       const maxContractOrder =
