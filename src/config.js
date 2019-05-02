@@ -69,8 +69,8 @@ export const term = {
 };
 
 export const discount = {
-  contractOrder: 75,
-  appliedOrder: 75,
+  contractOrder: 60,
+  appliedOrder: 60,
   bulk: 70,
   name: 125,
   effectiveDates: 220,
@@ -78,7 +78,8 @@ export const discount = {
   discountValue: 100,
   journeyType: 90,
   directionType: 115,
-  normalization: 125,
+  rules: 75,
+  normalization: 120,
   note: 100,
   actions: 120
 };

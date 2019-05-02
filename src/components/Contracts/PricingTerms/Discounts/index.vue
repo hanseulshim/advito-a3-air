@@ -91,7 +91,11 @@
         sort-by="discountValue"
       >
         <template slot-scope="props">
-          {{ formatPercent(props.row.discountValue) }}
+          {{
+            props.row.discountType.id === 2
+              ? formatPercent(props.row.discountValue)
+              : props.row.discountValue
+          }}
         </template>
       </el-table-column>
       <el-table-column
@@ -106,9 +110,26 @@
       />
       <el-table-column
         prop="normalizationList"
+        label="Rules"
+        :min-width="discount.rules"
+      >
+        <template slot-scope="props">
+          <button class="button number">
+            {{ props.row.normalizationList }}
+          </button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="normalizationList"
         label="Normalization"
         :min-width="discount.normalization"
-      />
+      >
+        <template slot-scope="props">
+          <button class="button number">
+            {{ props.row.normalizationList }}
+          </button>
+        </template>
+      </el-table-column>
       <el-table-column
         label="Notes"
         sortable

@@ -258,7 +258,8 @@ exports.contract = {
         effectiveStartDate: new Date(),
         effectiveEndDate: new Date(253402232400000),
         discountType,
-        discountValue,
+        discountValue:
+          discountTypeId === 2 ? discountValue / 100 : discountValue,
         journeyType,
         directionType,
         normalizationList: 0,
@@ -322,7 +323,8 @@ exports.contract = {
         effectiveStartDate: new Date(),
         effectiveEndDate: new Date(253402232400000),
         discountType,
-        discountValue,
+        discountValue:
+          discountTypeId === 2 ? discountValue / 100 : discountValue,
         journeyType,
         directionType,
         normalizationList: 0,
@@ -368,8 +370,9 @@ exports.contract = {
 
       discount.name = name;
       discount.discountType = discountType;
-      discount.discountValue = discountValue;
-      discount.journeyType = journeyType;
+      (discount.discountValue =
+        discountTypeId === 2 ? discountValue / 100 : discountValue),
+        (discount.journeyType = journeyType);
       discount.directionType = directionType;
 
       return discount;
