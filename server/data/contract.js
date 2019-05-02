@@ -99,7 +99,7 @@ exports.pricingTermList = [
             name: 'Scott Cashon',
             email: 'scott.cashon@boostlabs.com'
           },
-          date: new Date('08-03-2018'),
+          date: new Date('08-01-2018'),
           message: 'First message',
           assignee: {
             id: 2,
@@ -114,7 +114,7 @@ exports.pricingTermList = [
             name: 'Scott Cashon',
             email: 'scott.cashon@boostlabs.com'
           },
-          date: new Date('08-03-2018'),
+          date: new Date('08-02-2018'),
           message: 'Second message',
           assignee: {
             id: 2,
@@ -140,11 +140,11 @@ exports.pricingTermList = [
         {
           id: 4,
           author: {
-            id: 3,
-            name: 'Scott Cashon',
-            email: 'scott.cashon@boostlabs.com'
+            id: 2,
+            name: 'Kevin Ingalls',
+            email: 'kevin.ingalls@boostlabs.com'
           },
-          date: new Date('08-03-2018'),
+          date: new Date('08-04-2018'),
           message: 'Fourth message',
           assignee: {
             id: 2,
@@ -844,6 +844,21 @@ exports.pricingTermList = [
                 id: 3,
                 name: 'Scott Cashon',
                 email: 'scott.cashon@boostlabs.com'
+              },
+              date: new Date('08-03-2018'),
+              message: 'This is a message that is assigned to Kevin',
+              assignee: {
+                id: 2,
+                name: 'Kevin Ingalls',
+                email: 'kevin.ingalls@boostlabs.com'
+              }
+            },
+            {
+              id: 8,
+              author: {
+                id: 2,
+                name: 'Kevin Ingalls',
+                email: 'kevin.ingalls@boostlabs.com'
               },
               date: new Date('08-03-2018'),
               message: 'This is a message that is assigned to Kevin',
