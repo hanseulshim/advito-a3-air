@@ -499,6 +499,56 @@ exports.contract = {
       }
       deletePricingTerms(idList: [1, 2, 3])
 
+      updateDiscountAppliedOrder(
+        id: 1,
+        updateDiscountList: [
+          {
+            id: 1,
+            appliedOrder: 5
+          },
+          {
+            id: 2,
+            appliedOrder: 6
+          }
+        ]
+      ) {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType {
+          id
+          name
+        }
+        discountValue
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
+        normalizationList
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
+      }
+
       createDiscount(id: 1, name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
         id
         contractOrder

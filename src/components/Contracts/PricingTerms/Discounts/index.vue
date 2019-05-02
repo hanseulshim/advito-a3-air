@@ -5,7 +5,7 @@
         {{ pluralize('discount', discountList.length) }}
       </div>
       <div class="menu-container">
-        <button class="button long">
+        <button class="button long" @click="showChangeAppliedOrderModal">
           Change Applied Order
         </button>
         <div class="bulk-action">
@@ -262,6 +262,12 @@ export default {
         pricingTermId: this.pricingTermId,
         discountId: discount.id,
         note: discount.note
+      });
+    },
+    showChangeAppliedOrderModal() {
+      this.$modal.show('change-discount-order', {
+        id: this.pricingTermId,
+        discountList: this.discountList
       });
     },
     sortByNote(a, b) {

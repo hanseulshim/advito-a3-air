@@ -1,8 +1,9 @@
 <template>
   <modal
     classes="modal-container"
-    name="change-pricing-term-order"
+    name="change-discount-order"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <div class="title-row space-between">
@@ -11,10 +12,7 @@
         <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
-    <el-table
-      ref="changeAppliedOrderPricingTermList"
-      :data="pricingTermOrderList"
-    >
+    <el-table ref="changeAppliedOrderDiscountList" :data="discountOrderList">
       <el-table-column prop="contractOrder" :min-width="term.contractOrder">
         <template slot="header">
           <el-tooltip content="Read Order" placement="top" effect="dark">
@@ -45,48 +43,35 @@
 </template>
 
 <script>
-import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
-import { UPDATE_APPLIED_ORDER } from '@/graphql/mutations';
+import { UPDATE_DISCOUNT_APPLIED_ORDER } from '@/graphql/mutations';
 import { term } from '@/config';
 export default {
-  name: 'ChangeAppliedOrderModal',
-  apollo: {
-    pricingTermList: {
-      query: GET_PRICING_TERM_LIST,
-      result({ data: { pricingTermList } }) {
-        this.pricingTermOrderList = pricingTermList
-          .map(term => ({
-            id: term.id,
-            contractOrder: term.contractOrder,
-            appliedOrder: term.appliedOrder,
-            name: term.name
-          }))
-          .sort((a, b) => a.appliedOrder - b.appliedOrder);
-      }
-    }
-  },
+  name: 'ChangeDiscountAppliedOrderModal',
   data() {
     return {
       term,
-      pricingTermList: [],
-      pricingTermOrderList: []
+      discountList: [],
+      discountOrderList: [],
+      id: null
     };
   },
   methods: {
     hideModal() {
-      this.$modal.hide('change-pricing-term-order');
+      this.$modal.hide('change-discount-order');
     },
     async changeAppliedOrder() {
       try {
         await this.$apollo.mutate({
-          mutation: UPDATE_APPLIED_ORDER,
+          mutation: UPDATE_DISCOUNT_APPLIED_ORDER,
           variables: {
-            updatePricingTermList: this.pricingTermOrderList
+            id: this.id,
+            updateDiscountList: this.discountOrderList
           }
         });
+        this.$emit('toggle-row', this.id);
         this.$modal.show('success', {
           message: 'Applied Order successfully changed.',
-          name: 'change-pricing-term-order'
+          name: 'change-discount-order'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -94,8 +79,22 @@ export default {
         });
       }
     },
+    beforeOpen(event) {
+      const { discountList, id } = event.params;
+      this.id = id;
+      this.discountList = discountList.slice();
+      this.discountOrderList = discountList
+        .map(term => ({
+          id: term.id,
+          contractOrder: term.contractOrder,
+          appliedOrder: term.appliedOrder,
+          name: term.name
+        }))
+        .sort((a, b) => a.appliedOrder - b.appliedOrder);
+    },
     beforeClose() {
-      this.pricingTermOrderList = this.pricingTermList
+      this.id = null;
+      this.discountOrderList = this.discountList
         .map(term => ({
           id: term.id,
           contractOrder: term.contractOrder,
@@ -105,38 +104,25 @@ export default {
         .sort((a, b) => a.appliedOrder - b.appliedOrder);
     },
     checkFocus(id) {
-      const sortedListNum = this.pricingTermOrderList.map(v => v.appliedOrder);
-      const term = this.pricingTermOrderList.filter(v => v.id === id)[0];
-      const originIndex = this.pricingTermOrderList.findIndex(v => v.id === id);
-      const lastIndex = sortedListNum.lastIndexOf(term.appliedOrder);
+      const sortedListNum = this.discountOrderList.map(v => v.appliedOrder);
+      const discount = this.discountOrderList.filter(v => v.id === id)[0];
+      const originIndex = this.discountOrderList.findIndex(v => v.id === id);
+      const lastIndex = sortedListNum.lastIndexOf(discount.appliedOrder);
       if (originIndex === lastIndex) {
-        const destinationIndex = sortedListNum.indexOf(term.appliedOrder);
+        const destinationIndex = sortedListNum.indexOf(discount.appliedOrder);
         for (let i = destinationIndex; i < originIndex; i++) {
-          this.pricingTermOrderList[i].appliedOrder++;
+          this.discountOrderList[i].appliedOrder++;
         }
-        this.pricingTermOrderList.splice(destinationIndex, 0, term);
-        this.pricingTermOrderList.splice(originIndex + 1, 1);
+        this.discountOrderList.splice(destinationIndex, 0, discount);
+        this.discountOrderList.splice(originIndex + 1, 1);
       } else {
         for (let i = originIndex + 1; i <= lastIndex; i++) {
-          this.pricingTermOrderList[i].appliedOrder--;
+          this.discountOrderList[i].appliedOrder--;
         }
-        this.pricingTermOrderList.splice(lastIndex + 1, 0, term);
-        this.pricingTermOrderList.splice(originIndex, 1);
+        this.discountOrderList.splice(lastIndex + 1, 0, discount);
+        this.discountOrderList.splice(originIndex, 1);
       }
     }
   }
 };
 </script>
-
-<style lang="scss">
-@import '@/styles/global.scss';
-#app {
-  .change-order-input {
-    .el-input__inner {
-      &:focus {
-        border: 1px solid $tree-poppy;
-      }
-    }
-  }
-}
-</style>

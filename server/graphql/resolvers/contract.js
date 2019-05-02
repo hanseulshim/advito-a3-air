@@ -200,6 +200,19 @@ exports.contract = {
       });
       return idList;
     },
+    updateDiscountAppliedOrder: (_, { id, updateDiscountList }) => {
+      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
+      if (!pricingTerm) {
+        throw new ApolloError('Pricing Term not found', 400);
+      }
+      updateDiscountList.forEach(discount => {
+        const foundDiscount = pricingTerm.discountList.filter(
+          t => t.id === discount.id
+        )[0];
+        foundDiscount.appliedOrder = discount.appliedOrder;
+      });
+      return pricingTerm.discountList;
+    },
     createDiscount: (
       _,
       {

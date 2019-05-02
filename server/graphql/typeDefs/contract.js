@@ -123,6 +123,11 @@ extend type Mutation {
   togglePricingTermQC(id: Int!): PricingTerm @auth
   deletePricingTerms(idList: [Int]!): [Int] @auth
 
+  updateDiscountAppliedOrder(
+    id: Int!
+    updateDiscountList: [NewAppliedOrder]!
+  ): [Discount] @auth
+
   createDiscount(
     id: Int!
     name: String!

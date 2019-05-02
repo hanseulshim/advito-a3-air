@@ -260,6 +260,7 @@
     <DiscountNoteModal @toggle-row="toggleRow" />
     <NoteModal />
     <ChangeAppliedOrderModal />
+    <ChangeDiscountAppliedOrderModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -281,6 +282,7 @@ import DiscountNoteModal from './Discounts/DiscountNoteModal';
 import NoteModal from './NoteModal';
 import Discounts from './Discounts';
 import ChangeAppliedOrderModal from './ChangeAppliedOrderModal';
+import ChangeDiscountAppliedOrderModal from './Discounts/ChangeDiscountAppliedOrderModal';
 export default {
   name: 'PricingTerms',
   components: {
@@ -296,7 +298,8 @@ export default {
     NoteModal,
     DeleteDiscountModal,
     DiscountNoteModal,
-    ChangeAppliedOrderModal
+    ChangeAppliedOrderModal,
+    ChangeDiscountAppliedOrderModal
   },
   apollo: {
     pricingTermList: {
