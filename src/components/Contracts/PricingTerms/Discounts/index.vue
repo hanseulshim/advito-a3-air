@@ -35,6 +35,7 @@
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="discount.contractOrder"
+        class-name="sort-cell"
       >
         <template slot="header">
           <el-tooltip content="Read Order" placement="top" effect="dark">
@@ -47,6 +48,7 @@
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="discount.appliedOrder"
+        class-name="sort-cell"
       >
         <template slot="header">
           <el-tooltip content="Applied Order" placement="top" effect="dark">

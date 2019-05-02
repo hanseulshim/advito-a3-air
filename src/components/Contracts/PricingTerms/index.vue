@@ -55,6 +55,7 @@
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="term.contractOrder"
+        class-name="sort-cell"
       >
         <template slot="header">
           <el-tooltip content="Read Order" placement="top" effect="dark">
@@ -67,6 +68,7 @@
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="term.appliedOrder"
+        class-name="sort-cell"
       >
         <template slot="header">
           <el-tooltip content="Applied Order" placement="top" effect="dark">
@@ -473,11 +475,20 @@ export default {
     margin: 0 1em;
   }
 }
+#app {
+  .el-table {
+    th {
+      &.sort-cell {
+        .cell {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}
 .sort-icon {
   font-size: 1.5em;
-  + .caret-wrapper {
-    display: none !important;
-  }
 }
 .fa-sticky-note {
   &.important {
