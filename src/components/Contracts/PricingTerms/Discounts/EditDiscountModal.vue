@@ -162,7 +162,8 @@ export default {
       this.form.id = id;
       this.form.name = name;
       this.form.discountTypeId = discountType.id;
-      this.form.discountValue = discountValue;
+      this.form.discountValue =
+        discountType.id === 2 ? discountValue * 100 : discountValue;
       this.form.journeyTypeId = journeyType.id;
       this.form.directionTypeId = directionType.id;
     },

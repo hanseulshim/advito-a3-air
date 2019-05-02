@@ -75,10 +75,11 @@ export const discount = {
   name: 125,
   effectiveDates: 220,
   discountType: 110,
-  discountValue: 90,
+  discountValue: 100,
   journeyType: 90,
   directionType: 115,
-  normalization: 125,
+  rules: 75,
+  normalization: 120,
   note: 100,
   actions: 120
 };

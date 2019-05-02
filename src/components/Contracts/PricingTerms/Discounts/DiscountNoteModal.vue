@@ -28,7 +28,11 @@
             >By {{ note.author.name }} | {{ formatDate(note.date) }} | Assigned
             to {{ note.assignee.name }}</span
           >
-          <div v-if="!editMode || note.id !== noteId">
+          <div
+            v-if="
+              (!editMode || note.id !== noteId) && user.id === note.author.id
+            "
+          >
             <el-tooltip effect="dark" content="Edit Note" placement="top">
               <i
                 class="fas fa-pencil-alt icon-spacer"
@@ -68,7 +72,6 @@
       <button class="button" @click="saveDiscountNote">UPDATE NOTE</button>
     </div>
     <div v-else class="note-button-container">
-      <button class="button">DELETE ALL</button>
       <button class="button" @click="saveDiscountNote">SAVE</button>
     </div>
   </modal>
@@ -216,7 +219,7 @@ export default {
       this.pricingTermId = event.params.pricingTermId;
       this.discountId = event.params.discountId;
       this.important = note ? note.important : false;
-      this.noteList = note ? note.noteList : [];
+      this.noteList = note ? note.noteList.sort((a, b) => b.date - a.date) : [];
       this.assigneeId = this.user.id;
     },
     beforeClose() {

@@ -35,6 +35,7 @@
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="discount.contractOrder"
+        class-name="sort-cell"
       >
         <template slot="header">
           <el-tooltip content="Read Order" placement="top" effect="dark">
@@ -47,6 +48,7 @@
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="discount.appliedOrder"
+        class-name="sort-cell"
       >
         <template slot="header">
           <el-tooltip content="Applied Order" placement="top" effect="dark">
@@ -89,7 +91,11 @@
         sort-by="discountValue"
       >
         <template slot-scope="props">
-          {{ formatPercent(props.row.discountValue) }}
+          {{
+            props.row.discountType.id === 2
+              ? formatPercent(props.row.discountValue)
+              : props.row.discountValue
+          }}
         </template>
       </el-table-column>
       <el-table-column
@@ -104,9 +110,26 @@
       />
       <el-table-column
         prop="normalizationList"
+        label="Rules"
+        :min-width="discount.rules"
+      >
+        <template slot-scope="props">
+          <button class="button number">
+            {{ props.row.normalizationList }}
+          </button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="normalizationList"
         label="Normalization"
         :min-width="discount.normalization"
-      />
+      >
+        <template slot-scope="props">
+          <button class="button number">
+            {{ props.row.normalizationList }}
+          </button>
+        </template>
+      </el-table-column>
       <el-table-column
         label="Notes"
         sortable
