@@ -74,6 +74,12 @@ type NoteContent {
   date: Date
   assignee: User
 }
+input NewAppliedOrder {
+  id: Int
+  appliedOrder: Int
+  name: String
+  contractOrder: Int
+}
 
 extend type Query {
   contractList: [Contract] @auth
@@ -107,11 +113,20 @@ extend type Mutation {
   ): Contract @auth
   deleteContract(id: Int!): Int @auth
 
+  updateAppliedOrder(
+    updatePricingTermList: [NewAppliedOrder]!
+  ): [PricingTerm] @auth
+
   createPricingTerm(name: String!, ignore: Boolean!): PricingTerm @auth
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(id: Int!): PricingTerm @auth
   deletePricingTerms(idList: [Int]!): [Int] @auth
+
+  updateDiscountAppliedOrder(
+    id: Int!
+    updateDiscountList: [NewAppliedOrder]!
+  ): [Discount] @auth
 
   createDiscount(
     id: Int!

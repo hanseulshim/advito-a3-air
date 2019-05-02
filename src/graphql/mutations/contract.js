@@ -690,3 +690,121 @@ export const DELETE_DISCOUNT_NOTE = gql`
     }
   }
 `;
+
+export const UPDATE_APPLIED_ORDER = gql`
+  mutation updateAppliedOrder($updatePricingTermList: [NewAppliedOrder]!) {
+    updateAppliedOrder(updatePricingTermList: $updatePricingTermList) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      qc
+      pointOfSaleList
+      pointOfOriginList
+      airlineList
+      note {
+        important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          message
+          assignee {
+            id
+            name
+          }
+        }
+      }
+      ignore
+      discountList {
+        id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType {
+          id
+          name
+        }
+        discountValue
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
+        normalizationList
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
+  mutation updateDiscountAppliedOrder(
+    $id: Int!
+    $updateDiscountList: [NewAppliedOrder]!
+  ) {
+    updateDiscountAppliedOrder(
+      id: $id
+      updateDiscountList: $updateDiscountList
+    ) {
+      id
+      contractOrder
+      appliedOrder
+      name
+      effectiveStartDate
+      effectiveEndDate
+      discountType {
+        id
+        name
+      }
+      discountValue
+      journeyType {
+        id
+        name
+      }
+      directionType {
+        id
+        name
+      }
+      normalizationList
+      note {
+        important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
