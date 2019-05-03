@@ -1,3 +1,5 @@
+const { CONTRACT, PRICING_TERM, DISCOUNT, NOTE } = require('../constants');
+
 exports.contract = {
   queries: {
     name: 'Contract Queries',
@@ -6,22 +8,7 @@ exports.contract = {
     query: `
     {
       contractList {
-        id
-        name
-        type {
-          id
-          name
-        }
-        description
-        round
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        pricingTermTotal
-        targetTermTotal
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
+        ${CONTRACT}
       }
       contractTypeList {
         id
@@ -33,70 +20,7 @@ exports.contract = {
         email
       }
       pricingTermList {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }
-        ignore
-        discountList {
-          id
-          contractOrder
-          appliedOrder
-          name
-          effectiveStartDate
-          effectiveEndDate
-          discountType {
-            id
-            name
-          }
-          discountValue
-          journeyType {
-            id
-            name
-          }
-          directionType {
-            id
-            name
-          }
-          normalizationList
-          note {
-            important
-            noteList {
-              id
-              author {
-                id
-                name
-              }
-              date
-              assignee {
-                id
-                name
-              }
-            }
-          }
-        }
+        ${PRICING_TERM}
       }
     }`
   },
@@ -107,58 +31,13 @@ exports.contract = {
     query: `
     mutation {
       createContract(name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
-        id
-        name
-        type {
-          id
-          name
-        }
-        description
-        round
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        pricingTermTotal
-        targetTermTotal
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
+        ${CONTRACT}
       }
       copyContract(id: 1, name: "copy contract") {
-        id
-        name
-        type {
-          id
-          name
-        }
-        description
-        round
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        pricingTermTotal
-        targetTermTotal
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
+        ${CONTRACT}
       }
       editContract(id: 1, name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
-        id
-        name
-        type {
-          id
-          name
-        }
-        description
-        round
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        pricingTermTotal
-        targetTermTotal
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
+        ${CONTRACT}
       }
       updateAppliedOrder(
         updatePricingTermList: [
@@ -172,330 +51,19 @@ exports.contract = {
           }
         ]
       ) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }
-        ignore
-        discountList {
-          id
-          contractOrder
-          appliedOrder
-          name
-          effectiveStartDate
-          effectiveEndDate
-          discountType {
-            id
-            name
-          }
-          discountValue
-          journeyType {
-            id
-            name
-          }
-          directionType {
-            id
-            name
-          }
-          normalizationList
-          note {
-            important
-            noteList {
-              id
-              author {
-                id
-                name
-              }
-              date
-              assignee {
-                id
-                name
-              }
-            }
-          }
-        }
+        ${PRICING_TERM}
       }
       createPricingTerm(name: "term 1", ignore: false) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        discountList {
-          id
-          contractOrder
-          appliedOrder
-          name
-          effectiveStartDate
-          effectiveEndDate
-          discountType {
-            id
-            name
-          }
-          discountValue
-          journeyType {
-            id
-            name
-          }
-          directionType {
-            id
-            name
-          }
-          normalizationList
-          note {
-            important
-            noteList {
-              id
-              author {
-                id
-                name
-              }
-              date
-              assignee {
-                id
-                name
-              }
-            }
-          }
-        }
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-        ignore
+        ${PRICING_TERM}
       }
       copyPricingTerm(id: 1, name: "copy term", ignore: false) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        discountList {
-          id
-          contractOrder
-          appliedOrder
-          name
-          effectiveStartDate
-          effectiveEndDate
-          discountType {
-            id
-            name
-          }
-          discountValue
-          journeyType {
-            id
-            name
-          }
-          directionType {
-            id
-            name
-          }
-          normalizationList
-          note {
-            important
-            noteList {
-              id
-              author {
-                id
-                name
-              }
-              date
-              assignee {
-                id
-                name
-              }
-            }
-          }
-        }
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-        ignore
+        ${PRICING_TERM}
       }
       editPricingTerm(id: 1, name: "term edit", ignore: true) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        discountList {
-          id
-          contractOrder
-          appliedOrder
-          name
-          effectiveStartDate
-          effectiveEndDate
-          discountType {
-            id
-            name
-          }
-          discountValue
-          journeyType {
-            id
-            name
-          }
-          directionType {
-            id
-            name
-          }
-          normalizationList
-          note {
-            important
-            noteList {
-              id
-              author {
-                id
-                name
-              }
-              date
-              assignee {
-                id
-                name
-              }
-            }
-          }
-        }
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-        ignore
+        ${PRICING_TERM}
       }
       togglePricingTermQC(id: 1) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        qc
-        discountList {
-          id
-          contractOrder
-          appliedOrder
-          name
-          effectiveStartDate
-          effectiveEndDate
-          discountType {
-            id
-            name
-          }
-          discountValue
-          journeyType {
-            id
-            name
-          }
-          directionType {
-            id
-            name
-          }
-          normalizationList
-          note {
-            important
-            noteList {
-              id
-              author {
-                id
-                name
-              }
-              date
-              assignee {
-                id
-                name
-              }
-            }
-          }
-        }
-        pointOfSaleList
-        pointOfOriginList
-        airlineList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-        ignore
+        ${PRICING_TERM}
       }
       deletePricingTerms(idList: [1, 2, 3])
 
@@ -512,219 +80,31 @@ exports.contract = {
           }
         ]
       ) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
+        ${DISCOUNT}
       }
 
       createDiscount(id: 1, name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
+        ${DISCOUNT}
       }
       copyDiscount(pricingTermId: 1, id: 1  name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
+        ${DISCOUNT}
       }
       editDiscount(pricingTermId: 1, id: 1  name: "edit discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
+        ${DISCOUNT}
       }
       deleteDiscounts(pricingTermId: 1, idList: [1, 2, 3])
 
       saveNote(pricingTermId: 1, important: true, message: "this is my first note", assigneeId: 2) {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
-        }
+        ${NOTE}
       }
       deleteNote(pricingTermId: 1, noteId: 1) {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
-        }
+        ${NOTE}
       }
       saveDiscountNote(pricingTermId: 1, discountId: 1, important: true, message: "this is my first note", assigneeId: 2) {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
-        }
+        ${NOTE}
       }
       deleteDiscountNote(pricingTermId: 8, discountId: 22, noteId: 7) {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
-        }
+        ${NOTE}
       }
     }
     `

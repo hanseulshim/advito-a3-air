@@ -1,3 +1,5 @@
+const { PROJECT } = require('../constants');
+
 exports.project = {
   queries: {
     name: 'Project Queries',
@@ -6,35 +8,7 @@ exports.project = {
     query: `
     {
       projectList(clientId: 1) {
-        id
-        clientId
-        clientName
-        name
-        description
-        isDeleted
-        projectTypeId
-        projectType
-        savingsTypeId
-        savingsType
-        effectiveFrom
-        effectiveTo
-        reportFrom
-        reportTo
-        projectManagerId
-        projectManagerName
-        projectManagerEmail
-        leadAnalystId
-        leadAnalystName
-        leadAnalystEmail
-        dataSpecialistId
-        dataSpecialistName
-        dataSpecialistEmail
-        currencyId
-        currencyName
-        distanceUnitId
-        distanceUnitName
-        progress
-        favorite
+        ${PROJECT}
       }
       projectInfo {
         projectTypeList {
@@ -91,32 +65,7 @@ exports.project = {
         leadAnalystId: 2
         dataSpecialistId: 3
       ) {
-        id
-        clientId
-        clientName
-        name
-        division
-        description
-        isDeleted
-        projectTypeId
-        projectType
-        savingsTypeId
-        savingsType
-        effectiveFrom
-        effectiveTo
-        reportFrom
-        reportTo
-        projectManagerId
-        projectManagerName
-        projectManagerEmail
-        leadAnalystId
-        leadAnalystName
-        leadAnalystEmail
-        dataSpecialistId
-        dataSpecialistName
-        dataSpecialistEmail
-        progress
-        favorite
+        ${PROJECT}
       }
       deleteProject(id: 1)
       toggleFavoriteProject(id: 50) {
@@ -137,27 +86,7 @@ exports.project = {
         currencyId: 3,
         distanceUnitId: 2
       ) {
-        id
-        description
-        savingsTypeId
-        savingsType
-        effectiveFrom
-        effectiveTo
-        reportFrom
-        reportTo
-        projectManagerId
-        projectManagerName
-        projectManagerEmail
-        leadAnalystId
-        leadAnalystName
-        leadAnalystEmail
-        dataSpecialistId
-        dataSpecialistName
-        dataSpecialistEmail
-        currencyId
-        currencyName
-        distanceUnitId
-        distanceUnitName
+        ${PROJECT}
       }
     }
     `

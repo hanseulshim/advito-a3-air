@@ -1,38 +1,10 @@
 import gql from 'graphql-tag';
+import { PROJECT } from '../constants';
 
 export const GET_PROJECTS = gql`
   query projectList($clientId: Int) {
     projectList(clientId: $clientId) {
-      id
-      clientId
-      clientName
-      name
-      description
-      division
-      isDeleted
-      projectTypeId
-      projectType
-      savingsTypeId
-      savingsType
-      effectiveFrom
-      effectiveTo
-      reportFrom
-      reportTo
-      projectManagerId
-      projectManagerName
-      projectManagerEmail
-      leadAnalystId
-      leadAnalystName
-      leadAnalystEmail
-      dataSpecialistId
-      dataSpecialistName
-      dataSpecialistEmail
-      currencyId
-      currencyName
-      distanceUnitId
-      distanceUnitName
-      progress
-      favorite
+      ${PROJECT}
     }
   }
 `;
@@ -40,36 +12,7 @@ export const GET_PROJECTS = gql`
 export const GET_PROJECT = gql`
   {
     project @client {
-      id
-      clientId
-      clientName
-      name
-      description
-      division
-      isDeleted
-      projectTypeId
-      projectType
-      savingsTypeId
-      savingsType
-      effectiveFrom
-      effectiveTo
-      reportFrom
-      reportTo
-      projectManagerId
-      projectManagerName
-      projectManagerEmail
-      leadAnalystId
-      leadAnalystName
-      leadAnalystEmail
-      dataSpecialistId
-      dataSpecialistName
-      dataSpecialistEmail
-      currencyId
-      currencyName
-      distanceUnitId
-      distanceUnitName
-      progress
-      favorite
+      ${PROJECT}
     }
   }
 `;

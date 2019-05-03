@@ -1,0 +1,132 @@
+export const CONTRACT = `id
+        name
+        type {
+          id
+          name
+        }
+        description
+        round
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        pricingTermTotal
+        targetTermTotal
+        pointOfSaleList
+        pointOfOriginList
+        airlineList`;
+
+export const PRICING_TERM = `id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        qc
+        pointOfSaleList
+        pointOfOriginList
+        airlineList
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            message
+            assignee {
+              id
+              name
+            }
+          }
+        }
+        ignore
+        discountList {
+          id
+          contractOrder
+          appliedOrder
+          name
+          effectiveStartDate
+          effectiveEndDate
+          discountType {
+            id
+            name
+          }
+          discountValue
+          journeyType {
+            id
+            name
+          }
+          directionType {
+            id
+            name
+          }
+          normalizationList
+          note {
+            important
+            noteList {
+              id
+              author {
+                id
+                name
+              }
+              date
+              assignee {
+                id
+                name
+              }
+            }
+          }
+        }`;
+
+export const DISCOUNT = `id
+        contractOrder
+        appliedOrder
+        name
+        effectiveStartDate
+        effectiveEndDate
+        discountType {
+          id
+          name
+        }
+        discountValue
+        journeyType {
+          id
+          name
+        }
+        directionType {
+          id
+          name
+        }
+        normalizationList
+        note {
+          important
+          noteList {
+            id
+            author {
+              id
+              name
+            }
+            date
+            assignee {
+              id
+              name
+            }
+          }
+        }`;
+
+export const NOTE = `important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }`;

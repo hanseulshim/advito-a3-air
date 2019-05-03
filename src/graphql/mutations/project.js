@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { PROJECT } from '../constants';
 
 export const UPDATE_PROJECT = gql`
   mutation updateProject($project: Project) {
@@ -37,36 +38,7 @@ export const ADD_PROJECT = gql`
       currencyId: $currencyId
       distanceUnitId: $distanceUnitId
     ) {
-      id
-      clientId
-      clientName
-      name
-      division
-      description
-      isDeleted
-      projectTypeId
-      projectType
-      savingsTypeId
-      savingsType
-      effectiveFrom
-      effectiveTo
-      reportFrom
-      reportTo
-      projectManagerId
-      projectManagerName
-      projectManagerEmail
-      leadAnalystId
-      leadAnalystName
-      leadAnalystEmail
-      dataSpecialistId
-      dataSpecialistName
-      dataSpecialistEmail
-      currencyId
-      currencyName
-      distanceUnitId
-      distanceUnitName
-      progress
-      favorite
+      ${PROJECT}
     }
   }
 `;
@@ -100,27 +72,7 @@ export const EDIT_PROJECT = gql`
       currencyId: $currencyId
       distanceUnitId: $distanceUnitId
     ) {
-      id
-      description
-      savingsTypeId
-      savingsType
-      effectiveFrom
-      effectiveTo
-      reportFrom
-      reportTo
-      projectManagerId
-      projectManagerName
-      projectManagerEmail
-      leadAnalystId
-      leadAnalystName
-      leadAnalystEmail
-      dataSpecialistId
-      dataSpecialistName
-      dataSpecialistEmail
-      currencyId
-      currencyName
-      distanceUnitId
-      distanceUnitName
+      ${PROJECT}
     }
   }
 `;

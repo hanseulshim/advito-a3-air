@@ -1,24 +1,10 @@
 import gql from 'graphql-tag';
+import { CONTRACT, PRICING_TERM } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
   {
     contractList {
-      id
-      name
-      type {
-        id
-        name
-      }
-      description
-      round
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      pricingTermTotal
-      targetTermTotal
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
+      ${CONTRACT}
     }
   }
 `;
@@ -35,71 +21,7 @@ export const GET_CONTRACT_TYPE_LIST = gql`
 export const GET_PRICING_TERM_LIST = gql`
   {
     pricingTermList {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          message
-          assignee {
-            id
-            name
-          }
-        }
-      }
-      ignore
-      discountList {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }
-      }
+      ${PRICING_TERM}
     }
   }
 `;

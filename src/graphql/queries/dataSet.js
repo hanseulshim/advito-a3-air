@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { DATA_SET } from '../constants';
 
 export const GET_DATA_SET_COUNTRY_LIST = gql`
   {
@@ -30,34 +31,7 @@ export const GET_DATA_SET_DIVISION_LIST = gql`
 export const GET_DATA_SET_COLUMN_LIST = gql`
   {
     dataSetColumnList {
-      id
-      name
-      dateUpdated
-      status
-      posTrendList {
-        id
-        countryId
-        name
-        tickets
-        segments
-        farePaid
-      }
-      divisionTrendList {
-        id
-        divisionId
-        name
-        tickets
-        segments
-        farePaid
-      }
-      importErrorsList {
-        id
-        countryId
-        name
-        importedTickets
-        errorTickets
-        errorRatio
-      }
+      ${DATA_SET}
     }
   }
 `;

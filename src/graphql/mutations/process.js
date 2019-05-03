@@ -1,22 +1,10 @@
 import gql from 'graphql-tag';
+import { PROCESS } from '../constants';
 
 export const START_PROCESS = gql`
   mutation startProcess {
     startProcess {
-      contracts
-      dataSets
-      records
-      processing
-      processStartDate
-      recentProcessList {
-        date
-        contracts
-        dataSets
-        records
-        processDuration
-        status
-        processedBy
-      }
+      ${PROCESS}
     }
   }
 `;
@@ -24,20 +12,7 @@ export const START_PROCESS = gql`
 export const STOP_PROCESS = gql`
   mutation stopProcess {
     stopProcess {
-      contracts
-      dataSets
-      records
-      processing
-      processStartDate
-      recentProcessList {
-        date
-        contracts
-        dataSets
-        records
-        processDuration
-        status
-        processedBy
-      }
+      ${PROCESS}
     }
   }
 `;
