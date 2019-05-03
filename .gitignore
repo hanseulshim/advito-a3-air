@@ -3,6 +3,7 @@ node_modules
 /dist
 /server/node_modules
 /server/.serverless
+/server/_warmup
 /server/.env
 
 # local env files
