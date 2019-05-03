@@ -87,8 +87,8 @@ export default {
       discountTypeList: [],
       journeyTypeList: [],
       directionTypeList: [],
+      pricingTermId: null,
       form: {
-        pricingTermId: null,
         id: null,
         name: null,
         discountTypeId: null,
@@ -143,7 +143,7 @@ export default {
               query: GET_PRICING_TERM_LIST
             });
             const index = newData.pricingTermList.findIndex(
-              term => term.id === this.form.pricingTermId
+              term => term.id === this.pricingTermId
             );
             newData.pricingTermList[index].discountList.push(discount);
             store.writeQuery({
@@ -152,7 +152,7 @@ export default {
             });
           }
         });
-        this.$emit('toggle-row', this.form.pricingTermId);
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully copied.',
           name: 'copy-discount'
@@ -172,7 +172,7 @@ export default {
         journeyType,
         directionType
       } = event.params.discount;
-      this.form.pricingTermId = event.params.pricingTermId;
+      this.pricingTermId = event.params.pricingTermId;
       this.form.id = id;
       this.form.name = name;
       this.form.discountTypeId = discountType.id;
@@ -182,7 +182,7 @@ export default {
       this.form.directionTypeId = directionType.id;
     },
     beforeClose() {
-      this.form.pricingTermId = null;
+      this.pricingTermId = null;
       this.form.id = null;
       this.form.name = null;
       this.form.discountTypeId = null;

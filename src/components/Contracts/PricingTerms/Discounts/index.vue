@@ -189,20 +189,29 @@
 <script>
 import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
+import { GET_DISCOUNT_LIST } from '@/graphql/queries';
 export default {
   name: 'Discounts',
-  props: {
+  apollo: {
     discountList: {
-      type: Array,
-      required: true
-    },
+      query: GET_DISCOUNT_LIST,
+      variables() {
+        return {
+          pricingTermId: this.pricingTermId
+        };
+      }
+    }
+  },
+  props: {
     pricingTermId: {
       type: Number,
-      required: true
+      required: true,
+      default: null
     }
   },
   data() {
     return {
+      discountList: [],
       bulkActionId: null,
       discount,
       bulkIdList: [],
@@ -260,7 +269,7 @@ export default {
       }
     },
     showNewDiscountModal() {
-      this.$modal.show('new-discount', { id: this.pricingTermId });
+      this.$modal.show('new-discount', { pricingTermId: this.pricingTermId });
     },
     showCopyDiscountModal(discount) {
       this.$modal.show('copy-discount', {
@@ -289,7 +298,7 @@ export default {
     },
     showChangeAppliedOrderModal() {
       this.$modal.show('change-discount-order', {
-        id: this.pricingTermId,
+        pricingTermId: this.pricingTermId,
         discountList: this.discountList
       });
     },

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { CONTRACT, PRICING_TERM } from '../constants';
+import { CONTRACT, PRICING_TERM, DISCOUNT } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
   {
@@ -24,6 +24,14 @@ export const GET_PRICING_TERM_LIST = gql`
       ${PRICING_TERM}
     }
   }
+`;
+
+export const GET_DISCOUNT_LIST = gql`
+query discountList($pricingTermId: Int) {
+  discountList(pricingTermId: $pricingTermId) {
+    ${DISCOUNT}
+  }
+}
 `;
 
 export const GET_DISCOUNT_TYPE_LIST = gql`

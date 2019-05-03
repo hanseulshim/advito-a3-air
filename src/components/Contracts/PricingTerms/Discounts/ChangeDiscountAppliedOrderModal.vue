@@ -45,14 +45,37 @@
 <script>
 import { UPDATE_DISCOUNT_APPLIED_ORDER } from '@/graphql/mutations';
 import { term } from '@/config';
+import { GET_DISCOUNT_LIST } from '@/graphql/queries';
 export default {
   name: 'ChangeDiscountAppliedOrderModal',
+  apollo: {
+    discountList: {
+      query: GET_DISCOUNT_LIST,
+      variables() {
+        return {
+          pricingTermId: this.pricingTermId
+        };
+      },
+      result({ data: { discountList } }) {
+        this.discountOrderList = discountList
+          ? discountList
+              .map(term => ({
+                id: term.id,
+                contractOrder: term.contractOrder,
+                appliedOrder: term.appliedOrder,
+                name: term.name
+              }))
+              .sort((a, b) => a.appliedOrder - b.appliedOrder)
+          : [];
+      }
+    }
+  },
   data() {
     return {
       term,
       discountList: [],
       discountOrderList: [],
-      id: null
+      pricingTermId: null
     };
   },
   methods: {
@@ -64,11 +87,10 @@ export default {
         await this.$apollo.mutate({
           mutation: UPDATE_DISCOUNT_APPLIED_ORDER,
           variables: {
-            id: this.id,
             updateDiscountList: this.discountOrderList
           }
         });
-        this.$emit('toggle-row', this.id);
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Applied Order successfully changed.',
           name: 'change-discount-order'
@@ -80,20 +102,11 @@ export default {
       }
     },
     beforeOpen(event) {
-      const { discountList, id } = event.params;
-      this.id = id;
-      this.discountList = discountList.slice();
-      this.discountOrderList = discountList
-        .map(term => ({
-          id: term.id,
-          contractOrder: term.contractOrder,
-          appliedOrder: term.appliedOrder,
-          name: term.name
-        }))
-        .sort((a, b) => a.appliedOrder - b.appliedOrder);
+      const { pricingTermId } = event.params;
+      this.pricingTermId = pricingTermId;
     },
     beforeClose() {
-      this.id = null;
+      this.pricingTermId = null;
       this.discountOrderList = this.discountList
         .map(term => ({
           id: term.id,

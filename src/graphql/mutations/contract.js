@@ -105,7 +105,7 @@ export const DELETE_PRICING_TERMS = gql`
 
 export const CREATE_DISCOUNT = gql`
   mutation createDiscount(
-    $id: Int!
+    $pricingTermId: Int!
     $name: String!
     $discountTypeId: Int
     $discountValue: Float!
@@ -113,7 +113,7 @@ export const CREATE_DISCOUNT = gql`
     $directionTypeId: Int
   ) {
     createDiscount(
-      id: $id
+      pricingTermId: $pricingTermId
       name: $name
       discountTypeId: $discountTypeId
       discountValue: $discountValue
@@ -127,7 +127,6 @@ export const CREATE_DISCOUNT = gql`
 
 export const COPY_DISCOUNT = gql`
   mutation copyDiscount(
-    $pricingTermId: Int!
     $id: Int!
     $name: String!
     $discountTypeId: Int
@@ -136,7 +135,6 @@ export const COPY_DISCOUNT = gql`
     $directionTypeId: Int
   ) {
     copyDiscount(
-      pricingTermId: $pricingTermId
       id: $id
       name: $name
       discountTypeId: $discountTypeId
@@ -151,7 +149,6 @@ export const COPY_DISCOUNT = gql`
 
 export const EDIT_DISCOUNT = gql`
   mutation editDiscount(
-    $pricingTermId: Int!
     $id: Int!
     $name: String!
     $discountTypeId: Int
@@ -160,7 +157,6 @@ export const EDIT_DISCOUNT = gql`
     $directionTypeId: Int
   ) {
     editDiscount(
-      pricingTermId: $pricingTermId
       id: $id
       name: $name
       discountTypeId: $discountTypeId
@@ -174,21 +170,21 @@ export const EDIT_DISCOUNT = gql`
 `;
 
 export const DELETE_DISCOUNTS = gql`
-  mutation deleteDiscounts($pricingTermId: Int!, $idList: [Int]!) {
-    deleteDiscounts(pricingTermId: $pricingTermId, idList: $idList)
+  mutation deleteDiscounts($idList: [Int]!) {
+    deleteDiscounts(idList: $idList)
   }
 `;
 
 export const SAVE_NOTE = gql`
   mutation saveNote(
-    $pricingTermId: Int!
+    $id: Int!
     $important: Boolean!
     $message: String
     $assigneeId: Int!
     $noteId: Int
   ) {
     saveNote(
-      pricingTermId: $pricingTermId
+      id: $id
       important: $important
       message: $message
       assigneeId: $assigneeId
@@ -200,8 +196,8 @@ export const SAVE_NOTE = gql`
 `;
 
 export const DELETE_NOTE = gql`
-  mutation deleteNote($pricingTermId: Int!, $noteId: Int!) {
-    deleteNote(pricingTermId: $pricingTermId, noteId: $noteId) {
+  mutation deleteNote($id: Int!, $noteId: Int!) {
+    deleteNote(id: $id, noteId: $noteId) {
       ${NOTE}
     }
   }
@@ -209,16 +205,14 @@ export const DELETE_NOTE = gql`
 
 export const SAVE_DISCOUNT_NOTE = gql`
   mutation saveDiscountNote(
-    $pricingTermId: Int!
-    $discountId: Int!
+    $id: Int!
     $important: Boolean!
     $message: String
     $assigneeId: Int!
     $noteId: Int
   ) {
     saveDiscountNote(
-      pricingTermId: $pricingTermId
-      discountId: $discountId
+      id: $id
       important: $important
       message: $message
       assigneeId: $assigneeId
@@ -231,13 +225,11 @@ export const SAVE_DISCOUNT_NOTE = gql`
 
 export const DELETE_DISCOUNT_NOTE = gql`
   mutation deleteDiscountNote(
-    $pricingTermId: Int!
-    $discountId: Int!
+    $id: Int!
     $noteId: Int!
   ) {
     deleteDiscountNote(
-      pricingTermId: $pricingTermId
-      discountId: $discountId
+      id: $id
       noteId: $noteId
     ) {
       ${NOTE}
@@ -255,11 +247,9 @@ export const UPDATE_APPLIED_ORDER = gql`
 
 export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
   mutation updateDiscountAppliedOrder(
-    $id: Int!
     $updateDiscountList: [NewAppliedOrder]!
   ) {
     updateDiscountAppliedOrder(
-      id: $id
       updateDiscountList: $updateDiscountList
     ) {
       ${DISCOUNT}

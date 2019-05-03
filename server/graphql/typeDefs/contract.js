@@ -28,7 +28,7 @@ type PricingTerm {
   effectiveStartDate: Date
   effectiveEndDate: Date
   qc: Float
-  discountList: [Discount]
+  discountTotal: Int
   pointOfSaleList: [String]
   pointOfOriginList: [String]
   airlineList: [String]
@@ -38,6 +38,7 @@ type PricingTerm {
 }
 type Discount {
   id: Int
+  pricingTermId: Int
   contractOrder: Int
   appliedOrder: Int
   name: String
@@ -85,6 +86,7 @@ extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
   pricingTermList: [PricingTerm] @auth
+  discountList(pricingTermId: Int): [Discount] @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
@@ -124,12 +126,11 @@ extend type Mutation {
   deletePricingTerms(idList: [Int]!): [Int] @auth
 
   updateDiscountAppliedOrder(
-    id: Int!
     updateDiscountList: [NewAppliedOrder]!
   ): [Discount] @auth
 
   createDiscount(
-    id: Int!
+    pricingTermId: Int!
     name: String!
     discountTypeId: Int
     discountValue: Float!
@@ -137,7 +138,6 @@ extend type Mutation {
     directionTypeId: Int
   ): Discount @auth
   copyDiscount(
-    pricingTermId: Int!
     id: Int!
     name: String!
     discountTypeId: Int
@@ -146,7 +146,6 @@ extend type Mutation {
     directionTypeId: Int
   ): Discount @auth
   editDiscount(
-    pricingTermId: Int!
     id: Int!
     name: String!
     discountTypeId: Int
@@ -154,30 +153,28 @@ extend type Mutation {
     journeyTypeId: Int
     directionTypeId: Int
   ): Discount @auth
-  deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
+  deleteDiscounts(idList: [Int]!): [Int] @auth
 
   saveNote(
-    pricingTermId: Int!
+    id: Int!
     important: Boolean!
     message: String
     assigneeId: Int!
     noteId: Int
   ): Note
   deleteNote(
-    pricingTermId: Int!
+    id: Int!
     noteId: Int!
   ): Note
   saveDiscountNote(
-    pricingTermId: Int!
-    discountId: Int!
+    id: Int!
     important: Boolean!
     message: String
     assigneeId: Int!
     noteId: Int
   ): Note
   deleteDiscountNote(
-    pricingTermId: Int!
-    discountId: Int!
+    id: Int!
     noteId: Int!
   ): Note
 }

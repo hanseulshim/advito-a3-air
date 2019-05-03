@@ -22,6 +22,7 @@ const {
   contractList,
   contractTypeList,
   pricingTermList,
+  discountList,
   discountTypeList,
   journeyTypeList,
   directionTypeList
@@ -50,6 +51,7 @@ module.exports = {
   contractList,
   contractTypeList,
   pricingTermList,
+  discountList,
   discountTypeList,
   journeyTypeList,
   directionTypeList,

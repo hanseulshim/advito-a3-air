@@ -44,10 +44,7 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <Discounts
-            :discount-list="props.row.discountList"
-            :pricing-term-id="props.row.id"
-          />
+          <Discounts :pricing-term-id="props.row.id" />
         </template>
       </el-table-column>
       <el-table-column
@@ -120,11 +117,11 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Discounts" :min-width="term.discounts">
-        <template slot-scope="props">
-          {{ props.row.discountList.length }}
-        </template>
-      </el-table-column>
+      <el-table-column
+        prop="discountTotal"
+        label="Discounts"
+        :min-width="term.discounts"
+      />
       <el-table-column label="Airlines" :min-width="term.airlines">
         <template slot-scope="props">
           <el-tooltip
@@ -203,9 +200,9 @@
                 :class="{ important: props.row.note.important }"
                 @click="toggleNoteModal(props.row)"
               />
-              <span class="note-count sub-content empty">{{
+              <!-- <span class="note-count sub-content empty">{{
                 getNoteLength(props.row.discountList)
-              }}</span>
+              }}</span> -->
             </div>
           </el-tooltip>
           <el-tooltip v-else effect="dark" content="Show Note" placement="top">
@@ -217,9 +214,9 @@
                 }"
                 @click="toggleNoteModal(props.row)"
               />
-              <span class="note-count sub-content">{{
+              <!-- <span class="note-count sub-content">{{
                 getNoteLength(props.row.discountList)
-              }}</span>
+              }}</span> -->
             </div>
           </el-tooltip>
         </template>

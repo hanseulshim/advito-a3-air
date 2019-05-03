@@ -42,45 +42,10 @@ export const PRICING_TERM = `id
           }
         }
         ignore
-        discountList {
-          id
-          contractOrder
-          appliedOrder
-          name
-          effectiveStartDate
-          effectiveEndDate
-          discountType {
-            id
-            name
-          }
-          discountValue
-          journeyType {
-            id
-            name
-          }
-          directionType {
-            id
-            name
-          }
-          normalizationList
-          note {
-            important
-            noteList {
-              id
-              author {
-                id
-                name
-              }
-              date
-              assignee {
-                id
-                name
-              }
-            }
-          }
-        }`;
+        discountTotal`;
 
 export const DISCOUNT = `id
+        pricingTermId
         contractOrder
         appliedOrder
         name

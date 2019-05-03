@@ -22,6 +22,9 @@ exports.contract = {
       pricingTermList {
         ${PRICING_TERM}
       }
+      discountList(pricingTermId: 1) {
+        ${DISCOUNT}
+      }
     }`
   },
   mutations: {
@@ -68,7 +71,6 @@ exports.contract = {
       deletePricingTerms(idList: [1, 2, 3])
 
       updateDiscountAppliedOrder(
-        id: 1,
         updateDiscountList: [
           {
             id: 1,
@@ -83,27 +85,27 @@ exports.contract = {
         ${DISCOUNT}
       }
 
-      createDiscount(id: 1, name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
+      createDiscount(pricingTermId: 1, name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
         ${DISCOUNT}
       }
-      copyDiscount(pricingTermId: 1, id: 1  name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
+      copyDiscount(id: 1  name: "new discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
         ${DISCOUNT}
       }
-      editDiscount(pricingTermId: 1, id: 1  name: "edit discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
+      editDiscount(id: 1  name: "edit discount", discountTypeId: 1, discountValue: 10.2, journeyTypeId: 3, directionTypeId: 1) {
         ${DISCOUNT}
       }
-      deleteDiscounts(pricingTermId: 1, idList: [1, 2, 3])
+      deleteDiscounts(idList: [1, 2, 3])
 
-      saveNote(pricingTermId: 1, important: true, message: "this is my first note", assigneeId: 2) {
+      saveNote(id: 1, important: true, message: "this is my first note", assigneeId: 2) {
         ${NOTE}
       }
-      deleteNote(pricingTermId: 1, noteId: 1) {
+      deleteNote(id: 1, noteId: 1) {
         ${NOTE}
       }
-      saveDiscountNote(pricingTermId: 1, discountId: 1, important: true, message: "this is my first note", assigneeId: 2) {
+      saveDiscountNote(id: 1, important: true, message: "this is my first note", assigneeId: 2) {
         ${NOTE}
       }
-      deleteDiscountNote(pricingTermId: 8, discountId: 22, noteId: 7) {
+      deleteDiscountNote(id: 22, noteId: 7) {
         ${NOTE}
       }
     }
