@@ -90,7 +90,6 @@ export default {
             updateDiscountList: this.discountOrderList
           }
         });
-        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Applied Order successfully changed.',
           name: 'change-discount-order'

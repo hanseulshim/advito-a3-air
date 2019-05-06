@@ -98,7 +98,7 @@ export default {
   },
   data() {
     return {
-      pricingTermId: null,
+      id: null,
       important: false,
       noteList: [],
       noteId: null,
@@ -133,7 +133,7 @@ export default {
         await this.$apollo.mutate({
           mutation: SAVE_NOTE,
           variables: {
-            pricingTermId: this.pricingTermId,
+            id: this.id,
             important: this.important,
             message: this.message,
             assigneeId: this.assigneeId,
@@ -145,7 +145,7 @@ export default {
               query: GET_PRICING_TERM_LIST
             });
             const index = newData.pricingTermList.findIndex(
-              term => term.id === this.pricingTermId
+              term => term.id === this.id
             );
             newData.pricingTermList[index].note = note;
             store.writeQuery({
@@ -169,7 +169,7 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_NOTE,
           variables: {
-            pricingTermId: this.pricingTermId,
+            id: this.id,
             noteId
           },
           update: (store, data) => {
@@ -178,7 +178,7 @@ export default {
               query: GET_PRICING_TERM_LIST
             });
             const index = newData.pricingTermList.findIndex(
-              term => term.id === this.pricingTermId
+              term => term.id === this.id
             );
             newData.pricingTermList[index].note = note;
             store.writeQuery({
@@ -202,7 +202,7 @@ export default {
     },
     beforeOpen(event) {
       const note = event.params.note;
-      this.pricingTermId = event.params.pricingTermId;
+      this.id = event.params.id;
       this.important = note ? note.important : false;
       this.noteList = note ? note.noteList.sort((a, b) => b.date - a.date) : [];
       this.assigneeId = this.user.id;

@@ -183,6 +183,12 @@
         </template>
       </el-table-column>
     </el-table>
+    <NewDiscountModal />
+    <CopyDiscountModal />
+    <EditDiscountModal />
+    <DeleteDiscountModal />
+    <DiscountNoteModal />
+    <ChangeDiscountAppliedOrderModal />
   </div>
 </template>
 
@@ -190,8 +196,22 @@
 import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
 import { GET_DISCOUNT_LIST } from '@/graphql/queries';
+import NewDiscountModal from './NewDiscountModal';
+import CopyDiscountModal from './CopyDiscountModal';
+import EditDiscountModal from './EditDiscountModal';
+import DeleteDiscountModal from './DeleteDiscountModal';
+import DiscountNoteModal from './DiscountNoteModal';
+import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
 export default {
   name: 'Discounts',
+  components: {
+    NewDiscountModal,
+    CopyDiscountModal,
+    EditDiscountModal,
+    DeleteDiscountModal,
+    DiscountNoteModal,
+    ChangeDiscountAppliedOrderModal
+  },
   apollo: {
     discountList: {
       query: GET_DISCOUNT_LIST,
@@ -285,14 +305,13 @@ export default {
     },
     showEditDiscountModal(discount) {
       this.$modal.show('edit-discount', {
-        discount,
-        pricingTermId: this.pricingTermId
+        discount
       });
     },
     toggleNoteModal(discount) {
       this.$modal.show('save-discount-note', {
         pricingTermId: this.pricingTermId,
-        discountId: discount.id,
+        id: discount.id,
         note: discount.note
       });
     },

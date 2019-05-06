@@ -79,11 +79,7 @@ exports.pricingTerm = {
       if (!pricingTerm) {
         throw new ApolloError('Pricing Term not found', 400);
       }
-      if (pricingTerm.qc === 0) {
-        pricingTerm.qc = 1;
-      } else {
-        pricingTerm.qc = 0;
-      }
+      pricingTerm.qc = pricingTerm.qc !== 1 ? 1 : 0;
       return pricingTerm;
     },
     deletePricingTerms: (_, { idList }) => {

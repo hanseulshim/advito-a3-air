@@ -252,14 +252,8 @@
     <CopyPricingTermModal />
     <EditPricingTermModal />
     <DeletePricingTermModal @clear-bulk-actions="clearBulkActions" />
-    <NewDiscountModal @toggle-row="toggleRow" />
-    <CopyDiscountModal @toggle-row="toggleRow" />
-    <EditDiscountModal @toggle-row="toggleRow" />
-    <DeleteDiscountModal @toggle-row="toggleRow" />
-    <DiscountNoteModal @toggle-row="toggleRow" />
     <NoteModal />
     <ChangeAppliedOrderModal />
-    <ChangeDiscountAppliedOrderModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -273,15 +267,9 @@ import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
 import DeletePricingTermModal from './DeletePricingTermModal';
-import NewDiscountModal from './Discounts/NewDiscountModal';
-import CopyDiscountModal from './Discounts/CopyDiscountModal';
-import EditDiscountModal from './Discounts/EditDiscountModal';
-import DeleteDiscountModal from './Discounts/DeleteDiscountModal';
-import DiscountNoteModal from './Discounts/DiscountNoteModal';
 import NoteModal from './NoteModal';
 import Discounts from './Discounts';
 import ChangeAppliedOrderModal from './ChangeAppliedOrderModal';
-import ChangeDiscountAppliedOrderModal from './Discounts/ChangeDiscountAppliedOrderModal';
 export default {
   name: 'PricingTerms',
   components: {
@@ -291,14 +279,8 @@ export default {
     NewPricingTermModal,
     EditPricingTermModal,
     DeletePricingTermModal,
-    NewDiscountModal,
-    CopyDiscountModal,
-    EditDiscountModal,
     NoteModal,
-    DeleteDiscountModal,
-    DiscountNoteModal,
-    ChangeAppliedOrderModal,
-    ChangeDiscountAppliedOrderModal
+    ChangeAppliedOrderModal
   },
   apollo: {
     pricingTermList: {
@@ -399,7 +381,7 @@ export default {
     },
     toggleNoteModal(pricingTerm) {
       this.$modal.show('save-note', {
-        pricingTermId: pricingTerm.id,
+        id: pricingTerm.id,
         note: pricingTerm.note
       });
     },
@@ -411,12 +393,6 @@ export default {
     clearBulkActions() {
       this.bulkIdList = [];
       this.bulkActionId = null;
-    },
-    toggleRow(id) {
-      const row = this.$refs.pricingTermList.data.filter(
-        term => term.id === id
-      )[0];
-      this.$refs.pricingTermList.toggleRowExpansion(row, true);
     },
     async togglePricingTermQC(id) {
       try {

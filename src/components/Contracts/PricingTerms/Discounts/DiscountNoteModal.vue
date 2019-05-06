@@ -78,15 +78,11 @@
 </template>
 
 <script>
-import {
-  GET_USER,
-  GET_USER_LIST,
-  GET_PRICING_TERM_LIST
-} from '@/graphql/queries';
+import { GET_USER, GET_USER_LIST, GET_DISCOUNT_LIST } from '@/graphql/queries';
 import { SAVE_DISCOUNT_NOTE, DELETE_DISCOUNT_NOTE } from '@/graphql/mutations';
 import { formatDate } from '@/helper';
 export default {
-  name: 'NoteModal',
+  name: 'DiscountNoteModal',
   apollo: {
     userList: {
       query: GET_USER_LIST
@@ -102,7 +98,7 @@ export default {
   data() {
     return {
       pricingTermId: null,
-      discountId: null,
+      id: null,
       important: false,
       noteList: [],
       noteId: null,
@@ -137,8 +133,7 @@ export default {
         await this.$apollo.mutate({
           mutation: SAVE_DISCOUNT_NOTE,
           variables: {
-            pricingTermId: this.pricingTermId,
-            discountId: this.discountId,
+            id: this.id,
             important: this.important,
             message: this.message,
             assigneeId: this.assigneeId,
@@ -147,22 +142,24 @@ export default {
           update: (store, data) => {
             const note = data.data.saveDiscountNote;
             const newData = store.readQuery({
-              query: GET_PRICING_TERM_LIST
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             });
-            const pricingTerm = newData.pricingTermList.filter(
-              term => term.id === this.pricingTermId
+            const discount = newData.discountList.filter(
+              d => d.id === this.id
             )[0];
-            const index = pricingTerm.discountList.findIndex(
-              discount => discount.id === this.discountId
-            );
-            pricingTerm.discountList[index].note = note;
+            discount.note = note;
             store.writeQuery({
-              query: GET_PRICING_TERM_LIST,
-              data: newData
+              query: GET_DISCOUNT_LIST,
+              data: newData,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             });
           }
         });
-        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Note saved.',
           name: 'save-discount-note'
@@ -178,29 +175,30 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_DISCOUNT_NOTE,
           variables: {
-            pricingTermId: this.pricingTermId,
-            discountId: this.discountId,
+            id: this.id,
             noteId
           },
           update: (store, data) => {
-            const note = data.data.deleteDiscountNote;
+            const note = data.data.saveDiscountNote;
             const newData = store.readQuery({
-              query: GET_PRICING_TERM_LIST
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             });
-            const pricingTerm = newData.pricingTermList.filter(
-              term => term.id === this.pricingTermId
+            const discount = newData.discountList.filter(
+              d => d.id === this.id
             )[0];
-            const index = pricingTerm.discountList.findIndex(
-              discount => discount.id === this.discountId
-            );
-            pricingTerm.discountList[index].note = note;
+            discount.note = note;
             store.writeQuery({
-              query: GET_PRICING_TERM_LIST,
-              data: newData
+              query: GET_DISCOUNT_LIST,
+              data: newData,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             });
           }
         });
-        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Note deleted.',
           name: 'save-discount-note'
@@ -215,9 +213,9 @@ export default {
       return formatDate(date);
     },
     beforeOpen(event) {
-      const note = event.params.note;
-      this.pricingTermId = event.params.pricingTermId;
-      this.discountId = event.params.discountId;
+      const { note, id, pricingTermId } = event.params;
+      this.id = id;
+      this.pricingTermId = pricingTermId;
       this.important = note ? note.important : false;
       this.noteList = note ? note.noteList.sort((a, b) => b.date - a.date) : [];
       this.assigneeId = this.user.id;

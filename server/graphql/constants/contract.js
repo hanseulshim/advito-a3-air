@@ -74,6 +74,7 @@ const DISCOUNT = `id
               name
             }
             date
+            message
             assignee {
               id
               name
