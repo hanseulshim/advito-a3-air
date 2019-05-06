@@ -4,9 +4,12 @@
   "main": "index.js",
   "scripts": {
     "start": "sls offline",
-    "alpha": "sls deploy -s alpha",
-    "beta": "sls deploy -s beta",
-    "dev": "sls deploy -s dev",
+    "alpha-server": "sls deploy -s alpha",
+    "alpha-client": "aws s3 sync ./dist s3://alpha.boostlabs/air/ --acl public-read",
+    "beta-server": "sls deploy -s beta",
+    "beta-client": "aws s3 sync ./dist s3://beta.boostlabs/air/ --acl public-read",
+    "dev-server": "sls deploy -s dev",
+    "dev-client": "aws s3 sync ./dist s3://dev.boostlabs/air/ --acl public-read",
     "test": "sls deploy -s test"
   },
   "license": "MIT",
