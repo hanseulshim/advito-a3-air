@@ -5,6 +5,7 @@ node_modules
 /server/.serverless
 /server/_warmup
 /server/.env
+/server/env.yml
 
 # local env files
 .env.local
