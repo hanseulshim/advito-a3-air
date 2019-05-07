@@ -183,26 +183,55 @@
         </template>
       </el-table-column>
     </el-table>
+    <NewDiscountModal />
+    <CopyDiscountModal />
+    <EditDiscountModal />
+    <DeleteDiscountModal />
+    <DiscountNoteModal />
+    <ChangeDiscountAppliedOrderModal />
   </div>
 </template>
 
 <script>
 import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
+import { GET_DISCOUNT_LIST } from '@/graphql/queries';
+import NewDiscountModal from './NewDiscountModal';
+import CopyDiscountModal from './CopyDiscountModal';
+import EditDiscountModal from './EditDiscountModal';
+import DeleteDiscountModal from './DeleteDiscountModal';
+import DiscountNoteModal from './DiscountNoteModal';
+import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
 export default {
   name: 'Discounts',
-  props: {
+  components: {
+    NewDiscountModal,
+    CopyDiscountModal,
+    EditDiscountModal,
+    DeleteDiscountModal,
+    DiscountNoteModal,
+    ChangeDiscountAppliedOrderModal
+  },
+  apollo: {
     discountList: {
-      type: Array,
-      required: true
-    },
+      query: GET_DISCOUNT_LIST,
+      variables() {
+        return {
+          pricingTermId: this.pricingTermId
+        };
+      }
+    }
+  },
+  props: {
     pricingTermId: {
       type: Number,
-      required: true
+      required: true,
+      default: null
     }
   },
   data() {
     return {
+      discountList: [],
       bulkActionId: null,
       discount,
       bulkIdList: [],
@@ -260,7 +289,7 @@ export default {
       }
     },
     showNewDiscountModal() {
-      this.$modal.show('new-discount', { id: this.pricingTermId });
+      this.$modal.show('new-discount', { pricingTermId: this.pricingTermId });
     },
     showCopyDiscountModal(discount) {
       this.$modal.show('copy-discount', {
@@ -276,20 +305,19 @@ export default {
     },
     showEditDiscountModal(discount) {
       this.$modal.show('edit-discount', {
-        discount,
-        pricingTermId: this.pricingTermId
+        discount
       });
     },
     toggleNoteModal(discount) {
       this.$modal.show('save-discount-note', {
         pricingTermId: this.pricingTermId,
-        discountId: discount.id,
+        id: discount.id,
         note: discount.note
       });
     },
     showChangeAppliedOrderModal() {
       this.$modal.show('change-discount-order', {
-        id: this.pricingTermId,
+        pricingTermId: this.pricingTermId,
         discountList: this.discountList
       });
     },

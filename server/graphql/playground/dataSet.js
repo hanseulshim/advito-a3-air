@@ -1,3 +1,4 @@
+const { DATA_SET } = require('../constants');
 exports.dataSet = {
   queries: {
     name: 'Data Set Queries',
@@ -23,34 +24,7 @@ exports.dataSet = {
         farePaidTotal
       }
       dataSetColumnList {
-        id
-        name
-        dateUpdated
-        status
-        posTrendList {
-          id
-          countryId
-          name
-          tickets
-          segments
-          farePaid
-        }
-        divisionTrendList {
-          id
-          divisionId
-          name
-          tickets
-          segments
-          farePaid
-        }
-        importErrorsList {
-          id
-          countryId
-          name
-          importedTickets
-          errorTickets
-          errorRatio
-        }
+        ${DATA_SET}
       }
     }`
   },
@@ -61,34 +35,7 @@ exports.dataSet = {
     query: `
     mutation {
       toggleDataSet(id: 1) {
-        id
-        name
-        dateUpdated
-        status
-        posTrendList {
-          id
-          countryId
-          name
-          tickets
-          segments
-          farePaid
-        }
-        divisionTrendList {
-          id
-          divisionId
-          name
-          tickets
-          segments
-          farePaid
-        }
-        importErrorsList {
-          id
-          countryId
-          name
-          importedTickets
-          errorTickets
-          errorRatio
-        }
+        ${DATA_SET}
       }
       deleteDataSet(id: 1)
     }

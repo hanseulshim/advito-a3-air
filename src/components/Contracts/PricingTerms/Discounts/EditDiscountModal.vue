@@ -138,7 +138,6 @@ export default {
             ...this.form
           }
         });
-        this.$emit('toggle-row', this.form.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully updated.',
           name: 'edit-discount'
@@ -158,7 +157,6 @@ export default {
         journeyType,
         directionType
       } = event.params.discount;
-      this.form.pricingTermId = event.params.pricingTermId;
       this.form.id = id;
       this.form.name = name;
       this.form.discountTypeId = discountType.id;
@@ -168,7 +166,6 @@ export default {
       this.form.directionTypeId = directionType.id;
     },
     beforeClose() {
-      this.form.pricingTermId = null;
       this.form.id = null;
       this.form.name = null;
       this.form.discountTypeId = null;

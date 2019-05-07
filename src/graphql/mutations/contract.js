@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { CONTRACT, PRICING_TERM, DISCOUNT, NOTE } from '../constants';
 
 export const CREATE_CONTRACT = gql`
   mutation createContract(
@@ -19,22 +20,7 @@ export const CREATE_CONTRACT = gql`
       description: $description
       division: $division
     ) {
-      id
-      name
-      type {
-        id
-        name
-      }
-      description
-      round
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      pricingTermTotal
-      targetTermTotal
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
+      ${CONTRACT}
     }
   }
 `;
@@ -42,22 +28,7 @@ export const CREATE_CONTRACT = gql`
 export const COPY_CONTRACT = gql`
   mutation copyContract($id: Int!, $name: String!) {
     copyContract(id: $id, name: $name) {
-      id
-      name
-      type {
-        id
-        name
-      }
-      description
-      round
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      pricingTermTotal
-      targetTermTotal
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
+      ${CONTRACT}
     }
   }
 `;
@@ -83,22 +54,7 @@ export const EDIT_CONTRACT = gql`
       description: $description
       division: $division
     ) {
-      id
-      name
-      type {
-        id
-        name
-      }
-      description
-      round
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      pricingTermTotal
-      targetTermTotal
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
+      ${CONTRACT}
     }
   }
 `;
@@ -112,69 +68,7 @@ export const DELETE_CONTRACT = gql`
 export const CREATE_PRICING_TERM = gql`
   mutation createPricingTerm($name: String!, $ignore: Boolean!) {
     createPricingTerm(name: $name, ignore: $ignore) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      discountList {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-      }
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
-      ignore
+      ${PRICING_TERM}
     }
   }
 `;
@@ -182,69 +76,7 @@ export const CREATE_PRICING_TERM = gql`
 export const COPY_PRICING_TERM = gql`
   mutation copyPricingTerm($id: Int!, $name: String!, $ignore: Boolean!) {
     copyPricingTerm(id: $id, name: $name, ignore: $ignore) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      discountList {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-      }
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
-      ignore
+      ${PRICING_TERM}
     }
   }
 `;
@@ -252,69 +84,7 @@ export const COPY_PRICING_TERM = gql`
 export const EDIT_PRICING_TERM = gql`
   mutation editPricingTerm($id: Int!, $name: String!, $ignore: Boolean!) {
     editPricingTerm(id: $id, name: $name, ignore: $ignore) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      discountList {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-      }
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
-      ignore
+      ${PRICING_TERM}
     }
   }
 `;
@@ -322,69 +92,7 @@ export const EDIT_PRICING_TERM = gql`
 export const TOGGLE_PRICING_TERM_QC = gql`
   mutation togglePricingTermQC($id: Int!) {
     togglePricingTermQC(id: $id) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      discountList {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-      }
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
-      ignore
+      ${PRICING_TERM}
     }
   }
 `;
@@ -397,7 +105,7 @@ export const DELETE_PRICING_TERMS = gql`
 
 export const CREATE_DISCOUNT = gql`
   mutation createDiscount(
-    $id: Int!
+    $pricingTermId: Int!
     $name: String!
     $discountTypeId: Int
     $discountValue: Float!
@@ -405,55 +113,20 @@ export const CREATE_DISCOUNT = gql`
     $directionTypeId: Int
   ) {
     createDiscount(
-      id: $id
+      pricingTermId: $pricingTermId
       name: $name
       discountTypeId: $discountTypeId
       discountValue: $discountValue
       journeyTypeId: $journeyTypeId
       directionTypeId: $directionTypeId
     ) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      discountType {
-        id
-        name
-      }
-      discountValue
-      journeyType {
-        id
-        name
-      }
-      directionType {
-        id
-        name
-      }
-      normalizationList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
+      ${DISCOUNT}
     }
   }
 `;
 
 export const COPY_DISCOUNT = gql`
   mutation copyDiscount(
-    $pricingTermId: Int!
     $id: Int!
     $name: String!
     $discountTypeId: Int
@@ -462,7 +135,6 @@ export const COPY_DISCOUNT = gql`
     $directionTypeId: Int
   ) {
     copyDiscount(
-      pricingTermId: $pricingTermId
       id: $id
       name: $name
       discountTypeId: $discountTypeId
@@ -470,48 +142,13 @@ export const COPY_DISCOUNT = gql`
       journeyTypeId: $journeyTypeId
       directionTypeId: $directionTypeId
     ) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      discountType {
-        id
-        name
-      }
-      discountValue
-      journeyType {
-        id
-        name
-      }
-      directionType {
-        id
-        name
-      }
-      normalizationList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
+      ${DISCOUNT}
     }
   }
 `;
 
 export const EDIT_DISCOUNT = gql`
   mutation editDiscount(
-    $pricingTermId: Int!
     $id: Int!
     $name: String!
     $discountTypeId: Int
@@ -520,7 +157,6 @@ export const EDIT_DISCOUNT = gql`
     $directionTypeId: Int
   ) {
     editDiscount(
-      pricingTermId: $pricingTermId
       id: $id
       name: $name
       discountTypeId: $discountTypeId
@@ -528,165 +164,75 @@ export const EDIT_DISCOUNT = gql`
       journeyTypeId: $journeyTypeId
       directionTypeId: $directionTypeId
     ) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      discountType {
-        id
-        name
-      }
-      discountValue
-      journeyType {
-        id
-        name
-      }
-      directionType {
-        id
-        name
-      }
-      normalizationList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
+      ${DISCOUNT}
     }
   }
 `;
 
 export const DELETE_DISCOUNTS = gql`
-  mutation deleteDiscounts($pricingTermId: Int!, $idList: [Int]!) {
-    deleteDiscounts(pricingTermId: $pricingTermId, idList: $idList)
+  mutation deleteDiscounts($idList: [Int]!) {
+    deleteDiscounts(idList: $idList)
   }
 `;
 
 export const SAVE_NOTE = gql`
   mutation saveNote(
-    $pricingTermId: Int!
+    $id: Int!
     $important: Boolean!
     $message: String
     $assigneeId: Int!
     $noteId: Int
   ) {
     saveNote(
-      pricingTermId: $pricingTermId
+      id: $id
       important: $important
       message: $message
       assigneeId: $assigneeId
       noteId: $noteId
     ) {
-      important
-      noteList {
-        id
-        author {
-          id
-          name
-        }
-        date
-        assignee {
-          id
-          name
-        }
-        message
-      }
+      ${NOTE}
     }
   }
 `;
 
 export const DELETE_NOTE = gql`
-  mutation deleteNote($pricingTermId: Int!, $noteId: Int!) {
-    deleteNote(pricingTermId: $pricingTermId, noteId: $noteId) {
-      important
-      noteList {
-        id
-        author {
-          id
-          name
-        }
-        date
-        assignee {
-          id
-          name
-        }
-        message
-      }
+  mutation deleteNote($id: Int!, $noteId: Int!) {
+    deleteNote(id: $id, noteId: $noteId) {
+      ${NOTE}
     }
   }
 `;
 
 export const SAVE_DISCOUNT_NOTE = gql`
   mutation saveDiscountNote(
-    $pricingTermId: Int!
-    $discountId: Int!
+    $id: Int!
     $important: Boolean!
     $message: String
     $assigneeId: Int!
     $noteId: Int
   ) {
     saveDiscountNote(
-      pricingTermId: $pricingTermId
-      discountId: $discountId
+      id: $id
       important: $important
       message: $message
       assigneeId: $assigneeId
       noteId: $noteId
     ) {
-      important
-      noteList {
-        id
-        author {
-          id
-          name
-        }
-        date
-        assignee {
-          id
-          name
-        }
-        message
-      }
+      ${NOTE}
     }
   }
 `;
 
 export const DELETE_DISCOUNT_NOTE = gql`
   mutation deleteDiscountNote(
-    $pricingTermId: Int!
-    $discountId: Int!
+    $id: Int!
     $noteId: Int!
   ) {
     deleteDiscountNote(
-      pricingTermId: $pricingTermId
-      discountId: $discountId
+      id: $id
       noteId: $noteId
     ) {
-      important
-      noteList {
-        id
-        author {
-          id
-          name
-        }
-        date
-        assignee {
-          id
-          name
-        }
-        message
-      }
+      ${NOTE}
     }
   }
 `;
@@ -694,117 +240,19 @@ export const DELETE_DISCOUNT_NOTE = gql`
 export const UPDATE_APPLIED_ORDER = gql`
   mutation updateAppliedOrder($updatePricingTermList: [NewAppliedOrder]!) {
     updateAppliedOrder(updatePricingTermList: $updatePricingTermList) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      qc
-      pointOfSaleList
-      pointOfOriginList
-      airlineList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          message
-          assignee {
-            id
-            name
-          }
-        }
-      }
-      ignore
-      discountList {
-        id
-        contractOrder
-        appliedOrder
-        name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
-        discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            assignee {
-              id
-              name
-            }
-          }
-        }
-      }
+      ${PRICING_TERM}
     }
   }
 `;
+
 export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
   mutation updateDiscountAppliedOrder(
-    $id: Int!
     $updateDiscountList: [NewAppliedOrder]!
   ) {
     updateDiscountAppliedOrder(
-      id: $id
       updateDiscountList: $updateDiscountList
     ) {
-      id
-      contractOrder
-      appliedOrder
-      name
-      effectiveStartDate
-      effectiveEndDate
-      discountType {
-        id
-        name
-      }
-      discountValue
-      journeyType {
-        id
-        name
-      }
-      directionType {
-        id
-        name
-      }
-      normalizationList
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-        }
-      }
+      ${DISCOUNT}
     }
   }
 `;

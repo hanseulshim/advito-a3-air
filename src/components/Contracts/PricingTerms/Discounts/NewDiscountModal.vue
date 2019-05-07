@@ -65,7 +65,7 @@
 
 <script>
 import {
-  GET_PRICING_TERM_LIST,
+  GET_DISCOUNT_LIST,
   GET_DISCOUNT_TYPE_LIST,
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
@@ -90,7 +90,7 @@ export default {
       journeyTypeList: [],
       directionTypeList: [],
       form: {
-        id: null,
+        pricingTermId: null,
         name: null,
         discountTypeId: null,
         discountValue: null,
@@ -141,19 +141,21 @@ export default {
           update: (store, data) => {
             const discount = data.data.createDiscount;
             const newData = store.readQuery({
-              query: GET_PRICING_TERM_LIST
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.form.pricingTermId
+              }
             });
-            const index = newData.pricingTermList.findIndex(
-              term => term.id === this.form.id
-            );
-            newData.pricingTermList[index].discountList.push(discount);
+            newData.discountList.push(discount);
             store.writeQuery({
-              query: GET_PRICING_TERM_LIST,
-              data: newData
+              query: GET_DISCOUNT_LIST,
+              data: newData,
+              variables: {
+                pricingTermId: this.form.pricingTermId
+              }
             });
           }
         });
-        this.$emit('toggle-row', this.form.id);
         this.$modal.show('success', {
           message: 'Discount successfully created.',
           name: 'new-discount'
@@ -165,10 +167,10 @@ export default {
       }
     },
     beforeOpen(event) {
-      this.form.id = event.params.id;
+      this.form.pricingTermId = event.params.pricingTermId;
     },
     beforeClose() {
-      this.form.id = null;
+      this.form.pricingTermId = null;
       this.form.name = null;
       this.form.discountTypeId = null;
       this.form.discountValue = null;

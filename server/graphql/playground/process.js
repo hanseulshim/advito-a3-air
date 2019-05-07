@@ -1,3 +1,5 @@
+const { PROCESS } = require('../constants');
+
 exports.process = {
   queries: {
     name: 'Process Queries',
@@ -6,20 +8,7 @@ exports.process = {
     query: `
   {
     process {
-      contracts
-      dataSets
-      records
-      processing
-      processStartDate
-      recentProcessList {
-        date
-        contracts
-        dataSets
-        records
-        processDuration
-        status
-        processedBy
-      }
+      ${PROCESS}
     }
   }`
   },
@@ -30,36 +19,10 @@ exports.process = {
     query: `
     mutation {
       startProcess {
-        contracts
-        dataSets
-        records
-        processing
-        processStartDate
-        recentProcessList {
-          date
-          contracts
-          dataSets
-          records
-          processDuration
-          status
-          processedBy
-        }
+        ${PROCESS}
       }
       stopProcess {
-        contracts
-        dataSets
-        records
-        processing
-        processStartDate
-        recentProcessList {
-          date
-          contracts
-          dataSets
-          records
-          processDuration
-          status
-          processedBy
-        }
+        ${PROCESS}
       }
     }
     `

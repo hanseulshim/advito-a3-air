@@ -63,7 +63,7 @@
 
 <script>
 import {
-  GET_PRICING_TERM_LIST,
+  GET_DISCOUNT_LIST,
   GET_DISCOUNT_TYPE_LIST,
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
@@ -87,8 +87,8 @@ export default {
       discountTypeList: [],
       journeyTypeList: [],
       directionTypeList: [],
+      pricingTermId: null,
       form: {
-        pricingTermId: null,
         id: null,
         name: null,
         discountTypeId: null,
@@ -140,19 +140,21 @@ export default {
           update: (store, data) => {
             const discount = data.data.copyDiscount;
             const newData = store.readQuery({
-              query: GET_PRICING_TERM_LIST
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             });
-            const index = newData.pricingTermList.findIndex(
-              term => term.id === this.form.pricingTermId
-            );
-            newData.pricingTermList[index].discountList.push(discount);
+            newData.discountList.push(discount);
             store.writeQuery({
-              query: GET_PRICING_TERM_LIST,
-              data: newData
+              query: GET_DISCOUNT_LIST,
+              data: newData,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             });
           }
         });
-        this.$emit('toggle-row', this.form.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully copied.',
           name: 'copy-discount'
@@ -172,7 +174,7 @@ export default {
         journeyType,
         directionType
       } = event.params.discount;
-      this.form.pricingTermId = event.params.pricingTermId;
+      this.pricingTermId = event.params.pricingTermId;
       this.form.id = id;
       this.form.name = name;
       this.form.discountTypeId = discountType.id;
@@ -182,7 +184,7 @@ export default {
       this.form.directionTypeId = directionType.id;
     },
     beforeClose() {
-      this.form.pricingTermId = null;
+      this.pricingTermId = null;
       this.form.id = null;
       this.form.name = null;
       this.form.discountTypeId = null;
