@@ -15,6 +15,21 @@ export const CONTRACT = `id
         pointOfOriginList
         airlineList`;
 
+export const NOTE = `important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }`;
+
 export const PRICING_TERM = `id
         contractOrder
         appliedOrder
@@ -26,23 +41,33 @@ export const PRICING_TERM = `id
         pointOfOriginList
         airlineList
         note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
+          ${NOTE}
         }
         ignore
         discountTotal`;
+
+export const TARGET_TERM = `id
+      name
+      effectiveStartDate
+      effectiveEndDate
+      timeFrame
+      qc
+      targetType
+      cabinF
+      cabinB
+      cabinP
+      cabinE
+      qsi
+      incentiveType
+      softTarget
+      internalTarget
+      targetAmount
+      levelTotal
+      ruleTotal
+      note {
+        ${NOTE}
+      }
+  `;
 
 export const DISCOUNT = `id
         pricingTermId
@@ -66,33 +91,5 @@ export const DISCOUNT = `id
         }
         normalizationList
         note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }`;
-
-export const NOTE = `important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
+          ${NOTE}
         }`;

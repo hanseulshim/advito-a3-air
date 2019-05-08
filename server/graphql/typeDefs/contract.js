@@ -64,6 +64,36 @@ type DirectionType {
   id: Int
   name: String
 }
+type TargetTerm {
+  id: Int,
+  name: String,
+  effectiveStartDate: Date,
+  effectiveEndDate: Date,
+  timeFrame: String,
+  qc: Float,
+  targetType: String,
+  cabinF: Boolean
+  cabinB: Boolean
+  cabinP: Boolean
+  cabinE: Boolean
+  qsi: Float
+  incentiveType: String
+  softTarget: Boolean,
+  internalTarget: Boolean,
+  targetAmount: Float,
+  levelTotal: Int,
+  ruleTotal: Int,
+  note: Note,
+  isDeleted: Boolean
+}
+type TargetType {
+  id: Int,
+  name: String
+}
+type IncentiveType {
+  id: Int
+  name: String
+}
 type Note {
   important: Boolean
   noteList: [NoteContent]
@@ -86,6 +116,9 @@ extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
   pricingTermList: [PricingTerm] @auth
+  targetTermList: [TargetTerm] @auth
+  targetTypeList: [TargetType] @auth
+  incentiveTypeList: [IncentiveType] @auth
   discountList(pricingTermId: Int): [Discount] @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth

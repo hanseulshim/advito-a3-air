@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { CONTRACT, PRICING_TERM, DISCOUNT } from '../constants';
+import { CONTRACT, PRICING_TERM, DISCOUNT, TARGET_TERM } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
   {
@@ -55,6 +55,32 @@ export const GET_JOURNEY_TYPE_LIST = gql`
 export const GET_DIRECTION_TYPE_LIST = gql`
   {
     directionTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_TARGET_TERM_LIST = gql`
+{
+  targetTermList {
+    ${TARGET_TERM}
+  }
+}
+`;
+
+export const GET_TARGET_TYPE_LIST = gql`
+  {
+    targetTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_INCENTIVE_TYPE_LIST = gql`
+  {
+    incentiveTypeList {
       id
       name
     }

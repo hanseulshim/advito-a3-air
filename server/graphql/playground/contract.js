@@ -1,4 +1,10 @@
-const { CONTRACT, PRICING_TERM, DISCOUNT, NOTE } = require('../constants');
+const {
+  CONTRACT,
+  PRICING_TERM,
+  TARGET_TERM,
+  DISCOUNT,
+  NOTE
+} = require('../constants');
 
 exports.contract = {
   queries: {
@@ -24,6 +30,9 @@ exports.contract = {
       }
       discountList(pricingTermId: 1) {
         ${DISCOUNT}
+      }
+      targetTermList {
+        ${TARGET_TERM}
       }
     }`
   },
