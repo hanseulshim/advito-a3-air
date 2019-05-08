@@ -69,7 +69,7 @@ type TargetTerm {
   name: String,
   effectiveStartDate: Date,
   effectiveEndDate: Date,
-  timeframe: String,
+  timeframe: Int,
   qc: Float,
   targetType: String,
   cabinF: Boolean
