@@ -50,7 +50,7 @@ const TARGET_TERM = `id
       name
       effectiveStartDate
       effectiveEndDate
-      timeFrame
+      timeframe
       qc
       targetType
       cabinF
