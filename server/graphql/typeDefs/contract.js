@@ -84,6 +84,7 @@ type TargetTerm {
   levelTotal: Int,
   ruleTotal: Int,
   note: Note,
+  order: Int,
   isDeleted: Boolean
 }
 type TargetType {

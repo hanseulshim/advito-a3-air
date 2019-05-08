@@ -61,6 +61,7 @@ export const TARGET_TERM = `id
       incentiveType
       softTarget
       internalTarget
+      order
       targetAmount
       levelTotal
       ruleTotal

@@ -60,6 +60,7 @@ const TARGET_TERM = `id
       qsi
       incentiveType
       softTarget
+      order
       internalTarget
       targetAmount
       levelTotal
