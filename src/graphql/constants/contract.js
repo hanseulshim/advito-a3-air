@@ -70,6 +70,13 @@ export const TARGET_TERM = `id
       }
   `;
 
+export const TARGET_LEVEL = `id
+  targetTermId
+  targetAmount
+  scoringTarget
+  incentiveDescription
+`;
+
 export const DISCOUNT = `id
         pricingTermId
         contractOrder

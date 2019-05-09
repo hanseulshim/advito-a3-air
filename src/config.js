@@ -94,6 +94,13 @@ export const discount = {
   actions: 120
 };
 
+export const target = {
+  targetAmount: 150,
+  scoreTarget: 100,
+  incentiveDescription: 200,
+  actions: 100
+};
+
 export const airport = {
   name: 175,
   code: 75,

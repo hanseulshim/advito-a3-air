@@ -1,8 +1,9 @@
 const {
   CONTRACT,
   PRICING_TERM,
-  TARGET_TERM,
   DISCOUNT,
+  TARGET_TERM,
+  TARGET_LEVEL,
   NOTE
 } = require('../constants');
 
@@ -33,6 +34,9 @@ exports.contract = {
       }
       targetTermList {
         ${TARGET_TERM}
+      }
+      targetLevelList(targetTermId: 1) {
+        ${TARGET_LEVEL}
       }
     }`
   },

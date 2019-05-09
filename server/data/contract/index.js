@@ -8,6 +8,7 @@ const {
 } = require('./discount');
 const {
   targetTermList,
+  targetLevelList,
   targetTypeList,
   incentiveTypeList
 } = require('./targetTerm');
@@ -21,6 +22,7 @@ module.exports = {
   journeyTypeList,
   directionTypeList,
   targetTermList,
+  targetLevelList,
   targetTypeList,
   incentiveTypeList
 };

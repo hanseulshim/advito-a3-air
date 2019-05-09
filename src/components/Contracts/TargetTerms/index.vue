@@ -39,6 +39,11 @@
       :data="filteredTargetTermList"
       :row-class-name="tableRowClassName"
     >
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <TargetLevel :target-term-id="props.row.id" />
+        </template>
+      </el-table-column>
       <el-table-column
         prop="order"
         sortable
@@ -207,13 +212,13 @@
       </el-table-column>
       <el-table-column label="Actions" :min-width="term.actions">
         <template slot-scope="props">
-          <el-tooltip effect="dark" content="Copy Pricing Term" placement="top">
+          <el-tooltip effect="dark" content="Copy Target Term" placement="top">
             <i
               class="far fa-copy icon-spacer"
               @click="showCopyPricingTermModal(props.row)"
             />
           </el-tooltip>
-          <el-tooltip effect="dark" content="Edit Pricing Term" placement="top">
+          <el-tooltip effect="dark" content="Edit Target Term" placement="top">
             <i
               class="fas fa-pencil-alt icon-spacer"
               @click="showEditPricingTermModal(props.row)"
@@ -221,7 +226,7 @@
           </el-tooltip>
           <el-tooltip
             effect="dark"
-            content="Delete Pricing Term"
+            content="Delete Target Term"
             placement="top"
           >
             <i
@@ -241,10 +246,12 @@ import { pluralize, formatDate, formatPercent } from '@/helper';
 import { term } from '@/config';
 import { GET_TARGET_TERM_LIST } from '@/graphql/queries';
 import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
+import TargetLevel from './TargetLevel';
 export default {
   name: 'TargetTerms',
   components: {
-    Navigation
+    Navigation,
+    TargetLevel
   },
   props: {
     selectedContract: {

@@ -70,6 +70,13 @@ const TARGET_TERM = `id
       }
   `;
 
+const TARGET_LEVEL = `id
+        targetTermId
+        targetAmount
+        scoringTarget
+        incentiveDescription
+`;
+
 const DISCOUNT = `id
         pricingTermId
         contractOrder
@@ -100,5 +107,6 @@ module.exports = {
   PRICING_TERM,
   DISCOUNT,
   TARGET_TERM,
+  TARGET_LEVEL,
   NOTE
 };

@@ -65,30 +65,37 @@ type DirectionType {
   name: String
 }
 type TargetTerm {
-  id: Int,
-  name: String,
-  effectiveStartDate: Date,
-  effectiveEndDate: Date,
-  timeframe: Int,
-  qc: Float,
-  targetType: String,
+  id: Int
+  name: String
+  effectiveStartDate: Date
+  effectiveEndDate: Date
+  timeframe: Int
+  qc: Float
+  targetType: String
   cabinF: Boolean
   cabinB: Boolean
   cabinP: Boolean
   cabinE: Boolean
   qsi: Float
   incentiveType: String
-  softTarget: Boolean,
-  internalTarget: Boolean,
-  targetAmount: Float,
-  levelTotal: Int,
-  ruleTotal: Int,
-  note: Note,
-  order: Int,
+  softTarget: Boolean
+  internalTarget: Boolean
+  targetAmount: Float
+  levelTotal: Int
+  ruleTotal: Int
+  note: Note
+  order: Int
   isDeleted: Boolean
 }
+type TargetLevel {
+  id: Int
+  targetTermId: Int
+  targetAmount: Float
+  scoringTarget: Boolean
+  incentiveDescription: String
+}
 type TargetType {
-  id: Int,
+  id: Int
   name: String
 }
 type IncentiveType {
@@ -117,13 +124,14 @@ extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
   pricingTermList: [PricingTerm] @auth
-  targetTermList: [TargetTerm] @auth
-  targetTypeList: [TargetType] @auth
-  incentiveTypeList: [IncentiveType] @auth
   discountList(pricingTermId: Int): [Discount] @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
+  targetTermList: [TargetTerm] @auth
+  targetLevelList(targetTermId: Int): [TargetLevel] @auth
+  targetTypeList: [TargetType] @auth
+  incentiveTypeList: [IncentiveType] @auth
 }
 
 extend type Mutation {
@@ -158,6 +166,20 @@ extend type Mutation {
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(id: Int!): PricingTerm @auth
   deletePricingTerms(idList: [Int]!): [Int] @auth
+
+  createTargetTerm(
+    name: String!
+    targetTypeId: Int!
+    cabinF: Boolean!
+    cabinB: Boolean!
+    cabinP: Boolean!
+    cabinE: Boolean!
+    incentiveTypeId: Int!
+    qsi: Float!
+    softTarget: Boolean
+    internalTarget: Boolean
+    timeframe: Int
+  ): TargetTerm @auth
 
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!

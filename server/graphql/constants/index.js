@@ -2,6 +2,7 @@ const {
   CONTRACT,
   PRICING_TERM,
   TARGET_TERM,
+  TARGET_LEVEL,
   DISCOUNT,
   NOTE
 } = require('./contract');
@@ -13,6 +14,7 @@ module.exports = {
   CONTRACT,
   PRICING_TERM,
   TARGET_TERM,
+  TARGET_LEVEL,
   DISCOUNT,
   NOTE,
   DATA_SET,
