@@ -3,16 +3,11 @@ const { typeDefs } = require('./graphql/typeDefs');
 const { resolvers } = require('./graphql/resolvers');
 const requireAuthDirective = require('./graphql/directives');
 const { playground } = require('./graphql/playground');
-const {
-  AuthenticationService,
-  ContractService
-} = require('./graphql/services');
+const { AuthenticationService } = require('./graphql/services');
 const { knex, blopsKnex } = require('./db/knexApi');
 
 // Creates services which will be passed into the context
-const services = {
-  contractService: new ContractService(knex)
-};
+const services = {};
 
 // Creates authorization service
 const authenticationService = new AuthenticationService(blopsKnex);
