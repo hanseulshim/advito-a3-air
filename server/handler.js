@@ -3,22 +3,24 @@ const { typeDefs } = require('./graphql/typeDefs');
 const { resolvers } = require('./graphql/resolvers');
 const requireAuthDirective = require('./graphql/directives');
 const { playground } = require('./graphql/playground');
-const { AuthenticationService } = require('./graphql/services');
+const { AuthenticationService, ContractService } = require('./graphql/services');
+const { knex } = require('./db/knexApi');
+
+// Creates services which will be passed into the context
+const services = {
+  contractService: new ContractService(knex)
+};
+
+// Creates authorization service
+const authenticationService = new AuthenticationService(blopsKnex);
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ event }) => {
     const sessionToken = event.headers.sessiontoken || '';
-    const user =
-      sessionToken === 'advitoValidToken'
-        ? {
-            id: 3,
-            name: 'Scott Cashon',
-            email: 'scott.cashon@boostlabs.com'
-          }
-        : null;
-    return { sessionToken, user };
+    const user = await authenticationService.authenticate(sessionToken);
+    return { sessionToken, user, services };
   },
   schemaDirectives: {
     auth: requireAuthDirective
