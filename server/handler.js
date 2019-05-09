@@ -3,6 +3,7 @@ const { typeDefs } = require('./graphql/typeDefs');
 const { resolvers } = require('./graphql/resolvers');
 const requireAuthDirective = require('./graphql/directives');
 const { playground } = require('./graphql/playground');
+const { AuthenticationService } = require('./graphql/services');
 
 const server = new ApolloServer({
   typeDefs,
