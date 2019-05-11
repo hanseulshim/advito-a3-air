@@ -15,6 +15,21 @@ const CONTRACT = `id
         pointOfOriginList
         airlineList`;
 
+const NOTE = `important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }`;
+
 const PRICING_TERM = `id
         contractOrder
         appliedOrder
@@ -26,23 +41,47 @@ const PRICING_TERM = `id
         pointOfOriginList
         airlineList
         note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
+          ${NOTE}
         }
         ignore
         discountTotal`;
+
+const TARGET_TERM = `id
+      name
+      effectiveStartDate
+      effectiveEndDate
+      timeframe
+      qc
+      targetType {
+        id
+        name
+      }
+      cabinF
+      cabinB
+      cabinP
+      cabinE
+      qsi
+      incentiveType {
+        id
+        name
+      }
+      softTarget
+      order
+      internalTarget
+      targetAmount
+      levelTotal
+      ruleTotal
+      note {
+        ${NOTE}
+      }
+  `;
+
+const TARGET_LEVEL = `id
+        targetTermId
+        targetAmount
+        scoringTarget
+        incentiveDescription
+`;
 
 const DISCOUNT = `id
         pricingTermId
@@ -66,40 +105,14 @@ const DISCOUNT = `id
         }
         normalizationList
         note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }`;
-
-const NOTE = `important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
+          ${NOTE}
         }`;
 
 module.exports = {
   CONTRACT,
   PRICING_TERM,
   DISCOUNT,
+  TARGET_TERM,
+  TARGET_LEVEL,
   NOTE
 };

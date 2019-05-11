@@ -15,6 +15,21 @@ export const CONTRACT = `id
         pointOfOriginList
         airlineList`;
 
+export const NOTE = `important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }`;
+
 export const PRICING_TERM = `id
         contractOrder
         appliedOrder
@@ -26,23 +41,47 @@ export const PRICING_TERM = `id
         pointOfOriginList
         airlineList
         note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
+          ${NOTE}
         }
         ignore
         discountTotal`;
+
+export const TARGET_TERM = `id
+      name
+      effectiveStartDate
+      effectiveEndDate
+      timeframe
+      qc
+      targetType {
+        id
+        name
+      }
+      cabinF
+      cabinB
+      cabinP
+      cabinE
+      qsi
+      incentiveType {
+        id
+        name
+      }
+      softTarget
+      internalTarget
+      order
+      targetAmount
+      levelTotal
+      ruleTotal
+      note {
+        ${NOTE}
+      }
+  `;
+
+export const TARGET_LEVEL = `id
+  targetTermId
+  targetAmount
+  scoringTarget
+  incentiveDescription
+`;
 
 export const DISCOUNT = `id
         pricingTermId
@@ -66,33 +105,5 @@ export const DISCOUNT = `id
         }
         normalizationList
         note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }`;
-
-export const NOTE = `important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
+          ${NOTE}
         }`;

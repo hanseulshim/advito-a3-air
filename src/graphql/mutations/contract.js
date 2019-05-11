@@ -1,5 +1,12 @@
 import gql from 'graphql-tag';
-import { CONTRACT, PRICING_TERM, DISCOUNT, NOTE } from '../constants';
+import {
+  CONTRACT,
+  PRICING_TERM,
+  DISCOUNT,
+  TARGET_TERM,
+  TARGET_LEVEL,
+  NOTE
+} from '../constants';
 
 export const CREATE_CONTRACT = gql`
   mutation createContract(
@@ -254,5 +261,155 @@ export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
     ) {
       ${DISCOUNT}
     }
+  }
+`;
+
+export const CREATE_TARGET_TERM = gql`
+mutation createTargetTerm(
+  $name: String!
+  $targetTypeId: Int!
+  $cabinF: Boolean!
+  $cabinB: Boolean!
+  $cabinP: Boolean!
+  $cabinE: Boolean!
+  $incentiveTypeId: Int!
+  $qsi: Float!
+  $softTarget: Boolean
+  $internalTarget: Boolean
+  $timeframe: Int
+) {
+  createTargetTerm(
+    name: $name
+    targetTypeId: $targetTypeId
+    cabinF: $cabinF
+    cabinB: $cabinB
+    cabinP: $cabinP
+    cabinE: $cabinE
+    incentiveTypeId: $incentiveTypeId
+    qsi: $qsi
+    softTarget: $softTarget
+    internalTarget: $internalTarget
+    timeframe: $timeframe
+  ) {
+    ${TARGET_TERM}
+  }
+}
+`;
+
+export const COPY_TARGET_TERM = gql`
+mutation copyTargetTerm(
+  $id: Int!
+  $name: String!
+) {
+  copyTargetTerm(
+    id: $id
+    name: $name
+  ) {
+    ${TARGET_TERM}
+  }
+}
+`;
+
+export const EDIT_TARGET_TERM = gql`
+mutation editTargetTerm(
+  $id: Int!
+  $name: String!
+  $targetTypeId: Int!
+  $cabinF: Boolean!
+  $cabinB: Boolean!
+  $cabinP: Boolean!
+  $cabinE: Boolean!
+  $incentiveTypeId: Int!
+  $qsi: Float!
+  $softTarget: Boolean
+  $internalTarget: Boolean
+  $timeframe: Int
+) {
+  editTargetTerm(
+    id: $id
+    name: $name
+    targetTypeId: $targetTypeId
+    cabinF: $cabinF
+    cabinB: $cabinB
+    cabinP: $cabinP
+    cabinE: $cabinE
+    incentiveTypeId: $incentiveTypeId
+    qsi: $qsi
+    softTarget: $softTarget
+    internalTarget: $internalTarget
+    timeframe: $timeframe
+  ) {
+    ${TARGET_TERM}
+  }
+}
+`;
+
+export const DELETE_TARGET_TERMS = gql`
+  mutation deleteTargetTerms($idList: [Int]!) {
+    deleteTargetTerms(idList: $idList)
+  }
+`;
+
+export const TOGGLE_TARGET_TERM_QC = gql`
+  mutation toggleTargetTermQC($id: Int!) {
+    toggleTargetTermQC(id: $id) {
+      ${TARGET_TERM}
+    }
+  }
+`;
+
+export const SAVE_TARGET_TERM_NOTE = gql`
+  mutation saveTargetTermNote(
+    $id: Int!
+    $important: Boolean!
+    $message: String
+    $assigneeId: Int!
+    $noteId: Int
+  ) {
+    saveTargetTermNote(
+      id: $id
+      important: $important
+      message: $message
+      assigneeId: $assigneeId
+      noteId: $noteId
+    ) {
+      ${NOTE}
+    }
+  }
+`;
+
+export const DELETE_TARGET_TERM_NOTE = gql`
+  mutation deleteTargetTermNote($id: Int!, $noteId: Int!) {
+    deleteTargetTermNote(id: $id, noteId: $noteId) {
+      ${NOTE}
+    }
+  }
+`;
+
+export const CREATE_TARGET_LEVEL = gql`
+mutation createTargetLevel(
+  $targetTermId: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
+) {
+  createTargetLevel(
+    targetTermId: $targetTermId, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
+    ${TARGET_LEVEL}
+  }
+}
+`;
+
+export const EDIT_TARGET_LEVEL = gql`
+mutation editTargetLevel(
+  $id: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
+) {
+  editTargetLevel(
+    id: $id, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
+    ${TARGET_LEVEL}
+  }
+}
+`;
+
+export const DELETE_TARGET_LEVEL = gql`
+  mutation deleteTargetLevel($id: Int!) {
+    deleteTargetLevel(id: $id)
   }
 `;
