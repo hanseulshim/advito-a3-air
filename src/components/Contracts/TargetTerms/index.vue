@@ -29,13 +29,13 @@
             />
           </el-select>
         </div>
-        <button class="button long" @click="showNewPricingTermModal">
+        <button class="button long" @click="showNewTargetTermModal">
           + NEW TARGET TERM
         </button>
       </div>
     </div>
     <el-table
-      ref="pricingTermList"
+      ref="targetTermList"
       :data="filteredTargetTermList"
       :row-class-name="tableRowClassName"
     >
@@ -110,7 +110,7 @@
           <el-checkbox
             :class="{ invalid: props.row.qc !== 1 }"
             :value="props.row.qc === 1"
-            @change="togglePricingTermQC(props.row.id)"
+            @change="toggleTargetTermQC(props.row.id)"
           />
         </template>
       </el-table-column>
@@ -127,11 +127,10 @@
       </el-table-column>
       <el-table-column
         label="Type"
-        prop="targetType"
+        prop="targetType.name"
         :min-width="term.targetType"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="targetType"
       />
       <el-table-column label="Cabins" :min-width="term.cabins">
         <template slot-scope="props">
@@ -153,11 +152,10 @@
       />
       <el-table-column
         label="Incentive"
-        prop="incentiveType"
+        prop="incentiveType.name"
         :min-width="term.incentiveType"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="incentiveType"
       />
       <el-table-column
         label="Levels"
@@ -215,13 +213,13 @@
           <el-tooltip effect="dark" content="Copy Target Term" placement="top">
             <i
               class="far fa-copy icon-spacer"
-              @click="showCopyPricingTermModal(props.row)"
+              @click="showCopyTargetTermModal(props.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Edit Target Term" placement="top">
             <i
               class="fas fa-pencil-alt icon-spacer"
-              @click="showEditPricingTermModal(props.row)"
+              @click="showEditTargetTermModal(props.row)"
             />
           </el-tooltip>
           <el-tooltip
@@ -231,12 +229,17 @@
           >
             <i
               class="fas fa-trash-alt"
-              @click="showDeletePricingTermModal([props.row.id])"
+              @click="showDeleteTargetTermModal([props.row.id])"
             />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
+    <NewTargetTermModal />
+    <CopyTargetTermModal />
+    <EditTargetTermModal />
+    <DeleteTargetTermModal @clear-bulk-actions="clearBulkActions" />
+    <TargetTermNoteModal />
   </div>
 </template>
 
@@ -245,13 +248,23 @@ import Navigation from '../Navigation';
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { term } from '@/config';
 import { GET_TARGET_TERM_LIST } from '@/graphql/queries';
-import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
+import { TOGGLE_TARGET_TERM_QC } from '@/graphql/mutations';
 import TargetLevel from './TargetLevel';
+import NewTargetTermModal from './NewTargetTermModal';
+import CopyTargetTermModal from './CopyTargetTermModal';
+import EditTargetTermModal from './EditTargetTermModal';
+import DeleteTargetTermModal from './DeleteTargetTermModal';
+import TargetTermNoteModal from './TargetTermNoteModal';
 export default {
   name: 'TargetTerms',
   components: {
     Navigation,
-    TargetLevel
+    TargetLevel,
+    NewTargetTermModal,
+    CopyTargetTermModal,
+    EditTargetTermModal,
+    DeleteTargetTermModal,
+    TargetTermNoteModal
   },
   props: {
     selectedContract: {
@@ -338,37 +351,37 @@ export default {
         this.bulkIdList.splice(index, 1);
       }
     },
-    showNewPricingTermModal() {
-      this.$modal.show('new-pricing-term');
+    showNewTargetTermModal() {
+      this.$modal.show('new-target-term');
     },
-    showCopyPricingTermModal(pricingTerm) {
-      this.$modal.show('copy-pricing-term', { pricingTerm });
+    showCopyTargetTermModal(targetTerm) {
+      this.$modal.show('copy-target-term', { targetTerm });
     },
-    showEditPricingTermModal(pricingTerm) {
-      this.$modal.show('edit-pricing-term', { pricingTerm });
+    showEditTargetTermModal(targetTerm) {
+      this.$modal.show('edit-target-term', { targetTerm });
     },
-    showDeletePricingTermModal(idList) {
-      this.$modal.show('delete-pricing-term', { idList });
+    showDeleteTargetTermModal(idList) {
+      this.$modal.show('delete-target-term', { idList });
     },
-    toggleNoteModal(pricingTerm) {
-      this.$modal.show('save-note', {
-        id: pricingTerm.id,
-        note: pricingTerm.note
+    toggleNoteModal(targetTerm) {
+      this.$modal.show('save-target-term-note', {
+        id: targetTerm.id,
+        note: targetTerm.note
       });
     },
     bulkAction(value) {
       if (value === 1) {
-        this.showDeletePricingTermModal(this.bulkIdList);
+        this.showDeleteTargetTermModal(this.bulkIdList);
       }
     },
     clearBulkActions() {
       this.bulkIdList = [];
       this.bulkActionId = null;
     },
-    async togglePricingTermQC(id) {
+    async toggleTargetTermQC(id) {
       try {
         await this.$apollo.mutate({
-          mutation: TOGGLE_PRICING_TERM_QC,
+          mutation: TOGGLE_TARGET_TERM_QC,
           variables: {
             id
           }

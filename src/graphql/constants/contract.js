@@ -52,13 +52,19 @@ export const TARGET_TERM = `id
       effectiveEndDate
       timeframe
       qc
-      targetType
+      targetType {
+        id
+        name
+      }
       cabinF
       cabinB
       cabinP
       cabinE
       qsi
-      incentiveType
+      incentiveType {
+        id
+        name
+      }
       softTarget
       internalTarget
       order

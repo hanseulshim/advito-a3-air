@@ -96,7 +96,7 @@ export const discount = {
 
 export const target = {
   targetAmount: 150,
-  scoreTarget: 100,
+  scoreTarget: 150,
   incentiveDescription: 200,
   actions: 100
 };

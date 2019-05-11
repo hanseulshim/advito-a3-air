@@ -121,6 +121,30 @@ exports.contract = {
       deleteDiscountNote(id: 22, noteId: 7) {
         ${NOTE}
       }
+
+      createTargetTerm(
+        name: "test",
+        targetTypeId: 1,
+        cabinF: true,
+        cabinB: false,
+        cabinP: true,
+        cabinE: false,
+        incentiveTypeId: 2,
+        qsi: 0.7,
+        softTarget: true,
+        internalTarget: true,
+        timeframe: 20
+      ) {
+        ${TARGET_TERM}
+      }
+      createTargetLevel(
+        targetTermId: 1
+        targetAmount: 50
+        scoringTarget: true
+        incentiveDescription: "Test"
+      ) {
+        ${TARGET_LEVEL}
+      }
     }
     `
   }

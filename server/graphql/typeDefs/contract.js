@@ -71,13 +71,13 @@ type TargetTerm {
   effectiveEndDate: Date
   timeframe: Int
   qc: Float
-  targetType: String
+  targetType: TargetType
   cabinF: Boolean
   cabinB: Boolean
   cabinP: Boolean
   cabinE: Boolean
   qsi: Float
-  incentiveType: String
+  incentiveType: IncentiveType
   softTarget: Boolean
   internalTarget: Boolean
   targetAmount: Float
@@ -180,7 +180,40 @@ extend type Mutation {
     internalTarget: Boolean
     timeframe: Int
   ): TargetTerm @auth
+  copyTargetTerm(id: Int!, name: String!): TargetTerm @auth
+  editTargetTerm(
+    id: Int!
+    name: String!
+    targetTypeId: Int!
+    cabinF: Boolean!
+    cabinB: Boolean!
+    cabinP: Boolean!
+    cabinE: Boolean!
+    incentiveTypeId: Int!
+    qsi: Float!
+    softTarget: Boolean
+    internalTarget: Boolean
+    timeframe: Int
+  ): TargetTerm @auth
+  toggleTargetTermQC(id: Int!): TargetTerm @auth
+  deleteTargetTerms(idList: [Int]!): [Int] @auth
 
+  createTargetLevel(
+    targetTermId: Int!
+    targetAmount: Float!
+    scoringTarget: Boolean!
+    incentiveDescription: String
+  ): TargetLevel @auth
+  editTargetLevel(
+    id: Int!
+    targetAmount: Float!
+    scoringTarget: Boolean!
+    incentiveDescription: String
+  ): TargetLevel @auth
+  deleteTargetLevel(
+    id: Int!
+  ): Int @auth
+  
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!
   ): [Discount] @auth
@@ -219,6 +252,17 @@ extend type Mutation {
     noteId: Int
   ): Note
   deleteNote(
+    id: Int!
+    noteId: Int!
+  ): Note
+  saveTargetTermNote(
+    id: Int!
+    important: Boolean!
+    message: String
+    assigneeId: Int!
+    noteId: Int
+  ): Note
+  deleteTargetTermNote(
     id: Int!
     noteId: Int!
   ): Note

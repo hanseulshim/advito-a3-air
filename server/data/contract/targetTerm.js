@@ -6,13 +6,19 @@ exports.targetTermList = [
     effectiveEndDate: '12/28/2019',
     timeframe: 2,
     qc: 1,
-    targetType: 'Segment',
+    targetType: {
+      id: 3,
+      name: 'Segment'
+    },
     cabinF: true,
     cabinB: true,
     cabinP: false,
     cabinE: false,
     qsi: 0.84,
-    incentiveType: 'None',
+    incentiveType: {
+      id: 3,
+      name: 'None'
+    },
     softTarget: false,
     internalTarget: true,
     targetAmount: 0.02,
@@ -29,13 +35,19 @@ exports.targetTermList = [
     effectiveEndDate: '7/25/2019',
     timeframe: 11,
     qc: 1,
-    targetType: 'Revenue',
+    targetType: {
+      id: 4,
+      name: 'Revenue'
+    },
     cabinF: false,
     cabinB: false,
     cabinP: false,
     cabinE: false,
     qsi: 0.95,
-    incentiveType: 'None',
+    incentiveType: {
+      id: 3,
+      name: 'None'
+    },
     softTarget: true,
     internalTarget: false,
     targetAmount: 0.28,
@@ -52,13 +64,19 @@ exports.targetTermList = [
     effectiveEndDate: '12/8/2019',
     timeframe: 7,
     qc: 0,
-    targetType: 'Sgmt. Share',
+    targetType: {
+      id: 1,
+      name: 'Sgmt. Share'
+    },
     cabinF: true,
     cabinB: true,
     cabinP: true,
     cabinE: true,
     qsi: 0.63,
-    incentiveType: 'Other',
+    incentiveType: {
+      id: 2,
+      name: 'Other'
+    },
     softTarget: true,
     internalTarget: true,
     targetAmount: 0.22,
@@ -75,13 +93,19 @@ exports.targetTermList = [
     effectiveEndDate: '11/20/2019',
     timeframe: 1,
     qc: 0,
-    targetType: 'Sgmt. Share',
+    targetType: {
+      id: 1,
+      name: 'Sgmt. Share'
+    },
     cabinF: true,
     cabinB: false,
     cabinP: true,
     cabinE: false,
     qsi: 0.36,
-    incentiveType: 'None',
+    incentiveType: {
+      id: 3,
+      name: 'None'
+    },
     softTarget: false,
     internalTarget: true,
     targetAmount: 0.14,
@@ -98,13 +122,19 @@ exports.targetTermList = [
     effectiveEndDate: '6/9/2019',
     timeframe: 9,
     qc: 1,
-    targetType: 'Share Gap',
+    targetType: {
+      id: 5,
+      name: 'Share Gap'
+    },
     cabinF: false,
     cabinB: true,
     cabinP: false,
     cabinE: false,
     qsi: 0.82,
-    incentiveType: 'Back-End',
+    incentiveType: {
+      id: 1,
+      name: 'Back-End'
+    },
     softTarget: false,
     internalTarget: true,
     targetAmount: 0.1,
@@ -121,13 +151,19 @@ exports.targetTermList = [
     effectiveEndDate: '1/21/2019',
     timeframe: null,
     qc: 1,
-    targetType: 'Segment',
+    targetType: {
+      id: 3,
+      name: 'Segment'
+    },
     cabinF: true,
     cabinB: false,
     cabinP: true,
     cabinE: false,
     qsi: 0.68,
-    incentiveType: 'Other',
+    incentiveType: {
+      id: 2,
+      name: 'Other'
+    },
     softTarget: false,
     internalTarget: false,
     targetAmount: 0.18,
@@ -144,13 +180,19 @@ exports.targetTermList = [
     effectiveEndDate: '11/1/2019',
     timeframe: null,
     qc: 1,
-    targetType: 'Segment',
+    targetType: {
+      id: 3,
+      name: 'Segment'
+    },
     cabinF: false,
     cabinB: false,
     cabinP: false,
     cabinE: true,
     qsi: 0.31,
-    incentiveType: 'None',
+    incentiveType: {
+      id: 3,
+      name: 'None'
+    },
     softTarget: false,
     internalTarget: false,
     targetAmount: 0.36,
@@ -167,13 +209,19 @@ exports.targetTermList = [
     effectiveEndDate: '2/10/2019',
     timeframe: 7,
     qc: 0,
-    targetType: 'Sgmt. Share',
+    targetType: {
+      id: 1,
+      name: 'Sgmt. Share'
+    },
     cabinF: false,
     cabinB: false,
     cabinP: false,
     cabinE: true,
     qsi: 0.94,
-    incentiveType: 'Other',
+    incentiveType: {
+      id: 2,
+      name: 'Other'
+    },
     softTarget: true,
     internalTarget: true,
     targetAmount: 0.48,
@@ -190,13 +238,19 @@ exports.targetTermList = [
     effectiveEndDate: '1/20/2019',
     timeframe: null,
     qc: 1,
-    targetType: 'Segment',
+    targetType: {
+      id: 3,
+      name: 'Segment'
+    },
     cabinF: false,
     cabinB: false,
     cabinP: true,
     cabinE: false,
     qsi: 0.01,
-    incentiveType: 'Back-End',
+    incentiveType: {
+      id: 1,
+      name: 'Back-End'
+    },
     softTarget: false,
     internalTarget: true,
     targetAmount: 0.43,
@@ -213,13 +267,19 @@ exports.targetTermList = [
     effectiveEndDate: '12/30/2019',
     timeframe: 2,
     qc: 1,
-    targetType: 'Revenue',
+    targetType: {
+      id: 4,
+      name: 'Revenue'
+    },
     cabinF: false,
     cabinB: true,
     cabinP: false,
     cabinE: true,
     qsi: 0.24,
-    incentiveType: 'Other',
+    incentiveType: {
+      id: 2,
+      name: 'Other'
+    },
     softTarget: true,
     internalTarget: false,
     targetAmount: 0.4,
