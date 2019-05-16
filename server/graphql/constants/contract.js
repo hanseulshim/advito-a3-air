@@ -11,7 +11,8 @@ const CONTRACT = `id
         targetTermCount
         pointOfSaleList
         pointOfOriginList
-        airlineList`;
+        airlineList
+        divisionId`;
 
 const PRICING_TERM = `id
         contractOrder

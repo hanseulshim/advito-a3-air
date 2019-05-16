@@ -14,7 +14,7 @@ type Contract {
   pointOfSaleList: [String]
   pointOfOriginList: [String]
   airlineList: [String]
-  division: String
+  divisionId: Int
   isDeleted: Boolean
 }
 type ContractType {

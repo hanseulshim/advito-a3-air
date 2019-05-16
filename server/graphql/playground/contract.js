@@ -43,7 +43,7 @@ exports.contract = {
       copyContract(id: 1, name: "copy contract") {
         ${CONTRACT}
       }
-      editContract(id: 1, name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
+      editContract(id: 1, name: "Test 1 - edit", typeId: 2, round: 5, effectiveFrom: 2534032400000, effectiveTo: null, description: "description", divisionId: 2) {
         ${CONTRACT}
       }
       updateAppliedOrder(

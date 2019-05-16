@@ -1,25 +1,19 @@
 const { ApolloError } = require('apollo-server-lambda');
 const uuidv4 = require('uuid/v4');
-const { contractList, contractTypeList } = require('../../../data');
+const { contractList } = require('../../../data');
 
 exports.contract = {
   Query: {
     contractList: async (_, __, { db }) => await getContracts(db),
-    contractTypeList: async (_, __, { db }) => {
-      return await db('contractcontainer')
+    contractTypeList: async (_, __, { db }) =>
+      await db('lov_lookup')
         .select({
-          id: 'lov_lookup.id',
-          name: 'lov_lookup.name_val'
+          id: 'id',
+          name: 'name_val'
         })
-        .leftJoin(
-          'lov_lookup',
-          'contractcontainer.contracttype',
-          'lov_lookup.id'
-        )
-        .distinct('lov_lookup.id');
-    },
-    divisionTypeList: async (_, __, { db }) => {
-      return await db('division')
+        .where('type', 1),
+    divisionTypeList: async (_, __, { db }) =>
+      await db('division')
         .select({
           id: 'division.id',
           name: 'division.name'
@@ -30,8 +24,7 @@ exports.contract = {
           'division.clientid'
         )
         .distinct('division.id')
-        .where('division.isdeleted', false);
-    }
+        .where('division.isdeleted', false)
   },
   Mutation: {
     createContract: async (
@@ -47,7 +40,7 @@ exports.contract = {
       },
       { db }
     ) => {
-      const result = await db('contractcontainer').insert(
+      const [newContract] = await db('contractcontainer').insert(
         {
           guidref: uuidv4(),
           name,
@@ -62,13 +55,13 @@ exports.contract = {
         },
         ['id', 'guidref']
       );
-      const { id, guidref } = result[0];
-      const contract = await getContracts(db, guidref);
+      const { id, guidref } = newContract;
       await db('contractdivision').insert({
         contractid: id,
         divisionid: divisionId
       });
-      return contract[0];
+      const [contract] = await getContracts(db, guidref);
+      return contract;
     },
     copyContract: (_, { id, name }) => {
       const contract = contractList.filter(c => c.id === id)[0];
@@ -84,41 +77,48 @@ exports.contract = {
       contractList.push(copyContract);
       return copyContract;
     },
-    editContract: (
+    editContract: async (
       _,
       {
         id,
         name,
         typeId,
         round,
-        effectiveStartDate,
-        effectiveEndDate,
-        division,
+        effectiveFrom,
+        effectiveTo,
+        divisionId,
         description
-      }
+      },
+      { db }
     ) => {
-      const contract = contractList.filter(c => c.id === id)[0];
-      if (!contract) {
-        throw new ApolloError('Contract not found', 400);
-      }
-      const type = contractTypeList.filter(type => type.id === typeId)[0];
-      contract.name = name;
-      contract.type = type;
-      contract.round = round;
-      contract.effectiveStartDate = new Date(effectiveStartDate);
-      contract.effectiveEndDate = effectiveEndDate
-        ? new Date(effectiveEndDate)
-        : new Date(253402232400000);
-      contract.division = division;
-      contract.description = description;
+      const [updatedContract] = await db('contractcontainer')
+        .where('id', id)
+        .update(
+          {
+            contracttype: typeId,
+            name,
+            round,
+            effectivefrom: new Date(effectiveFrom),
+            effectiveto: effectiveTo
+              ? new Date(effectiveTo)
+              : new Date(253402232400000),
+            description
+          },
+          ['id', 'guidref']
+        );
+      const { id: contractId, guidref } = updatedContract;
+      await db('contractdivision')
+        .where('contractid', contractId)
+        .update({ divisionid: divisionId });
+      const [contract] = await getContracts(db, guidref);
       return contract;
     },
-    deleteContract: (_, { id }) => {
-      const contract = contractList.filter(c => c.id === id)[0];
-      if (!contract) {
-        throw new ApolloError('Contract not found', 400);
-      }
-      contract.isDeleted = true;
+    deleteContract: async (_, { id }, { db }) => {
+      await db('contractcontainer')
+        .where('id', id)
+        .update({
+          isdeleted: true
+        });
       return id;
     }
   }
@@ -159,7 +159,7 @@ const getContractList = async (db, guidref = null) =>
       qc: 'contractcontainer.qc',
       pricingTermCount: 'contractcontainer.count_priterms',
       targetTermCount: 'contractcontainer.count_targterms',
-      division: 'division.name'
+      divisionId: 'division.id'
     })
     .leftJoin('lov_lookup', 'contractcontainer.contracttype', 'lov_lookup.id')
     .leftJoin(

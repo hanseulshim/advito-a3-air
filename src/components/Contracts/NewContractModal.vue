@@ -162,15 +162,15 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const contract = data.data.createContract;
-            const newData = store.readQuery({
+          update: (store, { data: { createContract } }) => {
+            const query = {
               query: GET_CONTRACT_LIST
-            });
-            newData.contractList.push(contract);
+            };
+            const data = store.readQuery(query);
+            data.contractList.push(createContract);
             store.writeQuery({
-              query: GET_CONTRACT_LIST,
-              data: newData
+              ...query,
+              data
             });
           }
         });
@@ -190,13 +190,9 @@ export default {
       }
     },
     beforeClose() {
-      this.form.name = null;
-      this.form.typeId = null;
-      this.form.round = null;
-      this.form.effectiveFrom = null;
-      this.form.effectiveTo = null;
-      this.form.description = null;
-      this.form.divisionId = null;
+      Object.keys(this.form).forEach(key => {
+        this.form[key] = null;
+      });
     }
   }
 };

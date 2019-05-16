@@ -11,7 +11,8 @@ export const CONTRACT = `id
         targetTermCount
         pointOfSaleList
         pointOfOriginList
-        airlineList`;
+        airlineList
+        divisionId`;
 
 export const PRICING_TERM = `id
         contractOrder
