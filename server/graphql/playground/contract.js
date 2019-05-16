@@ -4,13 +4,17 @@ exports.contract = {
   queries: {
     name: 'Contract Queries',
     endpoint: 'http://localhost:8085/graphql',
-    headers: { sessiontoken: 'advitoValidToken' },
+    headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
       contractList {
         ${CONTRACT}
       }
       contractTypeList {
+        id
+        name
+      }
+      divisionTypeList {
         id
         name
       }
@@ -30,10 +34,10 @@ exports.contract = {
   mutations: {
     name: 'Contract Mutations',
     endpoint: 'http://localhost:8085/graphql',
-    headers: { sessiontoken: 'advitoValidToken' },
+    headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     mutation {
-      createContract(name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
+      createContract(name: "test", typeId: 2, round: 5, effectiveFrom: 2534032400000, effectiveTo: null, description: "description", divisionId: 2) {
         ${CONTRACT}
       }
       copyContract(id: 1, name: "copy contract") {

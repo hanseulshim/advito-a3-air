@@ -6,19 +6,19 @@ export const CREATE_CONTRACT = gql`
     $name: String!
     $typeId: Int!
     $round: Int
-    $effectiveStartDate: Date!
-    $effectiveEndDate: Date
+    $effectiveFrom: Date!
+    $effectiveTo: Date
     $description: String
-    $division: String
+    $divisionId: Int
   ) {
     createContract(
       name: $name
       typeId: $typeId
       round: $round
-      effectiveStartDate: $effectiveStartDate
-      effectiveEndDate: $effectiveEndDate
+      effectiveFrom: $effectiveFrom
+      effectiveTo: $effectiveTo
       description: $description
-      division: $division
+      divisionId: $divisionId
     ) {
       ${CONTRACT}
     }

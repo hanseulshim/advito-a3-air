@@ -33,7 +33,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item v-if="form.typeId === 2" label="Round *" prop="round">
@@ -41,17 +41,17 @@
       </el-form-item>
       <el-form-item label="Effective Dates *">
         <div class="date-picker-container">
-          <el-form-item prop="effectiveStartDate" class="date-picker-item">
+          <el-form-item prop="effectiveFrom" class="date-picker-item">
             <el-date-picker
-              v-model="form.effectiveStartDate"
+              v-model="form.effectiveFrom"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
             />
           </el-form-item>
-          <el-form-item prop="effectiveEndDate" class="date-picker-item">
+          <el-form-item prop="effectiveTo" class="date-picker-item">
             <el-date-picker
-              v-model="form.effectiveEndDate"
+              v-model="form.effectiveTo"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
@@ -60,7 +60,14 @@
         </div>
       </el-form-item>
       <el-form-item label="Division">
-        <el-input v-model="form.division" />
+        <el-select v-model="form.divisionId" class="select-modal">
+          <el-option
+            v-for="item in divisionTypeList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="Description">
         <el-input v-model="form.description" type="textarea" />
@@ -73,13 +80,20 @@
 </template>
 
 <script>
-import { GET_CONTRACT_LIST, GET_CONTRACT_TYPE_LIST } from '@/graphql/queries';
+import {
+  GET_CONTRACT_LIST,
+  GET_CONTRACT_TYPE_LIST,
+  GET_DIVISION_TYPE_LIST
+} from '@/graphql/queries';
 import { CREATE_CONTRACT } from '@/graphql/mutations';
 export default {
   name: 'NewContractModal',
   apollo: {
     contractTypeList: {
       query: GET_CONTRACT_TYPE_LIST
+    },
+    divisionTypeList: {
+      query: GET_DIVISION_TYPE_LIST
     }
   },
   data() {
@@ -88,12 +102,13 @@ export default {
         name: null,
         typeId: null,
         round: null,
-        effectiveStartDate: null,
-        effectiveEndDate: null,
+        effectiveFrom: null,
+        effectiveTo: null,
         description: null,
-        division: null
+        divisionId: null
       },
       contractTypeList: [],
+      divisionTypeList: [],
       rules: {
         name: [
           {
@@ -117,7 +132,7 @@ export default {
           },
           { type: 'number', message: 'Round must be a number' }
         ],
-        effectiveStartDate: [
+        effectiveFrom: [
           {
             required: true,
             message: 'Please select a start date',
@@ -178,10 +193,10 @@ export default {
       this.form.name = null;
       this.form.typeId = null;
       this.form.round = null;
-      this.form.effectiveStartDate = null;
-      this.form.effectiveEndDate = null;
+      this.form.effectiveFrom = null;
+      this.form.effectiveTo = null;
       this.form.description = null;
-      this.form.division = null;
+      this.form.divisionId = null;
     }
   }
 };

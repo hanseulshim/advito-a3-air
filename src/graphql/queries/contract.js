@@ -9,6 +9,15 @@ export const GET_CONTRACT_LIST = gql`
   }
 `;
 
+export const GET_DIVISION_TYPE_LIST = gql`
+  {
+    divisionTypeList {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_CONTRACT_TYPE_LIST = gql`
   {
     contractTypeList {

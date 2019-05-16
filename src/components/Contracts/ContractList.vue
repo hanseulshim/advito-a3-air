@@ -25,7 +25,7 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="type.name"
+        prop="typeName"
         label="Type"
         :min-width="contract.type"
         sortable
@@ -53,7 +53,7 @@
         :formatter="formatDate"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveEndDate"
+        sort-by="effectiveTo"
       />
       <el-table-column
         label="QC"
@@ -72,7 +72,7 @@
       <el-table-column label="Airlines" :min-width="contract.airlines">
         <template slot-scope="props">
           <el-tooltip
-            v-if="props.row.airlineList.length > 1"
+            v-if="props.row.airlineList && props.row.airlineList.length > 1"
             effect="dark"
             placement="top"
           >
@@ -101,6 +101,7 @@
             <span>
               <span>
                 {{
+                  props.row.pointOfSaleList &&
                   props.row.pointOfSaleList.length > 1
                     ? props.row.pointOfSaleList.length
                     : props.row.pointOfSaleList.join('')
@@ -125,7 +126,7 @@
           >
             <router-link to="/project/contracts/pricing-terms">
               <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.pricingTermTotal }}
+                {{ props.row.pricingTermCount }}
               </button>
             </router-link>
           </el-tooltip>
@@ -136,7 +137,7 @@
           <el-tooltip effect="dark" content="View Target Terms" placement="top">
             <router-link to="/project/contracts/target-terms">
               <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.targetTermTotal }}
+                {{ props.row.targetTermCount }}
               </button>
             </router-link>
           </el-tooltip>
@@ -201,7 +202,7 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return formatDate(row.effectiveEndDate);
+      return formatDate(row.effectiveTo);
     },
     formatPercent(num) {
       return formatPercent(num);

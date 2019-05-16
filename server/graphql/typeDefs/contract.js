@@ -2,14 +2,15 @@ exports.contract = `
 type Contract {
   id: Int
   name: String
-  type: ContractType
+  typeId: Int
+  typeName: String
   description: String
   round: Int
-  effectiveStartDate: Date
-  effectiveEndDate: Date
+  effectiveFrom: Date
+  effectiveTo: Date
   qc: Float
-  pricingTermTotal: Int
-  targetTermTotal: Int
+  pricingTermCount: Int
+  targetTermCount: Int
   pointOfSaleList: [String]
   pointOfOriginList: [String]
   airlineList: [String]
@@ -17,6 +18,10 @@ type Contract {
   isDeleted: Boolean
 }
 type ContractType {
+  id: Int
+  name: String
+}
+type DivisionType {
   id: Int
   name: String
 }
@@ -85,6 +90,7 @@ input NewAppliedOrder {
 extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
+  divisionTypeList: [DivisionType] @auth
   pricingTermList: [PricingTerm] @auth
   discountList(pricingTermId: Int): [Discount] @auth
   discountTypeList: [DiscountType] @auth
@@ -97,9 +103,9 @@ extend type Mutation {
     name: String!
     typeId: Int!
     round: Int
-    effectiveStartDate: Date!
-    effectiveEndDate: Date
-    division: String
+    effectiveFrom: Date!
+    effectiveTo: Date
+    divisionId: Int
     description: String
   ): Contract @auth
   copyContract(id: Int!, name: String!): Contract @auth
@@ -108,9 +114,9 @@ extend type Mutation {
     name: String!
     typeId: Int!
     round: Int
-    effectiveStartDate: Date!
-    effectiveEndDate: Date
-    division: String
+    effectiveFrom: Date!
+    effectiveTo: Date
+    divisionId: Int
     description: String
   ): Contract @auth
   deleteContract(id: Int!): Int @auth

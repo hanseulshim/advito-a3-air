@@ -1,16 +1,14 @@
 const CONTRACT = `id
         name
-        type {
-          id
-          name
-        }
+        typeId
+        typeName
         description
         round
-        effectiveStartDate
-        effectiveEndDate
+        effectiveFrom
+        effectiveTo
         qc
-        pricingTermTotal
-        targetTermTotal
+        pricingTermCount
+        targetTermCount
         pointOfSaleList
         pointOfOriginList
         airlineList`;
