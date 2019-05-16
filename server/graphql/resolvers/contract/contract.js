@@ -1,7 +1,3 @@
-const { ApolloError } = require('apollo-server-lambda');
-const uuidv4 = require('uuid/v4');
-const { contractList } = require('../../../data');
-
 exports.contract = {
   Query: {
     contractList: async (_, __, { db }) => await getContracts(db),
@@ -42,7 +38,6 @@ exports.contract = {
     ) => {
       const [newContract] = await db('contractcontainer').insert(
         {
-          guidref: uuidv4(),
           name,
           contracttype: typeId,
           round,
@@ -53,29 +48,26 @@ exports.contract = {
           description,
           qc: 0
         },
-        ['id', 'guidref']
+        ['id']
       );
-      const { id, guidref } = newContract;
+      const { id } = newContract;
       await db('contractdivision').insert({
         contractid: id,
         divisionid: divisionId
       });
-      const [contract] = await getContracts(db, guidref);
+      const [contract] = await getContracts(db, id);
       return contract;
     },
-    copyContract: (_, { id, name }) => {
-      const contract = contractList.filter(c => c.id === id)[0];
-      if (!contract) {
-        throw new ApolloError('Contract not found', 400);
-      }
-      const maxId = Math.max(...contractList.map(contract => contract.id)) + 1;
-      const copyContract = {
-        ...contract,
-        id: maxId,
-        name
-      };
-      contractList.push(copyContract);
-      return copyContract;
+    copyContract: async (_, { id, name }, { db }) => {
+      const { rows } = await db.raw(
+        `SELECT contract_createcopy(${id}, '${name}')`
+      );
+      const [copyContract] = rows;
+      const [contract] = await getContracts(
+        db,
+        copyContract.contract_createcopy
+      );
+      return contract;
     },
     editContract: async (
       _,
@@ -91,26 +83,22 @@ exports.contract = {
       },
       { db }
     ) => {
-      const [updatedContract] = await db('contractcontainer')
+      await db('contractcontainer')
         .where('id', id)
-        .update(
-          {
-            contracttype: typeId,
-            name,
-            round,
-            effectivefrom: new Date(effectiveFrom),
-            effectiveto: effectiveTo
-              ? new Date(effectiveTo)
-              : new Date(253402232400000),
-            description
-          },
-          ['id', 'guidref']
-        );
-      const { id: contractId, guidref } = updatedContract;
+        .update({
+          contracttype: typeId,
+          name,
+          round,
+          effectivefrom: new Date(effectiveFrom),
+          effectiveto: effectiveTo
+            ? new Date(effectiveTo)
+            : new Date(253402232400000),
+          description
+        });
       await db('contractdivision')
-        .where('contractid', contractId)
+        .where('contractid', id)
         .update({ divisionid: divisionId });
-      const [contract] = await getContracts(db, guidref);
+      const [contract] = await getContracts(db, id);
       return contract;
     },
     deleteContract: async (_, { id }, { db }) => {
@@ -124,11 +112,11 @@ exports.contract = {
   }
 };
 
-const getContracts = async (db, guidref) => {
-  const dbContractList = await getContractList(db, guidref);
-  const pointOfSaleList = await getPointOfSaleList(db, guidref);
-  const pointOfOriginList = await getPointOfOriginList(db, guidref);
-  const airlineList = await getAirlineList(db, guidref);
+const getContracts = async (db, id = null) => {
+  const dbContractList = await getContractList(db, id);
+  const pointOfSaleList = await getPointOfSaleList(db, id);
+  const pointOfOriginList = await getPointOfOriginList(db, id);
+  const airlineList = await getAirlineList(db, id);
   return dbContractList.map(contract => {
     const pointOfSale = pointOfSaleList.filter(p => p.id === contract.id)[0]
       .pointOfSaleList;
@@ -145,7 +133,7 @@ const getContracts = async (db, guidref) => {
   });
 };
 
-const getContractList = async (db, guidref = null) =>
+const getContractList = async (db, id) =>
   await db('contractcontainer')
     .select({
       id: 'contractcontainer.id',
@@ -169,11 +157,11 @@ const getContractList = async (db, guidref = null) =>
     )
     .leftJoin('division', 'contractdivision.divisionid', 'division.id')
     .whereRaw(
-      'contractcontainer.isdeleted = false and (?::uuid is null or contractcontainer.guidref = ?)',
-      [guidref, guidref]
+      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
+      [id, id]
     );
 
-const getPointOfSaleList = async (db, guidref = null) =>
+const getPointOfSaleList = async (db, id) =>
   await db('contractcontainer')
     .select({
       id: 'contractcontainer.id',
@@ -193,11 +181,11 @@ const getPointOfSaleList = async (db, guidref = null) =>
     )
     .groupBy('contractcontainer.id')
     .whereRaw(
-      'contractcontainer.isdeleted = false and (?::uuid is null or contractcontainer.guidref = ?)',
-      [guidref, guidref]
+      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
+      [id, id]
     );
 
-const getPointOfOriginList = async (db, guidref = null) =>
+const getPointOfOriginList = async (db, id) =>
   await db('contractcontainer')
     .select({
       id: 'contractcontainer.id',
@@ -217,11 +205,11 @@ const getPointOfOriginList = async (db, guidref = null) =>
     )
     .groupBy('contractcontainer.id')
     .whereRaw(
-      'contractcontainer.isdeleted = false and (?::uuid is null or contractcontainer.guidref = ?)',
-      [guidref, guidref]
+      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
+      [id, id]
     );
 
-const getAirlineList = async (db, guidref = null) =>
+const getAirlineList = async (db, id) =>
   await db('contractcontainer')
     .select({
       id: 'contractcontainer.id',
@@ -241,6 +229,6 @@ const getAirlineList = async (db, guidref = null) =>
     )
     .groupBy('contractcontainer.id')
     .whereRaw(
-      'contractcontainer.isdeleted = false and (?::uuid is null or contractcontainer.guidref = ?)',
-      [guidref, guidref]
+      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
+      [id, id]
     );
