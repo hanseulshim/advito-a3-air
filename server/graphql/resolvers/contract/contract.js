@@ -1,3 +1,5 @@
+const CONTRACT_TYPE = 2;
+
 exports.contract = {
   Query: {
     contractList: async (_, __, { db }) => await getContracts(db),
@@ -7,7 +9,7 @@ exports.contract = {
           id: 'id',
           name: 'name_val'
         })
-        .where('type', 1),
+        .where('type', CONTRACT_TYPE),
     divisionTypeList: async (_, __, { db }) =>
       await db('division')
         .select({
