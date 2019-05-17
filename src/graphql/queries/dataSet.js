@@ -12,6 +12,7 @@ export const GET_DATA_SET_COUNTRY_LIST = gql`
       importedTicketsTotal
       errorTicketsTotal
       errorRatioTotal
+      numberDatasets
     }
   }
 `;

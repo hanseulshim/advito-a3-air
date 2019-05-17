@@ -8,6 +8,7 @@ type DataSetCountry {
   importedTicketsTotal: Int
   errorTicketsTotal: Int
   errorRatioTotal: Int
+  numberDatasets: Int
 }
 type DataSetDivision {
   id: Int
