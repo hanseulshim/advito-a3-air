@@ -1,4 +1,6 @@
 const CONTRACT_TYPE = 2;
+//TODO: REPLACE HARD CODED CLIENT ID WITH REAL ONE WHEN CLIENT IS HOOKED UP
+const CLIENT_ID = 1;
 
 exports.contract = {
   Query: {
@@ -16,13 +18,9 @@ exports.contract = {
           id: 'division.id',
           name: 'division.name'
         })
-        .innerJoin(
-          'contractcontainer',
-          'contractcontainer.clientid',
-          'division.clientid'
-        )
         .distinct('division.id')
         .where('division.isdeleted', false)
+        .andWhere('division.clientid', CLIENT_ID)
   },
   Mutation: {
     createContract: async (
@@ -53,10 +51,12 @@ exports.contract = {
         ['id']
       );
       const { id } = newContract;
-      await db('contractdivision').insert({
-        contractid: id,
-        divisionid: divisionId
-      });
+      if (divisionId) {
+        await db('contractdivision').insert({
+          contractid: id,
+          divisionid: divisionId
+        });
+      }
       const [contract] = await getContracts(db, id);
       return contract;
     },
@@ -97,9 +97,11 @@ exports.contract = {
             : new Date(253402232400000),
           description
         });
-      await db('contractdivision')
-        .where('contractid', id)
-        .update({ divisionid: divisionId });
+      if (divisionId) {
+        await db('contractdivision')
+          .where('contractid', id)
+          .update({ divisionid: divisionId });
+      }
       const [contract] = await getContracts(db, id);
       return contract;
     },
@@ -216,7 +218,7 @@ const getAirlineList = async (db, id) =>
     .select({
       id: 'contractcontainer.id',
       airlineList: db.raw(
-        'ARRAY_AGG(pointoforigin.countrycode) filter (where pointoforigin.countrycode is not null)'
+        'ARRAY_AGG(carrierrule.carriercode) filter (where carrierrule.carriercode is not null)'
       )
     })
     .leftJoin(
@@ -225,9 +227,9 @@ const getAirlineList = async (db, id) =>
       'rulescontainer.contractcontainerid'
     )
     .leftJoin(
-      'pointoforigin',
+      'carrierrule',
       'rulescontainer.guidref',
-      'pointoforigin.rulescontainerguidref'
+      'carrierrule.rulescontainerguidref'
     )
     .groupBy('contractcontainer.id')
     .whereRaw(
