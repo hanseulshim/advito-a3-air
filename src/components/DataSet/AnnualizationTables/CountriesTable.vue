@@ -3,6 +3,10 @@
     <div class="annualize-container">
       <p>Annualization</p>
       <el-switch v-model="annualized"/>
+      <div class="annualize-controls" v-if="annualized">
+        <el-input v-model="annualizeAllBy"/>
+        <button class="button long annualization">ANNUALIZATION</button>
+      </div>
     </div>
     <el-table :data="dataSetCountryList" show-summary :summary-method="getTotal">
       <el-table-column prop="name" label="Countries">
