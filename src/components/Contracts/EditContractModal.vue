@@ -42,17 +42,17 @@
       </el-form-item>
       <el-form-item label="Effective Dates *">
         <div class="date-picker-container">
-          <el-form-item prop="effectiveStartDate" class="date-picker-item">
+          <el-form-item prop="effectiveFrom" class="date-picker-item">
             <el-date-picker
-              v-model="form.effectiveStartDate"
+              v-model="form.effectiveFrom"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
             />
           </el-form-item>
-          <el-form-item prop="effectiveEndDate" class="date-picker-item">
+          <el-form-item prop="effectiveTo" class="date-picker-item">
             <el-date-picker
-              v-model="form.effectiveEndDate"
+              v-model="form.effectiveTo"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
@@ -61,7 +61,14 @@
         </div>
       </el-form-item>
       <el-form-item label="Division">
-        <el-input v-model="form.division" />
+        <el-select v-model="form.divisionId" class="select-modal">
+          <el-option
+            v-for="item in divisionTypeList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="Description">
         <el-input v-model="form.description" type="textarea" />
@@ -74,13 +81,19 @@
 </template>
 
 <script>
-import { GET_CONTRACT_TYPE_LIST } from '@/graphql/queries';
+import {
+  GET_CONTRACT_TYPE_LIST,
+  GET_DIVISION_TYPE_LIST
+} from '@/graphql/queries';
 import { EDIT_CONTRACT } from '@/graphql/mutations';
 export default {
   name: 'EditContractModal',
   apollo: {
     contractTypeList: {
       query: GET_CONTRACT_TYPE_LIST
+    },
+    divisionTypeList: {
+      query: GET_DIVISION_TYPE_LIST
     }
   },
   data() {
@@ -90,12 +103,13 @@ export default {
         name: null,
         typeId: null,
         round: null,
-        effectiveStartDate: null,
-        effectiveEndDate: null,
+        effectiveFrom: null,
+        effectiveTo: null,
         description: null,
-        division: null
+        divisionId: null
       },
       contractTypeList: [],
+      divisionTypeList: [],
       rules: {
         name: [
           {
@@ -119,7 +133,7 @@ export default {
           },
           { type: 'number', message: 'Round must be a number' }
         ],
-        effectiveStartDate: [
+        effectiveFrom: [
           {
             required: true,
             message: 'Please select a start date',
@@ -161,30 +175,35 @@ export default {
       }
     },
     updateType(value) {
-      if (value !== 2) {
+      const [type] = this.contractTypeList.filter(c => c.id === value);
+      if (type.name !== 'Proposal') {
         this.form.round = null;
       }
     },
     beforeOpen(event) {
-      const contract = event.params.contract;
-      this.form.id = contract.id;
-      this.form.name = contract.name;
-      this.form.typeId = contract.type.id;
-      this.form.round = contract.round;
-      this.form.effectiveStartDate = contract.effectiveStartDate;
-      this.form.effectiveEndDate = contract.effectiveEndDate;
-      this.form.description = contract.description;
-      this.form.division = contract.division;
+      const {
+        id,
+        name,
+        typeId,
+        round,
+        effectiveFrom,
+        effectiveTo,
+        description,
+        divisionId
+      } = event.params.contract;
+      this.form.id = id;
+      this.form.name = name;
+      this.form.typeId = typeId;
+      this.form.round = round;
+      this.form.effectiveFrom = effectiveFrom;
+      this.form.effectiveTo = effectiveTo;
+      this.form.description = description;
+      this.form.divisionId = divisionId;
     },
     beforeClose() {
-      this.form.id = null;
-      this.form.name = null;
-      this.form.typeId = null;
-      this.form.round = null;
-      this.form.effectiveStartDate = null;
-      this.form.effectiveEndDate = null;
-      this.form.description = null;
-      this.form.division = null;
+      Object.keys(this.form).forEach(key => {
+        this.form[key] = null;
+      });
     }
   }
 };

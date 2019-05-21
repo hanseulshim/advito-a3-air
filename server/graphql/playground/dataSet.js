@@ -3,7 +3,7 @@ exports.dataSet = {
   queries: {
     name: 'Data Set Queries',
     endpoint: 'http://localhost:8085/graphql',
-    headers: { sessiontoken: 'advitoValidToken' },
+    headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
       dataSetCountryList {
@@ -31,7 +31,7 @@ exports.dataSet = {
   mutations: {
     name: 'Data Set Mutations',
     endpoint: 'http://localhost:8085/graphql',
-    headers: { sessiontoken: 'advitoValidToken' },
+    headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     mutation {
       toggleDataSet(id: 1) {

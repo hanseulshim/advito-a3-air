@@ -9,6 +9,15 @@ export const GET_CONTRACT_LIST = gql`
   }
 `;
 
+export const GET_DIVISION_TYPE_LIST = gql`
+  {
+    divisionTypeList {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_CONTRACT_TYPE_LIST = gql`
   {
     contractTypeList {
@@ -19,11 +28,11 @@ export const GET_CONTRACT_TYPE_LIST = gql`
 `;
 
 export const GET_PRICING_TERM_LIST = gql`
-  {
-    pricingTermList {
-      ${PRICING_TERM}
-    }
+query pricingTermList($contractId: Int) {
+  pricingTermList(contractId: $contractId) {
+    ${PRICING_TERM}
   }
+}
 `;
 
 export const GET_DISCOUNT_LIST = gql`

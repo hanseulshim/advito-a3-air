@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint",
     "alpha": "aws s3 sync  ./dist s3://alpha.boostlabs/air/ --acl public-read --profile boost",
     "beta": "aws s3 sync  ./dist s3://beta.boostlabs/air/ --acl public-read --profile boost",
-    "dev": "aws s3 sync  ./dist s3://dev.boostlabs/air/ --acl public-read --profile boost"
+    "dev": "aws s3 sync  ./dist s3://alpha.boostlabs/air-dev/ --acl public-read --profile boost"
   },
   "dependencies": {
     "apollo-boost": "^0.1.28",

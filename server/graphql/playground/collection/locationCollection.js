@@ -1,7 +1,7 @@
 exports.locationCollection = {
   name: 'Location Collection Mutations',
   endpoint: 'http://localhost:8085/graphql',
-  headers: { sessiontoken: 'advitoValidToken' },
+  headers: { sessiontoken: 'MY^PR3TTYP0NY' },
   query: `
     mutation {
       createLocationCollection(id: 1, name: "Collection 1", description: "Collection 1 description") {

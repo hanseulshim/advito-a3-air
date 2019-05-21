@@ -25,7 +25,7 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="type.name"
+        prop="typeName"
         label="Type"
         :min-width="contract.type"
         sortable
@@ -53,7 +53,7 @@
         :formatter="formatDate"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveEndDate"
+        sort-by="effectiveTo"
       />
       <el-table-column
         label="QC"
@@ -82,13 +82,19 @@
             </span>
           </el-tooltip>
           <span v-else>
-            {{ props.row.airlineList.join('') }}
+            {{
+              props.row.airlineList.length ? props.row.airlineList.join('') : 0
+            }}
           </span>
         </template>
       </el-table-column>
       <el-table-column label="PoS/PoO" :min-width="contract.pos">
         <template slot-scope="props">
           <el-tooltip
+            v-if="
+              props.row.pointOfSaleList.length ||
+                props.row.pointOfOriginList.length
+            "
             effect="dark"
             placement="top"
             popper-class="pos-popup-container"
@@ -101,6 +107,7 @@
             <span>
               <span>
                 {{
+                  props.row.pointOfSaleList &&
                   props.row.pointOfSaleList.length > 1
                     ? props.row.pointOfSaleList.length
                     : props.row.pointOfSaleList.join('')
@@ -114,6 +121,19 @@
               }}</span>
             </span>
           </el-tooltip>
+          <span v-else>
+            <span>{{
+              props.row.pointOfSaleList.length
+                ? props.row.pointOfSaleList.join('')
+                : 0
+            }}</span>
+            <span> / </span>
+            <span>{{
+              props.row.pointOfOriginList.length
+                ? props.row.pointOfOriginList.join('')
+                : 0
+            }}</span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="Pricing Terms" :min-width="contract.pricingTerms">
@@ -125,7 +145,7 @@
           >
             <router-link to="/project/contracts/pricing-terms">
               <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.pricingTermTotal }}
+                {{ props.row.pricingTermCount }}
               </button>
             </router-link>
           </el-tooltip>
@@ -136,7 +156,7 @@
           <el-tooltip effect="dark" content="View Target Terms" placement="top">
             <router-link to="/project/contracts/target-terms">
               <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.targetTermTotal }}
+                {{ props.row.targetTermCount }}
               </button>
             </router-link>
           </el-tooltip>
@@ -201,7 +221,9 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return formatDate(row.effectiveEndDate);
+      return `${formatDate(row.effectiveFrom)} — ${formatDate(
+        row.effectiveTo
+      )}`;
     },
     formatPercent(num) {
       return formatPercent(num);

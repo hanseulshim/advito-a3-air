@@ -45,7 +45,7 @@ export const contract = {
   type: 80,
   description: 150,
   round: 70,
-  effectiveDates: 115,
+  effectiveDates: 150,
   qc: 55,
   airlines: 55,
   pos: 75,

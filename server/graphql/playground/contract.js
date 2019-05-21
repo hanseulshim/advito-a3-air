@@ -4,7 +4,7 @@ exports.contract = {
   queries: {
     name: 'Contract Queries',
     endpoint: 'http://localhost:8085/graphql',
-    headers: { sessiontoken: 'advitoValidToken' },
+    headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
       contractList {
@@ -14,12 +14,16 @@ exports.contract = {
         id
         name
       }
+      divisionTypeList {
+        id
+        name
+      }
       userList {
         id
         name
         email
       }
-      pricingTermList {
+      pricingTermList(contractId: 134) {
         ${PRICING_TERM}
       }
       discountList(pricingTermId: 1) {
@@ -30,16 +34,16 @@ exports.contract = {
   mutations: {
     name: 'Contract Mutations',
     endpoint: 'http://localhost:8085/graphql',
-    headers: { sessiontoken: 'advitoValidToken' },
+    headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     mutation {
-      createContract(name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
+      createContract(name: "test", typeId: 2, round: 5, effectiveFrom: 2534032400000, effectiveTo: null, description: "description", divisionId: 2) {
         ${CONTRACT}
       }
       copyContract(id: 1, name: "copy contract") {
         ${CONTRACT}
       }
-      editContract(id: 1, name: "test", typeId: 2, round: 5, effectiveStartDate: 2534032400000, effectiveEndDate: null, description: "description", division: "division 1") {
+      editContract(id: 1, name: "Test 1 - edit", typeId: 2, round: 5, effectiveFrom: 2534032400000, effectiveTo: null, description: "description", divisionId: 2) {
         ${CONTRACT}
       }
       updateAppliedOrder(
@@ -56,19 +60,19 @@ exports.contract = {
       ) {
         ${PRICING_TERM}
       }
-      createPricingTerm(name: "term 1", ignore: false) {
+      createPricingTerm(contractId: 134, name: "term 1", ignore: false) {
         ${PRICING_TERM}
       }
       copyPricingTerm(id: 1, name: "copy term", ignore: false) {
         ${PRICING_TERM}
       }
-      editPricingTerm(id: 1, name: "term edit", ignore: true) {
+      editPricingTerm(id: 49, name: "Pricing Term 1 - edit", ignore: true) {
         ${PRICING_TERM}
       }
-      togglePricingTermQC(id: 1) {
+      togglePricingTermQC(id: 49) {
         ${PRICING_TERM}
       }
-      deletePricingTerms(idList: [1, 2, 3])
+      deletePricingTerms(idList: [72, 73, 74])
 
       updateDiscountAppliedOrder(
         updateDiscountList: [

@@ -2,21 +2,26 @@ exports.contract = `
 type Contract {
   id: Int
   name: String
-  type: ContractType
+  typeId: Int
+  typeName: String
   description: String
   round: Int
-  effectiveStartDate: Date
-  effectiveEndDate: Date
+  effectiveFrom: Date
+  effectiveTo: Date
   qc: Float
-  pricingTermTotal: Int
-  targetTermTotal: Int
+  pricingTermCount: Int
+  targetTermCount: Int
   pointOfSaleList: [String]
   pointOfOriginList: [String]
   airlineList: [String]
-  division: String
+  divisionId: Int
   isDeleted: Boolean
 }
 type ContractType {
+  id: Int
+  name: String
+}
+type DivisionType {
   id: Int
   name: String
 }
@@ -25,9 +30,9 @@ type PricingTerm {
   contractOrder: Int
   appliedOrder: Int
   name: String
-  effectiveStartDate: Date
-  effectiveEndDate: Date
-  qc: Float
+  effectiveFrom: Date
+  effectiveTo: Date
+  qc: Boolean
   discountTotal: Int
   pointOfSaleList: [String]
   pointOfOriginList: [String]
@@ -85,7 +90,8 @@ input NewAppliedOrder {
 extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
-  pricingTermList: [PricingTerm] @auth
+  divisionTypeList: [DivisionType] @auth
+  pricingTermList(contractId: Int): [PricingTerm] @auth
   discountList(pricingTermId: Int): [Discount] @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
@@ -97,9 +103,9 @@ extend type Mutation {
     name: String!
     typeId: Int!
     round: Int
-    effectiveStartDate: Date!
-    effectiveEndDate: Date
-    division: String
+    effectiveFrom: Date!
+    effectiveTo: Date
+    divisionId: Int
     description: String
   ): Contract @auth
   copyContract(id: Int!, name: String!): Contract @auth
@@ -108,9 +114,9 @@ extend type Mutation {
     name: String!
     typeId: Int!
     round: Int
-    effectiveStartDate: Date!
-    effectiveEndDate: Date
-    division: String
+    effectiveFrom: Date!
+    effectiveTo: Date
+    divisionId: Int
     description: String
   ): Contract @auth
   deleteContract(id: Int!): Int @auth
@@ -119,7 +125,7 @@ extend type Mutation {
     updatePricingTermList: [NewAppliedOrder]!
   ): [PricingTerm] @auth
 
-  createPricingTerm(name: String!, ignore: Boolean!): PricingTerm @auth
+  createPricingTerm(contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(id: Int!): PricingTerm @auth
