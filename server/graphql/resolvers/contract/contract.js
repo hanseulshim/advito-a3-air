@@ -36,7 +36,7 @@ exports.contract = {
       },
       { db }
     ) => {
-      const [newContract] = await db('contractcontainer').insert(
+      const [id] = await db('contractcontainer').insert(
         {
           name,
           contracttype: typeId,
@@ -48,9 +48,8 @@ exports.contract = {
           description,
           qc: 0
         },
-        ['id']
+        'id'
       );
-      const { id } = newContract;
       if (divisionId) {
         await db('contractdivision').insert({
           contractid: id,
@@ -105,14 +104,17 @@ exports.contract = {
       const [contract] = await getContracts(db, id);
       return contract;
     },
-    deleteContract: async (_, { id }, { db }) => {
-      await db('contractcontainer')
-        .where('id', id)
-        .update({
-          isdeleted: true
-        });
-      return id;
-    }
+    deleteContract: async (_, { id }, { db }) =>
+      parseInt(
+        await db('contractcontainer')
+          .where('id', id)
+          .update(
+            {
+              isdeleted: true
+            },
+            'id'
+          )
+      )
   }
 };
 
@@ -175,8 +177,8 @@ const getPointOfSaleList = async (db, id) =>
     })
     .leftJoin(
       'rulescontainer',
-      'contractcontainer.id',
-      'rulescontainer.contractcontainerid'
+      'contractcontainer.guidref',
+      'rulescontainer.guidref'
     )
     .leftJoin(
       'pointofsale',
@@ -199,8 +201,8 @@ const getPointOfOriginList = async (db, id) =>
     })
     .leftJoin(
       'rulescontainer',
-      'contractcontainer.id',
-      'rulescontainer.contractcontainerid'
+      'contractcontainer.guidref',
+      'rulescontainer.guidref'
     )
     .leftJoin(
       'pointoforigin',
@@ -223,8 +225,8 @@ const getAirlineList = async (db, id) =>
     })
     .leftJoin(
       'rulescontainer',
-      'contractcontainer.id',
-      'rulescontainer.contractcontainerid'
+      'contractcontainer.guidref',
+      'rulescontainer.guidref'
     )
     .leftJoin(
       'carrierrule',

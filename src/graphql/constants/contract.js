@@ -18,8 +18,8 @@ export const PRICING_TERM = `id
         contractOrder
         appliedOrder
         name
-        effectiveStartDate
-        effectiveEndDate
+        effectiveFrom
+        effectiveTo
         qc
         pointOfSaleList
         pointOfOriginList

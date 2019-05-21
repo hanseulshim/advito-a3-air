@@ -28,11 +28,11 @@ export const GET_CONTRACT_TYPE_LIST = gql`
 `;
 
 export const GET_PRICING_TERM_LIST = gql`
-  {
-    pricingTermList {
-      ${PRICING_TERM}
-    }
+query pricingTermList($contractId: Int) {
+  pricingTermList(contractId: $contractId) {
+    ${PRICING_TERM}
   }
+}
 `;
 
 export const GET_DISCOUNT_LIST = gql`

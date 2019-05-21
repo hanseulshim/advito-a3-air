@@ -100,7 +100,7 @@
         :formatter="formatDate"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveEndDate"
+        sort-by="effectiveTo"
       />
       <el-table-column
         label="QC"
@@ -111,8 +111,8 @@
       >
         <template slot-scope="props">
           <el-checkbox
-            :class="{ invalid: props.row.qc !== 1 }"
-            :value="props.row.qc === 1"
+            :class="{ invalid: !props.row.qc }"
+            :value="props.row.qc"
             @change="togglePricingTermQC(props.row.id)"
           />
         </template>
@@ -125,7 +125,7 @@
       <el-table-column label="Airlines" :min-width="term.airlines">
         <template slot-scope="props">
           <el-tooltip
-            v-if="props.row.airlineList.length > 1"
+            v-if="props.row.airlineList.length"
             effect="dark"
             placement="top"
           >
@@ -144,6 +144,10 @@
       <el-table-column label="PoS/PoO" :min-width="term.pos">
         <template slot-scope="props">
           <el-tooltip
+            v-if="
+              props.row.pointOfSaleList.length &&
+                props.row.pointOfOriginList.length
+            "
             effect="dark"
             placement="top"
             popper-class="pos-popup-container"
@@ -178,6 +182,19 @@
               }}</span>
             </span>
           </el-tooltip>
+          <span v-else>
+            <span>{{
+              props.row.pointOfSaleList.length
+                ? props.row.pointOfSaleList.join('')
+                : 0
+            }}</span>
+            <span> / </span>
+            <span>{{
+              props.row.pointOfOriginList.length
+                ? props.row.pointOfOriginList.join('')
+                : 0
+            }}</span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -284,7 +301,12 @@ export default {
   },
   apollo: {
     pricingTermList: {
-      query: GET_PRICING_TERM_LIST
+      query: GET_PRICING_TERM_LIST,
+      variables() {
+        return {
+          contractId: this.selectedContract.id
+        };
+      }
     }
   },
   props: {
@@ -329,12 +351,12 @@ export default {
     };
   },
   computed: {
-    filteredPricingTermList: function() {
+    filteredPricingTermList() {
       return this.pricingTermList
-        .filter(term => this.showInactive || term.effectiveEndDate > new Date())
+        .filter(term => this.showInactive || term.effectiveTo > new Date())
         .map(term => ({
           ...term,
-          inactive: term.effectiveEndDate < new Date()
+          inactive: term.effectiveTo < new Date()
         }));
     }
   },
@@ -343,8 +365,8 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return `${formatDate(row.effectiveStartDate)} — ${formatDate(
-        row.effectiveEndDate
+      return `${formatDate(row.effectiveFrom)} — ${formatDate(
+        row.effectiveTo
       )}`;
     },
     checkQc() {
