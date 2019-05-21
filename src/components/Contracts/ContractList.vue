@@ -72,7 +72,7 @@
       <el-table-column label="Airlines" :min-width="contract.airlines">
         <template slot-scope="props">
           <el-tooltip
-            v-if="props.row.airlineList && props.row.airlineList.length > 1"
+            v-if="props.row.airlineList.length > 1"
             effect="dark"
             placement="top"
           >
@@ -82,13 +82,19 @@
             </span>
           </el-tooltip>
           <span v-else>
-            {{ props.row.airlineList.join('') }}
+            {{
+              props.row.airlineList.length ? props.row.airlineList.join('') : 0
+            }}
           </span>
         </template>
       </el-table-column>
       <el-table-column label="PoS/PoO" :min-width="contract.pos">
         <template slot-scope="props">
           <el-tooltip
+            v-if="
+              props.row.pointOfSaleList.length ||
+                props.row.pointOfOriginList.length
+            "
             effect="dark"
             placement="top"
             popper-class="pos-popup-container"
@@ -115,6 +121,19 @@
               }}</span>
             </span>
           </el-tooltip>
+          <span v-else>
+            <span>{{
+              props.row.pointOfSaleList.length
+                ? props.row.pointOfSaleList.join('')
+                : 0
+            }}</span>
+            <span> / </span>
+            <span>{{
+              props.row.pointOfOriginList.length
+                ? props.row.pointOfOriginList.join('')
+                : 0
+            }}</span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="Pricing Terms" :min-width="contract.pricingTerms">
@@ -202,7 +221,9 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return formatDate(row.effectiveTo);
+      return `${formatDate(row.effectiveFrom)} — ${formatDate(
+        row.effectiveTo
+      )}`;
     },
     formatPercent(num) {
       return formatPercent(num);

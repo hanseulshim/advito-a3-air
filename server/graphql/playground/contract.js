@@ -23,7 +23,7 @@ exports.contract = {
         name
         email
       }
-      pricingTermList {
+      pricingTermList(contractId: 134) {
         ${PRICING_TERM}
       }
       discountList(pricingTermId: 1) {
@@ -60,19 +60,19 @@ exports.contract = {
       ) {
         ${PRICING_TERM}
       }
-      createPricingTerm(name: "term 1", ignore: false) {
+      createPricingTerm(contractId: 134, name: "term 1", ignore: false) {
         ${PRICING_TERM}
       }
       copyPricingTerm(id: 1, name: "copy term", ignore: false) {
         ${PRICING_TERM}
       }
-      editPricingTerm(id: 1, name: "term edit", ignore: true) {
+      editPricingTerm(id: 49, name: "Pricing Term 1 - edit", ignore: true) {
         ${PRICING_TERM}
       }
-      togglePricingTermQC(id: 1) {
+      togglePricingTermQC(id: 49) {
         ${PRICING_TERM}
       }
-      deletePricingTerms(idList: [1, 2, 3])
+      deletePricingTerms(idList: [72, 73, 74])
 
       updateDiscountAppliedOrder(
         updateDiscountList: [

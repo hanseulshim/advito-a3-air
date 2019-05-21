@@ -15,7 +15,7 @@ exports.projectList = [
     savingsTypeId: 2,
     savingsType: 'Standard',
     effectiveFrom: '03/26/2017',
-    effectiveTo: '05/08/2019',
+    effectiveTo: '10/08/2019',
     reportFrom: '01/13/2018',
     reportTo: '05/30/2019',
     projectManagerId: 3,

@@ -30,9 +30,9 @@ type PricingTerm {
   contractOrder: Int
   appliedOrder: Int
   name: String
-  effectiveStartDate: Date
-  effectiveEndDate: Date
-  qc: Float
+  effectiveFrom: Date
+  effectiveTo: Date
+  qc: Boolean
   discountTotal: Int
   pointOfSaleList: [String]
   pointOfOriginList: [String]
@@ -91,7 +91,7 @@ extend type Query {
   contractList: [Contract] @auth
   contractTypeList: [ContractType] @auth
   divisionTypeList: [DivisionType] @auth
-  pricingTermList: [PricingTerm] @auth
+  pricingTermList(contractId: Int): [PricingTerm] @auth
   discountList(pricingTermId: Int): [Discount] @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
@@ -125,7 +125,7 @@ extend type Mutation {
     updatePricingTermList: [NewAppliedOrder]!
   ): [PricingTerm] @auth
 
-  createPricingTerm(name: String!, ignore: Boolean!): PricingTerm @auth
+  createPricingTerm(contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(id: Int!): PricingTerm @auth
