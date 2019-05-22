@@ -1,11 +1,13 @@
 <template>
   <div class="fixed-table-container">
     <div class="annualize-container">
-      <p>Annualization</p>
-      <el-switch v-model="annualized"/>
+      <div class="enable-annualization">
+        <p>Annualization</p>
+        <el-switch v-model="annualized"/>
+      </div>
       <div class="annualize-controls" v-if="annualized">
-        <el-input v-model="annualizeAllBy"/>
-        <button class="button long annualization">ANNUALIZATION</button>
+        <el-input v-model="annualizeAllBy" type="number" size="small"/>
+        <button class="button annualization">ANNUALIZE ALL</button>
       </div>
     </div>
     <el-table :data="dataSetCountryList" show-summary :summary-method="getTotal">
@@ -25,13 +27,14 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="annualized" prop="numberDatasets" align="right">
+      <el-table-column v-if="annualized" align="right">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
             <span class="header-text">Annualization Months</span>
           </span>
         </template>
+        <el-input/>
       </el-table-column>
       <el-table-column
         prop="importedTicketsTotal"
@@ -120,6 +123,25 @@ export default {
   display: flex;
   height: 40px;
   align-items: center;
+  justify-content: space-between;
+}
+
+.enable-annualization {
+  display: flex;
+  align-items: center;
+  p {
+    margin-right: 10%;
+  }
+}
+
+.annualize-controls {
+  display: flex;
+  .el-input {
+    width: 65px;
+  }
+  button {
+    margin-left: 10px;
+  }
 }
 </style>
 

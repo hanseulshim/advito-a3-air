@@ -1,6 +1,30 @@
 <template>
   <div class="data-set-table-container">
-    <CountriesTable/>
+    <div class="fixed-table-container">
+      <div class="icon-container"/>
+      <el-table :data="dataSetCountryList" show-summary :summary-method="getTotal">
+        <el-table-column prop="name" label="Countries">
+          <template slot="header">
+            <span class="header-container">
+              <div class="updated-date"/>
+              <span class="header-text">Countries</span>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="ticketsTotal"
+          align="right"
+          :formatter="row => formatNumber(row.ticketsTotal)"
+        >
+          <template slot="header">
+            <span class="header-container">
+              <div class="updated-date"/>
+              <span class="header-text">Tickets</span>
+            </span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <div class="column-table-container">
       <div v-for="column in filteredDataSetList" :key="column.id" class="column-table">
         <div class="icon-container">
