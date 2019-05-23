@@ -129,6 +129,7 @@ exports.dataSetDivisionList = [
     ticketsTotal: 178312,
     segmentsTotal: 58275,
     farePaidTotal: 11278,
+    numberDatasets: 10,
   },
   {
     id: 2,
@@ -136,6 +137,7 @@ exports.dataSetDivisionList = [
     ticketsTotal: 82575,
     segmentsTotal: 100658,
     farePaidTotal: 17862,
+    numberDatasets: 10,
   },
   {
     id: 3,
@@ -143,6 +145,7 @@ exports.dataSetDivisionList = [
     ticketsTotal: 112742,
     segmentsTotal: 82240,
     farePaidTotal: 14610,
+    numberDatasets: 10,
   },
   {
     id: 4,
@@ -150,6 +153,7 @@ exports.dataSetDivisionList = [
     ticketsTotal: 153641,
     segmentsTotal: 55949,
     farePaidTotal: 23711,
+    numberDatasets: 10,
   },
   {
     id: 5,
@@ -157,6 +161,7 @@ exports.dataSetDivisionList = [
     ticketsTotal: 134624,
     segmentsTotal: 76875,
     farePaidTotal: 10835,
+    numberDatasets: 10,
   },
 ];
 

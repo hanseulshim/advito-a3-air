@@ -1,44 +1,8 @@
 <template>
   <div class="data-set-table-container">
-    <div class="fixed-table-container">
-      <div class="icon-container" />
-      <el-table
-        :data="dataSetDivisionList"
-        show-summary
-        :summary-method="getTotal"
-      >
-        <el-table-column prop="name" label="Countries">
-          <template slot="header">
-            <span class="header-container">
-              <div class="updated-date" />
-              <span class="header-text">
-                Divisions
-              </span>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="ticketsTotal"
-          align="right"
-          :formatter="row => formatNumber(row.ticketsTotal)"
-        >
-          <template slot="header">
-            <span class="header-container">
-              <div class="updated-date" />
-              <span class="header-text">
-                Tickets
-              </span>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <DivisionsTable v-bind:selected="selector"/>
     <div class="column-table-container">
-      <div
-        v-for="column in filteredDataSetList"
-        :key="column.id"
-        class="column-table"
-      >
+      <div v-for="column in filteredDataSetList" :key="column.id" class="column-table">
         <div class="icon-container">
           <el-tooltip effect="dark" content="Accept" placement="top">
             <i
@@ -52,25 +16,24 @@
               class="fas fa-minus data-icon qc"
               :class="{ active: column.status === null }"
               @click="toggleDataSet(column.id, null)"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip effect="dark" content="Reject" placement="top">
             <i
               class="fas fa-times data-icon reject"
               :class="{ active: column.status === 'reject' }"
               @click="toggleDataSet(column.id, 'reject')"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip
             v-if="column.status === 'reject'"
             effect="dark"
             content="Delete"
             placement="top"
           >
-            <i
-              class="fas fa-trash-alt delete"
-              @click="deleteDataSet(column.id)"
-            />
+            <i class="fas fa-trash-alt delete" @click="deleteDataSet(column.id)"/>
           </el-tooltip>
-          <i v-else class="fas fa-trash-alt reject-hide" />
+          <i v-else class="fas fa-trash-alt reject-hide"/>
         </div>
         <el-table
           :data="column.divisionTrendList"
@@ -78,18 +41,11 @@
           :summary-method="getSummaries"
           :row-class-name="tableRowClassName(column.status)"
         >
-          <el-table-column
-            align="right"
-            :formatter="row => formatNumber(row[selector])"
-          >
+          <el-table-column align="right" :formatter="row => formatNumber(row[selector])">
             <template slot="header">
               <span class="header-container content">
-                <span class="updated-date">
-                  {{ formatDateTime(column.dateUpdated) }}
-                </span>
-                <span class="header-text">
-                  {{ formatDataSetCol(column.name) }}
-                </span>
+                <span class="updated-date">{{ formatDateTime(column.dateUpdated) }}</span>
+                <span class="header-text">{{ formatDataSetCol(column.name) }}</span>
               </span>
             </template>
           </el-table-column>
@@ -100,19 +56,23 @@
 </template>
 
 <script>
-import { formatNumber, formatDataSetCol, formatDateTime } from '@/helper';
+import { formatNumber, formatDataSetCol, formatDateTime } from "@/helper";
+import DivisionsTable from "./AnnualizationTables/DivisionsTable";
 import {
   GET_DATA_SET_DIVISION_LIST,
   GET_DATA_SET_COLUMN_LIST
-} from '@/graphql/queries';
-import { TOGGLE_DATA_SET, DELETE_DATA_SET } from '@/graphql/mutations';
+} from "@/graphql/queries";
+import { TOGGLE_DATA_SET, DELETE_DATA_SET } from "@/graphql/mutations";
 export default {
-  name: 'DivisionTrends',
+  name: "DivisionTrends",
   props: {
     filteredDataSetList: {
       required: true,
       type: Array
     }
+  },
+  components: {
+    DivisionsTable
   },
   apollo: {
     dataSetDivisionList: {
@@ -127,16 +87,16 @@ export default {
   computed: {
     selector: function() {
       const { path } = this.$route.params;
-      return path === 'tickets'
-        ? 'tickets'
-        : path === 'segments'
-        ? 'segments'
-        : path === 'fare-paid'
-        ? 'farePaid'
-        : '';
+      return path === "tickets"
+        ? "tickets"
+        : path === "segments"
+        ? "segments"
+        : path === "fare-paid"
+        ? "farePaid"
+        : "";
     },
     selectorTotal: function() {
-      return this.selector ? `${this.selector}Total` : '';
+      return this.selector ? `${this.selector}Total` : "";
     }
   },
   methods: {
@@ -161,7 +121,7 @@ export default {
       const { columns, data } = param;
       return columns.map((col, i) => {
         if (i === 0) {
-          return 'TOTAL';
+          return "TOTAL";
         }
         return this.formatNumber(
           data.reduce((a, b) => a + b[this.selectorTotal], 0)
@@ -199,10 +159,10 @@ export default {
       });
     },
     tableRowClassName(status) {
-      if (status === null || status === 'reject') {
-        return 'need-qc-row';
+      if (status === null || status === "reject") {
+        return "need-qc-row";
       }
-      return '';
+      return "";
     }
   }
 };

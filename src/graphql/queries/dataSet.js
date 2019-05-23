@@ -25,6 +25,7 @@ export const GET_DATA_SET_DIVISION_LIST = gql`
       ticketsTotal
       segmentsTotal
       farePaidTotal
+      numberDatasets
     }
   }
 `;

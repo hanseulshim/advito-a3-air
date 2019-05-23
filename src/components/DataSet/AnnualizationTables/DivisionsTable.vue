@@ -10,7 +10,7 @@
         <button class="button annualization">ANNUALIZE ALL</button>
       </div>
     </div>
-    <el-table :data="dataSetCountryList" show-summary :summary-method="getTotal">
+    <el-table :data="dataSetDivisionList" show-summary :summary-method="getTotal">
       <el-table-column prop="name">
         <template slot="header">
           <span class="header-container">
@@ -19,7 +19,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="numberDatasets" align="center">
+      <el-table-column v-if="annualized" prop="numberDatasets" align="center">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
@@ -54,20 +54,20 @@
 </template>
 <script>
 import { formatNumber, formatDataSetCol, formatDateTime } from "@/helper";
-import { GET_DATA_SET_COUNTRY_LIST } from "@/graphql/queries";
+import { GET_DATA_SET_DIVISION_LIST } from "@/graphql/queries";
 export default {
-  name: "CountriesTable",
+  name: "DivisionsTable",
   props: {
     selected: String
   },
   apollo: {
-    dataSetCountryList: {
-      query: GET_DATA_SET_COUNTRY_LIST
+    dataSetDivisionList: {
+      query: GET_DATA_SET_DIVISION_LIST
     }
   },
   data() {
     return {
-      dataSetCountryList: [],
+      dataSetDivisionList: [],
       annualized: false,
       annualizeAllBy: 12
     };
@@ -154,7 +154,3 @@ export default {
   }
 }
 </style>
-
-
-
-

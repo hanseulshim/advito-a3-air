@@ -16,6 +16,7 @@ type DataSetDivision {
   ticketsTotal: Int
   segmentsTotal: Int
   farePaidTotal: Int
+  numberDatasets: Int
 }
 type DataSetColumn {
   id: Int
