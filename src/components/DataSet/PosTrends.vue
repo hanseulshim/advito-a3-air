@@ -1,6 +1,6 @@
 <template>
   <div class="data-set-table-container">
-    <CountriesTable/>
+    <CountriesTable v-bind:selected="selector"/>
     <div class="column-table-container">
       <div v-for="column in filteredDataSetList" :key="column.id" class="column-table">
         <div class="icon-container">

@@ -6,12 +6,12 @@
         <el-switch v-model="annualized"/>
       </div>
       <div class="annualize-controls" v-if="annualized">
-        <el-input v-model="annualizeAllBy" type="number" size="small"/>
+        <el-input v-model="annualizeAllBy" type="number" size="mini"/>
         <button class="button annualization">ANNUALIZE ALL</button>
       </div>
     </div>
     <el-table :data="dataSetCountryList" show-summary :summary-method="getTotal">
-      <el-table-column prop="name" label="Countries">
+      <el-table-column prop="name">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
@@ -19,7 +19,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="annualized" prop="numberDatasets" align="right">
+      <el-table-column v-if="annualized" prop="numberDatasets" align="center">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
@@ -27,24 +27,25 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="annualized" align="right">
+      <el-table-column v-if="annualized" align="center">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
-            <span class="header-text">Annualization Months</span>
+            <span class="header-text">Ann. Months</span>
           </span>
         </template>
-        <el-input/>
+        <el-input type="number" size="mini" v-bind:value="annualizeAllBy"/>
       </el-table-column>
       <el-table-column
-        prop="importedTicketsTotal"
+        :prop="selectorTotal"
         align="right"
-        :formatter="row => formatNumber(row.ticketsTotal)"
+        :formatter="row => formatNumber(row[selectorTotal])"
+        :class-name="tableRowClassName()"
       >
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
-            <span class="header-text">Tickets</span>
+            <span class="header-text">Total</span>
           </span>
         </template>
       </el-table-column>
@@ -56,7 +57,9 @@ import { formatNumber, formatDataSetCol, formatDateTime } from "@/helper";
 import { GET_DATA_SET_COUNTRY_LIST } from "@/graphql/queries";
 export default {
   name: "CountriesTable",
-  props: {},
+  props: {
+    selected: String
+  },
   apollo: {
     dataSetCountryList: {
       query: GET_DATA_SET_COUNTRY_LIST
@@ -66,7 +69,7 @@ export default {
     return {
       dataSetCountryList: [],
       annualized: false,
-      annualizeAllBy: null
+      annualizeAllBy: 12
     };
   },
   computed: {
@@ -94,14 +97,7 @@ export default {
     formatNumber(num) {
       return formatNumber(num);
     },
-    getSummaries(param) {
-      const { columns, data } = param;
-      return columns.map(() => {
-        return this.formatNumber(
-          data.reduce((a, b) => a + b[this.selector], 0)
-        );
-      });
-    },
+
     getTotal(param) {
       const { columns, data } = param;
       return columns.map((col, i) => {
@@ -112,7 +108,13 @@ export default {
           data.reduce((a, b) => a + b[this.selectorTotal], 0)
         );
       });
-    }
+    },
+    tableRowClassName() {
+      if (this.annualized) {
+        return "active";
+      } else return "";
+    },
+    getAnnualizedTotal() {}
   }
 };
 </script>
@@ -134,10 +136,18 @@ export default {
   }
 }
 
+.active {
+  color: $tree-poppy;
+}
+
 .annualize-controls {
   display: flex;
   .el-input {
     width: 65px;
+
+    &:focus {
+      border: 1px solid $tree-poppy;
+    }
   }
   button {
     margin-left: 10px;
