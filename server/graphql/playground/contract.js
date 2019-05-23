@@ -72,7 +72,7 @@ exports.contract = {
       togglePricingTermQC(id: 49) {
         ${PRICING_TERM}
       }
-      deletePricingTerms(idList: [72, 73, 74])
+      deletePricingTerms(contractId: 134, idList: [72, 73, 74])
 
       updateDiscountAppliedOrder(
         updateDiscountList: [

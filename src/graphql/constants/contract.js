@@ -24,22 +24,8 @@ export const PRICING_TERM = `id
         pointOfSaleList
         pointOfOriginList
         airlineList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }
+        noteImportant
+        noteContent
         ignore
         discountTotal`;
 
@@ -64,34 +50,17 @@ export const DISCOUNT = `id
           name
         }
         normalizationList
-        note {
-          important
-          noteList {
-            id
-            author {
-              id
-              name
-            }
-            date
-            message
-            assignee {
-              id
-              name
-            }
-          }
-        }`;
+        noteImportant
+        noteContent`;
 
-export const NOTE = `important
+export const NOTE = `id
+        important
         noteList {
           id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
+          text
+          lastUpdate
+          assigneeId
+          assigneeName
+          assignedToId
+          assignedToName
         }`;

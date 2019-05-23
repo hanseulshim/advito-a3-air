@@ -39,7 +39,8 @@ type PricingTerm {
   airlineList: [String]
   ignore: Boolean
   isDeleted: Boolean
-  note: Note
+  noteImportant: Boolean
+  noteContent: Boolean
 }
 type Discount {
   id: Int
@@ -70,15 +71,18 @@ type DirectionType {
   name: String
 }
 type Note {
+  id: String
   important: Boolean
   noteList: [NoteContent]
 }
 type NoteContent {
-  id: Int
-  author: User
-  message: String
-  date: Date
-  assignee: User
+  id: String
+  text: String
+  lastUpdate: Date
+  assigneeId: Int
+  assigneeName: String
+  assignedToId: Int
+  assignedToName: String
 }
 input NewAppliedOrder {
   id: Int
@@ -129,7 +133,7 @@ extend type Mutation {
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(id: Int!): PricingTerm @auth
-  deletePricingTerms(idList: [Int]!): [Int] @auth
+  deletePricingTerms(contractId: Int!, idList: [Int]!): [Int] @auth
 
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!

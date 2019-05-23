@@ -66,8 +66,8 @@ export const DELETE_CONTRACT = gql`
 `;
 
 export const CREATE_PRICING_TERM = gql`
-  mutation createPricingTerm($name: String!, $ignore: Boolean!) {
-    createPricingTerm(name: $name, ignore: $ignore) {
+  mutation createPricingTerm($contractId: Int!, $name: String!, $ignore: Boolean!) {
+    createPricingTerm(contractId: $contractId, name: $name, ignore: $ignore) {
       ${PRICING_TERM}
     }
   }
@@ -98,8 +98,8 @@ export const TOGGLE_PRICING_TERM_QC = gql`
 `;
 
 export const DELETE_PRICING_TERMS = gql`
-  mutation deletePricingTerms($idList: [Int]!) {
-    deletePricingTerms(idList: $idList)
+  mutation deletePricingTerms($contractId: Int!, $idList: [Int]!) {
+    deletePricingTerms(contractId: $contractId, idList: $idList)
   }
 `;
 

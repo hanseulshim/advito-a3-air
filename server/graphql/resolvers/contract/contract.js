@@ -238,3 +238,15 @@ const getAirlineList = async (db, id) =>
       'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
       [id, id]
     );
+
+exports.updatePricingTermCount = async (db, contractId) => {
+  const [{ count }] = await db('pricingterm')
+    .count('*')
+    .where('contractcontainerid', contractId)
+    .andWhere('isdeleted', false);
+  await db('contractcontainer')
+    .update({
+      count_priterms: count
+    })
+    .where('id', contractId);
+};

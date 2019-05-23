@@ -1,5 +1,6 @@
 const { ApolloError } = require('apollo-server-lambda');
 const { pricingTermList, userList, discountList } = require('../../../data');
+const { updatePricingTermCount } = require('./contract');
 
 exports.pricingTerm = {
   Query: {
@@ -8,17 +9,26 @@ exports.pricingTerm = {
   },
   Mutation: {
     createPricingTerm: async (_, { contractId, name, ignore }, { db }) => {
+      const [{ maxAppliedOrder }] = await db('pricingterm')
+        .max({ maxAppliedOrder: 'sequence' })
+        .where('contractcontainerid', contractId);
+      const [{ maxContractOrder }] = await db('pricingterm')
+        .max({ maxContractOrder: 'readorder' })
+        .where('contractcontainerid', contractId);
       const [id] = await db('pricingterm').insert(
         {
           contractcontainerid: contractId,
           name,
           type: 1,
-          sequence: 1,
+          sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
+          readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
           qc: false,
+          count_discounts: 0,
           ignore
         },
         'id'
       );
+      await updatePricingTermCount(db, contractId);
       const [pricingTerm] = await getPricingTerms(db, contractId, id);
       return pricingTerm;
     },
@@ -81,10 +91,11 @@ exports.pricingTerm = {
       const [pricingTerm] = await getPricingTerms(db, parseInt(contractId), id);
       return pricingTerm;
     },
-    deletePricingTerms: async (_, { idList }, { db }) => {
+    deletePricingTerms: async (_, { contractId, idList }, { db }) => {
       await db('pricingterm')
-        .update({ isdeleted: true }, 'contractcontainerid')
+        .update({ isdeleted: true })
         .whereIn('id', idList);
+      await updatePricingTermCount(db, contractId);
       return idList;
     },
     saveNote: (_, { id, important, message, assigneeId, noteId }, { user }) => {
@@ -147,6 +158,7 @@ const getPricingTerms = async (db, contractId = null, id = null) => {
   const pointOfSaleList = await getPointOfSaleList(db, contractId, id);
   const pointOfOriginList = await getPointOfOriginList(db, contractId, id);
   const airlineList = await getAirlineList(db, contractId, id);
+  const noteStatusList = await getNoteStatus(db, contractId, id);
   return dbPricingTermList.map(pricingTerm => {
     const pointOfSale = pointOfSaleList.filter(p => p.id === pricingTerm.id)[0]
       .pointOfSaleList;
@@ -155,11 +167,14 @@ const getPricingTerms = async (db, contractId = null, id = null) => {
     )[0].pointOfOriginList;
     const airline = airlineList.filter(p => p.id === pricingTerm.id)[0]
       .airlineList;
+    const note = noteStatusList.filter(n => n.parentId === pricingTerm.id)[0];
     return {
       ...pricingTerm,
       pointOfSaleList: pointOfSale ? pointOfSale : [],
       pointOfOriginList: pointOfOrigin ? pointOfOrigin : [],
-      airlineList: airline ? airline : []
+      airlineList: airline ? airline : [],
+      noteImportant: note ? note.important : false,
+      noteContent: note ? note.noteContent : false
     };
   });
 };
@@ -254,3 +269,80 @@ const getAirlineList = async (db, contractId, id) =>
       'pricingterm.isdeleted = false and (?::bigint is null or pricingterm.contractcontainerid = ?) and (?::bigint is null or pricingterm.id = ?)',
       [contractId, contractId, id, id]
     );
+
+const getNoteStatus = async (db, contractId, id) => {
+  const note = await db('pricingterm')
+    .select({
+      id: 'usernote.id',
+      parentId: 'usernote.parentid',
+      important: 'usernote.important'
+    })
+    .leftJoin('usernote', 'usernote.id', 'pricingterm.notesid')
+    .whereRaw(
+      'pricingterm.isdeleted = false and (?::bigint is null or pricingterm.contractcontainerid = ?) and (?::bigint is null or pricingterm.id = ?)',
+      [contractId, contractId, id, id]
+    );
+
+  return await Promise.all(
+    note.map(async parentNote => {
+      const [{ count }] = parentNote.id
+        ? await db('usernote')
+            .count('id')
+            .where('parentnoteid', parentNote.id)
+        : [{ count: null }];
+      parentNote.noteContent = count ? !!parseInt(count) : null;
+      return parentNote;
+    })
+  );
+};
+
+const getNote = async (db, contractId, id) => {
+  const note = await db('pricingterm')
+    .select({
+      id: 'usernote.id',
+      important: 'usernote.important',
+      parentId: 'usernote.parentid',
+      parentTable: 'usernote.parenttable'
+    })
+    .leftJoin('usernote', 'usernote.id', 'pricingterm.notesid')
+    .whereRaw(
+      'pricingterm.isdeleted = false and (?::bigint is null or pricingterm.contractcontainerid = ?) and (?::bigint is null or pricingterm.id = ?)',
+      [contractId, contractId, id, id]
+    );
+  return await Promise.all(
+    note.map(async parentNote => {
+      const noteList = parentNote.id
+        ? await db('usernote')
+            .select({
+              id: 'id',
+              text: 'text',
+              lastUpdate: 'lastupdate',
+              assigneeId: 'assignee',
+              assignedToId: 'assignedto'
+            })
+            .where('parentnoteid', parentNote.id)
+        : null;
+      if (noteList) {
+        noteList.forEach(async content => {
+          const [assignee] = await db
+            .select({
+              firstName: 'name_first',
+              lastName: 'name_last'
+            })
+            .from('blops.advito_user')
+            .where('id', content.assigneeId);
+          const [assignedTo] = await db
+            .select('*')
+            .from('blops.advito_user')
+            .where('id', content.assignedToId);
+          content.assigneeName = `${assignee.firstName} ${assignee.lastName}`;
+          content.assignedToName = `${assignedTo.firstName} ${
+            assignedTo.lastName
+          }`;
+        });
+        parentNote.noteList = noteList;
+      }
+      return parentNote;
+    })
+  );
+};
