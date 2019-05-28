@@ -7,10 +7,10 @@
       </div>
       <div class="annualize-controls" v-if="annualized">
         <el-input v-model="annualizeAllBy" type="number" size="mini"/>
-        <button class="button annualization">ANNUALIZE ALL</button>
+        <button class="button annualization" v-on:click="setAnnMonthsGlobal">ANNUALIZE ALL</button>
       </div>
     </div>
-    <el-table :data="dataSetCountryList" show-summary :summary-method="getTotal">
+    <el-table :data="dataSetCountryListCopy" show-summary :summary-method="getTotal">
       <el-table-column prop="name">
         <template slot="header">
           <span class="header-container">
@@ -27,14 +27,16 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="annualized" align="center">
+      <el-table-column v-if="annualized" align="right">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
             <span class="header-text">Ann. Months</span>
           </span>
         </template>
-        <el-input type="number" size="mini" v-bind:value="annualizeAllBy"/>
+        <template slot-scope="props">
+          <el-input type="number" size="mini" v-model.number="props.row.annMonths"/>
+        </template>
       </el-table-column>
       <el-table-column
         :prop="selectorTotal"
@@ -47,6 +49,9 @@
             <div class="updated-date"/>
             <span class="header-text">Total</span>
           </span>
+        </template>
+        <template slot-scope="props">
+          <div>{{ calcTotal(props.row) }}</div>
         </template>
       </el-table-column>
     </el-table>
@@ -62,12 +67,19 @@ export default {
   },
   apollo: {
     dataSetCountryList: {
-      query: GET_DATA_SET_COUNTRY_LIST
+      query: GET_DATA_SET_COUNTRY_LIST,
+      result({ data: { dataSetCountryList } }) {
+        this.dataSetCountryListCopy = dataSetCountryList.map(country => ({
+          ...country,
+          annMonths: country.numberDatasets
+        }));
+      }
     }
   },
   data() {
     return {
       dataSetCountryList: [],
+      dataSetCountryListCopy: [],
       annualized: false,
       annualizeAllBy: 12
     };
@@ -97,24 +109,40 @@ export default {
     formatNumber(num) {
       return formatNumber(num);
     },
-
     getTotal(param) {
       const { columns, data } = param;
+      const lastIdx = columns.length;
+
       return columns.map((col, i) => {
         if (i === 0) {
           return "TOTAL";
+        } else if (i === lastIdx - 1) {
+          return this.formatNumber(
+            data.reduce((a, b) => a + b[this.selectorTotal], 0)
+          );
         }
-        return this.formatNumber(
-          data.reduce((a, b) => a + b[this.selectorTotal], 0)
-        );
       });
+    },
+    setAnnMonthsGlobal() {
+      return (this.dataSetCountryListCopy = this.dataSetCountryListCopy.map(
+        country => ({
+          ...country,
+          annMonths: this.annualizeAllBy
+        })
+      ));
     },
     tableRowClassName() {
       if (this.annualized) {
         return "active";
       } else return "";
     },
-    getAnnualizedTotal() {}
+    calcTotal(row) {
+      if (!this.annualized) {
+        return formatNumber(row[this.selectorTotal]);
+      } else {
+        return formatNumber(row[this.selectorTotal] * row.annMonths);
+      }
+    }
   }
 };
 </script>

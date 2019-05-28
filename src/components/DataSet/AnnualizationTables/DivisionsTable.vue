@@ -7,10 +7,10 @@
       </div>
       <div class="annualize-controls" v-if="annualized">
         <el-input v-model="annualizeAllBy" type="number" size="mini"/>
-        <button class="button annualization">ANNUALIZE ALL</button>
+        <button class="button annualization" v-on:click="setAnnMonthsGlobal">ANNUALIZE ALL</button>
       </div>
     </div>
-    <el-table :data="dataSetDivisionList" show-summary :summary-method="getTotal">
+    <el-table :data="dataSetDivisionListCopy" show-summary :summary-method="getTotal">
       <el-table-column prop="name">
         <template slot="header">
           <span class="header-container">
@@ -19,7 +19,7 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column v-if="annualized" prop="numberDatasets" align="center">
+      <el-table-column prop="numberDatasets" align="center">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date"/>
@@ -34,7 +34,14 @@
             <span class="header-text">Ann. Months</span>
           </span>
         </template>
-        <el-input type="number" size="mini" v-bind:value="annualizeAllBy"/>
+        <template slot-scope="props">
+          <el-input
+            type="number"
+            size="mini"
+            v-model.number="props.row.annMonths"
+            v-on:change.native="setAnnMonths(props.row.id)"
+          />
+        </template>
       </el-table-column>
       <el-table-column
         :prop="selectorTotal"
@@ -47,6 +54,9 @@
             <div class="updated-date"/>
             <span class="header-text">Total</span>
           </span>
+        </template>
+        <template slot-scope="props">
+          <div>{{ calcTotal(props.row) }}</div>
         </template>
       </el-table-column>
     </el-table>
@@ -62,12 +72,19 @@ export default {
   },
   apollo: {
     dataSetDivisionList: {
-      query: GET_DATA_SET_DIVISION_LIST
+      query: GET_DATA_SET_DIVISION_LIST,
+      result({ data: { dataSetDivisionList } }) {
+        this.dataSetDivisionListCopy = dataSetDivisionList.map(division => ({
+          ...division,
+          annMonths: division.numberDatasets
+        }));
+      }
     }
   },
   data() {
     return {
       dataSetDivisionList: [],
+      dataSetDivisionListCopy: [],
       annualized: false,
       annualizeAllBy: 12
     };
@@ -100,21 +117,38 @@ export default {
 
     getTotal(param) {
       const { columns, data } = param;
+      const lastIdx = columns.length;
+
       return columns.map((col, i) => {
         if (i === 0) {
           return "TOTAL";
+        } else if (i === lastIdx - 1) {
+          return this.formatNumber(
+            data.reduce((a, b) => a + b[this.selectorTotal], 0)
+          );
         }
-        return this.formatNumber(
-          data.reduce((a, b) => a + b[this.selectorTotal], 0)
-        );
       });
+    },
+    setAnnMonthsGlobal() {
+      return (this.dataSetDivisionListCopy = this.dataSetDivisionListCopy.map(
+        country => ({
+          ...country,
+          annMonths: this.annualizeAllBy
+        })
+      ));
     },
     tableRowClassName() {
       if (this.annualized) {
         return "active";
       } else return "";
     },
-    getAnnualizedTotal() {}
+    calcTotal(row) {
+      if (!this.annualized) {
+        return formatNumber(row[this.selectorTotal]);
+      } else {
+        return formatNumber(row[this.selectorTotal] * row.annMonths);
+      }
+    }
   }
 };
 </script>
