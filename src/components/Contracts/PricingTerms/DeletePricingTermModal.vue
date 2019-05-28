@@ -21,12 +21,13 @@
 </template>
 
 <script>
-import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import { GET_CONTRACT_LIST, GET_PRICING_TERM_LIST } from '@/graphql/queries';
 import { DELETE_PRICING_TERMS } from '@/graphql/mutations';
 export default {
   name: 'DeletePricingTermModal',
   data() {
     return {
+      contractId: null,
       idList: []
     };
   },
@@ -39,24 +40,31 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_PRICING_TERMS,
           variables: {
+            contractId: this.contractId,
             idList: this.idList
           },
-          update: (store, data) => {
-            const idList = data.data.deletePricingTerms;
-            const newData = store.readQuery({
-              query: GET_PRICING_TERM_LIST
-            });
-            const indexList = idList.map(id =>
-              newData.pricingTermList.findIndex(term => term.id === id)
-            );
-            indexList.forEach(index => {
-              newData.pricingTermList.splice(index, 1);
-            });
-            store.writeQuery({
+          update: (store, { data: { deletePricingTerms } }) => {
+            const query = {
               query: GET_PRICING_TERM_LIST,
-              data: newData
+              variables: {
+                contractId: this.contractId
+              }
+            };
+            const data = store.readQuery(query);
+            data.pricingTermList = data.pricingTermList.filter(
+              term => deletePricingTerms.indexOf(term.id) === -1
+            );
+            store.writeQuery({
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT_LIST,
+              variables: { id: this.contractId }
+            }
+          ]
         });
         this.$emit('clear-bulk-actions');
         this.$modal.show('success', {
@@ -70,9 +78,11 @@ export default {
       }
     },
     beforeOpen(event) {
+      this.contractId = event.params.contractId;
       this.idList = event.params.idList;
     },
     beforeClose() {
+      this.contractId = null;
       this.idList = [];
     }
   }

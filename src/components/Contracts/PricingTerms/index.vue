@@ -3,7 +3,11 @@
     <Navigation :selected-contract="selectedContract" />
     <div class="title-row space-between">
       <div class="section-header">
-        <el-tooltip v-if="checkQc" placement="top" effect="light">
+        <el-tooltip
+          v-if="pricingTermList.some(term => term.qc !== 1)"
+          placement="top"
+          effect="light"
+        >
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
@@ -89,7 +93,7 @@
         :min-width="term.name"
       >
         <template slot-scope="props">
-          <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">
+          <div :class="{ 'error-qc': !props.row.qc }">
             {{ props.row.name }}
           </div>
         </template>
@@ -205,33 +209,17 @@
         :sort-orders="['ascending', 'descending']"
       >
         <template slot-scope="props">
-          <el-tooltip
-            v-if="props.row.note && props.row.note.noteList.length"
-            effect="dark"
-            content="Show Note"
-            placement="top"
-          >
+          <el-tooltip effect="dark" content="Show Note" placement="top">
             <div class="note-count-container">
               <i
-                class="fas fa-sticky-note"
-                :class="{ important: props.row.note.important }"
+                class="fa-sticky-note"
+                :class="[
+                  { important: props.row.noteImportant },
+                  props.row.noteContent ? 'fas' : 'far'
+                ]"
                 @click="toggleNoteModal(props.row)"
               />
               <!-- <span class="note-count sub-content empty">{{
-                getNoteLength(props.row.discountList)
-              }}</span> -->
-            </div>
-          </el-tooltip>
-          <el-tooltip v-else effect="dark" content="Show Note" placement="top">
-            <div class="note-count-container">
-              <i
-                class="far fa-sticky-note"
-                :class="{
-                  important: props.row.note && props.row.note.important
-                }"
-                @click="toggleNoteModal(props.row)"
-              />
-              <!-- <span class="note-count sub-content">{{
                 getNoteLength(props.row.discountList)
               }}</span> -->
             </div>
@@ -369,12 +357,6 @@ export default {
         row.effectiveTo
       )}`;
     },
-    checkQc() {
-      return this.pricingTermList.some(term => term.qc !== 1);
-    },
-    checkErrorQc(qc) {
-      return qc !== 1;
-    },
     tableRowClassName({ row }) {
       return row.inactive ? 'inactive-row' : '';
     },
@@ -387,7 +369,9 @@ export default {
       }
     },
     showNewPricingTermModal() {
-      this.$modal.show('new-pricing-term');
+      this.$modal.show('new-pricing-term', {
+        contractId: this.selectedContract.id
+      });
     },
     showCopyPricingTermModal(pricingTerm) {
       this.$modal.show('copy-pricing-term', { pricingTerm });
@@ -396,15 +380,21 @@ export default {
       this.$modal.show('edit-pricing-term', { pricingTerm });
     },
     showDeletePricingTermModal(idList) {
-      this.$modal.show('delete-pricing-term', { idList });
+      this.$modal.show('delete-pricing-term', {
+        contractId: this.selectedContract.id,
+        idList
+      });
     },
     showChangeAppliedOrderModal() {
-      this.$modal.show('change-pricing-term-order');
+      this.$modal.show('change-pricing-term-order', {
+        contractId: this.selectedContract.id
+      });
     },
     toggleNoteModal(pricingTerm) {
       this.$modal.show('save-note', {
-        id: pricingTerm.id,
-        note: pricingTerm.note
+        parentId: pricingTerm.id,
+        important: pricingTerm.noteImportant,
+        contractId: this.selectedContract.id
       });
     },
     bulkAction(value) {

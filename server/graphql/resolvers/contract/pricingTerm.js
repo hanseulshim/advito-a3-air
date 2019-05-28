@@ -1,60 +1,42 @@
-const { ApolloError } = require('apollo-server-lambda');
-const { pricingTermList, userList, discountList } = require('../../../data');
-
 exports.pricingTerm = {
   Query: {
-    pricingTermList: async (_, { contractId }, { db }) =>
-      contractId ? await getPricingTerms(db, contractId) : []
+    pricingTermList: async (_, { contractId, id }, { db }) =>
+      contractId ? await getPricingTermList(db, contractId, id) : []
   },
   Mutation: {
     createPricingTerm: async (_, { contractId, name, ignore }, { db }) => {
+      const [{ maxAppliedOrder, maxContractOrder }] = await db('pricingterm')
+        .max({ maxAppliedOrder: 'sequence' })
+        .max({ maxContractOrder: 'readorder' })
+        .where('contractcontainerid', contractId)
+        .andWhere('isdeleted', false);
       const [id] = await db('pricingterm').insert(
         {
           contractcontainerid: contractId,
           name,
           type: 1,
-          sequence: 1,
+          sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
+          readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
           qc: false,
+          count_discounts: 0,
           ignore
         },
         'id'
       );
-      const [pricingTerm] = await getPricingTerms(db, contractId, id);
+      await updatePricingTermCount(db, contractId);
+      const [pricingTerm] = await getPricingTermList(db, contractId, id);
       return pricingTerm;
     },
-    copyPricingTerm: (_, { id, name, ignore }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const maxContractOrder =
-        Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const maxAppliedOrder =
-        Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const filterDiscountList = discountList.filter(
-        d => d.pricingTermId === id
+    copyPricingTerm: async (_, { id, name }, { db }) => {
+      const { rows } = await db.raw(
+        `SELECT pricingterm_createcopy(${id}, '${name}')`
       );
-      filterDiscountList.forEach(discount => {
-        const maxId = Math.max(...discountList.map(d => d.id)) + 1;
-        const copyDiscount = {
-          ...discount,
-          id: maxId,
-          pricingTermId: id
-        };
-        discountList.push(copyDiscount);
-      });
-      const copyPricingTerm = {
-        ...pricingTerm,
-        id: maxId,
-        contractOrder: maxContractOrder,
-        appliedOrder: maxAppliedOrder,
-        discountTotal: filterDiscountList.length,
-        name,
-        ignore
-      };
-      pricingTermList.push(copyPricingTerm);
-      return copyPricingTerm;
+      const [copyPricingTerm] = rows;
+      const [pricingTerm] = await getPricingTermList(
+        db,
+        copyPricingTerm.pricingterm_createcopy
+      );
+      return pricingTerm;
     },
     editPricingTerm: async (_, { id, name, ignore }, { db }) => {
       const [contractId] = await db('pricingterm')
@@ -66,7 +48,11 @@ exports.pricingTerm = {
           },
           'contractcontainerid'
         );
-      const [pricingTerm] = await getPricingTerms(db, parseInt(contractId), id);
+      const [pricingTerm] = await getPricingTermList(
+        db,
+        parseInt(contractId),
+        id
+      );
       return pricingTerm;
     },
     togglePricingTermQC: async (_, { id }, { db }) => {
@@ -78,179 +64,91 @@ exports.pricingTerm = {
           'contractcontainerid'
         )
         .where('id', id);
-      const [pricingTerm] = await getPricingTerms(db, parseInt(contractId), id);
+      const [pricingTerm] = await getPricingTermList(
+        db,
+        parseInt(contractId),
+        id
+      );
       return pricingTerm;
     },
-    deletePricingTerms: async (_, { idList }, { db }) => {
+    deletePricingTerms: async (_, { contractId, idList }, { db }) => {
       await db('pricingterm')
-        .update({ isdeleted: true }, 'contractcontainerid')
+        .update({ isdeleted: true })
         .whereIn('id', idList);
+      await updatePricingTermCount(db, contractId);
       return idList;
     },
-    saveNote: (_, { id, important, message, assigneeId, noteId }, { user }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      const assignee = userList.filter(user => user.id === assigneeId)[0];
-      const note =
-        pricingTerm.note === null
-          ? {
-              important: false,
-              noteList: []
-            }
-          : pricingTerm.note;
-      note.important = important;
-      if (message) {
-        if (noteId) {
-          const noteContent = note.noteList.filter(n => n.id === noteId)[0];
-          noteContent.message = message;
-          noteContent.date = new Date();
-          noteContent.assignee = assignee;
-        } else {
-          const content = {
-            id: new Date().getUTCMilliseconds(),
-            author: user,
-            date: new Date(),
-            assignee,
-            message
-          };
-          note.noteList.push(content);
-        }
-      }
-      pricingTerm.note = note;
-      return note;
-    },
-    deleteNote: (_, { id, noteId }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      const noteIndex = pricingTerm.note.noteList.findIndex(
-        n => n.id === noteId
-      );
-      pricingTerm.note.noteList.splice(noteIndex, 1);
-      return pricingTerm.note;
-    },
-    updateAppliedOrder: (_, { updatePricingTermList }) => {
-      updatePricingTermList.forEach(term => {
-        const pricingTerm = pricingTermList.filter(t => t.id === term.id)[0];
-        pricingTerm.appliedOrder = term.appliedOrder;
+    updateAppliedOrder: async (_, { updatePricingTermList }, { db }) => {
+      const [[contractId]] = await db.transaction(trx => {
+        const queries = [];
+        updatePricingTermList.forEach(term => {
+          const query = db('pricingterm')
+            .where('id', term.id)
+            .update(
+              {
+                sequence: term.appliedOrder
+              },
+              'contractcontainerid'
+            )
+            .transacting(trx);
+          queries.push(query);
+        });
+
+        Promise.all(queries)
+          .then(trx.commit)
+          .catch(trx.rollback);
       });
-      return pricingTermList;
+      return await getPricingTermList(db, parseInt(contractId));
     }
   }
 };
 
-const getPricingTerms = async (db, contractId = null, id = null) => {
-  const dbPricingTermList = await getPricingTermList(db, contractId, id);
-  const pointOfSaleList = await getPointOfSaleList(db, contractId, id);
-  const pointOfOriginList = await getPointOfOriginList(db, contractId, id);
-  const airlineList = await getAirlineList(db, contractId, id);
-  return dbPricingTermList.map(pricingTerm => {
-    const pointOfSale = pointOfSaleList.filter(p => p.id === pricingTerm.id)[0]
-      .pointOfSaleList;
-    const pointOfOrigin = pointOfOriginList.filter(
-      p => p.id === pricingTerm.id
-    )[0].pointOfOriginList;
-    const airline = airlineList.filter(p => p.id === pricingTerm.id)[0]
-      .airlineList;
-    return {
-      ...pricingTerm,
-      pointOfSaleList: pointOfSale ? pointOfSale : [],
-      pointOfOriginList: pointOfOrigin ? pointOfOrigin : [],
-      airlineList: airline ? airline : []
-    };
-  });
-};
-
-const getPricingTermList = async (db, contractId, id) =>
-  await db('pricingterm')
+const getPricingTermList = async (db, contractId, id = null) =>
+  await db('pricingterm as p')
     .select({
-      id: 'pricingterm.id',
-      contractOrder: 'pricingterm.readorder',
-      appliedOrder: 'pricingterm.sequence',
-      name: 'pricingterm.name',
-      effectiveFrom: 'contractcontainer.effectivefrom',
-      effectiveTo: 'contractcontainer.effectiveto',
-      qc: 'pricingterm.qc',
-      discountTotal: 'pricingterm.count_discounts',
-      ignore: 'pricingterm.ignore'
-    })
-    .leftJoin('contractcontainer', 'contractcontainer.id', contractId)
-    .whereRaw(
-      'pricingterm.isdeleted = false and (?::bigint is null or pricingterm.contractcontainerid = ?) and (?::bigint is null or pricingterm.id = ?)',
-      [contractId, contractId, id, id]
-    );
-
-const getPointOfOriginList = async (db, contractId, id) =>
-  await db('pricingterm')
-    .select({
-      id: 'pricingterm.id',
+      id: 'p.id',
+      contractOrder: 'p.readorder',
+      appliedOrder: 'p.sequence',
+      name: 'p.name',
+      effectiveFrom: 'c.effectivefrom',
+      effectiveTo: 'c.effectiveto',
+      qc: 'p.qc',
+      discountTotal: 'p.count_discounts',
+      ignore: 'p.ignore',
+      noteImportant: db.raw('COALESCE(n.important, FALSE)'),
+      noteContent: db.raw(
+        'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
+      ),
       pointOfOriginList: db.raw(
-        'ARRAY_AGG(pointoforigin.countrycode) filter (where pointoforigin.countrycode is not null)'
-      )
-    })
-    .leftJoin(
-      'rulescontainer',
-      'pricingterm.rulescontainerguidref',
-      'rulescontainer.guidref'
-    )
-    .leftJoin(
-      'pointoforigin',
-      'rulescontainer.guidref',
-      'pointoforigin.rulescontainerguidref'
-    )
-    .groupBy('pricingterm.id')
-    .whereRaw(
-      'pricingterm.isdeleted = false and (?::bigint is null or pricingterm.contractcontainerid = ?) and (?::bigint is null or pricingterm.id = ?)',
-      [contractId, contractId, id, id]
-    );
-
-const getPointOfSaleList = async (db, contractId, id) =>
-  await db('pricingterm')
-    .select({
-      id: 'pricingterm.id',
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+      ),
       pointOfSaleList: db.raw(
-        'ARRAY_AGG(pointofsale.countrycode) filter (where pointofsale.countrycode is not null)'
-      )
-    })
-    .leftJoin(
-      'rulescontainer',
-      'pricingterm.rulescontainerguidref',
-      'rulescontainer.guidref'
-    )
-    .leftJoin(
-      'pointofsale',
-      'rulescontainer.guidref',
-      'pointofsale.rulescontainerguidref'
-    )
-    .groupBy('pricingterm.id')
-    .whereRaw(
-      'pricingterm.isdeleted = false and (?::bigint is null or pricingterm.contractcontainerid = ?) and (?::bigint is null or pricingterm.id = ?)',
-      [contractId, contractId, id, id]
-    );
-
-const getAirlineList = async (db, contractId, id) =>
-  await db('pricingterm')
-    .select({
-      id: 'pricingterm.id',
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+      ),
       airlineList: db.raw(
-        'ARRAY_AGG(carrierrule.carriercode) filter (where carrierrule.carriercode is not null)'
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
       )
     })
-    .leftJoin(
-      'rulescontainer',
-      'pricingterm.rulescontainerguidref',
-      'rulescontainer.guidref'
-    )
-    .leftJoin(
-      'carrierrule',
-      'rulescontainer.guidref',
-      'carrierrule.rulescontainerguidref'
-    )
-    .groupBy('pricingterm.id')
+    .leftJoin('contractcontainer as c', 'c.id', contractId)
+    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
+    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
+    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
+    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
+    .leftJoin('usernote as n', 'p.notesid', 'n.id')
     .whereRaw(
-      'pricingterm.isdeleted = false and (?::bigint is null or pricingterm.contractcontainerid = ?) and (?::bigint is null or pricingterm.id = ?)',
-      [contractId, contractId, id, id]
-    );
+      'p.isdeleted = false and p.contractcontainerid = ? and (?::bigint is null or p.id = ?)',
+      [contractId, id, id]
+    )
+    .groupBy('p.id', 'c.id', 'n.important', 'n.id');
+
+const updatePricingTermCount = async (db, contractId) => {
+  const [{ count }] = await db('pricingterm')
+    .count('*')
+    .where('contractcontainerid', contractId)
+    .andWhere('isdeleted', false);
+  await db('contractcontainer')
+    .update({
+      count_priterms: count
+    })
+    .where('id', contractId);
+};

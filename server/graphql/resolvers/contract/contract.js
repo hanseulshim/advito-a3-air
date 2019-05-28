@@ -4,7 +4,7 @@ const CLIENT_ID = 1;
 
 exports.contract = {
   Query: {
-    contractList: async (_, __, { db }) => await getContracts(db),
+    contractList: async (_, { id }, { db }) => await getContractList(db, id),
     contractTypeList: async (_, __, { db }) =>
       await db('lov_lookup')
         .select({
@@ -56,7 +56,7 @@ exports.contract = {
           divisionid: divisionId
         });
       }
-      const [contract] = await getContracts(db, id);
+      const [contract] = await getContractList(db, id);
       return contract;
     },
     copyContract: async (_, { id, name }, { db }) => {
@@ -64,7 +64,7 @@ exports.contract = {
         `SELECT contract_createcopy(${id}, '${name}')`
       );
       const [copyContract] = rows;
-      const [contract] = await getContracts(
+      const [contract] = await getContractList(
         db,
         copyContract.contract_createcopy
       );
@@ -101,7 +101,7 @@ exports.contract = {
           .where('contractid', id)
           .update({ divisionid: divisionId });
       }
-      const [contract] = await getContracts(db, id);
+      const [contract] = await getContractList(db, id);
       return contract;
     },
     deleteContract: async (_, { id }, { db }) =>
@@ -118,123 +118,40 @@ exports.contract = {
   }
 };
 
-const getContracts = async (db, id = null) => {
-  const dbContractList = await getContractList(db, id);
-  const pointOfSaleList = await getPointOfSaleList(db, id);
-  const pointOfOriginList = await getPointOfOriginList(db, id);
-  const airlineList = await getAirlineList(db, id);
-  return dbContractList.map(contract => {
-    const pointOfSale = pointOfSaleList.filter(p => p.id === contract.id)[0]
-      .pointOfSaleList;
-    const pointOfOrigin = pointOfOriginList.filter(p => p.id === contract.id)[0]
-      .pointOfOriginList;
-    const airline = airlineList.filter(p => p.id === contract.id)[0]
-      .airlineList;
-    return {
-      ...contract,
-      pointOfSaleList: pointOfSale ? pointOfSale : [],
-      pointOfOriginList: pointOfOrigin ? pointOfOrigin : [],
-      airlineList: airline ? airline : []
-    };
-  });
-};
-
-const getContractList = async (db, id) =>
-  await db('contractcontainer')
+const getContractList = async (db, id = null) =>
+  await db('contractcontainer as c')
     .select({
-      id: 'contractcontainer.id',
-      name: 'contractcontainer.name',
-      typeId: 'lov_lookup.id',
-      typeName: 'lov_lookup.name_val',
-      description: 'contractcontainer.description',
-      round: 'contractcontainer.round',
-      effectiveFrom: 'contractcontainer.effectivefrom',
-      effectiveTo: 'contractcontainer.effectiveto',
-      qc: 'contractcontainer.qc',
-      pricingTermCount: 'contractcontainer.count_priterms',
-      targetTermCount: 'contractcontainer.count_targterms',
-      divisionId: 'division.id'
-    })
-    .leftJoin('lov_lookup', 'contractcontainer.contracttype', 'lov_lookup.id')
-    .leftJoin(
-      'contractdivision',
-      'contractcontainer.id',
-      'contractdivision.contractid'
-    )
-    .leftJoin('division', 'contractdivision.divisionid', 'division.id')
-    .whereRaw(
-      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
-      [id, id]
-    );
-
-const getPointOfSaleList = async (db, id) =>
-  await db('contractcontainer')
-    .select({
-      id: 'contractcontainer.id',
-      pointOfSaleList: db.raw(
-        'ARRAY_AGG(pointofsale.countrycode) filter (where pointofsale.countrycode is not null) '
-      )
-    })
-    .leftJoin(
-      'rulescontainer',
-      'contractcontainer.guidref',
-      'rulescontainer.guidref'
-    )
-    .leftJoin(
-      'pointofsale',
-      'rulescontainer.guidref',
-      'pointofsale.rulescontainerguidref'
-    )
-    .groupBy('contractcontainer.id')
-    .whereRaw(
-      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
-      [id, id]
-    );
-
-const getPointOfOriginList = async (db, id) =>
-  await db('contractcontainer')
-    .select({
-      id: 'contractcontainer.id',
+      id: 'c.id',
+      name: 'c.name',
+      typeId: 'l.id',
+      typeName: 'l.name_val',
+      description: 'c.description',
+      round: 'c.round',
+      effectiveFrom: 'c.effectivefrom',
+      effectiveTo: 'c.effectiveto',
+      qc: 'c.qc',
+      pricingTermCount: 'c.count_priterms',
+      targetTermCount: 'c.count_targterms',
+      divisionId: 'd.id',
       pointOfOriginList: db.raw(
-        'ARRAY_AGG(pointoforigin.countrycode) filter (where pointoforigin.countrycode is not null)'
-      )
-    })
-    .leftJoin(
-      'rulescontainer',
-      'contractcontainer.guidref',
-      'rulescontainer.guidref'
-    )
-    .leftJoin(
-      'pointoforigin',
-      'rulescontainer.guidref',
-      'pointoforigin.rulescontainerguidref'
-    )
-    .groupBy('contractcontainer.id')
-    .whereRaw(
-      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
-      [id, id]
-    );
-
-const getAirlineList = async (db, id) =>
-  await db('contractcontainer')
-    .select({
-      id: 'contractcontainer.id',
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+      ),
+      pointOfSaleList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+      ),
       airlineList: db.raw(
-        'ARRAY_AGG(carrierrule.carriercode) filter (where carrierrule.carriercode is not null)'
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
       )
     })
-    .leftJoin(
-      'rulescontainer',
-      'contractcontainer.guidref',
-      'rulescontainer.guidref'
-    )
-    .leftJoin(
-      'carrierrule',
-      'rulescontainer.guidref',
-      'carrierrule.rulescontainerguidref'
-    )
-    .groupBy('contractcontainer.id')
-    .whereRaw(
-      'contractcontainer.isdeleted = false and (?::bigint is null or contractcontainer.id = ?)',
-      [id, id]
-    );
+    .leftJoin('lov_lookup as l', 'c.contracttype', 'l.id')
+    .leftJoin('contractdivision as cd', 'c.id', 'cd.contractid')
+    .leftJoin('division as d', 'cd.divisionid', 'd.id')
+    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
+    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
+    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
+    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
+    .whereRaw('c.isdeleted = false and (?::bigint is null or c.id = ?)', [
+      id,
+      id
+    ])
+    .groupBy('c.id', 'l.id', 'd.id');

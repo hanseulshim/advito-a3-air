@@ -19,9 +19,6 @@ const {
   dataSetColumnList
 } = require('./dataSet');
 const {
-  contractList,
-  contractTypeList,
-  pricingTermList,
   discountList,
   discountTypeList,
   journeyTypeList,
@@ -48,9 +45,6 @@ module.exports = {
   posList,
   travelSectorCollectionList,
   travelSectorRegionList,
-  contractList,
-  contractTypeList,
-  pricingTermList,
   discountList,
   discountTypeList,
   journeyTypeList,

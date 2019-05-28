@@ -66,8 +66,8 @@ export const DELETE_CONTRACT = gql`
 `;
 
 export const CREATE_PRICING_TERM = gql`
-  mutation createPricingTerm($name: String!, $ignore: Boolean!) {
-    createPricingTerm(name: $name, ignore: $ignore) {
+  mutation createPricingTerm($contractId: Int!, $name: String!, $ignore: Boolean!) {
+    createPricingTerm(contractId: $contractId, name: $name, ignore: $ignore) {
       ${PRICING_TERM}
     }
   }
@@ -98,8 +98,8 @@ export const TOGGLE_PRICING_TERM_QC = gql`
 `;
 
 export const DELETE_PRICING_TERMS = gql`
-  mutation deletePricingTerms($idList: [Int]!) {
-    deletePricingTerms(idList: $idList)
+  mutation deletePricingTerms($contractId: Int!, $idList: [Int]!) {
+    deletePricingTerms(contractId: $contractId, idList: $idList)
   }
 `;
 
@@ -175,19 +175,41 @@ export const DELETE_DISCOUNTS = gql`
   }
 `;
 
-export const SAVE_NOTE = gql`
-  mutation saveNote(
-    $id: Int!
+export const ADD_NOTE = gql`
+  mutation addNote(
+    $parentId: Int!
+    $parentTable: String!
     $important: Boolean!
-    $message: String
-    $assigneeId: Int!
-    $noteId: Int
+    $text: String
+    $assignedToId: Int!
   ) {
-    saveNote(
-      id: $id
+    addNote(
+      parentId: $parentId
+      parentTable: $parentTable
       important: $important
-      message: $message
-      assigneeId: $assigneeId
+      text: $text
+      assignedToId: $assignedToId
+    ) {
+      ${NOTE}
+    }
+  }
+`;
+
+export const EDIT_NOTE = gql`
+  mutation editNote(
+    $parentId: Int!
+    $parentTable: String!
+    $important: Boolean!
+    $text: String
+    $assignedToId: Int!
+    $noteId: String!
+  ) {
+    editNote(
+      parentId: $parentId
+      parentTable: $parentTable
+      important: $important
+      text: $text
+      assignedToId: $assignedToId
       noteId: $noteId
     ) {
       ${NOTE}
@@ -196,10 +218,8 @@ export const SAVE_NOTE = gql`
 `;
 
 export const DELETE_NOTE = gql`
-  mutation deleteNote($id: Int!, $noteId: Int!) {
-    deleteNote(id: $id, noteId: $noteId) {
-      ${NOTE}
-    }
+  mutation deleteNote($noteId: String!) {
+    deleteNote(noteId: $noteId)
   }
 `;
 
