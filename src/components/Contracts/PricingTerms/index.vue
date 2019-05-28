@@ -386,12 +386,15 @@ export default {
       });
     },
     showChangeAppliedOrderModal() {
-      this.$modal.show('change-pricing-term-order');
+      this.$modal.show('change-pricing-term-order', {
+        contractId: this.selectedContract.id
+      });
     },
     toggleNoteModal(pricingTerm) {
       this.$modal.show('save-note', {
-        id: pricingTerm.id,
-        note: pricingTerm.note
+        parentId: pricingTerm.id,
+        important: pricingTerm.noteImportant,
+        contractId: this.selectedContract.id
       });
     },
     bulkAction(value) {

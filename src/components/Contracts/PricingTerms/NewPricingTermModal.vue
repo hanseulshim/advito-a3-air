@@ -90,7 +90,12 @@ export default {
               data
             });
           },
-          refetchQueries: () => [{ query: GET_CONTRACT_LIST }]
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT_LIST,
+              variables: { id: this.form.contractId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Pricing Term successfully created.',

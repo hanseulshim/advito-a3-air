@@ -175,19 +175,41 @@ export const DELETE_DISCOUNTS = gql`
   }
 `;
 
-export const SAVE_NOTE = gql`
-  mutation saveNote(
-    $id: Int!
+export const ADD_NOTE = gql`
+  mutation addNote(
+    $parentId: Int!
+    $parentTable: String!
     $important: Boolean!
-    $message: String
-    $assigneeId: Int!
-    $noteId: Int
+    $text: String
+    $assignedToId: Int!
   ) {
-    saveNote(
-      id: $id
+    addNote(
+      parentId: $parentId
+      parentTable: $parentTable
       important: $important
-      message: $message
-      assigneeId: $assigneeId
+      text: $text
+      assignedToId: $assignedToId
+    ) {
+      ${NOTE}
+    }
+  }
+`;
+
+export const EDIT_NOTE = gql`
+  mutation editNote(
+    $parentId: Int!
+    $parentTable: String!
+    $important: Boolean!
+    $text: String
+    $assignedToId: Int!
+    $noteId: String!
+  ) {
+    editNote(
+      parentId: $parentId
+      parentTable: $parentTable
+      important: $important
+      text: $text
+      assignedToId: $assignedToId
       noteId: $noteId
     ) {
       ${NOTE}
@@ -196,10 +218,8 @@ export const SAVE_NOTE = gql`
 `;
 
 export const DELETE_NOTE = gql`
-  mutation deleteNote($id: Int!, $noteId: Int!) {
-    deleteNote(id: $id, noteId: $noteId) {
-      ${NOTE}
-    }
+  mutation deleteNote($noteId: String!) {
+    deleteNote(noteId: $noteId)
   }
 `;
 

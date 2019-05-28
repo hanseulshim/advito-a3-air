@@ -3,6 +3,7 @@
     classes="modal-container"
     name="change-pricing-term-order"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <div class="title-row space-between">
@@ -53,6 +54,11 @@ export default {
   apollo: {
     pricingTermList: {
       query: GET_PRICING_TERM_LIST,
+      variables() {
+        return {
+          contractId: this.contractId
+        };
+      },
       result({ data: { pricingTermList } }) {
         this.pricingTermOrderList = pricingTermList
           .map(term => ({
@@ -68,6 +74,7 @@ export default {
   data() {
     return {
       term,
+      contractId: null,
       pricingTermList: [],
       pricingTermOrderList: []
     };
@@ -93,6 +100,9 @@ export default {
           message: error.message
         });
       }
+    },
+    beforeOpen(event) {
+      this.contractId = event.params.contractId;
     },
     beforeClose() {
       this.pricingTermOrderList = this.pricingTermList
