@@ -35,12 +35,7 @@
           </span>
         </template>
         <template slot-scope="props">
-          <el-input
-            type="number"
-            size="mini"
-            v-model.number="props.row.annMonths"
-            v-on:change.native="setAnnMonths(props.row.id)"
-          />
+          <el-input type="number" size="mini" v-model.number="props.row.annMonths"/>
         </template>
       </el-table-column>
       <el-table-column
