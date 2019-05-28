@@ -29,6 +29,43 @@ export const PRICING_TERM = `id
         ignore
         discountTotal`;
 
+export const TARGET_TERM = `id
+      name
+      effectiveStartDate
+      effectiveEndDate
+      timeframe
+      qc
+      targetType {
+        id
+        name
+      }
+      cabinF
+      cabinB
+      cabinP
+      cabinE
+      qsi
+      incentiveType {
+        id
+        name
+      }
+      softTarget
+      internalTarget
+      order
+      targetAmount
+      levelTotal
+      ruleTotal
+      note {
+        ${NOTE}
+      }
+  `;
+
+export const TARGET_LEVEL = `id
+  targetTermId
+  targetAmount
+  scoringTarget
+  incentiveDescription
+`;
+
 export const DISCOUNT = `id
         pricingTermId
         contractOrder

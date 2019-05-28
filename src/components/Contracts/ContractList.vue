@@ -61,7 +61,6 @@
         sortable
         :sort-orders="['ascending', 'descending']"
         sort-by="qc"
-        :formatter="formatPercent"
       >
         <template slot-scope="props">
           <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">

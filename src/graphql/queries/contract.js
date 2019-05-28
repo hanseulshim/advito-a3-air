@@ -1,5 +1,11 @@
 import gql from 'graphql-tag';
-import { CONTRACT, PRICING_TERM, DISCOUNT } from '../constants';
+import {
+  CONTRACT,
+  PRICING_TERM,
+  DISCOUNT,
+  TARGET_TERM,
+  TARGET_LEVEL
+} from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
 query contractList($id: Int) {
@@ -80,6 +86,40 @@ export const GET_NOTE_LIST = gql`
       assigneeName
       assignedToId
       assignedToName
+    }
+  }
+`;
+
+export const GET_TARGET_TERM_LIST = gql`
+{
+  targetTermList {
+    ${TARGET_TERM}
+  }
+}
+`;
+
+export const GET_TARGET_LEVEL_LIST = gql`
+query targetLevelList($targetTermId: Int) {
+  targetLevelList(targetTermId: $targetTermId) {
+    ${TARGET_LEVEL}
+  }
+}
+`;
+
+export const GET_TARGET_TYPE_LIST = gql`
+  {
+    targetTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_INCENTIVE_TYPE_LIST = gql`
+  {
+    incentiveTypeList {
+      id
+      name
     }
   }
 `;

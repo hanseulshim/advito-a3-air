@@ -1,13 +1,13 @@
 <template>
   <modal
     classes="modal-container"
-    name="copy-contract"
+    name="copy-target-term"
     height="auto"
-    @before-close="beforeClose"
     @before-open="beforeOpen"
+    @before-close="beforeClose"
   >
     <el-form
-      ref="copyContract"
+      ref="copyTargetTerm"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -15,9 +15,9 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">copy contract</div>
+        <div class="section-header">copy target term</div>
         <el-tooltip effect="dark" content="Close Modal" placement="top">
-          <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
       </div>
       <el-form-item label="Name *" prop="name">
@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import { GET_CONTRACT_LIST } from '@/graphql/queries';
-import { COPY_CONTRACT } from '@/graphql/mutations';
+import { GET_TARGET_TERM_LIST } from '@/graphql/queries';
+import { COPY_TARGET_TERM } from '@/graphql/mutations';
 export default {
-  name: 'CopyContractModal',
+  name: 'CopyTargetTermModal',
   data() {
     return {
       form: {
@@ -45,7 +45,7 @@ export default {
         name: [
           {
             required: true,
-            message: 'Please input a contract name.',
+            message: 'Please input a target term name.',
             trigger: 'change'
           }
         ]
@@ -54,39 +54,39 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('copy-contract');
+      this.$modal.hide('copy-target-term');
     },
     validateForm() {
-      this.$refs.copyContract.validate(valid => {
+      this.$refs.copyTargetTerm.validate(valid => {
         if (valid) {
-          this.copyContract();
+          this.copyTargetTerm();
         } else {
           return false;
         }
       });
     },
-    async copyContract() {
+    async copyTargetTerm() {
       try {
         await this.$apollo.mutate({
-          mutation: COPY_CONTRACT,
+          mutation: COPY_TARGET_TERM,
           variables: {
             ...this.form
           },
           update: (store, data) => {
-            const contract = data.data.copyContract;
+            const targetTerm = data.data.copyTargetTerm;
             const newData = store.readQuery({
-              query: GET_CONTRACT_LIST
+              query: GET_TARGET_TERM_LIST
             });
-            newData.contractList.push(contract);
+            newData.targetTermList.push(targetTerm);
             store.writeQuery({
-              query: GET_CONTRACT_LIST,
+              query: GET_TARGET_TERM_LIST,
               data: newData
             });
           }
         });
         this.$modal.show('success', {
-          message: 'Contract successfully copied.',
-          name: 'copy-contract'
+          message: 'Target Term successfully created.',
+          name: 'copy-target-term'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -95,7 +95,9 @@ export default {
       }
     },
     beforeOpen(event) {
-      this.form.id = event.params.id;
+      const { id, name } = event.params.targetTerm;
+      this.form.id = id;
+      this.form.name = name;
     },
     beforeClose() {
       this.form.id = null;

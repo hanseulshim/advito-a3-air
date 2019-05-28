@@ -29,6 +29,56 @@ const PRICING_TERM = `id
         ignore
         discountTotal`;
 
+const TARGET_TERM = `id
+      name
+      effectiveStartDate
+      effectiveEndDate
+      timeframe
+      qc
+      targetType {
+        id
+        name
+      }
+      cabinF
+      cabinB
+      cabinP
+      cabinE
+      qsi
+      incentiveType {
+        id
+        name
+      }
+      softTarget
+      order
+      internalTarget
+      targetAmount
+      levelTotal
+      ruleTotal
+      note {
+        important
+        noteList {
+          id
+          author {
+            id
+            name
+          }
+          date
+          assignee {
+            id
+            name
+          }
+          message
+        }
+      }
+  `;
+
+const TARGET_LEVEL = `id
+        targetTermId
+        targetAmount
+        scoringTarget
+        incentiveDescription
+`;
+
 const DISCOUNT = `id
         pricingTermId
         contractOrder
@@ -65,5 +115,7 @@ module.exports = {
   CONTRACT,
   PRICING_TERM,
   DISCOUNT,
+  TARGET_TERM,
+  TARGET_LEVEL,
   NOTE
 };
