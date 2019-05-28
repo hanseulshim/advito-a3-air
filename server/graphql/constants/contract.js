@@ -54,16 +54,12 @@ const DISCOUNT = `id
         noteContent`;
 
 const NOTE = `id
-        important
-        noteList {
-          id
-          text
-          lastUpdate
-          assigneeId
-          assigneeName
-          assignedToId
-          assignedToName
-        }`;
+        text
+        lastUpdate
+        assigneeId
+        assigneeName
+        assignedToId
+        assignedToName`;
 
 module.exports = {
   CONTRACT,

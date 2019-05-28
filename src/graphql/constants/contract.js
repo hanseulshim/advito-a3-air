@@ -54,13 +54,9 @@ export const DISCOUNT = `id
         noteContent`;
 
 export const NOTE = `id
-        important
-        noteList {
-          id
-          text
-          lastUpdate
-          assigneeId
-          assigneeName
-          assignedToId
-          assignedToName
-        }`;
+        text
+        lastUpdate
+        assigneeId
+        assigneeName
+        assignedToId
+        assignedToName`;

@@ -29,6 +29,9 @@ exports.contract = {
       discountList(pricingTermId: 1) {
         ${DISCOUNT}
       }
+      noteList(parentId: 49) {
+        ${NOTE}
+      }
     }`
   },
   mutations: {
@@ -100,7 +103,14 @@ exports.contract = {
       }
       deleteDiscounts(idList: [1, 2, 3])
 
-      saveNote(id: 1, important: true, message: "this is my first note", assigneeId: 2) {
+      saveNote(
+        parentId: 52,
+        parentTable: "pricingterm",
+        important: true,
+        text: "",
+        assignedToId: 882,
+        noteId: ""
+      ) {
         ${NOTE}
       }
       deleteNote(id: 1, noteId: 1) {

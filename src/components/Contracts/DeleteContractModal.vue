@@ -42,10 +42,9 @@ export default {
               query: GET_CONTRACT_LIST
             };
             const data = store.readQuery(query);
-            const index = data.contractList.findIndex(
-              contract => contract.id === deleteContract
+            data.contractList = data.contractList.filter(
+              c => c.id !== deleteContract
             );
-            data.contractList.splice(index, 1);
             store.writeQuery({
               ...query,
               data

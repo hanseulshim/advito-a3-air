@@ -72,11 +72,6 @@ type DirectionType {
 }
 type Note {
   id: String
-  important: Boolean
-  noteList: [NoteContent]
-}
-type NoteContent {
-  id: String
   text: String
   lastUpdate: Date
   assigneeId: Int
@@ -92,14 +87,15 @@ input NewAppliedOrder {
 }
 
 extend type Query {
-  contractList: [Contract] @auth
+  contractList(id: Int): [Contract] @auth
   contractTypeList: [ContractType] @auth
   divisionTypeList: [DivisionType] @auth
-  pricingTermList(contractId: Int): [PricingTerm] @auth
+  pricingTermList(contractId: Int, id: Int): [PricingTerm] @auth
   discountList(pricingTermId: Int): [Discount] @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
+  noteList(parentId: Int): [Note] @auth
 }
 
 extend type Mutation {
@@ -125,15 +121,14 @@ extend type Mutation {
   ): Contract @auth
   deleteContract(id: Int!): Int @auth
 
-  updateAppliedOrder(
-    updatePricingTermList: [NewAppliedOrder]!
-  ): [PricingTerm] @auth
-
   createPricingTerm(contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(id: Int!): PricingTerm @auth
   deletePricingTerms(contractId: Int!, idList: [Int]!): [Int] @auth
+  updateAppliedOrder(
+    updatePricingTermList: [NewAppliedOrder]!
+  ): [PricingTerm] @auth
 
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!
@@ -164,18 +159,26 @@ extend type Mutation {
     directionTypeId: Int
   ): Discount @auth
   deleteDiscounts(idList: [Int]!): [Int] @auth
-
-  saveNote(
-    id: Int!
+  
+  addNote(
+    parentId: Int!
+    parentTable: String!
     important: Boolean!
-    message: String
-    assigneeId: Int!
-    noteId: Int
-  ): Note
+    text: String
+    assignedToId: Int!
+  ): Note @auth
+  editNote(
+    parentId: Int!
+    parentTable: String!
+    important: Boolean!
+    text: String
+    assignedToId: Int!
+    noteId: String!
+  ): Note @auth
   deleteNote(
-    id: Int!
-    noteId: Int!
-  ): Note
+    noteId: String!
+  ): String @auth
+
   saveDiscountNote(
     id: Int!
     important: Boolean!

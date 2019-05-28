@@ -51,18 +51,20 @@ export default {
               }
             };
             const data = store.readQuery(query);
-            const indexList = deletePricingTerms.map(id =>
-              data.pricingTermList.findIndex(term => term.id === id)
+            data.pricingTermList = data.pricingTermList.filter(
+              term => deletePricingTerms.indexOf(term.id) === -1
             );
-            indexList.forEach(index => {
-              data.pricingTermList.splice(index, 1);
-            });
             store.writeQuery({
               ...query,
               data
             });
           },
-          refetchQueries: () => [{ query: GET_CONTRACT_LIST }]
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT_LIST,
+              variables: { id: this.contractId }
+            }
+          ]
         });
         this.$emit('clear-bulk-actions');
         this.$modal.show('success', {
