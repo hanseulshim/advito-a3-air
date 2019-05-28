@@ -27,7 +27,7 @@
         <el-checkbox v-model="form.ignore" />
       </el-form-item>
       <el-form-item class="save-container">
-        <button class="button" @click="validateForm">SAVE</button>
+        <button class="button" type="button" @click="validateForm">SAVE</button>
       </el-form-item>
     </el-form>
   </modal>
