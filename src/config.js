@@ -60,12 +60,22 @@ export const term = {
   bulk: 50,
   name: 200,
   effectiveDates: 200,
-  qc: 55,
+  qc: 65,
   discounts: 70,
   airlines: 55,
   pos: 75,
-  note: 75,
-  actions: 90
+  note: 80,
+  actions: 100,
+  targetName: 150,
+  timeframe: 110,
+  softTarget: 75,
+  targetType: 95,
+  cabins: 65,
+  amount: 70,
+  qsi: 50,
+  incentiveType: 100,
+  levels: 60,
+  rules: 55
 };
 
 export const discount = {
@@ -82,6 +92,13 @@ export const discount = {
   normalization: 120,
   note: 100,
   actions: 120
+};
+
+export const target = {
+  targetAmount: 150,
+  scoreTarget: 150,
+  incentiveDescription: 200,
+  actions: 100
 };
 
 export const airport = {
