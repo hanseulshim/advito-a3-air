@@ -14,7 +14,7 @@
         <el-table-column
           prop="ticketsTotal"
           align="right"
-          :formatter="row => formatNumber(row.ticketsTotal)"
+          :formatter="row => formatNumber(row[selectorTotal])"
         >
           <template slot="header">
             <span class="header-container">

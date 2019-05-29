@@ -3,7 +3,7 @@
     <div class="annualize-container">
       <div class="enable-annualization">
         <p>Annualization</p>
-        <el-switch v-model="annualized"/>
+        <el-switch v-model="annualized" @change="toggleAnnualized"/>
       </div>
       <div class="annualize-controls" v-if="annualized">
         <el-input v-model="annualizeAllBy" type="number" size="mini"/>
@@ -132,17 +132,31 @@ export default {
         })
       ));
     },
+    toggleAnnualized() {
+      if (this.annualized) {
+        return (this.dataSetDivisionListCopy = this.dataSetDivisionListCopy.map(
+          division => ({
+            ...division,
+            [this.selectorTotal]:
+              division[this.selectorTotal] * division.annMonths
+          })
+        ));
+      } else {
+        this.dataSetDivisionListCopy = this.dataSetDivisionList.map(
+          division => ({
+            ...division,
+            annMonths: division.numberDatasets
+          })
+        );
+      }
+    },
     tableRowClassName() {
       if (this.annualized) {
         return "active";
       } else return "";
     },
     calcTotal(row) {
-      if (!this.annualized) {
-        return formatNumber(row[this.selectorTotal]);
-      } else {
-        return formatNumber(row[this.selectorTotal] * row.annMonths);
-      }
+      return formatNumber(row[this.selectorTotal]);
     }
   }
 };
