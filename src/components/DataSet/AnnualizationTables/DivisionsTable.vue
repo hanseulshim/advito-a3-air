@@ -3,7 +3,7 @@
     <div class="annualize-container">
       <div class="enable-annualization">
         <p>Annualization</p>
-        <el-switch v-model="annualized" @change="toggleAnnualized"/>
+        <el-switch v-model="annualized"/>
       </div>
       <div class="annualize-controls" v-if="annualized">
         <el-input v-model="annualizeAllBy" type="number" size="mini"/>
@@ -51,7 +51,7 @@
           </span>
         </template>
         <template slot-scope="props">
-          <div>{{ calcTotal(props.row) }}</div>
+          <div>{{ calcRowTotal(props.row) }}</div>
         </template>
       </el-table-column>
     </el-table>
@@ -114,49 +114,47 @@ export default {
       const { columns, data } = param;
       const lastIdx = columns.length;
 
-      return columns.map((col, i) => {
-        if (i === 0) {
-          return "TOTAL";
-        } else if (i === lastIdx - 1) {
-          return this.formatNumber(
-            data.reduce((a, b) => a + b[this.selectorTotal], 0)
-          );
-        }
-      });
+      if (!this.annualized) {
+        return columns.map((col, i) => {
+          if (i === 0) {
+            return "TOTAL";
+          } else if (i === lastIdx - 1) {
+            return this.formatNumber(
+              data.reduce((a, b) => a + b[this.selectorTotal], 0)
+            );
+          }
+        });
+      } else {
+        return columns.map((col, i) => {
+          if (i === 0) {
+            return "TOTAL";
+          } else if (i === lastIdx - 1) {
+            return this.formatNumber(
+              data.reduce((a, b) => a + b[this.selectorTotal] * b.annMonths, 0)
+            );
+          }
+        });
+      }
     },
     setAnnMonthsGlobal() {
       return (this.dataSetDivisionListCopy = this.dataSetDivisionListCopy.map(
-        country => ({
-          ...country,
+        division => ({
+          ...division,
           annMonths: this.annualizeAllBy
         })
       ));
-    },
-    toggleAnnualized() {
-      if (this.annualized) {
-        return (this.dataSetDivisionListCopy = this.dataSetDivisionListCopy.map(
-          division => ({
-            ...division,
-            [this.selectorTotal]:
-              division[this.selectorTotal] * division.annMonths
-          })
-        ));
-      } else {
-        this.dataSetDivisionListCopy = this.dataSetDivisionList.map(
-          division => ({
-            ...division,
-            annMonths: division.numberDatasets
-          })
-        );
-      }
     },
     tableRowClassName() {
       if (this.annualized) {
         return "active";
       } else return "";
     },
-    calcTotal(row) {
-      return formatNumber(row[this.selectorTotal]);
+    calcRowTotal(row) {
+      if (this.annualized) {
+        return this.formatNumber(row[this.selectorTotal] * row.annMonths);
+      } else {
+        return this.formatNumber(row[this.selectorTotal]);
+      }
     }
   }
 };
