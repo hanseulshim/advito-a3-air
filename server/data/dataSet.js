@@ -7,7 +7,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 11278,
     importedTicketsTotal: 178312,
     errorTicketsTotal: 58275,
-    errorRatioTotal: 11278
+    errorRatioTotal: 11278,
+    numberDatasets: 10
   },
   {
     id: 15,
@@ -17,7 +18,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 17862,
     importedTicketsTotal: 82575,
     errorTicketsTotal: 100658,
-    errorRatioTotal: 17862
+    errorRatioTotal: 17862,
+    numberDatasets: 10
   },
   {
     id: 52,
@@ -27,7 +29,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 14610,
     importedTicketsTotal: 112742,
     errorTicketsTotal: 82240,
-    errorRatioTotal: 14610
+    errorRatioTotal: 14610,
+    numberDatasets: 10
   },
   {
     id: 64,
@@ -37,7 +40,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 23711,
     importedTicketsTotal: 153641,
     errorTicketsTotal: 55949,
-    errorRatioTotal: 23711
+    errorRatioTotal: 23711,
+    numberDatasets: 10
   },
   {
     id: 77,
@@ -47,7 +51,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 10835,
     importedTicketsTotal: 134624,
     errorTicketsTotal: 76875,
-    errorRatioTotal: 10835
+    errorRatioTotal: 10835,
+    numberDatasets: 10
   },
   {
     id: 94,
@@ -57,7 +62,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 14160,
     importedTicketsTotal: 168217,
     errorTicketsTotal: 38690,
-    errorRatioTotal: 14160
+    errorRatioTotal: 14160,
+    numberDatasets: 10
   },
   {
     id: 137,
@@ -67,7 +73,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 16569,
     importedTicketsTotal: 53339,
     errorTicketsTotal: 83928,
-    errorRatioTotal: 16569
+    errorRatioTotal: 16569,
+    numberDatasets: 10
   },
   {
     id: 165,
@@ -77,7 +84,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 9492,
     importedTicketsTotal: 92657,
     errorTicketsTotal: 87603,
-    errorRatioTotal: 9492
+    errorRatioTotal: 9492,
+    numberDatasets: 10
   },
   {
     id: 187,
@@ -87,7 +95,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 9446,
     importedTicketsTotal: 155052,
     errorTicketsTotal: 86020,
-    errorRatioTotal: 9446
+    errorRatioTotal: 9446,
+    numberDatasets: 10
   },
   {
     id: 207,
@@ -97,7 +106,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 10181,
     importedTicketsTotal: 207094,
     errorTicketsTotal: 77896,
-    errorRatioTotal: 10181
+    errorRatioTotal: 10181,
+    numberDatasets: 10
   },
   {
     id: 209,
@@ -107,7 +117,8 @@ exports.dataSetCountryList = [
     farePaidTotal: 13488,
     importedTicketsTotal: 19004,
     errorTicketsTotal: 35146,
-    errorRatioTotal: 13488
+    errorRatioTotal: 13488,
+    numberDatasets: 10
   }
 ];
 
@@ -117,35 +128,40 @@ exports.dataSetDivisionList = [
     name: 'IT',
     ticketsTotal: 178312,
     segmentsTotal: 58275,
-    farePaidTotal: 11278
+    farePaidTotal: 11278,
+    numberDatasets: 10
   },
   {
     id: 2,
     name: 'Health',
     ticketsTotal: 82575,
     segmentsTotal: 100658,
-    farePaidTotal: 17862
+    farePaidTotal: 17862,
+    numberDatasets: 10
   },
   {
     id: 3,
     name: 'Development',
     ticketsTotal: 112742,
     segmentsTotal: 82240,
-    farePaidTotal: 14610
+    farePaidTotal: 14610,
+    numberDatasets: 10
   },
   {
     id: 4,
     name: 'Marketing',
     ticketsTotal: 153641,
     segmentsTotal: 55949,
-    farePaidTotal: 23711
+    farePaidTotal: 23711,
+    numberDatasets: 10
   },
   {
     id: 5,
     name: 'Sales',
     ticketsTotal: 134624,
     segmentsTotal: 76875,
-    farePaidTotal: 10835
+    farePaidTotal: 10835,
+    numberDatasets: 10
   }
 ];
 

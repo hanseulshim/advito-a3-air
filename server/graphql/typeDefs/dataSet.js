@@ -8,6 +8,7 @@ type DataSetCountry {
   importedTicketsTotal: Int
   errorTicketsTotal: Int
   errorRatioTotal: Int
+  numberDatasets: Int
 }
 type DataSetDivision {
   id: Int
@@ -15,6 +16,7 @@ type DataSetDivision {
   ticketsTotal: Int
   segmentsTotal: Int
   farePaidTotal: Int
+  numberDatasets: Int
 }
 type DataSetColumn {
   id: Int

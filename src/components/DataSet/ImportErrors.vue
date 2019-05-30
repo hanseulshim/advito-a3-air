@@ -11,23 +11,19 @@
           <template slot="header">
             <span class="header-container">
               <div class="updated-date" />
-              <span class="header-text">
-                Countries
-              </span>
+              <span class="header-text">Countries</span>
             </span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="importedTicketsTotal"
+          prop="ticketsTotal"
           align="right"
           :formatter="row => formatNumber(row[selectorTotal])"
         >
           <template slot="header">
             <span class="header-container">
               <div class="updated-date" />
-              <span class="header-text">
-                Tickets
-              </span>
+              <span class="header-text">Tickets</span>
             </span>
           </template>
         </el-table-column>
@@ -52,13 +48,15 @@
               class="fas fa-minus data-icon qc"
               :class="{ active: column.status === null }"
               @click="toggleDataSet(column.id, null)"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip effect="dark" content="Reject" placement="top">
             <i
               class="fas fa-times data-icon reject"
               :class="{ active: column.status === 'reject' }"
               @click="toggleDataSet(column.id, 'reject')"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip
             v-if="column.status === 'reject'"
             effect="dark"
@@ -84,12 +82,12 @@
           >
             <template slot="header">
               <span class="header-container content">
-                <span class="updated-date">
-                  {{ formatDateTime(column.dateUpdated) }}
-                </span>
-                <span class="header-text">
-                  {{ formatDataSetCol(column.name) }}
-                </span>
+                <span class="updated-date">{{
+                  formatDateTime(column.dateUpdated)
+                }}</span>
+                <span class="header-text">{{
+                  formatDataSetCol(column.name)
+                }}</span>
               </span>
             </template>
           </el-table-column>
