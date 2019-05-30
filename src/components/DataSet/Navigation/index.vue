@@ -7,7 +7,7 @@
         :class="{ active: $route.path.includes('/project/data/import-errors') }"
       >
         <span class="data-icon">
-          <img alt="import-errors" src="@/assets/importErrors.png">
+          <img alt="import-errors" src="@/assets/importErrors.png" />
         </span>
         <span class="nav-title">Import Errors</span>
       </router-link>
@@ -17,7 +17,7 @@
         :class="{ active: $route.path.includes('/project/data/pos-trends') }"
       >
         <span class="data-icon">
-          <img alt="pos-trends" src="@/assets/posTrends.png">
+          <img alt="pos-trends" src="@/assets/posTrends.png" />
         </span>
         <span class="nav-title">PoS Trends</span>
       </router-link>
@@ -29,13 +29,17 @@
         }"
       >
         <span class="data-icon">
-          <img alt="division-trends" src="@/assets/divisionTrends.png">
+          <img alt="division-trends" src="@/assets/divisionTrends.png" />
         </span>
         <span class="nav-title">Division Trends</span>
       </router-link>
       <button class="button long annualization">ANNUALIZATION</button>
       <div class="dataset">
-        <el-select :value="selectedFilter" placeholder="Select Client" @change="updateFilter">
+        <el-select
+          :value="selectedFilter"
+          placeholder="Select Client"
+          @change="updateFilter"
+        >
           <el-option
             v-for="item in filterSelectList"
             :key="item.value"
@@ -46,19 +50,23 @@
       </div>
     </div>
     <div class="sub-navigation-container">
-      <PosTrends v-if="$route.path.includes('/project/data/pos-trends')"/>
-      <DivisionTrends v-if="$route.path.includes('/project/data/division-trends')"/>
-      <ImportErrors v-if="$route.path.includes('/project/data/import-errors')"/>
+      <PosTrends v-if="$route.path.includes('/project/data/pos-trends')" />
+      <DivisionTrends
+        v-if="$route.path.includes('/project/data/division-trends')"
+      />
+      <ImportErrors
+        v-if="$route.path.includes('/project/data/import-errors')"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import PosTrends from "./PosTrends";
-import DivisionTrends from "./DivisionTrends";
-import ImportErrors from "./ImportErrors";
+import PosTrends from './PosTrends';
+import DivisionTrends from './DivisionTrends';
+import ImportErrors from './ImportErrors';
 export default {
-  name: "DataNavigation",
+  name: 'DataNavigation',
   components: {
     PosTrends,
     DivisionTrends,
@@ -76,17 +84,17 @@ export default {
   },
   methods: {
     updateFilter(value) {
-      this.$emit("update-filter", value);
+      this.$emit('update-filter', value);
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import "@/styles/global.scss";
+@import '@/styles/global.scss';
 .data-navigation-container {
   display: grid;
-  grid-template-areas: "import pos division . annualization dataset";
+  grid-template-areas: 'import pos division . annualization dataset';
   grid-template-columns: 15% 15% 15% auto 150px 200px;
   -ms-grid-columns: 15% 1em 15% 1em 15% 1em auto 1em 150px 1em 200px;
   row-gap: 1em;

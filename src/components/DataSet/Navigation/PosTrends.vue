@@ -31,6 +31,6 @@
 
 <script>
 export default {
-  name: "PosTrends"
+  name: 'PosTrends'
 };
 </script>

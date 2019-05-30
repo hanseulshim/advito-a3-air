@@ -5,16 +5,19 @@
       :selected-filter="selectedFilter"
       @update-filter="updateFilter"
     />
-    <router-view :filtered-data-set-list="filteredDataSetList" :check-status="checkStatus"/>
+    <router-view
+      :filtered-data-set-list="filteredDataSetList"
+      :check-status="checkStatus"
+    />
   </div>
 </template>
 
 <script>
-import Navigation from "./Navigation";
-import { GET_DATA_SET_COLUMN_LIST } from "@/graphql/queries";
-import { UPDATE_PROJECT_STATUS } from "@/graphql/mutations";
+import Navigation from './Navigation';
+import { GET_DATA_SET_COLUMN_LIST } from '@/graphql/queries';
+import { UPDATE_PROJECT_STATUS } from '@/graphql/mutations';
 export default {
-  name: "DataSet",
+  name: 'DataSet',
   components: {
     Navigation
   },
@@ -29,19 +32,19 @@ export default {
   data() {
     return {
       dataSetColumnList: [],
-      selectedFilter: "all"
+      selectedFilter: 'all'
     };
   },
   computed: {
     filteredDataSetList() {
-      if (this.selectedFilter === "all") {
+      if (this.selectedFilter === 'all') {
         return this.dataSetColumnList;
-      } else if (this.selectedFilter === "need") {
+      } else if (this.selectedFilter === 'need') {
         return this.dataSetColumnList.filter(set => set.status === null);
-      } else if (this.selectedFilter === "accept") {
-        return this.dataSetColumnList.filter(set => set.status === "accept");
-      } else if (this.selectedFilter === "reject") {
-        return this.dataSetColumnList.filter(set => set.status === "reject");
+      } else if (this.selectedFilter === 'accept') {
+        return this.dataSetColumnList.filter(set => set.status === 'accept');
+      } else if (this.selectedFilter === 'reject') {
+        return this.dataSetColumnList.filter(set => set.status === 'reject');
       }
       return [];
     },
@@ -50,26 +53,26 @@ export default {
       const need = this.dataSetColumnList.filter(set => set.status === null)
         .length;
       const accepted = this.dataSetColumnList.filter(
-        set => set.status === "accept"
+        set => set.status === 'accept'
       ).length;
       const rejected = this.dataSetColumnList.filter(
-        set => set.status === "reject"
+        set => set.status === 'reject'
       ).length;
       return [
         {
-          value: "all",
+          value: 'all',
           name: `All Datasets (${all})`
         },
         {
-          value: "need",
+          value: 'need',
           name: `Need QC (${need})`
         },
         {
-          value: "accept",
+          value: 'accept',
           name: `Accepted (${accepted})`
         },
         {
-          value: "reject",
+          value: 'reject',
           name: `Rejected (${rejected})`
         }
       ];
@@ -81,9 +84,9 @@ export default {
     },
     checkStatus() {
       const check = this.dataSetColumnList.every(
-        col => col.status === "accept"
+        col => col.status === 'accept'
       );
-      const status = check ? "valid" : "invalid";
+      const status = check ? 'valid' : 'invalid';
       this.$apollo.mutate({
         mutation: UPDATE_PROJECT_STATUS,
         variables: {
