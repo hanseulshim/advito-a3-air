@@ -1,38 +1,6 @@
 <template>
   <div class="data-set-table-container">
-    <div class="fixed-table-container">
-      <div class="icon-container" />
-      <el-table
-        :data="dataSetDivisionList"
-        show-summary
-        :summary-method="getTotal"
-      >
-        <el-table-column prop="name" label="Countries">
-          <template slot="header">
-            <span class="header-container">
-              <div class="updated-date" />
-              <span class="header-text">
-                Divisions
-              </span>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="ticketsTotal"
-          align="right"
-          :formatter="row => formatNumber(row.ticketsTotal)"
-        >
-          <template slot="header">
-            <span class="header-container">
-              <div class="updated-date" />
-              <span class="header-text">
-                Tickets
-              </span>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <DivisionsTable :selected="selector" />
     <div class="column-table-container">
       <div
         v-for="column in filteredDataSetList"
@@ -52,13 +20,15 @@
               class="fas fa-minus data-icon qc"
               :class="{ active: column.status === null }"
               @click="toggleDataSet(column.id, null)"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip effect="dark" content="Reject" placement="top">
             <i
               class="fas fa-times data-icon reject"
               :class="{ active: column.status === 'reject' }"
               @click="toggleDataSet(column.id, 'reject')"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip
             v-if="column.status === 'reject'"
             effect="dark"
@@ -84,12 +54,12 @@
           >
             <template slot="header">
               <span class="header-container content">
-                <span class="updated-date">
-                  {{ formatDateTime(column.dateUpdated) }}
-                </span>
-                <span class="header-text">
-                  {{ formatDataSetCol(column.name) }}
-                </span>
+                <span class="updated-date">{{
+                  formatDateTime(column.dateUpdated)
+                }}</span>
+                <span class="header-text">{{
+                  formatDataSetCol(column.name)
+                }}</span>
               </span>
             </template>
           </el-table-column>
@@ -101,6 +71,7 @@
 
 <script>
 import { formatNumber, formatDataSetCol, formatDateTime } from '@/helper';
+import DivisionsTable from './AnnualizationTables/DivisionsTable';
 import {
   GET_DATA_SET_DIVISION_LIST,
   GET_DATA_SET_COLUMN_LIST
@@ -108,6 +79,9 @@ import {
 import { TOGGLE_DATA_SET, DELETE_DATA_SET } from '@/graphql/mutations';
 export default {
   name: 'DivisionTrends',
+  components: {
+    DivisionsTable
+  },
   props: {
     filteredDataSetList: {
       required: true,

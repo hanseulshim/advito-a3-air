@@ -3,6 +3,16 @@
     <div class="data-navigation-container">
       <router-link
         class="data-nav-item nav-item data-nav"
+        to="/project/data/import-errors/imported-tickets"
+        :class="{ active: $route.path.includes('/project/data/import-errors') }"
+      >
+        <span class="data-icon">
+          <img alt="import-errors" src="@/assets/importErrors.png" />
+        </span>
+        <span class="nav-title">Import Errors</span>
+      </router-link>
+      <router-link
+        class="data-nav-item nav-item data-nav"
         to="/project/data/pos-trends/tickets"
         :class="{ active: $route.path.includes('/project/data/pos-trends') }"
       >
@@ -18,20 +28,10 @@
           active: $route.path.includes('/project/data/division-trends')
         }"
       >
-        <span class="data-icon"
-          ><img alt="division-trends" src="@/assets/divisionTrends.png"
-        /></span>
-        <span class="nav-title">Division Trends</span>
-      </router-link>
-      <router-link
-        class="data-nav-item nav-item data-nav"
-        to="/project/data/import-errors/imported-tickets"
-        :class="{ active: $route.path.includes('/project/data/import-errors') }"
-      >
         <span class="data-icon">
-          <img alt="import-errors" src="@/assets/importErrors.png"
-        /></span>
-        <span class="nav-title">Import Errors</span>
+          <img alt="division-trends" src="@/assets/divisionTrends.png" />
+        </span>
+        <span class="nav-title">Division Trends</span>
       </router-link>
       <button class="button long annualization">ANNUALIZATION</button>
       <div class="dataset">
@@ -94,7 +94,7 @@ export default {
 @import '@/styles/global.scss';
 .data-navigation-container {
   display: grid;
-  grid-template-areas: 'pos division import . annualization dataset';
+  grid-template-areas: 'import pos division . annualization dataset';
   grid-template-columns: 15% 15% 15% auto 150px 200px;
   -ms-grid-columns: 15% 1em 15% 1em 15% 1em auto 1em 150px 1em 200px;
   row-gap: 1em;
@@ -156,13 +156,13 @@ export default {
   margin-top: 10px;
   padding-top: 10px;
   position: relative;
-  .division-trends {
+  .pos-trends {
     margin-left: 15%;
     .fa-chevron-up {
       left: calc(15% + 1em + 22.375px);
     }
   }
-  .import-errors {
+  .division-trends {
     margin-left: 30%;
     .fa-chevron-up {
       left: calc(30% + 2em + 22.375px);
