@@ -1,22 +1,9 @@
 <template>
-  <router-view
-    :selected-contract="selectedContract"
-    @select-contract="selectContract"
-  />
+  <router-view />
 </template>
 
 <script>
 export default {
-  name: 'Contracts',
-  data() {
-    return {
-      selectedContract: {}
-    };
-  },
-  methods: {
-    selectContract(selectedContract) {
-      this.selectedContract = selectedContract;
-    }
-  }
+  name: 'Contracts'
 };
 </script>

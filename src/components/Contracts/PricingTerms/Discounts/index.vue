@@ -77,7 +77,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="discountType.name"
+        prop="discountTypeName"
         label="Type"
         sortable
         :sort-orders="['ascending', 'descending']"
@@ -92,71 +92,63 @@
       >
         <template slot-scope="props">
           {{
-            props.row.discountType.id === 2
+            props.row.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
               ? formatPercent(props.row.discountValue)
               : props.row.discountValue
           }}
         </template>
       </el-table-column>
       <el-table-column
-        prop="journeyType.name"
+        prop="journeyTypeName"
         label="Journey"
         :min-width="discount.journeyType"
       />
       <el-table-column
-        prop="directionType.name"
+        prop="directionTypeName"
         label="Direction"
         :min-width="discount.directionType"
       />
       <el-table-column
-        prop="normalizationList"
+        prop="normalizationCount"
         label="Rules"
         :min-width="discount.rules"
       >
         <template slot-scope="props">
           <button class="button number">
-            {{ props.row.normalizationList }}
+            {{ props.row.normalizationCount }}
           </button>
         </template>
       </el-table-column>
       <el-table-column
-        prop="normalizationList"
+        prop="normalizationCount"
         label="Normalization"
         :min-width="discount.normalization"
       >
         <template slot-scope="props">
           <button class="button number">
-            {{ props.row.normalizationList }}
+            {{ props.row.normalizationCount }}
           </button>
         </template>
       </el-table-column>
       <el-table-column
         label="Notes"
         sortable
-        :sort-orders="['ascending', 'descending']"
         :sort-method="sortByNote"
-        sort-by="note"
         :min-width="discount.note"
+        :sort-orders="['ascending', 'descending']"
       >
         <template slot-scope="props">
-          <el-tooltip
-            v-if="props.row.note && props.row.note.noteList.length"
-            effect="dark"
-            content="Show Note"
-            placement="top"
-          >
-            <i
-              class="fas fa-sticky-note"
-              :class="{ important: props.row.note.important }"
-              @click="toggleNoteModal(props.row)"
-            />
-          </el-tooltip>
-          <el-tooltip v-else effect="dark" content="Show Note" placement="top">
-            <i
-              class="far fa-sticky-note"
-              :class="{ important: props.row.note && props.row.note.important }"
-              @click="toggleNoteModal(props.row)"
-            />
+          <el-tooltip effect="dark" content="Show Note" placement="top">
+            <div class="note-count-container">
+              <i
+                class="fa-sticky-note"
+                :class="[
+                  { important: props.row.noteImportant },
+                  props.row.noteContent ? 'fas' : 'far'
+                ]"
+                @click="toggleNoteModal(props.row)"
+              />
+            </div>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -196,6 +188,7 @@
 import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
 import { GET_DISCOUNT_LIST } from '@/graphql/queries';
+import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import NewDiscountModal from './NewDiscountModal';
 import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
@@ -231,6 +224,7 @@ export default {
   },
   data() {
     return {
+      DISCOUNT_LOOKUP,
       discountList: [],
       bulkActionId: null,
       discount,
@@ -310,9 +304,8 @@ export default {
     },
     toggleNoteModal(discount) {
       this.$modal.show('save-discount-note', {
-        pricingTermId: this.pricingTermId,
-        id: discount.id,
-        note: discount.note
+        parentId: discount.id,
+        important: discount.noteImportant
       });
     },
     showChangeAppliedOrderModal() {
@@ -322,23 +315,18 @@ export default {
       });
     },
     sortByNote(a, b) {
-      if (a.note === null && b.note === null) {
+      if (a.noteImportant && !b.noteImportant) {
+        return -1;
+      } else if (a.noteImportant && b.noteImportant) {
         return 0;
-      }
-      if (b.note === null && a.note !== null) {
-        return -1;
-      }
-      if (a.note === null && b.note !== null) {
+      } else if (!a.noteImportant && b.noteImportant) {
         return 1;
-      }
-      if (a.note.important && !b.note.important) {
+      } else if (a.noteContent && !b.noteContent) {
         return -1;
-      }
-      if (!a.note.important && b.note.important) {
+      } else if (!a.noteContent && b.noteContent) {
         return 1;
-      }
-      if (a.note.length > b.note.length) {
-        return -1;
+      } else if (a.noteContent && b.noteContent) {
+        return 0;
       }
     }
   }

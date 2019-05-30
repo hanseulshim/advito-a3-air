@@ -191,6 +191,7 @@
 <script>
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { GET_CONTRACT_LIST } from '@/graphql/queries';
+import { UPDATE_CONTRACT } from '@/graphql/mutations';
 import { contract } from '@/config';
 import NewContractModal from './NewContractModal';
 import CopyContractModal from './CopyContractModal';
@@ -245,8 +246,11 @@ export default {
     showDeleteContractModal(id) {
       this.$modal.show('delete-contract', { id });
     },
-    selectContract(contract) {
-      this.$emit('select-contract', contract);
+    selectContract(selectedContract) {
+      this.$apollo.mutate({
+        mutation: UPDATE_CONTRACT,
+        variables: { selectedContract }
+      });
     }
   }
 };

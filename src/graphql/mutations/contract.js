@@ -8,6 +8,12 @@ import {
   NOTE
 } from '../constants';
 
+export const UPDATE_CONTRACT = gql`
+  mutation updateContract($selectedContract: SelectedContract) {
+    updateContract(selectedContract: $selectedContract) @client
+  }
+`;
+
 export const CREATE_CONTRACT = gql`
   mutation createContract(
     $name: String!
@@ -81,8 +87,8 @@ export const CREATE_PRICING_TERM = gql`
 `;
 
 export const COPY_PRICING_TERM = gql`
-  mutation copyPricingTerm($id: Int!, $name: String!, $ignore: Boolean!) {
-    copyPricingTerm(id: $id, name: $name, ignore: $ignore) {
+  mutation copyPricingTerm($id: Int!, $contractId: Int!, $name: String!, $ignore: Boolean!) {
+    copyPricingTerm(id: $id, contractId: $contractId, name: $name, ignore: $ignore) {
       ${PRICING_TERM}
     }
   }
@@ -177,8 +183,8 @@ export const EDIT_DISCOUNT = gql`
 `;
 
 export const DELETE_DISCOUNTS = gql`
-  mutation deleteDiscounts($idList: [Int]!) {
-    deleteDiscounts(idList: $idList)
+  mutation deleteDiscounts($pricingTermId: Int!, $idList: [Int]!) {
+    deleteDiscounts(pricingTermId: $pricingTermId, idList: $idList)
   }
 `;
 
@@ -227,40 +233,6 @@ export const EDIT_NOTE = gql`
 export const DELETE_NOTE = gql`
   mutation deleteNote($noteId: String!) {
     deleteNote(noteId: $noteId)
-  }
-`;
-
-export const SAVE_DISCOUNT_NOTE = gql`
-  mutation saveDiscountNote(
-    $id: Int!
-    $important: Boolean!
-    $message: String
-    $assigneeId: Int!
-    $noteId: Int
-  ) {
-    saveDiscountNote(
-      id: $id
-      important: $important
-      message: $message
-      assigneeId: $assigneeId
-      noteId: $noteId
-    ) {
-      ${NOTE}
-    }
-  }
-`;
-
-export const DELETE_DISCOUNT_NOTE = gql`
-  mutation deleteDiscountNote(
-    $id: Int!
-    $noteId: Int!
-  ) {
-    deleteDiscountNote(
-      id: $id
-      noteId: $noteId
-    ) {
-      ${NOTE}
-    }
   }
 `;
 

@@ -66,6 +66,7 @@
 <script>
 import {
   GET_DISCOUNT_LIST,
+  GET_PRICING_TERM,
   GET_DISCOUNT_TYPE_LIST,
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
@@ -138,23 +139,28 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const discount = data.data.createDiscount;
-            const newData = store.readQuery({
+          update: (store, { data: { createDiscount } }) => {
+            const query = {
               query: GET_DISCOUNT_LIST,
               variables: {
                 pricingTermId: this.form.pricingTermId
               }
-            });
-            newData.discountList.push(discount);
+            };
+            const data = store.readQuery(query);
+            data.discountList.push(createDiscount);
             store.writeQuery({
-              query: GET_DISCOUNT_LIST,
-              data: newData,
-              variables: {
-                pricingTermId: this.form.pricingTermId
-              }
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_PRICING_TERM,
+              variables: {
+                id: this.form.pricingTermId
+              }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Discount successfully created.',
@@ -170,12 +176,9 @@ export default {
       this.form.pricingTermId = event.params.pricingTermId;
     },
     beforeClose() {
-      this.form.pricingTermId = null;
-      this.form.name = null;
-      this.form.discountTypeId = null;
-      this.form.discountValue = null;
-      this.form.journeyTypeId = null;
-      this.form.directionTypeId = null;
+      Object.keys(this.form).forEach(key => {
+        this.form[key] = null;
+      });
     }
   }
 };

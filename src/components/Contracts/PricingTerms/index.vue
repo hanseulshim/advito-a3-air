@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navigation :selected-contract="selectedContract" />
+    <Navigation />
     <div class="title-row space-between">
       <div class="section-header">
         <el-tooltip
@@ -122,7 +122,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="discountTotal"
+        prop="discountCount"
         label="Discounts"
         :min-width="term.discounts"
       />
@@ -219,9 +219,6 @@
                 ]"
                 @click="toggleNoteModal(props.row)"
               />
-              <!-- <span class="note-count sub-content empty">{{
-                getNoteLength(props.row.discountList)
-              }}</span> -->
             </div>
           </el-tooltip>
         </template>
@@ -266,7 +263,10 @@
 import Navigation from '../Navigation';
 import { pluralize, formatDate } from '@/helper';
 import { term } from '@/config';
-import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import {
+  GET_PRICING_TERM_LIST,
+  GET_SELECTED_CONTRACT
+} from '@/graphql/queries';
 import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
@@ -288,6 +288,9 @@ export default {
     ChangeAppliedOrderModal
   },
   apollo: {
+    selectedContract: {
+      query: GET_SELECTED_CONTRACT
+    },
     pricingTermList: {
       query: GET_PRICING_TERM_LIST,
       variables() {
@@ -297,14 +300,9 @@ export default {
       }
     }
   },
-  props: {
-    selectedContract: {
-      type: Object,
-      required: true
-    }
-  },
   data() {
     return {
+      selectedContract: {},
       pricingTermList: [],
       showInactive: false,
       bulkActionId: null,
@@ -374,7 +372,10 @@ export default {
       });
     },
     showCopyPricingTermModal(pricingTerm) {
-      this.$modal.show('copy-pricing-term', { pricingTerm });
+      this.$modal.show('copy-pricing-term', {
+        pricingTerm,
+        contractId: this.selectedContract.id
+      });
     },
     showEditPricingTermModal(pricingTerm) {
       this.$modal.show('edit-pricing-term', { pricingTerm });
@@ -393,8 +394,7 @@ export default {
     toggleNoteModal(pricingTerm) {
       this.$modal.show('save-note', {
         parentId: pricingTerm.id,
-        important: pricingTerm.noteImportant,
-        contractId: this.selectedContract.id
+        important: pricingTerm.noteImportant
       });
     },
     bulkAction(value) {
@@ -421,30 +421,19 @@ export default {
       }
     },
     sortByNote(a, b) {
-      if (a.note === null && b.note === null) {
+      if (a.noteImportant && !b.noteImportant) {
+        return -1;
+      } else if (a.noteImportant && b.noteImportant) {
+        return 0;
+      } else if (!a.noteImportant && b.noteImportant) {
+        return 1;
+      } else if (a.noteContent && !b.noteContent) {
+        return -1;
+      } else if (!a.noteContent && b.noteContent) {
+        return 1;
+      } else if (a.noteContent && b.noteContent) {
         return 0;
       }
-      if (b.note === null && a.note !== null) {
-        return -1;
-      }
-      if (a.note === null && b.note !== null) {
-        return 1;
-      }
-      if (a.note.important && !b.note.important) {
-        return -1;
-      }
-      if (!a.note.important && b.note.important) {
-        return 1;
-      }
-      if (a.note.length > b.note.length) {
-        return -1;
-      }
-    },
-    getNoteLength(discountList) {
-      const length = discountList.filter(
-        discount => discount.note && discount.note.noteList.length
-      ).length;
-      return length ? length : null;
     }
   }
 };

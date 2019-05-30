@@ -69,6 +69,7 @@ import {
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
 } from '@/graphql/queries';
+import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { EDIT_DISCOUNT } from '@/graphql/mutations';
 export default {
   name: 'EditDiscountModal',
@@ -152,26 +153,25 @@ export default {
       const {
         id,
         name,
-        discountType,
+        discountTypeId,
         discountValue,
-        journeyType,
-        directionType
+        journeyTypeId,
+        directionTypeId
       } = event.params.discount;
       this.form.id = id;
       this.form.name = name;
-      this.form.discountTypeId = discountType.id;
+      this.form.discountTypeId = discountTypeId;
       this.form.discountValue =
-        discountType.id === 2 ? discountValue * 100 : discountValue;
-      this.form.journeyTypeId = journeyType.id;
-      this.form.directionTypeId = directionType.id;
+        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+          ? discountValue * 100
+          : discountValue;
+      this.form.journeyTypeId = journeyTypeId;
+      this.form.directionTypeId = directionTypeId;
     },
     beforeClose() {
-      this.form.id = null;
-      this.form.name = null;
-      this.form.discountTypeId = null;
-      this.form.discountValue = null;
-      this.form.journeyTypeId = null;
-      this.form.directionTypeId = null;
+      Object.keys(this.form).forEach(key => {
+        this.form[key] = null;
+      });
     }
   }
 };

@@ -1,17 +1,19 @@
-const CONTRACT_TYPE = 2;
+const { CONTRACT_LOOKUP } = require('../../constants');
+
 //TODO: REPLACE HARD CODED CLIENT ID WITH REAL ONE WHEN CLIENT IS HOOKED UP
 const CLIENT_ID = 1;
 
 exports.contract = {
   Query: {
-    contractList: async (_, { id }, { db }) => await getContractList(db, id),
+    contractList: async (_, __, { db }) => await getContractList(db),
+    contract: async (_, { id }, { db }) => await getContract(db, id),
     contractTypeList: async (_, __, { db }) =>
       await db('lov_lookup')
         .select({
           id: 'id',
           name: 'name_val'
         })
-        .where('type', CONTRACT_TYPE),
+        .where('type', CONTRACT_LOOKUP.TYPE),
     divisionTypeList: async (_, __, { db }) =>
       await db('division')
         .select({
@@ -56,7 +58,7 @@ exports.contract = {
           divisionid: divisionId
         });
       }
-      const [contract] = await getContractList(db, id);
+      const [contract] = await getContract(db, id);
       return contract;
     },
     copyContract: async (_, { id, name }, { db }) => {
@@ -64,7 +66,7 @@ exports.contract = {
         `SELECT contract_createcopy(${id}, '${name}')`
       );
       const [copyContract] = rows;
-      const [contract] = await getContractList(
+      const [contract] = await getContract(
         db,
         copyContract.contract_createcopy
       );
@@ -101,7 +103,7 @@ exports.contract = {
           .where('contractid', id)
           .update({ divisionid: divisionId });
       }
-      const [contract] = await getContractList(db, id);
+      const [contract] = await getContract(db, id);
       return contract;
     },
     deleteContract: async (_, { id }, { db }) =>
@@ -118,7 +120,7 @@ exports.contract = {
   }
 };
 
-const getContractList = async (db, id = null) =>
+const getContractList = async db =>
   await db('contractcontainer as c')
     .select({
       id: 'c.id',
@@ -150,8 +152,41 @@ const getContractList = async (db, id = null) =>
     .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
     .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
     .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
-    .whereRaw('c.isdeleted = false and (?::bigint is null or c.id = ?)', [
-      id,
-      id
-    ])
+    .where('c.isdeleted', false)
+    .groupBy('c.id', 'l.id', 'd.id');
+
+const getContract = async (db, id) =>
+  await db('contractcontainer as c')
+    .select({
+      id: 'c.id',
+      name: 'c.name',
+      typeId: 'l.id',
+      typeName: 'l.name_val',
+      description: 'c.description',
+      round: 'c.round',
+      effectiveFrom: 'c.effectivefrom',
+      effectiveTo: 'c.effectiveto',
+      qc: 'c.qc',
+      pricingTermCount: 'c.count_priterms',
+      targetTermCount: 'c.count_targterms',
+      divisionId: 'd.id',
+      pointOfOriginList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+      ),
+      pointOfSaleList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+      ),
+      airlineList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
+      )
+    })
+    .leftJoin('lov_lookup as l', 'c.contracttype', 'l.id')
+    .leftJoin('contractdivision as cd', 'c.id', 'cd.contractid')
+    .leftJoin('division as d', 'cd.divisionid', 'd.id')
+    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
+    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
+    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
+    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
+    .where('c.isdeleted', false)
+    .andWhere('c.id', id)
     .groupBy('c.id', 'l.id', 'd.id');

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { GET_CONTRACT_LIST, GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import { GET_CONTRACT, GET_PRICING_TERM_LIST } from '@/graphql/queries';
 import { DELETE_PRICING_TERMS } from '@/graphql/mutations';
 export default {
   name: 'DeletePricingTermModal',
@@ -61,7 +61,7 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_CONTRACT_LIST,
+              query: GET_CONTRACT,
               variables: { id: this.contractId }
             }
           ]

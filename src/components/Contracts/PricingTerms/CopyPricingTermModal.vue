@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import { GET_PRICING_TERM_LIST, GET_CONTRACT_LIST } from '@/graphql/queries';
 import { COPY_PRICING_TERM } from '@/graphql/mutations';
 export default {
   name: 'CopyPricingTermModal',
@@ -43,7 +43,8 @@ export default {
       form: {
         id: null,
         name: null,
-        ignore: false
+        ignore: false,
+        contractId: null
       },
       rules: {
         name: [
@@ -76,17 +77,26 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const pricingTerm = data.data.copyPricingTerm;
-            const newData = store.readQuery({
-              query: GET_PRICING_TERM_LIST
-            });
-            newData.pricingTermList.push(pricingTerm);
-            store.writeQuery({
+          update: (store, { data: { copyPricingTerm } }) => {
+            const query = {
               query: GET_PRICING_TERM_LIST,
-              data: newData
+              variables: {
+                contractId: this.form.contractId
+              }
+            };
+            const data = store.readQuery(query);
+            data.pricingTermList.push(copyPricingTerm);
+            store.writeQuery({
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT_LIST,
+              variables: { id: this.form.contractId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Pricing Term successfully copied.',
@@ -99,14 +109,17 @@ export default {
       }
     },
     beforeOpen(event) {
+      const contractId = event.params.contractId;
       const { id, ignore } = event.params.pricingTerm;
       this.form.id = id;
       this.form.ignore = ignore;
+      this.form.contractId = contractId;
     },
     beforeClose() {
       this.form.id = null;
       this.form.name = null;
       this.form.ignore = false;
+      this.form.contractId = null;
     }
   }
 };

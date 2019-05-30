@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { GET_CONTRACT_LIST, GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import { GET_CONTRACT, GET_PRICING_TERM_LIST } from '@/graphql/queries';
 import { CREATE_PRICING_TERM } from '@/graphql/mutations';
 export default {
   name: 'NewPricingTermModal',
@@ -92,7 +92,7 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_CONTRACT_LIST,
+              query: GET_CONTRACT,
               variables: { id: this.form.contractId }
             }
           ]

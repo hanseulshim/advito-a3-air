@@ -15,7 +15,6 @@ type Contract {
   pointOfOriginList: [String]
   airlineList: [String]
   divisionId: Int
-  isDeleted: Boolean
 }
 type ContractType {
   id: Int
@@ -33,12 +32,11 @@ type PricingTerm {
   effectiveFrom: Date
   effectiveTo: Date
   qc: Boolean
-  discountTotal: Int
+  discountCount: Int
   pointOfSaleList: [String]
   pointOfOriginList: [String]
   airlineList: [String]
   ignore: Boolean
-  isDeleted: Boolean
   noteImportant: Boolean
   noteContent: Boolean
 }
@@ -48,15 +46,16 @@ type Discount {
   contractOrder: Int
   appliedOrder: Int
   name: String
-  effectiveStartDate: Date
-  effectiveEndDate: Date
-  discountType: DiscountType
+  discountTypeId: Int
+  discountTypeName: String
   discountValue: Float
-  journeyType: JourneyType
-  directionType: DirectionType
-  normalizationList: Int
-  note: Note
-  isDeleted: Boolean
+  journeyTypeId: Int
+  journeyTypeName: String
+  directionTypeId: Int
+  directionTypeName: String
+  normalizationCount: Int
+  noteImportant: Boolean
+  noteContent: Boolean
 }
 type DiscountType {
   id: Int
@@ -125,19 +124,26 @@ input NewAppliedOrder {
 }
 
 extend type Query {
-  contractList(id: Int): [Contract] @auth
+  contractList: [Contract] @auth
+  contract(id: Int!): [Contract] @auth
   contractTypeList: [ContractType] @auth
   divisionTypeList: [DivisionType] @auth
-  pricingTermList(contractId: Int, id: Int): [PricingTerm] @auth
+
+  pricingTermList(contractId: Int): [PricingTerm] @auth
+  pricingTerm(id: Int!): [PricingTerm] @auth
+
   discountList(pricingTermId: Int): [Discount] @auth
+  discount(id: Int!): [Discount] @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
-  noteList(parentId: Int): [Note] @auth
+
   targetTermList: [TargetTerm] @auth
   targetLevelList(targetTermId: Int): [TargetLevel] @auth
   targetTypeList: [TargetType] @auth
   incentiveTypeList: [IncentiveType] @auth
+
+  noteList(parentId: Int, parentTable: String!): [Note] @auth
 }
 
 extend type Mutation {
@@ -164,7 +170,7 @@ extend type Mutation {
   deleteContract(id: Int!): Int @auth
 
   createPricingTerm(contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
-  copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
+  copyPricingTerm(id: Int!, contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(id: Int!): PricingTerm @auth
   deletePricingTerms(contractId: Int!, idList: [Int]!): [Int] @auth
@@ -218,10 +224,6 @@ extend type Mutation {
   deleteTargetLevel(
     id: Int!
   ): Int @auth
-  
-  updateDiscountAppliedOrder(
-    updateDiscountList: [NewAppliedOrder]!
-  ): [Discount] @auth
 
   createDiscount(
     pricingTermId: Int!
@@ -247,7 +249,10 @@ extend type Mutation {
     journeyTypeId: Int
     directionTypeId: Int
   ): Discount @auth
-  deleteDiscounts(idList: [Int]!): [Int] @auth
+  deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
+  updateDiscountAppliedOrder(
+    updateDiscountList: [NewAppliedOrder]!
+  ): [Discount] @auth
   
   addNote(
     parentId: Int!
@@ -275,17 +280,6 @@ extend type Mutation {
     noteId: Int
   ): Note
   deleteTargetTermNote(
-    noteId: Int!
-  ): Note
-  saveDiscountNote(
-    id: Int!
-    important: Boolean!
-    message: String
-    assigneeId: Int!
-    noteId: Int
-  ): Note
-  deleteDiscountNote(
-    id: Int!
     noteId: Int!
   ): Note
 }

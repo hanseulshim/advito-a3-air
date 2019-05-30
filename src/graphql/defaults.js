@@ -63,5 +63,23 @@ export default {
     progress: null,
     favorite: null,
     __typename: 'Project'
+  },
+  selectedContract: {
+    id: null,
+    name: null,
+    typeId: null,
+    typeName: null,
+    description: null,
+    round: null,
+    effectiveFrom: null,
+    effectiveTo: null,
+    qc: null,
+    pricingTermCount: null,
+    targetTermCount: null,
+    pointOfSaleList: [],
+    pointOfOriginList: [],
+    airlineList: null,
+    divisionId: null,
+    __typename: 'Contract'
   }
 };

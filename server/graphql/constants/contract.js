@@ -27,7 +27,7 @@ const PRICING_TERM = `id
         noteImportant
         noteContent
         ignore
-        discountTotal`;
+        discountCount`;
 
 const TARGET_TERM = `id
       name
@@ -84,22 +84,14 @@ const DISCOUNT = `id
         contractOrder
         appliedOrder
         name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
+        discountTypeId
+        discountTypeName
         discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
+        journeyTypeId
+        journeyTypeName
+        directionTypeId
+        directionTypeName
+        normalizationCount
         noteImportant
         noteContent`;
 
@@ -111,11 +103,27 @@ const NOTE = `id
         assignedToId
         assignedToName`;
 
+const CONTRACT_LOOKUP = {
+  CONTRACT: 7,
+  PROPOSAL: 8,
+  AMENDMENT: 9,
+  TYPE: 2
+};
+
+const DISCOUNT_LOOKUP = {
+  DISCOUNT_TYPE: 3,
+  PERCENTAGE: 11,
+  JOURNEY_TYPE: 4,
+  DIRECTION_TYPE: 5
+};
+
 module.exports = {
   CONTRACT,
   PRICING_TERM,
   DISCOUNT,
   TARGET_TERM,
   TARGET_LEVEL,
-  NOTE
+  NOTE,
+  CONTRACT_LOOKUP,
+  DISCOUNT_LOOKUP
 };

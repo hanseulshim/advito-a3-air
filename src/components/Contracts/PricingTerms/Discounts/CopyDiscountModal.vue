@@ -65,6 +65,7 @@
 import {
   GET_DISCOUNT_LIST,
   GET_DISCOUNT_TYPE_LIST,
+  GET_PRICING_TERM,
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
 } from '@/graphql/queries';
@@ -137,23 +138,28 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const discount = data.data.copyDiscount;
-            const newData = store.readQuery({
+          update: (store, { data: { copyDiscount } }) => {
+            const query = {
               query: GET_DISCOUNT_LIST,
               variables: {
                 pricingTermId: this.pricingTermId
               }
-            });
-            newData.discountList.push(discount);
+            };
+            const data = store.readQuery(query);
+            data.discountList.push(copyDiscount);
             store.writeQuery({
-              query: GET_DISCOUNT_LIST,
-              data: newData,
-              variables: {
-                pricingTermId: this.pricingTermId
-              }
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_PRICING_TERM,
+              variables: {
+                id: this.pricingTermId
+              }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Discount successfully copied.',

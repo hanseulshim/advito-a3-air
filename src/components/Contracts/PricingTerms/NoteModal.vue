@@ -79,7 +79,7 @@
 import {
   GET_USER,
   GET_USER_LIST,
-  GET_PRICING_TERM_LIST,
+  GET_PRICING_TERM,
   GET_NOTE_LIST
 } from '@/graphql/queries';
 import { ADD_NOTE, EDIT_NOTE, DELETE_NOTE } from '@/graphql/mutations';
@@ -101,15 +101,16 @@ export default {
       query: GET_NOTE_LIST,
       variables() {
         return {
-          parentId: this.parentId
+          parentId: this.parentId,
+          parentTable: this.parentTable
         };
       }
     }
   },
   data() {
     return {
-      contractId: null,
       parentId: null,
+      parentTable: 'pricingterm',
       important: false,
       noteList: [],
       noteId: null,
@@ -141,14 +142,13 @@ export default {
       return formatDate(date);
     },
     beforeOpen(event) {
-      const { parentId, important, contractId } = event.params;
+      const { parentId, important } = event.params;
       if (parentId !== this.parentId) {
         this.noteList = [];
       }
       this.parentId = parentId;
       this.important = important;
       this.assignedToId = this.user.id;
-      this.contractId = contractId;
     },
     beforeClose() {
       this.text = '';
@@ -182,7 +182,8 @@ export default {
             const query = {
               query: GET_NOTE_LIST,
               variables: {
-                parentId: this.parentId
+                parentId: this.parentId,
+                parentTable: this.parentTable
               }
             };
             const data = store.readQuery(query);
@@ -194,8 +195,8 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_PRICING_TERM_LIST,
-              variables: { contractId: this.contractId, id: this.parentId }
+              query: GET_PRICING_TERM,
+              variables: { id: this.parentId }
             }
           ]
         });
@@ -223,8 +224,8 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_PRICING_TERM_LIST,
-              variables: { contractId: this.contractId, id: this.parentId }
+              query: GET_PRICING_TERM,
+              variables: { id: this.parentId }
             }
           ]
         });
@@ -249,7 +250,8 @@ export default {
             const query = {
               query: GET_NOTE_LIST,
               variables: {
-                parentId: this.parentId
+                parentId: this.parentId,
+                parentTable: this.parentTable
               }
             };
             const data = store.readQuery(query);
@@ -261,8 +263,8 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_PRICING_TERM_LIST,
-              variables: { contractId: this.contractId, id: this.parentId }
+              query: GET_PRICING_TERM,
+              variables: { id: this.parentId }
             }
           ]
         });

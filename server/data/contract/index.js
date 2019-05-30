@@ -1,5 +1,3 @@
-const { contractList, contractTypeList } = require('./contract');
-const { pricingTermList } = require('./pricingTerm');
 const {
   discountList,
   discountTypeList,
@@ -14,9 +12,6 @@ const {
 } = require('./targetTerm');
 
 module.exports = {
-  contractList,
-  contractTypeList,
-  pricingTermList,
   discountList,
   discountTypeList,
   journeyTypeList,
