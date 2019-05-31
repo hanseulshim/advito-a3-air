@@ -65,15 +65,12 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="name"
         label="Name"
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="discount.name"
-      >
-        <template slot-scope="props">
-          <div class="discount-name">{{ props.row.name }}</div>
-        </template>
-      </el-table-column>
+      />
       <el-table-column
         prop="discountTypeName"
         label="Type"
@@ -338,14 +335,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import '@/styles/global.scss';
-.discount-name {
-  cursor: pointer;
-  color: $tree-poppy;
-  &:hover {
-    text-decoration: underline;
-  }
-}
-</style>
