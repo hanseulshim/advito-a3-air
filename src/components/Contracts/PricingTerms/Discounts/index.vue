@@ -1,9 +1,13 @@
 <template>
   <div>
     <div class="title-row space-between">
-      <div class="section-header">{{ pluralize('discount', discountList.length) }}</div>
+      <div class="section-header">
+        {{ pluralize('discount', discountList.length) }}
+      </div>
       <div class="menu-container">
-        <button class="button long" @click="showChangeAppliedOrderModal">Change Applied Order</button>
+        <button class="button long" @click="showChangeAppliedOrderModal">
+          Change Applied Order
+        </button>
         <div class="bulk-action">
           <el-select
             v-model="bulkActionId"
@@ -20,7 +24,9 @@
             />
           </el-select>
         </div>
-        <button class="button long" @click="showNewDiscountModal">+ NEW DISCOUNT</button>
+        <button class="button long" @click="showNewDiscountModal">
+          + NEW DISCOUNT
+        </button>
       </div>
     </div>
     <el-table ref="discountList" :data="discountList" class="level-two-table">
@@ -33,7 +39,7 @@
       >
         <template slot="header">
           <el-tooltip content="Read Order" placement="top" effect="dark">
-            <i class="fas fa-list-ol sort-icon"/>
+            <i class="fas fa-list-ol sort-icon" />
           </el-tooltip>
         </template>
       </el-table-column>
@@ -46,7 +52,7 @@
       >
         <template slot="header">
           <el-tooltip content="Applied Order" placement="top" effect="dark">
-            <i class="fas fa-list-ul sort-icon"/>
+            <i class="fas fa-list-ul sort-icon" />
           </el-tooltip>
         </template>
       </el-table-column>
@@ -84,24 +90,31 @@
       >
         <template slot-scope="props">
           {{
-          props.row.discountType.id === 2
-          ? formatPercent(props.row.discountValue)
-          : props.row.discountValue
+            props.row.discountType.id === 2
+              ? formatPercent(props.row.discountValue)
+              : props.row.discountValue
           }}
         </template>
       </el-table-column>
-      <el-table-column prop="journeyType.name" label="Journey" :min-width="discount.journeyType"/>
+      <el-table-column
+        prop="journeyType.name"
+        label="Journey"
+        :min-width="discount.journeyType"
+      />
       <el-table-column
         prop="directionType.name"
         label="Direction"
         :min-width="discount.directionType"
       />
-      <el-table-column prop="normalizationList" label="Rules" :min-width="discount.rules">
+      <el-table-column
+        prop="normalizationList"
+        label="Rules"
+        :min-width="discount.rules"
+      >
         <template slot-scope="props">
-          <button
-            class="button number"
-            @click="toggleRulesModal(props.row)"
-          >{{ props.row.normalizationList }}</button>
+          <button class="button number" @click="toggleRulesModal(props.row)">
+            {{ props.row.normalizationList }}
+          </button>
         </template>
       </el-table-column>
       <el-table-column
@@ -110,7 +123,9 @@
         :min-width="discount.normalization"
       >
         <template slot-scope="props">
-          <button class="button number">{{ props.row.normalizationList }}</button>
+          <button class="button number">
+            {{ props.row.normalizationList }}
+          </button>
         </template>
       </el-table-column>
       <el-table-column
@@ -146,40 +161,49 @@
       <el-table-column label="Actions" :min-width="discount.actions">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="Copy Discount" placement="top">
-            <i class="far fa-copy icon-spacer" @click="showCopyDiscountModal(props.row)"/>
+            <i
+              class="far fa-copy icon-spacer"
+              @click="showCopyDiscountModal(props.row)"
+            />
           </el-tooltip>
           <el-tooltip effect="dark" content="Edit Discount" placement="top">
-            <i class="fas fa-pencil-alt icon-spacer" @click="showEditDiscountModal(props.row)"/>
+            <i
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditDiscountModal(props.row)"
+            />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete Discount" placement="top">
-            <i class="fas fa-trash-alt" @click="showDeleteDiscountModal([props.row.id])"/>
+            <i
+              class="fas fa-trash-alt"
+              @click="showDeleteDiscountModal([props.row.id])"
+            />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-    <NewDiscountModal/>
-    <CopyDiscountModal/>
-    <EditDiscountModal/>
-    <DeleteDiscountModal/>
-    <DiscountNoteModal/>
-    <ChangeDiscountAppliedOrderModal/>
-    <RulesModal/>
+    <NewDiscountModal />
+    <CopyDiscountModal />
+    <EditDiscountModal />
+    <DeleteDiscountModal />
+    <DiscountNoteModal />
+    <ChangeDiscountAppliedOrderModal />
+    <RulesModal />
   </div>
 </template>
 
 <script>
-import { formatDate, formatPercent, pluralize } from "@/helper";
-import { discount } from "@/config";
-import { GET_DISCOUNT_LIST } from "@/graphql/queries";
-import NewDiscountModal from "./NewDiscountModal";
-import CopyDiscountModal from "./CopyDiscountModal";
-import EditDiscountModal from "./EditDiscountModal";
-import DeleteDiscountModal from "./DeleteDiscountModal";
-import DiscountNoteModal from "./DiscountNoteModal";
-import RulesModal from "./RulesModal";
-import ChangeDiscountAppliedOrderModal from "./ChangeDiscountAppliedOrderModal";
+import { formatDate, formatPercent, pluralize } from '@/helper';
+import { discount } from '@/config';
+import { GET_DISCOUNT_LIST } from '@/graphql/queries';
+import NewDiscountModal from './NewDiscountModal';
+import CopyDiscountModal from './CopyDiscountModal';
+import EditDiscountModal from './EditDiscountModal';
+import DeleteDiscountModal from './DeleteDiscountModal';
+import DiscountNoteModal from './DiscountNoteModal';
+import RulesModal from './RulesModal';
+import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
 export default {
-  name: "Discounts",
+  name: 'Discounts',
   components: {
     NewDiscountModal,
     CopyDiscountModal,
@@ -215,27 +239,27 @@ export default {
       bulkActionList: [
         {
           id: 1,
-          name: "Delete"
+          name: 'Delete'
         },
         {
           id: 2,
-          name: "QC"
+          name: 'QC'
         },
         {
           id: 3,
-          name: "Ticket Date"
+          name: 'Ticket Date'
         },
         {
           id: 4,
-          name: "Travel Data"
+          name: 'Travel Data'
         },
         {
           id: 5,
-          name: "Tour Code"
+          name: 'Tour Code'
         },
         {
           id: 6,
-          name: "Ticket Designation"
+          name: 'Ticket Designation'
         }
       ]
     };
@@ -266,39 +290,39 @@ export default {
       }
     },
     showNewDiscountModal() {
-      this.$modal.show("new-discount", { pricingTermId: this.pricingTermId });
+      this.$modal.show('new-discount', { pricingTermId: this.pricingTermId });
     },
     showCopyDiscountModal(discount) {
-      this.$modal.show("copy-discount", {
+      this.$modal.show('copy-discount', {
         discount,
         pricingTermId: this.pricingTermId
       });
     },
     showDeleteDiscountModal(idList) {
-      this.$modal.show("delete-discount", {
+      this.$modal.show('delete-discount', {
         pricingTermId: this.pricingTermId,
         idList
       });
     },
     showEditDiscountModal(discount) {
-      this.$modal.show("edit-discount", {
+      this.$modal.show('edit-discount', {
         discount
       });
     },
     toggleNoteModal(discount) {
-      this.$modal.show("save-discount-note", {
+      this.$modal.show('save-discount-note', {
         pricingTermId: this.pricingTermId,
         id: discount.id,
         note: discount.note
       });
     },
     toggleRulesModal(discount) {
-      this.$modal.show("rules", {
+      this.$modal.show('rules', {
         discount
       });
     },
     showChangeAppliedOrderModal() {
-      this.$modal.show("change-discount-order", {
+      this.$modal.show('change-discount-order', {
         pricingTermId: this.pricingTermId,
         discountList: this.discountList
       });
@@ -328,7 +352,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/global.scss";
+@import '@/styles/global.scss';
 .discount-name {
   cursor: pointer;
   color: $tree-poppy;

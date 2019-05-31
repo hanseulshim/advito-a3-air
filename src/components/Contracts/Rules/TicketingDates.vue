@@ -1,9 +1,15 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Ticketing Dates</p>
-    <i class="fas fa-pencil-alt edit-rule" @click="toggleEditMode" v-if="!editMode"/>
-    <button class="button save-rule" @click="toggleEditMode" v-if="editMode">Save</button>
-    <div class="datepicker-row" v-if="editMode">
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="toggleEditMode"
+    />
+    <button v-if="editMode" class="button save-rule" @click="toggleEditMode">
+      Save
+    </button>
+    <div v-if="editMode" class="datepicker-row">
       <el-date-picker
         v-model="startDate"
         type="date"
@@ -21,20 +27,24 @@
       <button class="button">Add</button>
     </div>
     <div class="rule-tags">
-      <el-tag type="info" size="small" closable>04 JUN 2018 - 31 DEC 2019</el-tag>
-      <el-tag type="info" size="small" closable>15 APR 2018 - 31 NOV 2019</el-tag>
+      <el-tag type="info" size="small" closable
+        >04 JUN 2018 - 31 DEC 2019</el-tag
+      >
+      <el-tag type="info" size="small" closable
+        >15 APR 2018 - 31 NOV 2019</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: "TicketingDates",
+  name: 'TicketingDates',
   apollo: {},
   data() {
     return {
       editMode: false,
-      startDate: "",
-      endDate: "",
+      startDate: '',
+      endDate: '',
       rules: []
     };
   },
@@ -45,6 +55,6 @@ export default {
   }
 };
 </script>
-<style lang='scss'>
-@import "./ruleStyles.scss";
+<style lang="scss">
+@import './ruleStyles.scss';
 </style>

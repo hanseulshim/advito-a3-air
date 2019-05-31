@@ -1,8 +1,12 @@
 <template>
   <div class="data-set-table-container">
-    <CountriesTable v-bind:selected="selector"/>
+    <CountriesTable :selected="selector" />
     <div class="column-table-container">
-      <div v-for="column in filteredDataSetList" :key="column.id" class="column-table">
+      <div
+        v-for="column in filteredDataSetList"
+        :key="column.id"
+        class="column-table"
+      >
         <div class="icon-container">
           <el-tooltip effect="dark" content="Accept" placement="top">
             <i
@@ -31,9 +35,12 @@
             content="Delete"
             placement="top"
           >
-            <i class="fas fa-trash-alt delete" @click="deleteDataSet(column.id)"/>
+            <i
+              class="fas fa-trash-alt delete"
+              @click="deleteDataSet(column.id)"
+            />
           </el-tooltip>
-          <i v-else class="fas fa-trash-alt reject-hide"/>
+          <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table
           :data="column.posTrendList"
@@ -41,11 +48,18 @@
           :summary-method="getSummaries"
           :row-class-name="tableRowClassName(column.status)"
         >
-          <el-table-column align="right" :formatter="row => formatNumber(row[selector])">
+          <el-table-column
+            align="right"
+            :formatter="row => formatNumber(row[selector])"
+          >
             <template slot="header">
               <span class="header-container content">
-                <span class="updated-date">{{ formatDateTime(column.dateUpdated) }}</span>
-                <span class="header-text">{{ formatDataSetCol(column.name) }}</span>
+                <span class="updated-date">{{
+                  formatDateTime(column.dateUpdated)
+                }}</span>
+                <span class="header-text">{{
+                  formatDataSetCol(column.name)
+                }}</span>
               </span>
             </template>
           </el-table-column>
@@ -56,15 +70,15 @@
 </template>
 
 <script>
-import { formatNumber, formatDataSetCol, formatDateTime } from "@/helper";
+import { formatNumber, formatDataSetCol, formatDateTime } from '@/helper';
 import {
   GET_DATA_SET_COUNTRY_LIST,
   GET_DATA_SET_COLUMN_LIST
-} from "@/graphql/queries";
-import CountriesTable from "./AnnualizationTables/CountriesTable";
-import { TOGGLE_DATA_SET, DELETE_DATA_SET } from "@/graphql/mutations";
+} from '@/graphql/queries';
+import CountriesTable from './AnnualizationTables/CountriesTable';
+import { TOGGLE_DATA_SET, DELETE_DATA_SET } from '@/graphql/mutations';
 export default {
-  name: "PosTrends",
+  name: 'PosTrends',
   components: {
     CountriesTable
   },
@@ -91,16 +105,16 @@ export default {
   computed: {
     selector: function() {
       const { path } = this.$route.params;
-      return path === "tickets"
-        ? "tickets"
-        : path === "segments"
-        ? "segments"
-        : path === "fare-paid"
-        ? "farePaid"
-        : "";
+      return path === 'tickets'
+        ? 'tickets'
+        : path === 'segments'
+        ? 'segments'
+        : path === 'fare-paid'
+        ? 'farePaid'
+        : '';
     },
     selectorTotal: function() {
-      return this.selector ? `${this.selector}Total` : "";
+      return this.selector ? `${this.selector}Total` : '';
     }
   },
   methods: {
@@ -125,7 +139,7 @@ export default {
       const { columns, data } = param;
       return columns.map((col, i) => {
         if (i === 0) {
-          return "TOTAL";
+          return 'TOTAL';
         }
         return this.formatNumber(
           data.reduce((a, b) => a + b[this.selectorTotal], 0)
@@ -163,17 +177,17 @@ export default {
       });
     },
     tableRowClassName(status) {
-      if (status === null || status === "reject") {
-        return "need-qc-row";
+      if (status === null || status === 'reject') {
+        return 'need-qc-row';
       }
-      return "";
+      return '';
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import "@/styles/global.scss";
+@import '@/styles/global.scss';
 .data-set-table-container {
   margin-top: 2em;
   display: flex;

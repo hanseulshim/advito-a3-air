@@ -26,7 +26,7 @@ const apolloClient = new ApolloClient({
   // uri: 'https://daqpm0wy59.execute-api.us-east-2.amazonaws.com/beta/graphql',
   clientState: {
     defaults,
-    resolvers,
+    resolvers
   },
   fetch,
   request: operation => {
@@ -35,8 +35,8 @@ const apolloClient = new ApolloClient({
     if (sessiontoken) {
       operation.setContext({
         headers: {
-          sessiontoken,
-        },
+          sessiontoken
+        }
       });
     }
   },
@@ -46,11 +46,11 @@ const apolloClient = new ApolloClient({
         if (extensions.code === 'UNAUTHENTICATED') logout();
       });
     }
-  },
+  }
 });
 
 const apolloProvider = new VueApollo({
-  defaultClient: apolloClient,
+  defaultClient: apolloClient
 });
 
 Vue.use(VueApollo);
@@ -62,5 +62,5 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   apolloProvider,
-  render: h => h(App),
+  render: h => h(App)
 }).$mount('#app');
