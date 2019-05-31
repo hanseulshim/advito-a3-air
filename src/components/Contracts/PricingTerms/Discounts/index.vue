@@ -71,9 +71,7 @@
         :min-width="discount.name"
       >
         <template slot-scope="props">
-          <div class="discount-name">
-            {{ props.row.name }}
-          </div>
+          <div class="discount-name">{{ props.row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -114,7 +112,7 @@
         :min-width="discount.rules"
       >
         <template slot-scope="props">
-          <button class="button number">
+          <button class="button number" @click="toggleRulesModal(props.row)">
             {{ props.row.normalizationCount }}
           </button>
         </template>
@@ -181,6 +179,7 @@
     <DeleteDiscountModal />
     <DiscountNoteModal />
     <ChangeDiscountAppliedOrderModal />
+    <RulesModal />
   </div>
 </template>
 
@@ -194,6 +193,7 @@ import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
 import DeleteDiscountModal from './DeleteDiscountModal';
 import DiscountNoteModal from './DiscountNoteModal';
+import RulesModal from './RulesModal';
 import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
 export default {
   name: 'Discounts',
@@ -203,7 +203,8 @@ export default {
     EditDiscountModal,
     DeleteDiscountModal,
     DiscountNoteModal,
-    ChangeDiscountAppliedOrderModal
+    ChangeDiscountAppliedOrderModal,
+    RulesModal
   },
   apollo: {
     discountList: {
@@ -306,6 +307,11 @@ export default {
       this.$modal.show('save-discount-note', {
         parentId: discount.id,
         important: discount.noteImportant
+      });
+    },
+    toggleRulesModal(discount) {
+      this.$modal.show('rules', {
+        discount
       });
     },
     showChangeAppliedOrderModal() {
