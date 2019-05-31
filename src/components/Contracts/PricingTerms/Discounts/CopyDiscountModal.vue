@@ -161,6 +161,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully copied.',
           name: 'copy-discount'
@@ -175,19 +176,19 @@ export default {
       const {
         id,
         name,
-        discountType,
+        discountTypeId,
         discountValue,
-        journeyType,
-        directionType
+        journeyTypeId,
+        directionTypeId
       } = event.params.discount;
       this.pricingTermId = event.params.pricingTermId;
       this.form.id = id;
       this.form.name = name;
-      this.form.discountTypeId = discountType.id;
+      this.form.discountTypeId = discountTypeId;
       this.form.discountValue =
-        discountType.id === 2 ? discountValue * 100 : discountValue;
-      this.form.journeyTypeId = journeyType.id;
-      this.form.directionTypeId = directionType.id;
+        discountTypeId === 2 ? discountValue * 100 : discountValue;
+      this.form.journeyTypeId = journeyTypeId;
+      this.form.directionTypeId = directionTypeId;
     },
     beforeClose() {
       this.pricingTermId = null;

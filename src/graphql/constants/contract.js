@@ -26,6 +26,7 @@ export const PRICING_TERM = `id
         airlineList
         noteImportant
         noteContent
+        discountNoteCount
         ignore
         discountCount`;
 

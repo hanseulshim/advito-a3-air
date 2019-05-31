@@ -39,6 +39,7 @@ type PricingTerm {
   ignore: Boolean
   noteImportant: Boolean
   noteContent: Boolean
+  discountNoteCount: Int
 }
 type Discount {
   id: Int

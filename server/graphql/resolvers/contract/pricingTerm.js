@@ -107,6 +107,7 @@ const getPricingTermList = async (db, contractId) =>
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
       ),
+      discountNoteCount: 'p.count_discountnotes',
       pointOfOriginList: db.raw(
         'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
       ),
@@ -143,6 +144,7 @@ const getPricingTerm = async (db, id) =>
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
       ),
+      discountNoteCount: 'p.count_discountnotes',
       pointOfOriginList: db.raw(
         'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
       ),

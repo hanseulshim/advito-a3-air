@@ -48,7 +48,7 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <Discounts :pricing-term-id="props.row.id" />
+          <Discounts :pricing-term-id="props.row.id" @toggle-row="toggleRow" />
         </template>
       </el-table-column>
       <el-table-column
@@ -210,15 +210,23 @@
       >
         <template slot-scope="props">
           <el-tooltip effect="dark" content="Show Note" placement="top">
-            <div class="note-count-container">
+            <div
+              class="note-count-container"
+              @click="toggleNoteModal(props.row)"
+            >
               <i
                 class="fa-sticky-note"
                 :class="[
                   { important: props.row.noteImportant },
                   props.row.noteContent ? 'fas' : 'far'
                 ]"
-                @click="toggleNoteModal(props.row)"
               />
+              <span
+                v-if="props.row.discountNoteCount"
+                class="note-count sub-content"
+                :class="{ empty: props.row.noteContent }"
+                >{{ props.row.discountNoteCount }}</span
+              >
             </div>
           </el-tooltip>
         </template>
@@ -308,6 +316,7 @@ export default {
       bulkActionId: null,
       term,
       bulkIdList: [],
+      toggleRowId: null,
       bulkActionList: [
         {
           id: 1,
@@ -345,6 +354,15 @@ export default {
           inactive: term.effectiveTo < new Date()
         }));
     }
+  },
+  updated() {
+    if (this.toggleRowId) {
+      const row = this.$refs.pricingTermList.data.filter(
+        term => term.id === this.toggleRowId
+      )[0];
+      this.$refs.pricingTermList.toggleRowExpansion(row, true);
+    }
+    this.toggleRowId = null;
   },
   methods: {
     pluralize(word, count) {
@@ -405,6 +423,9 @@ export default {
     clearBulkActions() {
       this.bulkIdList = [];
       this.bulkActionId = null;
+    },
+    toggleRow(id) {
+      this.toggleRowId = id;
     },
     async togglePricingTermQC(id) {
       try {
@@ -479,6 +500,7 @@ export default {
 .note-count-container {
   position: relative;
   display: inline;
+  cursor: pointer;
   .note-count {
     position: absolute;
     color: $dove-gray;
