@@ -117,7 +117,9 @@ export default {
       text: '',
       assignedToId: null,
       userList: [],
-      user: null,
+      user: {
+        id: null
+      },
       editMode: false
     };
   },

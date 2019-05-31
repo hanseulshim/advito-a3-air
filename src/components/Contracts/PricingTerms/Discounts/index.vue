@@ -306,6 +306,7 @@ export default {
     toggleNoteModal(discount) {
       this.$modal.show('save-discount-note', {
         parentId: discount.id,
+        pricingTermId: this.pricingTermId,
         important: discount.noteImportant
       });
     },

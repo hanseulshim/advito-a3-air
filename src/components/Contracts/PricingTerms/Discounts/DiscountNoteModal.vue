@@ -80,6 +80,7 @@ import {
   GET_USER,
   GET_USER_LIST,
   GET_DISCOUNT,
+  GET_PRICING_TERM,
   GET_NOTE_LIST
 } from '@/graphql/queries';
 import { ADD_NOTE, EDIT_NOTE, DELETE_NOTE } from '@/graphql/mutations';
@@ -118,7 +119,8 @@ export default {
       assignedToId: null,
       userList: [],
       user: null,
-      editMode: false
+      editMode: false,
+      pricingTermId: null
     };
   },
   computed: {
@@ -142,18 +144,20 @@ export default {
       return formatDate(date);
     },
     beforeOpen(event) {
-      const { parentId, important } = event.params;
+      const { parentId, important, pricingTermId } = event.params;
       if (parentId !== this.parentId) {
         this.noteList = [];
       }
       this.parentId = parentId;
       this.important = important;
+      this.pricingTermId = pricingTermId;
       this.assignedToId = this.user.id;
     },
     beforeClose() {
       this.text = '';
       this.editMode = false;
       this.noteId = null;
+      this.pricingTermId = null;
     },
     enableEditMode(text, assignedToId, noteId) {
       this.editMode = true;
@@ -199,6 +203,12 @@ export default {
               variables: {
                 id: this.parentId
               }
+            },
+            {
+              query: GET_PRICING_TERM,
+              variables: {
+                id: this.pricingTermId
+              }
             }
           ]
         });
@@ -223,15 +233,7 @@ export default {
             text: this.text,
             assignedToId: this.assignedToId,
             noteId: this.noteId
-          },
-          refetchQueries: () => [
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
-              }
-            }
-          ]
+          }
         });
         this.disableEditMode();
         this.$modal.show('success', {
@@ -270,6 +272,12 @@ export default {
               query: GET_DISCOUNT,
               variables: {
                 id: this.parentId
+              }
+            },
+            {
+              query: GET_PRICING_TERM,
+              variables: {
+                id: this.pricingTermId
               }
             }
           ]

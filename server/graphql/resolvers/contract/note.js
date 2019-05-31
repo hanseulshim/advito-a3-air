@@ -34,6 +34,9 @@ exports.note = {
           )
         : [null];
       if (!id) return null;
+      if (parentTable === 'discount') {
+        await updateNoteCount(db, parentId);
+      }
       const [note] = await getNote(db, id);
       return note;
     },
@@ -53,9 +56,19 @@ exports.note = {
       return note;
     },
     deleteNote: async (_, { noteId }, { db }) => {
+      const [note] = await db('usernote as n')
+        .select({
+          parentId: 'n1.parentid',
+          parentTable: 'n1.parenttable'
+        })
+        .leftJoin('usernote as n1', 'n.parentnoteid', 'n1.id')
+        .where('n.id', noteId);
       await db('usernote')
         .where('id', noteId)
         .del();
+      if (note.parentTable === 'discount') {
+        await updateNoteCount(db, parseInt(note.parentId));
+      }
       return noteId;
     }
   }
@@ -124,4 +137,24 @@ const updateNoteStatus = async (db, user, parentId, parentTable, important) => {
       .where('id', parentId);
   }
   return parentNoteId;
+};
+
+const updateNoteCount = async (db, discountId) => {
+  const [discount] = await db('discount')
+    .select({ pricingTermId: 'pricingtermid' })
+    .where('id', discountId);
+  const noteCountList = await db('discount as d')
+    .select({
+      count: db.raw(
+        '(SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id)'
+      )
+    })
+    .leftJoin('usernote as n', 'd.notesid', 'n.id')
+    .where('d.isdeleted', false)
+    .where('d.pricingtermid', discount.pricingTermId);
+  const count_discountnotes = noteCountList.filter(c => parseInt(c.count))
+    .length;
+  await db('pricingterm')
+    .update({ count_discountnotes })
+    .where('id', discount.pricingTermId);
 };

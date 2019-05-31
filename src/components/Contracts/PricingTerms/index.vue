@@ -210,15 +210,23 @@
       >
         <template slot-scope="props">
           <el-tooltip effect="dark" content="Show Note" placement="top">
-            <div class="note-count-container">
+            <div
+              class="note-count-container"
+              @click="toggleNoteModal(props.row)"
+            >
               <i
                 class="fa-sticky-note"
                 :class="[
                   { important: props.row.noteImportant },
                   props.row.noteContent ? 'fas' : 'far'
                 ]"
-                @click="toggleNoteModal(props.row)"
               />
+              <span
+                v-if="props.row.discountNoteCount"
+                class="note-count sub-content"
+                :class="{ empty: props.row.noteContent }"
+                >{{ props.row.discountNoteCount }}</span
+              >
             </div>
           </el-tooltip>
         </template>
@@ -479,6 +487,7 @@ export default {
 .note-count-container {
   position: relative;
   display: inline;
+  cursor: pointer;
   .note-count {
     position: absolute;
     color: $dove-gray;
