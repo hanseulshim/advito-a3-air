@@ -33,7 +33,7 @@
         </span>
         <span class="nav-title">Division Trends</span>
       </router-link>
-      <button class="button long annualization">ANNUALIZATION</button>
+
       <div class="dataset">
         <el-select :value="selectedFilter" placeholder="Select Client" @change="updateFilter">
           <el-option
