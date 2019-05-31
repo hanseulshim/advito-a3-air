@@ -172,39 +172,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import '@/styles/global.scss';
-.annualize-container {
-  display: flex;
-  height: 40px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.enable-annualization {
-  display: flex;
-  align-items: center;
-  p {
-    margin-right: 10%;
-  }
-}
-
-.active {
-  color: $tree-poppy;
-}
-
-.annualize-controls {
-  display: flex;
-  .el-input {
-    width: 65px;
-
-    &:focus {
-      border: 1px solid $tree-poppy;
-    }
-  }
-  button {
-    margin-left: 10px;
-  }
-}
-</style>
