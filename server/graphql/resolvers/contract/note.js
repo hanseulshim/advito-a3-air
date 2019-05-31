@@ -158,3 +158,5 @@ const updateNoteCount = async (db, discountId) => {
     .update({ count_discountnotes })
     .where('id', discount.pricingTermId);
 };
+
+exports.updateNoteCount = updateNoteCount;

@@ -162,6 +162,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', this.form.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully created.',
           name: 'new-discount'

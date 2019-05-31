@@ -68,6 +68,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount(s) successfully deleted.',
           name: 'delete-discount'

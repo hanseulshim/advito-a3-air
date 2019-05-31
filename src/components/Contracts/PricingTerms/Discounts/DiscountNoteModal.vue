@@ -212,6 +212,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.disableEditMode();
         this.$modal.show('success', {
           message: 'Note saved.'
@@ -282,6 +283,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Note deleted.'
         });

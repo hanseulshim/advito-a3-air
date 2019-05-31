@@ -1,11 +1,5 @@
 const { DISCOUNT_LOOKUP } = require('../../constants');
-const { ApolloError } = require('apollo-server-lambda');
-const {
-  discountTypeList,
-  journeyTypeList,
-  directionTypeList,
-  discountList
-} = require('../../../data');
+const { updateNoteCount } = require('./note');
 
 exports.discount = {
   Query: {
@@ -70,11 +64,12 @@ exports.discount = {
         },
         'id'
       );
+      await updateDiscountOrder(db, pricingTermId);
       await updateDiscountCount(db, pricingTermId);
       const [discount] = await getDiscount(db, id);
       return discount;
     },
-    copyDiscount: (
+    copyDiscount: async (
       _,
       {
         id,
@@ -83,45 +78,28 @@ exports.discount = {
         discountValue,
         journeyTypeId,
         directionTypeId
-      }
+      },
+      { db }
     ) => {
-      const discount = discountList.filter(discount => discount.id === id)[0];
-      if (!discount) {
-        throw new ApolloError('Discount not found', 400);
-      }
-      const maxId = Math.max(...discountList.map(d => d.id)) + 1;
-      const maxContractOrder =
-        Math.max(...discountList.map(discount => discount.contractOrder)) + 1;
-      const maxAppliedOrder =
-        Math.max(...discountList.map(discount => discount.appliedOrder)) + 1;
-      const discountType = discountTypeId
-        ? discountTypeList.filter(type => type.id === discountTypeId)[0]
-        : null;
-      const journeyType = journeyTypeId
-        ? journeyTypeList.filter(type => type.id === journeyTypeId)[0]
-        : null;
-      const directionType = directionTypeId
-        ? directionTypeList.filter(type => type.id === directionTypeId)[0]
-        : null;
-      const discountCopy = {
-        id: maxId,
-        pricingTermId: discount.pricingTermId,
-        contractOrder: maxContractOrder,
-        appliedOrder: maxAppliedOrder,
-        name,
-        effectiveStartDate: new Date(),
-        effectiveEndDate: new Date(253402232400000),
-        discountType,
-        discountValue:
-          discountTypeId === 2 ? discountValue / 100 : discountValue,
-        journeyType,
-        directionType,
-        normalizationList: 0,
-        note: null,
-        isDeleted: false
-      };
-      discountList.push(discountCopy);
-      return discountCopy;
+      const { rows } = await db.raw(`SELECT discount_createcopy(${id})`);
+      const [{ discount_createcopy: newId }] = rows;
+      const [pricingTermId] = await db('discount').update(
+        {
+          generateddiscountname: name,
+          discounttype: discountTypeId,
+          discountvalue:
+            discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+              ? discountValue / 100
+              : discountValue,
+          direction: directionTypeId,
+          journeytype: journeyTypeId
+        },
+        'pricingtermid'
+      );
+      await updateDiscountOrder(db, pricingTermId);
+      await updateDiscountCount(db, pricingTermId);
+      const [discount] = await getDiscount(db, parseInt(newId));
+      return discount;
     },
     editDiscount: async (
       _,
@@ -151,10 +129,12 @@ exports.discount = {
       return discount;
     },
     deleteDiscounts: async (_, { pricingTermId, idList }, { db }) => {
-      await db('discount')
-        .update({ isdeleted: true })
+      const [id] = await db('discount')
+        .update({ isdeleted: true }, 'id')
         .whereIn('id', idList);
+      await updateDiscountOrder(db, pricingTermId);
       await updateDiscountCount(db, pricingTermId);
+      await updateNoteCount(db, parseInt(id));
       return idList;
     },
     updateDiscountAppliedOrder: async (_, { updateDiscountList }, { db }) => {
@@ -250,4 +230,8 @@ const updateDiscountCount = async (db, pricingTermId) => {
       count_discounts: count
     })
     .where('id', pricingTermId);
+};
+
+const updateDiscountOrder = async (db, pricingTermId) => {
+  await db.raw(`SELECT discount_update_sequence(${pricingTermId})`);
 };

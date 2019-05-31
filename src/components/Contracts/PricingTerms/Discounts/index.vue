@@ -173,11 +173,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <NewDiscountModal />
-    <CopyDiscountModal />
+    <NewDiscountModal @toggle-row="toggleRow" />
+    <CopyDiscountModal @toggle-row="toggleRow" />
     <EditDiscountModal />
-    <DeleteDiscountModal />
-    <DiscountNoteModal />
+    <DeleteDiscountModal @toggle-row="toggleRow" />
+    <DiscountNoteModal @toggle-row="toggleRow" />
     <ChangeDiscountAppliedOrderModal />
     <RulesModal />
   </div>
@@ -320,6 +320,9 @@ export default {
         pricingTermId: this.pricingTermId,
         discountList: this.discountList
       });
+    },
+    toggleRow(id) {
+      this.$emit('toggle-row', id);
     },
     sortByNote(a, b) {
       if (a.noteImportant && !b.noteImportant) {
