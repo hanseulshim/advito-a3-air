@@ -55,7 +55,11 @@ exports.note = {
       const [note] = await getNote(db, noteId);
       return note;
     },
-    deleteNote: async (_, { noteId }, { db }) => {
+    deleteNote: async (
+      _,
+      { parentId, parentTable, resetImportant, noteId, important },
+      { db, user }
+    ) => {
       const [note] = await db('usernote as n')
         .select({
           parentId: 'n1.parentid',
@@ -68,6 +72,9 @@ exports.note = {
         .del();
       if (note.parentTable === 'discount') {
         await updateNoteCount(db, parseInt(note.parentId));
+      }
+      if (resetImportant) {
+        await updateNoteStatus(db, user, parentId, parentTable, important);
       }
       return noteId;
     }

@@ -271,6 +271,10 @@ extend type Mutation {
     noteId: String!
   ): Note @auth
   deleteNote(
+    parentId: Int!
+    parentTable: String!
+    resetImportant: Boolean!
+    important: Boolean!
     noteId: String!
   ): String @auth
   saveTargetTermNote(
