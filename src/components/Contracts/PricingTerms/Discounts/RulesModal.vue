@@ -18,8 +18,7 @@
         <el-option v-for="rule in ruleList" :key="rule.id" :label="rule.title" :value="rule.type"></el-option>
       </el-select>
     </div>
-    <TicketingDates/>
-    <TravelDates/>
+    <component v-for="rule in ruleList" v-bind:is="rule.type" v-bind:key="rule.id"></component>
   </modal>
 </template>
 
@@ -42,13 +41,13 @@ export default {
       ruleList: [
         {
           id: 1,
-          type: "ticketingDates",
+          type: "TicketingDates",
           title: "Ticketing Dates",
           active: true
         },
         {
           id: 2,
-          type: "travelDates",
+          type: "TravelDates",
           title: "Travel Dates",
           active: false
         }
@@ -65,7 +64,6 @@ export default {
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
-      //   this.discount.name = name;
     },
     beforeClose() {}
   }
