@@ -184,7 +184,7 @@ export default {
           mutation: ADD_NOTE,
           variables: {
             parentId: this.parentId,
-            parentTable: 'discount',
+            parentTable: this.parentTable,
             important: this.important,
             text: this.text,
             assignedToId: this.assignedToId
@@ -236,7 +236,7 @@ export default {
           mutation: EDIT_NOTE,
           variables: {
             parentId: this.parentId,
-            parentTable: 'discount',
+            parentTable: this.parentTable,
             important: this.important,
             text: this.text,
             assignedToId: this.assignedToId,
@@ -262,7 +262,7 @@ export default {
           mutation: DELETE_NOTE,
           variables: {
             parentId: this.parentId,
-            parentTable: 'discount',
+            parentTable: this.parentTable,
             resetImportant: this.noteList.length === 1,
             important: this.important,
             noteId
