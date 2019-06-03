@@ -3,8 +3,8 @@
     <div class="data-navigation-container">
       <router-link
         class="data-nav-item nav-item data-nav"
-        to="/project/data/import-errors/imported-tickets"
-        :class="{ active: $route.path.includes('/project/data/import-errors') }"
+        :to="`/project/${$route.params.projectId}/data/import-errors/imported-tickets`"
+        :class="{ active: $route.path.includes(`/project/${$route.params.projectId}/data/import-errors`) }"
       >
         <span class="data-icon">
           <img alt="import-errors" src="@/assets/importErrors.png">
@@ -13,8 +13,8 @@
       </router-link>
       <router-link
         class="data-nav-item nav-item data-nav"
-        to="/project/data/pos-trends/tickets"
-        :class="{ active: $route.path.includes('/project/data/pos-trends') }"
+        :to="`/project/${$route.params.projectId}/data/pos-trends/tickets`"
+        :class="{ active: $route.path.includes(`/project/${$route.params.projectId}/data/pos-trends`) }"
       >
         <span class="data-icon">
           <img alt="pos-trends" src="@/assets/posTrends.png">
@@ -23,9 +23,9 @@
       </router-link>
       <router-link
         class="data-nav-item nav-item data-nav"
-        to="/project/data/division-trends/tickets"
+        :to="`/project/${$route.params.projectId}/data/division-trends/tickets`"
         :class="{
-          active: $route.path.includes('/project/data/division-trends')
+          active: $route.path.includes(`/project/${$route.params.projectId}/data/division-trends`)
         }"
       >
         <span class="data-icon">
@@ -46,9 +46,15 @@
       </div>
     </div>
     <div class="sub-navigation-container">
-      <PosTrends v-if="$route.path.includes('/project/data/pos-trends')"/>
-      <DivisionTrends v-if="$route.path.includes('/project/data/division-trends')"/>
-      <ImportErrors v-if="$route.path.includes('/project/data/import-errors')"/>
+      <PosTrends
+        v-if="$route.path.includes(`/project/${$route.params.projectId}/data/pos-trends`)"
+      />
+      <DivisionTrends
+        v-if="$route.path.includes(`/project/${$route.params.projectId}/data/division-trends`)"
+      />
+      <ImportErrors
+        v-if="$route.path.includes(`/project/${$route.params.projectId}/data/import-errors`)"
+      />
     </div>
   </div>
 </template>

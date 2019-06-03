@@ -23,16 +23,16 @@ export default new Router({
     {
       path: '/',
       name: 'root',
-      component: AirManager
+      component: AirManager,
     },
     {
-      path: '/project',
+      path: '/project/:projectId',
       name: 'project',
       component: Project,
       children: [
         {
           path: 'program-settings',
-          component: ProjectSettings
+          component: ProjectSettings,
         },
         {
           path: 'contracts',
@@ -40,17 +40,17 @@ export default new Router({
           children: [
             {
               path: '',
-              component: ContractList
+              component: ContractList,
             },
             {
               path: 'pricing-terms',
-              component: PricingTerms
+              component: PricingTerms,
             },
             {
               path: 'target-terms',
-              component: TargetTerms
-            }
-          ]
+              component: TargetTerms,
+            },
+          ],
         },
         {
           path: 'data',
@@ -58,23 +58,23 @@ export default new Router({
           children: [
             {
               path: 'import-errors/:path',
-              component: ImportErrors
+              component: ImportErrors,
             },
             {
               path: 'division-trends/:path',
-              component: DivisionTrends
+              component: DivisionTrends,
             },
             {
               path: 'pos-trends/:path',
-              component: PosTrends
-            }
-          ]
+              component: PosTrends,
+            },
+          ],
         },
         {
           path: 'process',
-          component: Process
-        }
-      ]
-    }
-  ]
+          component: Process,
+        },
+      ],
+    },
+  ],
 });

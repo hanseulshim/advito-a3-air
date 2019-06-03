@@ -7,66 +7,75 @@
         :to="nav.link"
         class="nav-item"
         :class="{ active: $route.path.includes(nav.path) }"
-        ><i class="fas fa-circle" :class="getStatus(nav.id)" />{{
-          nav.title
-        }}</router-link
       >
+        <i class="fas fa-circle" :class="getStatus(nav.id)"/>
+        {{
+        nav.title
+        }}
+      </router-link>
     </div>
     <div class="content-container">
-      <ProjectInfo />
-      <router-view />
+      <ProjectInfo/>
+      <router-view/>
     </div>
   </div>
 </template>
 
 <script>
-import ProjectInfo from '@/components/ProjectInfo';
-import { GET_PROJECT, GET_PROJECT_STATUS_LIST } from '@/graphql/queries';
+import ProjectInfo from "@/components/ProjectInfo";
+import { GET_PROJECT, GET_PROJECT_STATUS_LIST } from "@/graphql/queries";
 export default {
-  name: 'Project',
+  name: "Project",
   components: {
     ProjectInfo
   },
   data() {
     return {
       project: null,
-      navItems: [
-        {
-          id: 1,
-          link: '/project/program-settings',
-          path: '/project/program-settings',
-          title: 'project settings'
-        },
-        {
-          id: 2,
-          link: '/project/data/import-errors/imported-tickets',
-          path: '/project/data',
-          title: 'data'
-        },
-        {
-          id: 3,
-          link: '/project/contracts',
-          path: '/project/contracts',
-          title: 'contracts'
-        },
-        {
-          id: 4,
-          link: '/project/scenario-settings',
-          path: '/project/scenario-settings',
-          title: 'scenario settings'
-        },
-        {
-          id: 5,
-          link: '/project/process',
-          path: '/project/process',
-          title: 'process'
-        }
-      ],
       projectStatusList: []
     };
   },
+  computed: {
+    navItems: function() {
+      const navItems = [
+        {
+          id: 1,
+          link: `/project/${this.project.id}/program-settings`,
+          path: `/project/${this.project.id}/program-settings`,
+          title: "project settings"
+        },
+        {
+          id: 2,
+          link: `/project/${
+            this.project.id
+          }/data/import-errors/imported-tickets`,
+          path: `/project/${this.project.id}/data`,
+          title: "data"
+        },
+        {
+          id: 3,
+          link: `/project/${this.project.id}/contracts`,
+          path: `/project/${this.project.id}/contracts`,
+          title: "contracts"
+        },
+        {
+          id: 4,
+          link: `/project/${this.project.id}/scenario-settings`,
+          path: `/project/${this.project.id}/scenario-settings`,
+          title: "scenario settings"
+        },
+        {
+          id: 5,
+          link: `/project/${this.project.id}/process`,
+          path: `/project/${this.project.id}/process`,
+          title: "process"
+        }
+      ];
+      return navItems;
+    }
+  },
   mounted() {
-    if (!this.project.id) this.$router.push('/');
+    if (!this.project.id) this.$router.push("/");
   },
   apollo: {
     project: {
@@ -81,12 +90,12 @@ export default {
       const project = this.projectStatusList.filter(
         project => project.id === id
       )[0];
-      if (project.status === 'valid') {
-        return 'valid';
-      } else if (project.status === 'invalid') {
-        return 'invalid';
+      if (project.status === "valid") {
+        return "valid";
+      } else if (project.status === "invalid") {
+        return "invalid";
       } else {
-        return '';
+        return "";
       }
     }
   }
@@ -94,7 +103,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 .container {
   margin-top: 2em;
 }

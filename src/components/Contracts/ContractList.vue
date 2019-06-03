@@ -4,13 +4,11 @@
       <div>
         <el-tooltip v-if="checkQc" placement="top" effect="light">
           <div slot="content">QC must be 100%</div>
-          <i class="fas fa-exclamation-circle" />
+          <i class="fas fa-exclamation-circle"/>
         </el-tooltip>
         <span>{{ pluralize('contract', contractList.length) }}</span>
       </div>
-      <button class="button long" @click="showNewContractModal">
-        + NEW CONTRACT
-      </button>
+      <button class="button long" @click="showNewContractModal">+ NEW CONTRACT</button>
     </div>
     <el-table
       ref="contractList"
@@ -31,11 +29,7 @@
         sortable
         :sort-orders="['ascending', 'descending']"
       />
-      <el-table-column
-        prop="description"
-        label="Description"
-        :min-width="contract.description"
-      />
+      <el-table-column prop="description" label="Description" :min-width="contract.description"/>
       <el-table-column
         label="Round"
         :min-width="contract.round"
@@ -43,9 +37,11 @@
         :sort-orders="['ascending', 'descending']"
         sort-by="round"
       >
-        <template slot-scope="props">{{
+        <template slot-scope="props">
+          {{
           props.row.round ? props.row.round : '—'
-        }}</template>
+          }}
+        </template>
       </el-table-column>
       <el-table-column
         label="Effective Dates"
@@ -63,69 +59,54 @@
         sort-by="qc"
       >
         <template slot-scope="props">
-          <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">
-            {{ formatPercent(props.row.qc) }}
-          </div>
+          <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">{{ formatPercent(props.row.qc) }}</div>
         </template>
       </el-table-column>
       <el-table-column label="Airlines" :min-width="contract.airlines">
         <template slot-scope="props">
-          <el-tooltip
-            v-if="props.row.airlineList.length > 1"
-            effect="dark"
-            placement="top"
-          >
+          <el-tooltip v-if="props.row.airlineList.length > 1" effect="dark" placement="top">
             <div slot="content">{{ props.row.airlineList.join(', ') }}</div>
-            <span>
-              {{ props.row.airlineList.length }}
-            </span>
+            <span>{{ props.row.airlineList.length }}</span>
           </el-tooltip>
-          <span v-else>
-            {{ props.row.airlineList.join('') }}
-          </span>
+          <span v-else>{{ props.row.airlineList.join('') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="PoS/PoO" :min-width="contract.pos">
         <template slot-scope="props">
-          <el-tooltip
-            effect="dark"
-            placement="top"
-            popper-class="pos-popup-container"
-          >
+          <el-tooltip effect="dark" placement="top" popper-class="pos-popup-container">
             <div slot="content">
               PoS: {{ props.row.pointOfSaleList.join(', ') }}
-              <br />
+              <br>
               PoO: {{ props.row.pointOfOriginList.join(', ') }}
             </div>
             <span>
               <span>
                 {{
-                  props.row.pointOfSaleList.length > 1
-                    ? props.row.pointOfSaleList.length
-                    : props.row.pointOfSaleList.join('')
+                props.row.pointOfSaleList.length > 1
+                ? props.row.pointOfSaleList.length
+                : props.row.pointOfSaleList.join('')
                 }}
               </span>
-              <span v-if="props.row.pointOfOriginList.length"> / </span>
-              <span>{{
+              <span v-if="props.row.pointOfOriginList.length">/</span>
+              <span>
+                {{
                 props.row.pointOfOriginList.length > 1
-                  ? props.row.pointOfOriginList.length
-                  : props.row.pointOfOriginList.join('')
-              }}</span>
+                ? props.row.pointOfOriginList.length
+                : props.row.pointOfOriginList.join('')
+                }}
+              </span>
             </span>
           </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="Pricing Terms" :min-width="contract.pricingTerms">
         <template slot-scope="props">
-          <el-tooltip
-            effect="dark"
-            content="View Pricing Terms"
-            placement="top"
-          >
-            <router-link to="/project/contracts/pricing-terms">
-              <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.pricingTermTotal }}
-              </button>
+          <el-tooltip effect="dark" content="View Pricing Terms" placement="top">
+            <router-link :to="`/project/${$route.params.projectId}/contracts/pricing-terms`">
+              <button
+                class="button number"
+                @click="selectContract(props.row)"
+              >{{ props.row.pricingTermTotal }}</button>
             </router-link>
           </el-tooltip>
         </template>
@@ -133,10 +114,11 @@
       <el-table-column label="Target Terms" :min-width="contract.targetTerms">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="View Target Terms" placement="top">
-            <router-link to="/project/contracts/target-terms">
-              <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.targetTermTotal }}
-              </button>
+            <router-link :to="`/project/${$route.params.projectId}/contracts/target-terms`">
+              <button
+                class="button number"
+                @click="selectContract(props.row)"
+              >{{ props.row.targetTermTotal }}</button>
             </router-link>
           </el-tooltip>
         </template>
@@ -144,40 +126,34 @@
       <el-table-column label="Actions" :min-width="contract.actions">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="Copy Contract" placement="top">
-            <i
-              class="far fa-copy icon-spacer"
-              @click="showCopyContractModal(props.row.id)"
-          /></el-tooltip>
+            <i class="far fa-copy icon-spacer" @click="showCopyContractModal(props.row.id)"/>
+          </el-tooltip>
           <el-tooltip effect="dark" content="Edit Contract" placement="top">
-            <i
-              class="fas fa-pencil-alt icon-spacer"
-              @click="showEditContractModal(props.row)"
-          /></el-tooltip>
+            <i class="fas fa-pencil-alt icon-spacer" @click="showEditContractModal(props.row)"/>
+          </el-tooltip>
           <el-tooltip effect="dark" content="Delete Contract" placement="top">
-            <i
-              class="fas fa-trash-alt"
-              @click="showDeleteContractModal(props.row.id)"
-          /></el-tooltip>
+            <i class="fas fa-trash-alt" @click="showDeleteContractModal(props.row.id)"/>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-    <NewContractModal />
-    <CopyContractModal />
-    <EditContractModal />
-    <DeleteContractModal />
+    <NewContractModal/>
+    <CopyContractModal/>
+    <EditContractModal/>
+    <DeleteContractModal/>
   </div>
 </template>
 
 <script>
-import { pluralize, formatDate, formatPercent } from '@/helper';
-import { GET_CONTRACT_LIST } from '@/graphql/queries';
-import { contract } from '@/config';
-import NewContractModal from './NewContractModal';
-import CopyContractModal from './CopyContractModal';
-import EditContractModal from './EditContractModal';
-import DeleteContractModal from './DeleteContractModal';
+import { pluralize, formatDate, formatPercent } from "@/helper";
+import { GET_CONTRACT_LIST } from "@/graphql/queries";
+import { contract } from "@/config";
+import NewContractModal from "./NewContractModal";
+import CopyContractModal from "./CopyContractModal";
+import EditContractModal from "./EditContractModal";
+import DeleteContractModal from "./DeleteContractModal";
 export default {
-  name: 'ContractList',
+  name: "ContractList",
   components: {
     NewContractModal,
     CopyContractModal,
@@ -212,26 +188,26 @@ export default {
       return qc !== 1;
     },
     showNewContractModal() {
-      this.$modal.show('new-contract');
+      this.$modal.show("new-contract");
     },
     showCopyContractModal(id) {
-      this.$modal.show('copy-contract', { id });
+      this.$modal.show("copy-contract", { id });
     },
     showEditContractModal(contract) {
-      this.$modal.show('edit-contract', { contract });
+      this.$modal.show("edit-contract", { contract });
     },
     showDeleteContractModal(id) {
-      this.$modal.show('delete-contract', { id });
+      this.$modal.show("delete-contract", { id });
     },
     selectContract(contract) {
-      this.$emit('select-contract', contract);
+      this.$emit("select-contract", contract);
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import '@/styles/global.scss';
+@import "@/styles/global.scss";
 .error-qc {
   color: $monza;
 }

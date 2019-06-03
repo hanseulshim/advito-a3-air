@@ -8,41 +8,41 @@ export default {
       cache.writeData({
         data: {
           client: {
-            ...client
-          }
-        }
+            ...client,
+          },
+        },
       });
       return null;
     },
     updateProject: (_, { project = defaults.project }, { cache }) => {
       if (project.id) {
-        router.push('/project/program-settings');
+        router.push(`/project/${project.id}/program-settings`);
       } else {
         router.push('/');
       }
       cache.writeData({
         data: {
           project: {
-            ...project
-          }
-        }
+            ...project,
+          },
+        },
       });
       return null;
     },
     updateProjectStatus: (_, { id, status }, { cache }) => {
       const data = cache.readQuery({
-        query: GET_PROJECT_STATUS_LIST
+        query: GET_PROJECT_STATUS_LIST,
       });
       const project = data.projectStatusList.filter(p => p.id === id)[0];
       if (project.status !== status) {
         project.status = status;
         cache.writeData({
           data: {
-            projectStatusList: data.projectStatusList
-          }
+            projectStatusList: data.projectStatusList,
+          },
         });
       }
       return null;
-    }
-  }
+    },
+  },
 };
