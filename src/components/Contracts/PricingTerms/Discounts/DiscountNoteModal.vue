@@ -70,7 +70,14 @@
       <button class="button" @click="editNote">UPDATE NOTE</button>
     </div>
     <div v-else class="note-button-container">
-      <button class="button" @click="addNote">SAVE</button>
+      <button
+        class="button"
+        :class="{ disabled: noteList.length === 0 && !text }"
+        :disabled="noteList.length === 0 && !text"
+        @click="addNote"
+      >
+        SAVE
+      </button>
     </div>
   </modal>
 </template>
@@ -177,7 +184,7 @@ export default {
           mutation: ADD_NOTE,
           variables: {
             parentId: this.parentId,
-            parentTable: 'discount',
+            parentTable: this.parentTable,
             important: this.important,
             text: this.text,
             assignedToId: this.assignedToId
@@ -229,7 +236,7 @@ export default {
           mutation: EDIT_NOTE,
           variables: {
             parentId: this.parentId,
-            parentTable: 'discount',
+            parentTable: this.parentTable,
             important: this.important,
             text: this.text,
             assignedToId: this.assignedToId,
@@ -248,9 +255,16 @@ export default {
     },
     async deleteNote(noteId) {
       try {
+        if (this.noteList.length === 1) {
+          this.important = false;
+        }
         await this.$apollo.mutate({
           mutation: DELETE_NOTE,
           variables: {
+            parentId: this.parentId,
+            parentTable: this.parentTable,
+            resetImportant: this.noteList.length === 1,
+            important: this.important,
             noteId
           },
           update: (store, { data: { deleteNote } }) => {

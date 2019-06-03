@@ -231,8 +231,20 @@ export const EDIT_NOTE = gql`
 `;
 
 export const DELETE_NOTE = gql`
-  mutation deleteNote($noteId: String!) {
-    deleteNote(noteId: $noteId)
+  mutation deleteNote(
+    $parentId: Int!
+    $parentTable: String!
+    $resetImportant: Boolean!
+    $important: Boolean!
+    $noteId: String!
+  ) {
+    deleteNote(
+      parentId: $parentId
+      parentTable: $parentTable
+      resetImportant: $resetImportant
+      important: $important
+      noteId: $noteId
+    )
   }
 `;
 
