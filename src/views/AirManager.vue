@@ -1,5 +1,5 @@
 <template>
-  <div class="projects-container">
+  <div v-loading="$apollo.loading" class="projects-container">
     <div class="option-container">
       <div class="favorite-projects section-header">
         {{ pluralize('favorite project', favoriteProjectList.length) }}

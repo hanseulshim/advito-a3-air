@@ -20,6 +20,7 @@
     </div>
     <el-table
       ref="preferredAirlineCollection"
+      v-loading="$apollo.loading"
       :data="preferredAirlineCollectionList"
     >
       <el-table-column type="expand">

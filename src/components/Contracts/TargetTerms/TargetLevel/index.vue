@@ -10,6 +10,7 @@
     </div>
     <el-table
       ref="targetLevelList"
+      v-loading="$apollo.loading"
       :data="targetLevelList"
       class="level-two-table"
     >
