@@ -29,7 +29,11 @@
         </el-tooltip>
       </div>
     </div>
-    <el-table ref="locationCollection" :data="locationCollectionList">
+    <el-table
+      ref="locationCollection"
+      v-loading="$apollo.loading"
+      :data="locationCollectionList"
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <button

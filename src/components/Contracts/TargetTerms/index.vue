@@ -36,6 +36,7 @@
     </div>
     <el-table
       ref="targetTermList"
+      v-loading="$apollo.loading"
       :data="filteredTargetTermList"
       :row-class-name="tableRowClassName"
     >

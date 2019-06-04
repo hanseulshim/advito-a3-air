@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="$apollo.loading">
     <Navigation
       :filter-select-list="filterSelectList"
       :selected-filter="selectedFilter"

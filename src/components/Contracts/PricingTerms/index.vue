@@ -43,6 +43,7 @@
     </div>
     <el-table
       ref="pricingTermList"
+      v-loading="$apollo.loading"
       :data="filteredPricingTermList"
       :row-class-name="tableRowClassName"
     >

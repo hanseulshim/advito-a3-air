@@ -29,7 +29,12 @@
         </button>
       </div>
     </div>
-    <el-table ref="discountList" :data="discountList" class="level-two-table">
+    <el-table
+      ref="discountList"
+      v-loading="$apollo.loading"
+      :data="discountList"
+      class="level-two-table"
+    >
       <el-table-column
         prop="contractOrder"
         sortable
