@@ -14,6 +14,7 @@
     </div>
     <el-table
       ref="contractList"
+      v-loading="$apollo.loading"
       :data="contractList"
       :default-sort="{ prop: 'name', order: 'ascending' }"
     >
