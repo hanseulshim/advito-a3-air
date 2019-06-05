@@ -5,9 +5,9 @@
         {{ pluralize('favorite project', favoriteProjectList.length) }}
       </div>
       <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
-      <el-select v-model="selectedUser" placeholder="Select" filterable>
+      <el-select v-model="selectedUserEmail" placeholder="Select" filterable>
         <el-option
-          v-for="item in projectManagerList"
+          v-for="item in userList"
           :key="item.email"
           :label="item.name"
           :value="item.email"
@@ -40,6 +40,7 @@ import EditProjectModal from '@/components/AirManager/EditProjectModal';
 import {
   GET_PROJECTS,
   GET_USER,
+  GET_USER_LIST,
   GET_CLIENT,
   GET_CLIENTS
 } from '@/graphql/queries';
@@ -56,10 +57,13 @@ export default {
   apollo: {
     user: {
       query: GET_USER,
-      update(data) {
-        this.selectedUser = data.user.email;
-        return data.user;
+      update({ user }) {
+        this.selectedUserEmail = user.email;
+        return user;
       }
+    },
+    userList: {
+      query: GET_USER_LIST
     },
     client: {
       query: GET_CLIENT
@@ -78,10 +82,11 @@ export default {
   },
   data() {
     return {
-      selectedUser: '',
+      selectedUserEmail: '',
       showInactive: false,
       projectList: [],
       clientList: [],
+      userList: [],
       user: {
         email: null
       },
@@ -101,34 +106,13 @@ export default {
       return this.filteredProjectList.filter(
         project =>
           project.favorite &&
-          (project.projectManagerEmail === this.selectedUser ||
-            project.leadAnalystEmail === this.selectedUser ||
-            project.dataSpecialistEmail === this.selectedUser)
+          (project.projectManagerEmail === this.selectedUserEmail ||
+            project.leadAnalystEmail === this.selectedUserEmail ||
+            project.dataSpecialistEmail === this.selectedUserEmail)
       );
     },
     totalProjectList: function() {
       return this.filteredProjectList.filter(project => !project.favorite);
-    },
-    projectManagerList: function() {
-      return this.filteredProjectList
-        .filter(
-          (project, index) =>
-            this.filteredProjectList.findIndex(
-              v => v.projectManagerId === project.projectManagerId
-            ) === index
-        )
-        .map(projectManager => ({
-          id: projectManager.projectManagerId,
-          name:
-            this.user.email === projectManager.projectManagerEmail
-              ? 'User: Me'
-              : projectManager.projectManagerName,
-          email: projectManager.projectManagerEmail
-        }))
-        .sort((a, b) => {
-          if (a.name === 'User: Me') return -1;
-          return a.name.localeCompare(b.name);
-        });
     }
   },
   methods: {
