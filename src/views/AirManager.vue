@@ -94,7 +94,7 @@ export default {
     };
   },
   computed: {
-    filteredProjectList: function() {
+    filteredProjectList() {
       return this.projectList.filter(
         project =>
           project.effectiveTo === null ||
@@ -102,7 +102,7 @@ export default {
           project.effectiveTo > new Date()
       );
     },
-    favoriteProjectList: function() {
+    favoriteProjectList() {
       return this.filteredProjectList.filter(
         project =>
           project.favorite &&
@@ -111,7 +111,7 @@ export default {
             project.dataSpecialistEmail === this.selectedUserEmail)
       );
     },
-    totalProjectList: function() {
+    totalProjectList() {
       return this.filteredProjectList.filter(project => !project.favorite);
     }
   },

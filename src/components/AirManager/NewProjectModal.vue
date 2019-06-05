@@ -277,7 +277,7 @@ export default {
     };
   },
   computed: {
-    savingsTypeList: function() {
+    savingsTypeList() {
       const savingsTypeList = this.projectInfo.savingsTypeList.slice();
       if (this.form.projectTypeId === 1) {
         return savingsTypeList.slice(0, 2);
@@ -290,7 +290,7 @@ export default {
     }
   },
   watch: {
-    projectTypeId: function() {
+    projectTypeId() {
       this.form.savingsTypeId = null;
     }
   },

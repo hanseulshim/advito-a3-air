@@ -162,7 +162,7 @@ export default {
     };
   },
   computed: {
-    lastProcessed: function() {
+    lastProcessed() {
       const maxDate = Math.max(
         ...this.process.recentProcessList.map(v => v.date)
       );
