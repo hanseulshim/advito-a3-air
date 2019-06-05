@@ -47,12 +47,16 @@ export default {
       const outsideUrl = path.includes("project");
       if (outsideUrl) {
         const projectId = parseInt(path.split("/")[2]);
+        const locations = path.split("/");
+        const route = locations.slice(3, locations.length).join("/");
+
         const matched = projList.filter(proj => proj.id === projectId)[0];
         this.$apollo
           .mutate({
             mutation: UPDATE_PROJECT,
             variables: {
-              project: matched
+              project: matched,
+              route
             }
           })
           .then(res => {

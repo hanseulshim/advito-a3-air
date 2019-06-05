@@ -14,9 +14,9 @@ export default {
       });
       return null;
     },
-    updateProject: (_, { project = defaults.project }, { cache }) => {
+    updateProject: (_, { project = defaults.project, route = 'program-settings' }, { cache }) => {
       if (project.id) {
-        router.push(`/project/${project.id}/program-settings`);
+        router.push(`/project/${project.id}/${route}`);
       } else {
         router.push('/');
       }
