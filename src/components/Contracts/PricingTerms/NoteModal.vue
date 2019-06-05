@@ -112,7 +112,7 @@ export default {
     };
   },
   computed: {
-    assigneeList: function() {
+    assigneeList() {
       return this.userList
         .map(user => ({
           ...user,
