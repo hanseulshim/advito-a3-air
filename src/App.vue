@@ -16,7 +16,8 @@
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Modals from "@/components/Modals";
-import { GET_PROJECTS, GET_CLIENT, GET_CLIENTS } from "@/graphql/queries";
+import { GET_PROJECTS, GET_CLIENTS } from "@/graphql/queries";
+import { UPDATE_PROJECT, UPDATE_CLIENT } from "@/graphql/mutations";
 export default {
   name: "App",
   components: {
@@ -27,13 +28,16 @@ export default {
   apollo: {
     clientList: {
       query: GET_CLIENTS
+      // result({ data }) {
+      //   this.setClient(data.clientList);
+      // }
     },
     projectList: {
-      query: GET_PROJECTS
+      query: GET_PROJECTS,
+      result({ data }) {
+        this.setProject(data.projectList);
+      }
     }
-  },
-  mounted() {
-    console.log(this.$route);
   },
   data() {
     return {
@@ -43,15 +47,29 @@ export default {
       client: null
     };
   },
-  computed: {
-    // filteredProjectList: function() {
-    //   return this.projectList.filter(
-    //     project =>
-    //       project.effectiveTo === null ||
-    //       this.showInactive ||
-    //       project.effectiveTo > new Date()
-    //   );
-    // }
+  methods: {
+    setProject(projList) {
+      const path = this.$route.path;
+      const outsideUrl = path.includes("project");
+      if (outsideUrl) {
+        const projectId = parseInt(path.split("/")[2]);
+        const matched = projList.filter(proj => proj.id === projectId)[0];
+        console.log(matched);
+        this.$apollo.mutate({
+          mutation: UPDATE_PROJECT,
+          variables: {
+            matched
+          }
+        });
+      } else return;
+    },
+    setClient(clientList) {
+      // const path = this.$route.path;
+      // const outsideUrl = path.includes("project");
+      // if (outsideUrl) {
+      //   console.log(clientList);
+      // }
+    }
   }
 };
 </script>

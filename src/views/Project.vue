@@ -75,7 +75,7 @@ export default {
     }
   },
   mounted() {
-    if (!this.project.id) this.$router.push("/");
+    // if (!this.project.id) this.$router.push("/");
   },
   apollo: {
     project: {
