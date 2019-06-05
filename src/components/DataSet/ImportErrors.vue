@@ -123,7 +123,7 @@ export default {
     };
   },
   computed: {
-    selector: function() {
+    selector() {
       const { path } = this.$route.params;
       return path === 'imported-tickets'
         ? 'importedTickets'
@@ -133,7 +133,7 @@ export default {
         ? 'errorRatio'
         : '';
     },
-    selectorTotal: function() {
+    selectorTotal() {
       return this.selector ? `${this.selector}Total` : '';
     }
   },

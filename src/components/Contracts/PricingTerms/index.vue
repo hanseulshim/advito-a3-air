@@ -330,7 +330,7 @@ export default {
     };
   },
   computed: {
-    filteredPricingTermList: function() {
+    filteredPricingTermList() {
       return this.pricingTermList
         .filter(term => this.showInactive || term.effectiveEndDate > new Date())
         .map(term => ({
