@@ -26,16 +26,10 @@ export default {
     Modals
   },
   apollo: {
-    clientList: {
-      query: GET_CLIENTS
-      // result({ data }) {
-      //   this.setClient(data.clientList);
-      // }
-    },
     projectList: {
       query: GET_PROJECTS,
       result({ data }) {
-        this.setProject(data.projectList);
+        this.restoreState(data.projectList);
       }
     }
   },
@@ -48,27 +42,38 @@ export default {
     };
   },
   methods: {
-    setProject(projList) {
+    restoreState(projList) {
       const path = this.$route.path;
       const outsideUrl = path.includes("project");
       if (outsideUrl) {
         const projectId = parseInt(path.split("/")[2]);
         const matched = projList.filter(proj => proj.id === projectId)[0];
-        console.log(matched);
-        this.$apollo.mutate({
-          mutation: UPDATE_PROJECT,
-          variables: {
-            project: matched
-          }
-        });
+        this.$apollo
+          .mutate({
+            mutation: UPDATE_PROJECT,
+            variables: {
+              project: matched
+            }
+          })
+          .then(res => {
+            this.$apollo
+              .query({
+                query: GET_CLIENTS
+              })
+              .then(res => {
+                const clients = res.data.clientList;
+                const matchedClient = clients.filter(
+                  client => client.id === matched.clientId
+                )[0];
+                this.$apollo.mutate({
+                  mutation: UPDATE_CLIENT,
+                  variables: {
+                    client: matchedClient
+                  }
+                });
+              });
+          });
       } else return;
-    },
-    setClient(clientList) {
-      // const path = this.$route.path;
-      // const outsideUrl = path.includes("project");
-      // if (outsideUrl) {
-      //   console.log(clientList);
-      // }
     }
   }
 };
