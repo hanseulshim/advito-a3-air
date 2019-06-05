@@ -58,7 +58,7 @@ export default {
         this.$apollo.mutate({
           mutation: UPDATE_PROJECT,
           variables: {
-            matched
+            project: matched
           }
         });
       } else return;
