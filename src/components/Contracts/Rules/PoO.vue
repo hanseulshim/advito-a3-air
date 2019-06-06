@@ -46,7 +46,7 @@ export default {
   apollo: {},
   data() {
     return {
-      countries: countries,
+      countries,
       editMode: false,
       selectedCountry: '',
       rules: [

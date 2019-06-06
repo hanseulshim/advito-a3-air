@@ -72,9 +72,6 @@ export default {
       return navItems;
     }
   },
-  mounted() {
-    // if (!this.project.id) this.$router.push("/");
-  },
   apollo: {
     project: {
       query: GET_PROJECT

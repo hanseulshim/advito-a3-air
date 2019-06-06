@@ -42,7 +42,7 @@ export default {
     };
   },
   methods: {
-    restoreState(projList) {
+    async restoreState(projList) {
       const path = this.$route.path;
       const outsideUrl = path.includes('project');
       if (outsideUrl) {
@@ -51,32 +51,27 @@ export default {
         const route = locations.slice(3, locations.length).join('/');
 
         const matched = projList.filter(proj => proj.id === projectId)[0];
-        this.$apollo
-          .mutate({
-            mutation: UPDATE_PROJECT,
-            variables: {
-              project: matched,
-              route
-            }
-          })
-          .then(() => {
-            this.$apollo
-              .query({
-                query: GET_CLIENTS
-              })
-              .then(res => {
-                const clients = res.data.clientList;
-                const matchedClient = clients.filter(
-                  client => client.id === matched.clientId
-                )[0];
-                this.$apollo.mutate({
-                  mutation: UPDATE_CLIENT,
-                  variables: {
-                    client: matchedClient
-                  }
-                });
-              });
-          });
+        await this.$apollo.mutate({
+          mutation: UPDATE_PROJECT,
+          variables: {
+            project: matched,
+            route
+          }
+        });
+        const {
+          data: { clientList }
+        } = await this.$apollo.query({
+          query: GET_CLIENTS
+        });
+        const matchedClient = clientList.filter(
+          client => client.id === matched.clientId
+        )[0];
+        this.$apollo.mutate({
+          mutation: UPDATE_CLIENT,
+          variables: {
+            client: matchedClient
+          }
+        });
       } else return;
     }
   }
