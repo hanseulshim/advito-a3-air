@@ -13,7 +13,7 @@
         :class="{ active: $route.path.includes('pricing-terms') }"
       >
         <span class="data-icon">
-          <img alt="division-trends" src="@/assets/pricingTerms.png">
+          <img alt="division-trends" src="@/assets/pricingTerms.png" />
         </span>
         <span class="nav-title">Pricing Terms</span>
       </router-link>
@@ -23,11 +23,13 @@
         :class="{ active: $route.path.includes('target-terms') }"
       >
         <span class="data-icon">
-          <img alt="import-errors" src="@/assets/targetTerms.png">
+          <img alt="import-errors" src="@/assets/targetTerms.png" />
         </span>
         <span class="nav-title">Target Terms</span>
       </router-link>
-      <div class="contract-name">{{ selectedContract.name }} | {{ selectedContract.qc * 100 }}% QC</div>
+      <div class="contract-name">
+        {{ selectedContract.name }} | {{ selectedContract.qc * 100 }}% QC
+      </div>
     </div>
     <div class="sub-navigation-container">
       <i
@@ -43,7 +45,7 @@
 
 <script>
 export default {
-  name: "ContractNavigation",
+  name: 'ContractNavigation',
   props: {
     selectedContract: {
       type: Object,
@@ -54,10 +56,10 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/global.scss";
+@import '@/styles/global.scss';
 .contracts-navigation-container {
   display: grid;
-  grid-template-areas: "all-contracts pricing-terms target-terms . contract-name";
+  grid-template-areas: 'all-contracts pricing-terms target-terms . contract-name';
   grid-template-columns: 10% 15% 15% auto;
   row-gap: 1em;
   column-gap: 1em;

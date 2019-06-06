@@ -1,10 +1,10 @@
 <template>
   <div v-if="password === 'air2019'">
-    <Sidebar/>
+    <Sidebar />
     <div id="app">
-      <Header/>
-      <router-view/>
-      <Modals/>
+      <Header />
+      <router-view />
+      <Modals />
     </div>
   </div>
   <div v-else class="validation-container">
@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
-import Modals from "@/components/Modals";
-import { GET_PROJECTS, GET_CLIENTS } from "@/graphql/queries";
-import { UPDATE_PROJECT, UPDATE_CLIENT } from "@/graphql/mutations";
+import Header from '@/components/Header';
+import Sidebar from '@/components/Sidebar';
+import Modals from '@/components/Modals';
+import { GET_PROJECTS, GET_CLIENTS } from '@/graphql/queries';
+import { UPDATE_PROJECT, UPDATE_CLIENT } from '@/graphql/mutations';
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Header,
     Sidebar,
@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      password: "air2019",
+      password: 'air2019',
       projectList: [],
       clientList: [],
       client: null
@@ -44,11 +44,11 @@ export default {
   methods: {
     restoreState(projList) {
       const path = this.$route.path;
-      const outsideUrl = path.includes("project");
+      const outsideUrl = path.includes('project');
       if (outsideUrl) {
-        const projectId = parseInt(path.split("/")[2]);
-        const locations = path.split("/");
-        const route = locations.slice(3, locations.length).join("/");
+        const projectId = parseInt(path.split('/')[2]);
+        const locations = path.split('/');
+        const route = locations.slice(3, locations.length).join('/');
 
         const matched = projList.filter(proj => proj.id === projectId)[0];
         this.$apollo
@@ -59,7 +59,7 @@ export default {
               route
             }
           })
-          .then(res => {
+          .then(() => {
             this.$apollo
               .query({
                 query: GET_CLIENTS
@@ -84,13 +84,13 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/styles/global.scss";
+@import '@/styles/global.scss';
 body {
   margin: 0;
   padding: 0;
   background: $alabaster;
   color: $dove-gray;
-  font-family: "Rubik", sans-serif;
+  font-family: 'Rubik', sans-serif;
   font-weight: 300;
   font-size: 14px;
   line-height: 20px;
@@ -98,7 +98,7 @@ body {
 
 #app {
   padding: 2em 4em;
-  font-family: "Rubik", sans-serif;
+  font-family: 'Rubik', sans-serif;
   max-width: 1600px;
   min-width: 1336px;
   margin: auto;

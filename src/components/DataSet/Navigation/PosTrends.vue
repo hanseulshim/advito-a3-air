@@ -4,7 +4,7 @@
     <router-link
       class="nav-item data-nav-item"
       :to="`/project/${$route.params.projectId}/data/pos-trends/tickets`"
-      :class="{ active: $route.path.includes('pos-trends/tickets')  }"
+      :class="{ active: $route.path.includes('pos-trends/tickets') }"
     >
       <span>Tickets</span>
     </router-link>
@@ -12,7 +12,7 @@
     <router-link
       class="nav-item data-nav-item"
       :to="`/project/${$route.params.projectId}/data/pos-trends/segments`"
-      :class="{ active: $route.path.includes('pos-trends/segments')  }"
+      :class="{ active: $route.path.includes('pos-trends/segments') }"
     >
       <span>O &amp; D Segments</span>
     </router-link>
@@ -21,7 +21,7 @@
       class="nav-item data-nav-item"
       :to="`/project/${$route.params.projectId}/data/pos-trends/fare-paid`"
       :class="{
-        active: $route.path.includes('pos-trends/fare-paid') 
+        active: $route.path.includes('pos-trends/fare-paid')
       }"
     >
       <span>Fare Paid</span>

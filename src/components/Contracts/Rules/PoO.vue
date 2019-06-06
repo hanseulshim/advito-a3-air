@@ -1,45 +1,63 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Point of Origin</p>
-    <i class="fas fa-pencil-alt edit-rule" @click="toggleEditMode" v-if="!editMode"/>
-    <button class="button save-rule" @click="toggleEditMode" v-if="editMode">Save</button>
-    <div class="control-row" v-if="editMode">
-      <el-select v-model="selectedCountry" filterable placeholder="Select" size="mini" clearable>
-        <el-option v-for="item in countries" :key="item.value" :label="item.name" :value="item.id"></el-option>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="toggleEditMode"
+    />
+    <button v-if="editMode" class="button save-rule" @click="toggleEditMode">
+      Save
+    </button>
+    <div v-if="editMode" class="control-row">
+      <el-select
+        v-model="selectedCountry"
+        filterable
+        placeholder="Select"
+        size="mini"
+        clearable
+      >
+        <el-option
+          v-for="item in countries"
+          :key="item.value"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
       </el-select>
       <button class="button" @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
       <el-tag
-        type="info"
         v-for="rule in rules"
-        v-bind:key="rule.index"
+        :key="rule.index"
+        type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{rule.code}}</el-tag>
+        >{{ rule.code }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { countries } from "./helper";
+import { countries } from './helper';
 export default {
-  name: "PointOfOrigin",
+  name: 'PointOfOrigin',
   apollo: {},
   data() {
     return {
       countries: countries,
       editMode: false,
-      selectedCountry: "",
+      selectedCountry: '',
       rules: [
         {
-          name: "Great Britain",
-          code: "GB",
+          name: 'Great Britain',
+          code: 'GB',
           id: 5
         },
         {
-          name: "United States",
-          code: "USA",
+          name: 'United States',
+          code: 'USA',
           id: 6
         }
       ]
@@ -59,7 +77,7 @@ export default {
         code: matched.code
       });
 
-      this.selectedCountry = "";
+      this.selectedCountry = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
@@ -67,6 +85,6 @@ export default {
   }
 };
 </script>
-<style lang='scss'>
-@import "./ruleStyles.scss";
+<style lang="scss">
+@import './ruleStyles.scss';
 </style>

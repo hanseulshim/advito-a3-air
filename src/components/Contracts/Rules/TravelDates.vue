@@ -1,9 +1,15 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Travel Dates</p>
-    <i class="fas fa-pencil-alt edit-rule" @click="toggleEditMode" v-if="!editMode"/>
-    <button class="button save-rule" @click="toggleEditMode" v-if="editMode">Save</button>
-    <div class="control-row" v-if="editMode">
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="toggleEditMode"
+    />
+    <button v-if="editMode" class="button save-rule" @click="toggleEditMode">
+      Save
+    </button>
+    <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
         type="date"
@@ -24,34 +30,35 @@
     </div>
     <div class="rule-tags">
       <el-tag
-        type="info"
         v-for="rule in rules"
-        v-bind:key="rule.index"
+        :key="rule.index"
+        type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{rule.start}} - {{rule.end}}</el-tag>
+        >{{ rule.start }} - {{ rule.end }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { formatDate } from "../../../helper";
+import { formatDate } from '../../../helper';
 export default {
-  name: "TravelDates",
+  name: 'TravelDates',
   apollo: {},
   data() {
     return {
       editMode: false,
-      startDate: "",
-      endDate: "",
+      startDate: '',
+      endDate: '',
       rules: [
         {
-          start: "04 JUN 2018",
-          end: "31 DEC 2019"
+          start: '04 JUN 2018',
+          end: '31 DEC 2019'
         },
         {
-          start: "04 JUN 2018",
-          end: "31 DEC 2019"
+          start: '04 JUN 2018',
+          end: '31 DEC 2019'
         }
       ]
     };
@@ -68,8 +75,8 @@ export default {
         start,
         end
       });
-      this.startDate = "";
-      this.endDate = "";
+      this.startDate = '';
+      this.endDate = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
@@ -78,5 +85,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

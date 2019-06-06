@@ -3,21 +3,33 @@
     <div class="data-navigation-container">
       <router-link
         class="data-nav-item nav-item data-nav"
-        :to="`/project/${$route.params.projectId}/data/import-errors/imported-tickets`"
-        :class="{ active: $route.path.includes(`/project/${$route.params.projectId}/data/import-errors`) }"
+        :to="
+          `/project/${
+            $route.params.projectId
+          }/data/import-errors/imported-tickets`
+        "
+        :class="{
+          active: $route.path.includes(
+            `/project/${$route.params.projectId}/data/import-errors`
+          )
+        }"
       >
         <span class="data-icon">
-          <img alt="import-errors" src="@/assets/importErrors.png">
+          <img alt="import-errors" src="@/assets/importErrors.png" />
         </span>
         <span class="nav-title">Import Errors</span>
       </router-link>
       <router-link
         class="data-nav-item nav-item data-nav"
         :to="`/project/${$route.params.projectId}/data/pos-trends/tickets`"
-        :class="{ active: $route.path.includes(`/project/${$route.params.projectId}/data/pos-trends`) }"
+        :class="{
+          active: $route.path.includes(
+            `/project/${$route.params.projectId}/data/pos-trends`
+          )
+        }"
       >
         <span class="data-icon">
-          <img alt="pos-trends" src="@/assets/posTrends.png">
+          <img alt="pos-trends" src="@/assets/posTrends.png" />
         </span>
         <span class="nav-title">PoS Trends</span>
       </router-link>
@@ -25,17 +37,23 @@
         class="data-nav-item nav-item data-nav"
         :to="`/project/${$route.params.projectId}/data/division-trends/tickets`"
         :class="{
-          active: $route.path.includes(`/project/${$route.params.projectId}/data/division-trends`)
+          active: $route.path.includes(
+            `/project/${$route.params.projectId}/data/division-trends`
+          )
         }"
       >
         <span class="data-icon">
-          <img alt="division-trends" src="@/assets/divisionTrends.png">
+          <img alt="division-trends" src="@/assets/divisionTrends.png" />
         </span>
         <span class="nav-title">Division Trends</span>
       </router-link>
 
       <div class="dataset">
-        <el-select :value="selectedFilter" placeholder="Select Client" @change="updateFilter">
+        <el-select
+          :value="selectedFilter"
+          placeholder="Select Client"
+          @change="updateFilter"
+        >
           <el-option
             v-for="item in filterSelectList"
             :key="item.value"
@@ -47,24 +65,36 @@
     </div>
     <div class="sub-navigation-container">
       <PosTrends
-        v-if="$route.path.includes(`/project/${$route.params.projectId}/data/pos-trends`)"
+        v-if="
+          $route.path.includes(
+            `/project/${$route.params.projectId}/data/pos-trends`
+          )
+        "
       />
       <DivisionTrends
-        v-if="$route.path.includes(`/project/${$route.params.projectId}/data/division-trends`)"
+        v-if="
+          $route.path.includes(
+            `/project/${$route.params.projectId}/data/division-trends`
+          )
+        "
       />
       <ImportErrors
-        v-if="$route.path.includes(`/project/${$route.params.projectId}/data/import-errors`)"
+        v-if="
+          $route.path.includes(
+            `/project/${$route.params.projectId}/data/import-errors`
+          )
+        "
       />
     </div>
   </div>
 </template>
 
 <script>
-import PosTrends from "./PosTrends";
-import DivisionTrends from "./DivisionTrends";
-import ImportErrors from "./ImportErrors";
+import PosTrends from './PosTrends';
+import DivisionTrends from './DivisionTrends';
+import ImportErrors from './ImportErrors';
 export default {
-  name: "DataNavigation",
+  name: 'DataNavigation',
   components: {
     PosTrends,
     DivisionTrends,
@@ -82,17 +112,17 @@ export default {
   },
   methods: {
     updateFilter(value) {
-      this.$emit("update-filter", value);
+      this.$emit('update-filter', value);
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import "@/styles/global.scss";
+@import '@/styles/global.scss';
 .data-navigation-container {
   display: grid;
-  grid-template-areas: "import pos division . annualization dataset";
+  grid-template-areas: 'import pos division . annualization dataset';
   grid-template-columns: 15% 15% 15% auto 150px 200px;
   -ms-grid-columns: 15% 1em 15% 1em 15% 1em auto 1em 150px 1em 200px;
   row-gap: 1em;

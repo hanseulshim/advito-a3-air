@@ -15,7 +15,7 @@
       class="nav-item data-nav-item"
       :to="`/project/${$route.params.projectId}/data/division-trends/segments`"
       :class="{
-        active: $route.path.includes('division-trends/segments') 
+        active: $route.path.includes('division-trends/segments')
       }"
     >
       <span>O &amp; D Segments</span>
@@ -35,6 +35,6 @@
 
 <script>
 export default {
-  name: "DivisionTrends"
+  name: 'DivisionTrends'
 };
 </script>

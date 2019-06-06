@@ -9,26 +9,39 @@
     <div class="title-row space-between">
       <div class="section-header">Discount : {{ discount.name }}</div>
       <el-tooltip effect="dark" content="Close Modal" placement="top">
-        <i class="fas fa-times close-modal-button" @click="hideModal"/>
+        <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
     <div class="rules-menu-container">
       <p class="rule-count">9 RULES</p>
-      <el-select v-model="selectedRule" placeholder="Create New Rule" size="small">
-        <el-option v-for="rule in ruleList" :key="rule.id" :label="rule.title" :value="rule.type"></el-option>
+      <el-select
+        v-model="selectedRule"
+        placeholder="Create New Rule"
+        size="small"
+      >
+        <el-option
+          v-for="rule in ruleList"
+          :key="rule.id"
+          :label="rule.title"
+          :value="rule.type"
+        ></el-option>
       </el-select>
     </div>
-    <component v-for="rule in ruleList" v-bind:is="rule.type" v-bind:key="rule.id"></component>
+    <component
+      :is="rule.type"
+      v-for="rule in ruleList"
+      :key="rule.id"
+    ></component>
   </modal>
 </template>
 
 <script>
-import TicketingDates from "../../Rules/TicketingDates";
-import TravelDates from "../../Rules/TravelDates";
-import PointOfSale from "../../Rules/PoS";
-import PointOfOrigin from "../../Rules/PoO";
+import TicketingDates from '../../Rules/TicketingDates';
+import TravelDates from '../../Rules/TravelDates';
+import PointOfSale from '../../Rules/PoS';
+import PointOfOrigin from '../../Rules/PoO';
 export default {
-  name: "RulesModal",
+  name: 'RulesModal',
   apollo: {},
   components: {
     TicketingDates,
@@ -39,41 +52,41 @@ export default {
   data() {
     return {
       discount: {
-        name: ""
+        name: ''
       },
-      ruleTypes: [""],
+      ruleTypes: [''],
       ruleList: [
         {
           id: 1,
-          type: "TicketingDates",
-          title: "Ticketing Dates",
+          type: 'TicketingDates',
+          title: 'Ticketing Dates',
           active: true
         },
         {
           id: 2,
-          type: "TravelDates",
-          title: "Travel Dates",
+          type: 'TravelDates',
+          title: 'Travel Dates',
           active: false
         },
         {
           id: 3,
-          type: "PointOfSale",
-          title: "Point Of Sale",
+          type: 'PointOfSale',
+          title: 'Point Of Sale',
           active: true
         },
         {
           id: 4,
-          type: "PointOfOrigin",
-          title: "Point Of Origin",
+          type: 'PointOfOrigin',
+          title: 'Point Of Origin',
           active: true
         }
       ],
-      selectedRule: ""
+      selectedRule: ''
     };
   },
   methods: {
     hideModal() {
-      this.$modal.hide("rules");
+      this.$modal.hide('rules');
     },
     validateForm() {
       // console.log('validated!');
