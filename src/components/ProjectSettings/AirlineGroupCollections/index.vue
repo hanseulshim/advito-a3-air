@@ -5,7 +5,11 @@
         pluralize('airline group collection', airlineGroupCollectionList.length)
       }}
     </div>
-    <el-table ref="airlineGroupCollection" :data="airlineGroupCollectionList">
+    <el-table
+      ref="airlineGroupCollection"
+      v-loading="$apollo.loading"
+      :data="airlineGroupCollectionList"
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
           <button

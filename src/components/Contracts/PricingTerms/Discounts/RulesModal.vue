@@ -7,7 +7,7 @@
     @before-close="beforeClose"
   >
     <div class="title-row space-between">
-      <div class="section-header">Discount : {{discount.name}}</div>
+      <div class="section-header">Discount : {{ discount.name }}</div>
       <el-tooltip effect="dark" content="Close Modal" placement="top">
         <i class="fas fa-times close-modal-button" @click="hideModal"/>
       </el-tooltip>
@@ -76,7 +76,7 @@ export default {
       this.$modal.hide("rules");
     },
     validateForm() {
-      console.log("validated!");
+      // console.log('validated!');
     },
     beforeOpen(event) {
       this.discount = event.params.discount;

@@ -240,7 +240,7 @@ export default {
     };
   },
   computed: {
-    savingsTypeList: function() {
+    savingsTypeList() {
       const savingsTypeList = this.projectInfo.savingsTypeList.slice();
       if (this.projectTypeId === 1) {
         return savingsTypeList.slice(0, 2);

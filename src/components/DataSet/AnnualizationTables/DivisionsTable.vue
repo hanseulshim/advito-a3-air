@@ -3,18 +3,24 @@
     <div class="annualize-container">
       <div class="enable-annualization">
         <p>Annualization</p>
-        <el-switch v-model="annualized"/>
+        <el-switch v-model="annualized" />
       </div>
-      <div class="annualize-controls" v-if="annualized">
-        <el-input v-model="annualizeAllBy" type="number" size="mini"/>
-        <button class="button annualization" v-on:click="setAnnMonthsGlobal">ANNUALIZE ALL</button>
+      <div v-if="annualized" class="annualize-controls">
+        <el-input v-model="annualizeAllBy" type="number" size="mini" />
+        <button class="button annualization" @click="setAnnMonthsGlobal">
+          ANNUALIZE ALL
+        </button>
       </div>
     </div>
-    <el-table :data="dataSetDivisionListCopy" show-summary :summary-method="getTotal">
+    <el-table
+      :data="dataSetDivisionListCopy"
+      show-summary
+      :summary-method="getTotal"
+    >
       <el-table-column prop="name">
         <template slot="header">
           <span class="header-container">
-            <div class="updated-date"/>
+            <div class="updated-date" />
             <span class="header-text">Countries</span>
           </span>
         </template>
@@ -22,7 +28,7 @@
       <el-table-column prop="numberDatasets" align="center">
         <template slot="header">
           <span class="header-container">
-            <div class="updated-date"/>
+            <div class="updated-date" />
             <span class="header-text"># Datasets</span>
           </span>
         </template>
@@ -30,12 +36,16 @@
       <el-table-column v-if="annualized" align="center">
         <template slot="header">
           <span class="header-container">
-            <div class="updated-date"/>
+            <div class="updated-date" />
             <span class="header-text">Ann. Months</span>
           </span>
         </template>
         <template slot-scope="props">
-          <el-input type="number" size="mini" v-model.number="props.row.annMonths"/>
+          <el-input
+            v-model.number="props.row.annMonths"
+            type="number"
+            size="mini"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -46,7 +56,7 @@
       >
         <template slot="header">
           <span class="header-container">
-            <div class="updated-date"/>
+            <div class="updated-date" />
             <span class="header-text">Total</span>
           </span>
         </template>
@@ -58,12 +68,15 @@
   </div>
 </template>
 <script>
-import { formatNumber, formatDataSetCol, formatDateTime } from "@/helper";
-import { GET_DATA_SET_DIVISION_LIST } from "@/graphql/queries";
+import { formatNumber, formatDataSetCol, formatDateTime } from '@/helper';
+import { GET_DATA_SET_DIVISION_LIST } from '@/graphql/queries';
 export default {
-  name: "DivisionsTable",
+  name: 'DivisionsTable',
   props: {
-    selected: String
+    selected: {
+      type: String,
+      required: true
+    }
   },
   apollo: {
     dataSetDivisionList: {
@@ -85,18 +98,18 @@ export default {
     };
   },
   computed: {
-    selector: function() {
+    selector() {
       const { path } = this.$route.params;
-      return path === "tickets"
-        ? "tickets"
-        : path === "segments"
-        ? "segments"
-        : path === "fare-paid"
-        ? "farePaid"
-        : "";
+      return path === 'tickets'
+        ? 'tickets'
+        : path === 'segments'
+        ? 'segments'
+        : path === 'fare-paid'
+        ? 'farePaid'
+        : '';
     },
-    selectorTotal: function() {
-      return this.selector ? `${this.selector}Total` : "";
+    selectorTotal() {
+      return this.selector ? `${this.selector}Total` : '';
     }
   },
   methods: {
@@ -117,7 +130,7 @@ export default {
       if (!this.annualized) {
         return columns.map((col, i) => {
           if (i === 0) {
-            return "TOTAL";
+            return 'TOTAL';
           } else if (i === lastIdx - 1) {
             return this.formatNumber(
               data.reduce((a, b) => a + b[this.selectorTotal], 0)
@@ -127,7 +140,7 @@ export default {
       } else {
         return columns.map((col, i) => {
           if (i === 0) {
-            return "TOTAL";
+            return 'TOTAL';
           } else if (i === lastIdx - 1) {
             return this.formatNumber(
               data.reduce(
@@ -149,8 +162,8 @@ export default {
     },
     tableRowClassName() {
       if (this.annualized) {
-        return "active";
-      } else return "";
+        return 'active';
+      } else return '';
     },
     calcRowTotal(row) {
       const multiplier = 12 / row.annMonths;
@@ -163,39 +176,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-@import "@/styles/global.scss";
-.annualize-container {
-  display: flex;
-  height: 40px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.enable-annualization {
-  display: flex;
-  align-items: center;
-  p {
-    margin-right: 10%;
-  }
-}
-
-.active {
-  color: $tree-poppy;
-}
-
-.annualize-controls {
-  display: flex;
-  .el-input {
-    width: 65px;
-
-    &:focus {
-      border: 1px solid $tree-poppy;
-    }
-  }
-  button {
-    margin-left: 10px;
-  }
-}
-</style>

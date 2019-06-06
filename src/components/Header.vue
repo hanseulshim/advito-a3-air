@@ -78,7 +78,7 @@ export default {
       }
     }
   },
-  data: function() {
+  data() {
     return {
       selected: null,
       clientList: [],

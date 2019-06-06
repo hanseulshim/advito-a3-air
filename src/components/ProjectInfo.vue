@@ -88,7 +88,7 @@ export default {
     };
   },
   computed: {
-    path: function() {
+    path() {
       const path = this.$route.path;
       if (path.includes('program-settings')) {
         return 'Show Settings Info';

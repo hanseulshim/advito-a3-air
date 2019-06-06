@@ -39,6 +39,7 @@
     </div>
     <el-table
       ref="pricingTermList"
+      v-loading="$apollo.loading"
       :data="filteredPricingTermList"
       :row-class-name="tableRowClassName"
     >
@@ -329,7 +330,7 @@ export default {
     };
   },
   computed: {
-    filteredPricingTermList: function() {
+    filteredPricingTermList() {
       return this.pricingTermList
         .filter(term => this.showInactive || term.effectiveEndDate > new Date())
         .map(term => ({
