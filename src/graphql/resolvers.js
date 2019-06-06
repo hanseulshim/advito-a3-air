@@ -14,9 +14,17 @@ export default {
       });
       return null;
     },
-    updateProject: (_, { project = defaults.project }, { cache }) => {
+    updateProject: (
+      _,
+      { project = defaults.project, route = 'program-settings' },
+      { cache }
+    ) => {
       if (project.id) {
-        router.push('/project/program-settings');
+        if (route.includes('contracts')) {
+          router.push(`/project/${project.id}/contracts`);
+        } else {
+          router.push(`/project/${project.id}/${route}`);
+        }
       } else {
         router.push('/');
       }

@@ -1,12 +1,15 @@
 <template>
   <div>
     <div class="contracts-navigation-container">
-      <router-link class="nav-item contract-item" to="/project/contracts">
+      <router-link
+        class="nav-item contract-item"
+        :to="`/project/${$route.params.projectId}/contracts`"
+      >
         <span class="nav-title">All Contracts</span>
       </router-link>
       <router-link
         class="nav-item contract-item"
-        to="/project/contracts/pricing-terms"
+        :to="`/project/${$route.params.projectId}/contracts/pricing-terms`"
         :class="{ active: $route.path.includes('pricing-terms') }"
       >
         <span class="data-icon">
@@ -16,7 +19,7 @@
       </router-link>
       <router-link
         class="nav-item contract-item"
-        to="/project/contracts/target-terms"
+        :to="`/project/${$route.params.projectId}/contracts/target-terms`"
         :class="{ active: $route.path.includes('target-terms') }"
       >
         <span class="data-icon">

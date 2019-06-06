@@ -26,7 +26,7 @@ export default new Router({
       component: AirManager
     },
     {
-      path: '/project',
+      path: '/project/:projectId',
       name: 'project',
       component: Project,
       children: [

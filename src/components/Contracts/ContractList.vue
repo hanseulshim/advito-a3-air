@@ -44,9 +44,9 @@
         :sort-orders="['ascending', 'descending']"
         sort-by="round"
       >
-        <template slot-scope="props">{{
-          props.row.round ? props.row.round : '—'
-        }}</template>
+        <template slot-scope="props">
+          {{ props.row.round ? props.row.round : '—' }}
+        </template>
       </el-table-column>
       <el-table-column
         label="Effective Dates"
@@ -77,9 +77,7 @@
             placement="top"
           >
             <div slot="content">{{ props.row.airlineList.join(', ') }}</div>
-            <span>
-              {{ props.row.airlineList.length }}
-            </span>
+            <span>{{ props.row.airlineList.length }}</span>
           </el-tooltip>
           <span v-else>
             {{
@@ -113,12 +111,14 @@
                     : props.row.pointOfSaleList.join('')
                 }}
               </span>
-              <span v-if="props.row.pointOfOriginList.length"> / </span>
-              <span>{{
-                props.row.pointOfOriginList.length > 1
-                  ? props.row.pointOfOriginList.length
-                  : props.row.pointOfOriginList.join('')
-              }}</span>
+              <span v-if="props.row.pointOfOriginList.length">/</span>
+              <span>
+                {{
+                  props.row.pointOfOriginList.length > 1
+                    ? props.row.pointOfOriginList.length
+                    : props.row.pointOfOriginList.join('')
+                }}
+              </span>
             </span>
           </el-tooltip>
           <span v-else>
@@ -143,7 +143,11 @@
             content="View Pricing Terms"
             placement="top"
           >
-            <router-link to="/project/contracts/pricing-terms">
+            <router-link
+              :to="
+                `/project/${$route.params.projectId}/contracts/pricing-terms`
+              "
+            >
               <button class="button number" @click="selectContract(props.row)">
                 {{ props.row.pricingTermCount }}
               </button>
@@ -154,7 +158,9 @@
       <el-table-column label="Target Terms" :min-width="contract.targetTerms">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="View Target Terms" placement="top">
-            <router-link to="/project/contracts/target-terms">
+            <router-link
+              :to="`/project/${$route.params.projectId}/contracts/target-terms`"
+            >
               <button class="button number" @click="selectContract(props.row)">
                 {{ props.row.targetTermCount }}
               </button>
@@ -168,17 +174,20 @@
             <i
               class="far fa-copy icon-spacer"
               @click="showCopyContractModal(props.row.id)"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip effect="dark" content="Edit Contract" placement="top">
             <i
               class="fas fa-pencil-alt icon-spacer"
               @click="showEditContractModal(props.row)"
-          /></el-tooltip>
+            />
+          </el-tooltip>
           <el-tooltip effect="dark" content="Delete Contract" placement="top">
             <i
               class="fas fa-trash-alt"
               @click="showDeleteContractModal(props.row.id)"
-          /></el-tooltip>
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>

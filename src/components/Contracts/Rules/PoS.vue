@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Travel Dates</p>
+    <p class="rule-title">Point of Sale</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -10,22 +10,20 @@
       Save
     </button>
     <div v-if="editMode" class="control-row">
-      <el-date-picker
-        v-model="startDate"
-        type="date"
+      <el-select
+        v-model="selectedCountry"
+        filterable
+        placeholder="Select"
         size="mini"
-        placeholder="Pick a day"
-        class="date-picker"
-        format="DD-MMM-yyyy"
-      ></el-date-picker>
-      <el-date-picker
-        v-model="endDate"
-        type="date"
-        size="mini"
-        placeholder="Pick a day"
-        class="date-picker"
-        format="DD-MMM-yyyy"
-      ></el-date-picker>
+        clearable
+      >
+        <el-option
+          v-for="item in countries"
+          :key="item.value"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
+      </el-select>
       <button class="button" @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -36,29 +34,31 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.start }} - {{ rule.end }}</el-tag
+        >{{ rule.code }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { formatDate } from '../../../helper';
+import { countries } from './helper';
 export default {
-  name: 'TravelDates',
+  name: 'PointOfSale',
   apollo: {},
   data() {
     return {
+      countries,
       editMode: false,
-      startDate: '',
-      endDate: '',
+      selectedCountry: '',
       rules: [
         {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
+          name: 'Great Britain',
+          code: 'GB',
+          id: 5
         },
         {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
+          name: 'United States',
+          code: 'USA',
+          id: 6
         }
       ]
     };
@@ -68,15 +68,16 @@ export default {
       this.editMode = !this.editMode;
     },
     createTag() {
-      const start = formatDate(this.startDate);
-      const end = formatDate(this.endDate);
+      const matched = this.countries.filter(
+        country => country.id === this.selectedCountry
+      )[0];
 
       this.rules.push({
-        start,
-        end
+        name: matched.name,
+        code: matched.code
       });
-      this.startDate = '';
-      this.endDate = '';
+
+      this.selectedCountry = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);

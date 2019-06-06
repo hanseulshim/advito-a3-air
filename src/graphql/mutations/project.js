@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { PROJECT } from '../constants';
 
 export const UPDATE_PROJECT = gql`
-  mutation updateProject($project: Project) {
-    updateProject(project: $project) @client
+  mutation updateProject($project: Project, $route: String) {
+    updateProject(project: $project, route: $route) @client
   }
 `;
 
