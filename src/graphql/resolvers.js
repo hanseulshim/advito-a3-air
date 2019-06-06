@@ -20,7 +20,11 @@ export default {
       { cache }
     ) => {
       if (project.id) {
-        router.push(`/project/${project.id}/${route}`);
+        if (route.includes('contracts')) {
+          router.push(`/project/${project.id}/contracts`);
+        } else {
+          router.push(`/project/${project.id}/${route}`);
+        }
       } else {
         router.push('/');
       }
