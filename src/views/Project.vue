@@ -7,10 +7,10 @@
         :to="nav.link"
         class="nav-item"
         :class="{ active: $route.path.includes(nav.path) }"
-        ><i class="fas fa-circle" :class="getStatus(nav.id)" />{{
-          nav.title
-        }}</router-link
       >
+        <i class="fas fa-circle" :class="getStatus(nav.id)" />
+        {{ nav.title }}
+      </router-link>
     </div>
     <div class="content-container">
       <ProjectInfo />
@@ -30,43 +30,47 @@ export default {
   data() {
     return {
       project: null,
-      navItems: [
+      projectStatusList: []
+    };
+  },
+  computed: {
+    navItems: function() {
+      const navItems = [
         {
           id: 1,
-          link: '/project/program-settings',
-          path: '/project/program-settings',
+          link: `/project/${this.project.id}/program-settings`,
+          path: `/project/${this.project.id}/program-settings`,
           title: 'project settings'
         },
         {
           id: 2,
-          link: '/project/data/import-errors/imported-tickets',
-          path: '/project/data',
+          link: `/project/${
+            this.project.id
+          }/data/import-errors/imported-tickets`,
+          path: `/project/${this.project.id}/data`,
           title: 'data'
         },
         {
           id: 3,
-          link: '/project/contracts',
-          path: '/project/contracts',
+          link: `/project/${this.project.id}/contracts`,
+          path: `/project/${this.project.id}/contracts`,
           title: 'contracts'
         },
         {
           id: 4,
-          link: '/project/scenario-settings',
-          path: '/project/scenario-settings',
+          link: `/project/${this.project.id}/scenario-settings`,
+          path: `/project/${this.project.id}/scenario-settings`,
           title: 'scenario settings'
         },
         {
           id: 5,
-          link: '/project/process',
-          path: '/project/process',
+          link: `/project/${this.project.id}/process`,
+          path: `/project/${this.project.id}/process`,
           title: 'process'
         }
-      ],
-      projectStatusList: []
-    };
-  },
-  mounted() {
-    if (!this.project.id) this.$router.push('/');
+      ];
+      return navItems;
+    }
   },
   apollo: {
     project: {

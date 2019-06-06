@@ -143,7 +143,10 @@ export default {
             return 'TOTAL';
           } else if (i === lastIdx - 1) {
             return this.formatNumber(
-              data.reduce((a, b) => a + b[this.selectorTotal] * b.annMonths, 0)
+              data.reduce(
+                (a, b) => a + b[this.selectorTotal] * (12 / b.annMonths),
+                0
+              )
             );
           }
         });
@@ -163,8 +166,9 @@ export default {
       } else return '';
     },
     calcRowTotal(row) {
+      const multiplier = 12 / row.annMonths;
       if (this.annualized) {
-        return this.formatNumber(row[this.selectorTotal] * row.annMonths);
+        return this.formatNumber(row[this.selectorTotal] * multiplier);
       } else {
         return this.formatNumber(row[this.selectorTotal]);
       }

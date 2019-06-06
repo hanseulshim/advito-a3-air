@@ -16,6 +16,8 @@
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import Modals from '@/components/Modals';
+import { GET_PROJECTS, GET_CLIENTS } from '@/graphql/queries';
+import { UPDATE_PROJECT, UPDATE_CLIENT } from '@/graphql/mutations';
 export default {
   name: 'App',
   components: {
@@ -23,10 +25,55 @@ export default {
     Sidebar,
     Modals
   },
+  apollo: {
+    projectList: {
+      query: GET_PROJECTS,
+      result({ data }) {
+        this.restoreState(data.projectList);
+      }
+    }
+  },
   data() {
     return {
-      password: 'air2019'
+      password: 'air2019',
+      projectList: [],
+      clientList: [],
+      client: null
     };
+  },
+  methods: {
+    async restoreState(projList) {
+      const path = this.$route.path;
+      const outsideUrl = path.includes('project');
+      if (outsideUrl) {
+        const splitPath = path.split('/');
+        const projectId = parseInt(splitPath[2]);
+        const route = splitPath.slice(3).join('/');
+
+        const matched = projList.filter(proj => proj.id === projectId)[0];
+        await this.$apollo.mutate({
+          mutation: UPDATE_PROJECT,
+          variables: {
+            project: matched,
+            route
+          }
+        });
+        const {
+          data: { clientList }
+        } = await this.$apollo.query({
+          query: GET_CLIENTS
+        });
+        const matchedClient = clientList.filter(
+          client => client.id === matched.clientId
+        )[0];
+        this.$apollo.mutate({
+          mutation: UPDATE_CLIENT,
+          variables: {
+            client: matchedClient
+          }
+        });
+      } else return;
+    }
   }
 };
 </script>

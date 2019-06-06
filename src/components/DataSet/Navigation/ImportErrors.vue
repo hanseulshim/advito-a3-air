@@ -3,30 +3,39 @@
     <i class="fas fa-chevron-up"></i>
     <router-link
       class="nav-item data-nav-item"
-      to="/project/data/import-errors/imported-tickets"
+      :to="
+        `/project/${
+          $route.params.projectId
+        }/data/import-errors/imported-tickets`
+      "
       :class="{
-        active: $route.path === '/project/data/import-errors/imported-tickets'
+        active: $route.path.includes('imported-tickets')
       }"
-      ><span>Imported Tickets</span></router-link
     >
+      <span>Imported Tickets</span>
+    </router-link>
     <span class="spacer">|</span>
     <router-link
       class="nav-item data-nav-item"
-      to="/project/data/import-errors/error-tickets"
+      :to="
+        `/project/${$route.params.projectId}/data/import-errors/error-tickets`
+      "
       :class="{
-        active: $route.path === '/project/data/import-errors/error-tickets'
+        active: $route.path.includes('error-tickets')
       }"
-      ><span>Error Tickets</span></router-link
     >
+      <span>Error Tickets</span>
+    </router-link>
     <span class="spacer">|</span>
     <router-link
       class="nav-item data-nav-item"
-      to="/project/data/import-errors/error-ratio"
+      :to="`/project/${$route.params.projectId}/data/import-errors/error-ratio`"
       :class="{
-        active: $route.path === '/project/data/import-errors/error-ratio'
+        active: $route.path.includes('error-ratio')
       }"
-      ><span>Error Ratio</span></router-link
     >
+      <span>Error Ratio</span>
+    </router-link>
   </div>
 </template>
 

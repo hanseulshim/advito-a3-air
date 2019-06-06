@@ -24,7 +24,8 @@
 .save-rule {
   position: absolute;
   right: 0;
-  top: 20%;
+  top: 10%;
+  width: 75px;
 }
 
 .rule-tags {
@@ -34,20 +35,28 @@
 
   .el-tag {
     margin-right: 1em;
+    margin-bottom: 1em;
   }
 }
 
 //DatePicker Styling. Ticketing Dates, Travel Dates,
 
-.datepicker-row {
+.control-row {
   display: flex;
   width: 75%;
+  align-items: center;
 
   .date-picker {
     margin-right: 1em;
   }
 
+  .el-select {
+    width: 50%;
+  }
+
   button {
     margin-left: 10px;
+    max-height: 2.5em;
+    width: 75px;
   }
 }

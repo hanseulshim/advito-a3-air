@@ -27,20 +27,27 @@
         ></el-option>
       </el-select>
     </div>
-    <TicketingDates />
-    <TravelDates />
+    <component
+      :is="rule.type"
+      v-for="rule in ruleList"
+      :key="rule.id"
+    ></component>
   </modal>
 </template>
 
 <script>
 import TicketingDates from '../../Rules/TicketingDates';
 import TravelDates from '../../Rules/TravelDates';
+import PointOfSale from '../../Rules/PoS';
+import PointOfOrigin from '../../Rules/PoO';
 export default {
   name: 'RulesModal',
   apollo: {},
   components: {
     TicketingDates,
-    TravelDates
+    TravelDates,
+    PointOfSale,
+    PointOfOrigin
   },
   data() {
     return {
@@ -51,15 +58,27 @@ export default {
       ruleList: [
         {
           id: 1,
-          type: 'ticketingDates',
+          type: 'TicketingDates',
           title: 'Ticketing Dates',
           active: true
         },
         {
           id: 2,
-          type: 'travelDates',
+          type: 'TravelDates',
           title: 'Travel Dates',
           active: false
+        },
+        {
+          id: 3,
+          type: 'PointOfSale',
+          title: 'Point Of Sale',
+          active: true
+        },
+        {
+          id: 4,
+          type: 'PointOfOrigin',
+          title: 'Point Of Origin',
+          active: true
         }
       ],
       selectedRule: ''
@@ -74,7 +93,6 @@ export default {
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
-      //   this.discount.name = name;
     },
     beforeClose() {}
   }
