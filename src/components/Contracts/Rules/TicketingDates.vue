@@ -10,6 +10,7 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
+        value-format="dd-MM-yyyy"
       ></el-date-picker>
       <el-date-picker
         v-model="endDate"
@@ -17,8 +18,9 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
+        value-format="dd-MM-yyyy"
       ></el-date-picker>
-      <button class="button">Add</button>
+      <button class="button" :click="createTag">Add</button>
     </div>
     <div class="rule-tags">
       <el-tag type="info" size="small" closable>04 JUN 2018 - 31 DEC 2019</el-tag>
@@ -41,7 +43,9 @@ export default {
   methods: {
     toggleEditMode() {
       this.editMode = !this.editMode;
-    }
+    },
+    createTag() {},
+    deleteTag(id) {}
   }
 };
 </script>
