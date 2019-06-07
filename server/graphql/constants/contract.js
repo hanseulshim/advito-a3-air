@@ -32,6 +32,7 @@ const PRICING_TERM = `id
 
 const TARGET_TERM = `id
         name
+        order
         effectiveFrom
         effectiveTo
         timeframe
@@ -52,7 +53,16 @@ const TARGET_TERM = `id
         ruleCount
         noteImportant
         noteContent
-        order
+        dpmPrice
+        dpmStartDate
+        baselineDateFrom
+        baselineDateTo
+        goalDateFrom
+        goalDateTo
+        airlineGroupFrom
+        airlineGroupTo
+        fareCategoryFrom
+        fareCategoryTo
   `;
 
 const TARGET_LEVEL = `id

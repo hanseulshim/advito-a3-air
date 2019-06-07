@@ -73,6 +73,7 @@ type DirectionType {
 type TargetTerm {
   id: Int
   name: String
+  order: Int
   effectiveFrom: Date
   effectiveTo: Date
   timeframe: Int
@@ -93,7 +94,16 @@ type TargetTerm {
   ruleCount: Int
   noteImportant: Boolean
   noteContent: Boolean
-  order: Int
+  dpmPrice: Float,
+  dpmStartDate: Date,
+  baselineDateFrom: Date,
+  baselineDateTo: Date,
+  goalDateFrom: Date,
+  goalDateTo: Date,
+  airlineGroupFrom: Date,
+  airlineGroupTo: Date,
+  fareCategoryFrom: Date,
+  fareCategoryTo: Date
 }
 type TargetLevel {
   id: Int
