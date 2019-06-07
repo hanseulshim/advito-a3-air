@@ -110,5 +110,6 @@ export const TARGET_TERM_LOOKUP = {
   SHARE_GAP: 24,
   NONE: 25,
   BACK_END: 26,
-  OTHER: 27
+  OTHER: 27,
+  KPG: 28
 };

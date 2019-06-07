@@ -191,8 +191,7 @@ export default {
       }
     },
     updateType(value) {
-      const [type] = this.contractTypeList.filter(c => c.id === value);
-      if (type.name !== 'Proposal') {
+      if (value !== CONTRACT_LOOKUP.PROPOSAL) {
         this.form.round = null;
       }
     },
