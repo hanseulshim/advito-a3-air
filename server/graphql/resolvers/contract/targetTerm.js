@@ -10,7 +10,10 @@ const {
 
 exports.targetTerm = {
   Query: {
-    targetTermList: () => [],
+    targetTermList: async (_, { contractId }, { db }) => {
+      await db.raw(`SELECT * from targetterm_getlist(${contractId})`);
+      return [];
+    },
     targetLevelList: (_, { targetTermId }) =>
       targetLevelList.filter(t => t.targetTermId === targetTermId),
     targetTypeList: async (_, __, { db }) =>

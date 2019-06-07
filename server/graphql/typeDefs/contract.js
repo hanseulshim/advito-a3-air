@@ -141,7 +141,7 @@ extend type Query {
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
 
-  targetTermList: [TargetTerm] @auth
+  targetTermList(contractId: Int): [TargetTerm] @auth
   targetLevelList(targetTermId: Int): [TargetLevel] @auth
   targetTypeList: [TargetType] @auth
   incentiveTypeList: [IncentiveType] @auth
