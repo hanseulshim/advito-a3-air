@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navigation :selected-contract="selectedContract" />
+    <Navigation />
     <div class="title-row space-between">
       <div class="section-header">
         <el-tooltip v-if="checkQc" placement="top" effect="light">
@@ -266,12 +266,6 @@ export default {
     EditTargetTermModal,
     DeleteTargetTermModal,
     TargetTermNoteModal
-  },
-  props: {
-    selectedContract: {
-      type: Object,
-      required: true
-    }
   },
   apollo: {
     targetTermList: {

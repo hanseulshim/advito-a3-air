@@ -69,6 +69,7 @@ import {
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
 } from '@/graphql/queries';
+import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { COPY_DISCOUNT } from '@/graphql/mutations';
 export default {
   name: 'CopyDiscountModal',
@@ -186,7 +187,9 @@ export default {
       this.form.name = name;
       this.form.discountTypeId = discountTypeId;
       this.form.discountValue =
-        discountTypeId === 2 ? discountValue * 100 : discountValue;
+        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+          ? discountValue * 100
+          : discountValue;
       this.form.journeyTypeId = journeyTypeId;
       this.form.directionTypeId = directionTypeId;
     },

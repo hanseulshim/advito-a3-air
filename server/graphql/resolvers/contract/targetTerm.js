@@ -1,3 +1,4 @@
+const { TARGET_TERM_LOOKUP } = require('../../constants');
 const { ApolloError } = require('apollo-server-lambda');
 const {
   targetTermList,
@@ -9,11 +10,23 @@ const {
 
 exports.targetTerm = {
   Query: {
-    targetTermList: () => targetTermList.filter(term => !term.isDeleted),
+    targetTermList: () => [],
     targetLevelList: (_, { targetTermId }) =>
       targetLevelList.filter(t => t.targetTermId === targetTermId),
-    targetTypeList: () => targetTypeList,
-    incentiveTypeList: () => incentiveTypeList
+    targetTypeList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', TARGET_TERM_LOOKUP.TARGET_TYPE),
+    incentiveTypeList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', TARGET_TERM_LOOKUP.INCENTIVE_TYPE)
   },
   Mutation: {
     createTargetTerm: (

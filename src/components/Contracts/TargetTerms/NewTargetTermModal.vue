@@ -32,6 +32,16 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="Currency *" prop="currency">
+        <el-select v-model="form.currency" class="select-modal">
+          <el-option
+            v-for="item in currencyList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="Cabins *">
         <el-checkbox v-model="form.cabinF">F</el-checkbox>
         <el-checkbox v-model="form.cabinB">B</el-checkbox>
@@ -50,7 +60,8 @@
       </el-form-item>
       <el-form-item label="Served Market QSI Threshold *" prop="qsi">
         <div class="qsi-input-container">
-          <el-input v-model.number="form.qsi" /><span>%</span>
+          <el-input v-model.number="form.qsi" />
+          <span>%</span>
         </div>
       </el-form-item>
       <el-form-item label="Soft Target?">
@@ -73,8 +84,10 @@
 import {
   GET_TARGET_TERM_LIST,
   GET_TARGET_TYPE_LIST,
-  GET_INCENTIVE_TYPE_LIST
+  GET_INCENTIVE_TYPE_LIST,
+  GET_CURRENCY_LIST
 } from '@/graphql/queries';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import { CREATE_TARGET_TERM } from '@/graphql/mutations';
 export default {
   name: 'NewTargetTermModal',
@@ -84,20 +97,25 @@ export default {
     },
     incentiveTypeList: {
       query: GET_INCENTIVE_TYPE_LIST
+    },
+    currencyList: {
+      query: GET_CURRENCY_LIST
     }
   },
   data() {
     return {
       targetTypeList: [],
       incentiveTypeList: [],
+      currencyList: [],
       form: {
         name: null,
         targetTypeId: null,
+        currency: null,
         cabinF: false,
         cabinB: false,
         cabinP: false,
         cabinE: false,
-        incentiveTypeId: 3,
+        incentiveTypeId: TARGET_TERM_LOOKUP.NONE,
         qsi: null,
         softTarget: null,
         internalTarget: null,
@@ -115,6 +133,13 @@ export default {
           {
             required: true,
             message: 'Please select a target type.',
+            trigger: 'change'
+          }
+        ],
+        currency: [
+          {
+            required: true,
+            message: 'Please select a currency.',
             trigger: 'change'
           }
         ],
@@ -173,11 +198,12 @@ export default {
     beforeClose() {
       this.form.name = null;
       this.form.targetTypeId = null;
+      this.form.currency = null;
       this.form.cabinF = false;
       this.form.cabinB = false;
       this.form.cabinP = false;
       this.form.cabinE = false;
-      this.form.incentiveTypeId = 3;
+      this.form.incentiveTypeId = TARGET_TERM_LOOKUP.NONE;
       this.form.qsi = null;
       this.form.softTarget = null;
       this.form.internalTarget = null;

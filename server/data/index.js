@@ -22,7 +22,8 @@ const {
   discountList,
   discountTypeList,
   journeyTypeList,
-  directionTypeList
+  directionTypeList,
+  targetLevelList
 } = require('./contract');
 const { userList } = require('./user');
 const { process } = require('./process');
@@ -49,6 +50,7 @@ module.exports = {
   discountTypeList,
   journeyTypeList,
   directionTypeList,
+  targetLevelList,
   userList,
   process
 };

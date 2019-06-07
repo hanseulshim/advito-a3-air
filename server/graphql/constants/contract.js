@@ -31,46 +31,28 @@ const PRICING_TERM = `id
         discountCount`;
 
 const TARGET_TERM = `id
-      name
-      effectiveStartDate
-      effectiveEndDate
-      timeframe
-      qc
-      targetType {
-        id
         name
-      }
-      cabinF
-      cabinB
-      cabinP
-      cabinE
-      qsi
-      incentiveType {
-        id
-        name
-      }
-      softTarget
-      order
-      internalTarget
-      targetAmount
-      levelTotal
-      ruleTotal
-      note {
-        important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
-        }
-      }
+        effectiveFrom
+        effectiveTo
+        timeframe
+        qc
+        targetTypeId
+        targetTypeName
+        cabinF
+        cabinB
+        cabinP
+        cabinE
+        qsi
+        incentiveTypeId
+        incentiveTypeName
+        softTarget
+        internalTarget
+        targetAmount
+        levelCount
+        ruleCount
+        noteImportant
+        noteContent
+        order
   `;
 
 const TARGET_LEVEL = `id
@@ -118,11 +100,25 @@ const DISCOUNT_LOOKUP = {
   DIRECTION_TYPE: 5
 };
 
+const TARGET_TERM_LOOKUP = {
+  TARGET_TYPE: 6,
+  INCENTIVE_TYPE: 7,
+  SEGMENT_SHARE: 20,
+  REVENUE_SHARE: 21,
+  SEGMENT: 22,
+  REVENUE: 23,
+  SHARE_GAP: 24,
+  NONE: 25,
+  BACK_END: 26,
+  OTHER: 27
+};
+
 module.exports = {
   CONTRACT,
   PRICING_TERM,
   DISCOUNT,
   TARGET_TERM,
+  TARGET_TERM_LOOKUP,
   TARGET_LEVEL,
   NOTE,
   CONTRACT_LOOKUP,

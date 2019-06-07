@@ -33,3 +33,13 @@ export const GET_BOOKING_CLASS_LIST = gql`
     }
   }
 `;
+
+export const GET_CURRENCY_LIST = gql`
+  {
+    currencyList {
+      id
+      name
+      code
+    }
+  }
+`;

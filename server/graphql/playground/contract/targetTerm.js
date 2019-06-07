@@ -13,6 +13,14 @@ exports.targetTerm = {
       targetLevelList(targetTermId: 1) {
         ${TARGET_LEVEL}
       }
+      targetTypeList {
+        id
+        name
+      }
+      incentiveTypeList {
+        id
+        name
+      }
     }`
   },
   mutations: {

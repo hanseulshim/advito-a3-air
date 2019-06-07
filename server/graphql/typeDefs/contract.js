@@ -73,25 +73,27 @@ type DirectionType {
 type TargetTerm {
   id: Int
   name: String
-  effectiveStartDate: Date
-  effectiveEndDate: Date
+  effectiveFrom: Date
+  effectiveTo: Date
   timeframe: Int
   qc: Float
-  targetType: TargetType
+  targetTypeId: Int
+  targetTypeName: String
   cabinF: Boolean
   cabinB: Boolean
   cabinP: Boolean
   cabinE: Boolean
   qsi: Float
-  incentiveType: IncentiveType
+  incentiveTypeId: Int
+  incentiveTypeName: String
   softTarget: Boolean
   internalTarget: Boolean
   targetAmount: Float
-  levelTotal: Int
-  ruleTotal: Int
-  note: Note
+  levelCount: Int
+  ruleCount: Int
+  noteImportant: Boolean
+  noteContent: Boolean
   order: Int
-  isDeleted: Boolean
 }
 type TargetLevel {
   id: Int
