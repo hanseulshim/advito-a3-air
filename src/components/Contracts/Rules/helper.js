@@ -20,3 +20,22 @@ export const countries = [
     id: 4
   }
 ];
+
+export const ruleTypes = [
+  {
+    value: 'TicketingDates',
+    label: 'Ticketing Dates'
+  },
+  {
+    value: 'TravelDates',
+    label: 'Travel Dates'
+  },
+  {
+    value: 'PointOfOrigin',
+    label: 'Point of Origin'
+  },
+  {
+    value: 'PointOfSale',
+    label: 'Point Of Sale'
+  }
+];
