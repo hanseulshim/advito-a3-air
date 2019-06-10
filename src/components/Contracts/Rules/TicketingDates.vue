@@ -16,7 +16,7 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="DD-MMM-yyyy"
+        format="dd-MMM-yyyy"
       ></el-date-picker>
       <el-date-picker
         v-model="endDate"
@@ -24,9 +24,12 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="DD-MMM-yyyy"
+        format="dd-MMM-yyyy"
       ></el-date-picker>
-      <button class="button" @click="createTag">Add</button>
+      <button v-if="!updateRule" class="button" @click="createTag">Add</button>
+      <button v-if="updateRule" class="button" @click="updateTag">
+        Update
+      </button>
     </div>
     <div class="rule-tags">
       <el-tag
@@ -36,6 +39,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
+        @click="editTag(rule)"
         >{{ rule.start }} - {{ rule.end }}</el-tag
       >
     </div>
@@ -51,6 +55,7 @@ export default {
       editMode: false,
       startDate: '',
       endDate: '',
+      updateRule: null,
       rules: [
         {
           start: '04 JUN 2018',
@@ -66,6 +71,9 @@ export default {
   methods: {
     toggleEditMode() {
       this.editMode = !this.editMode;
+      this.startDate = '';
+      this.endDate = '';
+      this.updateRule = null;
     },
     createTag() {
       const start = formatDate(this.startDate);
@@ -80,6 +88,21 @@ export default {
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
+    },
+    editTag(rule) {
+      if (this.editMode) {
+        this.updateRule = rule;
+        this.startDate = new Date(rule.start);
+        this.endDate = new Date(rule.end);
+      } else return;
+    },
+    updateTag() {
+      const ruleIndex = this.rules.indexOf(this.updateRule);
+      this.rules[ruleIndex].start = formatDate(this.startDate);
+      this.rules[ruleIndex].end = formatDate(this.endDate);
+      this.updateRule = null;
+      this.startDate = '';
+      this.endDate = '';
     }
   }
 };

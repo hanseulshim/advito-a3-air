@@ -16,6 +16,7 @@
         placeholder="Select"
         size="mini"
         clearable
+        multiple
       >
         <el-option
           v-for="item in countries"
@@ -48,7 +49,7 @@ export default {
     return {
       countries,
       editMode: false,
-      selectedCountry: '',
+      selectedCountry: [],
       rules: [
         {
           name: 'Great Britain',
@@ -68,16 +69,17 @@ export default {
       this.editMode = !this.editMode;
     },
     createTag() {
-      const matched = this.countries.filter(
-        country => country.id === this.selectedCountry
-      )[0];
+      this.selectedCountry.map(country => {
+        let matched = this.countries.filter(v => v.id === country)[0];
 
-      this.rules.push({
-        name: matched.name,
-        code: matched.code
+        this.rules.push({
+          name: matched.name,
+          code: matched.code,
+          id: matched.id
+        });
       });
 
-      this.selectedCountry = '';
+      this.selectedCountry = [];
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
