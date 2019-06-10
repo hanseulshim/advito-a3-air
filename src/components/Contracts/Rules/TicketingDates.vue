@@ -88,6 +88,9 @@ export default {
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
+      if (!this.rules.length) {
+        this.$emit('delete-rule', 'TicketingDates');
+      }
     },
     editTag(rule) {
       if (this.editMode) {

@@ -83,6 +83,9 @@ export default {
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
+      if (!this.rules.length) {
+        this.$emit('delete-rule', 'PointOfSale');
+      }
     }
   }
 };

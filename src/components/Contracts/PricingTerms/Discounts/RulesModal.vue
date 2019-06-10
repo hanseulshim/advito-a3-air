@@ -32,6 +32,7 @@
       :is="rule.type"
       v-for="rule in ruleList"
       :key="rule.id"
+      @delete-rule="deleteRule"
     ></component>
   </modal>
 </template>
@@ -90,6 +91,10 @@ export default {
         type: selected
       });
       this.selectedRule = '';
+    },
+    deleteRule(ruleType) {
+      const matched = this.ruleList.filter(rule => rule.type === ruleType)[0];
+      this.ruleList.splice(this.ruleList.indexOf(matched), 1);
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
