@@ -18,12 +18,13 @@
         v-model="selectedRule"
         placeholder="Create New Rule"
         size="small"
+        @change="createRule"
       >
         <el-option
-          v-for="rule in ruleList"
-          :key="rule.id"
-          :label="rule.title"
-          :value="rule.type"
+          v-for="rule in rulesInDropdown"
+          :key="rule.index"
+          :label="rule.label"
+          :value="rule.value"
         ></el-option>
       </el-select>
     </div>
@@ -40,6 +41,7 @@ import TicketingDates from '../../Rules/TicketingDates';
 import TravelDates from '../../Rules/TravelDates';
 import PointOfSale from '../../Rules/PoS';
 import PointOfOrigin from '../../Rules/PoO';
+import { ruleTypes } from '../../Rules/helper';
 export default {
   name: 'RulesModal',
   apollo: {},
@@ -54,7 +56,7 @@ export default {
       discount: {
         name: ''
       },
-      ruleTypes: [''],
+      ruleTypes: ruleTypes,
       ruleList: [
         {
           id: 1,
@@ -67,29 +69,27 @@ export default {
           type: 'TravelDates',
           title: 'Travel Dates',
           active: false
-        },
-        {
-          id: 3,
-          type: 'PointOfSale',
-          title: 'Point Of Sale',
-          active: true
-        },
-        {
-          id: 4,
-          type: 'PointOfOrigin',
-          title: 'Point Of Origin',
-          active: true
         }
       ],
       selectedRule: ''
     };
   },
+  computed: {
+    rulesInDropdown: function() {
+      return this.ruleTypes.filter(
+        rule => !this.ruleList.some(v => v.type === rule.value)
+      );
+    }
+  },
   methods: {
     hideModal() {
       this.$modal.hide('rules');
     },
-    validateForm() {
-      // console.log('validated!');
+    createRule(selected) {
+      this.ruleList.push({
+        type: selected
+      });
+      this.selectedRule = '';
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
