@@ -6,7 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="toggleEditMode"
     />
-    <button v-if="editMode" class="button save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -22,10 +22,10 @@
           v-for="item in countries"
           :key="item.value"
           :label="item.name"
-          :value="item.id"
+          :value="item.name"
         ></el-option>
       </el-select>
-      <button class="button" @click="createTag">Add</button>
+      <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
       <el-tag
@@ -50,32 +50,23 @@ export default {
       countries,
       editMode: false,
       selectedCountry: [],
-      rules: [
-        {
-          name: 'Great Britain',
-          code: 'GB',
-          id: 5
-        },
-        {
-          name: 'United States',
-          code: 'USA',
-          id: 6
-        }
-      ]
+      rules: []
     };
   },
   methods: {
     toggleEditMode() {
+      if (this.editMode && !this.rules.length) {
+        this.$emit('delete-rule', 'Market');
+      }
       this.editMode = !this.editMode;
     },
     createTag() {
       this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.id === country)[0];
+        let matched = this.countries.filter(v => v.name === country)[0];
 
         this.rules.push({
           name: matched.name,
-          code: matched.code,
-          id: matched.id
+          code: matched.code
         });
       });
 

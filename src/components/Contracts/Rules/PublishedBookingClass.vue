@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Point of Origin</p>
+    <p class="rule-title">Published Booking Class</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -11,7 +11,7 @@
     </button>
     <div v-if="editMode" class="control-row">
       <el-select
-        v-model="selectedCountry"
+        v-model="selectedClass"
         filterable
         placeholder="Select"
         size="mini"
@@ -19,39 +19,63 @@
         multiple
       >
         <el-option
-          v-for="item in countries"
-          :key="item.value"
-          :label="item.name"
-          :value="item.name"
+          v-for="item in classes"
+          :key="item"
+          :label="item"
+          :value="item"
         ></el-option>
       </el-select>
+      <label for="exclude"> Exclude: </label>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
+      <label v-if="includedRules.length">Included:</label>
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in includedRules"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ rule.name }}</el-tag
+      >
+    </div>
+    <div class="rule-tags">
+      <label v-if="excludedRules.length">Excluded:</label>
+      <el-tag
+        v-for="rule in excludedRules"
+        :key="rule.index"
+        type="info"
+        size="small"
+        closable
+        @close="deleteTag(rule)"
+        >{{ rule.name }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { countries } from './helper';
+import { classes } from './helper';
 export default {
-  name: 'PointOfOrigin',
+  name: 'PublishedBookingClass',
   apollo: {},
   data() {
     return {
-      countries,
+      classes,
+      exclude: false,
       editMode: false,
-      selectedCountry: [],
+      selectedClass: [],
       rules: []
     };
+  },
+  computed: {
+    excludedRules: function() {
+      return this.rules.filter(rule => rule.exclude);
+    },
+    includedRules: function() {
+      return this.rules.filter(rule => !rule.exclude);
+    }
   },
   methods: {
     toggleEditMode() {
@@ -61,21 +85,19 @@ export default {
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.name === country)[0];
-
+      this.selectedClass.map(v => {
         this.rules.push({
-          name: matched.name,
-          code: matched.code
+          name: v,
+          exclude: this.exclude
         });
       });
 
-      this.selectedCountry = [];
+      this.selectedClass = [];
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'PointOfOrigin');
+        this.$emit('delete-rule', 'PublishedBookingClass');
       }
     }
   }
