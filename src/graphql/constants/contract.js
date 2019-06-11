@@ -46,6 +46,7 @@ export const TARGET_TERM = `id
         qsi
         incentiveTypeId
         incentiveTypeName
+        currencyId
         softTarget
         internalTarget
         targetAmount

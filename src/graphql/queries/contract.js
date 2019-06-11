@@ -123,8 +123,16 @@ export const GET_NOTE_LIST = gql`
 `;
 
 export const GET_TARGET_TERM_LIST = gql`
-{
-  targetTermList {
+query targetTermList($contractId: Int) {
+  targetTermList(contractId: $contractId) {
+    ${TARGET_TERM}
+  }
+}
+`;
+
+export const GET_TARGET_TERM = gql`
+query targetTerm($id: Int!) {
+  targetTerm(id: $id) {
     ${TARGET_TERM}
   }
 }

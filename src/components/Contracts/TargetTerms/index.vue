@@ -87,7 +87,7 @@
         :formatter="formatDate"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveEndDate"
+        sort-by="effectiveTo"
       />
       <el-table-column
         sortable
@@ -128,7 +128,7 @@
       </el-table-column>
       <el-table-column
         label="Type"
-        prop="targetType.name"
+        prop="targetTypeName"
         :min-width="term.targetType"
         sortable
         :sort-orders="['ascending', 'descending']"
@@ -153,19 +153,19 @@
       />
       <el-table-column
         label="Incentive"
-        prop="incentiveType.name"
+        prop="incentiveTypeName"
         :min-width="term.incentiveType"
         sortable
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         label="Levels"
-        prop="levelTotal"
+        prop="levelCount"
         :min-width="term.levels"
       />
-      <el-table-column label="Rules" prop="ruleTotal" :min-width="term.rules">
+      <el-table-column label="Rules" prop="ruleCount" :min-width="term.rules">
         <template slot-scope="props">
-          <button class="button number">{{ props.row.ruleTotal }}</button>
+          <button class="button number">{{ props.row.ruleCount }}</button>
         </template>
       </el-table-column>
       <el-table-column
@@ -176,36 +176,15 @@
         :sort-orders="['ascending', 'descending']"
       >
         <template slot-scope="props">
-          <el-tooltip
-            v-if="props.row.note && props.row.note.noteList.length"
-            effect="dark"
-            content="Show Note"
-            placement="top"
-          >
-            <div class="note-count-container">
-              <i
-                class="fas fa-sticky-note"
-                :class="{ important: props.row.note.important }"
-                @click="toggleNoteModal(props.row)"
-              />
-              <!-- <span class="note-count sub-content empty">{{
-                getNoteLength(props.row.discountList)
-              }}</span> -->
-            </div>
-          </el-tooltip>
-          <el-tooltip v-else effect="dark" content="Show Note" placement="top">
-            <div class="note-count-container">
-              <i
-                class="far fa-sticky-note"
-                :class="{
-                  important: props.row.note && props.row.note.important
-                }"
-                @click="toggleNoteModal(props.row)"
-              />
-              <!-- <span class="note-count sub-content">{{
-                getNoteLength(props.row.discountList)
-              }}</span> -->
-            </div>
+          <el-tooltip effect="dark" content="Show Note" placement="top">
+            <i
+              class="fa-sticky-note"
+              :class="[
+                { important: props.row.noteImportant },
+                props.row.noteContent ? 'fas' : 'far'
+              ]"
+              @click="toggleNoteModal(props.row)"
+            />
           </el-tooltip>
         </template>
       </el-table-column>
@@ -248,7 +227,7 @@
 import Navigation from '../Navigation';
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { term } from '@/config';
-import { GET_TARGET_TERM_LIST } from '@/graphql/queries';
+import { GET_SELECTED_CONTRACT, GET_TARGET_TERM_LIST } from '@/graphql/queries';
 import { TOGGLE_TARGET_TERM_QC } from '@/graphql/mutations';
 import TargetLevel from './TargetLevel';
 import NewTargetTermModal from './NewTargetTermModal';
@@ -268,12 +247,21 @@ export default {
     TargetTermNoteModal
   },
   apollo: {
+    selectedContract: {
+      query: GET_SELECTED_CONTRACT
+    },
     targetTermList: {
-      query: GET_TARGET_TERM_LIST
+      query: GET_TARGET_TERM_LIST,
+      variables() {
+        return {
+          contractId: this.selectedContract.id
+        };
+      }
     }
   },
   data() {
     return {
+      selectedContract: {},
       targetTermList: [],
       showInactive: false,
       bulkActionId: null,
@@ -310,10 +298,10 @@ export default {
   computed: {
     filteredTargetTermList() {
       return this.targetTermList
-        .filter(term => this.showInactive || term.effectiveEndDate > new Date())
+        .filter(term => this.showInactive || term.effectiveTo > new Date())
         .map(term => ({
           ...term,
-          inactive: term.effectiveEndDate < new Date()
+          inactive: term.effectiveTo < new Date()
         }));
     }
   },
@@ -322,8 +310,8 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return `${formatDate(row.effectiveStartDate)} — ${formatDate(
-        row.effectiveEndDate
+      return `${formatDate(row.effectiveFrom)} — ${formatDate(
+        row.effectiveTo
       )}`;
     },
     formatPercent(num) {
@@ -347,21 +335,29 @@ export default {
       }
     },
     showNewTargetTermModal() {
-      this.$modal.show('new-target-term');
+      this.$modal.show('new-target-term', {
+        contractId: this.selectedContract.id
+      });
     },
     showCopyTargetTermModal(targetTerm) {
-      this.$modal.show('copy-target-term', { targetTerm });
+      this.$modal.show('copy-target-term', {
+        contractId: this.selectedContract.id,
+        targetTerm
+      });
     },
     showEditTargetTermModal(targetTerm) {
       this.$modal.show('edit-target-term', { targetTerm });
     },
     showDeleteTargetTermModal(idList) {
-      this.$modal.show('delete-target-term', { idList });
+      this.$modal.show('delete-target-term', {
+        contractId: this.selectedContract.id,
+        idList
+      });
     },
     toggleNoteModal(targetTerm) {
       this.$modal.show('save-target-term-note', {
-        id: targetTerm.id,
-        note: targetTerm.note
+        parentId: targetTerm.id,
+        important: targetTerm.noteImportant
       });
     },
     bulkAction(value) {
@@ -388,30 +384,19 @@ export default {
       }
     },
     sortByNote(a, b) {
-      if (a.note === null && b.note === null) {
+      if (a.noteImportant && !b.noteImportant) {
+        return -1;
+      } else if (a.noteImportant && b.noteImportant) {
+        return 0;
+      } else if (!a.noteImportant && b.noteImportant) {
+        return 1;
+      } else if (a.noteContent && !b.noteContent) {
+        return -1;
+      } else if (!a.noteContent && b.noteContent) {
+        return 1;
+      } else if (a.noteContent && b.noteContent) {
         return 0;
       }
-      if (b.note === null && a.note !== null) {
-        return -1;
-      }
-      if (a.note === null && b.note !== null) {
-        return 1;
-      }
-      if (a.note.important && !b.note.important) {
-        return -1;
-      }
-      if (!a.note.important && b.note.important) {
-        return 1;
-      }
-      if (a.note.length > b.note.length) {
-        return -1;
-      }
-    },
-    getNoteLength(discountList) {
-      const length = discountList.filter(
-        discount => discount.note && discount.note.noteList.length
-      ).length;
-      return length ? length : null;
     }
   }
 };

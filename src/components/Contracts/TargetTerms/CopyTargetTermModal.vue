@@ -31,12 +31,13 @@
 </template>
 
 <script>
-import { GET_TARGET_TERM_LIST } from '@/graphql/queries';
+import { GET_TARGET_TERM_LIST, GET_CONTRACT } from '@/graphql/queries';
 import { COPY_TARGET_TERM } from '@/graphql/mutations';
 export default {
   name: 'CopyTargetTermModal',
   data() {
     return {
+      contractId: null,
       form: {
         id: null,
         name: null
@@ -72,17 +73,26 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const targetTerm = data.data.copyTargetTerm;
-            const newData = store.readQuery({
-              query: GET_TARGET_TERM_LIST
-            });
-            newData.targetTermList.push(targetTerm);
-            store.writeQuery({
+          update: (store, { data: { copyTargetTerm } }) => {
+            const query = {
               query: GET_TARGET_TERM_LIST,
-              data: newData
+              variables: {
+                contractId: this.contractId
+              }
+            };
+            const data = store.readQuery(query);
+            data.targetTermList.push(copyTargetTerm);
+            store.writeQuery({
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT,
+              variables: { id: this.contractId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Target Term successfully created.',
@@ -96,10 +106,12 @@ export default {
     },
     beforeOpen(event) {
       const { id, name } = event.params.targetTerm;
+      this.contractId = event.params.contractId;
       this.form.id = id;
       this.form.name = name;
     },
     beforeClose() {
+      this.contractId = null;
       this.form.id = null;
       this.form.name = null;
     }

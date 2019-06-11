@@ -51,6 +51,7 @@ const TARGET_TERM = `id
         targetAmount
         levelCount
         ruleCount
+        currencyId
         noteImportant
         noteContent
         dpmPrice

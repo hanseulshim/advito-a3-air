@@ -18,14 +18,7 @@ const {
   dataSetDivisionList,
   dataSetColumnList
 } = require('./dataSet');
-const {
-  discountList,
-  discountTypeList,
-  journeyTypeList,
-  directionTypeList,
-  targetLevelList
-} = require('./contract');
-const { userList } = require('./user');
+const { targetLevelList } = require('./contract');
 const { process } = require('./process');
 
 module.exports = {
@@ -46,11 +39,6 @@ module.exports = {
   posList,
   travelSectorCollectionList,
   travelSectorRegionList,
-  discountList,
-  discountTypeList,
-  journeyTypeList,
-  directionTypeList,
   targetLevelList,
-  userList,
   process
 };

@@ -3,6 +3,7 @@
     classes="modal-container"
     name="new-target-term"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
@@ -42,9 +43,9 @@
             form.targetTypeId === TARGET_TERM_LOOKUP.KPG
         "
         label="Currency *"
-        prop="currency"
+        prop="currencyId"
       >
-        <el-select v-model="form.currency" class="select-modal">
+        <el-select v-model="form.currencyId" class="select-modal">
           <el-option
             v-for="item in currencyList"
             :key="item.id"
@@ -115,7 +116,7 @@
         label="DPM Price *"
         prop="dpmPrice"
       >
-        <el-input v-model.number="form.dpmPrice" />
+        <el-input v-model="form.dpmPrice" />
       </el-form-item>
       <el-form-item
         v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG"
@@ -236,7 +237,8 @@ import {
   GET_TARGET_TERM_LIST,
   GET_TARGET_TYPE_LIST,
   GET_INCENTIVE_TYPE_LIST,
-  GET_CURRENCY_LIST
+  GET_CURRENCY_LIST,
+  GET_CONTRACT
 } from '@/graphql/queries';
 import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import { CREATE_TARGET_TERM } from '@/graphql/mutations';
@@ -260,9 +262,10 @@ export default {
       currencyList: [],
       TARGET_TERM_LOOKUP,
       form: {
+        contractId: null,
         name: null,
         targetTypeId: null,
-        currency: null,
+        currencyId: null,
         cabinF: false,
         cabinB: false,
         cabinP: false,
@@ -299,7 +302,7 @@ export default {
           }
         ],
         timeframe: [{ type: 'number', message: 'Timeframe must be a number' }],
-        currency: [
+        currencyId: [
           {
             required: true,
             message: 'Please select a currency.',
@@ -376,7 +379,7 @@ export default {
         value !== TARGET_TERM_LOOKUP.REVENUE &&
         value !== TARGET_TERM_LOOKUP.KPG
       ) {
-        this.form.currency = null;
+        this.form.currencyId = null;
       }
       if (
         value !== TARGET_TERM_LOOKUP.REVENUE &&
@@ -399,22 +402,34 @@ export default {
     },
     async createTargetTerm() {
       try {
+        if (this.form.dpmPrice) {
+          this.form.dpmPrice = parseFloat(this.form.dpmPrice);
+        }
         await this.$apollo.mutate({
           mutation: CREATE_TARGET_TERM,
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const targetTerm = data.data.createTargetTerm;
-            const newData = store.readQuery({
-              query: GET_TARGET_TERM_LIST
-            });
-            newData.targetTermList.push(targetTerm);
-            store.writeQuery({
+          update: (store, { data: { createTargetTerm } }) => {
+            const query = {
               query: GET_TARGET_TERM_LIST,
-              data: newData
+              variables: {
+                contractId: this.form.contractId
+              }
+            };
+            const data = store.readQuery(query);
+            data.targetTermList.push(createTargetTerm);
+            store.writeQuery({
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT,
+              variables: { id: this.form.contractId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Target Term successfully created.',
@@ -426,10 +441,13 @@ export default {
         });
       }
     },
+    beforeOpen(event) {
+      this.form.contractId = event.params.contractId;
+    },
     beforeClose() {
       this.form.name = null;
       this.form.targetTypeId = null;
-      this.form.currency = null;
+      this.form.currencyId = null;
       this.form.cabinF = false;
       this.form.cabinB = false;
       this.form.cabinP = false;

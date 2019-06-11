@@ -270,30 +270,54 @@ export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
 
 export const CREATE_TARGET_TERM = gql`
 mutation createTargetTerm(
+  $contractId: Int!
   $name: String!
   $targetTypeId: Int!
-  $cabinF: Boolean!
-  $cabinB: Boolean!
-  $cabinP: Boolean!
-  $cabinE: Boolean!
-  $incentiveTypeId: Int!
-  $qsi: Float!
+  $timeframe: Int
+  $cabinF: Boolean
+  $cabinB: Boolean
+  $cabinP: Boolean
+  $cabinE: Boolean
+  $incentiveTypeId: Int
+  $currencyId: Int
   $softTarget: Boolean
   $internalTarget: Boolean
-  $timeframe: Int
+  $qsi: Float
+  $dpmPrice: Float
+  $dpmStartDate: Date
+  $baselineDateFrom: Date
+  $baselineDateTo: Date
+  $goalDateFrom: Date
+  $goalDateTo: Date
+  $airlineGroupFrom: Date
+  $airlineGroupTo: Date
+  $fareCategoryFrom: Date
+  $fareCategoryTo: Date
 ) {
   createTargetTerm(
+    contractId: $contractId
     name: $name
     targetTypeId: $targetTypeId
+    timeframe: $timeframe
     cabinF: $cabinF
     cabinB: $cabinB
     cabinP: $cabinP
     cabinE: $cabinE
     incentiveTypeId: $incentiveTypeId
-    qsi: $qsi
+    currencyId: $currencyId
     softTarget: $softTarget
     internalTarget: $internalTarget
-    timeframe: $timeframe
+    qsi: $qsi
+    dpmPrice: $dpmPrice
+    dpmStartDate: $dpmStartDate
+    baselineDateFrom: $baselineDateFrom
+    baselineDateTo: $baselineDateTo
+    goalDateFrom: $goalDateFrom
+    goalDateTo: $goalDateTo
+    airlineGroupFrom: $airlineGroupFrom
+    airlineGroupTo: $airlineGroupTo
+    fareCategoryFrom: $fareCategoryFrom
+    fareCategoryTo: $fareCategoryTo
   ) {
     ${TARGET_TERM}
   }
@@ -318,30 +342,48 @@ export const EDIT_TARGET_TERM = gql`
 mutation editTargetTerm(
   $id: Int!
   $name: String!
-  $targetTypeId: Int!
-  $cabinF: Boolean!
-  $cabinB: Boolean!
-  $cabinP: Boolean!
-  $cabinE: Boolean!
-  $incentiveTypeId: Int!
-  $qsi: Float!
+  $timeframe: Int
+  $cabinF: Boolean
+  $cabinB: Boolean
+  $cabinP: Boolean
+  $cabinE: Boolean
+  $currencyId: Int
   $softTarget: Boolean
   $internalTarget: Boolean
-  $timeframe: Int
+  $qsi: Float
+  $dpmPrice: Float
+  $dpmStartDate: Date
+  $baselineDateFrom: Date
+  $baselineDateTo: Date
+  $goalDateFrom: Date
+  $goalDateTo: Date
+  $airlineGroupFrom: Date
+  $airlineGroupTo: Date
+  $fareCategoryFrom: Date
+  $fareCategoryTo: Date
 ) {
   editTargetTerm(
     id: $id
     name: $name
-    targetTypeId: $targetTypeId
+    timeframe: $timeframe
     cabinF: $cabinF
     cabinB: $cabinB
     cabinP: $cabinP
     cabinE: $cabinE
-    incentiveTypeId: $incentiveTypeId
-    qsi: $qsi
+    currencyId: $currencyId
     softTarget: $softTarget
     internalTarget: $internalTarget
-    timeframe: $timeframe
+    qsi: $qsi
+    dpmPrice: $dpmPrice
+    dpmStartDate: $dpmStartDate
+    baselineDateFrom: $baselineDateFrom
+    baselineDateTo: $baselineDateTo
+    goalDateFrom: $goalDateFrom
+    goalDateTo: $goalDateTo
+    airlineGroupFrom: $airlineGroupFrom
+    airlineGroupTo: $airlineGroupTo
+    fareCategoryFrom: $fareCategoryFrom
+    fareCategoryTo: $fareCategoryTo
   ) {
     ${TARGET_TERM}
   }

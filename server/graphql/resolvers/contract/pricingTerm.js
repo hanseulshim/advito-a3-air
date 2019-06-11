@@ -19,15 +19,12 @@ exports.pricingTerm = {
           sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
           readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
           qc: false,
-          count_discounts: 0,
           ignore
         },
         'id'
       );
       await updatePricingTermOrder(db, contractId);
-      await updatePricingTermCount(db, contractId);
-      const [pricingTerm] = await getPricingTerm(db, id);
-      return pricingTerm;
+      return await getPricingTerm(db, id);
     },
     copyPricingTerm: async (_, { id, contractId, name }, { db }) => {
       const { rows } = await db.raw(
@@ -35,7 +32,6 @@ exports.pricingTerm = {
       );
       const [{ pricingterm_createcopy: newId }] = rows;
       await updatePricingTermOrder(db, contractId);
-      await updatePricingTermCount(db, contractId);
       const [pricingTerm] = await getPricingTerm(db, parseInt(newId));
       return pricingTerm;
     },
@@ -46,8 +42,7 @@ exports.pricingTerm = {
           name,
           ignore
         });
-      const [pricingTerm] = await getPricingTerm(db, id);
-      return pricingTerm;
+      return await getPricingTerm(db, id);
     },
     togglePricingTermQC: async (_, { id }, { db }) => {
       await db('pricingterm')
@@ -55,15 +50,13 @@ exports.pricingTerm = {
           qc: db.raw('NOT qc')
         })
         .where('id', id);
-      const [pricingTerm] = await getPricingTerm(db, id);
-      return pricingTerm;
+      return await getPricingTerm(db, id);
     },
     deletePricingTerms: async (_, { contractId, idList }, { db }) => {
       await db('pricingterm')
         .update({ isdeleted: true })
         .whereIn('id', idList);
       await updatePricingTermOrder(db, contractId);
-      await updatePricingTermCount(db, contractId);
       return idList;
     },
     updateAppliedOrder: async (_, { updatePricingTermList }, { db }) => {
@@ -81,7 +74,6 @@ exports.pricingTerm = {
             .transacting(trx);
           queries.push(query);
         });
-
         Promise.all(queries)
           .then(trx.commit)
           .catch(trx.rollback);
@@ -101,13 +93,24 @@ const getPricingTermList = async (db, contractId) =>
       effectiveFrom: 'c.effectivefrom',
       effectiveTo: 'c.effectiveto',
       qc: 'p.qc',
-      discountCount: 'p.count_discounts',
+      discountCount: db.raw(
+        '(SELECT COUNT(*) from discount as d where d.pricingtermid = p.id and d.isdeleted = false)'
+      ),
       ignore: 'p.ignore',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
       ),
-      discountNoteCount: 'p.count_discountnotes',
+      discountNoteCount: db.raw(`
+        (SELECT COUNT (
+          notecount != 0 OR NULL
+        )
+        FROM (
+          SELECT (
+            SELECT COUNT ( * ) FROM usernote WHERE discount.notesid = usernote.parentnoteid
+          ) as notecount
+          FROM discount WHERE pricingtermid = p.id AND isdeleted = FALSE
+        ) as count)`),
       pointOfOriginList: db.raw(
         'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
       ),
@@ -128,8 +131,8 @@ const getPricingTermList = async (db, contractId) =>
     .andWhere('p.contractcontainerid', contractId)
     .groupBy('p.id', 'c.id', 'n.important', 'n.id');
 
-const getPricingTerm = async (db, id) =>
-  await db('pricingterm as p')
+const getPricingTerm = async (db, id) => {
+  const [pricingTerm] = await db('pricingterm as p')
     .select({
       id: 'p.id',
       contractOrder: 'p.readorder',
@@ -138,13 +141,24 @@ const getPricingTerm = async (db, id) =>
       effectiveFrom: 'c.effectivefrom',
       effectiveTo: 'c.effectiveto',
       qc: 'p.qc',
-      discountCount: 'p.count_discounts',
+      discountCount: db.raw(
+        '(SELECT COUNT(*) from discount as d where d.pricingtermid = p.id and d.isdeleted = false)'
+      ),
       ignore: 'p.ignore',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
       ),
-      discountNoteCount: 'p.count_discountnotes',
+      discountNoteCount: db.raw(`
+        (SELECT COUNT (
+          notecount != 0 OR NULL
+        )
+        FROM (
+          SELECT (
+            SELECT COUNT ( * ) FROM usernote WHERE discount.notesid = usernote.parentnoteid
+          ) as notecount
+          FROM discount WHERE pricingtermid = p.id AND isdeleted = FALSE
+        ) as count)`),
       pointOfOriginList: db.raw(
         'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
       ),
@@ -164,17 +178,7 @@ const getPricingTerm = async (db, id) =>
     .where('p.isdeleted', false)
     .andWhere('p.id', id)
     .groupBy('p.id', 'c.id', 'n.important', 'n.id');
-
-const updatePricingTermCount = async (db, contractId) => {
-  const [{ count }] = await db('pricingterm')
-    .count('*')
-    .where('contractcontainerid', contractId)
-    .andWhere('isdeleted', false);
-  await db('contractcontainer')
-    .update({
-      count_priterms: count
-    })
-    .where('id', contractId);
+  return pricingTerm;
 };
 
 const updatePricingTermOrder = async (db, contractId) => {
