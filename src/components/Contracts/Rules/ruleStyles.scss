@@ -25,38 +25,69 @@
   position: absolute;
   right: 0;
   top: 10%;
-  width: 75px;
+  color: #ff9e16;
+  border: 1px solid #ff9e16;
+  border-radius: 10px;
+  padding: .5em 1em;
+  font-size: 0.8em;
+  cursor: pointer;
+  background: transparent;
+  text-transform: uppercase;
 }
 
 .rule-tags {
   display: flex;
   margin-top: 1em;
   flex-wrap: wrap;
+  align-items: center;
 
   .el-tag {
     margin-right: 1em;
-    margin-bottom: 1em;
   }
+
+  label {
+    margin-right: 1em;
+  }
+
+  // span{
+  //   margin-right: 1em;
+  // }
 }
 
 //DatePicker Styling. Ticketing Dates, Travel Dates,
 
 .control-row {
   display: flex;
-  width: 75%;
   align-items: center;
+  margin-top: 1em;
 
   .date-picker {
-    margin-right: 1em;
+    margin-right: 2em;
   }
 
   .el-select {
-    width: 50%;
+    width:30%;
+    margin-right: 2em;
+  }
+
+  .el-checkbox{
+    margin-right: 2em;
   }
 
   button {
-    margin-left: 10px;
-    max-height: 2.5em;
-    width: 75px;
+  color: #ff9e16;
+  border: 1px solid #ff9e16;
+  border-radius: 10px;
+  padding: .5em 1em;
+  font-size: 0.8em;
+  cursor: pointer;
+  background: transparent;
+  text-transform: uppercase;
   }
+
+  label {
+    margin-right: .5em;
+  }
+
+
 }

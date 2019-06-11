@@ -6,7 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="toggleEditMode"
     />
-    <button v-if="editMode" class="button save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -26,8 +26,8 @@
         class="date-picker"
         format="dd-MMM-yyyy"
       ></el-date-picker>
-      <button v-if="!updateRule" class="button" @click="createTag">Add</button>
-      <button v-if="updateRule" class="button" @click="updateTag">
+      <button v-if="!updateRule" @click="createTag">Add</button>
+      <button v-if="updateRule" @click="updateTag">
         Update
       </button>
     </div>
@@ -70,6 +70,9 @@ export default {
   },
   methods: {
     toggleEditMode() {
+      if (this.editMode && !this.rules.length) {
+        this.$emit('delete-rule', 'Market');
+      }
       this.editMode = !this.editMode;
       this.startDate = '';
       this.endDate = '';

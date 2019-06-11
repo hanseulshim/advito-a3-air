@@ -3,6 +3,7 @@
     classes="modal-container"
     name="rules"
     height="auto"
+    width="750px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
@@ -42,6 +43,9 @@ import TicketingDates from '../../Rules/TicketingDates';
 import TravelDates from '../../Rules/TravelDates';
 import PointOfSale from '../../Rules/PoS';
 import PointOfOrigin from '../../Rules/PoO';
+import PublishedBookingClass from '../../Rules/PublishedBookingClass';
+import RequiredBookingClass from '../../Rules/RequiredBookingClass';
+import Market from '../../Rules/Market';
 import { ruleTypes } from '../../Rules/helper';
 export default {
   name: 'RulesModal',
@@ -50,7 +54,10 @@ export default {
     TicketingDates,
     TravelDates,
     PointOfSale,
-    PointOfOrigin
+    PointOfOrigin,
+    PublishedBookingClass,
+    RequiredBookingClass,
+    Market
   },
   data() {
     return {
