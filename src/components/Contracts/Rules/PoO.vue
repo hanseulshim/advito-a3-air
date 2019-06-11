@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       countries,
-      editMode: false,
+      editMode: true,
       selectedCountry: [],
       rules: []
     };
