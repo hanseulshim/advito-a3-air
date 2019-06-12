@@ -1,23 +1,5 @@
-const {
-  discountList,
-  discountTypeList,
-  journeyTypeList,
-  directionTypeList
-} = require('./discount');
-const {
-  targetTermList,
-  targetLevelList,
-  targetTypeList,
-  incentiveTypeList
-} = require('./targetTerm');
+const { targetLevelList } = require('./targetTerm');
 
 module.exports = {
-  discountList,
-  discountTypeList,
-  journeyTypeList,
-  directionTypeList,
-  targetTermList,
-  targetLevelList,
-  targetTypeList,
-  incentiveTypeList
+  targetLevelList
 };

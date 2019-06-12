@@ -28,5 +28,10 @@ exports.library = {
         }
       }
     }
+    currencyList {
+      id
+      name
+      code
+    }
   }`
 };

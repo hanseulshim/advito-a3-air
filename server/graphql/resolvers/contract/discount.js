@@ -1,5 +1,4 @@
 const { DISCOUNT_LOOKUP } = require('../../constants');
-const { updateNoteCount } = require('./note');
 
 exports.discount = {
   Query: {
@@ -65,9 +64,7 @@ exports.discount = {
         'id'
       );
       await updateDiscountOrder(db, pricingTermId);
-      await updateDiscountCount(db, pricingTermId);
-      const [discount] = await getDiscount(db, id);
-      return discount;
+      return await getDiscount(db, id);
     },
     copyDiscount: async (
       _,
@@ -97,9 +94,7 @@ exports.discount = {
         'pricingtermid'
       );
       await updateDiscountOrder(db, pricingTermId);
-      await updateDiscountCount(db, pricingTermId);
-      const [discount] = await getDiscount(db, parseInt(newId));
-      return discount;
+      return await getDiscount(db, parseInt(newId));
     },
     editDiscount: async (
       _,
@@ -125,16 +120,13 @@ exports.discount = {
           direction: directionTypeId,
           journeytype: journeyTypeId
         });
-      const [discount] = await getDiscount(db, id);
-      return discount;
+      return await getDiscount(db, id);
     },
     deleteDiscounts: async (_, { pricingTermId, idList }, { db }) => {
-      const [id] = await db('discount')
+      await db('discount')
         .update({ isdeleted: true }, 'id')
         .whereIn('id', idList);
       await updateDiscountOrder(db, pricingTermId);
-      await updateDiscountCount(db, pricingTermId);
-      await updateNoteCount(db, parseInt(id));
       return idList;
     },
     updateDiscountAppliedOrder: async (_, { updateDiscountList }, { db }) => {
@@ -191,8 +183,8 @@ const getDiscountList = async (db, pricingTermId) =>
     .andWhere('d.pricingtermid', pricingTermId)
     .groupBy('d.id', 'l.id', 'l1.id', 'l2.id', 'n.important', 'n.id');
 
-const getDiscount = async (db, id) =>
-  await db('discount as d')
+const getDiscount = async (db, id) => {
+  const [discount] = await db('discount as d')
     .select({
       id: 'd.id',
       pricingTermId: 'd.pricingtermid',
@@ -219,17 +211,7 @@ const getDiscount = async (db, id) =>
     .where('d.isdeleted', false)
     .andWhere('d.id', id)
     .groupBy('d.id', 'l.id', 'l1.id', 'l2.id', 'n.important', 'n.id');
-
-const updateDiscountCount = async (db, pricingTermId) => {
-  const [{ count }] = await db('discount')
-    .count('*')
-    .where('pricingtermid', pricingTermId)
-    .andWhere('isdeleted', false);
-  await db('pricingterm')
-    .update({
-      count_discounts: count
-    })
-    .where('id', pricingTermId);
+  return discount;
 };
 
 const updateDiscountOrder = async (db, pricingTermId) => {

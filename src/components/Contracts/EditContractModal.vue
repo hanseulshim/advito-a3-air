@@ -37,7 +37,11 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-if="form.typeId === 2" label="Round *" prop="round">
+      <el-form-item
+        v-if="form.typeId === CONTRACT_LOOKUP.PROPOSAL"
+        label="Round *"
+        prop="round"
+      >
         <el-input v-model.number="form.round" />
       </el-form-item>
       <el-form-item label="Effective Dates *">
@@ -85,6 +89,7 @@ import {
   GET_CONTRACT_TYPE_LIST,
   GET_DIVISION_TYPE_LIST
 } from '@/graphql/queries';
+import { CONTRACT_LOOKUP } from '@/graphql/constants';
 import { EDIT_CONTRACT } from '@/graphql/mutations';
 export default {
   name: 'EditContractModal',
@@ -110,6 +115,7 @@ export default {
       },
       contractTypeList: [],
       divisionTypeList: [],
+      CONTRACT_LOOKUP,
       rules: {
         name: [
           {

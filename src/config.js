@@ -69,7 +69,7 @@ export const term = {
   targetName: 150,
   timeframe: 110,
   softTarget: 75,
-  targetType: 95,
+  targetType: 120,
   cabins: 65,
   amount: 70,
   qsi: 50,

@@ -73,25 +73,38 @@ type DirectionType {
 type TargetTerm {
   id: Int
   name: String
-  effectiveStartDate: Date
-  effectiveEndDate: Date
+  order: Int
+  effectiveFrom: Date
+  effectiveTo: Date
   timeframe: Int
   qc: Float
-  targetType: TargetType
+  targetTypeId: Int
+  targetTypeName: String
   cabinF: Boolean
   cabinB: Boolean
   cabinP: Boolean
   cabinE: Boolean
   qsi: Float
-  incentiveType: IncentiveType
+  incentiveTypeId: Int
+  incentiveTypeName: String
+  currencyId: Int
   softTarget: Boolean
   internalTarget: Boolean
   targetAmount: Float
-  levelTotal: Int
-  ruleTotal: Int
-  note: Note
-  order: Int
-  isDeleted: Boolean
+  levelCount: Int
+  ruleCount: Int
+  noteImportant: Boolean
+  noteContent: Boolean
+  dpmPrice: Float,
+  dpmStartDate: Date,
+  baselineDateFrom: Date,
+  baselineDateTo: Date,
+  goalDateFrom: Date,
+  goalDateTo: Date,
+  airlineGroupFrom: Date,
+  airlineGroupTo: Date,
+  fareCategoryFrom: Date,
+  fareCategoryTo: Date
 }
 type TargetLevel {
   id: Int
@@ -131,15 +144,16 @@ extend type Query {
   divisionTypeList: [DivisionType] @auth
 
   pricingTermList(contractId: Int): [PricingTerm] @auth
-  pricingTerm(id: Int!): [PricingTerm] @auth
+  pricingTerm(id: Int!): PricingTerm @auth
 
   discountList(pricingTermId: Int): [Discount] @auth
-  discount(id: Int!): [Discount] @auth
+  discount(id: Int!): Discount @auth
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
 
-  targetTermList: [TargetTerm] @auth
+  targetTermList(contractId: Int): [TargetTerm] @auth
+  targetTerm(id: Int!): TargetTerm @auth
   targetLevelList(targetTermId: Int): [TargetLevel] @auth
   targetTypeList: [TargetType] @auth
   incentiveTypeList: [IncentiveType] @auth
@@ -180,32 +194,53 @@ extend type Mutation {
   ): [PricingTerm] @auth
 
   createTargetTerm(
+    contractId: Int!
     name: String!
     targetTypeId: Int!
-    cabinF: Boolean!
-    cabinB: Boolean!
-    cabinP: Boolean!
-    cabinE: Boolean!
-    incentiveTypeId: Int!
-    qsi: Float!
+    timeframe: Int
+    cabinF: Boolean
+    cabinB: Boolean
+    cabinP: Boolean
+    cabinE: Boolean
+    incentiveTypeId: Int
+    currencyId: Int
     softTarget: Boolean
     internalTarget: Boolean
-    timeframe: Int
+    qsi: Float
+    dpmPrice: Float
+    dpmStartDate: Date
+    baselineDateFrom: Date
+    baselineDateTo: Date
+    goalDateFrom: Date
+    goalDateTo: Date
+    airlineGroupFrom: Date
+    airlineGroupTo: Date
+    fareCategoryFrom: Date
+    fareCategoryTo: Date
   ): TargetTerm @auth
   copyTargetTerm(id: Int!, name: String!): TargetTerm @auth
   editTargetTerm(
     id: Int!
     name: String!
-    targetTypeId: Int!
-    cabinF: Boolean!
-    cabinB: Boolean!
-    cabinP: Boolean!
-    cabinE: Boolean!
-    incentiveTypeId: Int!
-    qsi: Float!
+    timeframe: Int
+    cabinF: Boolean
+    cabinB: Boolean
+    cabinP: Boolean
+    cabinE: Boolean
+    currencyId: Int
     softTarget: Boolean
     internalTarget: Boolean
-    timeframe: Int
+    qsi: Float
+    dpmPrice: Float
+    dpmStartDate: Date
+    baselineDateFrom: Date
+    baselineDateTo: Date
+    goalDateFrom: Date
+    goalDateTo: Date
+    airlineGroupFrom: Date
+    airlineGroupTo: Date
+    fareCategoryFrom: Date
+    fareCategoryTo: Date
   ): TargetTerm @auth
   toggleTargetTermQC(id: Int!): TargetTerm @auth
   deleteTargetTerms(idList: [Int]!): [Int] @auth
@@ -277,15 +312,5 @@ extend type Mutation {
     important: Boolean!
     noteId: String!
   ): String @auth
-  saveTargetTermNote(
-    id: Int!
-    important: Boolean!
-    message: String
-    assigneeId: Int!
-    noteId: Int
-  ): Note
-  deleteTargetTermNote(
-    noteId: Int!
-  ): Note
 }
 `;

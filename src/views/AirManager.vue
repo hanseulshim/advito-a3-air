@@ -115,6 +115,13 @@ export default {
       return this.filteredProjectList.filter(project => !project.favorite);
     }
   },
+  mounted() {
+    Object.keys(this.$apollo.queries).forEach(query => {
+      this.$apollo.queries[query].setOptions({
+        notifyOnNetworkStatusChange: true
+      });
+    });
+  },
   methods: {
     pluralize(word, count) {
       return pluralize(word, count);

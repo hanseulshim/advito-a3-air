@@ -132,8 +132,12 @@ const getContractList = async db =>
       effectiveFrom: 'c.effectivefrom',
       effectiveTo: 'c.effectiveto',
       qc: 'c.qc',
-      pricingTermCount: 'c.count_priterms',
-      targetTermCount: 'c.count_targterms',
+      pricingTermCount: db.raw(
+        '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
+      ),
+      targetTermCount: db.raw(
+        '(SELECT COUNT(*) from targetterm_v2 as t where t.contractcontainerid = c.id and t.isdeleted = false)'
+      ),
       divisionId: 'd.id',
       pointOfOriginList: db.raw(
         'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
@@ -167,8 +171,12 @@ const getContract = async (db, id) =>
       effectiveFrom: 'c.effectivefrom',
       effectiveTo: 'c.effectiveto',
       qc: 'c.qc',
-      pricingTermCount: 'c.count_priterms',
-      targetTermCount: 'c.count_targterms',
+      pricingTermCount: db.raw(
+        '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
+      ),
+      targetTermCount: db.raw(
+        '(SELECT COUNT(*) from targetterm_v2 as t where t.contractcontainerid = c.id and t.isdeleted = false)'
+      ),
       divisionId: 'd.id',
       pointOfOriginList: db.raw(
         'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'

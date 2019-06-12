@@ -21,12 +21,13 @@
 </template>
 
 <script>
-import { GET_TARGET_TERM_LIST } from '@/graphql/queries';
+import { GET_CONTRACT, GET_TARGET_TERM_LIST } from '@/graphql/queries';
 import { DELETE_TARGET_TERMS } from '@/graphql/mutations';
 export default {
   name: 'DeleteTargetTermModal',
   data() {
     return {
+      contractId: null,
       idList: []
     };
   },
@@ -41,26 +42,32 @@ export default {
           variables: {
             idList: this.idList
           },
-          update: (store, data) => {
-            const idList = data.data.deleteTargetTerms;
-            const newData = store.readQuery({
-              query: GET_TARGET_TERM_LIST
-            });
-            const indexList = idList.map(id =>
-              newData.targetTermList.findIndex(term => term.id === id)
-            );
-            indexList.forEach(index => {
-              newData.targetTermList.splice(index, 1);
-            });
-            store.writeQuery({
+          update: (store, { data: { deleteTargetTerms } }) => {
+            const query = {
               query: GET_TARGET_TERM_LIST,
-              data: newData
+              variables: {
+                contractId: this.contractId
+              }
+            };
+            const data = store.readQuery(query);
+            data.targetTermList = data.targetTermList.filter(
+              term => deleteTargetTerms.indexOf(term.id) === -1
+            );
+            store.writeQuery({
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT,
+              variables: { id: this.contractId }
+            }
+          ]
         });
         this.$emit('clear-bulk-actions');
         this.$modal.show('success', {
-          message: 'Pricing Term successfully deleted.',
+          message: 'Target Term successfully deleted.',
           name: 'delete-target-term'
         });
       } catch (error) {
@@ -70,9 +77,11 @@ export default {
       }
     },
     beforeOpen(event) {
+      this.contractId = event.params.contractId;
       this.idList = event.params.idList;
     },
     beforeClose() {
+      this.contractId = null;
       this.idList = [];
     }
   }
