@@ -3,7 +3,7 @@
     classes="modal-container"
     name="rules"
     height="auto"
-    width="750px"
+    width="800px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
@@ -46,6 +46,16 @@ import PointOfOrigin from '../../Rules/PoO';
 import PublishedBookingClass from '../../Rules/PublishedBookingClass';
 import RequiredBookingClass from '../../Rules/RequiredBookingClass';
 import Market from '../../Rules/Market';
+import MarketingAirline from '../../Rules/MarketingAirline';
+import ValidatingAirline from '../../Rules/ValidatingAirline';
+import OperatingAirline from '../../Rules/OperatingAirline';
+import AdvancedTicketing from '../../Rules/AdvancedTicketing';
+import TourCode from '../../Rules/TourCode';
+import TicketDesignator from '../../Rules/TicketDesignator';
+import TimeOfWeek from '../../Rules/TimeOfWeek';
+import MinStay from '../../Rules/MinStay';
+import MaxStay from '../../Rules/MaxStay';
+import Stops from '../../Rules/Stops';
 import { ruleTypes } from '../../Rules/helper';
 export default {
   name: 'RulesModal',
@@ -57,7 +67,17 @@ export default {
     PointOfOrigin,
     PublishedBookingClass,
     RequiredBookingClass,
-    Market
+    Market,
+    MarketingAirline,
+    ValidatingAirline,
+    OperatingAirline,
+    AdvancedTicketing,
+    TourCode,
+    TicketDesignator,
+    TimeOfWeek,
+    MinStay,
+    MaxStay,
+    Stops
   },
   data() {
     return {
