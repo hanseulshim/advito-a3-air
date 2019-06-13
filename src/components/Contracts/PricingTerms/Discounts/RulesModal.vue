@@ -3,8 +3,8 @@
     classes="modal-container"
     name="rules"
     height="auto"
-    width="800px"
     scrollable
+    width="800px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >

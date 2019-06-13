@@ -38,7 +38,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ ` ${rule.min} - ${rule.max}` }}</el-tag
+        >{{ ` ${rule.min !== null ? rule.min : '0'} - ${rule.max}` }}</el-tag
       >
     </div>
   </div>
