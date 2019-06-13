@@ -37,7 +37,7 @@
           >
             <i
               class="fas fa-trash-alt delete"
-              @click="deleteDataSet(column.id)"
+              @click="toggleDeleteModal(column.id)"
             />
           </el-tooltip>
           <i v-else class="fas fa-trash-alt reject-hide" />
@@ -66,6 +66,7 @@
         </el-table>
       </div>
     </div>
+    <DeleteDatasetModal @delete-dataset="deleteDataSet" />
   </div>
 </template>
 
@@ -77,10 +78,12 @@ import {
 } from '@/graphql/queries';
 import CountriesTable from './AnnualizationTables/CountriesTable';
 import { TOGGLE_DATA_SET, DELETE_DATA_SET } from '@/graphql/mutations';
+import DeleteDatasetModal from './DeleteDatasetModal';
 export default {
   name: 'PosTrends',
   components: {
-    CountriesTable
+    CountriesTable,
+    DeleteDatasetModal
   },
   props: {
     filteredDataSetList: {
@@ -181,6 +184,11 @@ export default {
         return 'need-qc-row';
       }
       return '';
+    },
+    toggleDeleteModal(id) {
+      this.$modal.show('deleteDataset', {
+        id
+      });
     }
   }
 };
