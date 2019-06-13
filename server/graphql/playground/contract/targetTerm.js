@@ -10,7 +10,7 @@ exports.targetTerm = {
       targetTermList {
         ${TARGET_TERM}
       }
-      targetLevelList(targetTermId: 1) {
+      targetLevelList(targetTermId: 33) {
         ${TARGET_LEVEL}
       }
       targetTypeList {
@@ -45,12 +45,18 @@ exports.targetTerm = {
         ${TARGET_TERM}
       }
 
+      deleteTargetTerms(idList: [34, 35, 36])
+
       createTargetLevel(
         targetTermId: 1
         targetAmount: 50
         scoringTarget: true
         incentiveDescription: "Test"
       ) {
+        ${TARGET_LEVEL}
+      }
+
+      toggleTargetLevel(id: 3, targetTermId: 33) {
         ${TARGET_LEVEL}
       }
     }

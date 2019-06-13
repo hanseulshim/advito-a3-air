@@ -146,6 +146,14 @@ query targetLevelList($targetTermId: Int) {
 }
 `;
 
+export const GET_TARGET_LEVEL = gql`
+query targetLevel($id: Int!, $targetTermId: Int!) {
+  targetLevel(id: $id, targetTermId: $targetTermId) {
+    ${TARGET_LEVEL}
+  }
+}
+`;
+
 export const GET_TARGET_TYPE_LIST = gql`
   {
     targetTypeList {
