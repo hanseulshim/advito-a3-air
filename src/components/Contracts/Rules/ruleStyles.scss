@@ -1,7 +1,7 @@
 @import '@/styles/global.scss';
 
 .rule-container {
-  padding: 0.5em 0.5em;
+  padding: 1em 0.5em;
   border-top: 1px solid #eeecec;
   position: relative;
   //   display: flex;
@@ -66,7 +66,18 @@
   }
 
   .el-select {
-    width:30%;
+    width:25%;
+    margin-right: 2em;
+  }
+
+  .el-date-editor--time{
+    max-width:20%;
+    margin-right: 2em;
+    
+  }
+
+  .number-input {
+    width:15%;
     margin-right: 2em;
   }
 

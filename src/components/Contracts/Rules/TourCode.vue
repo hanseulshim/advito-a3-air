@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Point of Origin</p>
+    <p class="rule-title">Tour Code</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -10,21 +10,7 @@
       Save
     </button>
     <div v-if="editMode" class="control-row">
-      <el-select
-        v-model="selectedCountry"
-        filterable
-        placeholder="Select"
-        size="mini"
-        clearable
-        multiple
-      >
-        <el-option
-          v-for="item in countries"
-          :key="item.value"
-          :label="item.name"
-          :value="item.name"
-        ></el-option>
-      </el-select>
+      <el-input v-model="tourcode" size="mini" class="number-input" clearable />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -35,47 +21,40 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ ` ${rule.tourcode}` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { countries } from './helper';
 export default {
-  name: 'PointOfOrigin',
+  name: 'TourCode',
   apollo: {},
   data() {
     return {
-      countries,
       editMode: true,
-      selectedCountry: [],
+      tourcode: '',
       rules: []
     };
   },
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'Market');
+        this.$emit('delete-rule', 'TourCode');
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.name === country)[0];
-
-        this.rules.push({
-          name: matched.name,
-          code: matched.code
-        });
+      this.rules.push({
+        tourcode: this.tourcode
       });
 
-      this.selectedCountry = [];
+      this.tourcode = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'PointOfOrigin');
+        this.$emit('delete-rule', 'TourCode');
       }
     }
   }

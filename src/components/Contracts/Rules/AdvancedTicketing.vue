@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Point of Origin</p>
+    <p class="rule-title">Advanced Ticketing</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -10,21 +10,31 @@
       Save
     </button>
     <div v-if="editMode" class="control-row">
+      <label>Within: </label>
+      <el-input
+        v-model="timeframe"
+        size="mini"
+        class="number-input"
+        type="number"
+        clearable
+        min="0"
+      />
+      <label>Unit: </label>
       <el-select
-        v-model="selectedCountry"
+        v-model="selectedUnit"
         filterable
         placeholder="Select"
         size="mini"
         clearable
-        multiple
       >
         <el-option
-          v-for="item in countries"
-          :key="item.value"
-          :label="item.name"
-          :value="item.name"
+          v-for="unit in units"
+          :key="unit"
+          :label="unit"
+          :value="unit"
         ></el-option>
       </el-select>
+
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -35,47 +45,44 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ `Within ${rule.timeframe} ${rule.unit}` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { countries } from './helper';
 export default {
-  name: 'PointOfOrigin',
+  name: 'AdvancedTicketing',
   apollo: {},
   data() {
     return {
-      countries,
+      units: ['Hours', 'Days', 'Months'],
+      selectedUnit: '',
       editMode: true,
-      selectedCountry: [],
+      timeframe: null,
       rules: []
     };
   },
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'Market');
+        this.$emit('delete-rule', 'AdvancedTicketing');
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.name === country)[0];
-
-        this.rules.push({
-          name: matched.name,
-          code: matched.code
-        });
+      this.rules.push({
+        timeframe: this.timeframe,
+        unit: this.selectedUnit
       });
 
-      this.selectedCountry = [];
+      this.timeframe = null;
+      this.selectedUnit = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'PointOfOrigin');
+        this.$emit('delete-rule', 'AdvancedTicketing');
       }
     }
   }

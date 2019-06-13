@@ -1,17 +1,17 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Required Booking Class</p>
+    <p class="rule-title">Validating Airline</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
       @click="toggleEditMode"
     />
-    <button v-if="editMode" class=" save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
       Save
     </button>
     <div v-if="editMode" class="control-row">
       <el-select
-        v-model="selectedClass"
+        v-model="selectedAirline"
         filterable
         placeholder="Select"
         size="mini"
@@ -19,10 +19,10 @@
         multiple
       >
         <el-option
-          v-for="item in classes"
-          :key="item"
-          :label="item"
-          :value="item"
+          v-for="item in airlines"
+          :key="item.code"
+          :label="item.name"
+          :value="item.code"
         ></el-option>
       </el-select>
       <label for="exclude"> Exclude: </label>
@@ -56,16 +56,16 @@
   </div>
 </template>
 <script>
-import { classes } from './helper';
+import { airlines } from './helper';
 export default {
-  name: 'RequiredBookingClass',
+  name: 'ValidatingAirline',
   apollo: {},
   data() {
     return {
-      classes,
+      airlines,
       exclude: false,
       editMode: true,
-      selectedClass: [],
+      selectedAirline: [],
       rules: []
     };
   },
@@ -80,24 +80,24 @@ export default {
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'Market');
+        this.$emit('delete-rule', 'ValidatingAirline');
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedClass.map(v => {
+      this.selectedAirline.map(v => {
         this.rules.push({
           name: v,
           exclude: this.exclude
         });
       });
 
-      this.selectedClass = [];
+      this.selectedAirline = [];
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'RequiredBookingClass');
+        this.$emit('delete-rule', 'ValidatingAirline');
       }
     }
   }

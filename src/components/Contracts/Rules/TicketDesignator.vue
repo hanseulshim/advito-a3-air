@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Point of Origin</p>
+    <p class="rule-title">Ticket Designator</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -10,21 +10,12 @@
       Save
     </button>
     <div v-if="editMode" class="control-row">
-      <el-select
-        v-model="selectedCountry"
-        filterable
-        placeholder="Select"
+      <el-input
+        v-model="TicketDesignator"
         size="mini"
+        class="number-input"
         clearable
-        multiple
-      >
-        <el-option
-          v-for="item in countries"
-          :key="item.value"
-          :label="item.name"
-          :value="item.name"
-        ></el-option>
-      </el-select>
+      />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -35,47 +26,40 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ ` ${rule.TicketDesignator}` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { countries } from './helper';
 export default {
-  name: 'PointOfOrigin',
+  name: 'TicketDesignator',
   apollo: {},
   data() {
     return {
-      countries,
       editMode: true,
-      selectedCountry: [],
+      TicketDesignator: '',
       rules: []
     };
   },
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'Market');
+        this.$emit('delete-rule', 'TicketDesignator');
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.name === country)[0];
-
-        this.rules.push({
-          name: matched.name,
-          code: matched.code
-        });
+      this.rules.push({
+        TicketDesignator: this.TicketDesignator
       });
 
-      this.selectedCountry = [];
+      this.TicketDesignator = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'PointOfOrigin');
+        this.$emit('delete-rule', 'TicketDesignator');
       }
     }
   }
