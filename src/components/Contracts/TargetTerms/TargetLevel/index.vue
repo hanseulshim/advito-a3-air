@@ -22,7 +22,11 @@
       <el-table-column label="Score Target" :width="target.scoreTarget">
         <template slot-scope="props">
           <i v-if="props.row.scoringTarget" class="far fa-dot-circle" />
-          <i v-else class="far fa-circle" />
+          <i
+            v-else
+            class="far fa-circle"
+            @click="toggleTargetLevel(props.row)"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -52,14 +56,15 @@
     </el-table>
     <NewTargetLevelModal />
     <EditTargetLevelModal />
-    <DeleteTargetLevelModal />
+    <DeleteTargetLevelModal @toggle-row="toggleRow" />
   </div>
 </template>
 
 <script>
 import { formatPercent, pluralize } from '@/helper';
 import { target } from '@/config';
-import { GET_TARGET_LEVEL_LIST } from '@/graphql/queries';
+import { GET_TARGET_LEVEL_LIST, GET_TARGET_TERM } from '@/graphql/queries';
+import { TOGGLE_TARGET_LEVEL } from '@/graphql/mutations';
 import NewTargetLevelModal from './NewTargetLevelModal';
 import EditTargetLevelModal from './EditTargetLevelModal';
 import DeleteTargetLevelModal from './DeleteTargetLevelModal';
@@ -113,6 +118,31 @@ export default {
         id,
         targetTermId: this.targetTermId
       });
+    },
+    async toggleTargetLevel({ id, targetTermId }) {
+      try {
+        await this.$apollo.mutate({
+          mutation: TOGGLE_TARGET_LEVEL,
+          variables: {
+            id,
+            targetTermId
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TARGET_TERM,
+              variables: { id: this.targetTermId }
+            }
+          ]
+        });
+        this.toggleRow(targetTermId);
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
+    },
+    toggleRow(targetTermId) {
+      this.$emit('toggle-row', targetTermId);
     }
   }
 };

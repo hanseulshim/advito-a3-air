@@ -454,8 +454,18 @@ mutation editTargetLevel(
 }
 `;
 
+export const TOGGLE_TARGET_LEVEL = gql`
+mutation toggleTargetLevel(
+  $id: Int!, $targetTermId: Int!
+) {
+  toggleTargetLevel(id: $id, targetTermId: $targetTermId) {
+    ${TARGET_LEVEL}
+  }
+}
+`;
+
 export const DELETE_TARGET_LEVEL = gql`
-  mutation deleteTargetLevel($id: Int!) {
-    deleteTargetLevel(id: $id)
+  mutation deleteTargetLevel($id: Int!, $targetTermId: Int!) {
+    deleteTargetLevel(id: $id, targetTermId: $targetTermId)
   }
 `;
