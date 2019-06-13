@@ -42,7 +42,7 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <TargetLevel :target-term-id="props.row.id" />
+          <TargetLevel :target-term-id="props.row.id" @toggle-row="toggleRow" />
         </template>
       </el-table-column>
       <el-table-column
@@ -266,6 +266,7 @@ export default {
       showInactive: false,
       bulkActionId: null,
       term,
+      toggleRowId: null,
       bulkIdList: [],
       bulkActionList: [
         {
@@ -304,6 +305,15 @@ export default {
           inactive: term.effectiveTo < new Date()
         }));
     }
+  },
+  updated() {
+    if (this.toggleRowId) {
+      const row = this.$refs.targetTermList.data.filter(
+        term => term.id === this.toggleRowId
+      )[0];
+      this.$refs.targetTermList.toggleRowExpansion(row, true);
+    }
+    this.toggleRowId = null;
   },
   methods: {
     pluralize(word, count) {
@@ -382,6 +392,9 @@ export default {
           message: error.message
         });
       }
+    },
+    toggleRow(id) {
+      this.toggleRowId = id;
     },
     sortByNote(a, b) {
       if (a.noteImportant && !b.noteImportant) {

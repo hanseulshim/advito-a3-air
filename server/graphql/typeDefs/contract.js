@@ -155,6 +155,7 @@ extend type Query {
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth
   targetLevelList(targetTermId: Int): [TargetLevel] @auth
+  targetLevel(id: Int!, targetTermId: Int!): TargetLevel @auth
   targetTypeList: [TargetType] @auth
   incentiveTypeList: [IncentiveType] @auth
 
@@ -257,9 +258,8 @@ extend type Mutation {
     scoringTarget: Boolean!
     incentiveDescription: String
   ): TargetLevel @auth
-  deleteTargetLevel(
-    id: Int!
-  ): Int @auth
+  toggleTargetLevel(id: Int!, targetTermId: Int!): [TargetLevel] @auth
+  deleteTargetLevel(id: Int!, targetTermId: Int!): Int @auth
 
   createDiscount(
     pricingTermId: Int!

@@ -1,26 +1,29 @@
+const { TARGET_TERM_LOOKUP } = require('../../constants');
 const { ApolloError } = require('apollo-server-lambda');
 const { targetLevelList } = require('../../../data');
 
 exports.targetLevel = {
   Query: {
-    targetLevelList: (_, { targetTermId }) =>
-      targetLevelList.filter(t => t.targetTermId === targetTermId)
+    targetLevelList: async (_, { targetTermId }, { db }) =>
+      await getTargetLevelList(db, targetTermId),
+    targetLevel: async (_, { id, targetTermId }, { db }) =>
+      await getTargetLevel(db, id, targetTermId)
   },
   Mutation: {
-    createTargetLevel: (
+    createTargetLevel: async (
       _,
-      { targetTermId, targetAmount, scoringTarget, incentiveDescription }
+      { targetTermId, targetAmount, scoringTarget, incentiveDescription },
+      { db }
     ) => {
-      const maxId = Math.max(...targetLevelList.map(t => t.id)) + 1;
-      const targetLevel = {
-        id: maxId,
-        targetTermId,
-        targetAmount: targetAmount / 100,
-        scoringTarget,
-        incentiveDescription
-      };
-      targetLevelList.push(targetLevel);
-      return targetLevel;
+      const targetLevel = await getTargetLevelName(db, targetTermId);
+      const test = await db.raw(`SELECT targetlevel_create2(
+        '${targetLevel.tableName}',
+        ${targetTermId},
+        ${targetLevel.targetAmount},
+        ${scoringTarget},
+        ${incentiveDescription},
+
+      )`);
     },
     editTargetLevel: (
       _,
@@ -35,13 +38,90 @@ exports.targetLevel = {
       targetLevel.incentiveDescription = incentiveDescription;
       return targetLevel;
     },
-    deleteTargetLevel: (_, { id }) => {
-      const targetLevel = targetLevelList.filter(t => t.id === id)[0];
-      if (!targetLevel) {
-        throw new ApolloError('Target Level not found', 400);
-      }
-      targetLevel.isDeleted = true;
+    toggleTargetLevel: async (_, { id, targetTermId }, { db }) => {
+      const targetLevel = await getTargetLevelName(db, targetTermId);
+      await db.raw(
+        `SELECT targetlevel_toggle('${
+          targetLevel.tableName
+        }', ${id}, ${targetTermId})`
+      );
+      return await getTargetLevelList(db, targetTermId);
+    },
+    deleteTargetLevel: async (_, { id, targetTermId }, { db }) => {
+      const targetLevel = await getTargetLevelName(db, targetTermId);
+      await db.raw(
+        `SELECT targetlevel_delete('${targetLevel.tableName}', ${id})`
+      );
       return id;
     }
+  }
+};
+
+const getTargetLevelList = async (db, targetTermId) => {
+  const targetLevel = await getTargetLevelName(db, targetTermId);
+  return await db(targetLevel.tableName)
+    .select({
+      id: 'id',
+      targetTermId: 'targettermid',
+      targetAmount: targetLevel.targetAmount,
+      scoringTarget: 'overallscore',
+      incentiveDescription: 'incentivedescription'
+    })
+    .orderBy('id')
+    .where('isdeleted', false)
+    .andWhere('targettermid', targetTermId);
+};
+
+const getTargetLevel = async (db, id, targetTermId) => {
+  const targetLevel = await getTargetLevelName(db, targetTermId);
+  const [level] = await db(targetLevel.tableName)
+    .select({
+      id: 'id',
+      targetTermId: 'targettermid',
+      targetAmount: targetLevel.targetAmount,
+      scoringTarget: 'overallscore',
+      incentiveDescription: 'incentivedescription'
+    })
+    .orderBy('id')
+    .where('id', id);
+  return level;
+};
+
+const getTargetLevelName = async (db, targetTermId) => {
+  const [targetTerm] = await db('targetterm_v2')
+    .select('targettype')
+    .where('id', targetTermId);
+  if (!targetTerm) return null;
+  const targetType = parseInt(targetTerm.targettype);
+  if (targetType === TARGET_TERM_LOOKUP.SEGMENT_SHARE) {
+    return {
+      tableName: 'targetsegmentshare_v2',
+      targetAmount: 'segmentsshare'
+    };
+  } else if (targetType === TARGET_TERM_LOOKUP.REVENUE_SHARE) {
+    return {
+      tableName: 'targetrevenueshare_v2',
+      targetAmount: 'numberofsegments'
+    };
+  } else if (targetType === TARGET_TERM_LOOKUP.SHARE_GAP) {
+    return {
+      tableName: 'targetsegmentsharegap_v2',
+      targetAmount: 'segmentssharegap'
+    };
+  } else if (targetType === TARGET_TERM_LOOKUP.SEGMENT) {
+    return {
+      tableName: 'targetsegment_v2',
+      targetAmount: 'numberofsegments'
+    };
+  } else if (targetType === TARGET_TERM_LOOKUP.REVENUE) {
+    return {
+      tableName: 'targetrevenue_v2',
+      targetAmount: 'amount'
+    };
+  } else if (targetType === TARGET_TERM_LOOKUP.KPG) {
+    return {
+      tableName: 'targetkpg',
+      targetAmount: 'targetsegmentshare'
+    };
   }
 };
