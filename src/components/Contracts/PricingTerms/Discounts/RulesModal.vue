@@ -4,6 +4,7 @@
     name="rules"
     height="auto"
     width="800px"
+    scrollable
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
