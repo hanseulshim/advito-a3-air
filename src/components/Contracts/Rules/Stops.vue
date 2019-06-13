@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Point of Origin</p>
+    <p class="rule-title">Stops</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -10,21 +10,24 @@
       Save
     </button>
     <div v-if="editMode" class="control-row">
-      <el-select
-        v-model="selectedCountry"
-        filterable
-        placeholder="Select"
+      <label>Min: </label>
+      <el-input
+        v-model="min"
         size="mini"
+        min="0"
+        type="number"
+        class="number-input"
         clearable
-        multiple
-      >
-        <el-option
-          v-for="item in countries"
-          :key="item.value"
-          :label="item.name"
-          :value="item.name"
-        ></el-option>
-      </el-select>
+      />
+      <label>Max: </label>
+      <el-input
+        v-model="max"
+        size="mini"
+        min="0"
+        type="number"
+        class="number-input"
+        clearable
+      />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -35,47 +38,43 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ ` ${rule.min} - ${rule.max}` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { countries } from './helper';
 export default {
-  name: 'PointOfOrigin',
+  name: 'Stops',
   apollo: {},
   data() {
     return {
-      countries,
       editMode: true,
-      selectedCountry: [],
+      min: null,
+      max: null,
       rules: []
     };
   },
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'Market');
+        this.$emit('delete-rule', 'Stops');
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.name === country)[0];
-
-        this.rules.push({
-          name: matched.name,
-          code: matched.code
-        });
+      this.rules.push({
+        min: this.min,
+        max: this.max
       });
 
-      this.selectedCountry = [];
+      this.min = '';
+      this.max = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'PointOfOrigin');
+        this.$emit('delete-rule', 'Stops');
       }
     }
   }

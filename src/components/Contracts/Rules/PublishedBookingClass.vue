@@ -64,7 +64,7 @@ export default {
     return {
       classes,
       exclude: false,
-      editMode: false,
+      editMode: true,
       selectedClass: [],
       rules: []
     };

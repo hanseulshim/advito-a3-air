@@ -79,7 +79,7 @@ export default {
     return {
       countries,
       exclude: false,
-      editMode: false,
+      editMode: true,
       origin: '',
       destination: '',
       rules: []
