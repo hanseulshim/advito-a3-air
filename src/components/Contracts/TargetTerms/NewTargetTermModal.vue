@@ -271,7 +271,7 @@ export default {
         cabinP: false,
         cabinE: false,
         incentiveTypeId: TARGET_TERM_LOOKUP.NONE,
-        qsi: null,
+        qsi: 0,
         softTarget: null,
         internalTarget: null,
         timeframe: null,
@@ -453,7 +453,7 @@ export default {
       this.form.cabinP = false;
       this.form.cabinE = false;
       this.form.incentiveTypeId = TARGET_TERM_LOOKUP.NONE;
-      this.form.qsi = null;
+      this.form.qsi = 0;
       this.form.softTarget = null;
       this.form.internalTarget = null;
       this.form.timeframe = null;
