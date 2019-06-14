@@ -62,15 +62,12 @@ export default {
             }
           ]
         });
-        this.toggleRow(this.targetTermId);
+        this.$emit('toggle-row', this.targetTermId);
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
         });
       }
-    },
-    toggleRow(targetTermId) {
-      this.$emit('toggle-row', targetTermId);
     },
     beforeOpen(event) {
       this.id = event.params.id;

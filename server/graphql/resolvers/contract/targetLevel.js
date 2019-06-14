@@ -1,6 +1,4 @@
 const { TARGET_TERM_LOOKUP } = require('../../constants');
-const { ApolloError } = require('apollo-server-lambda');
-const { targetLevelList } = require('../../../data');
 
 exports.targetLevel = {
   Query: {
@@ -15,28 +13,36 @@ exports.targetLevel = {
       { targetTermId, targetAmount, scoringTarget, incentiveDescription },
       { db }
     ) => {
-      const targetLevel = await getTargetLevelName(db, targetTermId);
-      const test = await db.raw(`SELECT targetlevel_create2(
-        '${targetLevel.tableName}',
+      const targetLevelName = await getTargetLevelName(db, targetTermId);
+      const { rows } = await db.raw(`SELECT targetlevel_create4(
+        '${targetLevelName.tableName}',
         ${targetTermId},
-        ${targetLevel.targetAmount},
+        '${targetLevelName.targetAmount}',
+        ${targetAmount ? targetAmount / 100 : 0},
+        '${incentiveDescription}',
         ${scoringTarget},
-        ${incentiveDescription},
-
+        ${1}
       )`);
+      const [{ targetlevel_create4: newId }] = rows;
+      return await getTargetLevel(db, parseInt(newId), targetTermId);
     },
-    editTargetLevel: (
+    editTargetLevel: async (
       _,
-      { id, targetAmount, scoringTarget, incentiveDescription }
+      { id, targetTermId, targetAmount, scoringTarget, incentiveDescription },
+      { db }
     ) => {
-      const targetLevel = targetLevelList.filter(t => t.id === id)[0];
-      if (!targetLevel) {
-        throw new ApolloError('Target Level not found', 400);
-      }
-      targetLevel.targetAmount = targetAmount / 100;
-      targetLevel.scoringTarget = scoringTarget;
-      targetLevel.incentiveDescription = incentiveDescription;
-      return targetLevel;
+      const targetLevelName = await getTargetLevelName(db, targetTermId);
+      await db.raw(`SELECT targetlevel_update(
+        ${id},
+        '${targetLevelName.tableName}',
+        ${targetTermId},
+        '${targetLevelName.targetAmount}',
+        ${targetAmount ? targetAmount / 100 : 0},
+        '${incentiveDescription}',
+        ${scoringTarget},
+        ${1}
+      )`);
+      return await getTargetLevelList(db, targetTermId);
     },
     toggleTargetLevel: async (_, { id, targetTermId }, { db }) => {
       const targetLevel = await getTargetLevelName(db, targetTermId);

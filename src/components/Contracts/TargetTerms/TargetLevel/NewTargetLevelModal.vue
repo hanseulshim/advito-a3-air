@@ -15,7 +15,7 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">new target term</div>
+        <div class="section-header">new target level</div>
         <el-tooltip effect="dark" content="Close Modal" placement="top">
           <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { GET_TARGET_LEVEL_LIST } from '@/graphql/queries';
+import { GET_TARGET_LEVEL_LIST, GET_TARGET_TERM } from '@/graphql/queries';
 import { CREATE_TARGET_LEVEL } from '@/graphql/mutations';
 export default {
   name: 'NewTargetLevelModal',
@@ -82,24 +82,28 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const targetLevel = data.data.createTargetLevel;
-            const newData = store.readQuery({
+          update: (store, { data: { createTargetLevel } }) => {
+            const query = {
               query: GET_TARGET_LEVEL_LIST,
               variables: {
                 targetTermId: this.form.targetTermId
               }
-            });
-            newData.targetLevelList.push(targetLevel);
+            };
+            const data = store.readQuery(query);
+            data.targetLevelList.push(createTargetLevel);
             store.writeQuery({
-              query: GET_TARGET_LEVEL_LIST,
-              data: newData,
-              variables: {
-                targetTermId: this.form.targetTermId
-              }
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TARGET_TERM,
+              variables: { id: this.form.targetTermId }
+            }
+          ]
         });
+        this.$emit('toggle-row', this.form.targetTermId);
         this.$modal.show('success', {
           message: 'Target Level successfully created.',
           name: 'new-target-level'

@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { GET_TARGET_TERM } from '@/graphql/queries';
 import { EDIT_TARGET_LEVEL } from '@/graphql/mutations';
 export default {
   name: 'EditTargetLevelModal',
@@ -46,6 +47,7 @@ export default {
     return {
       form: {
         id: null,
+        targetTermId: null,
         targetAmount: null,
         incentiveDescription: null,
         scoringTarget: false
@@ -80,10 +82,17 @@ export default {
           mutation: EDIT_TARGET_LEVEL,
           variables: {
             ...this.form
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TARGET_TERM,
+              variables: { id: this.form.targetTermId }
+            }
+          ]
         });
+        this.$emit('toggle-row', this.form.targetTermId);
         this.$modal.show('success', {
-          message: 'Target Level successfully created.',
+          message: 'Target Level successfully edited.',
           name: 'edit-target-level'
         });
       } catch (error) {
@@ -95,17 +104,20 @@ export default {
     beforeOpen(event) {
       const {
         id,
+        targetTermId,
         targetAmount,
         incentiveDescription,
         scoringTarget
       } = event.params.targetLevel;
       this.form.id = id;
+      this.form.targetTermId = targetTermId;
       this.form.targetAmount = targetAmount * 100;
       this.form.incentiveDescription = incentiveDescription;
       this.form.scoringTarget = scoringTarget;
     },
     beforeClose() {
       this.form.id = null;
+      this.form.targetTermId = null;
       this.form.targetAmount = null;
       this.form.incentiveDescription = null;
       this.form.scoringTarget = false;

@@ -445,10 +445,10 @@ mutation createTargetLevel(
 
 export const EDIT_TARGET_LEVEL = gql`
 mutation editTargetLevel(
-  $id: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
+  $id: Int!, $targetTermId: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
 ) {
   editTargetLevel(
-    id: $id, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
+    id: $id, targetTermId: $targetTermId, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
     ${TARGET_LEVEL}
   }
 }

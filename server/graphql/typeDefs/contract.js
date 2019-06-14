@@ -254,10 +254,11 @@ extend type Mutation {
   ): TargetLevel @auth
   editTargetLevel(
     id: Int!
+    targetTermId: Int!
     targetAmount: Float!
     scoringTarget: Boolean!
     incentiveDescription: String
-  ): TargetLevel @auth
+  ): [TargetLevel] @auth
   toggleTargetLevel(id: Int!, targetTermId: Int!): [TargetLevel] @auth
   deleteTargetLevel(id: Int!, targetTermId: Int!): Int @auth
 

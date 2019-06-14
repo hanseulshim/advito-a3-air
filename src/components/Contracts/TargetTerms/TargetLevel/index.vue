@@ -54,8 +54,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <NewTargetLevelModal />
-    <EditTargetLevelModal />
+    <NewTargetLevelModal @toggle-row="toggleRow" />
+    <EditTargetLevelModal @toggle-row="toggleRow" />
     <DeleteTargetLevelModal @toggle-row="toggleRow" />
   </div>
 </template>
