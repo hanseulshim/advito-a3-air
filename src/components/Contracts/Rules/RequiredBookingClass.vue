@@ -80,7 +80,7 @@ export default {
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'Market');
+        this.$emit('delete-rule', 'RequiredBookingClass');
       }
       this.editMode = !this.editMode;
     },
