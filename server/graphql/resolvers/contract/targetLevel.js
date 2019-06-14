@@ -18,7 +18,11 @@ exports.targetLevel = {
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',
-        ${targetAmount ? targetAmount / 100 : 0},
+        ${
+          targetLevelName.targetAmount === 'numberofsegments'
+            ? targetAmount
+            : targetAmount / 100
+        },
         '${incentiveDescription}',
         ${scoringTarget},
         ${1}
@@ -37,7 +41,11 @@ exports.targetLevel = {
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',
-        ${targetAmount ? targetAmount / 100 : 0},
+        ${
+          targetLevelName.targetAmount === 'numberofsegments'
+            ? targetAmount
+            : targetAmount / 100
+        },
         '${incentiveDescription}',
         ${scoringTarget},
         ${1}

@@ -22,7 +22,10 @@
       </div>
       <el-form-item label="Target Amount *" prop="targetAmount">
         <div class="target-amount-input-container">
-          <el-input v-model.number="form.targetAmount" /><span>%</span>
+          <el-input v-model.number="form.targetAmount" /><span
+            v-if="showPercent()"
+            >%</span
+          >
         </div>
       </el-form-item>
       <el-form-item label="Incentive Description">
@@ -40,11 +43,13 @@
 
 <script>
 import { GET_TARGET_LEVEL_LIST, GET_TARGET_TERM } from '@/graphql/queries';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import { CREATE_TARGET_LEVEL } from '@/graphql/mutations';
 export default {
   name: 'NewTargetLevelModal',
   data() {
     return {
+      targetTypeId: null,
       form: {
         targetTermId: null,
         targetAmount: null,
@@ -74,6 +79,18 @@ export default {
           return false;
         }
       });
+    },
+    showPercent() {
+      if (
+        this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.KPG
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
     async createTargetLevel() {
       try {
@@ -115,9 +132,11 @@ export default {
       }
     },
     beforeOpen(event) {
+      this.targetTypeId = event.params.targetTypeId;
       this.form.targetTermId = event.params.targetTermId;
     },
     beforeClose() {
+      this.targetTypeId = null;
       this.form.targetTermId = null;
       this.form.targetAmount = null;
       this.form.incentiveDescription = null;

@@ -7,9 +7,9 @@
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
-        <span>{{
-          pluralize('target term', filteredTargetTermList.length)
-        }}</span>
+        <span>
+          {{ pluralize('target term', filteredTargetTermList.length) }}
+        </span>
       </div>
       <div class="menu-container">
         <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
@@ -42,7 +42,11 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <TargetLevel :target-term-id="props.row.id" @toggle-row="toggleRow" />
+          <TargetLevel
+            :target-term-id="props.row.id"
+            :target-type-id="props.row.targetTypeId"
+            @toggle-row="toggleRow"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -75,9 +79,8 @@
       >
         <template slot-scope="props">
           <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">
-            <i v-if="props.row.internalTarget" class="fas fa-eye-slash" />{{
-              props.row.name
-            }}
+            <i v-if="props.row.internalTarget" class="fas fa-eye-slash" />
+            {{ props.row.name }}
           </div>
         </template>
       </el-table-column>
@@ -96,9 +99,9 @@
         label="Timeframe"
         :min-width="term.timeframe"
       >
-        <template slot-scope="props">
-          {{ props.row.timeframe && `${props.row.timeframe} m` }}
-        </template>
+        <template slot-scope="props">{{
+          props.row.timeframe && `${props.row.timeframe} m`
+        }}</template>
       </el-table-column>
       <el-table-column
         label="QC"
@@ -122,9 +125,9 @@
         :sort-orders="['ascending', 'descending']"
         :min-width="term.softTarget"
       >
-        <template slot-scope="props">
-          {{ props.row.softTarget ? 'Y' : '' }}
-        </template>
+        <template slot-scope="props">{{
+          props.row.softTarget ? 'Y' : ''
+        }}</template>
       </el-table-column>
       <el-table-column
         label="Type"
@@ -144,7 +147,7 @@
       <el-table-column
         label="Amount"
         :min-width="term.amount"
-        :formatter="row => formatPercent(row.targetAmount)"
+        :formatter="row => formatTargetAmount(row)"
       />
       <el-table-column
         label="QSI"
@@ -229,6 +232,7 @@ import { pluralize, formatDate, formatPercent } from '@/helper';
 import { term } from '@/config';
 import { GET_SELECTED_CONTRACT, GET_TARGET_TERM_LIST } from '@/graphql/queries';
 import { TOGGLE_TARGET_TERM_QC } from '@/graphql/mutations';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import TargetLevel from './TargetLevel';
 import NewTargetTermModal from './NewTargetTermModal';
 import CopyTargetTermModal from './CopyTargetTermModal';
@@ -326,6 +330,18 @@ export default {
     },
     formatPercent(num) {
       return formatPercent(num);
+    },
+    formatTargetAmount({ targetTypeId, targetAmount }) {
+      if (
+        targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+        targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        targetTypeId === TARGET_TERM_LOOKUP.KPG
+      ) {
+        return formatPercent(targetAmount);
+      } else {
+        return targetAmount;
+      }
     },
     checkQc() {
       return this.targetTermList.some(term => term.qc !== 1);

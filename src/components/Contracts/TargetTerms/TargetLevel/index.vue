@@ -17,7 +17,7 @@
       <el-table-column
         label="Target Amount"
         :width="target.targetAmount"
-        :formatter="row => formatPercent(row.targetAmount)"
+        :formatter="row => formatTargetAmount(row)"
       />
       <el-table-column label="Score Target" :width="target.scoreTarget">
         <template slot-scope="props">
@@ -65,6 +65,7 @@ import { formatPercent, pluralize } from '@/helper';
 import { target } from '@/config';
 import { GET_TARGET_LEVEL_LIST, GET_TARGET_TERM } from '@/graphql/queries';
 import { TOGGLE_TARGET_LEVEL } from '@/graphql/mutations';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import NewTargetLevelModal from './NewTargetLevelModal';
 import EditTargetLevelModal from './EditTargetLevelModal';
 import DeleteTargetLevelModal from './DeleteTargetLevelModal';
@@ -90,6 +91,11 @@ export default {
       type: Number,
       required: true,
       default: null
+    },
+    targetTypeId: {
+      type: Number,
+      required: true,
+      default: null
     }
   },
   data() {
@@ -105,11 +111,27 @@ export default {
     formatPercent(num) {
       return formatPercent(num);
     },
+    formatTargetAmount({ targetAmount }) {
+      if (
+        this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.KPG
+      ) {
+        return formatPercent(targetAmount);
+      } else {
+        return targetAmount;
+      }
+    },
     showNewTargetLevelModal() {
-      this.$modal.show('new-target-level', { targetTermId: this.targetTermId });
+      this.$modal.show('new-target-level', {
+        targetTermId: this.targetTermId,
+        targetTypeId: this.targetTypeId
+      });
     },
     showEditTargetLevelModal(targetLevel) {
       this.$modal.show('edit-target-level', {
+        targetTypeId: this.targetTypeId,
         targetLevel
       });
     },
