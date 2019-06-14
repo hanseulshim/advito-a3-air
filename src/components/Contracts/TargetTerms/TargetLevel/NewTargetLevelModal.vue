@@ -99,21 +99,11 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, { data: { createTargetLevel } }) => {
-            const query = {
-              query: GET_TARGET_LEVEL_LIST,
-              variables: {
-                targetTermId: this.form.targetTermId
-              }
-            };
-            const data = store.readQuery(query);
-            data.targetLevelList.push(createTargetLevel);
-            store.writeQuery({
-              ...query,
-              data
-            });
-          },
           refetchQueries: () => [
+            {
+              query: GET_TARGET_LEVEL_LIST,
+              variables: { targetTermId: this.form.targetTermId }
+            },
             {
               query: GET_TARGET_TERM,
               variables: { id: this.form.targetTermId }

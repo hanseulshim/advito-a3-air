@@ -14,7 +14,7 @@ exports.targetLevel = {
       { db }
     ) => {
       const targetLevelName = await getTargetLevelName(db, targetTermId);
-      const { rows } = await db.raw(`SELECT targetlevel_create4(
+      await db.raw(`SELECT targetlevel_create4(
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',
@@ -27,8 +27,6 @@ exports.targetLevel = {
         ${scoringTarget},
         ${1}
       )`);
-      const [{ targetlevel_create4: newId }] = rows;
-      return await getTargetLevel(db, parseInt(newId), targetTermId);
     },
     editTargetLevel: async (
       _,

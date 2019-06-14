@@ -433,14 +433,19 @@ export const DELETE_TARGET_TERM_NOTE = gql`
 `;
 
 export const CREATE_TARGET_LEVEL = gql`
-mutation createTargetLevel(
-  $targetTermId: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
-) {
-  createTargetLevel(
-    targetTermId: $targetTermId, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
-    ${TARGET_LEVEL}
+  mutation createTargetLevel(
+    $targetTermId: Int!
+    $targetAmount: Float!
+    $scoringTarget: Boolean!
+    $incentiveDescription: String
+  ) {
+    createTargetLevel(
+      targetTermId: $targetTermId
+      targetAmount: $targetAmount
+      scoringTarget: $scoringTarget
+      incentiveDescription: $incentiveDescription
+    )
   }
-}
 `;
 
 export const EDIT_TARGET_LEVEL = gql`

@@ -251,7 +251,7 @@ extend type Mutation {
     targetAmount: Float!
     scoringTarget: Boolean!
     incentiveDescription: String
-  ): TargetLevel @auth
+  ): Int @auth
   editTargetLevel(
     id: Int!
     targetTermId: Int!
