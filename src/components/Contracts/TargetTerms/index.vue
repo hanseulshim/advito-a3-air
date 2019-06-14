@@ -230,7 +230,11 @@
 import Navigation from '../Navigation';
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { term } from '@/config';
-import { GET_SELECTED_CONTRACT, GET_TARGET_TERM_LIST } from '@/graphql/queries';
+import {
+  GET_CONTRACT,
+  GET_SELECTED_CONTRACT,
+  GET_TARGET_TERM_LIST
+} from '@/graphql/queries';
 import { TOGGLE_TARGET_TERM_QC } from '@/graphql/mutations';
 import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import TargetLevel from './TargetLevel';
@@ -401,7 +405,13 @@ export default {
           mutation: TOGGLE_TARGET_TERM_QC,
           variables: {
             id
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT,
+              variables: { id: this.selectedContract.id }
+            }
+          ]
         });
       } catch (error) {
         this.$modal.show('error', {

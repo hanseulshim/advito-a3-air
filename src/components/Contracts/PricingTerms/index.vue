@@ -274,7 +274,8 @@ import { pluralize, formatDate } from '@/helper';
 import { term } from '@/config';
 import {
   GET_PRICING_TERM_LIST,
-  GET_SELECTED_CONTRACT
+  GET_SELECTED_CONTRACT,
+  GET_CONTRACT
 } from '@/graphql/queries';
 import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
@@ -434,7 +435,13 @@ export default {
           mutation: TOGGLE_PRICING_TERM_QC,
           variables: {
             id
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT,
+              variables: { id: this.selectedContract.id }
+            }
+          ]
         });
       } catch (error) {
         this.$modal.show('error', {

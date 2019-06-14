@@ -45,11 +45,9 @@ exports.pricingTerm = {
       return await getPricingTerm(db, id);
     },
     togglePricingTermQC: async (_, { id }, { db }) => {
-      await db('pricingterm')
-        .update({
-          qc: db.raw('NOT qc')
-        })
-        .where('id', id);
+      await db.raw(`
+        SELECT pricingterm_toggleqc(${id})
+      `);
       return await getPricingTerm(db, id);
     },
     deletePricingTerms: async (_, { contractId, idList }, { db }) => {
