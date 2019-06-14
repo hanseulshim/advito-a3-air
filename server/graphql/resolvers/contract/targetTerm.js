@@ -69,15 +69,15 @@ exports.targetTerm = {
           ${internalTarget},
           ${qsi ? qsi / 100 : 0},
           ${dpmPrice},
-          ${dpmStartDate},
-          ${baselineDateFrom},
-          ${baselineDateTo},
-          ${goalDateFrom},
-          ${goalDateTo},
-          ${airlineGroupFrom},
-          ${airlineGroupTo},
-          ${fareCategoryFrom},
-          ${fareCategoryTo}
+          ${dpmStartDate ? `'${dpmStartDate}'` : null},
+          ${baselineDateFrom ? `'${baselineDateFrom}'` : null},
+          ${baselineDateTo ? `'${baselineDateTo}'` : null},
+          ${goalDateFrom ? `'${goalDateFrom}'` : null},
+          ${goalDateTo ? `'${goalDateTo}'` : null},
+          ${airlineGroupFrom ? `'${airlineGroupFrom}'` : null},
+          ${airlineGroupTo ? `'${airlineGroupTo}'` : null},
+          ${fareCategoryFrom ? `'${fareCategoryFrom}'` : null},
+          ${fareCategoryTo ? `'${fareCategoryTo}'` : null}
         )`
       );
       const [{ targetterm_create: id }] = rows;
@@ -134,31 +134,32 @@ exports.targetTerm = {
           ${internalTarget},
           ${qsi ? qsi / 100 : 0},
           ${dpmPrice},
-          ${dpmStartDate},
-          ${baselineDateFrom},
-          ${baselineDateTo},
-          ${goalDateFrom},
-          ${goalDateTo},
-          ${airlineGroupFrom},
-          ${airlineGroupTo},
-          ${fareCategoryFrom},
-          ${fareCategoryTo}
+          ${dpmStartDate ? `'${dpmStartDate}'` : null},
+          ${baselineDateFrom ? `'${baselineDateFrom}'` : null},
+          ${baselineDateTo ? `'${baselineDateTo}'` : null},
+          ${goalDateFrom ? `'${goalDateFrom}'` : null},
+          ${goalDateTo ? `'${goalDateTo}'` : null},
+          ${airlineGroupFrom ? `'${airlineGroupFrom}'` : null},
+          ${airlineGroupTo ? `'${airlineGroupTo}'` : null},
+          ${fareCategoryFrom ? `'${fareCategoryFrom}'` : null},
+          ${fareCategoryTo ? `'${fareCategoryTo}'` : null}
         )`
       );
       return await getTargetTerm(db, id);
     },
     toggleTargetTermQC: async (_, { id }, { db }) => {
-      await db('targetterm_v2')
-        .update({
-          qc: db.raw('NOT qc')
-        })
-        .where('id', id);
+      await db.raw(`
+        SELECT targetterm_toggleqc(${id})
+      `);
       return await getTargetTerm(db, id);
     },
     deleteTargetTerms: async (_, { idList }, { db }) => {
-      await db('targetterm_v2')
-        .update({ isdeleted: true })
-        .whereIn('id', idList);
+      const queries = idList.map(id =>
+        db.raw(`
+        SELECT targetterm_delete(${id})
+      `)
+      );
+      await Promise.all(queries);
       return idList;
     }
   }
@@ -186,43 +187,81 @@ const getTargetTermList = async (db, contractId) =>
       internalTarget: 'targetterm_v2_internaltarget',
       currencyId: 'currency',
       targetAmount: db.raw(`
-        case when targettype = 20 then   (select targetterm_getlist_vw.segmentsshare
-          from targetterm_getlist_vw 
-          where targetsegmentshare_v2_overallscore = 'True'
-          and targetsegmentshare_v2_isdeleted = 'false')
-        when targettype = 21 then   (select targetrevenueshare_v2_numberofsegments
-                from targetterm_getlist_vw 
-                where targetrevenueshare_v2_overallscore = 'True'
-                and targetrevenueshare_v2_isdeleted = 'false'	)		
-        when targettype = 22 then  ( select targetsegment_v2_numberofsegments
-                from targetterm_getlist_vw 
-                where targetsegment_v2_overallscore = 'True'
-                and targetsegment_v2_isdeleted = 'false')
-        when targettype = 23 then   (select amount 
-                from targetterm_getlist_vw 
-                where targetrevenue_v2_overallscore = 'True'
-                and targetrevenue_v2_isdeleted = 'false')
-        when targettype = 24 then  ( select targetterm_getlist_vw.segmentssharegap
-                from targetterm_getlist_vw 
-                where targetsegmentsharegap_v2_overallscore = 'True'
-                and targetsegmentsharegap_v2_isdeleted = 'false')
-        when targettype = 28 then (select dpmprice  
-              from targetterm_getlist_vw 
-              where targetkpg_overallscore = 'True'
-              and targetkpg_isdeleted = 'false'	) end`),
+        case when targettype = ${
+          TARGET_TERM_LOOKUP.SEGMENT_SHARE
+        } then (select segmentsshare
+          from targetsegmentshare_v2
+          where overallscore = true
+          and targettermid = targetterm_v2_id
+          and isdeleted = false)
+        when targettype = ${
+          TARGET_TERM_LOOKUP.REVENUE_SHARE
+        } then (select numberofsegments
+          from targetrevenueshare_v2
+          where overallscore = true
+          and targettermid = targetterm_v2_id
+          and isdeleted = false)
+        when targettype = ${
+          TARGET_TERM_LOOKUP.SEGMENT
+        } then (select numberofsegments
+          from targetsegment_v2
+          where overallscore = true
+          and targettermid = targetterm_v2_id
+          and isdeleted = false)
+        when targettype = ${TARGET_TERM_LOOKUP.REVENUE} then (select amount 
+          from targetrevenue_v2
+          where overallscore = true
+          and targettermid = targetterm_v2_id
+          and isdeleted = false)
+        when targettype = ${
+          TARGET_TERM_LOOKUP.SHARE_GAP
+        } then  (select segmentssharegap
+          from targetsegmentsharegap_v2 
+          where overallscore = true
+          and targettermid = targetterm_v2_id
+          and isdeleted = false)
+        when targettype = ${
+          TARGET_TERM_LOOKUP.KPG
+        } then (select targetsegmentshare  
+          from targetkpg
+          where overallscore = true
+          and targettermid = targetterm_v2_id
+          and isdeleted = false) end`),
       levelCount: db.raw(`
-          case when targettype = 20 then   (select count(targetterm_getlist_vw.segmentsshare)
-          from targetterm_getlist_vw )          
-          when targettype = 21 then   (select count(targetrevenueshare_v2_numberofsegments)
-                    from targetterm_getlist_vw )
-          when targettype = 22 then  ( select count(targetsegment_v2_numberofsegments)
-                    from targetterm_getlist_vw )
-          when targettype = 23 then   (select count(amount) 
-                    from targetterm_getlist_vw )
-          when targettype = 24 then  ( select count(targetterm_getlist_vw.segmentssharegap)
-                    from targetterm_getlist_vw )
-          when targettype = 28 then (select count(dpmprice ) 
-                  from targetterm_getlist_vw ) end`),
+          case when targettype = ${
+            TARGET_TERM_LOOKUP.SEGMENT_SHARE
+          } then   (select count(*)
+            from targetsegmentshare_v2
+            where targettermid = targetterm_v2_id
+            and isdeleted = false)
+          when targettype = ${
+            TARGET_TERM_LOOKUP.REVENUE_SHARE
+          } then   (select count(*)
+            from targetrevenueshare_v2
+            where targettermid = targetterm_v2_id
+            and isdeleted = false)
+          when targettype = ${
+            TARGET_TERM_LOOKUP.SEGMENT
+          } then  ( select count(*)
+            from targetsegment_v2
+            where targettermid = targetterm_v2_id
+            and isdeleted = false)
+          when targettype = ${
+            TARGET_TERM_LOOKUP.REVENUE
+          } then   (select count(*)
+            from targetrevenue_v2
+            where targettermid = targetterm_v2_id
+            and isdeleted = false)
+          when targettype = ${
+            TARGET_TERM_LOOKUP.SHARE_GAP
+          } then  ( select count(*)
+            from targetsegmentsharegap_v2 
+            where targettermid = targetterm_v2_id
+            and isdeleted = false)
+          when targettype = ${TARGET_TERM_LOOKUP.KPG} then (select count(*)
+            from targetkpg
+            where targettermid = targetterm_v2_id
+            and isdeleted = false) end`),
       ruleCount: 0,
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
@@ -265,43 +304,71 @@ const getTargetTerm = async (db, id) => {
       internalTarget: 'targetterm_v2_internaltarget',
       currencyId: 'currency',
       targetAmount: db.raw(`
-        case when targettype = 20 then   (select targetterm_getlist_vw.segmentsshare
-          from targetterm_getlist_vw 
-          where targetsegmentshare_v2_overallscore = 'True'
-          and targetsegmentshare_v2_isdeleted = 'false')
-        when targettype = 21 then   (select targetrevenueshare_v2_numberofsegments
-                from targetterm_getlist_vw 
-                where targetrevenueshare_v2_overallscore = 'True'
-                and targetrevenueshare_v2_isdeleted = 'false'	)		
-        when targettype = 22 then  ( select targetsegment_v2_numberofsegments
-                from targetterm_getlist_vw 
-                where targetsegment_v2_overallscore = 'True'
-                and targetsegment_v2_isdeleted = 'false')
-        when targettype = 23 then   (select amount 
-                from targetterm_getlist_vw 
-                where targetrevenue_v2_overallscore = 'True'
-                and targetrevenue_v2_isdeleted = 'false')
-        when targettype = 24 then  ( select targetterm_getlist_vw.segmentssharegap
-                from targetterm_getlist_vw 
-                where targetsegmentsharegap_v2_overallscore = 'True'
-                and targetsegmentsharegap_v2_isdeleted = 'false')
-        when targettype = 28 then (select dpmprice  
-              from targetterm_getlist_vw 
-              where targetkpg_overallscore = 'True'
-              and targetkpg_isdeleted = 'false'	) end`),
+  case when targettype = ${
+    TARGET_TERM_LOOKUP.SEGMENT_SHARE
+  } then (select segmentsshare
+    from targetsegmentshare_v2
+    where overallscore = true
+    and targettermid = targetterm_v2_id
+    and isdeleted = false)
+  when targettype = ${
+    TARGET_TERM_LOOKUP.REVENUE_SHARE
+  } then (select numberofsegments
+    from targetrevenueshare_v2
+    where overallscore = true
+    and targettermid = targetterm_v2_id
+    and isdeleted = false)
+  when targettype = ${TARGET_TERM_LOOKUP.SEGMENT} then (select numberofsegments
+    from targetsegment_v2
+    where overallscore = true
+    and targettermid = targetterm_v2_id
+    and isdeleted = false)
+  when targettype = ${TARGET_TERM_LOOKUP.REVENUE} then (select amount 
+    from targetrevenue_v2
+    where overallscore = true
+    and targettermid = targetterm_v2_id
+    and isdeleted = false)
+  when targettype = ${
+    TARGET_TERM_LOOKUP.SHARE_GAP
+  } then  (select segmentssharegap
+    from targetsegmentsharegap_v2 
+    where overallscore = true
+    and targettermid = targetterm_v2_id
+    and isdeleted = false)
+  when targettype = ${TARGET_TERM_LOOKUP.KPG} then (select targetsegmentshare  
+    from targetkpg
+    where overallscore = true
+    and targettermid = targetterm_v2_id
+    and isdeleted = false) end`),
       levelCount: db.raw(`
-          case when targettype = 20 then   (select count(targetterm_getlist_vw.segmentsshare)
-          from targetterm_getlist_vw )          
-          when targettype = 21 then   (select count(targetrevenueshare_v2_numberofsegments)
-                    from targetterm_getlist_vw )
-          when targettype = 22 then  ( select count(targetsegment_v2_numberofsegments)
-                    from targetterm_getlist_vw )
-          when targettype = 23 then   (select count(amount) 
-                    from targetterm_getlist_vw )
-          when targettype = 24 then  ( select count(targetterm_getlist_vw.segmentssharegap)
-                    from targetterm_getlist_vw )
-          when targettype = 28 then (select count(dpmprice ) 
-                  from targetterm_getlist_vw ) end`),
+    case when targettype = ${
+      TARGET_TERM_LOOKUP.SEGMENT_SHARE
+    } then   (select count(*)
+      from targetsegmentshare_v2
+      where targettermid = targetterm_v2_id
+      and isdeleted = false)
+    when targettype = ${
+      TARGET_TERM_LOOKUP.REVENUE_SHARE
+    } then   (select count(*)
+      from targetrevenueshare_v2
+      where targettermid = targetterm_v2_id
+      and isdeleted = false)
+    when targettype = ${TARGET_TERM_LOOKUP.SEGMENT} then  ( select count(*)
+      from targetsegment_v2
+      where targettermid = targetterm_v2_id
+      and isdeleted = false)
+    when targettype = ${TARGET_TERM_LOOKUP.REVENUE} then   (select count(*)
+      from targetrevenue_v2
+      where targettermid = targetterm_v2_id
+      and isdeleted = false)
+    when targettype = ${TARGET_TERM_LOOKUP.SHARE_GAP} then  ( select count(*)
+      from targetsegmentsharegap_v2 
+      where targettermid = targetterm_v2_id
+      and isdeleted = false)
+    when targettype = ${TARGET_TERM_LOOKUP.KPG} then (select count(*)
+      from targetkpg
+      where targettermid = targetterm_v2_id
+      and isdeleted = false) end`),
       ruleCount: 0,
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(

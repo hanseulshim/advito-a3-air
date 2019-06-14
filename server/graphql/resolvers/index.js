@@ -25,7 +25,7 @@ exports.resolvers = {
     name: 'Date',
     description: 'Date custom scalar type',
     parseValue(value) {
-      return new Date(value);
+      return new Date(value).toISOString();
     },
     serialize(value) {
       return new Date(value).getTime();

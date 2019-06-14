@@ -445,17 +445,27 @@ mutation createTargetLevel(
 
 export const EDIT_TARGET_LEVEL = gql`
 mutation editTargetLevel(
-  $id: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
+  $id: Int!, $targetTermId: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
 ) {
   editTargetLevel(
-    id: $id, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
+    id: $id, targetTermId: $targetTermId, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
+    ${TARGET_LEVEL}
+  }
+}
+`;
+
+export const TOGGLE_TARGET_LEVEL = gql`
+mutation toggleTargetLevel(
+  $id: Int!, $targetTermId: Int!
+) {
+  toggleTargetLevel(id: $id, targetTermId: $targetTermId) {
     ${TARGET_LEVEL}
   }
 }
 `;
 
 export const DELETE_TARGET_LEVEL = gql`
-  mutation deleteTargetLevel($id: Int!) {
-    deleteTargetLevel(id: $id)
+  mutation deleteTargetLevel($id: Int!, $targetTermId: Int!) {
+    deleteTargetLevel(id: $id, targetTermId: $targetTermId)
   }
 `;

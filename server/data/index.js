@@ -18,7 +18,6 @@ const {
   dataSetDivisionList,
   dataSetColumnList
 } = require('./dataSet');
-const { targetLevelList } = require('./contract');
 const { process } = require('./process');
 
 module.exports = {
@@ -39,6 +38,5 @@ module.exports = {
   posList,
   travelSectorCollectionList,
   travelSectorRegionList,
-  targetLevelList,
   process
 };
