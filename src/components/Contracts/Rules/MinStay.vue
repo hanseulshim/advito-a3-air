@@ -10,6 +10,15 @@
       Save
     </button>
     <div v-if="editMode" class="control-row">
+      <label>Value: </label>
+      <el-input
+        v-model="value"
+        size="mini"
+        class="number-input"
+        type="number"
+        min="0"
+        clearable
+      />
       <label>Unit: </label>
       <el-select
         v-model="selectedUnit"
@@ -25,15 +34,6 @@
           :value="unit"
         ></el-option>
       </el-select>
-      <label>Value: </label>
-      <el-input
-        v-model="value"
-        size="mini"
-        class="number-input"
-        type="number"
-        min="0"
-        clearable
-      />
       <label>Include Day of the week: </label>
       <el-select
         v-model="selectedDay"
