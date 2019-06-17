@@ -184,6 +184,14 @@ export const ruleTypes = [
   {
     value: 'Distance',
     label: 'Distance'
+  },
+  {
+    value: 'PublishedFareBasis',
+    label: 'Published Fare Basis'
+  },
+  {
+    value: 'CorporateFareBasis',
+    label: 'Corporate Fare Basis'
   }
 ];
 

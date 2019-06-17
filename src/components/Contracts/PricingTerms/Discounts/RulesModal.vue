@@ -61,6 +61,8 @@ import ConnectionPoint from '../../Rules/ConnectionPoint';
 import FlightNumber from '../../Rules/FlightNumber';
 import Blackouts from '../../Rules/Blackouts';
 import Distance from '../../Rules/Distance';
+import PublishedFareBasis from '../../Rules/PublishedFareBasis';
+import CorporateFareBasis from '../../Rules/CorporateFareBasis';
 
 import { ruleTypes } from '../../Rules/helper';
 export default {
@@ -87,7 +89,9 @@ export default {
     ConnectionPoint,
     FlightNumber,
     Blackouts,
-    Distance
+    Distance,
+    PublishedFareBasis,
+    CorporateFareBasis
   },
   data() {
     return {
