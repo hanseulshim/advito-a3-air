@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Travel Dates</p>
+    <p class="rule-title">Blackouts</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -48,30 +48,21 @@
 <script>
 import { formatDate } from '../../../helper';
 export default {
-  name: 'TravelDates',
+  name: 'Blackouts',
   apollo: {},
   data() {
     return {
-      editMode: false,
+      editMode: true,
       startDate: '',
       endDate: '',
       updateRule: null,
-      rules: [
-        {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
-        },
-        {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
-        }
-      ]
+      rules: []
     };
   },
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'TravelDates');
+        this.$emit('delete-rule', 'Blackouts');
       }
       this.editMode = !this.editMode;
       this.startDate = '';
@@ -92,7 +83,7 @@ export default {
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'TravelDates');
+        this.$emit('delete-rule', 'Blackouts');
       }
     },
     editTag(rule) {

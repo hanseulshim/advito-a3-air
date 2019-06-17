@@ -1,30 +1,36 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Required Booking Class</p>
+    <p class="rule-title">Corporate Fare Basis</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
       @click="toggleEditMode"
     />
-    <button v-if="editMode" class=" save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
       Save
     </button>
     <div v-if="editMode" class="control-row">
       <el-select
-        v-model="selectedClass"
+        v-model="selectedBasis"
         filterable
         placeholder="Select"
         size="mini"
         clearable
-        multiple
       >
         <el-option
-          v-for="item in classes"
+          v-for="item in basis"
           :key="item"
           :label="item"
           :value="item"
         ></el-option>
       </el-select>
+      <el-input
+        v-model="input"
+        size="mini"
+        class="number-input"
+        min="0"
+        clearable
+      />
       <label for="exclude"> Exclude: </label>
       <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
@@ -38,7 +44,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.name }}</el-tag
+        >{{ `${rule.basis} ${rule.input}` }}</el-tag
       >
     </div>
     <div class="rule-tags">
@@ -50,22 +56,28 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.name }}</el-tag
+        >{{ `${rule.basis} ${rule.input}` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { classes } from './helper';
 export default {
-  name: 'RequiredBookingClass',
+  name: 'CorporateFareBasis',
   apollo: {},
   data() {
     return {
-      classes,
+      basis: [
+        'Matches',
+        'Starts With',
+        'Ends With',
+        'Contains Any',
+        'Contains All'
+      ],
+      selectedBasis: '',
       exclude: false,
       editMode: true,
-      selectedClass: [],
+      input: '',
       rules: []
     };
   },
@@ -80,24 +92,24 @@ export default {
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'RequiredBookingClass');
+        this.$emit('delete-rule', 'CorporateFareBasis');
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedClass.map(v => {
-        this.rules.push({
-          name: v,
-          exclude: this.exclude
-        });
+      this.rules.push({
+        basis: this.selectedBasis,
+        input: this.input,
+        exclude: this.exclude
       });
 
-      this.selectedClass = [];
+      this.selectedBasis = '';
+      this.input = '';
     },
     deleteTag(tag) {
       this.rules.splice(this.rules.indexOf(tag), 1);
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'RequiredBookingClass');
+        this.$emit('delete-rule', 'CorporateFareBasis');
       }
     }
   }

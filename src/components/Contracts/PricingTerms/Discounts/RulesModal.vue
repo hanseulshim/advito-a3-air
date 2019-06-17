@@ -57,6 +57,13 @@ import TimeOfWeek from '../../Rules/TimeOfWeek';
 import MinStay from '../../Rules/MinStay';
 import MaxStay from '../../Rules/MaxStay';
 import Stops from '../../Rules/Stops';
+import ConnectionPoint from '../../Rules/ConnectionPoint';
+import FlightNumber from '../../Rules/FlightNumber';
+import Blackouts from '../../Rules/Blackouts';
+import Distance from '../../Rules/Distance';
+import PublishedFareBasis from '../../Rules/PublishedFareBasis';
+import CorporateFareBasis from '../../Rules/CorporateFareBasis';
+
 import { ruleTypes } from '../../Rules/helper';
 export default {
   name: 'RulesModal',
@@ -78,14 +85,20 @@ export default {
     TimeOfWeek,
     MinStay,
     MaxStay,
-    Stops
+    Stops,
+    ConnectionPoint,
+    FlightNumber,
+    Blackouts,
+    Distance,
+    PublishedFareBasis,
+    CorporateFareBasis
   },
   data() {
     return {
       discount: {
         name: ''
       },
-      ruleTypes: ruleTypes,
+      ruleTypes,
       ruleList: [
         {
           id: 1,
@@ -104,7 +117,7 @@ export default {
     };
   },
   computed: {
-    rulesInDropdown: function() {
+    rulesInDropdown() {
       return this.ruleTypes.filter(
         rule => !this.ruleList.some(v => v.type === rule.value)
       );

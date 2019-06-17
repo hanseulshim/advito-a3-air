@@ -70,10 +70,10 @@ export default {
     };
   },
   computed: {
-    excludedRules: function() {
+    excludedRules() {
       return this.rules.filter(rule => rule.exclude);
     },
-    includedRules: function() {
+    includedRules() {
       return this.rules.filter(rule => !rule.exclude);
     }
   },

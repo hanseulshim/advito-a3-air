@@ -70,17 +70,17 @@ export default {
     };
   },
   computed: {
-    excludedRules: function() {
+    excludedRules() {
       return this.rules.filter(rule => rule.exclude);
     },
-    includedRules: function() {
+    includedRules() {
       return this.rules.filter(rule => !rule.exclude);
     }
   },
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'Market');
+        this.$emit('delete-rule', 'PublishedBookingClass');
       }
       this.editMode = !this.editMode;
     },

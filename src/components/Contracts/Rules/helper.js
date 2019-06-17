@@ -168,6 +168,30 @@ export const ruleTypes = [
   {
     value: 'Stops',
     label: 'Stops'
+  },
+  {
+    value: 'ConnectionPoint',
+    label: 'Connection Point'
+  },
+  {
+    value: 'FlightNumber',
+    label: 'Flight Number'
+  },
+  {
+    value: 'Blackouts',
+    label: 'Blackouts'
+  },
+  {
+    value: 'Distance',
+    label: 'Distance'
+  },
+  {
+    value: 'PublishedFareBasis',
+    label: 'Published Fare Basis'
+  },
+  {
+    value: 'CorporateFareBasis',
+    label: 'Corporate Fare Basis'
   }
 ];
 

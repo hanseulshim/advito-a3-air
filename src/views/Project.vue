@@ -34,7 +34,7 @@ export default {
     };
   },
   computed: {
-    navItems: function() {
+    navItems() {
       const navItems = [
         {
           id: 1,
