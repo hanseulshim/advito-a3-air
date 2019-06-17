@@ -117,7 +117,7 @@ export default {
     };
   },
   computed: {
-    rulesInDropdown: function() {
+    rulesInDropdown() {
       return this.ruleTypes.filter(
         rule => !this.ruleList.some(v => v.type === rule.value)
       );
