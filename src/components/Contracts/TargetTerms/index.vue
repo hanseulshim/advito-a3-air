@@ -114,7 +114,7 @@
           <el-checkbox
             :class="{ invalid: props.row.qc !== 1 }"
             :value="props.row.qc === 1"
-            @change="toggleTargetTermQC(props.row.id)"
+            @change="toggleTargetTermQC([props.row.id])"
           />
         </template>
       </el-table-column>
@@ -233,7 +233,8 @@ import { term } from '@/config';
 import {
   GET_CONTRACT,
   GET_SELECTED_CONTRACT,
-  GET_TARGET_TERM_LIST
+  GET_TARGET_TERM_LIST,
+  GET_BULK_ACTION_LIST
 } from '@/graphql/queries';
 import { TOGGLE_TARGET_TERM_QC } from '@/graphql/mutations';
 import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
@@ -265,6 +266,12 @@ export default {
           contractId: this.selectedContract.id
         };
       }
+    },
+    bulkActionList: {
+      query: GET_BULK_ACTION_LIST,
+      variables: {
+        parentId: TARGET_TERM_LOOKUP.BULK_ACTION
+      }
     }
   },
   data() {
@@ -276,32 +283,7 @@ export default {
       term,
       toggleRowId: null,
       bulkIdList: [],
-      bulkActionList: [
-        {
-          id: 1,
-          name: 'Delete'
-        },
-        {
-          id: 2,
-          name: 'QC'
-        },
-        {
-          id: 3,
-          name: 'Ticket Date'
-        },
-        {
-          id: 4,
-          name: 'Travel Data'
-        },
-        {
-          id: 5,
-          name: 'Tour Code'
-        },
-        {
-          id: 6,
-          name: 'Ticket Designation'
-        }
-      ]
+      bulkActionList: []
     };
   },
   computed: {
@@ -391,20 +373,23 @@ export default {
       });
     },
     bulkAction(value) {
-      if (value === 1) {
+      if (value === TARGET_TERM_LOOKUP.BULK_ACTION_DELETE) {
         this.showDeleteTargetTermModal(this.bulkIdList);
+      } else if (value === TARGET_TERM_LOOKUP.BULK_ACTION_QC) {
+        this.toggleTargetTermQC(this.bulkIdList);
       }
     },
     clearBulkActions() {
       this.bulkIdList = [];
       this.bulkActionId = null;
     },
-    async toggleTargetTermQC(id) {
+    async toggleTargetTermQC(idList) {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_TARGET_TERM_QC,
           variables: {
-            id
+            contractId: this.selectedContract.id,
+            idList
           },
           refetchQueries: () => [
             {
@@ -413,6 +398,7 @@ export default {
             }
           ]
         });
+        this.clearBulkActions();
       } catch (error) {
         this.$modal.show('error', {
           message: error.message

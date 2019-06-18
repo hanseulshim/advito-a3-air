@@ -118,7 +118,7 @@
           <el-checkbox
             :class="{ invalid: !props.row.qc }"
             :value="props.row.qc"
-            @change="togglePricingTermQC(props.row.id)"
+            @change="togglePricingTermQC([props.row.id])"
           />
         </template>
       </el-table-column>
@@ -275,8 +275,10 @@ import { term } from '@/config';
 import {
   GET_PRICING_TERM_LIST,
   GET_SELECTED_CONTRACT,
-  GET_CONTRACT
+  GET_CONTRACT,
+  GET_BULK_ACTION_LIST
 } from '@/graphql/queries';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
@@ -308,6 +310,12 @@ export default {
           contractId: this.selectedContract.id
         };
       }
+    },
+    bulkActionList: {
+      query: GET_BULK_ACTION_LIST,
+      variables: {
+        parentId: PRICING_TERM_LOOKUP.BULK_ACTION
+      }
     }
   },
   data() {
@@ -319,32 +327,7 @@ export default {
       term,
       bulkIdList: [],
       toggleRowId: null,
-      bulkActionList: [
-        {
-          id: 1,
-          name: 'Delete'
-        },
-        {
-          id: 2,
-          name: 'QC'
-        },
-        {
-          id: 3,
-          name: 'Ticket Date'
-        },
-        {
-          id: 4,
-          name: 'Travel Data'
-        },
-        {
-          id: 5,
-          name: 'Tour Code'
-        },
-        {
-          id: 6,
-          name: 'Ticket Designation'
-        }
-      ]
+      bulkActionList: []
     };
   },
   computed: {
@@ -418,8 +401,10 @@ export default {
       });
     },
     bulkAction(value) {
-      if (value === 1) {
+      if (value === PRICING_TERM_LOOKUP.BULK_ACTION_DELETE) {
         this.showDeletePricingTermModal(this.bulkIdList);
+      } else if (value === PRICING_TERM_LOOKUP.BULK_ACTION_QC) {
+        this.togglePricingTermQC(this.bulkIdList);
       }
     },
     clearBulkActions() {
@@ -429,12 +414,13 @@ export default {
     toggleRow(id) {
       this.toggleRowId = id;
     },
-    async togglePricingTermQC(id) {
+    async togglePricingTermQC(idList) {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_PRICING_TERM_QC,
           variables: {
-            id
+            contractId: this.selectedContract.id,
+            idList
           },
           refetchQueries: () => [
             {
@@ -443,6 +429,7 @@ export default {
             }
           ]
         });
+        this.clearBulkActions();
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
