@@ -1,9 +1,13 @@
 <template>
   <div>
-    <Navigation :selected-contract="selectedContract" />
+    <Navigation />
     <div class="title-row space-between">
       <div class="section-header">
-        <el-tooltip v-if="checkQc" placement="top" effect="light">
+        <el-tooltip
+          v-if="pricingTermList.some(term => term.qc !== 1)"
+          placement="top"
+          effect="light"
+        >
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
@@ -45,7 +49,7 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <Discounts :pricing-term-id="props.row.id" />
+          <Discounts :pricing-term-id="props.row.id" @toggle-row="toggleRow" />
         </template>
       </el-table-column>
       <el-table-column
@@ -90,7 +94,7 @@
         :min-width="term.name"
       >
         <template slot-scope="props">
-          <div :class="{ 'error-qc': checkErrorQc(props.row.qc) }">
+          <div :class="{ 'error-qc': !props.row.qc }">
             {{ props.row.name }}
           </div>
         </template>
@@ -101,7 +105,7 @@
         :formatter="formatDate"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveEndDate"
+        sort-by="effectiveTo"
       />
       <el-table-column
         label="QC"
@@ -112,21 +116,21 @@
       >
         <template slot-scope="props">
           <el-checkbox
-            :class="{ invalid: props.row.qc !== 1 }"
-            :value="props.row.qc === 1"
+            :class="{ invalid: !props.row.qc }"
+            :value="props.row.qc"
             @change="togglePricingTermQC(props.row.id)"
           />
         </template>
       </el-table-column>
       <el-table-column
-        prop="discountTotal"
+        prop="discountCount"
         label="Discounts"
         :min-width="term.discounts"
       />
       <el-table-column label="Airlines" :min-width="term.airlines">
         <template slot-scope="props">
           <el-tooltip
-            v-if="props.row.airlineList.length > 1"
+            v-if="props.row.airlineList.length"
             effect="dark"
             placement="top"
           >
@@ -145,6 +149,10 @@
       <el-table-column label="PoS/PoO" :min-width="term.pos">
         <template slot-scope="props">
           <el-tooltip
+            v-if="
+              props.row.pointOfSaleList.length &&
+                props.row.pointOfOriginList.length
+            "
             effect="dark"
             placement="top"
             popper-class="pos-popup-container"
@@ -179,6 +187,19 @@
               }}</span>
             </span>
           </el-tooltip>
+          <span v-else>
+            <span>{{
+              props.row.pointOfSaleList.length
+                ? props.row.pointOfSaleList.join('')
+                : 0
+            }}</span>
+            <span> / </span>
+            <span>{{
+              props.row.pointOfOriginList.length
+                ? props.row.pointOfOriginList.join('')
+                : 0
+            }}</span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column
@@ -189,35 +210,24 @@
         :sort-orders="['ascending', 'descending']"
       >
         <template slot-scope="props">
-          <el-tooltip
-            v-if="props.row.note && props.row.note.noteList.length"
-            effect="dark"
-            content="Show Note"
-            placement="top"
-          >
-            <div class="note-count-container">
+          <el-tooltip effect="dark" content="Show Note" placement="top">
+            <div
+              class="note-count-container"
+              @click="toggleNoteModal(props.row)"
+            >
               <i
-                class="fas fa-sticky-note"
-                :class="{ important: props.row.note.important }"
-                @click="toggleNoteModal(props.row)"
+                class="fa-sticky-note"
+                :class="[
+                  { important: props.row.noteImportant },
+                  props.row.noteContent ? 'fas' : 'far'
+                ]"
               />
-              <!-- <span class="note-count sub-content empty">{{
-                getNoteLength(props.row.discountList)
-              }}</span> -->
-            </div>
-          </el-tooltip>
-          <el-tooltip v-else effect="dark" content="Show Note" placement="top">
-            <div class="note-count-container">
-              <i
-                class="far fa-sticky-note"
-                :class="{
-                  important: props.row.note && props.row.note.important
-                }"
-                @click="toggleNoteModal(props.row)"
-              />
-              <!-- <span class="note-count sub-content">{{
-                getNoteLength(props.row.discountList)
-              }}</span> -->
+              <span
+                v-if="props.row.discountNoteCount"
+                class="note-count sub-content"
+                :class="{ empty: props.row.noteContent }"
+                >{{ props.row.discountNoteCount }}</span
+              >
             </div>
           </el-tooltip>
         </template>
@@ -262,7 +272,11 @@
 import Navigation from '../Navigation';
 import { pluralize, formatDate } from '@/helper';
 import { term } from '@/config';
-import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import {
+  GET_PRICING_TERM_LIST,
+  GET_SELECTED_CONTRACT,
+  GET_CONTRACT
+} from '@/graphql/queries';
 import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
@@ -284,23 +298,27 @@ export default {
     ChangeAppliedOrderModal
   },
   apollo: {
-    pricingTermList: {
-      query: GET_PRICING_TERM_LIST
-    }
-  },
-  props: {
     selectedContract: {
-      type: Object,
-      required: true
+      query: GET_SELECTED_CONTRACT
+    },
+    pricingTermList: {
+      query: GET_PRICING_TERM_LIST,
+      variables() {
+        return {
+          contractId: this.selectedContract.id
+        };
+      }
     }
   },
   data() {
     return {
+      selectedContract: {},
       pricingTermList: [],
       showInactive: false,
       bulkActionId: null,
       term,
       bulkIdList: [],
+      toggleRowId: null,
       bulkActionList: [
         {
           id: 1,
@@ -332,27 +350,30 @@ export default {
   computed: {
     filteredPricingTermList() {
       return this.pricingTermList
-        .filter(term => this.showInactive || term.effectiveEndDate > new Date())
+        .filter(term => this.showInactive || term.effectiveTo > new Date())
         .map(term => ({
           ...term,
-          inactive: term.effectiveEndDate < new Date()
+          inactive: term.effectiveTo < new Date()
         }));
     }
+  },
+  updated() {
+    if (this.toggleRowId) {
+      const row = this.$refs.pricingTermList.data.filter(
+        term => term.id === this.toggleRowId
+      )[0];
+      this.$refs.pricingTermList.toggleRowExpansion(row, true);
+    }
+    this.toggleRowId = null;
   },
   methods: {
     pluralize(word, count) {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return `${formatDate(row.effectiveStartDate)} — ${formatDate(
-        row.effectiveEndDate
+      return `${formatDate(row.effectiveFrom)} — ${formatDate(
+        row.effectiveTo
       )}`;
-    },
-    checkQc() {
-      return this.pricingTermList.some(term => term.qc !== 1);
-    },
-    checkErrorQc(qc) {
-      return qc !== 1;
     },
     tableRowClassName({ row }) {
       return row.inactive ? 'inactive-row' : '';
@@ -366,24 +387,34 @@ export default {
       }
     },
     showNewPricingTermModal() {
-      this.$modal.show('new-pricing-term');
+      this.$modal.show('new-pricing-term', {
+        contractId: this.selectedContract.id
+      });
     },
     showCopyPricingTermModal(pricingTerm) {
-      this.$modal.show('copy-pricing-term', { pricingTerm });
+      this.$modal.show('copy-pricing-term', {
+        pricingTerm,
+        contractId: this.selectedContract.id
+      });
     },
     showEditPricingTermModal(pricingTerm) {
       this.$modal.show('edit-pricing-term', { pricingTerm });
     },
     showDeletePricingTermModal(idList) {
-      this.$modal.show('delete-pricing-term', { idList });
+      this.$modal.show('delete-pricing-term', {
+        contractId: this.selectedContract.id,
+        idList
+      });
     },
     showChangeAppliedOrderModal() {
-      this.$modal.show('change-pricing-term-order');
+      this.$modal.show('change-pricing-term-order', {
+        contractId: this.selectedContract.id
+      });
     },
     toggleNoteModal(pricingTerm) {
       this.$modal.show('save-note', {
-        id: pricingTerm.id,
-        note: pricingTerm.note
+        parentId: pricingTerm.id,
+        important: pricingTerm.noteImportant
       });
     },
     bulkAction(value) {
@@ -395,13 +426,22 @@ export default {
       this.bulkIdList = [];
       this.bulkActionId = null;
     },
+    toggleRow(id) {
+      this.toggleRowId = id;
+    },
     async togglePricingTermQC(id) {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_PRICING_TERM_QC,
           variables: {
             id
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT,
+              variables: { id: this.selectedContract.id }
+            }
+          ]
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -410,30 +450,19 @@ export default {
       }
     },
     sortByNote(a, b) {
-      if (a.note === null && b.note === null) {
+      if (a.noteImportant && !b.noteImportant) {
+        return -1;
+      } else if (a.noteImportant && b.noteImportant) {
+        return 0;
+      } else if (!a.noteImportant && b.noteImportant) {
+        return 1;
+      } else if (a.noteContent && !b.noteContent) {
+        return -1;
+      } else if (!a.noteContent && b.noteContent) {
+        return 1;
+      } else if (a.noteContent && b.noteContent) {
         return 0;
       }
-      if (b.note === null && a.note !== null) {
-        return -1;
-      }
-      if (a.note === null && b.note !== null) {
-        return 1;
-      }
-      if (a.note.important && !b.note.important) {
-        return -1;
-      }
-      if (!a.note.important && b.note.important) {
-        return 1;
-      }
-      if (a.note.length > b.note.length) {
-        return -1;
-      }
-    },
-    getNoteLength(discountList) {
-      const length = discountList.filter(
-        discount => discount.note && discount.note.noteList.length
-      ).length;
-      return length ? length : null;
     }
   }
 };
@@ -479,6 +508,7 @@ export default {
 .note-count-container {
   position: relative;
   display: inline;
+  cursor: pointer;
   .note-count {
     position: absolute;
     color: $dove-gray;

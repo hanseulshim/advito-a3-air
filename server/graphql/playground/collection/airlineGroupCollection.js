@@ -1,7 +1,7 @@
 exports.airlineGroupCollection = {
   name: 'Airline Group Collection Mutations',
   endpoint: 'http://localhost:8085/graphql',
-  headers: { sessiontoken: 'advitoValidToken' },
+  headers: { sessiontoken: 'MY^PR3TTYP0NY' },
   query: `
     mutation {
       editAirlineGroupCollection(id: 2, name: "Updated Collection", description: "new description") {

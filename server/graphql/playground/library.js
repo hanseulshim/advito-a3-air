@@ -1,7 +1,7 @@
 exports.library = {
   name: 'Library Queries',
   endpoint: 'http://localhost:8085/graphql',
-  headers: { sessiontoken: 'advitoValidToken' },
+  headers: { sessiontoken: 'MY^PR3TTYP0NY' },
   query: `
   {
     airportList {
@@ -27,6 +27,11 @@ exports.library = {
           overrideFareCategory
         }
       }
+    }
+    currencyList {
+      id
+      name
+      code
     }
   }`
 };

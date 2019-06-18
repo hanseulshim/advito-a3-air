@@ -15,14 +15,17 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">new target term</div>
+        <div class="section-header">new target level</div>
         <el-tooltip effect="dark" content="Close Modal" placement="top">
           <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
       </div>
       <el-form-item label="Target Amount *" prop="targetAmount">
         <div class="target-amount-input-container">
-          <el-input v-model.number="form.targetAmount" /><span>%</span>
+          <el-input v-model.number="form.targetAmount" /><span
+            v-if="showPercent()"
+            >%</span
+          >
         </div>
       </el-form-item>
       <el-form-item label="Incentive Description">
@@ -39,12 +42,14 @@
 </template>
 
 <script>
-import { GET_TARGET_LEVEL_LIST } from '@/graphql/queries';
+import { GET_TARGET_LEVEL_LIST, GET_TARGET_TERM } from '@/graphql/queries';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import { CREATE_TARGET_LEVEL } from '@/graphql/mutations';
 export default {
   name: 'NewTargetLevelModal',
   data() {
     return {
+      targetTypeId: null,
       form: {
         targetTermId: null,
         targetAmount: null,
@@ -75,6 +80,18 @@ export default {
         }
       });
     },
+    showPercent() {
+      if (
+        this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.KPG
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     async createTargetLevel() {
       try {
         await this.$apollo.mutate({
@@ -82,24 +99,18 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const targetLevel = data.data.createTargetLevel;
-            const newData = store.readQuery({
+          refetchQueries: () => [
+            {
               query: GET_TARGET_LEVEL_LIST,
-              variables: {
-                targetTermId: this.form.targetTermId
-              }
-            });
-            newData.targetLevelList.push(targetLevel);
-            store.writeQuery({
-              query: GET_TARGET_LEVEL_LIST,
-              data: newData,
-              variables: {
-                targetTermId: this.form.targetTermId
-              }
-            });
-          }
+              variables: { targetTermId: this.form.targetTermId }
+            },
+            {
+              query: GET_TARGET_TERM,
+              variables: { id: this.form.targetTermId }
+            }
+          ]
         });
+        this.$emit('toggle-row', this.form.targetTermId);
         this.$modal.show('success', {
           message: 'Target Level successfully created.',
           name: 'new-target-level'
@@ -111,9 +122,11 @@ export default {
       }
     },
     beforeOpen(event) {
+      this.targetTypeId = event.params.targetTypeId;
       this.form.targetTermId = event.params.targetTermId;
     },
     beforeClose() {
+      this.targetTypeId = null;
       this.form.targetTermId = null;
       this.form.targetAmount = null;
       this.form.incentiveDescription = null;

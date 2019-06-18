@@ -65,9 +65,11 @@
 import {
   GET_DISCOUNT_LIST,
   GET_DISCOUNT_TYPE_LIST,
+  GET_PRICING_TERM,
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
 } from '@/graphql/queries';
+import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { COPY_DISCOUNT } from '@/graphql/mutations';
 export default {
   name: 'CopyDiscountModal',
@@ -137,24 +139,30 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const discount = data.data.copyDiscount;
-            const newData = store.readQuery({
+          update: (store, { data: { copyDiscount } }) => {
+            const query = {
               query: GET_DISCOUNT_LIST,
               variables: {
                 pricingTermId: this.pricingTermId
               }
-            });
-            newData.discountList.push(discount);
+            };
+            const data = store.readQuery(query);
+            data.discountList.push(copyDiscount);
             store.writeQuery({
-              query: GET_DISCOUNT_LIST,
-              data: newData,
-              variables: {
-                pricingTermId: this.pricingTermId
-              }
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_PRICING_TERM,
+              variables: {
+                id: this.pricingTermId
+              }
+            }
+          ]
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount successfully copied.',
           name: 'copy-discount'
@@ -169,19 +177,21 @@ export default {
       const {
         id,
         name,
-        discountType,
+        discountTypeId,
         discountValue,
-        journeyType,
-        directionType
+        journeyTypeId,
+        directionTypeId
       } = event.params.discount;
       this.pricingTermId = event.params.pricingTermId;
       this.form.id = id;
       this.form.name = name;
-      this.form.discountTypeId = discountType.id;
+      this.form.discountTypeId = discountTypeId;
       this.form.discountValue =
-        discountType.id === 2 ? discountValue * 100 : discountValue;
-      this.form.journeyTypeId = journeyType.id;
-      this.form.directionTypeId = directionType.id;
+        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+          ? discountValue * 100
+          : discountValue;
+      this.form.journeyTypeId = journeyTypeId;
+      this.form.directionTypeId = directionTypeId;
     },
     beforeClose() {
       this.pricingTermId = null;

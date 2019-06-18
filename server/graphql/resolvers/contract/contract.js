@@ -1,98 +1,200 @@
-const { ApolloError } = require('apollo-server-lambda');
-const { contractList, contractTypeList } = require('../../../data');
+const { CONTRACT_LOOKUP } = require('../../constants');
+
+//TODO: REPLACE HARD CODED CLIENT ID WITH REAL ONE WHEN CLIENT IS HOOKED UP
+const CLIENT_ID = 1;
 
 exports.contract = {
   Query: {
-    contractList: () => contractList.filter(contract => !contract.isDeleted),
-    contractTypeList: () => contractTypeList
+    contractList: async (_, __, { db }) => await getContractList(db),
+    contract: async (_, { id }, { db }) => await getContract(db, id),
+    contractTypeList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', CONTRACT_LOOKUP.TYPE),
+    divisionTypeList: async (_, __, { db }) =>
+      await db('division')
+        .select({
+          id: 'division.id',
+          name: 'division.name'
+        })
+        .distinct('division.id')
+        .where('division.isdeleted', false)
+        .andWhere('division.clientid', CLIENT_ID)
   },
   Mutation: {
-    createContract: (
+    createContract: async (
       _,
       {
         name,
         typeId,
         round,
-        effectiveStartDate,
-        effectiveEndDate,
-        division,
+        effectiveFrom,
+        effectiveTo,
+        divisionId,
         description
-      }
+      },
+      { db }
     ) => {
-      const maxId = Math.max(...contractList.map(contract => contract.id)) + 1;
-      const type = contractTypeList.filter(type => type.id === typeId)[0];
-      const contract = {
-        id: maxId,
-        name,
-        type,
-        description,
-        round,
-        effectiveStartDate: new Date(effectiveStartDate),
-        effectiveEndDate: effectiveEndDate
-          ? new Date(effectiveEndDate)
-          : new Date(253402232400000),
-        qc: 0,
-        pricingTermTotal: 0,
-        targetTermTotal: 0,
-        pointOfSaleList: [],
-        pointOfOriginList: [],
-        airlineList: [],
-        division,
-        isDeleted: false
-      };
-      contractList.push(contract);
+      const [id] = await db('contractcontainer').insert(
+        {
+          name,
+          contracttype: typeId,
+          round,
+          effectivefrom: new Date(effectiveFrom),
+          effectiveto: effectiveTo
+            ? new Date(effectiveTo)
+            : new Date(253402232400000),
+          description,
+          qc: 0
+        },
+        'id'
+      );
+      if (divisionId) {
+        await db('contractdivision').insert({
+          contractid: id,
+          divisionid: divisionId
+        });
+      }
+      const [contract] = await getContract(db, id);
       return contract;
     },
-    copyContract: (_, { id, name }) => {
-      const contract = contractList.filter(c => c.id === id)[0];
-      if (!contract) {
-        throw new ApolloError('Contract not found', 400);
-      }
-      const maxId = Math.max(...contractList.map(contract => contract.id)) + 1;
-      const copyContract = {
-        ...contract,
-        id: maxId,
-        name
-      };
-      contractList.push(copyContract);
-      return copyContract;
+    copyContract: async (_, { id, name }, { db }) => {
+      const { rows } = await db.raw(
+        `SELECT contract_createcopy(${id}, '${name}')`
+      );
+      const [copyContract] = rows;
+      const [contract] = await getContract(
+        db,
+        copyContract.contract_createcopy
+      );
+      return contract;
     },
-    editContract: (
+    editContract: async (
       _,
       {
         id,
         name,
         typeId,
         round,
-        effectiveStartDate,
-        effectiveEndDate,
-        division,
+        effectiveFrom,
+        effectiveTo,
+        divisionId,
         description
-      }
+      },
+      { db }
     ) => {
-      const contract = contractList.filter(c => c.id === id)[0];
-      if (!contract) {
-        throw new ApolloError('Contract not found', 400);
+      await db('contractcontainer')
+        .where('id', id)
+        .update({
+          contracttype: typeId,
+          name,
+          round,
+          effectivefrom: new Date(effectiveFrom),
+          effectiveto: effectiveTo
+            ? new Date(effectiveTo)
+            : new Date(253402232400000),
+          description
+        });
+      if (divisionId) {
+        await db('contractdivision')
+          .where('contractid', id)
+          .update({ divisionid: divisionId });
       }
-      const type = contractTypeList.filter(type => type.id === typeId)[0];
-      contract.name = name;
-      contract.type = type;
-      contract.round = round;
-      contract.effectiveStartDate = new Date(effectiveStartDate);
-      contract.effectiveEndDate = effectiveEndDate
-        ? new Date(effectiveEndDate)
-        : new Date(253402232400000);
-      contract.division = division;
-      contract.description = description;
+      const [contract] = await getContract(db, id);
       return contract;
     },
-    deleteContract: (_, { id }) => {
-      const contract = contractList.filter(c => c.id === id)[0];
-      if (!contract) {
-        throw new ApolloError('Contract not found', 400);
-      }
-      contract.isDeleted = true;
-      return id;
-    }
+    deleteContract: async (_, { id }, { db }) =>
+      parseInt(
+        await db('contractcontainer')
+          .where('id', id)
+          .update(
+            {
+              isdeleted: true
+            },
+            'id'
+          )
+      )
   }
 };
+
+const getContractList = async db =>
+  await db('contractcontainer as c')
+    .select({
+      id: 'c.id',
+      name: 'c.name',
+      typeId: 'l.id',
+      typeName: 'l.name_val',
+      description: 'c.description',
+      round: 'c.round',
+      effectiveFrom: 'c.effectivefrom',
+      effectiveTo: 'c.effectiveto',
+      qc: 'c.qc',
+      pricingTermCount: db.raw(
+        '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
+      ),
+      targetTermCount: db.raw(
+        '(SELECT COUNT(*) from targetterm_v2 as t where t.contractcontainerid = c.id and t.isdeleted = false)'
+      ),
+      divisionId: 'd.id',
+      pointOfOriginList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+      ),
+      pointOfSaleList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+      ),
+      airlineList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
+      )
+    })
+    .leftJoin('lov_lookup as l', 'c.contracttype', 'l.id')
+    .leftJoin('contractdivision as cd', 'c.id', 'cd.contractid')
+    .leftJoin('division as d', 'cd.divisionid', 'd.id')
+    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
+    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
+    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
+    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
+    .where('c.isdeleted', false)
+    .groupBy('c.id', 'l.id', 'd.id');
+
+const getContract = async (db, id) =>
+  await db('contractcontainer as c')
+    .select({
+      id: 'c.id',
+      name: 'c.name',
+      typeId: 'l.id',
+      typeName: 'l.name_val',
+      description: 'c.description',
+      round: 'c.round',
+      effectiveFrom: 'c.effectivefrom',
+      effectiveTo: 'c.effectiveto',
+      qc: 'c.qc',
+      pricingTermCount: db.raw(
+        '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
+      ),
+      targetTermCount: db.raw(
+        '(SELECT COUNT(*) from targetterm_v2 as t where t.contractcontainerid = c.id and t.isdeleted = false)'
+      ),
+      divisionId: 'd.id',
+      pointOfOriginList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+      ),
+      pointOfSaleList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+      ),
+      airlineList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
+      )
+    })
+    .leftJoin('lov_lookup as l', 'c.contracttype', 'l.id')
+    .leftJoin('contractdivision as cd', 'c.id', 'cd.contractid')
+    .leftJoin('division as d', 'cd.divisionid', 'd.id')
+    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
+    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
+    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
+    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
+    .where('c.isdeleted', false)
+    .andWhere('c.id', id)
+    .groupBy('c.id', 'l.id', 'd.id');

@@ -1,79 +1,69 @@
 const CONTRACT = `id
         name
-        type {
-          id
-          name
-        }
+        typeId
+        typeName
         description
         round
-        effectiveStartDate
-        effectiveEndDate
+        effectiveFrom
+        effectiveTo
         qc
-        pricingTermTotal
-        targetTermTotal
+        pricingTermCount
+        targetTermCount
         pointOfSaleList
         pointOfOriginList
-        airlineList`;
-
-const NOTE = `important
-        noteList {
-          id
-          author {
-            id
-            name
-          }
-          date
-          assignee {
-            id
-            name
-          }
-          message
-        }`;
+        airlineList
+        divisionId`;
 
 const PRICING_TERM = `id
         contractOrder
         appliedOrder
         name
-        effectiveStartDate
-        effectiveEndDate
+        effectiveFrom
+        effectiveTo
         qc
         pointOfSaleList
         pointOfOriginList
         airlineList
-        note {
-          ${NOTE}
-        }
+        noteImportant
+        noteContent
+        discountNoteCount
         ignore
-        discountTotal`;
+        discountCount`;
 
 const TARGET_TERM = `id
-      name
-      effectiveStartDate
-      effectiveEndDate
-      timeframe
-      qc
-      targetType {
-        id
         name
-      }
-      cabinF
-      cabinB
-      cabinP
-      cabinE
-      qsi
-      incentiveType {
-        id
-        name
-      }
-      softTarget
-      order
-      internalTarget
-      targetAmount
-      levelTotal
-      ruleTotal
-      note {
-        ${NOTE}
-      }
+        order
+        effectiveFrom
+        effectiveTo
+        timeframe
+        qc
+        targetTypeId
+        targetTypeName
+        cabinF
+        cabinB
+        cabinP
+        cabinE
+        qsi
+        incentiveTypeId
+        incentiveTypeName
+        softTarget
+        internalTarget
+        targetAmount
+        levelCount
+        ruleCount
+        currencyId
+        noteImportant
+        noteContent
+        dpmPrice
+        dpmStartDate
+        baselineDateFrom
+        baselineDateTo
+        goalDateFrom
+        goalDateTo
+        airlineGroupFrom
+        airlineGroupTo
+        fareCategoryFrom
+        fareCategoryTo
   `;
 
 const TARGET_LEVEL = `id
@@ -88,31 +78,61 @@ const DISCOUNT = `id
         contractOrder
         appliedOrder
         name
-        effectiveStartDate
-        effectiveEndDate
-        discountType {
-          id
-          name
-        }
+        discountTypeId
+        discountTypeName
         discountValue
-        journeyType {
-          id
-          name
-        }
-        directionType {
-          id
-          name
-        }
-        normalizationList
-        note {
-          ${NOTE}
-        }`;
+        journeyTypeId
+        journeyTypeName
+        directionTypeId
+        directionTypeName
+        normalizationCount
+        noteImportant
+        noteContent`;
+
+const NOTE = `id
+        text
+        lastUpdate
+        assigneeId
+        assigneeName
+        assignedToId
+        assignedToName`;
+
+const CONTRACT_LOOKUP = {
+  CONTRACT: 7,
+  PROPOSAL: 8,
+  AMENDMENT: 9,
+  TYPE: 2
+};
+
+const DISCOUNT_LOOKUP = {
+  DISCOUNT_TYPE: 3,
+  PERCENTAGE: 11,
+  JOURNEY_TYPE: 4,
+  DIRECTION_TYPE: 5
+};
+
+const TARGET_TERM_LOOKUP = {
+  TARGET_TYPE: 6,
+  INCENTIVE_TYPE: 7,
+  SEGMENT_SHARE: 20,
+  REVENUE_SHARE: 21,
+  SEGMENT: 22,
+  REVENUE: 23,
+  SHARE_GAP: 24,
+  NONE: 25,
+  BACK_END: 26,
+  OTHER: 27,
+  KPG: 28
+};
 
 module.exports = {
   CONTRACT,
   PRICING_TERM,
   DISCOUNT,
   TARGET_TERM,
+  TARGET_TERM_LOOKUP,
   TARGET_LEVEL,
-  NOTE
+  NOTE,
+  CONTRACT_LOOKUP,
+  DISCOUNT_LOOKUP
 };

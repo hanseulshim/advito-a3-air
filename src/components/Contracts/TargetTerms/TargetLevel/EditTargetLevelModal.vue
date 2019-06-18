@@ -22,7 +22,10 @@
       </div>
       <el-form-item label="Target Amount *" prop="targetAmount">
         <div class="target-amount-input-container">
-          <el-input v-model.number="form.targetAmount" /><span>%</span>
+          <el-input v-model.number="form.targetAmount" /><span
+            v-if="showPercent()"
+            >%</span
+          >
         </div>
       </el-form-item>
       <el-form-item label="Incentive Description">
@@ -39,13 +42,17 @@
 </template>
 
 <script>
+import { GET_TARGET_TERM } from '@/graphql/queries';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import { EDIT_TARGET_LEVEL } from '@/graphql/mutations';
 export default {
   name: 'EditTargetLevelModal',
   data() {
     return {
+      targetTypeId: null,
       form: {
         id: null,
+        targetTermId: null,
         targetAmount: null,
         incentiveDescription: null,
         scoringTarget: false
@@ -74,16 +81,35 @@ export default {
         }
       });
     },
+    showPercent() {
+      if (
+        this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.KPG
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     async editTargetLevel() {
       try {
         await this.$apollo.mutate({
           mutation: EDIT_TARGET_LEVEL,
           variables: {
             ...this.form
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TARGET_TERM,
+              variables: { id: this.form.targetTermId }
+            }
+          ]
         });
+        this.$emit('toggle-row', this.form.targetTermId);
         this.$modal.show('success', {
-          message: 'Target Level successfully created.',
+          message: 'Target Level successfully edited.',
           name: 'edit-target-level'
         });
       } catch (error) {
@@ -95,17 +121,22 @@ export default {
     beforeOpen(event) {
       const {
         id,
+        targetTermId,
         targetAmount,
         incentiveDescription,
         scoringTarget
       } = event.params.targetLevel;
+      this.targetTypeId = event.params.targetTypeId;
       this.form.id = id;
+      this.form.targetTermId = targetTermId;
       this.form.targetAmount = targetAmount * 100;
       this.form.incentiveDescription = incentiveDescription;
       this.form.scoringTarget = scoringTarget;
     },
     beforeClose() {
+      this.targetTypeId = null;
       this.form.id = null;
+      this.form.targetTermId = null;
       this.form.targetAmount = null;
       this.form.incentiveDescription = null;
       this.form.scoringTarget = false;

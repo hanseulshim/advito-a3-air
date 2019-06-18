@@ -3,6 +3,7 @@
     classes="modal-container"
     name="new-pricing-term"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
@@ -33,13 +34,14 @@
 </template>
 
 <script>
-import { GET_PRICING_TERM_LIST } from '@/graphql/queries';
+import { GET_CONTRACT, GET_PRICING_TERM_LIST } from '@/graphql/queries';
 import { CREATE_PRICING_TERM } from '@/graphql/mutations';
 export default {
   name: 'NewPricingTermModal',
   data() {
     return {
       form: {
+        contractId: null,
         name: null,
         ignore: false
       },
@@ -74,17 +76,26 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const pricingTerm = data.data.createPricingTerm;
-            const newData = store.readQuery({
-              query: GET_PRICING_TERM_LIST
-            });
-            newData.pricingTermList.push(pricingTerm);
-            store.writeQuery({
+          update: (store, { data: { createPricingTerm } }) => {
+            const query = {
               query: GET_PRICING_TERM_LIST,
-              data: newData
+              variables: {
+                contractId: this.form.contractId
+              }
+            };
+            const data = store.readQuery(query);
+            data.pricingTermList.push(createPricingTerm);
+            store.writeQuery({
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONTRACT,
+              variables: { id: this.form.contractId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Pricing Term successfully created.',
@@ -96,7 +107,11 @@ export default {
         });
       }
     },
+    beforeOpen(event) {
+      this.form.contractId = event.params.contractId;
+    },
     beforeClose() {
+      this.form.contractId = null;
       this.form.name = null;
       this.form.ignore = false;
     }

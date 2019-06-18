@@ -26,7 +26,7 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="type.name"
+        prop="typeName"
         label="Type"
         :min-width="contract.type"
         sortable
@@ -54,7 +54,7 @@
         :formatter="formatDate"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveEndDate"
+        sort-by="effectiveTo"
       />
       <el-table-column
         label="QC"
@@ -79,12 +79,20 @@
             <div slot="content">{{ props.row.airlineList.join(', ') }}</div>
             <span>{{ props.row.airlineList.length }}</span>
           </el-tooltip>
-          <span v-else>{{ props.row.airlineList.join('') }}</span>
+          <span v-else>
+            {{
+              props.row.airlineList.length ? props.row.airlineList.join('') : 0
+            }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="PoS/PoO" :min-width="contract.pos">
         <template slot-scope="props">
           <el-tooltip
+            v-if="
+              props.row.pointOfSaleList.length ||
+                props.row.pointOfOriginList.length
+            "
             effect="dark"
             placement="top"
             popper-class="pos-popup-container"
@@ -97,6 +105,7 @@
             <span>
               <span>
                 {{
+                  props.row.pointOfSaleList &&
                   props.row.pointOfSaleList.length > 1
                     ? props.row.pointOfSaleList.length
                     : props.row.pointOfSaleList.join('')
@@ -112,6 +121,19 @@
               </span>
             </span>
           </el-tooltip>
+          <span v-else>
+            <span>{{
+              props.row.pointOfSaleList.length
+                ? props.row.pointOfSaleList.join('')
+                : 0
+            }}</span>
+            <span> / </span>
+            <span>{{
+              props.row.pointOfOriginList.length
+                ? props.row.pointOfOriginList.join('')
+                : 0
+            }}</span>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="Pricing Terms" :min-width="contract.pricingTerms">
@@ -127,7 +149,7 @@
               "
             >
               <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.pricingTermTotal }}
+                {{ props.row.pricingTermCount }}
               </button>
             </router-link>
           </el-tooltip>
@@ -140,7 +162,7 @@
               :to="`/project/${$route.params.projectId}/contracts/target-terms`"
             >
               <button class="button number" @click="selectContract(props.row)">
-                {{ props.row.targetTermTotal }}
+                {{ props.row.targetTermCount }}
               </button>
             </router-link>
           </el-tooltip>
@@ -179,6 +201,7 @@
 <script>
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { GET_CONTRACT_LIST } from '@/graphql/queries';
+import { UPDATE_CONTRACT } from '@/graphql/mutations';
 import { contract } from '@/config';
 import NewContractModal from './NewContractModal';
 import CopyContractModal from './CopyContractModal';
@@ -208,7 +231,9 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return formatDate(row.effectiveEndDate);
+      return `${formatDate(row.effectiveFrom)} — ${formatDate(
+        row.effectiveTo
+      )}`;
     },
     formatPercent(num) {
       return formatPercent(num);
@@ -231,8 +256,11 @@ export default {
     showDeleteContractModal(id) {
       this.$modal.show('delete-contract', { id });
     },
-    selectContract(contract) {
-      this.$emit('select-contract', contract);
+    selectContract(selectedContract) {
+      this.$apollo.mutate({
+        mutation: UPDATE_CONTRACT,
+        variables: { selectedContract }
+      });
     }
   }
 };

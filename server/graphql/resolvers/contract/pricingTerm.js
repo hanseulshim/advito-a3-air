@@ -1,148 +1,184 @@
-const { ApolloError } = require('apollo-server-lambda');
-const { pricingTermList, userList, discountList } = require('../../../data');
-
 exports.pricingTerm = {
   Query: {
-    pricingTermList: () => pricingTermList.filter(term => !term.isDeleted)
+    pricingTermList: async (_, { contractId }, { db }) =>
+      contractId ? await getPricingTermList(db, contractId) : [],
+    pricingTerm: async (_, { id }, { db }) => await getPricingTerm(db, id)
   },
   Mutation: {
-    createPricingTerm: (_, { name, ignore }) => {
-      const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const maxContractOrder =
-        Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const maxAppliedOrder =
-        Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const pricingTerm = {
-        id: maxId,
-        contractOrder: maxContractOrder,
-        appliedOrder: maxAppliedOrder,
-        name,
-        effectiveStartDate: new Date(),
-        effectiveEndDate: new Date(253402232400000),
-        qc: 0,
-        discountTotal: 0,
-        pointOfSaleList: [],
-        pointOfOriginList: [],
-        airlineList: [],
-        ignore,
-        isDeleted: false,
-        note: null
-      };
-      pricingTermList.push(pricingTerm);
-      return pricingTerm;
-    },
-    copyPricingTerm: (_, { id, name, ignore }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      const maxId = Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const maxContractOrder =
-        Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const maxAppliedOrder =
-        Math.max(...pricingTermList.map(term => term.id)) + 1;
-      const filterDiscountList = discountList.filter(
-        d => d.pricingTermId === id
+    createPricingTerm: async (_, { contractId, name, ignore }, { db }) => {
+      const [{ maxAppliedOrder, maxContractOrder }] = await db('pricingterm')
+        .max({ maxAppliedOrder: 'sequence' })
+        .max({ maxContractOrder: 'readorder' })
+        .where('contractcontainerid', contractId)
+        .andWhere('isdeleted', false);
+      const [id] = await db('pricingterm').insert(
+        {
+          contractcontainerid: contractId,
+          name,
+          type: 1,
+          sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
+          readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
+          qc: false,
+          ignore
+        },
+        'id'
       );
-      filterDiscountList.forEach(discount => {
-        const maxId = Math.max(...discountList.map(d => d.id)) + 1;
-        const copyDiscount = {
-          ...discount,
-          id: maxId,
-          pricingTermId: id
-        };
-        discountList.push(copyDiscount);
-      });
-      const copyPricingTerm = {
-        ...pricingTerm,
-        id: maxId,
-        contractOrder: maxContractOrder,
-        appliedOrder: maxAppliedOrder,
-        discountTotal: filterDiscountList.length,
-        name,
-        ignore
-      };
-      pricingTermList.push(copyPricingTerm);
-      return copyPricingTerm;
+      await updatePricingTermOrder(db, contractId);
+      return await getPricingTerm(db, id);
     },
-    editPricingTerm: (_, { id, name, ignore }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      pricingTerm.name = name;
-      pricingTerm.ignore = ignore;
+    copyPricingTerm: async (_, { id, contractId, name }, { db }) => {
+      const { rows } = await db.raw(
+        `SELECT pricingterm_createcopy(${id}, '${name}')`
+      );
+      const [{ pricingterm_createcopy: newId }] = rows;
+      await updatePricingTermOrder(db, contractId);
+      const [pricingTerm] = await getPricingTerm(db, parseInt(newId));
       return pricingTerm;
     },
-    togglePricingTermQC: (_, { id }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      pricingTerm.qc = pricingTerm.qc !== 1 ? 1 : 0;
-      return pricingTerm;
+    editPricingTerm: async (_, { id, name, ignore }, { db }) => {
+      await db('pricingterm')
+        .where('id', id)
+        .update({
+          name,
+          ignore
+        });
+      return await getPricingTerm(db, id);
     },
-    deletePricingTerms: (_, { idList }) => {
-      idList.forEach(id => {
-        const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-        if (!pricingTerm) {
-          throw new ApolloError('Pricing Term not found', 400);
-        }
-        pricingTerm.isDeleted = true;
-      });
+    togglePricingTermQC: async (_, { id }, { db }) => {
+      await db.raw(`
+        SELECT pricingterm_toggleqc(${id})
+      `);
+      return await getPricingTerm(db, id);
+    },
+    deletePricingTerms: async (_, { contractId, idList }, { db }) => {
+      await db('pricingterm')
+        .update({ isdeleted: true })
+        .whereIn('id', idList);
+      await updatePricingTermOrder(db, contractId);
       return idList;
     },
-    saveNote: (_, { id, important, message, assigneeId, noteId }, { user }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      const assignee = userList.filter(user => user.id === assigneeId)[0];
-      const note =
-        pricingTerm.note === null
-          ? {
-              important: false,
-              noteList: []
-            }
-          : pricingTerm.note;
-      note.important = important;
-      if (message) {
-        if (noteId) {
-          const noteContent = note.noteList.filter(n => n.id === noteId)[0];
-          noteContent.message = message;
-          noteContent.date = new Date();
-          noteContent.assignee = assignee;
-        } else {
-          const content = {
-            id: new Date().getUTCMilliseconds(),
-            author: user,
-            date: new Date(),
-            assignee,
-            message
-          };
-          note.noteList.push(content);
-        }
-      }
-      pricingTerm.note = note;
-      return note;
-    },
-    deleteNote: (_, { id, noteId }) => {
-      const pricingTerm = pricingTermList.filter(term => term.id === id)[0];
-      if (!pricingTerm) {
-        throw new ApolloError('Pricing Term not found', 400);
-      }
-      const noteIndex = pricingTerm.note.noteList.findIndex(
-        n => n.id === noteId
-      );
-      pricingTerm.note.noteList.splice(noteIndex, 1);
-      return pricingTerm.note;
-    },
-    updateAppliedOrder: (_, { updatePricingTermList }) => {
-      updatePricingTermList.forEach(term => {
-        const pricingTerm = pricingTermList.filter(t => t.id === term.id)[0];
-        pricingTerm.appliedOrder = term.appliedOrder;
+    updateAppliedOrder: async (_, { updatePricingTermList }, { db }) => {
+      const [[contractId]] = await db.transaction(trx => {
+        const queries = [];
+        updatePricingTermList.forEach(term => {
+          const query = db('pricingterm')
+            .where('id', term.id)
+            .update(
+              {
+                sequence: term.appliedOrder
+              },
+              'contractcontainerid'
+            )
+            .transacting(trx);
+          queries.push(query);
+        });
+        Promise.all(queries)
+          .then(trx.commit)
+          .catch(trx.rollback);
       });
-      return pricingTermList;
+      return await getPricingTermList(db, parseInt(contractId));
     }
   }
+};
+
+const getPricingTermList = async (db, contractId) =>
+  await db('pricingterm as p')
+    .select({
+      id: 'p.id',
+      contractOrder: 'p.readorder',
+      appliedOrder: 'p.sequence',
+      name: 'p.name',
+      effectiveFrom: 'c.effectivefrom',
+      effectiveTo: 'c.effectiveto',
+      qc: 'p.qc',
+      discountCount: db.raw(
+        '(SELECT COUNT(*) from discount as d where d.pricingtermid = p.id and d.isdeleted = false)'
+      ),
+      ignore: 'p.ignore',
+      noteImportant: db.raw('COALESCE(n.important, FALSE)'),
+      noteContent: db.raw(
+        'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
+      ),
+      discountNoteCount: db.raw(`
+        (SELECT COUNT (
+          notecount != 0 OR NULL
+        )
+        FROM (
+          SELECT (
+            SELECT COUNT ( * ) FROM usernote WHERE discount.notesid = usernote.parentnoteid
+          ) as notecount
+          FROM discount WHERE pricingtermid = p.id AND isdeleted = FALSE
+        ) as count)`),
+      pointOfOriginList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+      ),
+      pointOfSaleList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+      ),
+      airlineList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
+      )
+    })
+    .leftJoin('contractcontainer as c', 'c.id', contractId)
+    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
+    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
+    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
+    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
+    .leftJoin('usernote as n', 'p.notesid', 'n.id')
+    .where('p.isdeleted', false)
+    .andWhere('p.contractcontainerid', contractId)
+    .groupBy('p.id', 'c.id', 'n.important', 'n.id');
+
+const getPricingTerm = async (db, id) => {
+  const [pricingTerm] = await db('pricingterm as p')
+    .select({
+      id: 'p.id',
+      contractOrder: 'p.readorder',
+      appliedOrder: 'p.sequence',
+      name: 'p.name',
+      effectiveFrom: 'c.effectivefrom',
+      effectiveTo: 'c.effectiveto',
+      qc: 'p.qc',
+      discountCount: db.raw(
+        '(SELECT COUNT(*) from discount as d where d.pricingtermid = p.id and d.isdeleted = false)'
+      ),
+      ignore: 'p.ignore',
+      noteImportant: db.raw('COALESCE(n.important, FALSE)'),
+      noteContent: db.raw(
+        'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
+      ),
+      discountNoteCount: db.raw(`
+        (SELECT COUNT (
+          notecount != 0 OR NULL
+        )
+        FROM (
+          SELECT (
+            SELECT COUNT ( * ) FROM usernote WHERE discount.notesid = usernote.parentnoteid
+          ) as notecount
+          FROM discount WHERE pricingtermid = p.id AND isdeleted = FALSE
+        ) as count)`),
+      pointOfOriginList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+      ),
+      pointOfSaleList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+      ),
+      airlineList: db.raw(
+        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
+      )
+    })
+    .leftJoin('contractcontainer as c', 'c.id', 'p.contractcontainerid')
+    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
+    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
+    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
+    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
+    .leftJoin('usernote as n', 'p.notesid', 'n.id')
+    .where('p.isdeleted', false)
+    .andWhere('p.id', id)
+    .groupBy('p.id', 'c.id', 'n.important', 'n.id');
+  return pricingTerm;
+};
+
+const updatePricingTermOrder = async (db, contractId) => {
+  await db.raw(`SELECT pricingterm_update_sequence(${contractId})`);
 };

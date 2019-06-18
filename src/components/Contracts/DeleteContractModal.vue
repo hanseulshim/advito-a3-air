@@ -37,18 +37,17 @@ export default {
           variables: {
             id: this.id
           },
-          update: (store, data) => {
-            const id = data.data.deleteContract;
-            const newData = store.readQuery({
+          update: (store, { data: { deleteContract } }) => {
+            const query = {
               query: GET_CONTRACT_LIST
-            });
-            const index = newData.contractList.findIndex(
-              contract => contract.id === id
+            };
+            const data = store.readQuery(query);
+            data.contractList = data.contractList.filter(
+              c => c.id !== deleteContract
             );
-            newData.contractList.splice(index, 1);
             store.writeQuery({
-              query: GET_CONTRACT_LIST,
-              data: newData
+              ...query,
+              data
             });
           }
         });

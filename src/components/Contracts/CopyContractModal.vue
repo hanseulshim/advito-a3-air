@@ -72,15 +72,15 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const contract = data.data.copyContract;
-            const newData = store.readQuery({
+          update: (store, { data: { copyContract } }) => {
+            const query = {
               query: GET_CONTRACT_LIST
-            });
-            newData.contractList.push(contract);
+            };
+            const data = store.readQuery(query);
+            data.contractList.push(copyContract);
             store.writeQuery({
-              query: GET_CONTRACT_LIST,
-              data: newData
+              ...query,
+              data
             });
           }
         });

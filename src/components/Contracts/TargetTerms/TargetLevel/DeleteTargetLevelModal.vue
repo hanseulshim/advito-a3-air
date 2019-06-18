@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { GET_TARGET_LEVEL_LIST } from '@/graphql/queries';
+import { GET_TARGET_TERM, GET_TARGET_LEVEL_LIST } from '@/graphql/queries';
 import { DELETE_TARGET_LEVEL } from '@/graphql/mutations';
 export default {
   name: 'DeleteTargetLevelModal',
@@ -36,9 +36,10 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_TARGET_LEVEL,
           variables: {
-            id: this.id
+            id: this.id,
+            targetTermId: this.targetTermId
           },
-          update: (store, { data: deleteTargetLevel }) => {
+          update: (store, { data: { deleteTargetLevel } }) => {
             const query = {
               query: GET_TARGET_LEVEL_LIST,
               variables: {
@@ -46,21 +47,22 @@ export default {
               }
             };
             const data = store.readQuery(query);
-            const index = data.targetLevelList.findIndex(
-              term => term.id === deleteTargetLevel
+            data.targetLevelList = data.targetLevelList.filter(
+              term => deleteTargetLevel !== term.id
             );
-            data.targetLevelList.splice(index, 1);
             store.writeQuery({
               ...query,
               data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TARGET_TERM,
+              variables: { id: this.targetTermId }
+            }
+          ]
         });
-        this.$emit('clear-bulk-actions');
-        this.$modal.show('success', {
-          message: 'Pricing Term successfully deleted.',
-          name: 'delete-target-level'
-        });
+        this.$emit('toggle-row', this.targetTermId);
       } catch (error) {
         this.$modal.show('error', {
           message: error.message

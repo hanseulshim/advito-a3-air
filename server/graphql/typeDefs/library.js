@@ -27,8 +27,15 @@ type AirlineMappingException {
   overrideFareCategory: String
 }
 
+type Currency {
+  id: Int,
+  name: String,
+  code: String
+}
+
 extend type Query {
   airportList: [Airport] @auth
   bookingClassList: [BookingClass] @auth
+  currencyList: [Currency] @auth
 }
 `;

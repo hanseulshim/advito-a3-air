@@ -8,24 +8,30 @@ import {
   NOTE
 } from '../constants';
 
+export const UPDATE_CONTRACT = gql`
+  mutation updateContract($selectedContract: SelectedContract) {
+    updateContract(selectedContract: $selectedContract) @client
+  }
+`;
+
 export const CREATE_CONTRACT = gql`
   mutation createContract(
     $name: String!
     $typeId: Int!
     $round: Int
-    $effectiveStartDate: Date!
-    $effectiveEndDate: Date
+    $effectiveFrom: Date!
+    $effectiveTo: Date
     $description: String
-    $division: String
+    $divisionId: Int
   ) {
     createContract(
       name: $name
       typeId: $typeId
       round: $round
-      effectiveStartDate: $effectiveStartDate
-      effectiveEndDate: $effectiveEndDate
+      effectiveFrom: $effectiveFrom
+      effectiveTo: $effectiveTo
       description: $description
-      division: $division
+      divisionId: $divisionId
     ) {
       ${CONTRACT}
     }
@@ -46,20 +52,20 @@ export const EDIT_CONTRACT = gql`
     $name: String!
     $typeId: Int!
     $round: Int
-    $effectiveStartDate: Date!
-    $effectiveEndDate: Date
+    $effectiveFrom: Date!
+    $effectiveTo: Date
     $description: String
-    $division: String
+    $divisionId: Int
   ) {
     editContract(
       id: $id
       name: $name
       typeId: $typeId
       round: $round
-      effectiveStartDate: $effectiveStartDate
-      effectiveEndDate: $effectiveEndDate
+      effectiveFrom: $effectiveFrom
+      effectiveTo: $effectiveTo
       description: $description
-      division: $division
+      divisionId: $divisionId
     ) {
       ${CONTRACT}
     }
@@ -73,16 +79,16 @@ export const DELETE_CONTRACT = gql`
 `;
 
 export const CREATE_PRICING_TERM = gql`
-  mutation createPricingTerm($name: String!, $ignore: Boolean!) {
-    createPricingTerm(name: $name, ignore: $ignore) {
+  mutation createPricingTerm($contractId: Int!, $name: String!, $ignore: Boolean!) {
+    createPricingTerm(contractId: $contractId, name: $name, ignore: $ignore) {
       ${PRICING_TERM}
     }
   }
 `;
 
 export const COPY_PRICING_TERM = gql`
-  mutation copyPricingTerm($id: Int!, $name: String!, $ignore: Boolean!) {
-    copyPricingTerm(id: $id, name: $name, ignore: $ignore) {
+  mutation copyPricingTerm($id: Int!, $contractId: Int!, $name: String!, $ignore: Boolean!) {
+    copyPricingTerm(id: $id, contractId: $contractId, name: $name, ignore: $ignore) {
       ${PRICING_TERM}
     }
   }
@@ -105,8 +111,8 @@ export const TOGGLE_PRICING_TERM_QC = gql`
 `;
 
 export const DELETE_PRICING_TERMS = gql`
-  mutation deletePricingTerms($idList: [Int]!) {
-    deletePricingTerms(idList: $idList)
+  mutation deletePricingTerms($contractId: Int!, $idList: [Int]!) {
+    deletePricingTerms(contractId: $contractId, idList: $idList)
   }
 `;
 
@@ -177,24 +183,46 @@ export const EDIT_DISCOUNT = gql`
 `;
 
 export const DELETE_DISCOUNTS = gql`
-  mutation deleteDiscounts($idList: [Int]!) {
-    deleteDiscounts(idList: $idList)
+  mutation deleteDiscounts($pricingTermId: Int!, $idList: [Int]!) {
+    deleteDiscounts(pricingTermId: $pricingTermId, idList: $idList)
   }
 `;
 
-export const SAVE_NOTE = gql`
-  mutation saveNote(
-    $id: Int!
+export const ADD_NOTE = gql`
+  mutation addNote(
+    $parentId: Int!
+    $parentTable: String!
     $important: Boolean!
-    $message: String
-    $assigneeId: Int!
-    $noteId: Int
+    $text: String
+    $assignedToId: Int!
   ) {
-    saveNote(
-      id: $id
+    addNote(
+      parentId: $parentId
+      parentTable: $parentTable
       important: $important
-      message: $message
-      assigneeId: $assigneeId
+      text: $text
+      assignedToId: $assignedToId
+    ) {
+      ${NOTE}
+    }
+  }
+`;
+
+export const EDIT_NOTE = gql`
+  mutation editNote(
+    $parentId: Int!
+    $parentTable: String!
+    $important: Boolean!
+    $text: String
+    $assignedToId: Int!
+    $noteId: String!
+  ) {
+    editNote(
+      parentId: $parentId
+      parentTable: $parentTable
+      important: $important
+      text: $text
+      assignedToId: $assignedToId
       noteId: $noteId
     ) {
       ${NOTE}
@@ -203,44 +231,20 @@ export const SAVE_NOTE = gql`
 `;
 
 export const DELETE_NOTE = gql`
-  mutation deleteNote($id: Int!, $noteId: Int!) {
-    deleteNote(id: $id, noteId: $noteId) {
-      ${NOTE}
-    }
-  }
-`;
-
-export const SAVE_DISCOUNT_NOTE = gql`
-  mutation saveDiscountNote(
-    $id: Int!
+  mutation deleteNote(
+    $parentId: Int!
+    $parentTable: String!
+    $resetImportant: Boolean!
     $important: Boolean!
-    $message: String
-    $assigneeId: Int!
-    $noteId: Int
+    $noteId: String!
   ) {
-    saveDiscountNote(
-      id: $id
+    deleteNote(
+      parentId: $parentId
+      parentTable: $parentTable
+      resetImportant: $resetImportant
       important: $important
-      message: $message
-      assigneeId: $assigneeId
       noteId: $noteId
-    ) {
-      ${NOTE}
-    }
-  }
-`;
-
-export const DELETE_DISCOUNT_NOTE = gql`
-  mutation deleteDiscountNote(
-    $id: Int!
-    $noteId: Int!
-  ) {
-    deleteDiscountNote(
-      id: $id
-      noteId: $noteId
-    ) {
-      ${NOTE}
-    }
+    )
   }
 `;
 
@@ -266,30 +270,54 @@ export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
 
 export const CREATE_TARGET_TERM = gql`
 mutation createTargetTerm(
+  $contractId: Int!
   $name: String!
   $targetTypeId: Int!
-  $cabinF: Boolean!
-  $cabinB: Boolean!
-  $cabinP: Boolean!
-  $cabinE: Boolean!
-  $incentiveTypeId: Int!
-  $qsi: Float!
+  $timeframe: Int
+  $cabinF: Boolean
+  $cabinB: Boolean
+  $cabinP: Boolean
+  $cabinE: Boolean
+  $incentiveTypeId: Int
+  $currencyId: Int
   $softTarget: Boolean
   $internalTarget: Boolean
-  $timeframe: Int
+  $qsi: Float
+  $dpmPrice: Float
+  $dpmStartDate: Date
+  $baselineDateFrom: Date
+  $baselineDateTo: Date
+  $goalDateFrom: Date
+  $goalDateTo: Date
+  $airlineGroupFrom: Date
+  $airlineGroupTo: Date
+  $fareCategoryFrom: Date
+  $fareCategoryTo: Date
 ) {
   createTargetTerm(
+    contractId: $contractId
     name: $name
     targetTypeId: $targetTypeId
+    timeframe: $timeframe
     cabinF: $cabinF
     cabinB: $cabinB
     cabinP: $cabinP
     cabinE: $cabinE
     incentiveTypeId: $incentiveTypeId
-    qsi: $qsi
+    currencyId: $currencyId
     softTarget: $softTarget
     internalTarget: $internalTarget
-    timeframe: $timeframe
+    qsi: $qsi
+    dpmPrice: $dpmPrice
+    dpmStartDate: $dpmStartDate
+    baselineDateFrom: $baselineDateFrom
+    baselineDateTo: $baselineDateTo
+    goalDateFrom: $goalDateFrom
+    goalDateTo: $goalDateTo
+    airlineGroupFrom: $airlineGroupFrom
+    airlineGroupTo: $airlineGroupTo
+    fareCategoryFrom: $fareCategoryFrom
+    fareCategoryTo: $fareCategoryTo
   ) {
     ${TARGET_TERM}
   }
@@ -314,30 +342,48 @@ export const EDIT_TARGET_TERM = gql`
 mutation editTargetTerm(
   $id: Int!
   $name: String!
-  $targetTypeId: Int!
-  $cabinF: Boolean!
-  $cabinB: Boolean!
-  $cabinP: Boolean!
-  $cabinE: Boolean!
-  $incentiveTypeId: Int!
-  $qsi: Float!
+  $timeframe: Int
+  $cabinF: Boolean
+  $cabinB: Boolean
+  $cabinP: Boolean
+  $cabinE: Boolean
+  $currencyId: Int
   $softTarget: Boolean
   $internalTarget: Boolean
-  $timeframe: Int
+  $qsi: Float
+  $dpmPrice: Float
+  $dpmStartDate: Date
+  $baselineDateFrom: Date
+  $baselineDateTo: Date
+  $goalDateFrom: Date
+  $goalDateTo: Date
+  $airlineGroupFrom: Date
+  $airlineGroupTo: Date
+  $fareCategoryFrom: Date
+  $fareCategoryTo: Date
 ) {
   editTargetTerm(
     id: $id
     name: $name
-    targetTypeId: $targetTypeId
+    timeframe: $timeframe
     cabinF: $cabinF
     cabinB: $cabinB
     cabinP: $cabinP
     cabinE: $cabinE
-    incentiveTypeId: $incentiveTypeId
-    qsi: $qsi
+    currencyId: $currencyId
     softTarget: $softTarget
     internalTarget: $internalTarget
-    timeframe: $timeframe
+    qsi: $qsi
+    dpmPrice: $dpmPrice
+    dpmStartDate: $dpmStartDate
+    baselineDateFrom: $baselineDateFrom
+    baselineDateTo: $baselineDateTo
+    goalDateFrom: $goalDateFrom
+    goalDateTo: $goalDateTo
+    airlineGroupFrom: $airlineGroupFrom
+    airlineGroupTo: $airlineGroupTo
+    fareCategoryFrom: $fareCategoryFrom
+    fareCategoryTo: $fareCategoryTo
   ) {
     ${TARGET_TERM}
   }
@@ -387,29 +433,44 @@ export const DELETE_TARGET_TERM_NOTE = gql`
 `;
 
 export const CREATE_TARGET_LEVEL = gql`
-mutation createTargetLevel(
-  $targetTermId: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
+  mutation createTargetLevel(
+    $targetTermId: Int!
+    $targetAmount: Float!
+    $scoringTarget: Boolean!
+    $incentiveDescription: String
+  ) {
+    createTargetLevel(
+      targetTermId: $targetTermId
+      targetAmount: $targetAmount
+      scoringTarget: $scoringTarget
+      incentiveDescription: $incentiveDescription
+    )
+  }
+`;
+
+export const EDIT_TARGET_LEVEL = gql`
+mutation editTargetLevel(
+  $id: Int!, $targetTermId: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
 ) {
-  createTargetLevel(
-    targetTermId: $targetTermId, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
+  editTargetLevel(
+    id: $id, targetTermId: $targetTermId, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
     ${TARGET_LEVEL}
   }
 }
 `;
 
-export const EDIT_TARGET_LEVEL = gql`
-mutation editTargetLevel(
-  $id: Int!, $targetAmount: Float!, $scoringTarget: Boolean!, $incentiveDescription: String
+export const TOGGLE_TARGET_LEVEL = gql`
+mutation toggleTargetLevel(
+  $id: Int!, $targetTermId: Int!
 ) {
-  editTargetLevel(
-    id: $id, targetAmount: $targetAmount, scoringTarget: $scoringTarget, incentiveDescription: $incentiveDescription) {
+  toggleTargetLevel(id: $id, targetTermId: $targetTermId) {
     ${TARGET_LEVEL}
   }
 }
 `;
 
 export const DELETE_TARGET_LEVEL = gql`
-  mutation deleteTargetLevel($id: Int!) {
-    deleteTargetLevel(id: $id)
+  mutation deleteTargetLevel($id: Int!, $targetTermId: Int!) {
+    deleteTargetLevel(id: $id, targetTermId: $targetTermId)
   }
 `;

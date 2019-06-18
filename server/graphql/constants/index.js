@@ -3,8 +3,11 @@ const {
   PRICING_TERM,
   TARGET_TERM,
   TARGET_LEVEL,
+  TARGET_TERM_LOOKUP,
   DISCOUNT,
-  NOTE
+  NOTE,
+  CONTRACT_LOOKUP,
+  DISCOUNT_LOOKUP
 } = require('./contract');
 const { DATA_SET } = require('./dataSet');
 const { PROCESS } = require('./process');
@@ -15,8 +18,11 @@ module.exports = {
   PRICING_TERM,
   TARGET_TERM,
   TARGET_LEVEL,
+  TARGET_TERM_LOOKUP,
   DISCOUNT,
   NOTE,
+  CONTRACT_LOOKUP,
+  DISCOUNT_LOOKUP,
   DATA_SET,
   PROCESS,
   PROJECT

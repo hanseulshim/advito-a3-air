@@ -17,12 +17,16 @@
       <el-table-column
         label="Target Amount"
         :width="target.targetAmount"
-        :formatter="row => formatPercent(row.targetAmount)"
+        :formatter="row => formatTargetAmount(row)"
       />
       <el-table-column label="Score Target" :width="target.scoreTarget">
         <template slot-scope="props">
           <i v-if="props.row.scoringTarget" class="far fa-dot-circle" />
-          <i v-else class="far fa-circle" />
+          <i
+            v-else
+            class="far fa-circle"
+            @click="toggleTargetLevel(props.row)"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -50,16 +54,18 @@
         </template>
       </el-table-column>
     </el-table>
-    <NewTargetLevelModal />
-    <EditTargetLevelModal />
-    <DeleteTargetLevelModal />
+    <NewTargetLevelModal @toggle-row="toggleRow" />
+    <EditTargetLevelModal @toggle-row="toggleRow" />
+    <DeleteTargetLevelModal @toggle-row="toggleRow" />
   </div>
 </template>
 
 <script>
 import { formatPercent, pluralize } from '@/helper';
 import { target } from '@/config';
-import { GET_TARGET_LEVEL_LIST } from '@/graphql/queries';
+import { GET_TARGET_LEVEL_LIST, GET_TARGET_TERM } from '@/graphql/queries';
+import { TOGGLE_TARGET_LEVEL } from '@/graphql/mutations';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import NewTargetLevelModal from './NewTargetLevelModal';
 import EditTargetLevelModal from './EditTargetLevelModal';
 import DeleteTargetLevelModal from './DeleteTargetLevelModal';
@@ -85,6 +91,11 @@ export default {
       type: Number,
       required: true,
       default: null
+    },
+    targetTypeId: {
+      type: Number,
+      required: true,
+      default: null
     }
   },
   data() {
@@ -100,11 +111,27 @@ export default {
     formatPercent(num) {
       return formatPercent(num);
     },
+    formatTargetAmount({ targetAmount }) {
+      if (
+        this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.KPG
+      ) {
+        return formatPercent(targetAmount);
+      } else {
+        return targetAmount;
+      }
+    },
     showNewTargetLevelModal() {
-      this.$modal.show('new-target-level', { targetTermId: this.targetTermId });
+      this.$modal.show('new-target-level', {
+        targetTermId: this.targetTermId,
+        targetTypeId: this.targetTypeId
+      });
     },
     showEditTargetLevelModal(targetLevel) {
       this.$modal.show('edit-target-level', {
+        targetTypeId: this.targetTypeId,
         targetLevel
       });
     },
@@ -113,6 +140,31 @@ export default {
         id,
         targetTermId: this.targetTermId
       });
+    },
+    async toggleTargetLevel({ id, targetTermId }) {
+      try {
+        await this.$apollo.mutate({
+          mutation: TOGGLE_TARGET_LEVEL,
+          variables: {
+            id,
+            targetTermId
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TARGET_TERM,
+              variables: { id: this.targetTermId }
+            }
+          ]
+        });
+        this.toggleRow(targetTermId);
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
+    },
+    toggleRow(targetTermId) {
+      this.$emit('toggle-row', targetTermId);
     }
   }
 };

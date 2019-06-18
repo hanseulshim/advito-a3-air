@@ -5,12 +5,17 @@ provider:
   runtime: nodejs8.10
   region: us-east-2
   timeout: 30
+  environment: ${file(./env.yml)}
+  vpc:
+    securityGroupIds:
+      - 'sg-09b7d9888c893594d'
+    subnetIds:
+      - 'subnet-08c1aacead6928c9f'
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
-        - 'lambda:InvokeFunction'
-      Resource:
-        - '*'
+        - 'ses:*'
+      Resource: '*'
 
 functions:
   graphql:

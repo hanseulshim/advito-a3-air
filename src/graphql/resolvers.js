@@ -37,6 +37,20 @@ export default {
       });
       return null;
     },
+    updateContract: (
+      _,
+      { selectedContract = defaults.selectedContract },
+      { cache }
+    ) => {
+      cache.writeData({
+        data: {
+          selectedContract: {
+            ...selectedContract
+          }
+        }
+      });
+      return null;
+    },
     updateProjectStatus: (_, { id, status }, { cache }) => {
       const data = cache.readQuery({
         query: GET_PROJECT_STATUS_LIST

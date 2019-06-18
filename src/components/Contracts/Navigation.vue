@@ -44,13 +44,18 @@
 </template>
 
 <script>
+import { GET_SELECTED_CONTRACT } from '@/graphql/queries';
 export default {
   name: 'ContractNavigation',
-  props: {
+  apollo: {
     selectedContract: {
-      type: Object,
-      required: true
+      query: GET_SELECTED_CONTRACT
     }
+  },
+  data() {
+    return {
+      selectedContract: {}
+    };
   }
 };
 </script>

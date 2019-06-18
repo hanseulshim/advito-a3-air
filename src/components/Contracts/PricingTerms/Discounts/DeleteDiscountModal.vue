@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { GET_DISCOUNT_LIST } from '@/graphql/queries';
+import { GET_DISCOUNT_LIST, GET_PRICING_TERM } from '@/graphql/queries';
 import { DELETE_DISCOUNTS } from '@/graphql/mutations';
 export default {
   name: 'DeleteDiscountModal',
@@ -43,29 +43,32 @@ export default {
             idList: this.idList,
             pricingTermId: this.pricingTermId
           },
-          update: (store, data) => {
-            const idList = data.data.deleteDiscounts;
-            const newData = store.readQuery({
+          update: (store, { data: { deleteDiscounts } }) => {
+            const query = {
               query: GET_DISCOUNT_LIST,
               variables: {
                 pricingTermId: this.pricingTermId
               }
-            });
-            idList.forEach(id => {
-              const index = newData.discountList.findIndex(
-                discount => discount.id === id
-              );
-              newData.discountList.splice(index, 1);
-            });
+            };
+            const data = store.readQuery(query);
+            data.discountList = data.discountList.filter(
+              term => deleteDiscounts.indexOf(term.id) === -1
+            );
             store.writeQuery({
-              query: GET_DISCOUNT_LIST,
-              data: newData,
-              variables: {
-                pricingTermId: this.pricingTermId
-              }
+              ...query,
+              data
             });
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_PRICING_TERM,
+              variables: {
+                id: this.pricingTermId
+              }
+            }
+          ]
         });
+        this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Discount(s) successfully deleted.',
           name: 'delete-discount'

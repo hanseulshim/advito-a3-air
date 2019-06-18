@@ -33,25 +33,29 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-form-item>
-      <el-form-item v-if="form.typeId === 2" label="Round *" prop="round">
+      <el-form-item
+        v-if="form.typeId === CONTRACT_LOOKUP.PROPOSAL"
+        label="Round *"
+        prop="round"
+      >
         <el-input v-model.number="form.round" />
       </el-form-item>
       <el-form-item label="Effective Dates *">
         <div class="date-picker-container">
-          <el-form-item prop="effectiveStartDate" class="date-picker-item">
+          <el-form-item prop="effectiveFrom" class="date-picker-item">
             <el-date-picker
-              v-model="form.effectiveStartDate"
+              v-model="form.effectiveFrom"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
             />
           </el-form-item>
-          <el-form-item prop="effectiveEndDate" class="date-picker-item">
+          <el-form-item prop="effectiveTo" class="date-picker-item">
             <el-date-picker
-              v-model="form.effectiveEndDate"
+              v-model="form.effectiveTo"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
@@ -60,7 +64,14 @@
         </div>
       </el-form-item>
       <el-form-item label="Division">
-        <el-input v-model="form.division" />
+        <el-select v-model="form.divisionId" class="select-modal">
+          <el-option
+            v-for="item in divisionTypeList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="Description">
         <el-input v-model="form.description" type="textarea" />
@@ -73,13 +84,21 @@
 </template>
 
 <script>
-import { GET_CONTRACT_LIST, GET_CONTRACT_TYPE_LIST } from '@/graphql/queries';
+import {
+  GET_CONTRACT_LIST,
+  GET_CONTRACT_TYPE_LIST,
+  GET_DIVISION_TYPE_LIST
+} from '@/graphql/queries';
+import { CONTRACT_LOOKUP } from '@/graphql/constants';
 import { CREATE_CONTRACT } from '@/graphql/mutations';
 export default {
   name: 'NewContractModal',
   apollo: {
     contractTypeList: {
       query: GET_CONTRACT_TYPE_LIST
+    },
+    divisionTypeList: {
+      query: GET_DIVISION_TYPE_LIST
     }
   },
   data() {
@@ -88,12 +107,14 @@ export default {
         name: null,
         typeId: null,
         round: null,
-        effectiveStartDate: null,
-        effectiveEndDate: null,
+        effectiveFrom: null,
+        effectiveTo: null,
         description: null,
-        division: null
+        divisionId: null
       },
+      CONTRACT_LOOKUP,
       contractTypeList: [],
+      divisionTypeList: [],
       rules: {
         name: [
           {
@@ -117,7 +138,7 @@ export default {
           },
           { type: 'number', message: 'Round must be a number' }
         ],
-        effectiveStartDate: [
+        effectiveFrom: [
           {
             required: true,
             message: 'Please select a start date',
@@ -147,15 +168,15 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const contract = data.data.createContract;
-            const newData = store.readQuery({
+          update: (store, { data: { createContract } }) => {
+            const query = {
               query: GET_CONTRACT_LIST
-            });
-            newData.contractList.push(contract);
+            };
+            const data = store.readQuery(query);
+            data.contractList.push(createContract);
             store.writeQuery({
-              query: GET_CONTRACT_LIST,
-              data: newData
+              ...query,
+              data
             });
           }
         });
@@ -170,18 +191,14 @@ export default {
       }
     },
     updateType(value) {
-      if (value !== 2) {
+      if (value !== CONTRACT_LOOKUP.PROPOSAL) {
         this.form.round = null;
       }
     },
     beforeClose() {
-      this.form.name = null;
-      this.form.typeId = null;
-      this.form.round = null;
-      this.form.effectiveStartDate = null;
-      this.form.effectiveEndDate = null;
-      this.form.description = null;
-      this.form.division = null;
+      Object.keys(this.form).forEach(key => {
+        this.form[key] = null;
+      });
     }
   }
 };
