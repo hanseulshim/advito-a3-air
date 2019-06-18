@@ -196,6 +196,10 @@ export const ruleTypes = [
   {
     value: 'Cabin',
     label: 'Cabin'
+  },
+  {
+    value: 'FareCategory',
+    label: 'Fare Category'
   }
 ];
 
