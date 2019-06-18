@@ -22,7 +22,15 @@ exports.contract = {
         })
         .distinct('division.id')
         .where('division.isdeleted', false)
-        .andWhere('division.clientid', CLIENT_ID)
+        .andWhere('division.clientid', CLIENT_ID),
+    bulkActionList: async (_, { parentId }, { db }) =>
+      await db('bulkoperation')
+        .select({
+          id: 'id',
+          name: 'action'
+        })
+        .where('parentid', parentId)
+        .orderBy('id')
   },
   Mutation: {
     createContract: async (

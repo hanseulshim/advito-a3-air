@@ -121,6 +121,10 @@ type IncentiveType {
   id: Int
   name: String
 }
+type BulkAction {
+  id: Int,
+  name: String
+}
 type Note {
   id: String
   text: String
@@ -142,6 +146,7 @@ extend type Query {
   contract(id: Int!): [Contract] @auth
   contractTypeList: [ContractType] @auth
   divisionTypeList: [DivisionType] @auth
+  bulkActionList(parentId: Int!): [BulkAction] @auth
 
   pricingTermList(contractId: Int): [PricingTerm] @auth
   pricingTerm(id: Int!): PricingTerm @auth
@@ -188,7 +193,7 @@ extend type Mutation {
   createPricingTerm(contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   copyPricingTerm(id: Int!, contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
-  togglePricingTermQC(id: Int!): PricingTerm @auth
+  togglePricingTermQC(contractId: Int!, idList: [Int]!): [PricingTerm] @auth
   deletePricingTerms(contractId: Int!, idList: [Int]!): [Int] @auth
   updateAppliedOrder(
     updatePricingTermList: [NewAppliedOrder]!
@@ -243,7 +248,7 @@ extend type Mutation {
     fareCategoryFrom: Date
     fareCategoryTo: Date
   ): TargetTerm @auth
-  toggleTargetTermQC(id: Int!): TargetTerm @auth
+  toggleTargetTermQC(contractId: Int!, idList: [Int]!): [TargetTerm] @auth
   deleteTargetTerms(idList: [Int]!): [Int] @auth
 
   createTargetLevel(

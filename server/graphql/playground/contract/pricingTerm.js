@@ -33,7 +33,7 @@ exports.pricingTerm = {
         ${PRICING_TERM}
       }
 
-      togglePricingTermQC(id: 49) {
+      togglePricingTermQC(idList: [49]) {
         ${PRICING_TERM}
       }
 

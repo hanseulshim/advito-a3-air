@@ -188,7 +188,7 @@
 <script>
 import { formatDate, formatPercent, pluralize } from '@/helper';
 import { discount } from '@/config';
-import { GET_DISCOUNT_LIST } from '@/graphql/queries';
+import { GET_DISCOUNT_LIST, GET_BULK_ACTION_LIST } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import NewDiscountModal from './NewDiscountModal';
 import CopyDiscountModal from './CopyDiscountModal';
@@ -216,6 +216,12 @@ export default {
           pricingTermId: this.pricingTermId
         };
       }
+    },
+    bulkActionList: {
+      query: GET_BULK_ACTION_LIST,
+      variables: {
+        parentId: DISCOUNT_LOOKUP.BULK_ACTION
+      }
     }
   },
   props: {
@@ -232,32 +238,7 @@ export default {
       bulkActionId: null,
       discount,
       bulkIdList: [],
-      bulkActionList: [
-        {
-          id: 1,
-          name: 'Delete'
-        },
-        {
-          id: 2,
-          name: 'QC'
-        },
-        {
-          id: 3,
-          name: 'Ticket Date'
-        },
-        {
-          id: 4,
-          name: 'Travel Data'
-        },
-        {
-          id: 5,
-          name: 'Tour Code'
-        },
-        {
-          id: 6,
-          name: 'Ticket Designation'
-        }
-      ]
+      bulkActionList: []
     };
   },
   methods: {
@@ -281,7 +262,7 @@ export default {
       }
     },
     bulkAction(value) {
-      if (value === 1) {
+      if (value === DISCOUNT_LOOKUP.BULK_ACTION_DELETE) {
         this.showDeleteDiscountModal(this.bulkIdList);
       }
     },
