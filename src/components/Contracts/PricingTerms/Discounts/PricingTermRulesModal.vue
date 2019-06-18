@@ -1,7 +1,7 @@
 <template>
   <modal
     classes="modal-container"
-    name="rules"
+    name="pricingTermRulesModal"
     height="auto"
     scrollable
     width="800px"
@@ -66,9 +66,9 @@ import CorporateFareBasis from '../../Rules/CorporateFareBasis';
 import Cabin from '../../Rules/Cabin';
 import FareCategory from '../../Rules/FareCategory';
 
-import { ruleTypes } from '../../Rules/helper';
+import { pricingTermRuleTypes } from '../../Rules/helper';
 export default {
-  name: 'RulesModal',
+  name: 'PricingTermRulesModal',
   apollo: {},
   components: {
     TicketingDates,
@@ -102,7 +102,7 @@ export default {
       discount: {
         name: ''
       },
-      ruleTypes,
+      ruleTypes: pricingTermRuleTypes,
       ruleList: [
         {
           id: 1,
@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('rules');
+      this.$modal.hide('pricingTermRulesModal');
     },
     createRule(selected) {
       this.ruleList.push({
