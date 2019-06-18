@@ -192,6 +192,14 @@ export const ruleTypes = [
   {
     value: 'CorporateFareBasis',
     label: 'Corporate Fare Basis'
+  },
+  {
+    value: 'Cabin',
+    label: 'Cabin'
+  },
+  {
+    value: 'FareCategory',
+    label: 'Fare Category'
   }
 ];
 

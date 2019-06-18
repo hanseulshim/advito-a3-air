@@ -72,7 +72,11 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.name }}</el-tag
+        >{{
+          rule.name +
+            ' ' +
+            `${rule.start !== null ? rule.start : '0'} - ${rule.end}`
+        }}</el-tag
       >
     </div>
   </div>

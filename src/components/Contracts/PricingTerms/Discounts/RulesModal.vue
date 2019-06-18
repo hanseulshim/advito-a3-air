@@ -63,6 +63,8 @@ import Blackouts from '../../Rules/Blackouts';
 import Distance from '../../Rules/Distance';
 import PublishedFareBasis from '../../Rules/PublishedFareBasis';
 import CorporateFareBasis from '../../Rules/CorporateFareBasis';
+import Cabin from '../../Rules/Cabin';
+import FareCategory from '../../Rules/FareCategory';
 
 import { ruleTypes } from '../../Rules/helper';
 export default {
@@ -91,7 +93,9 @@ export default {
     Blackouts,
     Distance,
     PublishedFareBasis,
-    CorporateFareBasis
+    CorporateFareBasis,
+    Cabin,
+    FareCategory
   },
   data() {
     return {
