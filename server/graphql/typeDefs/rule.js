@@ -7,7 +7,23 @@ type TicketingDate {
   isDeleted: Boolean
 }
 
+input TicketingDateInput {
+  id: Int
+  ruleContainerId: String
+  startDate: Date
+  endDate: Date
+  isDeleted: Boolean
+}
+
 type TravelDate {
+  id: Int
+  ruleContainerId: String
+  startDate: Date
+  endDate: Date
+  isDeleted: Boolean
+}
+
+input TravelDateInput {
   id: Int
   ruleContainerId: String
   startDate: Date
@@ -205,6 +221,13 @@ extend type Query {
   distanceList(discountId: Int): [Distance] @auth
   cabinList(discountId: Int): [Cabin] @auth
   fareCategoryList(discountId: Int): [FareCategory] @auth
+}
+
+extend type Mutation {
+  updateTicketingDates(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]): [TicketingDate] @auth
+  deleteTicketingDate(id: Int!): Int @auth
+  updateTravelDates(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]): [TravelDate] @auth
+  deleteTravelDate(id: Int!): Int @auth
 }
 
 `;
