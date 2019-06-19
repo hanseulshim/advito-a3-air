@@ -147,11 +147,14 @@ exports.targetTerm = {
       );
       return await getTargetTerm(db, id);
     },
-    toggleTargetTermQC: async (_, { id }, { db }) => {
-      await db.raw(`
+    toggleTargetTermQC: async (_, { contractId, idList }, { db }) => {
+      const queries = idList.map(id =>
+        db.raw(`
         SELECT targetterm_toggleqc(${id})
-      `);
-      return await getTargetTerm(db, id);
+      `)
+      );
+      await Promise.all(queries);
+      return await getTargetTermList(db, contractId);
     },
     deleteTargetTerms: async (_, { idList }, { db }) => {
       const queries = idList.map(id =>

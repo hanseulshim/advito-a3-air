@@ -44,11 +44,14 @@ exports.pricingTerm = {
         });
       return await getPricingTerm(db, id);
     },
-    togglePricingTermQC: async (_, { id }, { db }) => {
-      await db.raw(`
+    togglePricingTermQC: async (_, { contractId, idList }, { db }) => {
+      const queries = idList.map(id =>
+        db.raw(`
         SELECT pricingterm_toggleqc(${id})
-      `);
-      return await getPricingTerm(db, id);
+      `)
+      );
+      await Promise.all(queries);
+      return await getPricingTermList(db, contractId);
     },
     deletePricingTerms: async (_, { contractId, idList }, { db }) => {
       await db('pricingterm')

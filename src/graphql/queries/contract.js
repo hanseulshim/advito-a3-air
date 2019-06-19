@@ -49,6 +49,15 @@ export const GET_CONTRACT_TYPE_LIST = gql`
   }
 `;
 
+export const GET_BULK_ACTION_LIST = gql`
+  query bulkActionList($parentId: Int!) {
+    bulkActionList(parentId: $parentId) {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_PRICING_TERM_LIST = gql`
 query pricingTermList($contractId: Int) {
   pricingTermList(contractId: $contractId) {

@@ -103,8 +103,8 @@ export const EDIT_PRICING_TERM = gql`
 `;
 
 export const TOGGLE_PRICING_TERM_QC = gql`
-  mutation togglePricingTermQC($id: Int!) {
-    togglePricingTermQC(id: $id) {
+  mutation togglePricingTermQC($contractId: Int!, $idList: [Int]!) {
+    togglePricingTermQC(contractId: $contractId, idList: $idList) {
       ${PRICING_TERM}
     }
   }
@@ -397,8 +397,8 @@ export const DELETE_TARGET_TERMS = gql`
 `;
 
 export const TOGGLE_TARGET_TERM_QC = gql`
-  mutation toggleTargetTermQC($id: Int!) {
-    toggleTargetTermQC(id: $id) {
+  mutation toggleTargetTermQC($contractId: Int!, $idList: [Int]!) {
+    toggleTargetTermQC(contractId: $contractId, idList: $idList) {
       ${TARGET_TERM}
     }
   }
