@@ -32,7 +32,7 @@
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-      >{{ rule.start }} - {{ rule.end }}</el-tag>
+      >{{ rule.startDate }} - {{ rule.endDate }}</el-tag>
     </div>
   </div>
 </template>
@@ -41,13 +41,17 @@ import { formatDate } from "../../../helper";
 import { GET_TICKETING_DATE_LIST } from "@/graphql/queries";
 export default {
   name: "TicketingDates",
+  props: {
+    parentId: Number
+  },
   apollo: {
-    rules: {
+    ticketingDateList: {
       query: GET_TICKETING_DATE_LIST,
+      variables: {
+        parentId: 34
+      },
       result({ data: { ticketingDateList } }) {
-        ticketDateList.length
-          ? this.$emit("create-rule", "TicketingDates")
-          : [];
+        console.log(ticketingDateList);
       }
     }
   },
@@ -58,21 +62,21 @@ export default {
       startDate: "",
       endDate: "",
       updateRule: null,
-      rules: []
+      ticketingDateList: []
     };
   },
   computed: {
-    //to handle any rules that are "deleted" from UI
+    //to handle any ticketingDateList that are "deleted" from UI
     filteredRuleList() {
-      return this.rules.filter(rule => !rule.isDeleted);
-    },
-    ruleContainerId() {
-      return this.rules.length ? this.rules[0].ruleContainerId : null;
+      return this.ticketingDateList.filter(rule => !rule.isDeleted);
     }
+    // ruleContainerId() {
+    //   return this.ticketingDateList.length ? this.ticketingDateList[0].ruleContainerId : null;
+    // }
   },
   methods: {
     toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+      if (this.editMode && !this.filteredRuleList.length) {
         this.$emit("delete-rule", "TicketingDates");
       }
       this.editMode = !this.editMode;
@@ -84,7 +88,7 @@ export default {
       const startDate = formatDate(this.startDate);
       const endDate = formatDate(this.endDate);
 
-      this.rules.push({
+      this.ticketingDateList.push({
         id: null,
         //this needs to be grabbed somewhere!
         ruleContainerId: null,
@@ -97,10 +101,10 @@ export default {
     },
     deleteTag(tag) {
       //dont delete from array anymore! just filter out any isDeleted with computed.
-      const idx = this.rules.indexOf(tag);
-      this.rules[idx].isDeleted = true;
+      const idx = this.ticketingDateList.indexOf(tag);
+      this.ticketingDateList[idx].isDeleted = true;
 
-      if (!this.rules.length) {
+      if (!this.filteredRuleList.length) {
         this.$emit("delete-rule", "TicketingDates");
       }
     },
@@ -112,9 +116,9 @@ export default {
       } else return;
     },
     updateTag() {
-      const ruleIndex = this.rules.indexOf(this.updateRule);
-      this.rules[ruleIndex].start = formatDate(this.startDate);
-      this.rules[ruleIndex].end = formatDate(this.endDate);
+      const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
+      this.ticketingDateList[ruleIndex].start = formatDate(this.startDate);
+      this.ticketingDateList[ruleIndex].end = formatDate(this.endDate);
       this.updateRule = null;
       this.startDate = "";
       this.endDate = "";
