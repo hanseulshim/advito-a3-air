@@ -1,14 +1,8 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Ticketing Dates</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
-    />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="toggleEditMode"/>
+    <button v-if="editMode" class="save-rule" @click="toggleEditMode">Save</button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
@@ -27,72 +21,87 @@
         format="dd-MMM-yyyy"
       ></el-date-picker>
       <button v-if="!updateRule" @click="createTag">Add</button>
-      <button v-if="updateRule" @click="updateTag">
-        Update
-      </button>
+      <button v-if="updateRule" @click="updateTag">Update</button>
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in filteredRuleList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-        >{{ rule.start }} - {{ rule.end }}</el-tag
-      >
+      >{{ rule.start }} - {{ rule.end }}</el-tag>
     </div>
   </div>
 </template>
 <script>
-import { formatDate } from '../../../helper';
+import { formatDate } from "../../../helper";
+import { GET_TICKETING_DATE_LIST } from "@/graphql/queries";
 export default {
-  name: 'TicketingDates',
-  apollo: {},
+  name: "TicketingDates",
+  apollo: {
+    rules: {
+      query: GET_TICKETING_DATE_LIST,
+      result({ data: { ticketingDateList } }) {
+        ticketDateList.length
+          ? this.$emit("create-rule", "TicketingDates")
+          : [];
+      }
+    }
+  },
   data() {
     return {
-      editMode: false,
-      startDate: '',
-      endDate: '',
+      editMode: true,
+      ruleContainerId: "",
+      startDate: "",
+      endDate: "",
       updateRule: null,
-      rules: [
-        {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
-        },
-        {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
-        }
-      ]
+      rules: []
     };
+  },
+  computed: {
+    //to handle any rules that are "deleted" from UI
+    filteredRuleList() {
+      return this.rules.filter(rule => !rule.isDeleted);
+    },
+    ruleContainerId() {
+      return this.rules.length ? this.rules[0].ruleContainerId : null;
+    }
   },
   methods: {
     toggleEditMode() {
       if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'TicketingDates');
+        this.$emit("delete-rule", "TicketingDates");
       }
       this.editMode = !this.editMode;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
       this.updateRule = null;
     },
     createTag() {
-      const start = formatDate(this.startDate);
-      const end = formatDate(this.endDate);
+      const startDate = formatDate(this.startDate);
+      const endDate = formatDate(this.endDate);
 
       this.rules.push({
-        start,
-        end
+        id: null,
+        //this needs to be grabbed somewhere!
+        ruleContainerId: null,
+        startDate,
+        endDate,
+        isDeleted: false
       });
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     },
     deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
+      //dont delete from array anymore! just filter out any isDeleted with computed.
+      const idx = this.rules.indexOf(tag);
+      this.rules[idx].isDeleted = true;
+
       if (!this.rules.length) {
-        this.$emit('delete-rule', 'TicketingDates');
+        this.$emit("delete-rule", "TicketingDates");
       }
     },
     editTag(rule) {
@@ -107,12 +116,12 @@ export default {
       this.rules[ruleIndex].start = formatDate(this.startDate);
       this.rules[ruleIndex].end = formatDate(this.endDate);
       this.updateRule = null;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     }
   }
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>
