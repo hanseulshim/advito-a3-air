@@ -47,11 +47,10 @@ export default {
   apollo: {
     ticketingDateList: {
       query: GET_TICKETING_DATE_LIST,
-      variables: {
-        parentId: 34
-      },
-      result({ data: { ticketingDateList } }) {
-        console.log(ticketingDateList);
+      variables() {
+        return {
+          parentId: this.parentId
+        };
       }
     }
   },
@@ -70,9 +69,6 @@ export default {
     filteredRuleList() {
       return this.ticketingDateList.filter(rule => !rule.isDeleted);
     }
-    // ruleContainerId() {
-    //   return this.ticketingDateList.length ? this.ticketingDateList[0].ruleContainerId : null;
-    // }
   },
   methods: {
     toggleEditMode() {
