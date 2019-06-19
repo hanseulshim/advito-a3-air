@@ -8,11 +8,13 @@ const { pricingTerm } = require('./contract/pricingTerm');
 const { targetTerm } = require('./contract/targetTerm');
 const { discount } = require('./contract/discount');
 const { note } = require('./contract/note');
+const { rule } = require('./contract/rule');
 const { user } = require('./user');
 const { process } = require('./process');
 
 exports.playground = {
   tabs: [
+    rule.queries,
     client,
     project.queries,
     project.mutations,

@@ -108,7 +108,8 @@ const DISCOUNT_LOOKUP = {
   DISCOUNT_TYPE: 3,
   PERCENTAGE: 11,
   JOURNEY_TYPE: 4,
-  DIRECTION_TYPE: 5
+  DIRECTION_TYPE: 5,
+  RULE_TYPE: 1
 };
 
 const TARGET_TERM_LOOKUP = {
@@ -122,7 +123,8 @@ const TARGET_TERM_LOOKUP = {
   NONE: 25,
   BACK_END: 26,
   OTHER: 27,
-  KPG: 28
+  KPG: 28,
+  RULE_TYPE: 2
 };
 
 module.exports = {

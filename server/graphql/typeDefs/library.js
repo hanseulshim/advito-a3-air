@@ -6,7 +6,7 @@ type Airport {
   airportCode: String,
   airportName: String
 }
-type BookingClass {
+type BookingClassLibrary {
   class: String,
   defaultFareCategory: String,
   dateUpdated: Date,
@@ -33,9 +33,17 @@ type Currency {
   code: String
 }
 
+type Location {
+  id: Int,
+  locationType: Int,
+  code: String,
+  name: String
+}
+
 extend type Query {
   airportList: [Airport] @auth
-  bookingClassList: [BookingClass] @auth
+  bookingClassLibraryList: [BookingClassLibrary] @auth
   currencyList: [Currency] @auth
+  locationList: [Location] @auth
 }
 `;

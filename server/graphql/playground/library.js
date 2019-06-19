@@ -11,7 +11,7 @@ exports.library = {
       airportCode
       airportName
     }
-    bookingClassList {
+    bookingClassLibraryList {
       class
       defaultFareCategory
       dateUpdated
