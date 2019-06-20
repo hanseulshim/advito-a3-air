@@ -105,20 +105,7 @@ export default {
         name: ''
       },
       ruleTypes,
-      ruleList: [
-        // {
-        //   id: 1,
-        //   type: 'TicketingDates',
-        //   title: 'Ticketing Dates',
-        //   active: true
-        // },
-        // {
-        //   id: 2,
-        //   type: 'TravelDates',
-        //   title: 'Travel Dates',
-        //   active: false
-        // }
-      ],
+      ruleList: [],
       selectedRule: ''
     };
   },
