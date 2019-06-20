@@ -60,11 +60,22 @@ input PointOfOriginInput {
 }
 
 type GeographyRule {
-  code: String,
+  code: String
   name: String
+  locationType: Int
 }
 
 type Market {
+  id: Int
+  ruleContainerId: String
+  origin: String
+  originType: Int
+  arrival: String
+  arrivalType: Int
+  isDeleted: Boolean
+}
+
+input MarketInput {
   id: Int
   ruleContainerId: String
   origin: String
@@ -220,6 +231,7 @@ type FareCategory {
 extend type Query {
   ruleList(parentId: Int, parentType: Int): [Int] @auth
   geographyRuleList: [GeographyRule] @auth
+  marketGeoList: [GeographyRule] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
@@ -248,6 +260,7 @@ extend type Mutation {
   updateTravelDates(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
   updatePointOfSales(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
   updatePointOfOrigins(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
+  updateMarkets(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
   deleteRule(id: Int!, parentTable: Int!): Int @auth
 }
 

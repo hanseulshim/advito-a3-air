@@ -22,10 +22,32 @@ exports.rule = {
       await db('location')
         .select({
           name: 'name',
-          code: 'code'
+          code: 'code',
+          locationType: 'locationtype'
         })
         .where(function() {
           this.where('locationtype', 5).orWhere('locationtype', 3);
+        })
+        .andWhere('clientid', CONTRACT_LOOKUP.ID)
+        .orderBy([
+          {
+            column: 'locationtype',
+            order: 'desc'
+          },
+          'code'
+        ]),
+    marketGeoList: async (_, __, { db }) =>
+      await db('location')
+        .select({
+          name: 'name',
+          code: 'code',
+          locationType: 'locationtype'
+        })
+        .where(function() {
+          this.where('locationtype', 5)
+            .orWhere('locationtype', 3)
+            .orWhere('locationtype', 1)
+            .orWhere('locationtype', 0);
         })
         .andWhere('clientid', CONTRACT_LOOKUP.ID)
         .orderBy([
@@ -42,7 +64,9 @@ exports.rule = {
     pointOfSaleList: async (_, { parentId, parentType }, { db }) =>
       await getPointOfSaleList(db, parentId, parentType),
     pointOfOriginList: async (_, { parentId, parentType }, { db }) =>
-      await getPointOfOriginList(db, parentId, parentType)
+      await getPointOfOriginList(db, parentId, parentType),
+    marketList: async (_, { parentId, parentType }, { db }) =>
+      await getMarketList(db, parentId, parentType)
   },
   Mutation: {
     updateTicketingDates: async (
@@ -147,6 +171,26 @@ exports.rule = {
       await Promise.all(queries);
       return await getPointOfOriginList(db, parentId, parentType);
     },
+    updateMarkets: async (_, { parentId, parentType, marketList }, { db }) => {
+      const parentTable = getParentTable(parentType);
+      const queries = marketList.map(market =>
+        db.raw(`
+        SELECT geographyrule_update(
+          ${parentId},
+          '${parentTable}',
+          ${market.id},
+          ${market.ruleContainerId ? `'${market.ruleContainerId}'` : null},
+          '${market.origin}',
+          ${market.originType},
+          '${market.arrival}',
+          ${market.arrivalType},
+          ${market.isDeleted}
+        )
+      `)
+      );
+      await Promise.all(queries);
+      return await getMarketList(db, parentId, parentType);
+    },
     deleteRule: async (_, { id, parentTable }, { db }) => {
       const tableName = getRuleTable(parentTable);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
@@ -228,6 +272,24 @@ const getPointOfOriginList = async (db, parentId, parentType) => {
       id: 'id',
       ruleContainerId: 'rulescontainerguidref',
       countryCode: 'countrycode',
+      isDeleted: 'isdeleted'
+    })
+    .where('rulescontainerguidref', ruleContainerId)
+    .andWhere('isdeleted', false);
+};
+
+const getMarketList = async (db, parentId, parentType) => {
+  if (!parentId) return [];
+  const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
+  if (!ruleContainerId) return [];
+  return await db('geographyrule')
+    .select({
+      id: 'id',
+      ruleContainerId: 'rulescontainerguidref',
+      origin: 'origin',
+      originType: 'origintype',
+      arrival: 'arrival',
+      arrivalType: 'arrivaltype',
       isDeleted: 'isdeleted'
     })
     .where('rulescontainerguidref', ruleContainerId)

@@ -6,10 +6,15 @@ exports.rule = {
     query: `
     {
       ruleList(parentId: 34)
-      geographyRuleList {
-        name
-        code
-      }
+      #geographyRuleList {
+      #  name
+      #  code
+      #}
+      #marketGeoList {
+      #  name
+      #  code
+      #  locationType
+      #}
       ticketingDateList(parentId: 34) {
         id
         ruleContainerId
@@ -34,6 +39,15 @@ exports.rule = {
         id
         ruleContainerId
         countryCode
+        isDeleted
+      }
+      marketList(parentId: 34) {
+        id
+        ruleContainerId
+        origin
+        originType
+        arrival
+        arrivalType
         isDeleted
       }
     }`
@@ -98,6 +112,25 @@ exports.rule = {
         id
         ruleContainerId
         countryCode
+        isDeleted
+      }
+      updateMarkets(parentId: 34, marketList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          origin: "EU"
+          originType: 5
+          arrival: "LA"
+          arrivalType: 5
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        origin
+        originType
+        arrival
+        arrivalType
         isDeleted
       }
       deleteRule(id: 46, parentTable: 4)
