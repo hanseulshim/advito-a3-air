@@ -29,7 +29,7 @@
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in filteredRuleList"
+        v-for="rule in ticketingDateList"
         :key="rule.index"
         type="info"
         size="small"
@@ -45,11 +45,15 @@
 <script>
 import { formatDate, removeTypename } from '@/helper';
 import { GET_TICKETING_DATE_LIST } from '@/graphql/queries';
-import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
+import { UPDATE_TICKETING_DATES, DELETE_RULE } from '@/graphql/mutations';
 export default {
   name: 'TicketingDates',
   props: {
     parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
       default: null,
       type: Number
     }
@@ -76,11 +80,7 @@ export default {
       ticketingDateList: []
     };
   },
-  computed: {
-    filteredRuleList() {
-      return this.ticketingDateList.filter(rule => !rule.isDeleted);
-    }
-  },
+
   methods: {
     async toggleEditMode() {
       if (this.editMode && !this.filteredRuleList.length) {
@@ -123,21 +123,23 @@ export default {
     async deleteTag(tag) {
       const idx = this.ticketingDateList.indexOf(tag);
       this.ticketingDateList[idx].isDeleted = true;
+      const tagId = this.ticketingDateList[idx].id;
+
+      await this.$apollo.mutate({
+        mutation: DELETE_RULE,
+        variables: {
+          id: tagId,
+          parentTable: this.tableId
+        },
+        refetchQueries: () => [
+          {
+            query: GET_TICKETING_DATE_LIST,
+            variables: { parentId: this.parentId }
+          }
+        ]
+      });
 
       if (!this.filteredRuleList.length) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_TICKETING_DATES,
-          variables: {
-            parentId: this.parentId,
-            ticketingDateList: this.ticketingDateList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_TICKETING_DATE_LIST,
-              variables: { parentId: this.parentId }
-            }
-          ]
-        });
         await this.$emit('delete-rule', 'TicketingDates');
       }
     },

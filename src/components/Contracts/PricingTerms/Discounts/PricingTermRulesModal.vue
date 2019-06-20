@@ -35,6 +35,7 @@
       v-for="rule in ruleList"
       :key="rule.id"
       :parent-id="discount.id"
+      :table-id="rule.id"
       @delete-rule="deleteRule"
     ></component>
   </modal>
@@ -105,18 +106,18 @@ export default {
       },
       ruleTypes,
       ruleList: [
-        {
-          id: 1,
-          type: 'TicketingDates',
-          title: 'Ticketing Dates',
-          active: true
-        },
-        {
-          id: 2,
-          type: 'TravelDates',
-          title: 'Travel Dates',
-          active: false
-        }
+        // {
+        //   id: 1,
+        //   type: 'TicketingDates',
+        //   title: 'Ticketing Dates',
+        //   active: true
+        // },
+        // {
+        //   id: 2,
+        //   type: 'TravelDates',
+        //   title: 'Travel Dates',
+        //   active: false
+        // }
       ],
       selectedRule: ''
     };
