@@ -120,12 +120,25 @@ export default {
       this.startDate = '';
       this.endDate = '';
     },
-    deleteTag(tag) {
+    async deleteTag(tag) {
       const idx = this.ticketingDateList.indexOf(tag);
       this.ticketingDateList[idx].isDeleted = true;
 
       if (!this.filteredRuleList.length) {
-        this.$emit('delete-rule', 'TicketingDates');
+        await this.$apollo.mutate({
+          mutation: UPDATE_TICKETING_DATES,
+          variables: {
+            parentId: this.parentId,
+            ticketingDateList: this.ticketingDateList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TICKETING_DATE_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
+        await this.$emit('delete-rule', 'TicketingDates');
       }
     },
     editTag(rule) {
