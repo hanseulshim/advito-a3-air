@@ -198,8 +198,8 @@ type FareCategory {
   isDeleted: Boolean
 }
 
-
 extend type Query {
+  ruleList(parentId: Int, parentType: Int): [Int] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth

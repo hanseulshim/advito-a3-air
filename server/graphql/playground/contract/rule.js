@@ -5,6 +5,7 @@ exports.rule = {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
+      ruleList(parentId: 34)
       ticketingDateList(parentId: 34) {
         id
         ruleContainerId
