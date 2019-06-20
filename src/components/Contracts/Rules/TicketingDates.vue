@@ -74,6 +74,8 @@ export default {
     toggleEditMode() {
       if (this.editMode && !this.filteredRuleList.length) {
         this.$emit("delete-rule", "TicketingDates");
+      } else if (this.editMode) {
+        this.$emit("save-rule", this.ticketingDateList);
       }
       this.editMode = !this.editMode;
       this.startDate = "";
@@ -83,11 +85,14 @@ export default {
     createTag() {
       const startDate = formatDate(this.startDate);
       const endDate = formatDate(this.endDate);
+      const ruleContainerId = this.ticketingDateList.length
+        ? this.ticketingDateList[0].ruleContaierId
+        : null;
 
       this.ticketingDateList.push({
         id: null,
         //this needs to be grabbed somewhere!
-        ruleContainerId: null,
+        ruleContainerId,
         startDate,
         endDate,
         isDeleted: false

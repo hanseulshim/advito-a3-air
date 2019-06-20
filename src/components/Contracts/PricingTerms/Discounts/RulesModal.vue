@@ -136,6 +136,9 @@ export default {
       });
       this.selectedRule = "";
     },
+    saveRule(payload) {
+      //the mutation. pass in the array of rules
+    },
     deleteRule(ruleType) {
       const matched = this.ruleList.filter(rule => rule.type === ruleType)[0];
       this.ruleList.splice(this.ruleList.indexOf(matched), 1);
