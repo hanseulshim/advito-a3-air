@@ -34,7 +34,7 @@
       :is="rule.type"
       v-for="rule in ruleList"
       :key="rule.id"
-      :parentId="discount.id"
+      :parent-id="discount.id"
       @delete-rule="deleteRule"
     ></component>
   </modal>
@@ -67,7 +67,7 @@ import CorporateFareBasis from '../../Rules/CorporateFareBasis';
 import Cabin from '../../Rules/Cabin';
 import FareCategory from '../../Rules/FareCategory';
 
-import { pricingTermRuleTypes } from '../../Rules/helper';
+import { ruleTypes } from '../../Rules/helper';
 export default {
   name: 'PricingTermRulesModal',
   apollo: {},
@@ -103,7 +103,7 @@ export default {
       discount: {
         name: ''
       },
-      ruleTypes: pricingTermRuleTypes,
+      ruleTypes,
       ruleList: [
         {
           id: 1,

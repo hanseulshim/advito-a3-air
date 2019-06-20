@@ -100,143 +100,168 @@ export const countries = [
   { name: 'Hungary', code: 'HU' }
 ];
 
-export const pricingTermRuleTypes = [
+export const ruleTypes = [
   {
     value: 'TicketingDates',
-    label: 'Ticketing Dates'
+    label: 'Ticketing Dates',
+    id: 1
   },
   {
     value: 'TravelDates',
-    label: 'Travel Dates'
+    label: 'Travel Dates',
+    id: 2
   },
   {
     value: 'PointOfOrigin',
-    label: 'Point of Origin'
+    label: 'Point of Origin',
+    id: 3
   },
   {
     value: 'PointOfSale',
-    label: 'Point Of Sale'
+    label: 'Point Of Sale',
+    id: 4
   },
   {
     value: 'Market',
-    label: 'Market'
+    label: 'Market',
+    id: 5
   },
   {
     value: 'PublishedFareBasis',
-    label: 'Published Fare Basis'
+    label: 'Published Fare Basis',
+    id: 6
   },
   {
     value: 'CorporateFareBasis',
-    label: 'Corporate Fare Basis'
+    label: 'Corporate Fare Basis',
+    id: 7
   },
   {
     value: 'PublishedBookingClass',
-    label: 'Published Booking Class'
+    label: 'Published Booking Class',
+    id: 8
   },
   {
     value: 'RequiredBookingClass',
-    label: 'Required Booking Class'
+    label: 'Required Booking Class',
+    id: 9
   },
   {
     value: 'MarketingAirline',
-    label: 'Marketing Airline'
+    label: 'Marketing Airline',
+    id: 10
   },
   {
     value: 'ValidatingAirline',
-    label: 'Validating Airline'
+    label: 'Validating Airline',
+    id: 11
   },
   {
     value: 'OperatingAirline',
-    label: 'Operating Airline'
-  },
-  {
-    value: 'AdvancedTicketing',
-    label: 'Advanced Ticketing'
-  },
-  {
-    value: 'TourCode',
-    label: 'Tour Code'
+    label: 'Operating Airline',
+    id: 12
   },
   {
     value: 'TicketDesignator',
-    label: 'Ticket Designator'
+    label: 'Ticket Designator',
+    id: 13
+  },
+  {
+    value: 'TourCode',
+    label: 'Tour Code',
+    id: 14
+  },
+  {
+    value: 'AdvancedTicketing',
+    label: 'Advanced Ticketing',
+    id: 15
   },
   {
     value: 'MinStay',
-    label: 'Minimum Stay'
+    label: 'Minimum Stay',
+    id: 16
   },
   {
     value: 'MaxStay',
-    label: 'Maximum Stay'
+    label: 'Maximum Stay',
+    id: 17
   },
   {
     value: 'TimeOfWeek',
-    label: 'Time Of Week'
+    label: 'Time Of Week',
+    id: 18
   },
   {
     value: 'Stops',
-    label: 'Stops'
+    label: 'Stops',
+    id: 19
   },
   {
     value: 'ConnectionPoint',
-    label: 'Connection Point'
+    label: 'Connection Point',
+    id: 20
   },
   {
     value: 'FlightNumber',
-    label: 'Flight Number'
+    label: 'Flight Number',
+    id: 21
   },
   {
     value: 'Blackouts',
-    label: 'Blackouts'
+    label: 'Blackouts',
+    id: 22
   },
   {
     value: 'Distance',
-    label: 'Distance'
+    label: 'Distance',
+    id: 23
   },
   {
     value: 'Cabin',
-    label: 'Cabin'
+    label: 'Cabin',
+    id: 24
   },
   {
     value: 'FareCategory',
-    label: 'Fare Category'
+    label: 'Fare Category',
+    id: 25
   }
 ];
 
-export const targetTermRuleTypes = [
-  {
-    value: 'TicketingDates',
-    label: 'Ticketing Dates'
-  },
-  {
-    value: 'TravelDates',
-    label: 'Travel Dates'
-  },
-  {
-    value: 'PointOfOrigin',
-    label: 'Point of Origin'
-  },
-  {
-    value: 'PointOfSale',
-    label: 'Point Of Sale'
-  },
-  {
-    value: 'Market',
-    label: 'Market'
-  },
-  {
-    value: 'MarketingAirline',
-    label: 'Marketing Airline'
-  },
-  {
-    value: 'ValidatingAirline',
-    label: 'Validating Airline'
-  },
-  {
-    value: 'OperatingAirline',
-    label: 'Operating Airline'
-  }
-];
+// export const targetTermRuleTypes = [
+//   {
+//     value: 'TicketingDates',
+//     label: 'Ticketing Dates'
+//   },
+//   {
+//     value: 'TravelDates',
+//     label: 'Travel Dates'
+//   },
+//   {
+//     value: 'PointOfOrigin',
+//     label: 'Point of Origin'
+//   },
+//   {
+//     value: 'PointOfSale',
+//     label: 'Point Of Sale'
+//   },
+//   {
+//     value: 'Market',
+//     label: 'Market'
+//   },
+//   {
+//     value: 'MarketingAirline',
+//     label: 'Marketing Airline'
+//   },
+//   {
+//     value: 'ValidatingAirline',
+//     label: 'Validating Airline'
+//   },
+//   {
+//     value: 'OperatingAirline',
+//     label: 'Operating Airline'
+//   }
+// ];
 
 export const classes = [
   'a',

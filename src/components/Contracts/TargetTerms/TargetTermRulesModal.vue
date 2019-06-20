@@ -49,7 +49,7 @@ import MarketingAirline from '../Rules/MarketingAirline';
 import ValidatingAirline from '../Rules/ValidatingAirline';
 import OperatingAirline from '../Rules/OperatingAirline';
 
-import { targetTermRuleTypes } from '../Rules/helper';
+import { ruleTypes } from '../Rules/helper';
 export default {
   name: 'TargetTermRulesModal',
   apollo: {},
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       term: {},
-      ruleTypes: targetTermRuleTypes,
+      ruleTypes: ruleTypes,
       ruleList: [],
       selectedRule: ''
     };

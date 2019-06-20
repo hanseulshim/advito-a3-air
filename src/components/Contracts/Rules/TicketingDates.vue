@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-import { formatDate } from '@/helper';
+import { formatDate, removeTypename } from '@/helper';
 import { GET_TICKETING_DATE_LIST } from '@/graphql/queries';
 import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
 export default {
@@ -63,7 +63,7 @@ export default {
         };
       },
       result({ data: { ticketingDateList } }) {
-        this.editMode = !ticketingDateList.length ? true : false;
+        return removeTypename(ticketingDateList);
       }
     }
   },
@@ -91,7 +91,13 @@ export default {
           variables: {
             parentId: this.parentId,
             ticketingDateList: this.ticketingDateList
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TICKETING_DATE_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
         });
       }
       this.editMode = !this.editMode;
@@ -125,14 +131,14 @@ export default {
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = new Date(rule.start);
-        this.endDate = new Date(rule.end);
+        this.startDate = new Date(rule.startDate);
+        this.endDate = new Date(rule.endDate);
       } else return;
     },
     updateTag() {
       const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
-      this.ticketingDateList[ruleIndex].start = this.startDate;
-      this.ticketingDateList[ruleIndex].end = formatDate(this.endDate);
+      this.ticketingDateList[ruleIndex].startDate = new Date(this.startDate);
+      this.ticketingDateList[ruleIndex].endDate = new Date(this.endDate);
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';

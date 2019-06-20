@@ -1,5 +1,10 @@
 import gql from 'graphql-tag';
 
+
+export const DELETE_RULE
+
+
+
 export const UPDATE_TICKETING_DATES = gql`
   mutation updateTicketingDates(
     $parentId: Int!
@@ -19,3 +24,5 @@ export const UPDATE_TICKETING_DATES = gql`
     }
   }
 `;
+
+
