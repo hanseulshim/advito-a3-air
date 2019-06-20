@@ -73,7 +73,6 @@ export default {
     };
   },
   computed: {
-    //to handle any ticketingDateList that are "deleted" from UI
     filteredRuleList() {
       return this.ticketingDateList.filter(rule => !rule.isDeleted);
     },
