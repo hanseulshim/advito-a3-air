@@ -61,11 +61,15 @@ export default {
         return {
           parentId: this.parentId
         };
+      },
+      result({ data: { ticketingDateList } }) {
+        this.editMode = !ticketingDateList.length ? true : false;
       }
     }
   },
   data() {
     return {
+      editMode: false,
       startDate: '',
       endDate: '',
       updateRule: null,
@@ -75,9 +79,6 @@ export default {
   computed: {
     filteredRuleList() {
       return this.ticketingDateList.filter(rule => !rule.isDeleted);
-    },
-    editMode() {
-      return this.ticketingDateList.length ? false : true;
     }
   },
   methods: {

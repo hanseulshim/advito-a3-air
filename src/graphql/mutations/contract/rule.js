@@ -4,7 +4,7 @@ export const UPDATE_TICKETING_DATES = gql`
   mutation updateTicketingDates(
     $parentId: Int!
     $parentType: Int
-    $ticketingDateList: [TicketingDateInput]
+    $ticketingDateList: [TicketingDateInput]!
   ) {
     updateTicketingDates(
       parentId: $parentId
