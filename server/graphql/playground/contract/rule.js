@@ -48,6 +48,7 @@ exports.rule = {
         originType
         arrival
         arrivalType
+        exclude
         isDeleted
       }
     }`
@@ -121,7 +122,8 @@ exports.rule = {
           origin: "EU"
           originType: 5
           arrival: "LA"
-          arrivalType: 5
+          arrivalType: 5,
+          exclude: true,
           isDeleted: false
         }
       ]) {
@@ -131,9 +133,10 @@ exports.rule = {
         originType
         arrival
         arrivalType
+        exclude
         isDeleted
       }
-      deleteRule(id: 46, parentTable: 4)
+      deleteRule(id: 46, ruleType: 4)
     }`
   }
 };

@@ -72,6 +72,7 @@ type Market {
   originType: Int
   arrival: String
   arrivalType: Int
+  exclude: Boolean
   isDeleted: Boolean
 }
 
@@ -82,6 +83,7 @@ input MarketInput {
   originType: Int
   arrival: String
   arrivalType: Int
+  exclude: Boolean
   isDeleted: Boolean
 }
 
@@ -261,7 +263,7 @@ extend type Mutation {
   updatePointOfSales(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
   updatePointOfOrigins(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
   updateMarkets(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
-  deleteRule(id: Int!, parentTable: Int!): Int @auth
+  deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 
 `;
