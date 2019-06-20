@@ -39,6 +39,7 @@
 <script>
 import { formatDate } from "../../../helper";
 import { GET_TICKETING_DATE_LIST } from "@/graphql/queries";
+import { UPDATE_TICKETING_DATES } from "@/graphql/mutations";
 export default {
   name: "TicketingDates",
   props: {
@@ -71,17 +72,57 @@ export default {
     }
   },
   methods: {
-    toggleEditMode() {
+    async toggleEditMode() {
       if (this.editMode && !this.filteredRuleList.length) {
         this.$emit("delete-rule", "TicketingDates");
       } else if (this.editMode) {
-        this.$emit("save-rule", this.ticketingDateList);
+        await this.$apollo.mutate({
+          mutation: UPDATE_TICKETING_DATES,
+          variables: {
+            parentId: this.parentId,
+            ticketingDateList: this.ticketingDateList
+          }
+        });
       }
       this.editMode = !this.editMode;
       this.startDate = "";
       this.endDate = "";
       this.updateRule = null;
     },
+    // async addProject() {
+    //   try {
+    //     await this.$apollo.mutate({
+    //       mutation: ADD_PROJECT,
+    //       variables: {
+    //         ...this.form
+    //       },
+    //       update: (store, data) => {
+    //         const project = data.data.addProject;
+    //         const client = store.readQuery({
+    //           query: GET_CLIENT
+    //         }).client;
+    //         const newData = store.readQuery({
+    //           query: GET_PROJECTS,
+    //           variables: { clientId: client.id }
+    //         });
+    //         newData.projectList.push(project);
+    //         store.writeQuery({
+    //           query: GET_PROJECTS,
+    //           variables: { clientId: client.id },
+    //           data: newData
+    //         });
+    //       }
+    //     });
+    //     this.$modal.show("success", {
+    //       message: "Project successfully created.",
+    //       name: "new-project"
+    //     });
+    //   } catch (error) {
+    //     this.$modal.show("error", {
+    //       message: "Failed to create project. Please try again."
+    //     });
+    //   }
+    // },
     createTag() {
       const startDate = formatDate(this.startDate);
       const endDate = formatDate(this.endDate);
