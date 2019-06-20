@@ -24,6 +24,18 @@ exports.rule = {
         endDate
         isDeleted
       }
+      pointOfSaleList(parentId: 34) {
+        id
+        ruleContainerId
+        countryCode
+        isDeleted
+      }
+      pointOfOriginList(parentId: 34) {
+        id
+        ruleContainerId
+        countryCode
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -47,7 +59,6 @@ exports.rule = {
         endDate
         isDeleted
       }
-      deleteTicketingDate(id: 32)
       updateTravelDates(parentId: 34, travelDateList: [
         {
           id: 10,
@@ -63,7 +74,33 @@ exports.rule = {
         endDate
         isDeleted
       }
-      deleteTravelDate(id: 10)
+      updatePointOfSales(parentId: 34, pointOfSaleList: [
+        {
+          id: 179,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          countryCode: "UK"
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        countryCode
+        isDeleted
+      }
+      updatePointOfOrigins(parentId: 34, pointOfOriginList: [
+        {
+          id: null,
+          ruleContainerId: null,
+          countryCode: "UK"
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        countryCode
+        isDeleted
+      }
+      deleteRule(id: 46, parentTable: 4)
     }`
   }
 };

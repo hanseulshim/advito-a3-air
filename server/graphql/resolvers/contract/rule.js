@@ -38,7 +38,11 @@ exports.rule = {
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getTicketingDateList(db, parentId, parentType),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
-      await getTravelDateList(db, parentId, parentType)
+      await getTravelDateList(db, parentId, parentType),
+    pointOfSaleList: async (_, { parentId, parentType }, { db }) =>
+      await getPointOfSaleList(db, parentId, parentType),
+    pointOfOriginList: async (_, { parentId, parentType }, { db }) =>
+      await getPointOfOriginList(db, parentId, parentType)
   },
   Mutation: {
     updateTicketingDates: async (
@@ -67,10 +71,6 @@ exports.rule = {
       await Promise.all(queries);
       return await getTicketingDateList(db, parentId, parentType);
     },
-    deleteTicketingDate: async (_, { id }, { db }) => {
-      await db.raw(`SELECT ticketdaterule_delete(${id})`);
-      return id;
-    },
     updateTravelDates: async (
       _,
       { parentId, parentType, travelDateList },
@@ -97,9 +97,59 @@ exports.rule = {
       await Promise.all(queries);
       return await getTravelDateList(db, parentId, parentType);
     },
-    deleteTravelDate: async (_, { id }, { db }) => {
-      await db.raw(`SELECT traveldaterule_delete(${id})`);
-      return id;
+    updatePointOfSales: async (
+      _,
+      { parentId, parentType, pointOfSaleList },
+      { db }
+    ) => {
+      const parentTable = getParentTable(parentType);
+      const queries = pointOfSaleList.map(pointOfSale =>
+        db.raw(`
+        SELECT pointofsale_update(
+          ${parentId},
+          '${parentTable}',
+          ${pointOfSale.id},
+          ${
+            pointOfSale.ruleContainerId
+              ? `'${pointOfSale.ruleContainerId}'`
+              : null
+          },
+          '${pointOfSale.countryCode}',
+          ${pointOfSale.isDeleted}
+        )
+      `)
+      );
+      await Promise.all(queries);
+      return await getPointOfSaleList(db, parentId, parentType);
+    },
+    updatePointOfOrigins: async (
+      _,
+      { parentId, parentType, pointOfOriginList },
+      { db }
+    ) => {
+      const parentTable = getParentTable(parentType);
+      const queries = pointOfOriginList.map(pointOfOrigin =>
+        db.raw(`
+        SELECT pointoforigin_update(
+          ${parentId},
+          '${parentTable}',
+          ${pointOfOrigin.id},
+          ${
+            pointOfOrigin.ruleContainerId
+              ? `'${pointOfOrigin.ruleContainerId}'`
+              : null
+          },
+          '${pointOfOrigin.countryCode}',
+          ${pointOfOrigin.isDeleted}
+        )
+      `)
+      );
+      await Promise.all(queries);
+      return await getPointOfOriginList(db, parentId, parentType);
+    },
+    deleteRule: async (_, { id, parentTable }, { db }) => {
+      const tableName = getRuleTable(parentTable);
+      await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
     }
   }
 };
@@ -152,4 +202,85 @@ const getTravelDateList = async (db, parentId, parentType) => {
     })
     .where('rulescontainerguidref', ruleContainerId)
     .andWhere('isdeleted', false);
+};
+
+const getPointOfSaleList = async (db, parentId, parentType) => {
+  if (!parentId) return [];
+  const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
+  if (!ruleContainerId) return [];
+  return await db('pointofsale')
+    .select({
+      id: 'id',
+      ruleContainerId: 'rulescontainerguidref',
+      countryCode: 'countrycode',
+      isDeleted: 'isdeleted'
+    })
+    .where('rulescontainerguidref', ruleContainerId)
+    .andWhere('isdeleted', false);
+};
+
+const getPointOfOriginList = async (db, parentId, parentType) => {
+  if (!parentId) return [];
+  const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
+  if (!ruleContainerId) return [];
+  return await db('pointoforigin')
+    .select({
+      id: 'id',
+      ruleContainerId: 'rulescontainerguidref',
+      countryCode: 'countrycode',
+      isDeleted: 'isdeleted'
+    })
+    .where('rulescontainerguidref', ruleContainerId)
+    .andWhere('isdeleted', false);
+};
+
+const getRuleTable = id => {
+  switch (id) {
+    case 1:
+      return 'ticketdaterule';
+    case 2:
+      return 'traveldaterule';
+    case 3:
+      return 'pointofsale';
+    case 4:
+      return 'pointoforigin';
+    case 5:
+      return 'geographyrule';
+    case 6:
+    case 7:
+      return 'farebasis';
+    case 8:
+    case 9:
+      return 'bookingclassrule';
+    case 10:
+    case 11:
+    case 12:
+      return 'carrierrule';
+    case 13:
+      return 'ticketdeesignatorrule';
+    case 14:
+      return 'tourcoderule';
+    case 15:
+      return 'advancepurchaserule';
+    case 16:
+      return 'minstayrule';
+    case 17:
+      return 'maxstayrule';
+    case 18:
+      return 'dayofweekrule';
+    case 19:
+      return 'stopsrule';
+    case 20:
+      return 'connectionrule';
+    case 21:
+      return 'flightnumberrule';
+    case 22:
+      return 'blackoutdaterule';
+    case 23:
+      return 'distancerule';
+    case 24:
+      return 'cabinrule';
+    case 25:
+      return 'farecategoryrule';
+  }
 };

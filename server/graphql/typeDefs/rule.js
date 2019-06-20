@@ -38,7 +38,21 @@ type PointOfSale {
   isDeleted: Boolean
 }
 
+input PointOfSaleInput {
+  id: Int
+  ruleContainerId: String
+  countryCode: String
+  isDeleted: Boolean
+}
+
 type PointOfOrigin {
+  id: Int
+  ruleContainerId: String
+  countryCode: String
+  isDeleted: Boolean
+}
+
+input PointOfOriginInput {
   id: Int
   ruleContainerId: String
   countryCode: String
@@ -230,10 +244,11 @@ extend type Query {
 }
 
 extend type Mutation {
-  updateTicketingDates(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]): [TicketingDate] @auth
-  deleteTicketingDate(id: Int!): Int @auth
-  updateTravelDates(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]): [TravelDate] @auth
-  deleteTravelDate(id: Int!): Int @auth
+  updateTicketingDates(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]!): [TicketingDate] @auth
+  updateTravelDates(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
+  updatePointOfSales(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
+  updatePointOfOrigins(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
+  deleteRule(id: Int!, parentTable: Int!): Int @auth
 }
 
 `;
