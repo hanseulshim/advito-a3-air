@@ -2,6 +2,18 @@ const { DISCOUNT_LOOKUP, TARGET_TERM_LOOKUP } = require('../../constants');
 
 exports.rule = {
   Query: {
+    ruleList: async (_, { parentId, parentType }, { db }) => {
+      const ruleContainerId = await getRuleContainerId(
+        db,
+        parentId,
+        parentType
+      );
+      if (!ruleContainerId) return [];
+      const { rows } = await db.raw(
+        `SELECT tableid from rules_checker('${ruleContainerId}')`
+      );
+      return rows.map(row => row.tableid);
+    },
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getTicketingDateList(db, parentId, parentType),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
