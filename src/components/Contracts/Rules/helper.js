@@ -100,7 +100,7 @@ export const countries = [
   { name: 'Hungary', code: 'HU' }
 ];
 
-export const ruleTypes = [
+export const pricingTermRuleTypes = [
   {
     value: 'TicketingDates',
     label: 'Ticketing Dates'
@@ -118,16 +118,24 @@ export const ruleTypes = [
     label: 'Point Of Sale'
   },
   {
+    value: 'Market',
+    label: 'Market'
+  },
+  {
+    value: 'PublishedFareBasis',
+    label: 'Published Fare Basis'
+  },
+  {
+    value: 'CorporateFareBasis',
+    label: 'Corporate Fare Basis'
+  },
+  {
     value: 'PublishedBookingClass',
     label: 'Published Booking Class'
   },
   {
     value: 'RequiredBookingClass',
     label: 'Required Booking Class'
-  },
-  {
-    value: 'Market',
-    label: 'Market'
   },
   {
     value: 'MarketingAirline',
@@ -154,16 +162,16 @@ export const ruleTypes = [
     label: 'Ticket Designator'
   },
   {
-    value: 'TimeOfWeek',
-    label: 'Time Of Week'
-  },
-  {
     value: 'MinStay',
     label: 'Minimum Stay'
   },
   {
     value: 'MaxStay',
     label: 'Maximum Stay'
+  },
+  {
+    value: 'TimeOfWeek',
+    label: 'Time Of Week'
   },
   {
     value: 'Stops',
@@ -186,20 +194,47 @@ export const ruleTypes = [
     label: 'Distance'
   },
   {
-    value: 'PublishedFareBasis',
-    label: 'Published Fare Basis'
-  },
-  {
-    value: 'CorporateFareBasis',
-    label: 'Corporate Fare Basis'
-  },
-  {
     value: 'Cabin',
     label: 'Cabin'
   },
   {
     value: 'FareCategory',
     label: 'Fare Category'
+  }
+];
+
+export const targetTermRuleTypes = [
+  {
+    value: 'TicketingDates',
+    label: 'Ticketing Dates'
+  },
+  {
+    value: 'TravelDates',
+    label: 'Travel Dates'
+  },
+  {
+    value: 'PointOfOrigin',
+    label: 'Point of Origin'
+  },
+  {
+    value: 'PointOfSale',
+    label: 'Point Of Sale'
+  },
+  {
+    value: 'Market',
+    label: 'Market'
+  },
+  {
+    value: 'MarketingAirline',
+    label: 'Marketing Airline'
+  },
+  {
+    value: 'ValidatingAirline',
+    label: 'Validating Airline'
+  },
+  {
+    value: 'OperatingAirline',
+    label: 'Operating Airline'
   }
 ];
 

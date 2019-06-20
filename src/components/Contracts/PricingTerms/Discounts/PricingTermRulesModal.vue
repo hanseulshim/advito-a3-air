@@ -1,7 +1,7 @@
 <template>
   <modal
     classes="modal-container"
-    name="rules"
+    name="pricingTermRulesModal"
     height="auto"
     scrollable
     width="800px"
@@ -11,7 +11,7 @@
     <div class="title-row space-between">
       <div class="section-header">Discount : {{ discount.name }}</div>
       <el-tooltip effect="dark" content="Close Modal" placement="top">
-        <i class="fas fa-times close-modal-button" @click="hideModal"/>
+        <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
     <div class="rules-menu-container">
@@ -34,42 +34,42 @@
       :is="rule.type"
       v-for="rule in ruleList"
       :key="rule.id"
-      @delete-rule="deleteRule"
       v-bind:parentId="discount.id"
+      @delete-rule="deleteRule"
     ></component>
   </modal>
 </template>
 
 <script>
-import TicketingDates from "../../Rules/TicketingDates";
-import TravelDates from "../../Rules/TravelDates";
-import PointOfSale from "../../Rules/PoS";
-import PointOfOrigin from "../../Rules/PoO";
-import PublishedBookingClass from "../../Rules/PublishedBookingClass";
-import RequiredBookingClass from "../../Rules/RequiredBookingClass";
-import Market from "../../Rules/Market";
-import MarketingAirline from "../../Rules/MarketingAirline";
-import ValidatingAirline from "../../Rules/ValidatingAirline";
-import OperatingAirline from "../../Rules/OperatingAirline";
-import AdvancedTicketing from "../../Rules/AdvancedTicketing";
-import TourCode from "../../Rules/TourCode";
-import TicketDesignator from "../../Rules/TicketDesignator";
-import TimeOfWeek from "../../Rules/TimeOfWeek";
-import MinStay from "../../Rules/MinStay";
-import MaxStay from "../../Rules/MaxStay";
-import Stops from "../../Rules/Stops";
-import ConnectionPoint from "../../Rules/ConnectionPoint";
-import FlightNumber from "../../Rules/FlightNumber";
-import Blackouts from "../../Rules/Blackouts";
-import Distance from "../../Rules/Distance";
-import PublishedFareBasis from "../../Rules/PublishedFareBasis";
-import CorporateFareBasis from "../../Rules/CorporateFareBasis";
-import Cabin from "../../Rules/Cabin";
-import FareCategory from "../../Rules/FareCategory";
+import TicketingDates from '../../Rules/TicketingDates';
+import TravelDates from '../../Rules/TravelDates';
+import PointOfSale from '../../Rules/PoS';
+import PointOfOrigin from '../../Rules/PoO';
+import PublishedBookingClass from '../../Rules/PublishedBookingClass';
+import RequiredBookingClass from '../../Rules/RequiredBookingClass';
+import Market from '../../Rules/Market';
+import MarketingAirline from '../../Rules/MarketingAirline';
+import ValidatingAirline from '../../Rules/ValidatingAirline';
+import OperatingAirline from '../../Rules/OperatingAirline';
+import AdvancedTicketing from '../../Rules/AdvancedTicketing';
+import TourCode from '../../Rules/TourCode';
+import TicketDesignator from '../../Rules/TicketDesignator';
+import TimeOfWeek from '../../Rules/TimeOfWeek';
+import MinStay from '../../Rules/MinStay';
+import MaxStay from '../../Rules/MaxStay';
+import Stops from '../../Rules/Stops';
+import ConnectionPoint from '../../Rules/ConnectionPoint';
+import FlightNumber from '../../Rules/FlightNumber';
+import Blackouts from '../../Rules/Blackouts';
+import Distance from '../../Rules/Distance';
+import PublishedFareBasis from '../../Rules/PublishedFareBasis';
+import CorporateFareBasis from '../../Rules/CorporateFareBasis';
+import Cabin from '../../Rules/Cabin';
+import FareCategory from '../../Rules/FareCategory';
 
-import { ruleTypes } from "../../Rules/helper";
+import { pricingTermRuleTypes } from '../../Rules/helper';
 export default {
-  name: "RulesModal",
+  name: 'PricingTermRulesModal',
   apollo: {},
   components: {
     TicketingDates,
@@ -100,23 +100,25 @@ export default {
   },
   data() {
     return {
-      discount: {},
-      ruleTypes,
+      discount: {
+        name: ''
+      },
+      ruleTypes: pricingTermRuleTypes,
       ruleList: [
         {
           id: 1,
-          type: "TicketingDates",
-          title: "Ticketing Dates",
+          type: 'TicketingDates',
+          title: 'Ticketing Dates',
           active: true
         },
         {
           id: 2,
-          type: "TravelDates",
-          title: "Travel Dates",
+          type: 'TravelDates',
+          title: 'Travel Dates',
           active: false
         }
       ],
-      selectedRule: ""
+      selectedRule: ''
     };
   },
   computed: {
@@ -128,13 +130,13 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide("rules");
+      this.$modal.hide('pricingTermRulesModal');
     },
     createRule(selected) {
       this.ruleList.push({
         type: selected
       });
-      this.selectedRule = "";
+      this.selectedRule = '';
     },
     deleteRule(ruleType) {
       const matched = this.ruleList.filter(rule => rule.type === ruleType)[0];

@@ -181,7 +181,7 @@
     <DeleteDiscountModal @toggle-row="toggleRow" />
     <DiscountNoteModal @toggle-row="toggleRow" />
     <ChangeDiscountAppliedOrderModal />
-    <RulesModal />
+    <PricingTermRulesModal />
   </div>
 </template>
 
@@ -195,7 +195,7 @@ import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
 import DeleteDiscountModal from './DeleteDiscountModal';
 import DiscountNoteModal from './DiscountNoteModal';
-import RulesModal from './RulesModal';
+import PricingTermRulesModal from './PricingTermRulesModal';
 import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
 export default {
   name: 'Discounts',
@@ -206,7 +206,7 @@ export default {
     DeleteDiscountModal,
     DiscountNoteModal,
     ChangeDiscountAppliedOrderModal,
-    RulesModal
+    PricingTermRulesModal
   },
   apollo: {
     discountList: {
@@ -294,7 +294,7 @@ export default {
       });
     },
     toggleRulesModal(discount) {
-      this.$modal.show('rules', {
+      this.$modal.show('pricingTermRulesModal', {
         discount
       });
     },
