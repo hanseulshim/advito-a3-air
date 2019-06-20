@@ -6,7 +6,7 @@ import {
   TARGET_TERM,
   TARGET_LEVEL,
   NOTE
-} from '../constants';
+} from '../../constants';
 
 export const UPDATE_CONTRACT = gql`
   mutation updateContract($selectedContract: SelectedContract) {

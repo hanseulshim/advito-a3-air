@@ -1,8 +1,14 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Ticketing Dates</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="toggleEditMode"/>
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">Save</button>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="toggleEditMode"
+    />
+    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+      Save
+    </button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
@@ -10,7 +16,6 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="dd-MMM-yyyy"
       ></el-date-picker>
       <el-date-picker
         v-model="endDate"
@@ -18,7 +23,6 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="dd-MMM-yyyy"
       ></el-date-picker>
       <button v-if="!updateRule" @click="createTag">Add</button>
       <button v-if="updateRule" @click="updateTag">Update</button>
@@ -32,18 +36,23 @@
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-      >{{ rule.startDate }} - {{ rule.endDate }}</el-tag>
+        >{{ formatDate(rule.startDate) }} -
+        {{ formatDate(rule.endDate) }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { formatDate } from "../../../helper";
-import { GET_TICKETING_DATE_LIST } from "@/graphql/queries";
-import { UPDATE_TICKETING_DATES } from "@/graphql/mutations";
+import { formatDate } from '@/helper';
+import { GET_TICKETING_DATE_LIST } from '@/graphql/queries';
+import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
 export default {
-  name: "TicketingDates",
+  name: 'TicketingDates',
   props: {
-    parentId: Number
+    parentId: {
+      default: null,
+      type: Number
+    }
   },
   apollo: {
     ticketingDateList: {
@@ -57,10 +66,8 @@ export default {
   },
   data() {
     return {
-      editMode: true,
-      ruleContainerId: "",
-      startDate: "",
-      endDate: "",
+      startDate: '',
+      endDate: '',
       updateRule: null,
       ticketingDateList: []
     };
@@ -69,12 +76,15 @@ export default {
     //to handle any ticketingDateList that are "deleted" from UI
     filteredRuleList() {
       return this.ticketingDateList.filter(rule => !rule.isDeleted);
+    },
+    editMode() {
+      return this.ticketingDateList.length ? false : true;
     }
   },
   methods: {
     async toggleEditMode() {
       if (this.editMode && !this.filteredRuleList.length) {
-        this.$emit("delete-rule", "TicketingDates");
+        this.$emit('delete-rule', 'TicketingDates');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_TICKETING_DATES,
@@ -85,69 +95,31 @@ export default {
         });
       }
       this.editMode = !this.editMode;
-      this.startDate = "";
-      this.endDate = "";
+      this.startDate = '';
+      this.endDate = '';
       this.updateRule = null;
     },
-    // async addProject() {
-    //   try {
-    //     await this.$apollo.mutate({
-    //       mutation: ADD_PROJECT,
-    //       variables: {
-    //         ...this.form
-    //       },
-    //       update: (store, data) => {
-    //         const project = data.data.addProject;
-    //         const client = store.readQuery({
-    //           query: GET_CLIENT
-    //         }).client;
-    //         const newData = store.readQuery({
-    //           query: GET_PROJECTS,
-    //           variables: { clientId: client.id }
-    //         });
-    //         newData.projectList.push(project);
-    //         store.writeQuery({
-    //           query: GET_PROJECTS,
-    //           variables: { clientId: client.id },
-    //           data: newData
-    //         });
-    //       }
-    //     });
-    //     this.$modal.show("success", {
-    //       message: "Project successfully created.",
-    //       name: "new-project"
-    //     });
-    //   } catch (error) {
-    //     this.$modal.show("error", {
-    //       message: "Failed to create project. Please try again."
-    //     });
-    //   }
-    // },
     createTag() {
-      const startDate = formatDate(this.startDate);
-      const endDate = formatDate(this.endDate);
       const ruleContainerId = this.ticketingDateList.length
-        ? this.ticketingDateList[0].ruleContaierId
+        ? this.ticketingDateList[0].ruleContainerId
         : null;
 
       this.ticketingDateList.push({
         id: null,
-        //this needs to be grabbed somewhere!
         ruleContainerId,
-        startDate,
-        endDate,
+        startDate: new Date(this.startDate),
+        endDate: new Date(this.endDate),
         isDeleted: false
       });
-      this.startDate = "";
-      this.endDate = "";
+      this.startDate = '';
+      this.endDate = '';
     },
     deleteTag(tag) {
-      //dont delete from array anymore! just filter out any isDeleted with computed.
       const idx = this.ticketingDateList.indexOf(tag);
       this.ticketingDateList[idx].isDeleted = true;
 
       if (!this.filteredRuleList.length) {
-        this.$emit("delete-rule", "TicketingDates");
+        this.$emit('delete-rule', 'TicketingDates');
       }
     },
     editTag(rule) {
@@ -159,15 +131,18 @@ export default {
     },
     updateTag() {
       const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
-      this.ticketingDateList[ruleIndex].start = formatDate(this.startDate);
+      this.ticketingDateList[ruleIndex].start = this.startDate;
       this.ticketingDateList[ruleIndex].end = formatDate(this.endDate);
       this.updateRule = null;
-      this.startDate = "";
-      this.endDate = "";
+      this.startDate = '';
+      this.endDate = '';
+    },
+    formatDate(date) {
+      return formatDate(date);
     }
   }
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

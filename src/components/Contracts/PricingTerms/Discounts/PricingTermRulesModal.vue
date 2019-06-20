@@ -34,7 +34,7 @@
       :is="rule.type"
       v-for="rule in ruleList"
       :key="rule.id"
-      v-bind:parentId="discount.id"
+      :parentId="discount.id"
       @delete-rule="deleteRule"
     ></component>
   </modal>
