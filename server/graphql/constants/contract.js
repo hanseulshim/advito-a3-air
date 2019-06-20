@@ -98,6 +98,7 @@ const NOTE = `id
         assignedToName`;
 
 const CONTRACT_LOOKUP = {
+  ID: 57, //TODO: DELETE THIS ONCE IT'S CONNECTED
   CONTRACT: 7,
   PROPOSAL: 8,
   AMENDMENT: 9,

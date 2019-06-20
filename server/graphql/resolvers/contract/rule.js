@@ -1,4 +1,8 @@
-const { DISCOUNT_LOOKUP, TARGET_TERM_LOOKUP } = require('../../constants');
+const {
+  DISCOUNT_LOOKUP,
+  TARGET_TERM_LOOKUP,
+  CONTRACT_LOOKUP
+} = require('../../constants');
 
 exports.rule = {
   Query: {
@@ -14,6 +18,23 @@ exports.rule = {
       );
       return rows.map(row => row.tableid);
     },
+    geographyRuleList: async (_, __, { db }) =>
+      await db('location')
+        .select({
+          name: 'name',
+          code: 'code'
+        })
+        .where(function() {
+          this.where('locationtype', 5).orWhere('locationtype', 3);
+        })
+        .andWhere('clientid', CONTRACT_LOOKUP.ID)
+        .orderBy([
+          {
+            column: 'locationtype',
+            order: 'desc'
+          },
+          'code'
+        ]),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getTicketingDateList(db, parentId, parentType),
     travelDateList: async (_, { parentId, parentType }, { db }) =>

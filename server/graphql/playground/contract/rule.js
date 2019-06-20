@@ -6,6 +6,10 @@ exports.rule = {
     query: `
     {
       ruleList(parentId: 34)
+      geographyRuleList {
+        name
+        code
+      }
       ticketingDateList(parentId: 34) {
         id
         ruleContainerId

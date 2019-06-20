@@ -45,6 +45,11 @@ type PointOfOrigin {
   isDeleted: Boolean
 }
 
+type GeographyRule {
+  code: String,
+  name: String
+}
+
 type Market {
   id: Int
   ruleContainerId: String
@@ -200,6 +205,7 @@ type FareCategory {
 
 extend type Query {
   ruleList(parentId: Int, parentType: Int): [Int] @auth
+  geographyRuleList: [GeographyRule] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
