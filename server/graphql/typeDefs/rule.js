@@ -38,6 +38,13 @@ type PointOfSale {
   isDeleted: Boolean
 }
 
+input PointOfSaleInput {
+  id: Int
+  ruleContainerId: String
+  countryCode: String
+  isDeleted: Boolean
+}
+
 type PointOfOrigin {
   id: Int
   ruleContainerId: String
@@ -45,7 +52,30 @@ type PointOfOrigin {
   isDeleted: Boolean
 }
 
+input PointOfOriginInput {
+  id: Int
+  ruleContainerId: String
+  countryCode: String
+  isDeleted: Boolean
+}
+
+type GeographyRule {
+  code: String
+  name: String
+  locationType: Int
+}
+
 type Market {
+  id: Int
+  ruleContainerId: String
+  origin: String
+  originType: Int
+  arrival: String
+  arrivalType: Int
+  isDeleted: Boolean
+}
+
+input MarketInput {
   id: Int
   ruleContainerId: String
   origin: String
@@ -200,6 +230,8 @@ type FareCategory {
 
 extend type Query {
   ruleList(parentId: Int, parentType: Int): [Int] @auth
+  geographyRuleList: [GeographyRule] @auth
+  marketGeoList: [GeographyRule] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
@@ -224,10 +256,12 @@ extend type Query {
 }
 
 extend type Mutation {
-  updateTicketingDates(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]): [TicketingDate] @auth
-  deleteTicketingDate(id: Int!): Int @auth
-  updateTravelDates(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]): [TravelDate] @auth
-  deleteTravelDate(id: Int!): Int @auth
+  updateTicketingDates(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]!): [TicketingDate] @auth
+  updateTravelDates(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
+  updatePointOfSales(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
+  updatePointOfOrigins(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
+  updateMarkets(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
+  deleteRule(id: Int!, parentTable: Int!): Int @auth
 }
 
 `;

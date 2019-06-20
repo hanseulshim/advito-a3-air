@@ -17,8 +17,10 @@ exports.library = {
           locationType: 'locationtype',
           name: 'name'
         })
-        .whereNot('locationtype', 4)
-        .andWhereNot('locationtype', 6)
+        .where(function() {
+          this.where('locationtype', 5).orWhere('locationtype', 3);
+        })
+        .andWhere('clientid', 1)
         .orderBy([
           {
             column: 'locationtype',
