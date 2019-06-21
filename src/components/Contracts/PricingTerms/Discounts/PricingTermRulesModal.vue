@@ -152,6 +152,7 @@ export default {
         rule => rule.value === ruleType
       )[0];
       this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
+      //Call Apollo refetch of RuleList here!
     },
     beforeOpen(event) {
       this.discount = event.params.discount;

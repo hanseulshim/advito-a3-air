@@ -83,7 +83,7 @@ export default {
 
   methods: {
     async toggleEditMode() {
-      if (this.editMode && !this.filteredRuleList.length) {
+      if (this.editMode && !this.ticketingDateList.length) {
         this.$emit('delete-rule', 'TicketingDates');
       } else if (this.editMode) {
         await this.$apollo.mutate({
@@ -139,7 +139,7 @@ export default {
         ]
       });
 
-      if (!this.filteredRuleList.length) {
+      if (!this.ticketingDateList.length) {
         await this.$emit('delete-rule', 'TicketingDates');
       }
     },
