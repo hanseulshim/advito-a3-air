@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const DELETE_RULE = gql`
-  mutation deleteRule($id: Int!, $parentTable: Int!) {
-    deleteRule(id: $id, parentTable: $parentTable)
+  mutation deleteRule($id: Int!, $ruleType: Int!) {
+    deleteRule(id: $id, ruleType: $ruleType)
   }
 `;
 

@@ -129,7 +129,7 @@ export default {
         mutation: DELETE_RULE,
         variables: {
           id: tagId,
-          parentTable: this.tableId
+          ruleType: this.tableId
         },
         refetchQueries: () => [
           {
