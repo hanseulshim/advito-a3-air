@@ -30,6 +30,7 @@ exports.rule = {
           this.where('locationtype', 5).orWhere('locationtype', 3);
         })
         .andWhere('clientid', CONTRACT_LOOKUP.ID)
+        .andWhere('isdeleted', false)
         .orderBy([
           {
             column: 'locationtype',
@@ -51,6 +52,7 @@ exports.rule = {
             .orWhere('locationtype', 0);
         })
         .andWhere('clientid', CONTRACT_LOOKUP.ID)
+        .andWhere('isdeleted', false)
         .orderBy([
           {
             column: 'locationtype',
@@ -58,6 +60,13 @@ exports.rule = {
           },
           'code'
         ]),
+    bookingClassCodeList: async (_, __, { db }) =>
+      await db('bookingclass')
+        .select({
+          fareCategoryId: 'farecategoryid',
+          code: 'code'
+        })
+        .where('isdeleted', false),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.TICKET_DATE),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
@@ -67,10 +76,18 @@ exports.rule = {
     pointOfOriginList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.POINT_OF_ORIGIN),
     marketList: async (_, { parentId, parentType }, { db }) =>
-      await getRuleList(db, parentId, parentType, RULE_LOOKUP.MARKET)
+      await getRuleList(db, parentId, parentType, RULE_LOOKUP.MARKET),
+    bookingClassList: async (_, { parentId, bookingClassType = 1 }, { db }) =>
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.BOOKING_CLASS,
+        bookingClassType
+      )
   },
   Mutation: {
-    updateTicketingDates: async (
+    updateTicketingDate: async (
       _,
       { parentId, parentType, ticketingDateList },
       { db }
@@ -82,7 +99,7 @@ exports.rule = {
         ticketingDateList,
         RULE_LOOKUP.TICKET_DATE
       ),
-    updateTravelDates: async (
+    updateTravelDate: async (
       _,
       { parentId, parentType, travelDateList },
       { db }
@@ -94,7 +111,7 @@ exports.rule = {
         travelDateList,
         RULE_LOOKUP.TRAVEL_DATE
       ),
-    updatePointOfSales: async (
+    updatePointOfSale: async (
       _,
       { parentId, parentType, pointOfSaleList },
       { db }
@@ -106,7 +123,7 @@ exports.rule = {
         pointOfSaleList,
         RULE_LOOKUP.POINT_OF_SALE
       ),
-    updatePointOfOrigins: async (
+    updatePointOfOrigin: async (
       _,
       { parentId, parentType, pointOfOriginList },
       { db }
@@ -118,13 +135,26 @@ exports.rule = {
         pointOfOriginList,
         RULE_LOOKUP.POINT_OF_ORIGIN
       ),
-    updateMarkets: async (_, { parentId, parentType, marketList }, { db }) =>
+    updateMarket: async (_, { parentId, parentType, marketList }, { db }) =>
       await updateRule(
         db,
         parentId,
         parentType,
         marketList,
         RULE_LOOKUP.MARKET
+      ),
+    updateBookingClass: async (
+      _,
+      { parentId, bookingClassType = 1, bookingClassList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        bookingClassList,
+        RULE_LOOKUP.BOOKING_CLASS,
+        bookingClassType
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -135,11 +165,11 @@ exports.rule = {
 
 const getRuleContainerId = async (db, parentId, parentType) => {
   const table = getParentTable(parentType);
-  if (!table) return null;
+  if (!table) return [];
   const [parent] = await db(table)
     .select('rulescontainerguidref')
     .where('id', parentId);
-  if (!parent) return null;
+  if (!parent) return [];
   const { rulescontainerguidref: ruleContainerId } = parent;
   return ruleContainerId;
 };
@@ -151,7 +181,7 @@ const getParentTable = (parentType = DISCOUNT_LOOKUP.RULE_TYPE) =>
     ? 'targetterm_v2'
     : null;
 
-const getRuleList = async (db, parentId, parentType, ruleType) => {
+const getRuleList = async (db, parentId, parentType, ruleType, type) => {
   const ruleInfo = getRuleInfo(ruleType);
   if (!parentId) return [];
   const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
@@ -161,16 +191,32 @@ const getRuleList = async (db, parentId, parentType, ruleType) => {
     ruleContainerId: 'rulescontainerguidref',
     isDeleted: 'isdeleted'
   };
-  return await db(ruleInfo.tableName)
-    .select({
-      ...select,
-      ...ruleInfo.select
-    })
-    .where('rulescontainerguidref', ruleContainerId)
-    .andWhere('isdeleted', false);
+  return type
+    ? await db(ruleInfo.tableName)
+        .select({
+          ...select,
+          ...ruleInfo.select
+        })
+        .where('rulescontainerguidref', ruleContainerId)
+        .where(ruleInfo.type, type)
+        .andWhere('isdeleted', false)
+    : await db(ruleInfo.tableName)
+        .select({
+          ...select,
+          ...ruleInfo.select
+        })
+        .where('rulescontainerguidref', ruleContainerId)
+        .andWhere('isdeleted', false);
 };
 
-const updateRule = async (db, parentId, parentType, ruleList, ruleType) => {
+const updateRule = async (
+  db,
+  parentId,
+  parentType,
+  ruleList,
+  ruleType,
+  type
+) => {
   const ruleInfo = getRuleInfo(ruleType);
   const parentTable = getParentTable(parentType);
   const queries = ruleList.map(rule =>
@@ -192,7 +238,7 @@ const updateRule = async (db, parentId, parentType, ruleList, ruleType) => {
       `)
   );
   await Promise.all(queries);
-  return await getRuleList(db, parentId, parentType, ruleType);
+  return await getRuleList(db, parentId, parentType, ruleType, type);
 };
 
 const getRuleInfo = id => {
@@ -296,9 +342,27 @@ const getRuleInfo = id => {
   } else if (id === 8 || id === 9) {
     return {
       tableName: 'bookingclassrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        bookingClassType: 'bookingclasstype',
+        bookingClass: 'bookingclass'
+      },
+      type: 'bookingclasstype',
+      update: 'bookingclassrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'bookingClassType',
+          type: 'int'
+        },
+        {
+          name: 'bookingClass',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 10 || id === 11 || id === 12) {
     return {
