@@ -26,13 +26,13 @@
           v-for="rule in rulesInDropdown"
           :key="rule.index"
           :label="rule.label"
-          :value="rule.value"
+          :value="rule.id"
         ></el-option>
       </el-select>
     </div>
     <component
-      :is="rule.type"
-      v-for="rule in ruleList"
+      :is="rule.value"
+      v-for="rule in renderedRules"
       :key="rule.id"
       :parent-id="discount.id"
       :table-id="rule.id"
@@ -69,9 +69,27 @@ import Cabin from '../../Rules/Cabin';
 import FareCategory from '../../Rules/FareCategory';
 
 import { ruleTypes } from '../../Rules/helper';
+import { GET_RULE_LIST } from '@/graphql/queries';
 export default {
   name: 'PricingTermRulesModal',
-  apollo: {},
+  apollo: {
+    ruleList: {
+      query: GET_RULE_LIST,
+      variables() {
+        return {
+          parentId: this.discount.id
+        };
+      },
+      result({ data }) {
+        if (data && this.discount.id) {
+          data.ruleList.map(ruleId => {
+            let match = this.ruleTypes.filter(v => v.id === ruleId)[0];
+            this.renderedRules.push(match);
+          });
+        }
+      }
+    }
+  },
   components: {
     TicketingDates,
     TravelDates,
@@ -101,19 +119,22 @@ export default {
   },
   data() {
     return {
-      discount: {
-        name: ''
-      },
+      discount: {},
       ruleTypes,
       ruleList: [],
+      renderedRules: [],
       selectedRule: ''
     };
   },
   computed: {
     rulesInDropdown() {
-      return this.ruleTypes.filter(
-        rule => !this.ruleList.some(v => v.type === rule.value)
-      );
+      if (this.renderedRules.length) {
+        return this.ruleTypes.filter(
+          rule => !this.ruleList.some(v => v === rule.id)
+        );
+      } else {
+        return this.ruleTypes;
+      }
     }
   },
   methods: {
@@ -121,14 +142,16 @@ export default {
       this.$modal.hide('pricingTermRulesModal');
     },
     createRule(selected) {
-      this.ruleList.push({
-        type: selected
-      });
+      const match = this.ruleTypes.filter(rule => rule.id === selected)[0];
+
+      this.renderedRules.push(match);
       this.selectedRule = '';
     },
     deleteRule(ruleType) {
-      const matched = this.ruleList.filter(rule => rule.type === ruleType)[0];
-      this.ruleList.splice(this.ruleList.indexOf(matched), 1);
+      const matched = this.renderedRules.filter(
+        rule => rule.value === ruleType
+      )[0];
+      this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
     },
     beforeOpen(event) {
       this.discount = event.params.discount;

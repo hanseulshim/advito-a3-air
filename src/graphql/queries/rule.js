@@ -1,5 +1,11 @@
 import gql from 'graphql-tag';
 
+export const GET_RULE_LIST = gql`
+  query ruleList($parentId: Int, $parentType: Int) {
+    ruleList(parentId: $parentId, parentType: $parentType)
+  }
+`;
+
 export const GET_TICKETING_DATE_LIST = gql`
   query ticketingDateList($parentId: Int, $parentType: Int) {
     ticketingDateList(parentId: $parentId, parentType: $parentType) {
