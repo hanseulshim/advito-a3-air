@@ -232,6 +232,15 @@ type ConnectionPoint {
   isDeleted: Boolean
 }
 
+input ConnectionPointInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  connection: String
+  connectionGeoType: Int
+  isDeleted: Boolean
+}
+
 type FlightNumber {
   id: Int
   ruleContainerId: String

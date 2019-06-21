@@ -220,12 +220,13 @@ exports.rule = {
 };
 
 const getRuleContainerId = async (db, parentId, parentType) => {
+  if (!parentId) return null;
   const table = getParentTable(parentType);
-  if (!table) return [];
+  if (!table) return null;
   const [parent] = await db(table)
     .select('rulescontainerguidref')
     .where('id', parentId);
-  if (!parent) return [];
+  if (!parent) return null;
   const { rulescontainerguidref: ruleContainerId } = parent;
   return ruleContainerId;
 };
@@ -239,7 +240,6 @@ const getParentTable = (parentType = DISCOUNT_LOOKUP.RULE_TYPE) =>
 
 const getRuleList = async (db, parentId, parentType, ruleType, type) => {
   const ruleInfo = getRuleInfo(ruleType);
-  if (!parentId) return [];
   const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
   if (!ruleContainerId) return [];
   const select = {
@@ -518,9 +518,26 @@ const getRuleInfo = id => {
   } else if (id === 20) {
     return {
       tableName: 'connectionrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        connection: 'connection',
+        connectionGeoType: 'connectiongeotype'
+      },
+      update: 'connectionrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'connection',
+          type: 'string'
+        },
+        {
+          name: 'connectionGeoType',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 21) {
     return {
