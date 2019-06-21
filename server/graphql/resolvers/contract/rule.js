@@ -15,7 +15,7 @@ exports.rule = {
       );
       if (!ruleContainerId) return [];
       const { rows } = await db.raw(
-        `SELECT tableid from rules_checker('${ruleContainerId}')`
+        `SELECT tableid from rules_checker2('${ruleContainerId}')`
       );
       return rows.map(row => row.tableid);
     },
