@@ -122,9 +122,23 @@ type Airline {
   id: Int
   ruleContainerId: String
   exclude: Boolean
-  type: Int
+  ruleType: Int
   carrierCode: String
   isDeleted: Boolean
+}
+
+input AirlineInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  ruleType: Int
+  carrierCode: String
+  isDeleted: Boolean
+}
+
+type AirlineCode {
+  code: String
+  name: String
 }
 
 type TicketDesignator {
@@ -256,7 +270,8 @@ extend type Query {
   fareBasisList(parentId: Int): [FareBasis] @auth
   bookingClassList(parentId: Int, bookingClassType: Int): [BookingClass] @auth
   bookingClassCodeList: [BookingClassCode] @auth
-  airlineList(parentId: Int, parentType: Int): [Airline] @auth
+  airlineList(parentId: Int, airlineType: Int): [Airline] @auth
+  airlineCodeList: [AirlineCode] @auth
   ticketDesignatorList(parentId: Int): [TicketDesignator] @auth
   tourCodeList(parentId: Int): [TourCode] @auth
   advancedTicketingList(parentId: Int): [AdvancedTicketing] @auth
@@ -279,6 +294,7 @@ extend type Mutation {
   updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
   updateMarket(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
   updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClass] @auth
+  updateAirline(parentId: Int!, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

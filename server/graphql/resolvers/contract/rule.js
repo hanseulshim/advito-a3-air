@@ -67,6 +67,13 @@ exports.rule = {
           code: 'code'
         })
         .where('isdeleted', false),
+    airlineCodeList: async (_, __, { db }) =>
+      await db('carrier')
+        .select({
+          name: 'name',
+          code: 'code'
+        })
+        .where('isdeleted', false),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.TICKET_DATE),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
@@ -84,6 +91,14 @@ exports.rule = {
         undefined,
         RULE_LOOKUP.BOOKING_CLASS,
         bookingClassType
+      ),
+    airlineList: async (_, { parentId, airlineType = 1 }, { db }) =>
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.AIRLINE,
+        airlineType
       )
   },
   Mutation: {
@@ -155,6 +170,19 @@ exports.rule = {
         bookingClassList,
         RULE_LOOKUP.BOOKING_CLASS,
         bookingClassType
+      ),
+    updateAirline: async (
+      _,
+      { parentId, airlineType = 1, airlineList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        airlineList,
+        RULE_LOOKUP.AIRLINE,
+        airlineType
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -367,9 +395,27 @@ const getRuleInfo = id => {
   } else if (id === 10 || id === 11 || id === 12) {
     return {
       tableName: 'carrierrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        ruleType: 'ruletype',
+        carrierCode: 'carriercode'
+      },
+      type: 'ruletype',
+      update: 'carrierrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'ruleType',
+          type: 'int'
+        },
+        {
+          name: 'carrierCode',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 13) {
     return {

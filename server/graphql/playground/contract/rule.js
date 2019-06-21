@@ -15,10 +15,14 @@ exports.rule = {
       #  code
       #  locationType
       #}
-      bookingClassCodeList {
-        fareCategoryId
-        code
-      }
+      #bookingClassCodeList {
+      #  fareCategoryId
+      #  code
+      #}
+      #airlineCodeList {
+      #  name
+      #  code
+      #}
       ticketingDateList(parentId: 34) {
         id
         ruleContainerId
@@ -61,6 +65,14 @@ exports.rule = {
         exclude
         bookingClassType
         bookingClass
+        isDeleted
+      }
+      airlineList(parentId: 34) {
+        id
+        ruleContainerId
+        exclude
+        ruleType
+        carrierCode
         isDeleted
       }
     }`
@@ -163,6 +175,23 @@ exports.rule = {
         exclude
         bookingClassType
         bookingClass
+        isDeleted
+      }
+      updateAirline(parentId: 34, airlineList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          exclude: true
+          ruleType: 1
+          carrierCode: "AQ"
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        exclude
+        ruleType
+        carrierCode
         isDeleted
       }
       deleteRule(id: 46, ruleType: 4)
