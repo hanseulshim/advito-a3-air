@@ -103,7 +103,9 @@ exports.rule = {
     ticketDesignatorList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.TICKET_DESIGNATOR),
     tourCodeList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.TOUR_CODE)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.TOUR_CODE),
+    stopsList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.STOPS)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -208,6 +210,8 @@ exports.rule = {
         tourCodeList,
         RULE_LOOKUP.TOUR_CODE
       ),
+    updateStops: async (_, { parentId, stopsList }, { db }) =>
+      await updateRule(db, parentId, undefined, stopsList, RULE_LOOKUP.STOPS),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
@@ -495,9 +499,21 @@ const getRuleInfo = id => {
   } else if (id === 19) {
     return {
       tableName: 'stopsrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        minStops: 'minstops',
+        maxStops: 'maxstops'
+      },
+      update: 'stopsrule_update',
+      params: [
+        {
+          name: 'minStops',
+          type: 'int'
+        },
+        {
+          name: 'maxStops',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 20) {
     return {

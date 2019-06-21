@@ -210,8 +210,16 @@ type DayOfWeek {
 type Stops {
   id: Int
   ruleContainerId: String
-  minstops: Int
-  maxstops: Int
+  minStops: Int
+  maxStops: Int
+  isDeleted: Boolean
+}
+
+input StopsInput {
+  id: Int
+  ruleContainerId: String
+  minStops: Int
+  maxStops: Int
   isDeleted: Boolean
 }
 
@@ -311,6 +319,7 @@ extend type Mutation {
   updateAirline(parentId: Int!, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
   updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
   updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
+  updateStops(parentId: Int! stopsList: [StopsInput]!): [Stops] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

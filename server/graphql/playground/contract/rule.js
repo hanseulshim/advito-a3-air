@@ -87,6 +87,13 @@ exports.rule = {
         tourCode
         isDeleted
       }
+      stopsList(parentId: 34) {
+        id
+        ruleContainerId
+        minStops
+        maxStops
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -231,6 +238,21 @@ exports.rule = {
         id
         ruleContainerId
         tourCode
+        isDeleted
+      }
+      updateStops(parentId: 34, stopsList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          minStops: 10,
+          maxStops: 15
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        minStops
+        maxStops
         isDeleted
       }
     }`
