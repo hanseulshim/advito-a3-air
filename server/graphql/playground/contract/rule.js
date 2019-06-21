@@ -75,6 +75,18 @@ exports.rule = {
         carrierCode
         isDeleted
       }
+      ticketDesignatorList(parentId: 34) {
+        id
+        ruleContainerId
+        ticketDesignator
+        isDeleted
+      }
+      tourCodeList(parentId: 34) {
+        id
+        ruleContainerId
+        tourCode
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -83,6 +95,7 @@ exports.rule = {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     mutation {
+      deleteRule(id: 46, ruleType: 4)
       updateTicketingDate(parentId: 34, ticketingDateList: [
         {
           id: 32,
@@ -194,7 +207,32 @@ exports.rule = {
         carrierCode
         isDeleted
       }
-      deleteRule(id: 46, ruleType: 4)
+      updateTicketDesignator(parentId: 34, ticketDesignatorList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          ticketDesignator: "test"
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        ticketDesignator
+        isDeleted
+      }
+      updateTourCode(parentId: 34, tourCodeList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          tourCode: "test"
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        tourCode
+        isDeleted
+      }
     }`
   }
 };

@@ -148,7 +148,21 @@ type TicketDesignator {
   isDeleted: Boolean
 }
 
+input TicketDesignatorInput {
+  id: Int
+  ruleContainerId: String
+  ticketDesignator: String
+  isDeleted: Boolean
+}
+
 type TourCode {
+  id: Int
+  ruleContainerId: String
+  tourCode: String
+  isDeleted: Boolean
+}
+
+input TourCodeInput {
   id: Int
   ruleContainerId: String
   tourCode: String
@@ -295,6 +309,8 @@ extend type Mutation {
   updateMarket(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
   updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClass] @auth
   updateAirline(parentId: Int!, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
+  updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
+  updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

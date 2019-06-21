@@ -99,7 +99,11 @@ exports.rule = {
         undefined,
         RULE_LOOKUP.AIRLINE,
         airlineType
-      )
+      ),
+    ticketDesignatorList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.TICKET_DESIGNATOR),
+    tourCodeList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.TOUR_CODE)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -183,6 +187,26 @@ exports.rule = {
         airlineList,
         RULE_LOOKUP.AIRLINE,
         airlineType
+      ),
+    updateTicketDesignator: async (
+      _,
+      { parentId, ticketDesignatorList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        ticketDesignatorList,
+        RULE_LOOKUP.TICKET_DESIGNATOR
+      ),
+    updateTourCode: async (_, { parentId, tourCodeList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        tourCodeList,
+        RULE_LOOKUP.TOUR_CODE
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -419,17 +443,26 @@ const getRuleInfo = id => {
     };
   } else if (id === 13) {
     return {
-      tableName: 'ticketdeesignatorrule',
-      select: {},
-      update: '',
-      params: []
+      tableName: 'ticketdesignatorrule',
+      select: {
+        ticketDesignator: 'ticketdesignator'
+      },
+      update: 'ticketdesignatorrule_update',
+      params: [
+        {
+          name: 'ticketDesignator',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 14) {
     return {
       tableName: 'tourcoderule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        tourCode: 'tourcode'
+      },
+      update: 'tourcoderule_update',
+      params: [{ name: 'tourCode', type: 'string' }]
     };
   } else if (id === 15) {
     return {
