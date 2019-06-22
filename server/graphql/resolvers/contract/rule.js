@@ -1,7 +1,8 @@
 const {
   DISCOUNT_LOOKUP,
   TARGET_TERM_LOOKUP,
-  CONTRACT_LOOKUP
+  CONTRACT_LOOKUP,
+  RULE_LOOKUP
 } = require('../../constants');
 
 exports.rule = {
@@ -14,7 +15,7 @@ exports.rule = {
       );
       if (!ruleContainerId) return [];
       const { rows } = await db.raw(
-        `SELECT tableid from rules_checker('${ruleContainerId}')`
+        `SELECT tableid from rules_checker2('${ruleContainerId}')`
       );
       return rows.map(row => row.tableid);
     },
@@ -29,6 +30,7 @@ exports.rule = {
           this.where('locationtype', 5).orWhere('locationtype', 3);
         })
         .andWhere('clientid', CONTRACT_LOOKUP.ID)
+        .andWhere('isdeleted', false)
         .orderBy([
           {
             column: 'locationtype',
@@ -50,6 +52,7 @@ exports.rule = {
             .orWhere('locationtype', 0);
         })
         .andWhere('clientid', CONTRACT_LOOKUP.ID)
+        .andWhere('isdeleted', false)
         .orderBy([
           {
             column: 'locationtype',
@@ -57,148 +60,167 @@ exports.rule = {
           },
           'code'
         ]),
+    bookingClassCodeList: async (_, __, { db }) =>
+      await db('bookingclass')
+        .select({
+          fareCategoryId: 'farecategoryid',
+          code: 'code'
+        })
+        .where('isdeleted', false),
+    airlineCodeList: async (_, __, { db }) =>
+      await db('carrier')
+        .select({
+          name: 'name',
+          code: 'code'
+        })
+        .where('isdeleted', false),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
-      await getTicketingDateList(db, parentId, parentType),
+      await getRuleList(db, parentId, parentType, RULE_LOOKUP.TICKET_DATE),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
-      await getTravelDateList(db, parentId, parentType),
+      await getRuleList(db, parentId, parentType, RULE_LOOKUP.TRAVEL_DATE),
     pointOfSaleList: async (_, { parentId, parentType }, { db }) =>
-      await getPointOfSaleList(db, parentId, parentType),
+      await getRuleList(db, parentId, parentType, RULE_LOOKUP.POINT_OF_SALE),
     pointOfOriginList: async (_, { parentId, parentType }, { db }) =>
-      await getPointOfOriginList(db, parentId, parentType),
+      await getRuleList(db, parentId, parentType, RULE_LOOKUP.POINT_OF_ORIGIN),
     marketList: async (_, { parentId, parentType }, { db }) =>
-      await getMarketList(db, parentId, parentType)
+      await getRuleList(db, parentId, parentType, RULE_LOOKUP.MARKET),
+    bookingClassList: async (_, { parentId, bookingClassType = 1 }, { db }) =>
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.BOOKING_CLASS,
+        bookingClassType
+      ),
+    airlineList: async (_, { parentId, airlineType = 1 }, { db }) =>
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.AIRLINE,
+        airlineType
+      ),
+    ticketDesignatorList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.TICKET_DESIGNATOR),
+    tourCodeList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.TOUR_CODE),
+    stopsList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.STOPS)
   },
   Mutation: {
-    updateTicketingDates: async (
+    updateTicketingDate: async (
       _,
       { parentId, parentType, ticketingDateList },
       { db }
-    ) => {
-      const parentTable = getParentTable(parentType);
-      const queries = ticketingDateList.map(ticketingDate =>
-        db.raw(`
-        SELECT ticketdaterule_create_update(
-          ${parentId},
-          '${parentTable}',
-          ${ticketingDate.id},
-          ${
-            ticketingDate.ruleContainerId
-              ? `'${ticketingDate.ruleContainerId}'`
-              : null
-          },
-          '${new Date(ticketingDate.startDate).toISOString()}',
-          '${new Date(ticketingDate.endDate).toISOString()}',
-          ${ticketingDate.isDeleted}
-        )
-      `)
-      );
-      await Promise.all(queries);
-      return await getTicketingDateList(db, parentId, parentType);
-    },
-    updateTravelDates: async (
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        parentType,
+        ticketingDateList,
+        RULE_LOOKUP.TICKET_DATE
+      ),
+    updateTravelDate: async (
       _,
       { parentId, parentType, travelDateList },
       { db }
-    ) => {
-      const parentTable = getParentTable(parentType);
-      const queries = travelDateList.map(travelDate =>
-        db.raw(`
-        SELECT traveldaterule_create_update(
-          ${parentId},
-          '${parentTable}',
-          ${travelDate.id},
-          ${
-            travelDate.ruleContainerId
-              ? `'${travelDate.ruleContainerId}'`
-              : null
-          },
-          '${new Date(travelDate.startDate).toISOString()}',
-          '${new Date(travelDate.endDate).toISOString()}',
-          ${travelDate.isDeleted}
-        )
-      `)
-      );
-      await Promise.all(queries);
-      return await getTravelDateList(db, parentId, parentType);
-    },
-    updatePointOfSales: async (
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        parentType,
+        travelDateList,
+        RULE_LOOKUP.TRAVEL_DATE
+      ),
+    updatePointOfSale: async (
       _,
       { parentId, parentType, pointOfSaleList },
       { db }
-    ) => {
-      const parentTable = getParentTable(parentType);
-      const queries = pointOfSaleList.map(pointOfSale =>
-        db.raw(`
-        SELECT pointofsale_update(
-          ${parentId},
-          '${parentTable}',
-          ${pointOfSale.id},
-          ${
-            pointOfSale.ruleContainerId
-              ? `'${pointOfSale.ruleContainerId}'`
-              : null
-          },
-          '${pointOfSale.countryCode}',
-          ${pointOfSale.isDeleted}
-        )
-      `)
-      );
-      await Promise.all(queries);
-      return await getPointOfSaleList(db, parentId, parentType);
-    },
-    updatePointOfOrigins: async (
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        parentType,
+        pointOfSaleList,
+        RULE_LOOKUP.POINT_OF_SALE
+      ),
+    updatePointOfOrigin: async (
       _,
       { parentId, parentType, pointOfOriginList },
       { db }
-    ) => {
-      const parentTable = getParentTable(parentType);
-      const queries = pointOfOriginList.map(pointOfOrigin =>
-        db.raw(`
-        SELECT pointoforigin_update(
-          ${parentId},
-          '${parentTable}',
-          ${pointOfOrigin.id},
-          ${
-            pointOfOrigin.ruleContainerId
-              ? `'${pointOfOrigin.ruleContainerId}'`
-              : null
-          },
-          '${pointOfOrigin.countryCode}',
-          ${pointOfOrigin.isDeleted}
-        )
-      `)
-      );
-      await Promise.all(queries);
-      return await getPointOfOriginList(db, parentId, parentType);
-    },
-    updateMarkets: async (_, { parentId, parentType, marketList }, { db }) => {
-      const parentTable = getParentTable(parentType);
-      const queries = marketList.map(market =>
-        db.raw(`
-        SELECT geographyrule_update(
-          ${parentId},
-          '${parentTable}',
-          ${market.id},
-          ${market.ruleContainerId ? `'${market.ruleContainerId}'` : null},
-          '${market.origin}',
-          ${market.originType},
-          '${market.arrival}',
-          ${market.arrivalType},
-          ${market.isDeleted}
-        )
-      `)
-      );
-      await Promise.all(queries);
-      return await getMarketList(db, parentId, parentType);
-    },
-    deleteRule: async (_, { id, parentTable }, { db }) => {
-      const tableName = getRuleTable(parentTable);
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        parentType,
+        pointOfOriginList,
+        RULE_LOOKUP.POINT_OF_ORIGIN
+      ),
+    updateMarket: async (_, { parentId, parentType, marketList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        parentType,
+        marketList,
+        RULE_LOOKUP.MARKET
+      ),
+    updateBookingClass: async (
+      _,
+      { parentId, bookingClassType = 1, bookingClassList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        bookingClassList,
+        RULE_LOOKUP.BOOKING_CLASS,
+        bookingClassType
+      ),
+    updateAirline: async (
+      _,
+      { parentId, airlineType = 1, airlineList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        airlineList,
+        RULE_LOOKUP.AIRLINE,
+        airlineType
+      ),
+    updateTicketDesignator: async (
+      _,
+      { parentId, ticketDesignatorList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        ticketDesignatorList,
+        RULE_LOOKUP.TICKET_DESIGNATOR
+      ),
+    updateTourCode: async (_, { parentId, tourCodeList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        tourCodeList,
+        RULE_LOOKUP.TOUR_CODE
+      ),
+    updateStops: async (_, { parentId, stopsList }, { db }) =>
+      await updateRule(db, parentId, undefined, stopsList, RULE_LOOKUP.STOPS),
+    deleteRule: async (_, { id, ruleType }, { db }) => {
+      const { tableName } = getRuleInfo(ruleType);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
     }
   }
 };
 
 const getRuleContainerId = async (db, parentId, parentType) => {
+  if (!parentId) return null;
   const table = getParentTable(parentType);
   if (!table) return null;
   const [parent] = await db(table)
@@ -216,133 +238,341 @@ const getParentTable = (parentType = DISCOUNT_LOOKUP.RULE_TYPE) =>
     ? 'targetterm_v2'
     : null;
 
-const getTicketingDateList = async (db, parentId, parentType) => {
-  if (!parentId) return [];
+const getRuleList = async (db, parentId, parentType, ruleType, type) => {
+  const ruleInfo = getRuleInfo(ruleType);
   const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
   if (!ruleContainerId) return [];
-  return await db('ticketdaterule')
-    .select({
-      id: 'id',
-      ruleContainerId: 'rulescontainerguidref',
-      startDate: 'startdate',
-      endDate: 'enddate',
-      isDeleted: 'isdeleted'
-    })
-    .where('rulescontainerguidref', ruleContainerId)
-    .andWhere('isdeleted', false);
+  const select = {
+    id: 'id',
+    ruleContainerId: 'rulescontainerguidref',
+    isDeleted: 'isdeleted'
+  };
+  return type
+    ? await db(ruleInfo.tableName)
+        .select({
+          ...select,
+          ...ruleInfo.select
+        })
+        .where('rulescontainerguidref', ruleContainerId)
+        .where(ruleInfo.type, type)
+        .andWhere('isdeleted', false)
+    : await db(ruleInfo.tableName)
+        .select({
+          ...select,
+          ...ruleInfo.select
+        })
+        .where('rulescontainerguidref', ruleContainerId)
+        .andWhere('isdeleted', false);
 };
 
-const getTravelDateList = async (db, parentId, parentType) => {
-  if (!parentId) return [];
-  const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
-  if (!ruleContainerId) return [];
-  return await db('traveldaterule')
-    .select({
-      id: 'id',
-      ruleContainerId: 'rulescontainerguidref',
-      startDate: 'startdate',
-      endDate: 'enddate',
-      isDeleted: 'isdeleted'
-    })
-    .where('rulescontainerguidref', ruleContainerId)
-    .andWhere('isdeleted', false);
+const updateRule = async (
+  db,
+  parentId,
+  parentType,
+  ruleList,
+  ruleType,
+  type
+) => {
+  const ruleInfo = getRuleInfo(ruleType);
+  const parentTable = getParentTable(parentType);
+  const queries = ruleList.map(rule =>
+    db.raw(`
+        SELECT ${ruleInfo.update}(
+          ${parentId},
+          '${parentTable}',
+          ${rule.id},
+          ${rule.ruleContainerId ? `'${rule.ruleContainerId}'` : null},
+          ${ruleInfo.params.map(param => {
+            return param.type === 'string'
+              ? `'${rule[param.name]}'`
+              : param.type === 'date'
+              ? `'${new Date(rule[param.name]).toISOString()}'`
+              : `${rule[param.name]}`;
+          })},
+          ${rule.isDeleted}
+        )
+      `)
+  );
+  await Promise.all(queries);
+  return await getRuleList(db, parentId, parentType, ruleType, type);
 };
 
-const getPointOfSaleList = async (db, parentId, parentType) => {
-  if (!parentId) return [];
-  const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
-  if (!ruleContainerId) return [];
-  return await db('pointofsale')
-    .select({
-      id: 'id',
-      ruleContainerId: 'rulescontainerguidref',
-      countryCode: 'countrycode',
-      isDeleted: 'isdeleted'
-    })
-    .where('rulescontainerguidref', ruleContainerId)
-    .andWhere('isdeleted', false);
-};
-
-const getPointOfOriginList = async (db, parentId, parentType) => {
-  if (!parentId) return [];
-  const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
-  if (!ruleContainerId) return [];
-  return await db('pointoforigin')
-    .select({
-      id: 'id',
-      ruleContainerId: 'rulescontainerguidref',
-      countryCode: 'countrycode',
-      isDeleted: 'isdeleted'
-    })
-    .where('rulescontainerguidref', ruleContainerId)
-    .andWhere('isdeleted', false);
-};
-
-const getMarketList = async (db, parentId, parentType) => {
-  if (!parentId) return [];
-  const ruleContainerId = await getRuleContainerId(db, parentId, parentType);
-  if (!ruleContainerId) return [];
-  return await db('geographyrule')
-    .select({
-      id: 'id',
-      ruleContainerId: 'rulescontainerguidref',
-      origin: 'origin',
-      originType: 'origintype',
-      arrival: 'arrival',
-      arrivalType: 'arrivaltype',
-      isDeleted: 'isdeleted'
-    })
-    .where('rulescontainerguidref', ruleContainerId)
-    .andWhere('isdeleted', false);
-};
-
-const getRuleTable = id => {
-  switch (id) {
-    case 1:
-      return 'ticketdaterule';
-    case 2:
-      return 'traveldaterule';
-    case 3:
-      return 'pointofsale';
-    case 4:
-      return 'pointoforigin';
-    case 5:
-      return 'geographyrule';
-    case 6:
-    case 7:
-      return 'farebasis';
-    case 8:
-    case 9:
-      return 'bookingclassrule';
-    case 10:
-    case 11:
-    case 12:
-      return 'carrierrule';
-    case 13:
-      return 'ticketdeesignatorrule';
-    case 14:
-      return 'tourcoderule';
-    case 15:
-      return 'advancepurchaserule';
-    case 16:
-      return 'minstayrule';
-    case 17:
-      return 'maxstayrule';
-    case 18:
-      return 'dayofweekrule';
-    case 19:
-      return 'stopsrule';
-    case 20:
-      return 'connectionrule';
-    case 21:
-      return 'flightnumberrule';
-    case 22:
-      return 'blackoutdaterule';
-    case 23:
-      return 'distancerule';
-    case 24:
-      return 'cabinrule';
-    case 25:
-      return 'farecategoryrule';
+const getRuleInfo = id => {
+  if (id === 1) {
+    return {
+      tableName: 'ticketdaterule',
+      select: { startDate: 'startdate', endDate: 'enddate' },
+      update: 'ticketdaterule_create_update',
+      params: [
+        {
+          name: 'startDate',
+          type: 'date'
+        },
+        {
+          name: 'endDate',
+          type: 'date'
+        }
+      ]
+    };
+  } else if (id === 2) {
+    return {
+      tableName: 'traveldaterule',
+      select: { startDate: 'startdate', endDate: 'enddate' },
+      update: 'traveldaterule_create_update',
+      params: [
+        {
+          name: 'startDate',
+          type: 'date'
+        },
+        {
+          name: 'endDate',
+          type: 'date'
+        }
+      ]
+    };
+  } else if (id === 3) {
+    return {
+      tableName: 'pointofsale',
+      select: { countryCode: 'countrycode' },
+      update: 'pointofsale_update',
+      params: [
+        {
+          name: 'countryCode',
+          type: 'string'
+        }
+      ]
+    };
+  } else if (id === 4) {
+    return {
+      tableName: 'pointoforigin',
+      select: { countryCode: 'countrycode' },
+      update: 'pointoforigin_update',
+      params: [
+        {
+          name: 'countryCode',
+          type: 'string'
+        }
+      ]
+    };
+  } else if (id === 5) {
+    return {
+      tableName: 'geographyrule',
+      select: {
+        origin: 'origin',
+        originType: 'origintype',
+        arrival: 'arrival',
+        arrivalType: 'arrivaltype',
+        exclude: 'exclude'
+      },
+      update: 'geographyrule_update',
+      params: [
+        {
+          name: 'origin',
+          type: 'string'
+        },
+        {
+          name: 'originType',
+          type: 'int'
+        },
+        {
+          name: 'arrival',
+          type: 'string'
+        },
+        {
+          name: 'arrivalType',
+          type: 'int'
+        },
+        {
+          name: 'exclude',
+          type: 'boolean'
+        }
+      ]
+    };
+  } else if (id === 6 || id === 7) {
+    return {
+      tableName: 'farebasis',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 8 || id === 9) {
+    return {
+      tableName: 'bookingclassrule',
+      select: {
+        exclude: 'exclude',
+        bookingClassType: 'bookingclasstype',
+        bookingClass: 'bookingclass'
+      },
+      type: 'bookingclasstype',
+      update: 'bookingclassrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'bookingClassType',
+          type: 'int'
+        },
+        {
+          name: 'bookingClass',
+          type: 'string'
+        }
+      ]
+    };
+  } else if (id === 10 || id === 11 || id === 12) {
+    return {
+      tableName: 'carrierrule',
+      select: {
+        exclude: 'exclude',
+        ruleType: 'ruletype',
+        carrierCode: 'carriercode'
+      },
+      type: 'ruletype',
+      update: 'carrierrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'ruleType',
+          type: 'int'
+        },
+        {
+          name: 'carrierCode',
+          type: 'string'
+        }
+      ]
+    };
+  } else if (id === 13) {
+    return {
+      tableName: 'ticketdesignatorrule',
+      select: {
+        ticketDesignator: 'ticketdesignator'
+      },
+      update: 'ticketdesignatorrule_update',
+      params: [
+        {
+          name: 'ticketDesignator',
+          type: 'string'
+        }
+      ]
+    };
+  } else if (id === 14) {
+    return {
+      tableName: 'tourcoderule',
+      select: {
+        tourCode: 'tourcode'
+      },
+      update: 'tourcoderule_update',
+      params: [{ name: 'tourCode', type: 'string' }]
+    };
+  } else if (id === 15) {
+    return {
+      tableName: 'advancepurchaserule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 16) {
+    return {
+      tableName: 'minstayrule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 17) {
+    return {
+      tableName: 'maxstayrule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 18) {
+    return {
+      tableName: 'dayofweekrule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 19) {
+    return {
+      tableName: 'stopsrule',
+      select: {
+        minStops: 'minstops',
+        maxStops: 'maxstops'
+      },
+      update: 'stopsrule_update',
+      params: [
+        {
+          name: 'minStops',
+          type: 'int'
+        },
+        {
+          name: 'maxStops',
+          type: 'int'
+        }
+      ]
+    };
+  } else if (id === 20) {
+    return {
+      tableName: 'connectionrule',
+      select: {
+        exclude: 'exclude',
+        connection: 'connection',
+        connectionGeoType: 'connectiongeotype'
+      },
+      update: 'connectionrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'connection',
+          type: 'string'
+        },
+        {
+          name: 'connectionGeoType',
+          type: 'int'
+        }
+      ]
+    };
+  } else if (id === 21) {
+    return {
+      tableName: 'flightnumberrule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 22) {
+    return {
+      tableName: 'blackoutdaterule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 23) {
+    return {
+      tableName: 'distancerule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 24) {
+    return {
+      tableName: 'cabinrule',
+      select: {},
+      update: '',
+      params: []
+    };
+  } else if (id === 25) {
+    return {
+      tableName: 'farecategoryrule',
+      select: {},
+      update: '',
+      params: []
+    };
   }
 };

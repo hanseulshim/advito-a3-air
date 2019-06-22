@@ -72,6 +72,7 @@ type Market {
   originType: Int
   arrival: String
   arrivalType: Int
+  exclude: Boolean
   isDeleted: Boolean
 }
 
@@ -82,6 +83,7 @@ input MarketInput {
   originType: Int
   arrival: String
   arrivalType: Int
+  exclude: Boolean
   isDeleted: Boolean
 }
 
@@ -97,7 +99,21 @@ type BookingClass {
   id: Int
   ruleContainerId: String
   exclude: Boolean
-  type: Int
+  bookingClassType: Int
+  bookingClass: String
+  isDeleted: Boolean
+}
+
+type BookingClassCode {
+  fareCategoryId: Int
+  code: String
+}
+
+input BookingClassInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  bookingClassType: Int
   bookingClass: String
   isDeleted: Boolean
 }
@@ -106,9 +122,23 @@ type Airline {
   id: Int
   ruleContainerId: String
   exclude: Boolean
-  type: Int
+  ruleType: Int
   carrierCode: String
   isDeleted: Boolean
+}
+
+input AirlineInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  ruleType: Int
+  carrierCode: String
+  isDeleted: Boolean
+}
+
+type AirlineCode {
+  code: String
+  name: String
 }
 
 type TicketDesignator {
@@ -118,7 +148,21 @@ type TicketDesignator {
   isDeleted: Boolean
 }
 
+input TicketDesignatorInput {
+  id: Int
+  ruleContainerId: String
+  ticketDesignator: String
+  isDeleted: Boolean
+}
+
 type TourCode {
+  id: Int
+  ruleContainerId: String
+  tourCode: String
+  isDeleted: Boolean
+}
+
+input TourCodeInput {
   id: Int
   ruleContainerId: String
   tourCode: String
@@ -166,12 +210,29 @@ type DayOfWeek {
 type Stops {
   id: Int
   ruleContainerId: String
-  minstops: Int
-  maxstops: Int
+  minStops: Int
+  maxStops: Int
+  isDeleted: Boolean
+}
+
+input StopsInput {
+  id: Int
+  ruleContainerId: String
+  minStops: Int
+  maxStops: Int
   isDeleted: Boolean
 }
 
 type ConnectionPoint {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  connection: String
+  connectionGeoType: Int
+  isDeleted: Boolean
+}
+
+input ConnectionPointInput {
   id: Int
   ruleContainerId: String
   exclude: Boolean
@@ -237,31 +298,38 @@ extend type Query {
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
   pointOfOriginList(parentId: Int, parentType: Int): [PointOfOrigin] @auth
   marketList(parentId: Int, parentType: Int): [Market] @auth
-  fareBasisList(discountId: Int): [FareBasis] @auth
-  bookingClassList(discountId: Int): [BookingClass] @auth
-  airlineList(parentId: Int, parentType: Int): [Airline] @auth
-  ticketDesignatorList(discountId: Int): [TicketDesignator] @auth
-  tourCodeList(discountId: Int): [TourCode] @auth
-  advancedTicketingList(discountId: Int): [AdvancedTicketing] @auth
-  minStayList(discountId: Int): [MinStay] @auth
-  maxStayList(discountId: Int): [MaxStay] @auth
-  dayOfWeekList(discountId: Int): [DayOfWeek] @auth
-  stopsList(discountId: Int): [Stops] @auth
-  connectionPointList(discountId: Int): [ConnectionPoint] @auth
-  flightNumberList(discountId: Int): [FlightNumber] @auth
-  blackoutList(discountId: Int): [Blackout] @auth
-  distanceList(discountId: Int): [Distance] @auth
-  cabinList(discountId: Int): [Cabin] @auth
-  fareCategoryList(discountId: Int): [FareCategory] @auth
+  fareBasisList(parentId: Int): [FareBasis] @auth
+  bookingClassList(parentId: Int, bookingClassType: Int): [BookingClass] @auth
+  bookingClassCodeList: [BookingClassCode] @auth
+  airlineList(parentId: Int, airlineType: Int): [Airline] @auth
+  airlineCodeList: [AirlineCode] @auth
+  ticketDesignatorList(parentId: Int): [TicketDesignator] @auth
+  tourCodeList(parentId: Int): [TourCode] @auth
+  advancedTicketingList(parentId: Int): [AdvancedTicketing] @auth
+  minStayList(parentId: Int): [MinStay] @auth
+  maxStayList(parentId: Int): [MaxStay] @auth
+  dayOfWeekList(parentId: Int): [DayOfWeek] @auth
+  stopsList(parentId: Int): [Stops] @auth
+  connectionPointList(parentId: Int): [ConnectionPoint] @auth
+  flightNumberList(parentId: Int): [FlightNumber] @auth
+  blackoutList(parentId: Int): [Blackout] @auth
+  distanceList(parentId: Int): [Distance] @auth
+  cabinList(parentId: Int): [Cabin] @auth
+  fareCategoryList(parentId: Int): [FareCategory] @auth
 }
 
 extend type Mutation {
-  updateTicketingDates(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]!): [TicketingDate] @auth
-  updateTravelDates(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
-  updatePointOfSales(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
-  updatePointOfOrigins(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
-  updateMarkets(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
-  deleteRule(id: Int!, parentTable: Int!): Int @auth
+  updateTicketingDate(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]!): [TicketingDate] @auth
+  updateTravelDate(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
+  updatePointOfSale(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
+  updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
+  updateMarket(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
+  updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClass] @auth
+  updateAirline(parentId: Int!, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
+  updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
+  updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
+  updateStops(parentId: Int! stopsList: [StopsInput]!): [Stops] @auth
+  deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 
 `;
