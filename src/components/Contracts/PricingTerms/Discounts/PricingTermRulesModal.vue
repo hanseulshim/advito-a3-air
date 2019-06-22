@@ -143,16 +143,21 @@ export default {
     },
     createRule(selected) {
       const match = this.ruleTypes.filter(rule => rule.id === selected)[0];
-
       this.renderedRules.push(match);
       this.selectedRule = '';
     },
-    deleteRule(ruleType) {
+    async deleteRule(ruleType) {
       const matched = this.renderedRules.filter(
         rule => rule.value === ruleType
       )[0];
       this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
       //Call Apollo refetch of RuleList here!
+      const {
+        data: { ruleList }
+      } = await this.$apollo.query({
+        query: GET_RULE_LIST
+      });
+      this.data = ruleList;
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
