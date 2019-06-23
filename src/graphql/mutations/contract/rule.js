@@ -7,12 +7,12 @@ export const DELETE_RULE = gql`
 `;
 
 export const UPDATE_TICKETING_DATES = gql`
-  mutation updateTicketingDates(
+  mutation updateTicketingDate(
     $parentId: Int!
     $parentType: Int
     $ticketingDateList: [TicketingDateInput]!
   ) {
-    updateTicketingDates(
+    updateTicketingDate(
       parentId: $parentId
       parentType: $parentType
       ticketingDateList: $ticketingDateList
