@@ -29,3 +29,14 @@ export const GET_TRAVEL_DATE_LIST = gql`
     }
   }
 `;
+
+export const GET_POINT_OF_SALE_LIST = gql`
+  query pointOfSaleList($parentId: Int, $parentType: Int) {
+    pointOfSaleList(parentId: $parentId, parentType: $parentType) {
+      id
+      ruleContainerId
+      countryCode
+      isDeleted
+    }
+  }
+`;

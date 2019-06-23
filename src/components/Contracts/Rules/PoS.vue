@@ -19,7 +19,7 @@
         multiple
       >
         <el-option
-          v-for="item in countries"
+          v-for="item in geographyRuleList"
           :key="item.value"
           :label="item.name"
           :value="item.name"
@@ -41,13 +41,17 @@
   </div>
 </template>
 <script>
-import { countries } from './helper';
+import { GET_GEO_LIST } from '@/graphql/queries';
 export default {
   name: 'PointOfSale',
-  apollo: {},
+  apollo: {
+    geographyRuleList: {
+      query: GET_GEO_LIST
+    }
+  },
   data() {
     return {
-      countries,
+      geographyRuleList: [],
       editMode: true,
       selectedCountry: [],
       rules: []
@@ -62,7 +66,7 @@ export default {
     },
     createTag() {
       this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.name === country)[0];
+        let matched = this.geographyRuleList.filter(v => v.name === country)[0];
 
         this.rules.push({
           name: matched.name,

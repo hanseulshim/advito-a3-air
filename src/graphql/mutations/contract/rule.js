@@ -45,3 +45,22 @@ export const UPDATE_TRAVEL_DATES = gql`
     }
   }
 `;
+
+export const UPDATE_POINT_OF_SALE_DATES = gql`
+  mutation pointOfSale(
+    $parentId: Int!
+    $parentType: Int
+    $pointOfSaleList: [PointOfSaleInput]!
+  ) {
+    pointOfSaleList(
+      parentId: $parentId
+      parentType: $parentType
+      pointOfSaleList: $pointOfSaleList
+    ) {
+      id
+      ruleContainerId
+      countryCode
+      isDeleted
+    }
+  }
+`;

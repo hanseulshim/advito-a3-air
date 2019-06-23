@@ -43,3 +43,13 @@ export const GET_CURRENCY_LIST = gql`
     }
   }
 `;
+
+export const GET_GEO_LIST = gql`
+  {
+    geographyRuleList {
+      name
+      code
+      locationType
+    }
+  }
+`;
