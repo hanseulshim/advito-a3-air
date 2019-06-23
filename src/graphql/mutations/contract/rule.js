@@ -25,3 +25,23 @@ export const UPDATE_TICKETING_DATES = gql`
     }
   }
 `;
+
+export const UPDATE_TRAVEL_DATES = gql`
+  mutation updateTravelDate(
+    $parentId: Int!
+    $parentType: Int
+    $travelDateList: [TravelDateInput]!
+  ) {
+    updateTravelDate(
+      parentId: $parentId
+      parentType: $parentType
+      travelDateList: $travelDateList
+    ) {
+      id
+      ruleContainerId
+      startDate
+      endDate
+      isDeleted
+    }
+  }
+`;

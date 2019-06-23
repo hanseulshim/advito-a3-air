@@ -4,9 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -82,7 +82,7 @@ export default {
   },
 
   methods: {
-    async toggleEditMode() {
+    async saveRules() {
       if (this.editMode && !this.ticketingDateList.length) {
         this.$emit('delete-rule', 'TicketingDates');
       } else if (this.editMode) {
