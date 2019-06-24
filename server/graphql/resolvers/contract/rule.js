@@ -138,7 +138,9 @@ exports.rule = {
     connectionPointList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.CONNECTION_POINT),
     distanceList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DISTANCE)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DISTANCE),
+    cabinList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CABIN)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -309,6 +311,8 @@ exports.rule = {
         distanceList,
         RULE_LOOKUP.DISTANCE
       ),
+    updateCabin: async (_, { parentId, cabinList }, { db }) =>
+      await updateRule(db, parentId, undefined, cabinList, RULE_LOOKUP.CABIN),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
@@ -774,9 +778,21 @@ const getRuleInfo = id => {
   } else if (id === 24) {
     return {
       tableName: 'cabinrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        cabin: 'cabin'
+      },
+      update: 'cabinrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'cabin',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 25) {
     return {

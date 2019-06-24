@@ -337,6 +337,14 @@ type Cabin {
   isDeleted: Boolean
 }
 
+input CabinInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  cabin: String
+  isDeleted: Boolean
+}
+
 type FareCategory {
   id: Int
   ruleContainerId: String
@@ -404,6 +412,7 @@ extend type Mutation {
   updateConnectionPoint(parentId: Int! connectionPointList: [ConnectionPointInput]!): [ConnectionPoint] @auth
   updateFlightNumber(parentId: Int! flightNumberList: [FlightNumberInput]!): [FlightNumber] @auth
   updateDistance(parentId: Int! distanceList: [DistanceInput]!): [Distance] @auth
+  updateCabin(parentId: Int! cabinList: [CabinInput]!): [Cabin] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

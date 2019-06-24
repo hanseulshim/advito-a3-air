@@ -161,6 +161,13 @@ exports.rule = {
         maxDistance
         isDeleted
       }
+      cabinList(parentId: 34) {
+        id
+        ruleContainerId
+        exclude
+        cabin
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -445,6 +452,21 @@ exports.rule = {
         distanceUnit
         minDistance
         maxDistance
+        isDeleted
+      }
+      updateCabin(parentId: 34, cabinList: [
+        {
+          id: null
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
+          exclude: true
+          cabin: "CAB"
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        exclude
+        cabin
         isDeleted
       }
     }`
