@@ -127,3 +127,24 @@ export const UPDATE_BOOKING_CLASS = gql`
     }
   }
 `;
+
+export const UPDATE_AIRLINE = gql`
+  mutation updateAirline(
+    $parentId: Int!
+    $airlineType: Int!
+    $airlineList: [AirlineInput]!
+  ) {
+    updateAirline(
+      parentId: $parentId
+      airlineType: $airlineType
+      airineList: $airineList
+    ) {
+      id
+      ruleContainerId
+      exclude
+      ruleType
+      carrierCode
+      isDeleted
+    }
+  }
+`;

@@ -15,11 +15,12 @@
       </el-tooltip>
     </div>
     <div class="rules-menu-container">
-      <p class="rule-count">9 RULES</p>
+      <p class="rule-count">{{ `${renderedRules.length} Rules` }}</p>
       <el-select
         v-model="selectedRule"
         placeholder="Create New Rule"
         size="small"
+        filterable
         @change="createRule"
       >
         <el-option
@@ -82,10 +83,9 @@ export default {
       },
       result({ data }) {
         if (data && this.discount.id) {
-          data.ruleList.map(ruleId => {
-            let match = this.ruleTypes.filter(v => v.id === ruleId)[0];
-            this.renderedRules.push(match);
-          });
+          this.renderedRules = data.ruleList.map(
+            ruleId => this.ruleTypes.filter(v => v.id === ruleId)[0]
+          );
         }
       }
     }
@@ -162,7 +162,12 @@ export default {
     beforeOpen(event) {
       this.discount = event.params.discount;
     },
-    beforeClose() {}
+    beforeClose() {
+      this.discount = {};
+      this.renderedRules = [];
+      this.ruleList = [];
+      this.selectedRule = '';
+    }
   }
 };
 </script>

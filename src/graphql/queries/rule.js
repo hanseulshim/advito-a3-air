@@ -88,3 +88,25 @@ export const GET_BOOKING_CLASS_LIST = gql`
     }
   }
 `;
+
+export const GET_AIRLINE_CODE_LIST = gql`
+  query airlineCodeList {
+    airlineCodeList {
+      code
+      name
+    }
+  }
+`;
+
+export const GET_AIRLINE_LIST = gql`
+  query airlineList($parentId: Int, $airlineType: Int) {
+    airlineList(parentId: $parentId, airlineType: $airlineType) {
+      id
+      ruleContainerId
+      exclude
+      ruleType
+      carrierCode
+      isDeleted
+    }
+  }
+`;
