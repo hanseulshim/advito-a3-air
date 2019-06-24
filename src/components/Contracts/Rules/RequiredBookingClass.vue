@@ -38,7 +38,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ rule.bookingClass }}</el-tag
       >
     </div>
     <div class="rule-tags">
@@ -50,7 +50,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ rule.bookingClass }}</el-tag
       >
     </div>
   </div>
@@ -66,6 +66,16 @@ import { UPDATE_BOOKING_CLASS } from '@/graphql/mutations';
 import { removeTypename } from '@/helper';
 export default {
   name: 'RequiredBookingClass',
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
   apollo: {
     bookingClassCodeList: {
       query: GET_BOOKING_CLASS_CODES
@@ -88,7 +98,7 @@ export default {
       bookingClassCodeList: [],
       bookingClassList: [],
       exclude: false,
-      editMode: true,
+      editMode: false,
       selectedClass: []
     };
   },
