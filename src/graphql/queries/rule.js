@@ -98,7 +98,7 @@ export const GET_AIRLINE_CODE_LIST = gql`
   }
 `;
 
-export const GET_AIRLINE_LIST = gql`
+export const GET_AIRLINE_RULE_LIST = gql`
   query airlineList($parentId: Int, $airlineType: Int) {
     airlineList(parentId: $parentId, airlineType: $airlineType) {
       id

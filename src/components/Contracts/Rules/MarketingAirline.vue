@@ -57,7 +57,10 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_AIRLINE_CODE_LIST, GET_AIRLINE_LIST } from '@/graphql/queries';
+import {
+  GET_AIRLINE_CODE_LIST,
+  GET_AIRLINE_RULE_LIST
+} from '@/graphql/queries';
 import { UPDATE_AIRLINE } from '@/graphql/mutations';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
@@ -77,7 +80,7 @@ export default {
       query: GET_AIRLINE_CODE_LIST
     },
     airlineList: {
-      query: GET_AIRLINE_LIST,
+      query: GET_AIRLINE_RULE_LIST,
       variables() {
         return {
           parentId: this.parentId,
@@ -94,7 +97,7 @@ export default {
       airlineCodeList: [],
       airlineList: [],
       exclude: false,
-      editMode: true,
+      editMode: false,
       selectedAirline: []
     };
   },
@@ -120,10 +123,9 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_AIRLINE_LIST,
+              query: GET_AIRLINE_RULE_LIST,
               variables: {
                 parentId: this.parentId,
-                airlineList: this.airlineList,
                 airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
               }
             }
@@ -149,9 +151,7 @@ export default {
         });
       });
 
-      this.selectedCountry = [];
-      this.origin = {};
-      this.arrival = {};
+      this.selectedAirline = [];
     },
     async deleteTag(tag) {
       const idx = this.airlineList.indexOf(tag);
@@ -167,7 +167,7 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_AIRLINE_LIST,
+              query: GET_AIRLINE_RULE_LIST,
               variables: {
                 parentId: this.parentId,
                 airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE

@@ -137,7 +137,7 @@ export const UPDATE_AIRLINE = gql`
     updateAirline(
       parentId: $parentId
       airlineType: $airlineType
-      airineList: $airineList
+      airlineList: $airlineList
     ) {
       id
       ruleContainerId
