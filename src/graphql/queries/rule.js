@@ -121,3 +121,14 @@ export const GET_TICKET_DESIGNATOR_LIST = gql`
     }
   }
 `;
+
+export const GET_TOUR_CODE_LIST = gql`
+  query tourCodeList($parentId: Int) {
+    tourCodeList(parentId: $parentId) {
+      id
+      ruleContainerId
+      tourCode
+      isDeleted
+    }
+  }
+`;

@@ -165,3 +165,14 @@ export const UPDATE_TICKETING_DESIGNATOR = gql`
     }
   }
 `;
+
+export const UPDATE_TOUR_CODE_LIST = gql`
+  mutation updateTourCode($parentId: Int!, $tourCodeList: [TourCodeInput]!) {
+    updateTourCode(parentId: $parentId, tourCodeList: $tourCodeList) {
+      id
+      ruleContainerId
+      tourCode
+      isDeleted
+    }
+  }
+`;
