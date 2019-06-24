@@ -353,6 +353,22 @@ type FareCategory {
   isDeleted: Boolean
 }
 
+type FareCategoryUnit {
+  id: Int
+  cabinId: Int
+  code: String
+  name: String
+  shortName: String
+}
+
+input FareCategoryInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  fareCategory: Int
+  isDeleted: Boolean
+}
+
 type DayUnit {
   id: Int
   name: String
@@ -369,6 +385,7 @@ extend type Query {
   marketGeoList: [GeographyRule] @auth
   dayUnitList: [DayUnit] @auth
   dayOfWeekUnitList: [DayOfWeekUnit] @auth
+  fareCategoryUnitList: [FareCategoryUnit] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
@@ -413,6 +430,7 @@ extend type Mutation {
   updateFlightNumber(parentId: Int! flightNumberList: [FlightNumberInput]!): [FlightNumber] @auth
   updateDistance(parentId: Int! distanceList: [DistanceInput]!): [Distance] @auth
   updateCabin(parentId: Int! cabinList: [CabinInput]!): [Cabin] @auth
+  updateFareCategory(parentId: Int! fareCategoryList: [FareCategoryInput]!): [FareCategory] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

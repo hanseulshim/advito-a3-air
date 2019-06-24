@@ -31,6 +31,13 @@ exports.rule = {
       #  id
       #  name
       #}
+      #fareCategoryUnitList {
+      #  id
+      #  cabinId
+      #  code
+      #  name
+      #  shortName
+      #}
       ticketingDateList(parentId: 34) {
         id
         ruleContainerId
@@ -166,6 +173,13 @@ exports.rule = {
         ruleContainerId
         exclude
         cabin
+        isDeleted
+      }
+      fareCategoryList(parentId: 34) {
+        id
+        ruleContainerId
+        exclude
+        fareCategory
         isDeleted
       }
     }`
@@ -467,6 +481,21 @@ exports.rule = {
         ruleContainerId
         exclude
         cabin
+        isDeleted
+      }
+      updateFareCategory(parentId: 34, fareCategoryList: [
+        {
+          id: null
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
+          exclude: true
+          fareCategory: 1
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        exclude
+        fareCategory
         isDeleted
       }
     }`

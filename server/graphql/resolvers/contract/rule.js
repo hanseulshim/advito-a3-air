@@ -88,6 +88,14 @@ exports.rule = {
           name: 'name_val'
         })
         .where('type', RULE_LOOKUP.DAY_UNIT),
+    fareCategoryUnitList: async (_, __, { db }) =>
+      await db('farecategory').select({
+        id: 'id',
+        cabinId: 'cabinid',
+        code: 'code',
+        name: 'name',
+        shortName: 'shortname'
+      }),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.TICKET_DATE),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
@@ -140,7 +148,9 @@ exports.rule = {
     distanceList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.DISTANCE),
     cabinList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CABIN)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CABIN),
+    fareCategoryList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -313,6 +323,14 @@ exports.rule = {
       ),
     updateCabin: async (_, { parentId, cabinList }, { db }) =>
       await updateRule(db, parentId, undefined, cabinList, RULE_LOOKUP.CABIN),
+    updateFareCategory: async (_, { parentId, fareCategoryList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        fareCategoryList,
+        RULE_LOOKUP.FARE_CATEGORY
+      ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
@@ -797,9 +815,18 @@ const getRuleInfo = id => {
   } else if (id === 25) {
     return {
       tableName: 'farecategoryrule',
-      select: {},
-      update: '',
-      params: []
+      select: { exclude: 'exclude', fareCategory: 'farecategory' },
+      update: 'farecategoryrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'fareCategory',
+          type: 'int'
+        }
+      ]
     };
   }
 };
