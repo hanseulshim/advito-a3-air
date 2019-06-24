@@ -84,7 +84,7 @@ export default {
       variables() {
         return {
           parentId: this.parentId,
-          airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
+          airlineType: PRICING_TERM_LOOKUP.OPERATING_AIRLINE_RULETYPE
         };
       },
       result({ data: { airlineList } }) {
