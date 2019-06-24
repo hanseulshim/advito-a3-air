@@ -15,7 +15,7 @@
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in tourCodeList"
         :key="rule.index"
         type="info"
         size="small"
@@ -29,7 +29,7 @@
 <script>
 import { removeTypename } from '@/helper';
 import { GET_TOUR_CODE_LIST } from '@/graphql/queries';
-import { UPDATE_TOUR_CODE } from '@/graphql/mutations';
+import { UPDATE_TOUR_CODE_LIST } from '@/graphql/mutations';
 export default {
   name: 'TourCode',
   props: {
@@ -43,7 +43,7 @@ export default {
     }
   },
   apollo: {
-    marketList: {
+    tourCodeList: {
       query: GET_TOUR_CODE_LIST,
       variables() {
         return {
@@ -68,7 +68,7 @@ export default {
         this.$emit('delete-rule', 'TourCode');
       } else if (this.editMode) {
         await this.$apollo.mutate({
-          mutation: UPDATE_TOUR_CODE,
+          mutation: UPDATE_TOUR_CODE_LIST,
           variables: {
             parentId: this.parentId,
             tourCodeList: this.tourCodeList
@@ -104,7 +104,7 @@ export default {
 
       await this.$apollo
         .mutate({
-          mutation: UPDATE_TOUR_CODE,
+          mutation: UPDATE_TOUR_CODE_LIST,
           variables: {
             parentId: this.parentId,
             tourCodeList: this.tourCodeList
