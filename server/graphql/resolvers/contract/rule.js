@@ -134,7 +134,9 @@ exports.rule = {
     dayOfWeekList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.DAY_OF_WEEK),
     flightNumberList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FLIGHT_NUMBER)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FLIGHT_NUMBER),
+    connectionPointList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CONNECTION_POINT)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -284,6 +286,18 @@ exports.rule = {
         undefined,
         flightNumberList,
         RULE_LOOKUP.FLIGHT_NUMBER
+      ),
+    updateConnectionPoint: async (
+      _,
+      { parentId, connectionPointList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        connectionPointList,
+        RULE_LOOKUP.CONNECTION_POINT
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);

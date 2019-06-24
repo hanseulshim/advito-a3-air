@@ -392,6 +392,7 @@ extend type Mutation {
   updateMinStay(parentId: Int! minStayList: [MinStayInput]!): [MinStay] @auth
   updateMaxStay(parentId: Int! maxStayList: [MaxStayInput]!): [MaxStay] @auth
   updateDayOfWeek(parentId: Int! dayOfWeekList: [DayOfWeekInput]!): [DayOfWeek] @auth
+  updateConnectionPoint(parentId: Int! connectionPointList: [ConnectionPointInput]!): [ConnectionPoint] @auth
   updateFlightNumber(parentId: Int! flightNumberList: [FlightNumberInput]!): [FlightNumber] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }

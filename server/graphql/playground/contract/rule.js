@@ -145,6 +145,14 @@ exports.rule = {
         endRange
         isDeleted
       }
+      connectionPointList(parentId: 34) {
+        id
+        ruleContainerId
+        exclude
+        connection
+        connectionGeoType
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -374,6 +382,23 @@ exports.rule = {
         startTime
         endDay
         endTime
+        isDeleted
+      }
+      updateConnectionPoint(parentId: 34, connectionPointList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          exclude: true
+          connection: "SIN"
+          connectionGeoType: 1
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        exclude
+        connection
+        connectionGeoType
         isDeleted
       }
       updateFlightNumber(parentId: 34, flightNumberList: [
