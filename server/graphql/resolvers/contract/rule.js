@@ -74,6 +74,20 @@ exports.rule = {
           code: 'code'
         })
         .where('isdeleted', false),
+    dayOfWeekUnitList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', RULE_LOOKUP.DAY_OF_WEEK_UNIT),
+    dayUnitList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', RULE_LOOKUP.DAY_UNIT),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.TICKET_DATE),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
@@ -105,7 +119,9 @@ exports.rule = {
     tourCodeList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.TOUR_CODE),
     stopsList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.STOPS)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.STOPS),
+    advancedTicketingList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.ADVANCED_TICKETING)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -212,6 +228,18 @@ exports.rule = {
       ),
     updateStops: async (_, { parentId, stopsList }, { db }) =>
       await updateRule(db, parentId, undefined, stopsList, RULE_LOOKUP.STOPS),
+    updateAdvancedTicketing: async (
+      _,
+      { parentId, advancedTicketingList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        advancedTicketingList,
+        RULE_LOOKUP.ADVANCED_TICKETING
+      ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
@@ -471,9 +499,26 @@ const getRuleInfo = id => {
   } else if (id === 15) {
     return {
       tableName: 'advancepurchaserule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        unit: 'unit',
+        startRange: 'startrange',
+        endRange: 'endrange'
+      },
+      update: 'advancepurchaserule_update',
+      params: [
+        {
+          name: 'unit',
+          type: 'int'
+        },
+        {
+          name: 'startRange',
+          type: 'int'
+        },
+        {
+          name: 'endRange',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 16) {
     return {

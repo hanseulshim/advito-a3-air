@@ -178,6 +178,15 @@ type AdvancedTicketing {
   isDeleted: Boolean
 }
 
+input AdvancedTicketingInput {
+  id: Int
+  ruleContainerId: String
+  unit: Int
+  startRange: Int
+  endRange: Int
+  isDeleted: Boolean
+}
+
 type MinStay {
   id: Int
   ruleContainerId: String
@@ -289,10 +298,22 @@ type FareCategory {
   isDeleted: Boolean
 }
 
+type DayUnit {
+  id: Int
+  name: String
+}
+
+type DayOfWeekUnit {
+  id: Int
+  name: String
+}
+
 extend type Query {
   ruleList(parentId: Int, parentType: Int): [Int] @auth
   geographyRuleList: [GeographyRule] @auth
   marketGeoList: [GeographyRule] @auth
+  dayUnitList: [DayUnit] @auth
+  dayOfWeekUnitList: [DayOfWeekUnit] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
@@ -329,6 +350,7 @@ extend type Mutation {
   updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
   updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
   updateStops(parentId: Int! stopsList: [StopsInput]!): [Stops] @auth
+  updateAdvancedTicketing(parentId: Int! advancedTicketingList: [AdvancedTicketingInput]!): [AdvancedTicketing] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

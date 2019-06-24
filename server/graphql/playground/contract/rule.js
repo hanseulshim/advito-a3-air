@@ -23,6 +23,14 @@ exports.rule = {
       #  name
       #  code
       #}
+      #dayOfWeekUnitList {
+      #  id
+      #  name
+      #}
+      #dayUnitList {
+      #  id
+      #  name
+      #}
       ticketingDateList(parentId: 34) {
         id
         ruleContainerId
@@ -92,6 +100,14 @@ exports.rule = {
         ruleContainerId
         minStops
         maxStops
+        isDeleted
+      }
+      advancedTicketingList(parentId: 34) {
+        id
+        ruleContainerId
+        unit
+        startRange
+        endRange
         isDeleted
       }
     }`
@@ -253,6 +269,23 @@ exports.rule = {
         ruleContainerId
         minStops
         maxStops
+        isDeleted
+      }
+      updateAdvancedTicketing(parentId: 34, advancedTicketingList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          unit: 2
+          startRange: 1
+          endRange: 2
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        unit
+        startRange
+        endRange
         isDeleted
       }
     }`
