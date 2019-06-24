@@ -153,6 +153,14 @@ exports.rule = {
         connectionGeoType
         isDeleted
       }
+      distanceList(parentId: 34) {
+        id
+        ruleContainerId
+        distanceUnit
+        minDistance
+        maxDistance
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -335,7 +343,7 @@ exports.rule = {
         {
           id: null,
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
-          unit: 2
+          unit: 70
           value: 10
           dayOfWeekInclusion: 3
           isDeleted: false
@@ -352,7 +360,7 @@ exports.rule = {
         {
           id: null,
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
-          unit: 2
+          unit: 70
           value: 10
           isDeleted: false
         }
@@ -368,9 +376,9 @@ exports.rule = {
           id: null,
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
           exclude: true
-          startDay: 1
+          startDay: 78
           startTime: "12:00 AM"
-          endDay: 2
+          endDay: 80
           endTime: "1:00 PM"
           isDeleted: false
         }
@@ -386,8 +394,8 @@ exports.rule = {
       }
       updateConnectionPoint(parentId: 34, connectionPointList: [
         {
-          id: null,
-          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          id: null
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
           exclude: true
           connection: "SIN"
           connectionGeoType: 1
@@ -403,10 +411,10 @@ exports.rule = {
       }
       updateFlightNumber(parentId: 34, flightNumberList: [
         {
-          id: null,
-          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          id: null
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
           exclude: true
-          segmentType: 1
+          segmentType: 2
           carrierCode: "SW"
           startRange: 10
           endRange: 15
@@ -420,6 +428,23 @@ exports.rule = {
         carrierCode
         startRange
         endRange
+        isDeleted
+      }
+      updateDistance(parentId: 34, distanceList: [
+        {
+          id: null
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
+          distanceUnit: 67
+          minDistance: 10
+          maxDistance: 15
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        distanceUnit
+        minDistance
+        maxDistance
         isDeleted
       }
     }`

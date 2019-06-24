@@ -320,6 +320,15 @@ type Distance {
   isDeleted: Boolean
 }
 
+input DistanceInput {
+  id: Int
+  ruleContainerId: String
+  distanceUnit: Int
+  minDistance: Int
+  maxDistance: Int
+  isDeleted: Boolean
+}
+
 type Cabin {
   id: Int
   ruleContainerId: String
@@ -394,6 +403,7 @@ extend type Mutation {
   updateDayOfWeek(parentId: Int! dayOfWeekList: [DayOfWeekInput]!): [DayOfWeek] @auth
   updateConnectionPoint(parentId: Int! connectionPointList: [ConnectionPointInput]!): [ConnectionPoint] @auth
   updateFlightNumber(parentId: Int! flightNumberList: [FlightNumberInput]!): [FlightNumber] @auth
+  updateDistance(parentId: Int! distanceList: [DistanceInput]!): [Distance] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

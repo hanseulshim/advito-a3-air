@@ -136,7 +136,9 @@ exports.rule = {
     flightNumberList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.FLIGHT_NUMBER),
     connectionPointList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CONNECTION_POINT)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CONNECTION_POINT),
+    distanceList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DISTANCE)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -298,6 +300,14 @@ exports.rule = {
         undefined,
         connectionPointList,
         RULE_LOOKUP.CONNECTION_POINT
+      ),
+    updateDistance: async (_, { parentId, distanceList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        distanceList,
+        RULE_LOOKUP.DISTANCE
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -740,9 +750,26 @@ const getRuleInfo = id => {
   } else if (id === 23) {
     return {
       tableName: 'distancerule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        distanceUnit: 'distanceunit',
+        minDistance: 'mindistance',
+        maxDistance: 'maxdistance'
+      },
+      update: 'distancerule_update',
+      params: [
+        {
+          name: 'distanceUnit',
+          type: 'int'
+        },
+        {
+          name: 'minDistance',
+          type: 'int'
+        },
+        {
+          name: 'maxDistance',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 24) {
     return {
