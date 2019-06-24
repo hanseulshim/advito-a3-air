@@ -40,3 +40,29 @@ export const GET_POINT_OF_SALE_LIST = gql`
     }
   }
 `;
+
+export const GET_POINT_OF_ORIGIN_LIST = gql`
+  query pointOfOriginList($parentId: Int, $parentType: Int) {
+    pointOfOriginList(parentId: $parentId, parentType: $parentType) {
+      id
+      ruleContainerId
+      countryCode
+      isDeleted
+    }
+  }
+`;
+
+export const GET_MARKET_RULE_LIST = gql`
+  query marketList($parentId: Int, $parentType: Int) {
+    marketList(parentId: $parentId, parentType: $parentType) {
+      id
+      ruleContainerId
+      origin
+      originType
+      arrival
+      arrivalType
+      exclude
+      isDeleted
+    }
+  }
+`;
