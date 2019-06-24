@@ -311,6 +311,18 @@ type Blackout {
   isDeleted: Boolean
 }
 
+input BlackoutInput {
+  id: Int
+  ruleContainerId: String
+  startDate: Date
+  endDate: Date
+  origin: String
+  originType: Int
+  arrival: String
+  arrivalType: Int
+  isDeleted: Boolean
+}
+
 type Distance {
   id: Int
   ruleContainerId: String
@@ -431,6 +443,7 @@ extend type Mutation {
   updateDistance(parentId: Int! distanceList: [DistanceInput]!): [Distance] @auth
   updateCabin(parentId: Int! cabinList: [CabinInput]!): [Cabin] @auth
   updateFareCategory(parentId: Int! fareCategoryList: [FareCategoryInput]!): [FareCategory] @auth
+  updateBlackout(parentId: Int! blackoutList: [BlackoutInput]!): [Blackout] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

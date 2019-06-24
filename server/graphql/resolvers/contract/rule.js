@@ -150,7 +150,9 @@ exports.rule = {
     cabinList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.CABIN),
     fareCategoryList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY),
+    blackoutList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.BLACKOUT)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -330,6 +332,14 @@ exports.rule = {
         undefined,
         fareCategoryList,
         RULE_LOOKUP.FARE_CATEGORY
+      ),
+    updateBlackout: async (_, { parentId, blackoutList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        blackoutList,
+        RULE_LOOKUP.BLACKOUT
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -765,9 +775,41 @@ const getRuleInfo = id => {
   } else if (id === 22) {
     return {
       tableName: 'blackoutdaterule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        startDate: 'startdate',
+        endDate: 'enddate',
+        origin: 'origin',
+        originType: 'origintype',
+        arrival: 'arrival',
+        arrivalType: 'arrivaltype'
+      },
+      update: 'blackoutdaterule_update',
+      params: [
+        {
+          name: 'startDate',
+          type: 'date'
+        },
+        {
+          name: 'endDate',
+          type: 'date'
+        },
+        {
+          name: 'origin',
+          type: 'string'
+        },
+        {
+          name: 'originType',
+          type: 'int'
+        },
+        {
+          name: 'arrival',
+          type: 'string'
+        },
+        {
+          name: 'arrivalType',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 23) {
     return {

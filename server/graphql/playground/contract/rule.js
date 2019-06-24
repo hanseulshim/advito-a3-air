@@ -182,6 +182,17 @@ exports.rule = {
         fareCategory
         isDeleted
       }
+      blackoutList(parentId: 34) {
+        id
+        ruleContainerId
+        startDate
+        endDate
+        origin
+        originType
+        arrival
+        arrivalType
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -496,6 +507,29 @@ exports.rule = {
         ruleContainerId
         exclude
         fareCategory
+        isDeleted
+      }
+      updateBlackout(parentId: 34, blackoutList: [
+        {
+          id: null
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
+          startDate: 1483246800001
+          endDate: 1483246800001
+          origin: "0B"
+          originType: 1
+          arrival: "0D"
+          arrivalType: 2
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        startDate
+        endDate
+        origin
+        originType
+        arrival
+        arrivalType
         isDeleted
       }
     }`
