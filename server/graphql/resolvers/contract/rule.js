@@ -121,7 +121,16 @@ exports.rule = {
     stopsList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.STOPS),
     advancedTicketingList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.ADVANCED_TICKETING)
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.ADVANCED_TICKETING
+      ),
+    minStayList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.MIN_STAY),
+    maxStayList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.MAX_STAY)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -239,6 +248,22 @@ exports.rule = {
         undefined,
         advancedTicketingList,
         RULE_LOOKUP.ADVANCED_TICKETING
+      ),
+    updateMinStay: async (_, { parentId, minStayList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        minStayList,
+        RULE_LOOKUP.MIN_STAY
+      ),
+    updateMaxStay: async (_, { parentId, maxStayList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        maxStayList,
+        RULE_LOOKUP.MAX_STAY
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -523,16 +548,42 @@ const getRuleInfo = id => {
   } else if (id === 16) {
     return {
       tableName: 'minstayrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        unit: 'unit',
+        value: 'value',
+        dayOfWeekInclusion: 'dayofweekinclusion'
+      },
+      update: 'minstayrule_update',
+      params: [
+        {
+          name: 'unit',
+          type: 'int'
+        },
+        {
+          name: 'value',
+          type: 'int'
+        },
+        {
+          name: 'dayOfWeekInclusion',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 17) {
     return {
       tableName: 'maxstayrule',
-      select: {},
-      update: '',
-      params: []
+      select: { unit: 'unit', value: 'value' },
+      update: 'maxstayrule_update',
+      params: [
+        {
+          name: 'unit',
+          type: 'int'
+        },
+        {
+          name: 'value',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 18) {
     return {

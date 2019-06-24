@@ -193,11 +193,27 @@ type MinStay {
   unit: Int
   value: Int
   dayOfWeekInclusion: Int
-  dayOfWeekRecurrence: Int
+  isDeleted: Boolean
+}
+
+input MinStayInput {
+  id: Int
+  ruleContainerId: String
+  unit: Int
+  value: Int
+  dayOfWeekInclusion: Int
   isDeleted: Boolean
 }
 
 type MaxStay {
+  id: Int
+  ruleContainerId: String
+  unit: Int
+  value: Int
+  isDeleted: Boolean
+}
+
+input MaxStayInput {
   id: Int
   ruleContainerId: String
   unit: Int
@@ -351,6 +367,8 @@ extend type Mutation {
   updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
   updateStops(parentId: Int! stopsList: [StopsInput]!): [Stops] @auth
   updateAdvancedTicketing(parentId: Int! advancedTicketingList: [AdvancedTicketingInput]!): [AdvancedTicketing] @auth
+  updateMinStay(parentId: Int! minStayList: [MinStayInput]!): [MinStay] @auth
+  updateMaxStay(parentId: Int! maxStayList: [MaxStayInput]!): [MaxStay] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

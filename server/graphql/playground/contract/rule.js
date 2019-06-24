@@ -110,6 +110,21 @@ exports.rule = {
         endRange
         isDeleted
       }
+      minStayList(parentId: 34) {
+        id
+        ruleContainerId
+        unit
+        value
+        dayOfWeekInclusion
+        isDeleted
+      }
+      maxStayList(parentId: 34) {
+        id
+        ruleContainerId
+        unit
+        value
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -286,6 +301,38 @@ exports.rule = {
         unit
         startRange
         endRange
+        isDeleted
+      }
+      updateMinStay(parentId: 34, minStayList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          unit: 2
+          value: 10
+          dayOfWeekInclusion: 3
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        unit
+        value
+        dayOfWeekInclusion
+        isDeleted
+      }
+      updateMaxStay(parentId: 34, maxStayList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          unit: 2
+          value: 10
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        unit
+        value
         isDeleted
       }
     }`
