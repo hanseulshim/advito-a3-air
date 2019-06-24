@@ -125,6 +125,16 @@ exports.rule = {
         value
         isDeleted
       }
+      dayOfWeekList(parentId: 34) {
+        id
+        ruleContainerId
+        exclude
+        startDay
+        startTime
+        endDay
+        endTime
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -333,6 +343,27 @@ exports.rule = {
         ruleContainerId
         unit
         value
+        isDeleted
+      }
+      updateDayOfWeek(parentId: 34, dayOfWeekList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          exclude: true
+          startDay: 1
+          startTime: "12:00 AM"
+          endDay: 2
+          endTime: "1:00 PM"
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        exclude
+        startDay
+        startTime
+        endDay
+        endTime
         isDeleted
       }
     }`

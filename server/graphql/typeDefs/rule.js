@@ -232,6 +232,17 @@ type DayOfWeek {
   isDeleted: Boolean
 }
 
+input DayOfWeekInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  startDay: Int
+  startTime: String
+  endDay: Int
+  endTime: String
+  isDeleted: Boolean
+}
+
 type Stops {
   id: Int
   ruleContainerId: String
@@ -369,6 +380,7 @@ extend type Mutation {
   updateAdvancedTicketing(parentId: Int! advancedTicketingList: [AdvancedTicketingInput]!): [AdvancedTicketing] @auth
   updateMinStay(parentId: Int! minStayList: [MinStayInput]!): [MinStay] @auth
   updateMaxStay(parentId: Int! maxStayList: [MaxStayInput]!): [MaxStay] @auth
+  updateDayOfWeek(parentId: Int! dayOfWeekList: [DayOfWeekInput]!): [DayOfWeek] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

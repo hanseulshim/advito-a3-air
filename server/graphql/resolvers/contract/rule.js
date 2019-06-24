@@ -130,7 +130,9 @@ exports.rule = {
     minStayList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.MIN_STAY),
     maxStayList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.MAX_STAY)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.MAX_STAY),
+    dayOfWeekList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DAY_OF_WEEK)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -264,6 +266,14 @@ exports.rule = {
         undefined,
         maxStayList,
         RULE_LOOKUP.MAX_STAY
+      ),
+    updateDayOfWeek: async (_, { parentId, dayOfWeekList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        dayOfWeekList,
+        RULE_LOOKUP.DAY_OF_WEEK
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -588,9 +598,36 @@ const getRuleInfo = id => {
   } else if (id === 18) {
     return {
       tableName: 'dayofweekrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        startDay: 'startday',
+        startTime: 'starttime',
+        endDay: 'endday',
+        endTime: 'endtime'
+      },
+      update: 'dayofweekrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'startDay',
+          type: 'int'
+        },
+        {
+          name: 'startTime',
+          type: 'string'
+        },
+        {
+          name: 'endDay',
+          type: 'int'
+        },
+        {
+          name: 'endTime',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 19) {
     return {
