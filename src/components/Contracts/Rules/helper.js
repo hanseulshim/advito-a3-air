@@ -112,13 +112,13 @@ export const ruleTypes = [
     id: 2
   },
   {
-    value: 'PointOfOrigin',
-    label: 'Point of Origin',
+    value: 'PointOfSale',
+    label: 'Point Of Sale',
     id: 3
   },
   {
-    value: 'PointOfSale',
-    label: 'Point Of Sale',
+    value: 'PointOfOrigin',
+    label: 'Point of Origin',
     id: 4
   },
   {

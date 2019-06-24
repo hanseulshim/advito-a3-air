@@ -124,25 +124,29 @@ export default {
     async deleteTag(tag) {
       const idx = this.travelDateList.indexOf(tag);
       this.travelDateList[idx].isDeleted = true;
-      const tagId = this.travelDateList[idx].id;
 
-      await this.$apollo.mutate({
-        mutation: DELETE_RULE,
-        variables: {
-          id: tagId,
-          ruleType: this.tableId
-        },
-        refetchQueries: () => [
-          {
-            query: GET_TRAVEL_DATE_LIST,
-            variables: { parentId: this.parentId }
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_TRAVEL_DATES,
+          variables: {
+            parentId: this.parentId,
+            travelDateList: this.travelDateList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TRAVEL_DATE_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.travelDateList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.travelDateList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'TravelDates');
           }
-        ]
-      });
-
-      if (!this.travelDateList.length) {
-        await this.$emit('delete-rule', 'TravelDates');
-      }
+        });
     },
     editTag(rule) {
       if (this.editMode) {

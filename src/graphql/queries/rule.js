@@ -66,3 +66,25 @@ export const GET_MARKET_RULE_LIST = gql`
     }
   }
 `;
+
+export const GET_BOOKING_CLASS_CODES = gql`
+  query bookingClassCodeList {
+    bookingClassCodeList {
+      fareCategoryId
+      code
+    }
+  }
+`;
+
+export const GET_BOOKING_CLASS_LIST = gql`
+  query bookingClassList($parentId: Int, $bookingClassType: Int) {
+    bookingClassList(parentId: $parentId, bookingClassType: $bookingClassType) {
+      id
+      ruleContainerId
+      exclude
+      bookingClassType
+      bookingClass
+      isDeleted
+    }
+  }
+`;

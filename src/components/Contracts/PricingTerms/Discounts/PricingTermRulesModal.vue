@@ -130,7 +130,7 @@ export default {
     rulesInDropdown() {
       if (this.renderedRules.length) {
         return this.ruleTypes.filter(
-          rule => !this.ruleList.some(v => v === rule.id)
+          rule => !this.renderedRules.some(v => v.id === rule.id)
         );
       } else {
         return this.ruleTypes;

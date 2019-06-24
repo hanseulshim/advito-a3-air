@@ -46,13 +46,13 @@ export const UPDATE_TRAVEL_DATES = gql`
   }
 `;
 
-export const UPDATE_POINT_OF_SALE_DATES = gql`
-  mutation pointOfSale(
+export const UPDATE_POINT_OF_SALE = gql`
+  mutation updatePointOfSale(
     $parentId: Int!
     $parentType: Int
     $pointOfSaleList: [PointOfSaleInput]!
   ) {
-    pointOfSaleList(
+    updatePointOfSale(
       parentId: $parentId
       parentType: $parentType
       pointOfSaleList: $pointOfSaleList
@@ -60,6 +60,69 @@ export const UPDATE_POINT_OF_SALE_DATES = gql`
       id
       ruleContainerId
       countryCode
+      isDeleted
+    }
+  }
+`;
+
+export const UPDATE_POINT_OF_ORIGIN = gql`
+  mutation updatePointOfOrigin(
+    $parentId: Int!
+    $parentType: Int
+    $pointOfOriginList: [PointOfOriginInput]!
+  ) {
+    updatePointOfOrigin(
+      parentId: $parentId
+      parentType: $parentType
+      pointOfOriginList: $pointOfOriginList
+    ) {
+      id
+      ruleContainerId
+      countryCode
+      isDeleted
+    }
+  }
+`;
+
+export const UPDATE_MARKET = gql`
+  mutation updateMarket(
+    $parentId: Int!
+    $parentType: Int
+    $marketList: [MarketInput]!
+  ) {
+    updateMarket(
+      parentId: $parentId
+      parentType: $parentType
+      marketList: $marketList
+    ) {
+      id
+      ruleContainerId
+      origin
+      originType
+      arrival
+      arrivalType
+      exclude
+      isDeleted
+    }
+  }
+`;
+
+export const UPDATE_BOOKING_CLASS = gql`
+  mutation updateBookingClass(
+    $parentId: Int!
+    $bookingClassType: Int!
+    $bookingClassList: [BookingClassInput]!
+  ) {
+    updateBookingClass(
+      parentId: $parentId
+      bookingClassType: $bookingClassType
+      bookingClassList: $bookingClassList
+    ) {
+      id
+      ruleContainerId
+      exclude
+      bookingClassType
+      bookingClass
       isDeleted
     }
   }

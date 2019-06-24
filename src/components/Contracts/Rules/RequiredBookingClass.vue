@@ -4,9 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class=" save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class=" save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -19,10 +19,10 @@
         multiple
       >
         <el-option
-          v-for="item in classes"
-          :key="item"
-          :label="item"
-          :value="item"
+          v-for="item in bookingClassCodeList"
+          :key="item.code"
+          :label="item.code"
+          :value="item.code"
         ></el-option>
       </el-select>
       <label for="exclude"> Exclude: </label>
@@ -38,7 +38,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.name }}</el-tag
+        >{{ rule.code }}</el-tag
       >
     </div>
     <div class="rule-tags">
@@ -50,55 +50,132 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.name }}</el-tag
+        >{{ rule.code }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { classes } from './helper';
+// import { classes } from './helper';
+import {
+  GET_BOOKING_CLASS_CODES,
+  GET_BOOKING_CLASS_LIST
+} from '@/graphql/queries';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
+import { UPDATE_BOOKING_CLASS } from '@/graphql/mutations';
+import { removeTypename } from '@/helper';
 export default {
   name: 'RequiredBookingClass',
-  apollo: {},
+  apollo: {
+    bookingClassCodeList: {
+      query: GET_BOOKING_CLASS_CODES
+    },
+    bookingClassList: {
+      query: GET_BOOKING_CLASS_LIST,
+      variables() {
+        return {
+          parentId: this.parentId,
+          bookingClassType: PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE
+        };
+      },
+      result({ data: { bookingClassList } }) {
+        return removeTypename(bookingClassList);
+      }
+    }
+  },
   data() {
     return {
-      classes,
+      bookingClassCodeList: [],
+      bookingClassList: [],
       exclude: false,
       editMode: true,
-      selectedClass: [],
-      rules: []
+      selectedClass: []
     };
   },
   computed: {
     excludedRules() {
-      return this.rules.filter(rule => rule.exclude);
+      return this.bookingClassList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.rules.filter(rule => !rule.exclude);
+      return this.bookingClassList.filter(rule => !rule.exclude);
     }
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.bookingClassList.length) {
         this.$emit('delete-rule', 'RequiredBookingClass');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_BOOKING_CLASS,
+          variables: {
+            parentId: this.parentId,
+            bookingClassType: PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE,
+            bookingClassList: this.bookingClassList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_BOOKING_CLASS_LIST,
+              variables: {
+                parentId: this.parentId,
+                bookingClassType:
+                  PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE
+              }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.selectedClass = [];
     },
     createTag() {
+      const ruleContainerId = this.bookingClassList.length
+        ? this.bookingClassList[0].ruleContainerId
+        : null;
+
       this.selectedClass.map(v => {
-        this.rules.push({
-          name: v,
-          exclude: this.exclude
+        this.bookingClassList.push({
+          id: null,
+          ruleContainerId,
+          bookingClassType: PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE,
+          bookingClass: v,
+          exclude: this.exclude,
+          isDeleted: false
         });
       });
 
       this.selectedClass = [];
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'RequiredBookingClass');
-      }
+    async deleteTag(tag) {
+      const idx = this.bookingClassList.indexOf(tag);
+      this.bookingClassList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_BOOKING_CLASS,
+          variables: {
+            parentId: this.parentId,
+            bookingClassType: PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE,
+            bookingClassList: this.bookingClassList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_BOOKING_CLASS_LIST,
+              variables: {
+                parentId: this.parentId,
+                bookingClassType:
+                  PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE
+              }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.bookingClassList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.bookingClassList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'RequiredBookingClass');
+          }
+        });
     }
   }
 };
