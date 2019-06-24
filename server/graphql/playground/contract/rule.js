@@ -135,6 +135,16 @@ exports.rule = {
         endTime
         isDeleted
       }
+      flightNumberList(parentId: 34) {
+        id
+        ruleContainerId
+        exclude
+        segmentType
+        carrierCode
+        startRange
+        endRange
+        isDeleted
+      }
     }`
   },
   mutations: {
@@ -364,6 +374,27 @@ exports.rule = {
         startTime
         endDay
         endTime
+        isDeleted
+      }
+      updateFlightNumber(parentId: 34, flightNumberList: [
+        {
+          id: null,
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
+          exclude: true
+          segmentType: 1
+          carrierCode: "SW"
+          startRange: 10
+          endRange: 15
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        exclude
+        segmentType
+        carrierCode
+        startRange
+        endRange
         isDeleted
       }
     }`

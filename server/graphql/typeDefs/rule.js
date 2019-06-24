@@ -288,6 +288,17 @@ type FlightNumber {
   isDeleted: Boolean
 }
 
+input FlightNumberInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  segmentType: Int
+  carrierCode: String
+  startRange: Int
+  endRange: Int
+  isDeleted: Boolean
+}
+
 type Blackout {
   id: Int
   ruleContainerId: String
@@ -381,6 +392,7 @@ extend type Mutation {
   updateMinStay(parentId: Int! minStayList: [MinStayInput]!): [MinStay] @auth
   updateMaxStay(parentId: Int! maxStayList: [MaxStayInput]!): [MaxStay] @auth
   updateDayOfWeek(parentId: Int! dayOfWeekList: [DayOfWeekInput]!): [DayOfWeek] @auth
+  updateFlightNumber(parentId: Int! flightNumberList: [FlightNumberInput]!): [FlightNumber] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

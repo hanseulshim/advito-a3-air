@@ -132,7 +132,9 @@ exports.rule = {
     maxStayList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.MAX_STAY),
     dayOfWeekList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DAY_OF_WEEK)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DAY_OF_WEEK),
+    flightNumberList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FLIGHT_NUMBER)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -274,6 +276,14 @@ exports.rule = {
         undefined,
         dayOfWeekList,
         RULE_LOOKUP.DAY_OF_WEEK
+      ),
+    updateFlightNumber: async (_, { parentId, flightNumberList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        flightNumberList,
+        RULE_LOOKUP.FLIGHT_NUMBER
       ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
@@ -675,9 +685,36 @@ const getRuleInfo = id => {
   } else if (id === 21) {
     return {
       tableName: 'flightnumberrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        segmentType: 'segmenttype',
+        carrierCode: 'carriercode',
+        startRange: 'startrange',
+        endRange: 'endrange'
+      },
+      update: 'flightnumberrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'segmentType',
+          type: 'int'
+        },
+        {
+          name: 'carrierCode',
+          type: 'string'
+        },
+        {
+          name: 'startRange',
+          type: 'int'
+        },
+        {
+          name: 'endRange',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 22) {
     return {
