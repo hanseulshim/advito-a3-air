@@ -110,3 +110,14 @@ export const GET_AIRLINE_RULE_LIST = gql`
     }
   }
 `;
+
+export const GET_TICKET_DESIGNATOR_LIST = gql`
+  query ticketDesignatorList($parentId: Int) {
+    ticketDesignatorList(parentId: $parentId) {
+      id
+      ruleContainerId
+      ticketDesignator
+      isDeleted
+    }
+  }
+`;

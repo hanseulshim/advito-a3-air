@@ -148,3 +148,20 @@ export const UPDATE_AIRLINE = gql`
     }
   }
 `;
+
+export const UPDATE_TICKETING_DESIGNATOR = gql`
+  mutation updateTicketDesignator(
+    $parentId: Int!
+    $ticketDesignatorList: [TicketDesignatorInput]!
+  ) {
+    updateTicketDesignator(
+      parentId: $parentId
+      ticketDesignatorList: $ticketDesignatorList
+    ) {
+      id
+      ruleContainerId
+      ticketDesignator
+      isDeleted
+    }
+  }
+`;
