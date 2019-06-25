@@ -74,6 +74,28 @@ exports.rule = {
           code: 'code'
         })
         .where('isdeleted', false),
+    dayOfWeekUnitList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', RULE_LOOKUP.DAY_OF_WEEK_UNIT),
+    dayUnitList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', RULE_LOOKUP.DAY_UNIT),
+    fareCategoryUnitList: async (_, __, { db }) =>
+      await db('farecategory').select({
+        id: 'id',
+        cabinId: 'cabinid',
+        code: 'code',
+        name: 'name',
+        shortName: 'shortname'
+      }),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.TICKET_DATE),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
@@ -105,7 +127,32 @@ exports.rule = {
     tourCodeList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.TOUR_CODE),
     stopsList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.STOPS)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.STOPS),
+    advancedTicketingList: async (_, { parentId }, { db }) =>
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.ADVANCED_TICKETING
+      ),
+    minStayList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.MIN_STAY),
+    maxStayList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.MAX_STAY),
+    dayOfWeekList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DAY_OF_WEEK),
+    flightNumberList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FLIGHT_NUMBER),
+    connectionPointList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CONNECTION_POINT),
+    distanceList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.DISTANCE),
+    cabinList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CABIN),
+    fareCategoryList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY),
+    blackoutList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.BLACKOUT)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -212,6 +259,88 @@ exports.rule = {
       ),
     updateStops: async (_, { parentId, stopsList }, { db }) =>
       await updateRule(db, parentId, undefined, stopsList, RULE_LOOKUP.STOPS),
+    updateAdvancedTicketing: async (
+      _,
+      { parentId, advancedTicketingList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        advancedTicketingList,
+        RULE_LOOKUP.ADVANCED_TICKETING
+      ),
+    updateMinStay: async (_, { parentId, minStayList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        minStayList,
+        RULE_LOOKUP.MIN_STAY
+      ),
+    updateMaxStay: async (_, { parentId, maxStayList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        maxStayList,
+        RULE_LOOKUP.MAX_STAY
+      ),
+    updateDayOfWeek: async (_, { parentId, dayOfWeekList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        dayOfWeekList,
+        RULE_LOOKUP.DAY_OF_WEEK
+      ),
+    updateFlightNumber: async (_, { parentId, flightNumberList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        flightNumberList,
+        RULE_LOOKUP.FLIGHT_NUMBER
+      ),
+    updateConnectionPoint: async (
+      _,
+      { parentId, connectionPointList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        connectionPointList,
+        RULE_LOOKUP.CONNECTION_POINT
+      ),
+    updateDistance: async (_, { parentId, distanceList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        distanceList,
+        RULE_LOOKUP.DISTANCE
+      ),
+    updateCabin: async (_, { parentId, cabinList }, { db }) =>
+      await updateRule(db, parentId, undefined, cabinList, RULE_LOOKUP.CABIN),
+    updateFareCategory: async (_, { parentId, fareCategoryList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        fareCategoryList,
+        RULE_LOOKUP.FARE_CATEGORY
+      ),
+    updateBlackout: async (_, { parentId, blackoutList }, { db }) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        blackoutList,
+        RULE_LOOKUP.BLACKOUT
+      ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
@@ -471,30 +600,100 @@ const getRuleInfo = id => {
   } else if (id === 15) {
     return {
       tableName: 'advancepurchaserule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        unit: 'unit',
+        startRange: 'startrange',
+        endRange: 'endrange'
+      },
+      update: 'advancepurchaserule_update',
+      params: [
+        {
+          name: 'unit',
+          type: 'int'
+        },
+        {
+          name: 'startRange',
+          type: 'int'
+        },
+        {
+          name: 'endRange',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 16) {
     return {
       tableName: 'minstayrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        unit: 'unit',
+        value: 'value',
+        dayOfWeekInclusion: 'dayofweekinclusion'
+      },
+      update: 'minstayrule_update',
+      params: [
+        {
+          name: 'unit',
+          type: 'int'
+        },
+        {
+          name: 'value',
+          type: 'int'
+        },
+        {
+          name: 'dayOfWeekInclusion',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 17) {
     return {
       tableName: 'maxstayrule',
-      select: {},
-      update: '',
-      params: []
+      select: { unit: 'unit', value: 'value' },
+      update: 'maxstayrule_update',
+      params: [
+        {
+          name: 'unit',
+          type: 'int'
+        },
+        {
+          name: 'value',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 18) {
     return {
       tableName: 'dayofweekrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        startDay: 'startday',
+        startTime: 'starttime',
+        endDay: 'endday',
+        endTime: 'endtime'
+      },
+      update: 'dayofweekrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'startDay',
+          type: 'int'
+        },
+        {
+          name: 'startTime',
+          type: 'string'
+        },
+        {
+          name: 'endDay',
+          type: 'int'
+        },
+        {
+          name: 'endTime',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 19) {
     return {
@@ -542,37 +741,134 @@ const getRuleInfo = id => {
   } else if (id === 21) {
     return {
       tableName: 'flightnumberrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        segmentType: 'segmenttype',
+        carrierCode: 'carriercode',
+        startRange: 'startrange',
+        endRange: 'endrange'
+      },
+      update: 'flightnumberrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'segmentType',
+          type: 'int'
+        },
+        {
+          name: 'carrierCode',
+          type: 'string'
+        },
+        {
+          name: 'startRange',
+          type: 'int'
+        },
+        {
+          name: 'endRange',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 22) {
     return {
       tableName: 'blackoutdaterule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        startDate: 'startdate',
+        endDate: 'enddate',
+        origin: 'origin',
+        originType: 'origintype',
+        arrival: 'arrival',
+        arrivalType: 'arrivaltype'
+      },
+      update: 'blackoutdaterule_update',
+      params: [
+        {
+          name: 'startDate',
+          type: 'date'
+        },
+        {
+          name: 'endDate',
+          type: 'date'
+        },
+        {
+          name: 'origin',
+          type: 'string'
+        },
+        {
+          name: 'originType',
+          type: 'int'
+        },
+        {
+          name: 'arrival',
+          type: 'string'
+        },
+        {
+          name: 'arrivalType',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 23) {
     return {
       tableName: 'distancerule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        distanceUnit: 'distanceunit',
+        minDistance: 'mindistance',
+        maxDistance: 'maxdistance'
+      },
+      update: 'distancerule_update',
+      params: [
+        {
+          name: 'distanceUnit',
+          type: 'int'
+        },
+        {
+          name: 'minDistance',
+          type: 'int'
+        },
+        {
+          name: 'maxDistance',
+          type: 'int'
+        }
+      ]
     };
   } else if (id === 24) {
     return {
       tableName: 'cabinrule',
-      select: {},
-      update: '',
-      params: []
+      select: {
+        exclude: 'exclude',
+        cabin: 'cabin'
+      },
+      update: 'cabinrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'cabin',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 25) {
     return {
       tableName: 'farecategoryrule',
-      select: {},
-      update: '',
-      params: []
+      select: { exclude: 'exclude', fareCategory: 'farecategory' },
+      update: 'farecategoryrule_update',
+      params: [
+        {
+          name: 'exclude',
+          type: 'boolean'
+        },
+        {
+          name: 'fareCategory',
+          type: 'int'
+        }
+      ]
     };
   }
 };

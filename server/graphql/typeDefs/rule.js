@@ -178,13 +178,30 @@ type AdvancedTicketing {
   isDeleted: Boolean
 }
 
+input AdvancedTicketingInput {
+  id: Int
+  ruleContainerId: String
+  unit: Int
+  startRange: Int
+  endRange: Int
+  isDeleted: Boolean
+}
+
 type MinStay {
   id: Int
   ruleContainerId: String
   unit: Int
   value: Int
   dayOfWeekInclusion: Int
-  dayOfWeekRecurrence: Int
+  isDeleted: Boolean
+}
+
+input MinStayInput {
+  id: Int
+  ruleContainerId: String
+  unit: Int
+  value: Int
+  dayOfWeekInclusion: Int
   isDeleted: Boolean
 }
 
@@ -196,7 +213,26 @@ type MaxStay {
   isDeleted: Boolean
 }
 
+input MaxStayInput {
+  id: Int
+  ruleContainerId: String
+  unit: Int
+  value: Int
+  isDeleted: Boolean
+}
+
 type DayOfWeek {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  startDay: Int
+  startTime: String
+  endDay: Int
+  endTime: String
+  isDeleted: Boolean
+}
+
+input DayOfWeekInput {
   id: Int
   ruleContainerId: String
   exclude: Boolean
@@ -252,7 +288,30 @@ type FlightNumber {
   isDeleted: Boolean
 }
 
+input FlightNumberInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  segmentType: Int
+  carrierCode: String
+  startRange: Int
+  endRange: Int
+  isDeleted: Boolean
+}
+
 type Blackout {
+  id: Int
+  ruleContainerId: String
+  startDate: Date
+  endDate: Date
+  origin: String
+  originType: Int
+  arrival: String
+  arrivalType: Int
+  isDeleted: Boolean
+}
+
+input BlackoutInput {
   id: Int
   ruleContainerId: String
   startDate: Date
@@ -273,7 +332,24 @@ type Distance {
   isDeleted: Boolean
 }
 
+input DistanceInput {
+  id: Int
+  ruleContainerId: String
+  distanceUnit: Int
+  minDistance: Int
+  maxDistance: Int
+  isDeleted: Boolean
+}
+
 type Cabin {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  cabin: String
+  isDeleted: Boolean
+}
+
+input CabinInput {
   id: Int
   ruleContainerId: String
   exclude: Boolean
@@ -289,10 +365,39 @@ type FareCategory {
   isDeleted: Boolean
 }
 
+type FareCategoryUnit {
+  id: Int
+  cabinId: Int
+  code: String
+  name: String
+  shortName: String
+}
+
+input FareCategoryInput {
+  id: Int
+  ruleContainerId: String
+  exclude: Boolean
+  fareCategory: Int
+  isDeleted: Boolean
+}
+
+type DayUnit {
+  id: Int
+  name: String
+}
+
+type DayOfWeekUnit {
+  id: Int
+  name: String
+}
+
 extend type Query {
   ruleList(parentId: Int, parentType: Int): [Int] @auth
   geographyRuleList: [GeographyRule] @auth
   marketGeoList: [GeographyRule] @auth
+  dayUnitList: [DayUnit] @auth
+  dayOfWeekUnitList: [DayOfWeekUnit] @auth
+  fareCategoryUnitList: [FareCategoryUnit] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
@@ -329,6 +434,16 @@ extend type Mutation {
   updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
   updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
   updateStops(parentId: Int! stopsList: [StopsInput]!): [Stops] @auth
+  updateAdvancedTicketing(parentId: Int! advancedTicketingList: [AdvancedTicketingInput]!): [AdvancedTicketing] @auth
+  updateMinStay(parentId: Int! minStayList: [MinStayInput]!): [MinStay] @auth
+  updateMaxStay(parentId: Int! maxStayList: [MaxStayInput]!): [MaxStay] @auth
+  updateDayOfWeek(parentId: Int! dayOfWeekList: [DayOfWeekInput]!): [DayOfWeek] @auth
+  updateConnectionPoint(parentId: Int! connectionPointList: [ConnectionPointInput]!): [ConnectionPoint] @auth
+  updateFlightNumber(parentId: Int! flightNumberList: [FlightNumberInput]!): [FlightNumber] @auth
+  updateDistance(parentId: Int! distanceList: [DistanceInput]!): [Distance] @auth
+  updateCabin(parentId: Int! cabinList: [CabinInput]!): [Cabin] @auth
+  updateFareCategory(parentId: Int! fareCategoryList: [FareCategoryInput]!): [FareCategory] @auth
+  updateBlackout(parentId: Int! blackoutList: [BlackoutInput]!): [Blackout] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

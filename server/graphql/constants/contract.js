@@ -149,7 +149,12 @@ const RULE_LOOKUP = {
   BLACKOUT: 22,
   DISTANCE: 23,
   CABIN: 24,
-  FARE_CATEGORY: 25
+  FARE_CATEGORY: 25,
+  DAY_UNIT: 11,
+  DAY_OF_WEEK_UNIT: 13,
+  HOURS: 69,
+  DAYS: 70,
+  MONTHS: 71
 };
 
 module.exports = {
