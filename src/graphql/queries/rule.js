@@ -157,3 +157,47 @@ export const GET_ADVANCED_TICKETING_LIST = gql`
     }
   }
 `;
+
+export const GET_DAY_OF_WEEK_UNIT_LIST = gql`
+  query dayOfWeekUnitList {
+    dayOfWeekUnitList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_DAY_UNIT_LIST = gql`
+  query dayUnitList {
+    dayUnitList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_MIN_STAY_LIST = gql`
+  query minStayList($parentId: Int) {
+    minStayList(parentId: $parentId) {
+      id
+      ruleContainerId
+      unit
+      value
+      dayOfWeekInclusion
+      isDeleted
+    }
+  }
+`;
+
+export const GET_MAX_STAY_LIST = gql`
+  query maxStayList($parentId: Int) {
+    maxStayList(parentId: $parentId) {
+      id
+      ruleContainerId
+      unit
+      value
+      dayOfWeekInclusion
+      isDeleted
+    }
+  }
+`;

@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      editMode: true,
+      editMode: false,
       tourCode: '',
       tourCodeList: []
     };
