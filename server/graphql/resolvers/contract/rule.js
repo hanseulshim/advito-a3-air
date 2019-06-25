@@ -343,6 +343,19 @@ exports.rule = {
         blackoutList,
         RULE_LOOKUP.BLACKOUT
       ),
+    updateFareBasis: async (
+      _,
+      { parentId, fareBasisType = 1, fareBasisList },
+      { db }
+    ) =>
+      await updateRule(
+        db,
+        parentId,
+        undefined,
+        fareBasisList,
+        RULE_LOOKUP.FARE_BASIS,
+        fareBasisType
+      ),
     deleteRule: async (_, { id, ruleType }, { db }) => {
       const { tableName } = getRuleInfo(ruleType);
       await db.raw(`SELECT rule_delete(${id}, '${tableName}')`);
@@ -539,7 +552,7 @@ const getRuleInfo = id => {
         containsMultipleValue: 'containsmultiplevalue',
         containsMultiplePosition: 'containsmultipleposition'
       },
-      update: 'farebasis_update',
+      update: 'farebasis_update2',
       params: [
         {
           name: 'name',
@@ -547,7 +560,11 @@ const getRuleInfo = id => {
         },
         {
           name: 'type',
-          type: 'string'
+          type: 'int'
+        },
+        {
+          name: 'basisType',
+          type: 'int'
         },
         {
           name: 'matchExclude',
@@ -559,7 +576,7 @@ const getRuleInfo = id => {
         },
         {
           name: 'endsWithExclude',
-          type: 'string'
+          type: 'boolean'
         },
         {
           name: 'endsWithValue',
@@ -567,7 +584,7 @@ const getRuleInfo = id => {
         },
         {
           name: 'startsWithExclude',
-          type: 'string'
+          type: 'boolean'
         },
         {
           name: 'startsWithValue',
@@ -575,7 +592,7 @@ const getRuleInfo = id => {
         },
         {
           name: 'containsExclude',
-          type: 'string'
+          type: 'boolean'
         },
         {
           name: 'containsValue',
@@ -583,11 +600,11 @@ const getRuleInfo = id => {
         },
         {
           name: 'containsPosition',
-          type: 'string'
+          type: 'int'
         },
         {
           name: 'containsMultipleExclude',
-          type: 'string'
+          type: 'boolean'
         },
         {
           name: 'containsMultipleValue',
@@ -595,7 +612,7 @@ const getRuleInfo = id => {
         },
         {
           name: 'containsMultiplePosition',
-          type: 'string'
+          type: 'int'
         }
       ]
     };
