@@ -110,7 +110,7 @@ export default {
       value: null,
       unit: null,
       dayOfWeekInclusion: null,
-      editMode: true
+      editMode: false
     };
   },
   methods: {
@@ -187,8 +187,6 @@ export default {
             day => day.id === rule.dayOfWeekInclusion
           )[0]
         : null;
-
-      console.log(unit, dayOfWeek);
 
       return `${rule.value} ${unit.name} ${
         !!rule.dayOfWeekInclusion && rule.dayOfWeekInclusion !== 'Undefined'

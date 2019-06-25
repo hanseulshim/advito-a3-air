@@ -223,12 +223,11 @@ export const UPDATE_MIN_STAY_LIST = gql`
 
 export const UPDATE_MAX_STAY_LIST = gql`
   mutation updateMaxStay($parentId: Int!, $maxStayList: [MaxStayInput]!) {
-    updateMaxStay(parentId: $parentId, maxStayListList: $maxStayList) {
+    updateMaxStay(parentId: $parentId, maxStayList: $maxStayList) {
       id
       ruleContainerId
       unit
       value
-      dayOfWeekInclusion
       isDeleted
     }
   }

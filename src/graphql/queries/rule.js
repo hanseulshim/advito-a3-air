@@ -196,7 +196,6 @@ export const GET_MAX_STAY_LIST = gql`
       ruleContainerId
       unit
       value
-      dayOfWeekInclusion
       isDeleted
     }
   }
