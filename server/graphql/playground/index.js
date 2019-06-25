@@ -14,9 +14,9 @@ const { process } = require('./process');
 
 exports.playground = {
   tabs: [
+    client,
     rule.queries,
     rule.mutations,
-    client,
     project.queries,
     project.mutations,
     collection.queries,
