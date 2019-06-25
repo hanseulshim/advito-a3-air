@@ -215,3 +215,16 @@ export const GET_FLIGHT_NUMBER_LIST = gql`
     }
   }
 `;
+
+export const GET_CONNECTION_POINT_LIST = gql`
+  query connectionPointList($parentId: Int) {
+    connectionPointList(parentId: $parentId) {
+      id
+      ruleContainerId
+      exclude
+      connection
+      connectionGeoType
+      isDeleted
+    }
+  }
+`;

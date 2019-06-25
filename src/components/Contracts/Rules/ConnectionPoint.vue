@@ -4,23 +4,48 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
-      <el-input
+      <label>Connection: </label>
+      <el-select
         v-model="connection"
+        filterable
+        placeholder="Select"
         size="mini"
-        class="number-input"
         clearable
-      />
+        value-key="name"
+      >
+        <el-option
+          v-for="country in geographyRuleList"
+          :key="country.index"
+          :label="country.name"
+          :value="country"
+        ></el-option>
+      </el-select>
+      <label> Exclude: </label>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
+      <label v-if="includedRules.length">Included:</label>
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in includedRules"
+        :key="rule.index"
+        type="info"
+        size="small"
+        closable
+        @close="deleteTag(rule)"
+        >{{ ` ${rule.connection} ` }}</el-tag
+      >
+    </div>
+    <div class="rule-tags">
+      <label v-if="excludedRules.length">Excluded:</label>
+      <el-tag
+        v-for="rule in excludedRules"
         :key="rule.index"
         type="info"
         size="small"
@@ -32,35 +57,117 @@
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import { GET_GEO_LIST, GET_CONNECTION_POINT_LIST } from '@/graphql/queries';
+import { UPDATE_CONNECTION_POINT_LIST } from '@/graphql/mutations';
 export default {
   name: 'ConnectionPoint',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    geographyRuleList: {
+      query: GET_GEO_LIST
+    },
+    connectionPointList: {
+      query: GET_CONNECTION_POINT_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { connectionPointList } }) {
+        return removeTypename(connectionPointList);
+      }
+    }
+  },
   data() {
     return {
-      editMode: true,
-      connection: '',
-      rules: []
+      editMode: false,
+      exclude: false,
+      connection: {},
+      connectionPointList: []
     };
   },
+  computed: {
+    excludedRules() {
+      return this.connectionPointList.filter(rule => rule.exclude);
+    },
+    includedRules() {
+      return this.connectionPointList.filter(rule => !rule.exclude);
+    }
+  },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.connectionPointList.length) {
         this.$emit('delete-rule', 'ConnectionPoint');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_CONNECTION_POINT_LIST,
+          variables: {
+            parentId: this.parentId,
+            connectionPointList: this.connectionPointList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONNECTION_POINT_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.connection = {};
     },
     createTag() {
-      this.rules.push({
-        connection: this.connection
+      const ruleContainerId = this.connectionPointList.length
+        ? this.connectionPointList[0].ruleContainerId
+        : null;
+
+      this.connectionPointList.push({
+        id: null,
+        ruleContainerId,
+        connection: this.connection.name,
+        connectionGeoType: this.connection.locationType,
+        exclude: this.exclude,
+        isDeleted: false
       });
 
-      this.connection = '';
+      this.connection = {};
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'ConnectionPoint');
-      }
+    async deleteTag(tag) {
+      const idx = this.connectionPointList.indexOf(tag);
+      this.connectionPointList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_CONNECTION_POINT_LIST,
+          variables: {
+            parentId: this.parentId,
+            connectionPointList: this.connectionPointList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CONNECTION_POINT_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.connectionPointList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.connectionPointList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'ConnectionPoint');
+          }
+        });
     }
   }
 };

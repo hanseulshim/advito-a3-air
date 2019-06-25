@@ -253,3 +253,22 @@ export const UPDATE_FLIGHT_NUMBER_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_CONNECTION_POINT_LIST = gql`
+  mutation updateConnectionPoint(
+    $parentId: Int!
+    $connectionPointList: [ConnectionPointInput]!
+  ) {
+    updateConnectionPoint(
+      parentId: $parentId
+      connectionPointList: $connectionPointList
+    ) {
+      id
+      ruleContainerId
+      exclude
+      connection
+      connectionGeoType
+      isDeleted
+    }
+  }
+`;

@@ -128,7 +128,7 @@ export default {
       endRange: null,
       segmentType: PRICING_TERM_LOOKUP.SEGMENT_TYPE,
       exclude: false,
-      editMode: true
+      editMode: false
     };
   },
   computed: {
