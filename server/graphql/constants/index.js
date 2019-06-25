@@ -7,7 +7,8 @@ const {
   DISCOUNT,
   NOTE,
   CONTRACT_LOOKUP,
-  DISCOUNT_LOOKUP
+  DISCOUNT_LOOKUP,
+  RULE_LOOKUP
 } = require('./contract');
 const { DATA_SET } = require('./dataSet');
 const { PROCESS } = require('./process');
@@ -23,6 +24,7 @@ module.exports = {
   NOTE,
   CONTRACT_LOOKUP,
   DISCOUNT_LOOKUP,
+  RULE_LOOKUP,
   DATA_SET,
   PROCESS,
   PROJECT

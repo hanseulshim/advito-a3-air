@@ -1,10 +1,10 @@
-const CLIENT_ID = 57;
+const { CONTRACT_LOOKUP } = require('../constants');
 
 exports.user = {
   Query: {
     userList: async (_, __, { db }) => {
       const userList = await db('blops.advito_user')
-        .where('client_id', CLIENT_ID)
+        .where('client_id', CONTRACT_LOOKUP.ID)
         .orWhere('id', 882);
       return userList.map(user => ({
         id: user.id,

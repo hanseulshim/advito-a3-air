@@ -1,8 +1,5 @@
 const { CONTRACT_LOOKUP } = require('../../constants');
 
-//TODO: REPLACE HARD CODED CLIENT ID WITH REAL ONE WHEN CLIENT IS HOOKED UP
-const CLIENT_ID = 1;
-
 exports.contract = {
   Query: {
     contractList: async (_, __, { db }) => await getContractList(db),
@@ -22,7 +19,7 @@ exports.contract = {
         })
         .distinct('division.id')
         .where('division.isdeleted', false)
-        .andWhere('division.clientid', CLIENT_ID),
+        .andWhere('division.clientid', CONTRACT_LOOKUP.ID),
     bulkActionList: async (_, { parentId }, { db }) =>
       await db('bulkoperation')
         .select({

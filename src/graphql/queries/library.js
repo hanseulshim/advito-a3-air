@@ -12,9 +12,9 @@ export const GET_AIRPORT_LIST = gql`
   }
 `;
 
-export const GET_BOOKING_CLASS_LIST = gql`
+export const GET_BOOKING_CLASS_LIBRARY_LIST = gql`
   {
-    bookingClassList {
+    bookingClassLibraryList {
       class
       defaultFareCategory
       dateUpdated
