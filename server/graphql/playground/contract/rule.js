@@ -187,10 +187,26 @@ exports.rule = {
         ruleContainerId
         startDate
         endDate
-        origin
-        originType
-        arrival
-        arrivalType
+        isDeleted
+      },
+      fareBasisList(parentId: 34) {
+        id
+        ruleContainerId
+        name
+        type
+        basisType
+        matchExclude
+        matchValue
+        endsWithExclude
+        endsWithValue
+        startsWithExclude
+        startsWithValue
+        containsExclude
+        containsValue
+        containsPosition
+        containsMultipleExclude
+        containsMultipleValue
+        containsMultiplePosition
         isDeleted
       }
     }`
@@ -515,10 +531,6 @@ exports.rule = {
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
           startDate: 1483246800001
           endDate: 1483246800001
-          origin: "0B"
-          originType: 1
-          arrival: "0D"
-          arrivalType: 2
           isDeleted: false
         }
       ]) {
@@ -526,10 +538,33 @@ exports.rule = {
         ruleContainerId
         startDate
         endDate
-        origin
-        originType
-        arrival
-        arrivalType
+        isDeleted
+      }
+      updateFareBasis(parentId: 34, fareBasisType: 1, fareBasisList: [
+        {
+          id: null
+          ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
+          name: 'fare 1',
+          type: 1,
+          matchExclude: false,
+          matchValue: 'matches',
+          endsWithExclude: null,
+          endsWithValue: null,
+          startsWithExclude: null,
+          startsWithValue: null,
+          containsExclude: null,
+          containsValue: null,
+          containsPosition: null,
+          containsMultipleExclude: null,
+          containsMultipleValue: null,
+          containsMultiplePosition: null,
+          isDeleted: false
+        }
+      ]) {
+        id
+        ruleContainerId
+        startDate
+        endDate
         isDeleted
       }
     }`
