@@ -176,3 +176,15 @@ export const UPDATE_TOUR_CODE_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_STOPS_LIST = gql`
+  mutation updateStops($parentId: Int!, $stopsList: [StopsInput]!) {
+    updateStops(parentId: $parentId, stopsList: $stopsList) {
+      id
+      ruleContainerId
+      minStops
+      maxStops
+      isDeleted
+    }
+  }
+`;

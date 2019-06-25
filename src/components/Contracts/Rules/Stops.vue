@@ -4,9 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -32,50 +32,119 @@
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in stopsList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ ` ${rule.min !== null ? rule.min : '0'} - ${rule.max}` }}</el-tag
+        >{{
+          ` ${rule.minStops !== null ? rule.minStops : '0'} - ${rule.maxStops}`
+        }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import { GET_STOPS_LIST } from '@/graphql/queries';
+import { UPDATE_STOPS_LIST } from '@/graphql/mutations';
 export default {
   name: 'Stops',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    stopsList: {
+      query: GET_STOPS_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { stopsList } }) {
+        return removeTypename(stopsList);
+      }
+    }
+  },
   data() {
     return {
-      editMode: true,
-      min: null,
-      max: null,
-      rules: []
+      editMode: false,
+      minStops: null,
+      maxStops: null,
+      stopsList: []
     };
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.stopsList.length) {
         this.$emit('delete-rule', 'Stops');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_STOPS_LIST,
+          variables: {
+            parentId: this.parentId,
+            stopsList: this.stopsList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_STOPS_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
-    },
-    createTag() {
-      this.rules.push({
-        min: this.min,
-        max: this.max
-      });
-
       this.min = '';
       this.max = '';
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'Stops');
-      }
+    createTag() {
+      const ruleContainerId = this.stopsList.length
+        ? this.stopsList[0].ruleContainerId
+        : null;
+
+      this.stopsList.push({
+        id: null,
+        ruleContainerId,
+        minStops: this.minStops,
+        maxStops: this.maxStops,
+        isDeleted: false
+      });
+
+      this.minStops = '';
+      this.maxStops = '';
+    },
+    async deleteTag(tag) {
+      const idx = this.stopsList.indexOf(tag);
+      this.stopsList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_STOPS_LIST,
+          variables: {
+            parentId: this.parentId,
+            stopsList: this.stopsList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_STOPS_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.stopsList.some(rule => !rule.isDeleted);
+          if (!this.stopsList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'Stops');
+          }
+        });
     }
   }
 };

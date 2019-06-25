@@ -132,3 +132,15 @@ export const GET_TOUR_CODE_LIST = gql`
     }
   }
 `;
+
+export const GET_STOPS_LIST = gql`
+  query stopsList($parentId: Int) {
+    tourCodeList(parentId: $parentId) {
+      id
+      ruleContainerId
+      minStops
+      maxStops
+      isDeleted
+    }
+  }
+`;
