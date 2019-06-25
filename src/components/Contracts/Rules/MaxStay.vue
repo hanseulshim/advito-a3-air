@@ -155,7 +155,7 @@ export default {
         });
     },
     getTagString(rule) {
-      if (!this.maxStayList) {
+      if (!this.maxStayList.length) {
         return;
       } else {
         const unit = this.dayUnitList.filter(unit => unit.id === rule.unit)[0];
