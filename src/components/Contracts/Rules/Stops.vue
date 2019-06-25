@@ -11,20 +11,18 @@
     </button>
     <div v-if="editMode" class="control-row">
       <label>Min: </label>
-      <el-input
-        v-model="min"
+      <el-inputNumber
+        v-model="minStops"
         size="mini"
-        min="0"
-        type="number"
+        :min="0"
         class="number-input"
         clearable
       />
       <label>Max: </label>
-      <el-input
-        v-model="max"
+      <el-inputNumber
+        v-model="maxStops"
         size="mini"
-        min="0"
-        type="number"
+        :min="0"
         class="number-input"
         clearable
       />
@@ -102,8 +100,8 @@ export default {
         });
       }
       this.editMode = !this.editMode;
-      this.min = '';
-      this.max = '';
+      this.min = null;
+      this.max = null;
     },
     createTag() {
       const ruleContainerId = this.stopsList.length
@@ -118,8 +116,8 @@ export default {
         isDeleted: false
       });
 
-      this.minStops = '';
-      this.maxStops = '';
+      this.minStops = null;
+      this.maxStops = null;
     },
     async deleteTag(tag) {
       const idx = this.stopsList.indexOf(tag);
