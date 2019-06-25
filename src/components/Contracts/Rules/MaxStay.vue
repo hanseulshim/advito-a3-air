@@ -155,8 +155,12 @@ export default {
         });
     },
     getTagString(rule) {
-      const unit = this.dayUnitList.filter(unit => unit.id === rule.unit)[0];
-      return `${rule.value} ${unit.name}`;
+      if (!this.maxStayList) {
+        return;
+      } else {
+        const unit = this.dayUnitList.filter(unit => unit.id === rule.unit)[0];
+        return `${rule.value} ${unit.name}`;
+      }
     }
   }
 };

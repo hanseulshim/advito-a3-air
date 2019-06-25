@@ -181,18 +181,22 @@ export default {
         });
     },
     getTagString(rule) {
-      const unit = this.dayUnitList.filter(unit => unit.id === rule.unit)[0];
-      const dayOfWeek = rule.dayOfWeekInclusion
-        ? this.dayOfWeekUnitList.filter(
-            day => day.id === rule.dayOfWeekInclusion
-          )[0]
-        : null;
+      if (!this.minStayList) {
+        return;
+      } else {
+        const unit = this.dayUnitList.filter(unit => unit.id === rule.unit)[0];
+        const dayOfWeek = rule.dayOfWeekInclusion
+          ? this.dayOfWeekUnitList.filter(
+              day => day.id === rule.dayOfWeekInclusion
+            )[0]
+          : null;
 
-      return `${rule.value} ${unit.name} ${
-        !!rule.dayOfWeekInclusion && rule.dayOfWeekInclusion !== 'Undefined'
-          ? `including ${dayOfWeek.name}`
-          : ''
-      }`;
+        return `${rule.value} ${unit.name} ${
+          !!rule.dayOfWeekInclusion && rule.dayOfWeekInclusion !== 'Undefined'
+            ? `including ${dayOfWeek.name}`
+            : ''
+        }`;
+      }
     }
   }
 };

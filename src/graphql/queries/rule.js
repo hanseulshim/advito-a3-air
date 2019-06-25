@@ -200,3 +200,18 @@ export const GET_MAX_STAY_LIST = gql`
     }
   }
 `;
+
+export const GET_FLIGHT_NUMBER_LIST = gql`
+  query flightNumberList($parentId: Int) {
+    flightNumberList(parentId: $parentId) {
+      id
+      ruleContainerId
+      exclude
+      segmentType
+      carrierCode
+      startRange
+      endRange
+      isDeleted
+    }
+  }
+`;

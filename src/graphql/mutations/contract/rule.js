@@ -232,3 +232,24 @@ export const UPDATE_MAX_STAY_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_FLIGHT_NUMBER_LIST = gql`
+  mutation updateFlightNumber(
+    $parentId: Int!
+    $flightNumberList: [FlightNumberInput]!
+  ) {
+    updateFlightNumber(
+      parentId: $parentId
+      flightNumberList: $flightNumberList
+    ) {
+      id
+      ruleContainerId
+      exclude
+      segmentType
+      carrierCode
+      startRange
+      endRange
+      isDeleted
+    }
+  }
+`;
