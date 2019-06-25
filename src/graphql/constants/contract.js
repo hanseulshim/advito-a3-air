@@ -104,6 +104,12 @@ export const CONTRACT_LOOKUP = {
   TYPE: 2
 };
 
+export const TIME_UNIT_LOOKUP = {
+  HOURS: 1,
+  DAYS: 2,
+  MONTHS: 3
+};
+
 export const DISCOUNT_LOOKUP = {
   DISCOUNT_TYPE: 3,
   PERCENTAGE: 11,

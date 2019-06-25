@@ -144,3 +144,16 @@ export const GET_STOPS_LIST = gql`
     }
   }
 `;
+
+export const GET_ADVANCED_TICKETING_LIST = gql`
+  query advancedTicketingList($parentId: Int) {
+    advancedTicketingList(parentId: $parentId) {
+      id
+      ruleContainerId
+      unit
+      startRange
+      endRange
+      isDeleted
+    }
+  }
+`;

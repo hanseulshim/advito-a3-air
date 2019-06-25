@@ -188,3 +188,22 @@ export const UPDATE_STOPS_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_ADVANCED_TICKETING_LIST = gql`
+  mutation updateAdvancedTicketing(
+    $parentId: Int!
+    $advancedTicketingList: [AdvancedTicketingInput]!
+  ) {
+    updateAdvancedTicketing(
+      parentId: $parentId
+      advancedTicketingList: $advancedTicketingList
+    ) {
+      id
+      ruleContainerId
+      unit
+      startRange
+      endRange
+      isDeleted
+    }
+  }
+`;
