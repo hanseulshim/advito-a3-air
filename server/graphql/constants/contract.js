@@ -154,7 +154,12 @@ const RULE_LOOKUP = {
   DAY_OF_WEEK_UNIT: 13,
   HOURS: 69,
   DAYS: 70,
-  MONTHS: 71
+  MONTHS: 71,
+  MATCHES: 83,
+  STARTS_WITH: 84,
+  ENDS_WITH: 85,
+  CONTAINS_ANY: 86,
+  CONTAINS_ALL: 87
 };
 
 module.exports = {

@@ -92,6 +92,40 @@ type FareBasis {
   ruleContainerId: String
   name: String
   type: Int
+  basisType: Int
+  matchExclude: Boolean
+  matchValue: String
+  endsWithExclude: Boolean
+  endsWithValue: String
+  startsWithExclude: Boolean
+  startsWithValue: String
+  containsExclude: Boolean
+  containsValue: String
+  containsPosition: Int
+  containsMultipleExclude: Boolean
+  containsMultipleValue: String
+  containsMultiplePosition: Int
+  isDeleted: Boolean
+}
+
+input FareBasisInput {
+  id: Int
+  ruleContainerId: String
+  name: String
+  type: Int
+  basisType: Int
+  matchExclude: Boolean
+  matchValue: String
+  endsWithExclude: Boolean
+  endsWithValue: String
+  startsWithExclude: Boolean
+  startsWithValue: String
+  containsExclude: Boolean
+  containsValue: String
+  containsPosition: Int
+  containsMultipleExclude: Boolean
+  containsMultipleValue: String
+  containsMultiplePosition: Int
   isDeleted: Boolean
 }
 
@@ -304,10 +338,6 @@ type Blackout {
   ruleContainerId: String
   startDate: Date
   endDate: Date
-  origin: String
-  originType: Int
-  arrival: String
-  arrivalType: Int
   isDeleted: Boolean
 }
 
@@ -316,10 +346,6 @@ input BlackoutInput {
   ruleContainerId: String
   startDate: Date
   endDate: Date
-  origin: String
-  originType: Int
-  arrival: String
-  arrivalType: Int
   isDeleted: Boolean
 }
 
@@ -444,6 +470,7 @@ extend type Mutation {
   updateCabin(parentId: Int! cabinList: [CabinInput]!): [Cabin] @auth
   updateFareCategory(parentId: Int! fareCategoryList: [FareCategoryInput]!): [FareCategory] @auth
   updateBlackout(parentId: Int! blackoutList: [BlackoutInput]!): [Blackout] @auth
+  updateFareBasis(parentId: Int!, fareBasisType: Int, fareBasisList: [FareBasisInput]!): [FareBasis] @auth
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 

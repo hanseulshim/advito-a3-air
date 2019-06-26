@@ -152,7 +152,9 @@ exports.rule = {
     fareCategoryList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY),
     blackoutList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.BLACKOUT)
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.BLACKOUT),
+    fareBasisList: async (_, { parentId }, { db }) =>
+      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_BASIS)
   },
   Mutation: {
     updateTicketingDate: async (
@@ -519,10 +521,83 @@ const getRuleInfo = id => {
     };
   } else if (id === 6 || id === 7) {
     return {
-      tableName: 'farebasis',
-      select: {},
-      update: '',
-      params: []
+      tableName: 'farebasis_list',
+      type: 'type',
+      select: {
+        name: 'name',
+        type: 'type',
+        matchExclude: 'matchexclude',
+        matchValue: 'matchvalue',
+        endsWithExclude: 'endswithexclude',
+        endsWithValue: 'endswithvalue',
+        startsWithExclude: 'startswithexclude',
+        startsWithValue: 'startswithvalue',
+        containsExclude: 'containsexclude',
+        containsValue: 'containsvalue',
+        containsPosition: 'containsposition',
+        containsMultipleExclude: 'containsmultipleexclude',
+        containsMultipleValue: 'containsmultiplevalue',
+        containsMultiplePosition: 'containsmultipleposition'
+      },
+      update: 'farebasis_update',
+      params: [
+        {
+          name: 'name',
+          type: 'string'
+        },
+        {
+          name: 'type',
+          type: 'string'
+        },
+        {
+          name: 'matchExclude',
+          type: 'string'
+        },
+        {
+          name: 'matchValue',
+          type: 'string'
+        },
+        {
+          name: 'endsWithExclude',
+          type: 'string'
+        },
+        {
+          name: 'endsWithValue',
+          type: 'string'
+        },
+        {
+          name: 'startsWithExclude',
+          type: 'string'
+        },
+        {
+          name: 'startsWithValue',
+          type: 'string'
+        },
+        {
+          name: 'containsExclude',
+          type: 'string'
+        },
+        {
+          name: 'containsValue',
+          type: 'string'
+        },
+        {
+          name: 'containsPosition',
+          type: 'string'
+        },
+        {
+          name: 'containsMultipleExclude',
+          type: 'string'
+        },
+        {
+          name: 'containsMultipleValue',
+          type: 'string'
+        },
+        {
+          name: 'containsMultiplePosition',
+          type: 'string'
+        }
+      ]
     };
   } else if (id === 8 || id === 9) {
     return {
@@ -777,11 +852,7 @@ const getRuleInfo = id => {
       tableName: 'blackoutdaterule',
       select: {
         startDate: 'startdate',
-        endDate: 'enddate',
-        origin: 'origin',
-        originType: 'origintype',
-        arrival: 'arrival',
-        arrivalType: 'arrivaltype'
+        endDate: 'enddate'
       },
       update: 'blackoutdaterule_update',
       params: [
@@ -792,22 +863,6 @@ const getRuleInfo = id => {
         {
           name: 'endDate',
           type: 'date'
-        },
-        {
-          name: 'origin',
-          type: 'string'
-        },
-        {
-          name: 'originType',
-          type: 'int'
-        },
-        {
-          name: 'arrival',
-          type: 'string'
-        },
-        {
-          name: 'arrivalType',
-          type: 'int'
         }
       ]
     };
