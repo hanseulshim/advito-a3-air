@@ -6,11 +6,43 @@ const { getProjectName } = require('../helper');
 
 exports.project = {
   Query: {
-    projectList: (_, payload) => {
-      const projectListFiltered = payload.clientId
-        ? projectList.filter(project => project.clientId === payload.clientId)
-        : projectList;
-      return projectListFiltered.filter(project => !project.isDeleted);
+    projectList: async (_, { clientId }, { db }) => {
+      const select = {
+        id: 'id',
+        clientId: 'clientid',
+        clientName: 'clientname',
+        name: 'name',
+        description: 'description',
+        projectTypeId: 'projecttypeid',
+        projectTypeName: 'projecttypename',
+        savingsTypeId: 'savingstypeid',
+        savingsTypeName: 'savingstypename',
+        effectiveFrom: 'effectivefrom',
+        effectiveTo: 'effectiveto',
+        reportFrom: 'reportfrom',
+        reportTo: 'reportto',
+        projectManagerId: 'projectmanagerid',
+        projectManagerName: 'projectmanagername',
+        projectManagerEmail: 'projectmanageremail',
+        leadAnalystId: 'leadanalystid',
+        leadAnalystName: 'leadanalystname',
+        leadAnalystEmail: 'leadanalystemail',
+        dataSpecialistId: 'dataspecialistid',
+        dataSpecialistName: 'dataspecialistname',
+        dataSpecialistEmail: 'dataspecialistemail',
+        currencyId: 'currencyid',
+        currencyName: 'currencyname',
+        distanceUnitId: 'distanceunitid',
+        distanceUnitName: 'distanceunitname'
+      };
+      return clientId
+        ? await db('project_list')
+            .select({ ...select })
+            .where('isdeleted', false)
+            .andWhere('clientid', clientId)
+        : await db('project_list')
+            .select({ ...select })
+            .where('isdeleted', false);
     },
     projectInfo: () => projectData
   },

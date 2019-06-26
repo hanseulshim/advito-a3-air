@@ -18,7 +18,7 @@
       </div>
       <div class="project-line">
         Savings Type:
-        <span class="project-value">{{ project.savingsType }}</span>
+        <span class="project-value">{{ project.savingsTypeName }}</span>
       </div>
     </div>
     <div class="project-column">

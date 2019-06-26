@@ -28,7 +28,7 @@
         </div>
         <div class="value-row">
           <span>Savings Type</span>
-          <span>{{ project.savingsType }}</span>
+          <span>{{ project.savingsTypeName }}</span>
         </div>
         <div class="value-row">
           <span>Project Manager</span>

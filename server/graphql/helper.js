@@ -7,7 +7,7 @@ const getProjectName = project => {
     effectiveFromYear !== effectiveToYear
       ? `${effectiveFromYear} - ${effectiveToYear.toString().substr(-2)}`
       : effectiveFromYear;
-  return `${project.clientName} ${yearRange} ${project.projectType}`;
+  return `${project.clientName} ${yearRange} ${project.projectTypeName}`;
 };
 
 const authenticateUser = async (sessionToken, advitoDb) => {
