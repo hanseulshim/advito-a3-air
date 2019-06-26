@@ -228,3 +228,89 @@ export const GET_CONNECTION_POINT_LIST = gql`
     }
   }
 `;
+
+export const GET_DISTANCE_LIST = gql`
+  query distanceList($parentId: Int) {
+    distanceList(parentId: $parentId) {
+      id
+      ruleContainerId
+      distanceUnit
+      minDistance
+      maxDistance
+      isDeleted
+    }
+  }
+`;
+
+export const GET_CABIN_LIST = gql`
+  query cabinList($parentId: Int) {
+    cabinList(parentId: $parentId) {
+      id
+      ruleContainerId
+      exclude
+      cabin
+      isDeleted
+    }
+  }
+`;
+
+export const GET_FARE_CATEGORY_UNIT_LIST = gql`
+  query fareCategoryUnitList {
+    fareCategoryUnitList {
+      id
+      cabinId
+      code
+      name
+      shortName
+    }
+  }
+`;
+
+export const GET_FARE_CATEGORY_LIST = gql`
+  query fareCategoryList($parentId: Int) {
+    fareCategoryList(parentId: $parentId) {
+      id
+      ruleContainerId
+      exclude
+      fareCategory
+      isDeleted
+    }
+  }
+`;
+
+export const GET_BLACKOUT_LIST = gql`
+  query blackoutList($parentId: Int) {
+    blackoutList(parentId: $parentId) {
+      id
+      ruleContainerId
+      startDate
+      endDate
+      isDeleted
+    }
+  }
+`;
+
+export const GET_FARE_BASIS_LIST = gql`
+  query fareBasisList($parentId: Int) {
+    fareBasisList(parentId: $parentId) {
+      id
+      ruleContainerId
+      name
+      type
+      basisType
+      matchExclude
+      matchValue
+      endsWithExclude
+      endsWithValue
+      startsWithExclude
+      startsWithValue
+      containsExclude
+      containsValue
+      containsPosition
+      containsMultipleExclude
+      containsMultipleValue
+      containsMultiplePosition
+      isDeleted
+    }
+  }
+`;

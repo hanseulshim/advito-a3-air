@@ -272,3 +272,58 @@ export const UPDATE_CONNECTION_POINT_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_DISTANCE_LIST = gql`
+  mutation updateDistance($parentId: Int!, $distanceList: [DistanceInput]!) {
+    updateDistance(parentId: $parentId, distanceList: $distanceList) {
+      id
+      ruleContainerId
+      distanceUnit
+      minDistance
+      maxDistance
+      isDeleted
+    }
+  }
+`;
+
+export const UPDATE_CABIN_LIST = gql`
+  mutation updateCabinList($parentId: Int!, $cabinList: [CabinInput]!) {
+    updateCabinList(parentId: $parentId, cabinList: $cabinList) {
+      id
+      ruleContainerId
+      exclude
+      cabin
+      isDeleted
+    }
+  }
+`;
+
+export const UPDATE_FARE_CATEGORY_LIST = gql`
+  mutation updateFareCategory(
+    $parentId: Int!
+    $fareCategoryList: [FareCategoryInput]!
+  ) {
+    updateFareCategory(
+      parentId: $parentId
+      fareCategoryList: $fareCategoryList
+    ) {
+      id
+      ruleContainerId
+      exclude
+      fareCategory
+      isDeleted
+    }
+  }
+`;
+
+export const UPDATE_BLACKOUT_LIST = gql`
+  mutation updateBlackout($parentId: Int!, $blackoutList: [BlackoutInput]!) {
+    updateBlackout(parentId: $parentId, blackoutList: $blackoutList) {
+      id
+      ruleContainerId
+      startDate
+      endDate
+      isDeleted
+    }
+  }
+`;
