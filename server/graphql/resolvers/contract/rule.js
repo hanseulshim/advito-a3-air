@@ -428,9 +428,13 @@ const updateRule = async (
           ${rule.ruleContainerId ? `'${rule.ruleContainerId}'` : null},
           ${ruleInfo.params.map(param => {
             return param.type === 'string'
-              ? `'${rule[param.name]}'`
+              ? `${rule[param.name] ? `'${rule[param.name]}'` : null}`
               : param.type === 'date'
-              ? `'${new Date(rule[param.name]).toISOString()}'`
+              ? `${
+                  new Date(rule[param.name]).toISOString()
+                    ? `'${new Date(rule[param.name]).toISOString()}'`
+                    : null
+                }`
               : `${rule[param.name]}`;
           })},
           ${rule.isDeleted}
