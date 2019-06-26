@@ -13,8 +13,10 @@ const {
 const { DATA_SET } = require('./dataSet');
 const { PROCESS } = require('./process');
 const { PROJECT } = require('./project');
+const { AIR_APPLICATION_ID } = require('./client');
 
 module.exports = {
+  AIR_APPLICATION_ID,
   CONTRACT,
   PRICING_TERM,
   TARGET_TERM,
