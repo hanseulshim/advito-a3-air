@@ -287,8 +287,8 @@ export const UPDATE_DISTANCE_LIST = gql`
 `;
 
 export const UPDATE_CABIN_LIST = gql`
-  mutation updateCabinList($parentId: Int!, $cabinList: [CabinInput]!) {
-    updateCabinList(parentId: $parentId, cabinList: $cabinList) {
+  mutation updateCabin($parentId: Int!, $cabinList: [CabinInput]!) {
+    updateCabin(parentId: $parentId, cabinList: $cabinList) {
       id
       ruleContainerId
       exclude
