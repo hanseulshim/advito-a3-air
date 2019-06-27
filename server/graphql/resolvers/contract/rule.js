@@ -147,8 +147,11 @@ exports.rule = {
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.CONNECTION_POINT),
     distanceList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.DISTANCE),
-    cabinList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.CABIN),
+    cabinList: async (
+      _,
+      { parentId, parentType = TARGET_TERM_LOOKUP.RULE_TYPE },
+      { db }
+    ) => await getRuleList(db, parentId, parentType, RULE_LOOKUP.CABIN),
     fareCategoryList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY),
     blackoutList: async (_, { parentId }, { db }) =>
@@ -325,8 +328,12 @@ exports.rule = {
         distanceList,
         RULE_LOOKUP.DISTANCE
       ),
-    updateCabin: async (_, { parentId, cabinList }, { db }) =>
-      await updateRule(db, parentId, undefined, cabinList, RULE_LOOKUP.CABIN),
+    updateCabin: async (
+      _,
+      { parentId, parentType = TARGET_TERM_LOOKUP.RULE_TYPE, cabinList },
+      { db }
+    ) =>
+      await updateRule(db, parentId, parentType, cabinList, RULE_LOOKUP.CABIN),
     updateFareCategory: async (_, { parentId, fareCategoryList }, { db }) =>
       await updateRule(
         db,
