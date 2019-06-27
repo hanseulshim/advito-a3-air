@@ -1,7 +1,11 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Cabin</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
@@ -12,10 +16,15 @@
         clearable
         multiple
       >
-        <el-option v-for="cabin in cabinsInDropdown" :key="cabin" :label="cabin" :value="cabin"></el-option>
+        <el-option
+          v-for="cabin in cabinsInDropdown"
+          :key="cabin"
+          :label="cabin"
+          :value="cabin"
+        ></el-option>
       </el-select>
       <label>Exclude:</label>
-      <el-checkbox v-model="exclude" name="exclude"/>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -27,7 +36,8 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ rule.cabin }}</el-tag>
+        >{{ rule.cabin }}</el-tag
+      >
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -38,16 +48,17 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ rule.cabin }}</el-tag>
+        >{{ rule.cabin }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
-import { GET_CABIN_LIST } from "@/graphql/queries";
-import { UPDATE_CABIN_LIST } from "@/graphql/mutations";
+import { removeTypename } from '@/helper';
+import { GET_CABIN_LIST } from '@/graphql/queries';
+import { UPDATE_CABIN_LIST } from '@/graphql/mutations';
 export default {
-  name: "Cabin",
+  name: 'Cabin',
   props: {
     parentId: {
       default: null,
@@ -74,17 +85,17 @@ export default {
   data() {
     return {
       cabins: [
-        "Cabin C",
-        "Cabin D",
-        "Cabin F",
-        "Cabin L",
-        "Cabin P",
-        "Cabin Y"
+        'Cabin C',
+        'Cabin D',
+        'Cabin F',
+        'Cabin L',
+        'Cabin P',
+        'Cabin Y'
       ],
       selectedCabins: [],
       cabinList: [],
       exclude: false,
-      editMode: true
+      editMode: false
     };
   },
   computed: {
@@ -103,7 +114,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.cabinList.length) {
-        this.$emit("delete-rule", "Cabin");
+        this.$emit('delete-rule', 'Cabin');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_CABIN_LIST,
@@ -160,7 +171,7 @@ export default {
         .then(() => {
           const rulesRemaining = this.cabinList.some(rule => !rule.isDeleted);
           if (!this.cabinList.length || !rulesRemaining) {
-            this.$emit("delete-rule", "Cabin");
+            this.$emit('delete-rule', 'Cabin');
           }
         });
     }
@@ -168,5 +179,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

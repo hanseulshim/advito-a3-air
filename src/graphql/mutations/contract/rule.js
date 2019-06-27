@@ -272,6 +272,20 @@ export const UPDATE_CONNECTION_POINT_LIST = gql`
     }
   }
 `;
+export const UPDATE_DAY_OF_WEEK_LIST = gql`
+  mutation updateDayOfWeek($parentId: Int!, $dayOfWeekList: [DayOfWeekInput]!) {
+    updateDayOfWeek(parentId: $parentId, dayOfWeekList: $dayOfWeekList) {
+      id
+      ruleContainerId
+      exclude
+      startDay
+      startTime
+      endDay
+      endTime
+      isDeleted
+    }
+  }
+`;
 
 export const UPDATE_DISTANCE_LIST = gql`
   mutation updateDistance($parentId: Int!, $distanceList: [DistanceInput]!) {

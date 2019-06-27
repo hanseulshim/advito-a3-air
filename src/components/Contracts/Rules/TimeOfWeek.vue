@@ -4,40 +4,40 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
       <label>Start Day: </label>
       <el-select
-        v-model="startDate"
+        v-model="startDay"
         filterable
         placeholder="Select"
         size="mini"
         clearable
       >
         <el-option
-          v-for="day in days"
-          :key="day"
-          :label="day"
-          :value="day"
+          v-for="dayUnit in dayOfWeekUnitList"
+          :key="dayUnit.name"
+          :label="dayUnit.name"
+          :value="dayUnit.id"
         ></el-option>
       </el-select>
       <label>End Day: </label>
       <el-select
-        v-model="endDate"
+        v-model="endDay"
         filterable
         placeholder="Select"
         size="mini"
         clearable
       >
         <el-option
-          v-for="day in days"
-          :key="day"
-          :label="day"
-          :value="day"
+          v-for="dayUnit in dayOfWeekUnitList"
+          :key="dayUnit.name"
+          :label="dayUnit.name"
+          :value="dayUnit.id"
         ></el-option>
       </el-select>
     </div>
@@ -73,11 +73,7 @@
         closable
         @click="editTag(rule)"
         @close="deleteTag(rule)"
-        >{{
-          `${rule.startDate} after ${rule.startTime} -  ${
-            rule.endDate
-          } before ${rule.endTime}`
-        }}</el-tag
+        >{{ getTagString(rule) }}</el-tag
       >
     </div>
     <div class="rule-tags">
@@ -90,88 +86,148 @@
         closable
         @click="editTag(rule)"
         @close="deleteTag(rule)"
-        >{{
-          `${rule.startDate} after ${rule.startTime} -  ${
-            rule.endDate
-          } before ${rule.endTime}`
-        }}</el-tag
+        >{{ getTagString(rule) }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import {
+  GET_DAY_OF_WEEK_LIST,
+  GET_DAY_OF_WEEK_UNIT_LIST
+} from '@/graphql/queries';
+import { UPDATE_DAY_OF_WEEK_LIST } from '@/graphql/mutations';
 import moment from 'moment';
 export default {
   name: 'TimeOfWeek',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    dayOfWeekList: {
+      query: GET_DAY_OF_WEEK_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { dayOfWeekList } }) {
+        return removeTypename(dayOfWeekList);
+      }
+    },
+    dayOfWeekUnitList: {
+      query: GET_DAY_OF_WEEK_UNIT_LIST
+    }
+  },
   data() {
     return {
-      days: [
-        'Undefined',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-      ],
-      exclude: false,
-      editMode: true,
-      startDate: '',
-      endDate: '',
+      dayOfWeekList: [],
+      dayOfWeekUnitList: [],
+      startDay: null,
+      endDay: null,
       startTime: '',
       endTime: '',
-      rules: [],
-      updateRule: null
+      exclude: false,
+      updateRule: null,
+      editMode: false
     };
   },
   computed: {
     excludedRules() {
-      return this.rules.filter(rule => rule.exclude);
+      return this.dayOfWeekList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.rules.filter(rule => !rule.exclude);
+      return this.dayOfWeekList.filter(rule => !rule.exclude);
     }
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.dayOfWeekList.length) {
         this.$emit('delete-rule', 'TimeOfWeek');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_DAY_OF_WEEK_LIST,
+          variables: {
+            parentId: this.parentId,
+            dayOfWeekList: this.dayOfWeekList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DAY_OF_WEEK_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
-    },
-    createTag() {
-      const formattedStart = this.formatTime(this.startTime);
-      const formattedEnd = this.formatTime(this.endTime);
-
-      this.rules.push({
-        startDate: this.startDate,
-        endDate: this.endDate,
-        exclude: this.exclude,
-        startTime: formattedStart,
-        endTime: formattedEnd,
-        unformattedStart: this.startTime,
-        unformattedEnd: this.endTime
-      });
-
-      this.startDate = '';
-      this.endDate = '';
+      this.startDay = null;
+      this.endDay = null;
       this.startTime = '';
       this.endTime = '';
-      this.exlcude = false;
+      this.updateRule = null;
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'TimeOfWeek');
-      }
+    createTag() {
+      const ruleContainerId = this.dayOfWeekList.length
+        ? this.dayOfWeekList[0].ruleContainerId
+        : null;
+
+      this.dayOfWeekList.push({
+        id: null,
+        ruleContainerId,
+        startDay: this.startDay,
+        endDay: this.endDay,
+        startTime: this.formatTime(this.startTime),
+        endTime: this.formatTime(this.endTime),
+        exclude: this.exclude,
+        isDeleted: false
+      });
+
+      this.startDay = null;
+      this.endDay = null;
+      this.startTime = '';
+      this.endTime = '';
+      this.updateRule = null;
+    },
+    async deleteTag(tag) {
+      const idx = this.dayOfWeekList.indexOf(tag);
+      this.dayOfWeekList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_DAY_OF_WEEK_LIST,
+          variables: {
+            parentId: this.parentId,
+            dayOfWeekList: this.dayOfWeekList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DAY_OF_WEEK_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.dayOfWeekList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.dayOfWeekList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'TimeOfWeek');
+          }
+        });
     },
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = rule.startDate;
-        this.endDate = rule.endDate;
+        this.startDay = rule.startDay;
+        this.endDay = rule.endDay;
         this.startTime = rule.unformattedStart;
         this.endTime = rule.unformattedEnd;
         this.exclude = rule.exclude;
@@ -180,22 +236,38 @@ export default {
     updateTag() {
       const formattedStart = this.formatTime(this.startTime);
       const formattedEnd = this.formatTime(this.endTime);
-      const ruleIndex = this.rules.indexOf(this.updateRule);
+      const ruleIndex = this.dayOfWeekList.indexOf(this.updateRule);
 
-      this.rules[ruleIndex].startDate = this.startDate;
-      this.rules[ruleIndex].endDate = this.endDate;
-      this.rules[ruleIndex].startTime = formattedStart;
-      this.rules[ruleIndex].endTime = formattedEnd;
-      this.rules[ruleIndex].unformattedStart = this.startTime;
-      this.rules[ruleIndex].unformattedEnd = this.endTime;
+      this.dayOfWeekList[ruleIndex].startDay = this.startDay;
+      this.dayOfWeekList[ruleIndex].endDay = this.endDay;
+      this.dayOfWeekList[ruleIndex].startTime = formattedStart;
+      this.dayOfWeekList[ruleIndex].endTime = formattedEnd;
+
       this.updateRule = null;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDay = '';
+      this.endDay = '';
       this.startTime = '';
       this.endTime = '';
     },
     formatTime(date) {
       return date ? moment(date).format('H:mm') : '';
+    },
+    getTagString(rule) {
+      if (!this.dayOfWeekList.length || !this.dayOfWeekUnitList.length) {
+        return;
+      } else {
+        const startDayMatch = rule.startDay
+          ? this.dayOfWeekUnitList.filter(day => day.id === rule.startDay)[0]
+          : null;
+
+        const endDayMatch = rule.endDay
+          ? this.dayOfWeekUnitList.filter(day => day.id === rule.endDay)[0]
+          : null;
+
+        return `${startDayMatch.name} after ${rule.startTime} -  ${
+          endDayMatch.name
+        } before ${rule.endTime}`;
+      }
     }
   }
 };
