@@ -17,40 +17,20 @@ export const GET_PROJECT = gql`
   }
 `;
 
-export const GET_PROJECT_INFO = gql`
+export const GET_PROJECT_TYPE_LIST = gql`
   {
-    projectInfo {
-      projectTypeList {
-        id
-        name
-      }
-      savingsTypeList {
-        id
-        name
-      }
-      projectManagerList {
-        id
-        name
-        email
-      }
-      leadAnalystList {
-        id
-        name
-        email
-      }
-      dataSpecialistList {
-        id
-        name
-        email
-      }
-      currencyList {
-        id
-        name
-      }
-      distanceUnitList {
-        id
-        name
-      }
+    projectTypeList {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_SAVINGS_TYPE_LIST = gql`
+  {
+    savingsTypeList {
+      id
+      name
     }
   }
 `;

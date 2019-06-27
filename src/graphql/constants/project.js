@@ -3,11 +3,12 @@ export const PROJECT = `id
         clientName
         name
         description
+        division
         isDeleted
         projectTypeId
-        projectType
+        projectTypeName
         savingsTypeId
-        savingsType
+        savingsTypeName
         effectiveFrom
         effectiveTo
         reportFrom

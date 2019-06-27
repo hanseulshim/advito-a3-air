@@ -44,12 +44,11 @@ export const GET_CURRENCY_LIST = gql`
   }
 `;
 
-export const GET_GEO_LIST = gql`
+export const GET_DISTANCE_UNIT_LIST = gql`
   {
-    geographyRuleList {
+    distanceUnitList {
+      id
       name
-      code
-      locationType
     }
   }
 `;

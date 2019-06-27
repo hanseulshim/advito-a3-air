@@ -1,15 +1,5 @@
 const { AuthenticationError } = require('apollo-server-lambda');
 
-const getProjectName = project => {
-  const effectiveFromYear = new Date(project.effectiveFrom).getFullYear();
-  const effectiveToYear = new Date(project.effectiveTo).getFullYear();
-  const yearRange =
-    effectiveFromYear !== effectiveToYear
-      ? `${effectiveFromYear} - ${effectiveToYear.toString().substr(-2)}`
-      : effectiveFromYear;
-  return `${project.clientName} ${yearRange} ${project.projectType}`;
-};
-
 const authenticateUser = async (sessionToken, advitoDb) => {
   // Gets session info from DB
   const sessionRow = await advitoDb('advito_user_session')
@@ -72,6 +62,5 @@ const authenticateUser = async (sessionToken, advitoDb) => {
 };
 
 module.exports = {
-  getProjectName,
   authenticateUser
 };

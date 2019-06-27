@@ -10,9 +10,9 @@ type Project {
   division: String,
   isDeleted: Boolean,
   projectTypeId: Int,
-  projectType: String,
+  projectTypeName: String,
   savingsTypeId: Int,
-  savingsType: String,
+  savingsTypeName: String,
   effectiveFrom: Date,
   effectiveTo: Date,
   reportFrom: Date,
@@ -34,16 +34,6 @@ type Project {
   favorite: Boolean,
 }
 
-type ProjectInfo {
-  projectTypeList: [ProjectType]
-  savingsTypeList: [SavingsType]
-  projectManagerList: [ProjectManagerUser]
-  leadAnalystList: [LeadAnalystUser]
-  dataSpecialistList: [DataSpecialistUser]
-  currencyList: [CurrencyType]
-  distanceUnitList: [DistanceUnitType]
-}
-
 type ProjectType {
   id: Int,
   name: String
@@ -54,37 +44,10 @@ type SavingsType {
   name: String
 }
 
-type ProjectManagerUser {
-  id: Int,
-  name: String,
-  email: String
-}
-
-type LeadAnalystUser {
-  id: Int,
-  name: String,
-  email: String
-}
-
-type DataSpecialistUser {
-  id: Int,
-  name: String,
-  email: String
-}
-
-type CurrencyType {
-  id: Int,
-  name: String
-}
-
-type DistanceUnitType {
-  id: Int,
-  name: String
-}
-
 extend type Query {
   projectList(clientId: Int): [Project] @auth
-  projectInfo: ProjectInfo @auth
+  projectTypeList: [ProjectType]
+  savingsTypeList: [SavingsType]
 }
 
 extend type Mutation {

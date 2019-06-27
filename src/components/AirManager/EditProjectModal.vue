@@ -23,12 +23,12 @@
         <el-input v-model="clientName" disabled></el-input>
       </el-form-item>
       <el-form-item label="Project Type">
-        <el-input v-model="projectType" disabled></el-input>
+        <el-input v-model="projectTypeName" disabled></el-input>
       </el-form-item>
       <el-form-item label="Savings Type *" prop="savingsTypeId">
         <el-select v-model="form.savingsTypeId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.savingsTypeList"
+            v-for="item in savingsTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -81,7 +81,7 @@
       <el-form-item label="Project Manager *" prop="projectManagerId">
         <el-select v-model="form.projectManagerId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.projectManagerList"
+            v-for="item in projectManagerList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -91,7 +91,7 @@
       <el-form-item label="Lead Analyst *" prop="leadAnalystId">
         <el-select v-model="form.leadAnalystId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.leadAnalystList"
+            v-for="item in leadAnalystList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -101,7 +101,7 @@
       <el-form-item label="Data Specialist *" prop="dataSpecialistId">
         <el-select v-model="form.dataSpecialistId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.dataSpecialistList"
+            v-for="item in dataSpecialistList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -109,9 +109,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Currency *" prop="currencyId">
-        <el-select v-model="form.currencyId" class="select-modal">
+        <el-select v-model="form.currencyId" filterable class="select-modal">
           <el-option
-            v-for="item in projectInfo.currencyList"
+            v-for="item in currencyList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -121,7 +121,7 @@
       <el-form-item label="Distance Unit *" prop="distanceUnitId">
         <el-select v-model="form.distanceUnitId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.distanceUnitList"
+            v-for="item in distanceUnitList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -137,12 +137,38 @@
 
 <script>
 import { EDIT_PROJECT } from '@/graphql/mutations';
-import { GET_PROJECT_INFO } from '@/graphql/queries';
+import {
+  GET_CURRENCY_LIST,
+  GET_DISTANCE_UNIT_LIST,
+  GET_PROJECT_MANAGER_LIST,
+  GET_LEAD_ANALYST_LIST,
+  GET_DATA_SPECIALIST_LIST,
+  GET_PROJECT_TYPE_LIST,
+  GET_SAVINGS_TYPE_LIST
+} from '@/graphql/queries';
 export default {
   name: 'EditProjectModal',
   apollo: {
-    projectInfo: {
-      query: GET_PROJECT_INFO
+    currencyList: {
+      query: GET_CURRENCY_LIST
+    },
+    distanceUnitList: {
+      query: GET_DISTANCE_UNIT_LIST
+    },
+    projectManagerList: {
+      query: GET_PROJECT_MANAGER_LIST
+    },
+    leadAnalystList: {
+      query: GET_LEAD_ANALYST_LIST
+    },
+    dataSpecialistList: {
+      query: GET_DATA_SPECIALIST_LIST
+    },
+    projectTypeList: {
+      query: GET_PROJECT_TYPE_LIST
+    },
+    savingsTypeList: {
+      query: GET_SAVINGS_TYPE_LIST
     }
   },
   data() {
@@ -233,24 +259,17 @@ export default {
           }
         ]
       },
-      projectType: null,
+      projectTypeName: null,
       projectTypeId: null,
       clientName: null,
-      projectInfo: {}
+      currencyList: [],
+      distanceUnitList: [],
+      projectManagerList: [],
+      leadAnalystList: [],
+      dataSpecialistList: [],
+      projectTypeList: [],
+      savingsTypeList: []
     };
-  },
-  computed: {
-    savingsTypeList() {
-      const savingsTypeList = this.projectInfo.savingsTypeList.slice();
-      if (this.projectTypeId === 1) {
-        return savingsTypeList.slice(0, 2);
-      } else if (this.projectTypeId === 2) {
-        return savingsTypeList.slice(1, 3);
-      } else if (this.projectTypeId === 3) {
-        return savingsTypeList.slice(0, 1);
-      }
-      return [];
-    }
   },
   methods: {
     hideModal() {
@@ -286,7 +305,7 @@ export default {
     beforeOpen(event) {
       const project = event.params.project;
       this.clientName = project.clientName;
-      this.projectType = project.projectType;
+      this.projectTypeName = project.projectTypeName;
       this.projectTypeId = project.projectTypeId;
       this.form.id = project.id;
       this.form.savingsTypeId = project.savingsTypeId;
