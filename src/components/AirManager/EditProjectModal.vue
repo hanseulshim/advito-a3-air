@@ -23,7 +23,7 @@
         <el-input v-model="clientName" disabled></el-input>
       </el-form-item>
       <el-form-item label="Project Type">
-        <el-input v-model="projectType" disabled></el-input>
+        <el-input v-model="projectTypeName" disabled></el-input>
       </el-form-item>
       <el-form-item label="Savings Type *" prop="savingsTypeId">
         <el-select v-model="form.savingsTypeId" class="select-modal">
@@ -233,7 +233,7 @@ export default {
           }
         ]
       },
-      projectType: null,
+      projectTypeName: null,
       projectTypeId: null,
       clientName: null,
       projectInfo: {}
@@ -286,7 +286,7 @@ export default {
     beforeOpen(event) {
       const project = event.params.project;
       this.clientName = project.clientName;
-      this.projectType = project.projectType;
+      this.projectTypeName = project.projectTypeName;
       this.projectTypeId = project.projectTypeId;
       this.form.id = project.id;
       this.form.savingsTypeId = project.savingsTypeId;

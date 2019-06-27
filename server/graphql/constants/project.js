@@ -5,9 +5,9 @@ const PROJECT = `id
         description
         isDeleted
         projectTypeId
-        projectType
+        projectTypeName
         savingsTypeId
-        savingsType
+        savingsTypeName
         effectiveFrom
         effectiveTo
         reportFrom
