@@ -38,10 +38,10 @@ exports.rule = {
       #  name
       #  shortName
       #}
-      fareBasisUnitList {
-        id
-        name
-      }
+      #fareBasisUnitList {
+      #  id
+      #  name
+      #}
       ticketingDateList(parentId: 34) {
         id
         ruleContainerId
