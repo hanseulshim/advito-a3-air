@@ -32,7 +32,7 @@
       <el-form-item label="Project Type *" prop="projectTypeId">
         <el-select v-model="form.projectTypeId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.projectTypeList"
+            v-for="item in projectTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -42,7 +42,7 @@
       <el-form-item label="Savings Type *" prop="savingsTypeId">
         <el-select v-model="form.savingsTypeId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.savingsTypeList"
+            v-for="item in savingsTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -95,7 +95,7 @@
       <el-form-item label="Project Manager *" prop="projectManagerId">
         <el-select v-model="form.projectManagerId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.projectManagerList"
+            v-for="item in projectManagerList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -105,7 +105,7 @@
       <el-form-item label="Lead Analyst *" prop="leadAnalystId">
         <el-select v-model="form.leadAnalystId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.leadAnalystList"
+            v-for="item in leadAnalystList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -115,7 +115,7 @@
       <el-form-item label="Data Specialist *" prop="dataSpecialistId">
         <el-select v-model="form.dataSpecialistId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.dataSpecialistList"
+            v-for="item in dataSpecialistList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -125,7 +125,7 @@
       <el-form-item label="Currency *" prop="currencyId">
         <el-select v-model="form.currencyId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.currencyList"
+            v-for="item in currencyList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -135,7 +135,7 @@
       <el-form-item label="Distance Unit *" prop="distanceUnitId">
         <el-select v-model="form.distanceUnitId" class="select-modal">
           <el-option
-            v-for="item in projectInfo.distanceUnitList"
+            v-for="item in distanceUnitList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -154,7 +154,13 @@ import {
   GET_PROJECTS,
   GET_CLIENT,
   GET_CLIENTS,
-  GET_PROJECT_INFO
+  GET_CURRENCY_LIST,
+  GET_DISTANCE_UNIT_LIST,
+  GET_PROJECT_MANAGER_LIST,
+  GET_LEAD_ANALYST_LIST,
+  GET_DATA_SPECIALIST_LIST,
+  GET_PROJECT_TYPE_LIST,
+  GET_SAVINGS_TYPE_LIST
 } from '@/graphql/queries';
 import { ADD_PROJECT } from '@/graphql/mutations';
 export default {
@@ -163,8 +169,26 @@ export default {
     clientList: {
       query: GET_CLIENTS
     },
-    projectInfo: {
-      query: GET_PROJECT_INFO
+    currencyList: {
+      query: GET_CURRENCY_LIST
+    },
+    distanceUnitList: {
+      query: GET_DISTANCE_UNIT_LIST
+    },
+    projectManagerList: {
+      query: GET_PROJECT_MANAGER_LIST
+    },
+    leadAnalystList: {
+      query: GET_LEAD_ANALYST_LIST
+    },
+    dataSpecialistList: {
+      query: GET_DATA_SPECIALIST_LIST
+    },
+    projectTypeList: {
+      query: GET_PROJECT_TYPE_LIST
+    },
+    savingsTypeList: {
+      query: GET_SAVINGS_TYPE_LIST
     }
   },
   data() {
@@ -273,21 +297,14 @@ export default {
         ]
       },
       clientList: [],
-      projectInfo: {}
+      currencyList: [],
+      distanceUnitList: [],
+      projectManagerList: [],
+      leadAnalystList: [],
+      dataSpecialistList: [],
+      projectTypeList: [],
+      savingsTypeList: []
     };
-  },
-  computed: {
-    savingsTypeList() {
-      const savingsTypeList = this.projectInfo.savingsTypeList.slice();
-      if (this.form.projectTypeId === 1) {
-        return savingsTypeList.slice(0, 2);
-      } else if (this.form.projectTypeId === 2) {
-        return savingsTypeList.slice(1, 3);
-      } else if (this.form.projectTypeId === 3) {
-        return savingsTypeList.slice(0, 1);
-      }
-      return [];
-    }
   },
   watch: {
     projectTypeId() {
