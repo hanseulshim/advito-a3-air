@@ -544,27 +544,41 @@ exports.rule = {
         {
           id: null
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb"
-          name: 'fare 1',
-          type: 1,
-          matchExclude: false,
-          matchValue: 'matches',
-          endsWithExclude: null,
-          endsWithValue: null,
-          startsWithExclude: null,
-          startsWithValue: null,
-          containsExclude: null,
-          containsValue: null,
-          containsPosition: null,
-          containsMultipleExclude: null,
-          containsMultipleValue: null,
-          containsMultiplePosition: null,
+          name: "fare 1"
+          type: 1
+          basisType: 83
+          matchExclude: false
+          matchValue: "matches"
+          endsWithExclude: null
+          endsWithValue: null
+          startsWithExclude: null
+          startsWithValue: null
+          containsExclude: null
+          containsValue: null
+          containsPosition: null
+          containsMultipleExclude: null
+          containsMultipleValue: null
+          containsMultiplePosition: null
           isDeleted: false
         }
       ]) {
         id
         ruleContainerId
-        startDate
-        endDate
+        name
+        type
+        basisType
+        matchExclude
+        matchValue
+        endsWithExclude
+        endsWithValue
+        startsWithExclude
+        startsWithValue
+        containsExclude
+        containsValue
+        containsPosition
+        containsMultipleExclude
+        containsMultipleValue
+        containsMultiplePosition
         isDeleted
       }
     }`

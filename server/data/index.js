@@ -1,4 +1,3 @@
-const { clientList } = require('./client');
 const { projectList } = require('./project');
 const { projectData } = require('./projectData');
 const {
@@ -21,7 +20,6 @@ const {
 const { process } = require('./process');
 
 module.exports = {
-  clientList,
   projectList,
   projectData,
   airportList,
