@@ -54,6 +54,7 @@ type Discount {
   journeyTypeName: String
   directionTypeId: Int
   directionTypeName: String
+  ruleCount: Int
   normalizationCount: Int
   noteImportant: Boolean
   noteContent: Boolean
