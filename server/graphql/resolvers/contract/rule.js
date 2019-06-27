@@ -96,6 +96,13 @@ exports.rule = {
         name: 'name',
         shortName: 'shortname'
       }),
+    fareBasisUnitList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', RULE_LOOKUP.FARE_BASIS_TYPE),
     ticketingDateList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.TICKET_DATE),
     travelDateList: async (_, { parentId, parentType }, { db }) =>
