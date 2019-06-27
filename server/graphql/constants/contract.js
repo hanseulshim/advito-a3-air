@@ -85,6 +85,7 @@ const DISCOUNT = `id
         journeyTypeName
         directionTypeId
         directionTypeName
+        ruleCount
         normalizationCount
         noteImportant
         noteContent`;
