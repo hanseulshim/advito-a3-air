@@ -4,9 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -62,9 +62,37 @@
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import { GET_FARE_BASIS_LIST, GET_FARE_BASIS_MATCHES } from '@/graphql/queries';
+import { UPDATE_FARE_BASIS_LIST } from '@/graphql/mutations';
 export default {
   name: 'PublishedFareBasis',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    fareBasisUnits: {
+      query: GET_FARE_BASIS_MATCHES
+    },
+    fareBasisList: {
+      query: GET_FARE_BASIS_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { fareBasisList } }) {
+        return removeTypename(fareBasisList);
+      }
+    }
+  },
   data() {
     return {
       basis: [
@@ -78,26 +106,26 @@ export default {
       exclude: false,
       editMode: true,
       input: '',
-      rules: []
+      fareBasisList: []
     };
   },
   computed: {
     excludedRules() {
-      return this.rules.filter(rule => rule.exclude);
+      return this.fareBasisList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.rules.filter(rule => !rule.exclude);
+      return this.fareBasisList.filter(rule => !rule.exclude);
     }
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    saveRules() {
+      if (this.editMode && !this.fareBasisList.length) {
         this.$emit('delete-rule', 'PublishedFareBasis');
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.rules.push({
+      this.fareBasisList.push({
         basis: this.selectedBasis,
         input: this.input,
         exclude: this.exclude
@@ -107,8 +135,8 @@ export default {
       this.input = '';
     },
     deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
+      this.fareBasisList.splice(this.fareBasisList.indexOf(tag), 1);
+      if (!this.fareBasisList.length) {
         this.$emit('delete-rule', 'PublishedFareBasis');
       }
     }
