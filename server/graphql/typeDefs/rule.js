@@ -129,6 +129,11 @@ input FareBasisInput {
   isDeleted: Boolean
 }
 
+type FareBasisUnit {
+  id: Int
+  name: String
+}
+
 type BookingClass {
   id: Int
   ruleContainerId: String
@@ -424,6 +429,7 @@ extend type Query {
   dayUnitList: [DayUnit] @auth
   dayOfWeekUnitList: [DayOfWeekUnit] @auth
   fareCategoryUnitList: [FareCategoryUnit] @auth
+  fareBasisUnitList: [FareBasisUnit] @auth
   ticketingDateList(parentId: Int, parentType: Int): [TicketingDate] @auth
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
