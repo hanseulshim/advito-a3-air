@@ -3,6 +3,7 @@ export const PROJECT = `id
         clientName
         name
         description
+        division
         isDeleted
         projectTypeId
         projectTypeName

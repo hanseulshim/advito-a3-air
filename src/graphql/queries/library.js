@@ -43,3 +43,12 @@ export const GET_CURRENCY_LIST = gql`
     }
   }
 `;
+
+export const GET_DISTANCE_UNIT_LIST = gql`
+  {
+    distanceUnitList {
+      id
+      name
+    }
+  }
+`;

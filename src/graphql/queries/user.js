@@ -19,3 +19,33 @@ export const GET_USER_LIST = gql`
     }
   }
 `;
+
+export const GET_PROJECT_MANAGER_LIST = gql`
+  {
+    projectManagerList {
+      id
+      name
+      email
+    }
+  }
+`;
+
+export const GET_LEAD_ANALYST_LIST = gql`
+  {
+    leadAnalystList {
+      id
+      name
+      email
+    }
+  }
+`;
+
+export const GET_DATA_SPECIALIST_LIST = gql`
+  {
+    dataSpecialistList {
+      id
+      name
+      email
+    }
+  }
+`;

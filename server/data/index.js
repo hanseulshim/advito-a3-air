@@ -1,5 +1,3 @@
-const { projectList } = require('./project');
-const { projectData } = require('./projectData');
 const {
   airlineGroupAirlineList,
   airlineGroupCollectionList,
@@ -20,8 +18,6 @@ const {
 const { process } = require('./process');
 
 module.exports = {
-  projectList,
-  projectData,
   airportList,
   bookingClassList,
   dataSet,
