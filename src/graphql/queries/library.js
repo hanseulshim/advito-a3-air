@@ -12,9 +12,9 @@ export const GET_AIRPORT_LIST = gql`
   }
 `;
 
-export const GET_BOOKING_CLASS_LIST = gql`
+export const GET_BOOKING_CLASS_LIBRARY_LIST = gql`
   {
-    bookingClassList {
+    bookingClassLibraryList {
       class
       defaultFareCategory
       dateUpdated
@@ -40,6 +40,15 @@ export const GET_CURRENCY_LIST = gql`
       id
       name
       code
+    }
+  }
+`;
+
+export const GET_DISTANCE_UNIT_LIST = gql`
+  {
+    distanceUnitList {
+      id
+      name
     }
   }
 `;

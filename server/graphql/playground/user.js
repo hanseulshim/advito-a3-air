@@ -15,6 +15,21 @@ exports.user = {
         name
         email
       }
+      projectManagerList {
+        id
+        name
+        email
+      }
+      leadAnalystList {
+        id
+        name
+        email
+      }
+      dataSpecialistList {
+        id
+        name
+        email
+      }
     }`
   }
 };

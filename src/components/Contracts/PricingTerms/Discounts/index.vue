@@ -108,19 +108,14 @@
         label="Direction"
         :min-width="discount.directionType"
       />
-      <el-table-column
-        prop="normalizationCount"
-        label="Rules"
-        :min-width="discount.rules"
-      >
+      <el-table-column label="Rules" :min-width="discount.rules">
         <template slot-scope="props">
           <button class="button number" @click="toggleRulesModal(props.row)">
-            {{ props.row.normalizationCount }}
+            {{ props.row.ruleCount }}
           </button>
         </template>
       </el-table-column>
       <el-table-column
-        prop="normalizationCount"
         label="Normalization"
         :min-width="discount.normalization"
       >

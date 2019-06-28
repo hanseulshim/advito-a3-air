@@ -1,142 +1,200 @@
-const { ApolloError } = require('apollo-server-lambda');
-const { projectList } = require('../../data');
-const { clientList } = require('../../data');
-const { projectData } = require('../../data');
-const { getProjectName } = require('../helper');
+const { PROJECT_LOOKUP } = require('../constants');
 
 exports.project = {
   Query: {
-    projectList: (_, payload) => {
-      const projectListFiltered = payload.clientId
-        ? projectList.filter(project => project.clientId === payload.clientId)
-        : projectList;
-      return projectListFiltered.filter(project => !project.isDeleted);
+    projectList: async (_, { clientId }, { db, user }) => {
+      return clientId
+        ? await db('project_list as pl')
+            .select({
+              ...projectSelect,
+              ...getFavorite(db, user)
+            })
+            .where('isdeleted', false)
+            .andWhere('clientid', clientId)
+        : await db('project_list as pl')
+            .select({ ...projectSelect, ...getFavorite(db, user) })
+            .where('isdeleted', false);
     },
-    projectInfo: () => projectData
+    projectTypeList: async (_, __, { db }) => {
+      return await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', PROJECT_LOOKUP.PROJECT_TYPE);
+    },
+    savingsTypeList: async (_, __, { db }) => {
+      return await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', PROJECT_LOOKUP.SAVINGS_TYPE);
+    }
   },
   Mutation: {
-    addProject: (_, payload) => {
-      const maxId = Math.max(...projectList.map(project => project.id)) + 1;
-      const client = clientList.filter(
-        client => client.id === payload.clientId
-      )[0];
-      if (!client) {
-        throw new ApolloError('Client not found', 400);
-      }
-      const projectType =
-        projectData.projectTypeList[payload.projectTypeId - 1];
-      const savingsType =
-        projectData.savingsTypeList[payload.savingsTypeId - 1];
-      const projectManager =
-        projectData.projectManagerList[payload.projectManagerId - 1];
-      const leadAnalyst =
-        projectData.leadAnalystList[payload.leadAnalystId - 1];
-      const dataSpecialist =
-        projectData.dataSpecialistList[payload.dataSpecialistId - 1];
-      const currency = projectData.currencyList[payload.currencyId - 1];
-      const distanceUnit =
-        projectData.distanceUnitList[payload.distanceUnitId - 1];
-      const project = {
-        id: maxId,
-        clientId: client.id,
-        clientName: client.name,
-        name: getProjectName({
-          ...payload,
-          projectType: projectType.name,
-          clientName: client.name
-        }),
-        description: payload.description,
-        division: maxId % 2 === 0 ? 'Technology' : '',
-        isDeleted: false,
-        projectTypeId: projectType.id,
-        projectType: projectType.name,
-        savingsTypeId: savingsType.id,
-        savingsType: savingsType.name,
-        effectiveFrom: payload.effectiveFrom,
-        effectiveTo: payload.effectiveTo,
-        reportFrom: payload.reportFrom,
-        reportTo: payload.reportTo,
-        projectManagerId: projectManager.id,
-        projectManagerName: projectManager.name,
-        projectManagerEmail: projectManager.email,
-        leadAnalystId: leadAnalyst.id,
-        leadAnalystName: leadAnalyst.name,
-        leadAnalystEmail: leadAnalyst.email,
-        dataSpecialistId: dataSpecialist.id,
-        dataSpecialistName: dataSpecialist.name,
-        dataSpecialistEmail: dataSpecialist.email,
-        currencyId: currency.id,
-        currencyName: currency.name,
-        distanceUnitId: distanceUnit.id,
-        distanceUnitName: distanceUnit.name,
-        progress: 'Front-line solution-oriented leverage',
-        favorite: true
-      };
-      projectList.push(project);
-      return project;
+    addProject: async (
+      _,
+      {
+        clientId,
+        projectTypeId,
+        savingsTypeId,
+        effectiveFrom,
+        effectiveTo,
+        reportFrom,
+        reportTo,
+        description,
+        projectManagerId,
+        leadAnalystId,
+        dataSpecialistId,
+        currencyId,
+        distanceUnitId
+      },
+      { db, user }
+    ) => {
+      const [projectLookup] = await db('lov_lookup')
+        .select({ projectTypeName: 'name_val' })
+        .where('id', projectTypeId);
+      const [clientLookup] = await db('blops.client')
+        .select({
+          clientName: 'client_name'
+        })
+        .where('id', clientId);
+      const { projectTypeName } = projectLookup;
+      const { clientName } = clientLookup;
+      const name = getProjectName(
+        projectTypeName,
+        clientName,
+        effectiveFrom,
+        effectiveTo
+      );
+      const { rows } = await db.raw(`
+        SELECT project_create(
+          ${clientId},
+          '${name}',
+          ${projectTypeId},
+          ${savingsTypeId},
+          '${effectiveFrom}',
+          '${effectiveTo}',
+          '${reportFrom}',
+          '${reportTo}',
+          ${description ? `'${description}'` : null},
+          ${projectManagerId},
+          ${leadAnalystId},
+          ${dataSpecialistId},
+          ${currencyId},
+          ${distanceUnitId}
+        )
+      `);
+      const [{ project_create: newId }] = rows;
+      return await getProject(db, newId, user);
     },
-    editProject: (_, payload) => {
-      const project = projectList.filter(
-        project => project.id === payload.id
-      )[0];
-      if (!project) {
-        throw new ApolloError('Project not found', 400);
-      }
-      const savingsType =
-        projectData.savingsTypeList[payload.savingsTypeId - 1];
-      const projectManager =
-        projectData.projectManagerList[payload.projectManagerId - 1];
-      const leadAnalyst =
-        projectData.leadAnalystList[payload.leadAnalystId - 1];
-      const dataSpecialist =
-        projectData.dataSpecialistList[payload.dataSpecialistId - 1];
-      const currency = projectData.currencyList[payload.currencyId - 1];
-      const distanceUnit =
-        projectData.distanceUnitList[payload.distanceUnitId - 1];
-      project.name = getProjectName({
-        ...payload,
-        clientName: project.clientName,
-        projectType: project.projectType
-      });
-      project.description = payload.description;
-      project.savingsTypeId = savingsType.id;
-      project.savingsType = savingsType.name;
-      project.effectiveFrom = payload.effectiveFrom;
-      project.effectiveTo = payload.effectiveTo;
-      project.projectManagerId = projectManager.id;
-      project.projectManagerName = projectManager.name;
-      project.projectManagerEmail = projectManager.email;
-      project.leadAnalystId = leadAnalyst.id;
-      project.leadAnalystName = leadAnalyst.name;
-      project.leadAnalystEmail = leadAnalyst.email;
-      project.dataSpecialistId = dataSpecialist.id;
-      project.dataSpecialistName = dataSpecialist.name;
-      project.dataSpecialistEmail = dataSpecialist.email;
-      project.currencyId = currency.id;
-      project.currencyName = currency.name;
-      project.distanceUnitId = distanceUnit.id;
-      project.distanceUnitName = distanceUnit.name;
-      return project;
+    editProject: async (
+      _,
+      {
+        id,
+        savingsTypeId,
+        effectiveFrom,
+        effectiveTo,
+        reportFrom,
+        reportTo,
+        description,
+        projectManagerId,
+        leadAnalystId,
+        dataSpecialistId,
+        currencyId,
+        distanceUnitId
+      },
+      { db, user }
+    ) => {
+      await db.raw(`
+        SELECT project_update(
+          ${id},
+          ${savingsTypeId},
+          '${effectiveFrom}',
+          '${effectiveTo}',
+          '${reportFrom}',
+          '${reportTo}',
+          ${description ? `'${description}'` : null},
+          ${projectManagerId},
+          ${leadAnalystId},
+          ${dataSpecialistId},
+          ${currencyId},
+          ${distanceUnitId}
+        )
+      `);
+      return await getProject(db, id, user);
     },
-    deleteProject: (_, payload) => {
-      const project = projectList.filter(
-        project => project.id === payload.id
-      )[0];
-      if (!project) {
-        throw new ApolloError('Project not found', 400);
-      }
-      project.isDeleted = true;
-      return payload.id;
+    deleteProject: async (_, { id }, { db }) => {
+      await db.raw(`
+        SELECT project_delete(${id})
+      `);
+      return id;
     },
-    toggleFavoriteProject: (_, payload) => {
-      const project = projectList.filter(
-        project => project.id === payload.id
-      )[0];
-      if (!project) {
-        throw new ApolloError('Project not found', 400);
-      }
-      project.favorite = !project.favorite;
-      return project;
+    toggleFavoriteProject: async (_, { id }, { db, user }) => {
+      await db.raw(`
+        SELECT project_favorite(${id}, ${user.id})
+      `);
+      return await getProject(db, id, user);
     }
   }
+};
+
+const getProjectName = (
+  projectTypeName,
+  clientName,
+  effectiveFrom,
+  effectiveTo
+) => {
+  const effectiveFromYear = new Date(effectiveFrom).getFullYear();
+  const effectiveToYear = new Date(effectiveTo).getFullYear();
+  const yearRange =
+    effectiveFromYear !== effectiveToYear
+      ? `${effectiveFromYear} - ${effectiveToYear.toString().substr(-2)}`
+      : effectiveFromYear;
+  return `${clientName} ${yearRange} ${projectTypeName}`;
+};
+
+const getProject = async (db, id, user) => {
+  const [project] = await db('project_list as pl')
+    .select({ ...projectSelect, ...getFavorite(db, user) })
+    .where('id', id);
+  return project;
+};
+
+const getFavorite = (db, user) => ({
+  favorite: db.raw(
+    `COALESCE(EXISTS(SELECT p.id FROM projectuserfavourite as p GROUP BY p.id HAVING userid=${
+      user.id
+    } AND projectid=pl.id),FALSE)`
+  )
+});
+
+const projectSelect = {
+  id: 'id',
+  clientId: 'clientid',
+  clientName: 'clientname',
+  name: 'name',
+  description: 'description',
+  projectTypeId: 'projecttypeid',
+  projectTypeName: 'projecttypename',
+  savingsTypeId: 'savingstypeid',
+  savingsTypeName: 'savingstypename',
+  effectiveFrom: 'effectivefrom',
+  effectiveTo: 'effectiveto',
+  reportFrom: 'reportfrom',
+  reportTo: 'reportto',
+  projectManagerId: 'projectmanagerid',
+  projectManagerName: 'projectmanagername',
+  projectManagerEmail: 'projectmanageremail',
+  leadAnalystId: 'leadanalystid',
+  leadAnalystName: 'leadanalystname',
+  leadAnalystEmail: 'leadanalystemail',
+  dataSpecialistId: 'dataspecialistid',
+  dataSpecialistName: 'dataspecialistname',
+  dataSpecialistEmail: 'dataspecialistemail',
+  currencyId: 'currencyid',
+  currencyName: 'currencyname',
+  distanceUnitId: 'distanceunitid',
+  distanceUnitName: 'distanceunitname'
 };

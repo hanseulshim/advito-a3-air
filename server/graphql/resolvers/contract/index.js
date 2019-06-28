@@ -5,7 +5,8 @@ const { targetTerm } = require('./targetTerm');
 const { targetLevel } = require('./targetLevel');
 const { discount } = require('./discount');
 const { note } = require('./note');
+const { rule } = require('./rule');
 
 exports.contract = {
-  ...merge(contract, pricingTerm, targetTerm, discount, note, targetLevel)
+  ...merge(contract, pricingTerm, targetTerm, discount, note, targetLevel, rule)
 };

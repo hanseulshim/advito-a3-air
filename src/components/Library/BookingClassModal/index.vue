@@ -11,7 +11,7 @@
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </el-tooltip>
     </div>
-    <el-table :data="bookingClassList" :max-height="700">
+    <el-table :data="bookingClassLibraryList" :max-height="700">
       <el-table-column type="expand">
         <template slot-scope="props">
           <AirlineMappingTable
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { GET_BOOKING_CLASS_LIST } from '@/graphql/queries';
+import { GET_BOOKING_CLASS_LIBRARY_LIST } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import { bookingClass } from '@/config';
 import AirlineMappingTable from './AirlineMappingTable';
@@ -61,13 +61,13 @@ export default {
     AirlineMappingTable
   },
   apollo: {
-    bookingClassList: {
-      query: GET_BOOKING_CLASS_LIST
+    bookingClassLibraryList: {
+      query: GET_BOOKING_CLASS_LIBRARY_LIST
     }
   },
   data() {
     return {
-      bookingClassList: [],
+      bookingClassLibraryList: [],
       bookingClass
     };
   },

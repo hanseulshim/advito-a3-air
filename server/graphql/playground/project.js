@@ -10,38 +10,13 @@ exports.project = {
       projectList(clientId: 1) {
         ${PROJECT}
       }
-      projectInfo {
-        projectTypeList {
-          id
-          name
-        }
-        savingsTypeList {
-          id
-          name
-        }
-        projectManagerList {
-          id
-          name
-          email
-        }
-        leadAnalystList {
-          id
-          name
-          email
-        }
-        dataSpecialistList {
-          id
-          name
-          email
-        }
-        currencyList {
-          id
-          name
-        }
-        distanceUnitList {
-          id
-          name
-        }
+      projectTypeList {
+        id
+        name
+      }
+      savingsTypeList {
+        id
+        name
       }
     }
     `
@@ -56,14 +31,16 @@ exports.project = {
         clientId: 1
         projectTypeId: 1
         savingsTypeId: 3
-        effectiveFrom: "01 Jan 2018"
-        effectiveTo: "31 Dec 2018"
-        reportFrom: "01 Jan 2018"
-        reportTo: "31 Dec 2018"
+        effectiveFrom: 1483246800001
+        effectiveTo: 1483246800001
+        reportFrom: 1483246800001
+        reportTo: 1483246800001
         description: "my description"
         projectManagerId: 4
         leadAnalystId: 2
         dataSpecialistId: 3
+        currencyId: 1
+        distanceUnitId: 2
       ) {
         ${PROJECT}
       }
@@ -75,10 +52,10 @@ exports.project = {
       editProject(
         id:50,
         savingsTypeId: 3
-        effectiveFrom: "01 Jan 2018"
-        effectiveTo: "31 Dec 2018"
-        reportFrom: "01 Jan 2018"
-        reportTo: "31 Dec 2018"
+        effectiveFrom: 1483246800001
+        effectiveTo: 1483246800001
+        reportFrom: 1483246800001
+        reportTo: 1483246800001
         description: "my description"
         projectManagerId: 4
         leadAnalystId: 2

@@ -5,9 +5,9 @@ const PROJECT = `id
         description
         isDeleted
         projectTypeId
-        projectType
+        projectTypeName
         savingsTypeId
-        savingsType
+        savingsTypeName
         effectiveFrom
         effectiveTo
         reportFrom
@@ -28,6 +28,12 @@ const PROJECT = `id
         progress
         favorite`;
 
+const PROJECT_LOOKUP = {
+  PROJECT_TYPE: 1,
+  SAVINGS_TYPE: 9
+};
+
 module.exports = {
-  PROJECT
+  PROJECT,
+  PROJECT_LOOKUP
 };

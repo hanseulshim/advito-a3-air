@@ -85,6 +85,7 @@ export const DISCOUNT = `id
         journeyTypeName
         directionTypeId
         directionTypeName
+        ruleCount
         normalizationCount
         noteImportant
         noteContent`;
@@ -110,7 +111,8 @@ export const DISCOUNT_LOOKUP = {
   JOURNEY_TYPE: 4,
   DIRECTION_TYPE: 5,
   BULK_ACTION: 2,
-  BULK_ACTION_DELETE: 13
+  BULK_ACTION_DELETE: 13,
+  RULE_TYPE: 1
 };
 
 export const PRICING_TERM_LOOKUP = {
@@ -133,5 +135,6 @@ export const TARGET_TERM_LOOKUP = {
   KPG: 28,
   BULK_ACTION: 3,
   BULK_ACTION_DELETE: 19,
-  BULK_ACTION_QC: 20
+  BULK_ACTION_QC: 20,
+  RULE_TYPE: 2
 };
