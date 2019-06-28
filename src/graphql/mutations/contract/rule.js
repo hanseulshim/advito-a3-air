@@ -341,3 +341,36 @@ export const UPDATE_BLACKOUT_LIST = gql`
     }
   }
 `;
+
+export const UPDATE_FARE_BASIS_LIST = gql`
+  mutation updateFareBasis(
+    $parentId: Int!
+    $fareBasisType: Int!
+    $fareBasisList: [FareBasisInput]!
+  ) {
+    updateFareBasis(
+      parentId: $parentId
+      fareBasisType: $fareBasisType
+      fareBasisList: $fareBasisList
+    ) {
+      id
+      ruleContainerId
+      name
+      type
+      basisType
+      matchExclude
+      matchValue
+      endsWithExclude
+      endsWithValue
+      startsWithExclude
+      startsWithValue
+      containsExclude
+      containsValue
+      containsPosition
+      containsMultipleExclude
+      containsMultipleValue
+      containsMultiplePosition
+      isDeleted
+    }
+  }
+`;

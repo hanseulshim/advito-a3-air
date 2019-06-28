@@ -18,19 +18,25 @@
         clearable
       >
         <el-option
-          v-for="item in basis"
-          :key="item"
-          :label="item"
-          :value="item"
+          v-for="item in fareBasisUnitList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
         ></el-option>
       </el-select>
-      <el-input
-        v-model="input"
+      <el-input v-model="value" size="mini" class="number-input" clearable />
+      <label v-if="selectedBasis === 86 || selectedBasis === 87"
+        >Position:
+      </label>
+      <el-input-number
+        v-if="selectedBasis === 86 || selectedBasis === 87"
+        v-model="position"
         size="mini"
         class="number-input"
-        min="0"
+        :min="0"
         clearable
       />
+
       <label for="exclude"> Exclude: </label>
       <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
@@ -63,8 +69,12 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_FARE_BASIS_LIST, GET_FARE_BASIS_MATCHES } from '@/graphql/queries';
+import {
+  GET_FARE_BASIS_LIST,
+  GET_FARE_BASIS_UNIT_LIST
+} from '@/graphql/queries';
 import { UPDATE_FARE_BASIS_LIST } from '@/graphql/mutations';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
   name: 'PublishedFareBasis',
   props: {
@@ -78,8 +88,8 @@ export default {
     }
   },
   apollo: {
-    fareBasisUnits: {
-      query: GET_FARE_BASIS_MATCHES
+    fareBasisUnitList: {
+      query: GET_FARE_BASIS_UNIT_LIST
     },
     fareBasisList: {
       query: GET_FARE_BASIS_LIST,
@@ -95,18 +105,12 @@ export default {
   },
   data() {
     return {
-      basis: [
-        'Matches',
-        'Starts With',
-        'Ends With',
-        'Contains Any',
-        'Contains All'
-      ],
+      fareBasisList: [],
+      fareBasisUnitList: [],
       selectedBasis: '',
       exclude: false,
       editMode: true,
-      input: '',
-      fareBasisList: []
+      input: ''
     };
   },
   computed: {

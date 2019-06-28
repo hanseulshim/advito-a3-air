@@ -58,7 +58,10 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_GEO_LIST, GET_CONNECTION_POINT_LIST } from '@/graphql/queries';
+import {
+  GET_GEO_RULE_LIST,
+  GET_CONNECTION_POINT_LIST
+} from '@/graphql/queries';
 import { UPDATE_CONNECTION_POINT_LIST } from '@/graphql/mutations';
 export default {
   name: 'ConnectionPoint',
@@ -74,7 +77,7 @@ export default {
   },
   apollo: {
     geographyRuleList: {
-      query: GET_GEO_LIST
+      query: GET_GEO_RULE_LIST
     },
     connectionPointList: {
       query: GET_CONNECTION_POINT_LIST,

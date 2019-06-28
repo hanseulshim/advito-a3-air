@@ -6,9 +6,18 @@ export const GET_RULE_LIST = gql`
   }
 `;
 
-export const GET_GEO_LIST = gql`
-  query ruleList {
-    ruleList {
+export const GET_GEO_RULE_LIST = gql`
+  query geographyRuleList {
+    geographyRuleList {
+      code
+      name
+    }
+  }
+`;
+
+export const GET_MARKET_GEO_LIST = gql`
+  query marketGeoList {
+    marketGeoList {
       code
       name
       locationType
@@ -311,6 +320,15 @@ export const GET_BLACKOUT_LIST = gql`
       startDate
       endDate
       isDeleted
+    }
+  }
+`;
+
+export const GET_FARE_BASIS_UNIT_LIST = gql`
+  query fareBasisUnitList {
+    fareBasisUnitList {
+      id
+      name
     }
   }
 `;
