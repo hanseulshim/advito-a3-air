@@ -36,7 +36,6 @@
         :min="0"
         clearable
       />
-
       <label for="exclude"> Exclude: </label>
       <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
