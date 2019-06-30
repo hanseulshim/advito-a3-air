@@ -6,7 +6,7 @@ export const GET_RULE_LIST = gql`
   }
 `;
 
-export const GET_GEO_RULE_LIST = gql`
+export const GET_GEO_LIST = gql`
   query geographyRuleList {
     geographyRuleList {
       code

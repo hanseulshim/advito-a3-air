@@ -1,16 +1,10 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Connection Point</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
-      <label>Connection: </label>
+      <label>Connection:</label>
       <el-select
         v-model="connection"
         filterable
@@ -26,8 +20,8 @@
           :value="country"
         ></el-option>
       </el-select>
-      <label> Exclude: </label>
-      <el-checkbox v-model="exclude" name="exclude" />
+      <label>Exclude:</label>
+      <el-checkbox v-model="exclude" name="exclude"/>
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -39,8 +33,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ ` ${rule.connection} ` }}</el-tag
-      >
+      >{{ ` ${rule.connection} ` }}</el-tag>
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -51,20 +44,16 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ ` ${rule.connection} ` }}</el-tag
-      >
+      >{{ ` ${rule.connection} ` }}</el-tag>
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
-import {
-  GET_GEO_RULE_LIST,
-  GET_CONNECTION_POINT_LIST
-} from '@/graphql/queries';
-import { UPDATE_CONNECTION_POINT_LIST } from '@/graphql/mutations';
+import { removeTypename } from "@/helper";
+import { GET_GEO_LIST, GET_CONNECTION_POINT_LIST } from "@/graphql/queries";
+import { UPDATE_CONNECTION_POINT_LIST } from "@/graphql/mutations";
 export default {
-  name: 'ConnectionPoint',
+  name: "ConnectionPoint",
   props: {
     parentId: {
       default: null,
@@ -77,7 +66,7 @@ export default {
   },
   apollo: {
     geographyRuleList: {
-      query: GET_GEO_RULE_LIST
+      query: GET_GEO_LIST
     },
     connectionPointList: {
       query: GET_CONNECTION_POINT_LIST,
@@ -110,7 +99,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.connectionPointList.length) {
-        this.$emit('delete-rule', 'ConnectionPoint');
+        this.$emit("delete-rule", "ConnectionPoint");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_CONNECTION_POINT_LIST,
@@ -168,7 +157,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.connectionPointList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'ConnectionPoint');
+            this.$emit("delete-rule", "ConnectionPoint");
           }
         });
     }
@@ -176,5 +165,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>

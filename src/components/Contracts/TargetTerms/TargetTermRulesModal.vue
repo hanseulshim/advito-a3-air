@@ -4,14 +4,14 @@
     name="targetTermRulesModal"
     height="auto"
     scrollable
-    width="800px"
+    :width="800"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <div class="title-row space-between">
       <div class="section-header">Term : {{ term.name }}</div>
       <el-tooltip effect="dark" content="Close Modal" placement="top">
-        <i class="fas fa-times close-modal-button" @click="hideModal" />
+        <i class="fas fa-times close-modal-button" @click="hideModal"/>
       </el-tooltip>
     </div>
     <div class="rules-menu-container">
@@ -20,39 +20,61 @@
         v-model="selectedRule"
         placeholder="Create New Rule"
         size="small"
+        filterable
         @change="createRule"
       >
         <el-option
           v-for="rule in rulesInDropdown"
           :key="rule.index"
           :label="rule.label"
-          :value="rule.value"
+          :value="rule.id"
         ></el-option>
       </el-select>
     </div>
     <component
-      :is="rule.type"
-      v-for="rule in ruleList"
+      :is="rule.value"
+      v-for="rule in renderedRules"
       :key="rule.id"
+      :parent-id="term.id"
+      :table-id="rule.id"
+      :parent-type="parentType"
       @delete-rule="deleteRule"
     ></component>
   </modal>
 </template>
 
 <script>
-import TicketingDates from '../Rules/TicketingDates';
-import TravelDates from '../Rules/TravelDates';
-import PointOfSale from '../Rules/PoS';
-import PointOfOrigin from '../Rules/PoO';
-import Market from '../Rules/Market';
-import MarketingAirline from '../Rules/MarketingAirline';
-import ValidatingAirline from '../Rules/ValidatingAirline';
-import OperatingAirline from '../Rules/OperatingAirline';
-
-import { ruleTypes } from '../Rules/helper';
+import TicketingDates from "../Rules/TicketingDates";
+import TravelDates from "../Rules/TravelDates";
+import PointOfSale from "../Rules/PoS";
+import PointOfOrigin from "../Rules/PoO";
+import Market from "../Rules/Market";
+import MarketingAirline from "../Rules/MarketingAirline";
+import ValidatingAirline from "../Rules/ValidatingAirline";
+import OperatingAirline from "../Rules/OperatingAirline";
+import { ruleTypes } from "../Rules/helper";
+import { TARGET_TERM_LOOKUP } from "@/graphql/constants";
+import { GET_RULE_LIST } from "@/graphql/queries";
 export default {
-  name: 'TargetTermRulesModal',
-  apollo: {},
+  name: "TargetTermRulesModal",
+  apollo: {
+    ruleList: {
+      query: GET_RULE_LIST,
+      variables() {
+        return {
+          parentId: this.term.id,
+          parentType: TARGET_TERM_LOOKUP.RULE_TYPE
+        };
+      },
+      result({ data }) {
+        if (data && this.term.id) {
+          this.renderedRules = data.ruleList.map(
+            ruleId => this.ruleTypes.filter(v => v.id === ruleId)[0]
+          );
+        }
+      }
+    }
+  },
   components: {
     TicketingDates,
     TravelDates,
@@ -66,36 +88,61 @@ export default {
   data() {
     return {
       term: {},
-      ruleTypes: ruleTypes,
+      parentType: TARGET_TERM_LOOKUP.RULE_TYPE,
+      ruleTypes,
       ruleList: [],
-      selectedRule: ''
+      renderedRules: [],
+      selectedRule: ""
     };
   },
   computed: {
     rulesInDropdown() {
-      return this.ruleTypes.filter(
-        rule => !this.ruleList.some(v => v.type === rule.value)
-      );
+      if (this.renderedRules.length) {
+        return this.ruleTypes.filter(
+          rule =>
+            !this.renderedRules.some(v => v.id === rule.id) &&
+            rule.targetTermRule
+        );
+      } else {
+        return this.ruleTypes.filter(rule => rule.targetTermRule);
+      }
     }
   },
   methods: {
     hideModal() {
-      this.$modal.hide('targetTermRulesModal');
+      this.$modal.hide("targetTermRulesModal");
     },
     createRule(selected) {
-      this.ruleList.push({
-        type: selected
-      });
-      this.selectedRule = '';
+      const match = this.ruleTypes.filter(rule => rule.id === selected)[0];
+      this.renderedRules.push(match);
+      this.selectedRule = "";
     },
-    deleteRule(ruleType) {
-      const matched = this.ruleList.filter(rule => rule.type === ruleType)[0];
-      this.ruleList.splice(this.ruleList.indexOf(matched), 1);
+    async deleteRule(ruleType) {
+      const matched = this.renderedRules.filter(
+        rule => rule.value === ruleType
+      )[0];
+      this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
+      //Call Apollo refetch of RuleList here!
+      const {
+        data: { ruleList }
+      } = await this.$apollo.query({
+        query: GET_RULE_LIST,
+        variables: {
+          parentId: this.term.id,
+          parentType: TARGET_TERM_LOOKUP.RULE_TYPE
+        }
+      });
+      this.data = ruleList;
     },
     beforeOpen(event) {
       this.term = event.params.term;
     },
-    beforeClose() {}
+    beforeClose() {
+      this.term = {};
+      this.renderedRules = [];
+      this.ruleList = [];
+      this.selectedRule = "";
+    }
   }
 };
 </script>

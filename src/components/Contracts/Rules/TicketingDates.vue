@@ -1,14 +1,8 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Ticketing Dates</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
@@ -36,24 +30,29 @@
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-        >{{ formatDate(rule.startDate) }} -
-        {{ formatDate(rule.endDate) }}</el-tag
       >
+        {{ formatDate(rule.startDate) }} -
+        {{ formatDate(rule.endDate) }}
+      </el-tag>
     </div>
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from '@/helper';
-import { GET_TICKETING_DATE_LIST } from '@/graphql/queries';
-import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
+import { formatDate, removeTypename } from "@/helper";
+import { GET_TICKETING_DATE_LIST } from "@/graphql/queries";
+import { UPDATE_TICKETING_DATES } from "@/graphql/mutations";
 export default {
-  name: 'TicketingDates',
+  name: "TicketingDates",
   props: {
     parentId: {
       default: null,
       type: Number
     },
     tableId: {
+      default: null,
+      type: Number
+    },
+    parentType: {
       default: null,
       type: Number
     }
@@ -63,7 +62,8 @@ export default {
       query: GET_TICKETING_DATE_LIST,
       variables() {
         return {
-          parentId: this.parentId
+          parentId: this.parentId,
+          parentType: this.parentType
         };
       },
       result({ data: { ticketingDateList } }) {
@@ -74,8 +74,8 @@ export default {
   data() {
     return {
       editMode: false,
-      startDate: '',
-      endDate: '',
+      startDate: "",
+      endDate: "",
       updateRule: null,
       ticketingDateList: []
     };
@@ -84,25 +84,29 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.ticketingDateList.length) {
-        this.$emit('delete-rule', 'TicketingDates');
+        this.$emit("delete-rule", "TicketingDates");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_TICKETING_DATES,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             ticketingDateList: this.ticketingDateList
           },
           refetchQueries: () => [
             {
               query: GET_TICKETING_DATE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         });
       }
       this.editMode = !this.editMode;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
       this.updateRule = null;
     },
     createTag() {
@@ -117,8 +121,8 @@ export default {
         endDate: new Date(this.endDate),
         isDeleted: false
       });
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     },
     async deleteTag(tag) {
       const idx = this.ticketingDateList.indexOf(tag);
@@ -129,12 +133,16 @@ export default {
           mutation: UPDATE_TICKETING_DATES,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             ticketingDateList: this.ticketingDateList
           },
           refetchQueries: () => [
             {
               query: GET_TICKETING_DATE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         })
@@ -143,7 +151,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.ticketingDateList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TicketingDates');
+            this.$emit("delete-rule", "TicketingDates");
           }
         });
     },
@@ -159,8 +167,8 @@ export default {
       this.ticketingDateList[ruleIndex].startDate = new Date(this.startDate);
       this.ticketingDateList[ruleIndex].endDate = new Date(this.endDate);
       this.updateRule = null;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     },
     formatDate(date) {
       return formatDate(date);
@@ -169,5 +177,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>

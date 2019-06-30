@@ -99,7 +99,7 @@ export default {
       fareBasisUnitList: [],
       basisType: null,
       exclude: false,
-      editMode: true,
+      editMode: false,
       value: "",
       position: null
     };

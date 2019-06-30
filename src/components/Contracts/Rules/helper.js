@@ -2,27 +2,32 @@ export const ruleTypes = [
   {
     value: 'TicketingDates',
     label: 'Ticketing Dates',
-    id: 1
+    id: 1,
+    targetTermRule: true
   },
   {
     value: 'TravelDates',
     label: 'Travel Dates',
-    id: 2
+    id: 2,
+    targetTermRule: true
   },
   {
     value: 'PointOfSale',
     label: 'Point Of Sale',
-    id: 3
+    id: 3,
+    targetTermRule: true
   },
   {
     value: 'PointOfOrigin',
     label: 'Point of Origin',
-    id: 4
+    id: 4,
+    targetTermRule: true
   },
   {
     value: 'Market',
     label: 'Market',
-    id: 5
+    id: 5,
+    targetTermRule: true
   },
   {
     value: 'PublishedFareBasis',
@@ -47,17 +52,20 @@ export const ruleTypes = [
   {
     value: 'MarketingAirline',
     label: 'Marketing Airline',
-    id: 10
+    id: 10,
+    targetTermRule: true
   },
   {
     value: 'ValidatingAirline',
     label: 'Validating Airline',
-    id: 11
+    id: 11,
+    targetTermRule: true
   },
   {
     value: 'OperatingAirline',
     label: 'Operating Airline',
-    id: 12
+    id: 12,
+    targetTermRule: true
   },
   {
     value: 'TicketDesignator',
@@ -70,7 +78,7 @@ export const ruleTypes = [
     id: 14
   },
   {
-    value: 'AdvancedTicketing',
+    value: 'AdvanceTicketing',
     label: 'Advanced Ticketing',
     id: 15
   },
@@ -118,10 +126,5 @@ export const ruleTypes = [
     value: 'Cabin',
     label: 'Cabin',
     id: 24
-  },
-  {
-    value: 'FareCategory',
-    label: 'Fare Category',
-    id: 25
   }
 ];
