@@ -11,7 +11,7 @@
     <div class="title-row space-between">
       <div class="section-header">Term : {{ term.name }}</div>
       <el-tooltip effect="dark" content="Close Modal" placement="top">
-        <i class="fas fa-times close-modal-button" @click="hideModal"/>
+        <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
     <div class="rules-menu-container">
@@ -44,19 +44,19 @@
 </template>
 
 <script>
-import TicketingDates from "../Rules/TicketingDates";
-import TravelDates from "../Rules/TravelDates";
-import PointOfSale from "../Rules/PoS";
-import PointOfOrigin from "../Rules/PoO";
-import Market from "../Rules/Market";
-import MarketingAirline from "../Rules/MarketingAirline";
-import ValidatingAirline from "../Rules/ValidatingAirline";
-import OperatingAirline from "../Rules/OperatingAirline";
-import { ruleTypes } from "../Rules/helper";
-import { TARGET_TERM_LOOKUP } from "@/graphql/constants";
-import { GET_RULE_LIST } from "@/graphql/queries";
+import TicketingDates from '../Rules/TicketingDates';
+import TravelDates from '../Rules/TravelDates';
+import PointOfSale from '../Rules/PoS';
+import PointOfOrigin from '../Rules/PoO';
+import Market from '../Rules/Market';
+import MarketingAirline from '../Rules/MarketingAirline';
+import ValidatingAirline from '../Rules/ValidatingAirline';
+import OperatingAirline from '../Rules/OperatingAirline';
+import { ruleTypes } from '../Rules/helper';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
+import { GET_RULE_LIST } from '@/graphql/queries';
 export default {
-  name: "TargetTermRulesModal",
+  name: 'TargetTermRulesModal',
   apollo: {
     ruleList: {
       query: GET_RULE_LIST,
@@ -92,7 +92,7 @@ export default {
       ruleTypes,
       ruleList: [],
       renderedRules: [],
-      selectedRule: ""
+      selectedRule: ''
     };
   },
   computed: {
@@ -110,12 +110,12 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide("targetTermRulesModal");
+      this.$modal.hide('targetTermRulesModal');
     },
     createRule(selected) {
       const match = this.ruleTypes.filter(rule => rule.id === selected)[0];
       this.renderedRules.push(match);
-      this.selectedRule = "";
+      this.selectedRule = '';
     },
     async deleteRule(ruleType) {
       const matched = this.renderedRules.filter(
@@ -141,7 +141,7 @@ export default {
       this.term = {};
       this.renderedRules = [];
       this.ruleList = [];
-      this.selectedRule = "";
+      this.selectedRule = '';
     }
   }
 };

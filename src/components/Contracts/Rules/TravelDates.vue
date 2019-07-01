@@ -47,7 +47,7 @@
 <script>
 import { formatDate, removeTypename } from '@/helper';
 import { GET_TRAVEL_DATE_LIST } from '@/graphql/queries';
-import { UPDATE_TRAVEL_DATES, DELETE_RULE } from '@/graphql/mutations';
+import { UPDATE_TRAVEL_DATES } from '@/graphql/mutations';
 export default {
   name: 'TravelDates',
   props: {

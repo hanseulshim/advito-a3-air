@@ -1,7 +1,11 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Corporate Fare Basis</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
@@ -19,10 +23,19 @@
           :value="item"
         ></el-option>
       </el-select>
-      <el-input v-model="value" size="mini" class="number-input" clearable/>
-      <label v-if="basisType && basisType.id === 86 ||  basisType && basisType.id === 87">Position:</label>
+      <el-input v-model="value" size="mini" class="number-input" clearable />
+      <label
+        v-if="
+          (basisType && basisType.id === 86) ||
+            (basisType && basisType.id === 87)
+        "
+        >Position:</label
+      >
       <el-input-number
-        v-if="basisType && basisType.id === 86 || basisType && basisType.id === 87"
+        v-if="
+          (basisType && basisType.id === 86) ||
+            (basisType && basisType.id === 87)
+        "
         v-model="position"
         size="mini"
         class="number-input"
@@ -30,7 +43,7 @@
         clearable
       />
       <label for="exclude">Exclude:</label>
-      <el-checkbox v-model="exclude" name="exclude"/>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -42,7 +55,8 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ getTagString(rule) }}</el-tag>
+        >{{ getTagString(rule) }}</el-tag
+      >
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -53,20 +67,21 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ getTagString(rule) }}</el-tag>
+        >{{ getTagString(rule) }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
+import { removeTypename } from '@/helper';
 import {
   GET_FARE_BASIS_LIST,
   GET_FARE_BASIS_UNIT_LIST
-} from "@/graphql/queries";
-import { UPDATE_FARE_BASIS_LIST } from "@/graphql/mutations";
-import { PRICING_TERM_LOOKUP } from "@/graphql/constants";
+} from '@/graphql/queries';
+import { UPDATE_FARE_BASIS_LIST } from '@/graphql/mutations';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
-  name: "CorporateFareBasis",
+  name: 'CorporateFareBasis',
   props: {
     parentId: {
       default: null,
@@ -100,7 +115,7 @@ export default {
       basisType: null,
       exclude: false,
       editMode: false,
-      value: "",
+      value: '',
       position: null
     };
   },
@@ -129,7 +144,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.fareBasisList.length) {
-        this.$emit("delete-rule", "CorporateFareBasis");
+        this.$emit('delete-rule', 'CorporateFareBasis');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_FARE_BASIS_LIST,
@@ -148,7 +163,7 @@ export default {
       }
       this.editMode = !this.editMode;
       this.basisType = null;
-      this.value = "";
+      this.value = '';
       this.position = null;
     },
     createTag() {
@@ -272,7 +287,7 @@ export default {
       }
 
       this.basisType = null;
-      this.value = "";
+      this.value = '';
       this.position = null;
     },
     async deleteTag(tag) {
@@ -299,7 +314,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.fareBasisList.length || !rulesRemaining) {
-            this.$emit("delete-rule", "CorporateFareBasis");
+            this.$emit('delete-rule', 'CorporateFareBasis');
           }
         });
     },
@@ -308,7 +323,7 @@ export default {
         return;
       } else {
         const propName = Object.keys(rule).filter(
-          key => key.includes("Value") && rule[key] !== null
+          key => key.includes('Value') && rule[key] !== null
         );
 
         const value = rule[propName];
@@ -317,7 +332,7 @@ export default {
           rule.basisType === 86 || rule.basisType === 87
             ? ` at position ${rule.containsPosition ||
                 rule.containsMultiplePosition}`
-            : ""
+            : ''
         }`;
       }
     }
@@ -325,5 +340,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

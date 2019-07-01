@@ -1,13 +1,29 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Max Stay</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Value:</label>
-      <el-input-number v-model="value" size="mini" class="number-input" :min="0" clearable/>
+      <el-input-number
+        v-model="value"
+        size="mini"
+        class="number-input"
+        :min="0"
+        clearable
+      />
       <label>Unit:</label>
-      <el-select v-model="unit" filterable placeholder="Select" size="mini" clearable>
+      <el-select
+        v-model="unit"
+        filterable
+        placeholder="Select"
+        size="mini"
+        clearable
+      >
         <el-option
           v-for="dayUnit in dayUnitList"
           :key="dayUnit.name"
@@ -25,16 +41,17 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ getTagString(rule) }}</el-tag>
+        >{{ getTagString(rule) }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
-import { GET_MAX_STAY_LIST, GET_DAY_UNIT_LIST } from "@/graphql/queries";
-import { UPDATE_MAX_STAY_LIST } from "@/graphql/mutations";
+import { removeTypename } from '@/helper';
+import { GET_MAX_STAY_LIST, GET_DAY_UNIT_LIST } from '@/graphql/queries';
+import { UPDATE_MAX_STAY_LIST } from '@/graphql/mutations';
 export default {
-  name: "MaxStay",
+  name: 'MaxStay',
   props: {
     parentId: {
       default: null,
@@ -74,7 +91,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.maxStayList.length) {
-        this.$emit("delete-rule", "MaxStay");
+        this.$emit('delete-rule', 'MaxStay');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_MAX_STAY_LIST,
@@ -131,7 +148,7 @@ export default {
         .then(() => {
           const rulesRemaining = this.maxStayList.some(rule => !rule.isDeleted);
           if (!this.maxStayList.length || !rulesRemaining) {
-            this.$emit("delete-rule", "MaxStay");
+            this.$emit('delete-rule', 'MaxStay');
           }
         });
     },
@@ -147,5 +164,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>
