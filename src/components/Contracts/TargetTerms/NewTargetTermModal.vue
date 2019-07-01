@@ -96,7 +96,13 @@
       >
         <div class="text-input-container qsi">
           <el-input v-model.number="form.qsi" />
-          <span>%</span>
+          <span>{{
+            form.targetTypeId === 21
+              ? '%'
+              : form.targetTypeId === 24
+              ? 'points'
+              : ''
+          }}</span>
         </div>
       </el-form-item>
       <el-form-item
@@ -246,7 +252,12 @@ export default {
   name: 'NewTargetTermModal',
   apollo: {
     targetTypeList: {
-      query: GET_TARGET_TYPE_LIST
+      query: GET_TARGET_TYPE_LIST,
+      result({ data: { targetTypeList } }) {
+        return (this.targetTypeList = targetTypeList.filter(
+          type => type.id !== 28
+        ));
+      }
     },
     incentiveTypeList: {
       query: GET_INCENTIVE_TYPE_LIST

@@ -181,7 +181,6 @@ export default {
 .scroll-container {
   height: 100%;
   overflow: auto;
-  padding-right: 25px;
 }
 
 .rules-menu-container {
