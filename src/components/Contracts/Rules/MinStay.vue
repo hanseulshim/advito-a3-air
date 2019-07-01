@@ -41,7 +41,7 @@
       >
         <el-option
           v-for="day in dayOfWeekUnitList"
-          :key="day.name"
+          :key="day.id"
           :label="day.name"
           :value="day.id"
         ></el-option>

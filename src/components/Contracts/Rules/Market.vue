@@ -84,6 +84,10 @@ export default {
     tableId: {
       default: null,
       type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
     }
   },
   apollo: {
@@ -94,7 +98,8 @@ export default {
       query: GET_MARKET_RULE_LIST,
       variables() {
         return {
-          parentId: this.parentId
+          parentId: this.parentId,
+          parentType: this.parentType
         };
       },
       result({ data: { marketList } }) {
@@ -129,12 +134,16 @@ export default {
           mutation: UPDATE_MARKET,
           variables: {
             parentId: this.parentId,
-            marketList: this.marketList
+            marketList: this.marketList,
+            parentType: this.parentType
           },
           refetchQueries: () => [
             {
               query: GET_MARKET_RULE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         });
@@ -172,12 +181,16 @@ export default {
           mutation: UPDATE_MARKET,
           variables: {
             parentId: this.parentId,
-            marketList: this.marketList
+            marketList: this.marketList,
+            parentType: this.parentType
           },
           refetchQueries: () => [
             {
               query: GET_MARKET_RULE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         })

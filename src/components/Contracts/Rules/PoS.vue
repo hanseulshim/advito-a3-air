@@ -54,6 +54,10 @@ export default {
     tableId: {
       default: null,
       type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
     }
   },
   apollo: {
@@ -64,7 +68,8 @@ export default {
       query: GET_POINT_OF_SALE_LIST,
       variables() {
         return {
-          parentId: this.parentId
+          parentId: this.parentId,
+          parentType: this.parentType
         };
       },
       result({ data: { pointOfSaleList } }) {
@@ -89,12 +94,16 @@ export default {
           mutation: UPDATE_POINT_OF_SALE,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             pointOfSaleList: this.pointOfSaleList
           },
           refetchQueries: () => [
             {
               query: GET_POINT_OF_SALE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         });
@@ -126,12 +135,16 @@ export default {
           mutation: UPDATE_POINT_OF_SALE,
           variables: {
             parentId: this.parentId,
-            pointOfSaleList: this.pointOfSaleList
+            pointOfSaleList: this.pointOfSaleList,
+            parentType: this.parentType
           },
           refetchQueries: () => [
             {
               query: GET_POINT_OF_SALE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         })

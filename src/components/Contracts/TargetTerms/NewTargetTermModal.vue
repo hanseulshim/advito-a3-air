@@ -45,11 +45,11 @@
         label="Currency *"
         prop="currencyId"
       >
-        <el-select v-model="form.currencyId" class="select-modal">
+        <el-select v-model="form.currencyId" filterable class="select-modal">
           <el-option
             v-for="item in currencyList"
             :key="item.id"
-            :label="item.name"
+            :label="`${item.name}  (${item.code})`"
             :value="item.id"
           ></el-option>
         </el-select>
@@ -266,10 +266,10 @@ export default {
         name: null,
         targetTypeId: null,
         currencyId: null,
-        cabinF: false,
-        cabinB: false,
-        cabinP: false,
-        cabinE: false,
+        cabinF: true,
+        cabinB: true,
+        cabinP: true,
+        cabinE: true,
         incentiveTypeId: TARGET_TERM_LOOKUP.NONE,
         qsi: 0,
         softTarget: null,

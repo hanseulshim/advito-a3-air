@@ -73,6 +73,10 @@ export default {
     tableId: {
       default: null,
       type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
     }
   },
   apollo: {
@@ -84,6 +88,7 @@ export default {
       variables() {
         return {
           parentId: this.parentId,
+          parentType: this.parentType,
           airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
         };
       },
@@ -118,6 +123,7 @@ export default {
           mutation: UPDATE_AIRLINE,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             airlineList: this.airlineList,
             airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
           },
@@ -126,6 +132,7 @@ export default {
               query: GET_AIRLINE_RULE_LIST,
               variables: {
                 parentId: this.parentId,
+                parentType: this.parentType,
                 airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
               }
             }
@@ -162,6 +169,7 @@ export default {
           mutation: UPDATE_AIRLINE,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             airlineList: this.airlineList,
             airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
           },
@@ -170,6 +178,7 @@ export default {
               query: GET_AIRLINE_RULE_LIST,
               variables: {
                 parentId: this.parentId,
+                parentType: this.parentType,
                 airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
               }
             }

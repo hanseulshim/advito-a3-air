@@ -54,6 +54,10 @@ export default {
     tableId: {
       default: null,
       type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
     }
   },
   apollo: {
@@ -64,7 +68,8 @@ export default {
       query: GET_POINT_OF_ORIGIN_LIST,
       variables() {
         return {
-          parentId: this.parentId
+          parentId: this.parentId,
+          parentType: this.parentType
         };
       },
       result({ data: { pointOfOriginList } }) {
@@ -89,12 +94,16 @@ export default {
           mutation: UPDATE_POINT_OF_ORIGIN,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             pointOfOriginList: this.pointOfOriginList
           },
           refetchQueries: () => [
             {
               query: GET_POINT_OF_ORIGIN_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         });
@@ -126,12 +135,16 @@ export default {
           mutation: UPDATE_POINT_OF_ORIGIN,
           variables: {
             parentId: this.parentId,
-            pointOfOriginList: this.pointOfOriginList
+            pointOfOriginList: this.pointOfOriginList,
+            parentType: this.parentType
           },
           refetchQueries: () => [
             {
               query: GET_POINT_OF_ORIGIN_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         })

@@ -45,7 +45,7 @@
           <el-option
             v-for="item in currencyList"
             :key="item.id"
-            :label="item.name"
+            :label="`${item.name}  (${item.code})`"
             :value="item.id"
           ></el-option>
         </el-select>

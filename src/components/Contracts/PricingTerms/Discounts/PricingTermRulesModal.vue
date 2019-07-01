@@ -2,44 +2,45 @@
   <modal
     classes="modal-container"
     name="pricingTermRulesModal"
-    height="auto"
-    scrollable
+    :height="600"
     width="800px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
-    <div class="title-row space-between">
-      <div class="section-header">Discount : {{ discount.name }}</div>
-      <el-tooltip effect="dark" content="Close Modal" placement="top">
-        <i class="fas fa-times close-modal-button" @click="hideModal" />
-      </el-tooltip>
+    <div class="scroll-container">
+      <div class="title-row space-between">
+        <div class="section-header">Discount : {{ discount.name }}</div>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
+        </el-tooltip>
+      </div>
+      <div class="rules-menu-container">
+        <p class="rule-count">{{ `${renderedRules.length} Rules` }}</p>
+        <el-select
+          v-model="selectedRule"
+          placeholder="Create New Rule"
+          size="small"
+          filterable
+          @change="createRule"
+        >
+          <el-option
+            v-for="rule in rulesInDropdown"
+            :key="rule.index"
+            :label="rule.label"
+            :value="rule.id"
+          ></el-option>
+        </el-select>
+      </div>
+      <component
+        :is="rule.value"
+        v-for="rule in renderedRules"
+        :key="rule.id"
+        :parent-id="discount.id"
+        :table-id="rule.id"
+        :parent-type="parentType"
+        @delete-rule="deleteRule"
+      ></component>
     </div>
-    <div class="rules-menu-container">
-      <p class="rule-count">{{ `${renderedRules.length} Rules` }}</p>
-      <el-select
-        v-model="selectedRule"
-        placeholder="Create New Rule"
-        size="small"
-        filterable
-        @change="createRule"
-      >
-        <el-option
-          v-for="rule in rulesInDropdown"
-          :key="rule.index"
-          :label="rule.label"
-          :value="rule.id"
-        ></el-option>
-      </el-select>
-    </div>
-    <component
-      :is="rule.value"
-      v-for="rule in renderedRules"
-      :key="rule.id"
-      :parent-id="discount.id"
-      :table-id="rule.id"
-      :parent-type="parentType"
-      @delete-rule="deleteRule"
-    ></component>
   </modal>
 </template>
 
@@ -177,6 +178,12 @@ export default {
 };
 </script>
 <style lang="scss">
+.scroll-container {
+  height: 100%;
+  overflow: auto;
+  padding-right: 25px;
+}
+
 .rules-menu-container {
   display: flex;
   justify-content: space-between;

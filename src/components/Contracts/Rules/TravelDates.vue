@@ -58,6 +58,10 @@ export default {
     tableId: {
       default: null,
       type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
     }
   },
   apollo: {
@@ -65,7 +69,8 @@ export default {
       query: GET_TRAVEL_DATE_LIST,
       variables() {
         return {
-          parentId: this.parentId
+          parentId: this.parentId,
+          parentType: this.parentType
         };
       },
       result({ data: { travelDateList } }) {
@@ -91,12 +96,16 @@ export default {
           mutation: UPDATE_TRAVEL_DATES,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             travelDateList: this.travelDateList
           },
           refetchQueries: () => [
             {
               query: GET_TRAVEL_DATE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         });
@@ -130,12 +139,16 @@ export default {
           mutation: UPDATE_TRAVEL_DATES,
           variables: {
             parentId: this.parentId,
+            parentType: this.parentType,
             travelDateList: this.travelDateList
           },
           refetchQueries: () => [
             {
               query: GET_TRAVEL_DATE_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
             }
           ]
         })
