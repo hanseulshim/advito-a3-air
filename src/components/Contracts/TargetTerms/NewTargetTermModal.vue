@@ -45,11 +45,11 @@
         label="Currency *"
         prop="currencyId"
       >
-        <el-select v-model="form.currencyId" class="select-modal">
+        <el-select v-model="form.currencyId" filterable class="select-modal">
           <el-option
             v-for="item in currencyList"
             :key="item.id"
-            :label="item.name"
+            :label="`${item.name}  (${item.code})`"
             :value="item.id"
           ></el-option>
         </el-select>
@@ -96,7 +96,13 @@
       >
         <div class="text-input-container qsi">
           <el-input v-model.number="form.qsi" />
-          <span>%</span>
+          <span>{{
+            form.targetTypeId === 21
+              ? '%'
+              : form.targetTypeId === 24
+              ? 'points'
+              : ''
+          }}</span>
         </div>
       </el-form-item>
       <el-form-item
@@ -246,7 +252,12 @@ export default {
   name: 'NewTargetTermModal',
   apollo: {
     targetTypeList: {
-      query: GET_TARGET_TYPE_LIST
+      query: GET_TARGET_TYPE_LIST,
+      result({ data: { targetTypeList } }) {
+        return (this.targetTypeList = targetTypeList.filter(
+          type => type.id !== 28
+        ));
+      }
     },
     incentiveTypeList: {
       query: GET_INCENTIVE_TYPE_LIST
@@ -266,10 +277,10 @@ export default {
         name: null,
         targetTypeId: null,
         currencyId: null,
-        cabinF: false,
-        cabinB: false,
-        cabinP: false,
-        cabinE: false,
+        cabinF: true,
+        cabinB: true,
+        cabinP: true,
+        cabinE: true,
         incentiveTypeId: TARGET_TERM_LOOKUP.NONE,
         qsi: 0,
         softTarget: null,

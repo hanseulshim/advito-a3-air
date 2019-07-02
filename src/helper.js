@@ -34,6 +34,12 @@ export const pluralize = (word, count) => {
     : `${count} ${word}`;
 };
 
+export const removeTypename = payload => {
+  return payload.forEach(v => {
+    delete v.__typename;
+  });
+};
+
 export const checkToken = router => {
   const localToken = localStorage.getItem('air-session-token');
   if (localToken) {

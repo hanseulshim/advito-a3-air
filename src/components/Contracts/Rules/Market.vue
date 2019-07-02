@@ -4,43 +4,43 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
-      <label>Origin: </label>
+      <label>Origin:</label>
       <el-select
         v-model="origin"
         filterable
         placeholder="Select"
         size="mini"
         clearable
+        value-key="name"
       >
         <el-option
-          v-for="country in countries"
+          v-for="country in geographyRuleList"
           :key="country.index"
           :label="country.name"
-          :value="country.code"
+          :value="country"
         ></el-option>
       </el-select>
-      <label>Destination: </label>
+      <label>Destination:</label>
       <el-select
-        v-model="destination"
+        v-model="arrival"
         filterable
         placeholder="Select"
         size="mini"
         clearable
+        value-key="name"
       >
         <el-option
-          v-for="country in countries"
+          v-for="country in geographyRuleList"
           :key="country.index"
           :label="country.name"
-          :value="country.code"
+          :value="country"
         ></el-option>
       </el-select>
-      <label> Exclude: </label>
+      <label>Exclude:</label>
       <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
@@ -53,7 +53,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ `${rule.origin} - ${rule.destination}` }}</el-tag
+        >{{ `${rule.origin} - ${rule.arrival}` }}</el-tag
       >
     </div>
     <div class="rule-tags">
@@ -65,56 +65,141 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ `${rule.origin} - ${rule.destination}` }}</el-tag
+        >{{ `${rule.origin} - ${rule.arrival}` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { countries } from './helper';
+import { removeTypename } from '@/helper';
+import { GET_GEO_LIST, GET_MARKET_RULE_LIST } from '@/graphql/queries';
+import { UPDATE_MARKET } from '@/graphql/mutations';
 export default {
   name: 'Market',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    geographyRuleList: {
+      query: GET_GEO_LIST
+    },
+    marketList: {
+      query: GET_MARKET_RULE_LIST,
+      variables() {
+        return {
+          parentId: this.parentId,
+          parentType: this.parentType
+        };
+      },
+      result({ data: { marketList } }) {
+        return removeTypename(marketList);
+      }
+    }
+  },
   data() {
     return {
-      countries,
+      geographyRuleList: [],
       exclude: false,
-      editMode: true,
-      origin: '',
-      destination: '',
-      rules: []
+      editMode: false,
+      origin: {},
+      arrival: {},
+      marketList: []
     };
   },
   computed: {
     excludedRules() {
-      return this.rules.filter(rule => rule.exclude);
+      return this.marketList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.rules.filter(rule => !rule.exclude);
+      return this.marketList.filter(rule => !rule.exclude);
     }
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.marketList.length) {
         this.$emit('delete-rule', 'Market');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_MARKET,
+          variables: {
+            parentId: this.parentId,
+            marketList: this.marketList,
+            parentType: this.parentType
+          },
+          refetchQueries: () => [
+            {
+              query: GET_MARKET_RULE_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.origin = {};
+      this.arrival = {};
     },
     createTag() {
-      this.rules.push({
-        origin: this.origin,
-        destination: this.destination,
-        exclude: this.exclude
+      const ruleContainerId = this.marketList.length
+        ? this.marketList[0].ruleContainerId
+        : null;
+
+      this.marketList.push({
+        id: null,
+        ruleContainerId,
+        origin: this.origin.name,
+        originType: this.origin.locationType,
+        arrival: this.arrival.name,
+        arrivalType: this.arrival.locationType,
+        exclude: this.exclude,
+        isDeleted: false
       });
 
-      this.origin = '';
-      this.destination = '';
+      this.selectedCountry = [];
+      this.origin = {};
+      this.arrival = {};
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'Market');
-      }
+    async deleteTag(tag) {
+      const idx = this.marketList.indexOf(tag);
+      this.marketList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_MARKET,
+          variables: {
+            parentId: this.parentId,
+            marketList: this.marketList,
+            parentType: this.parentType
+          },
+          refetchQueries: () => [
+            {
+              query: GET_MARKET_RULE_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.marketList.some(rule => !rule.isDeleted);
+          if (!this.marketList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'Market');
+          }
+        });
     }
   }
 };

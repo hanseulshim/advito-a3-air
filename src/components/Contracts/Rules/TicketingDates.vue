@@ -4,11 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
@@ -16,7 +14,6 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="dd-MMM-yyyy"
       ></el-date-picker>
       <el-date-picker
         v-model="endDate"
@@ -24,54 +21,92 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="dd-MMM-yyyy"
       ></el-date-picker>
       <button v-if="!updateRule" @click="createTag">Add</button>
-      <button v-if="updateRule" @click="updateTag">
-        Update
-      </button>
+      <button v-if="updateRule" @click="updateTag">Update</button>
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in ticketingDateList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-        >{{ rule.start }} - {{ rule.end }}</el-tag
       >
+        {{ formatDate(rule.startDate) }} -
+        {{ formatDate(rule.endDate) }}
+      </el-tag>
     </div>
   </div>
 </template>
 <script>
-import { formatDate } from '../../../helper';
+import { formatDate, removeTypename } from '@/helper';
+import { GET_TICKETING_DATE_LIST } from '@/graphql/queries';
+import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
 export default {
   name: 'TicketingDates',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    ticketingDateList: {
+      query: GET_TICKETING_DATE_LIST,
+      variables() {
+        return {
+          parentId: this.parentId,
+          parentType: this.parentType
+        };
+      },
+      result({ data: { ticketingDateList } }) {
+        return removeTypename(ticketingDateList);
+      }
+    }
+  },
   data() {
     return {
       editMode: false,
       startDate: '',
       endDate: '',
       updateRule: null,
-      rules: [
-        {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
-        },
-        {
-          start: '04 JUN 2018',
-          end: '31 DEC 2019'
-        }
-      ]
+      ticketingDateList: []
     };
   },
+
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.ticketingDateList.length) {
         this.$emit('delete-rule', 'TicketingDates');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_TICKETING_DATES,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType,
+            ticketingDateList: this.ticketingDateList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TICKETING_DATE_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
       this.startDate = '';
@@ -79,36 +114,68 @@ export default {
       this.updateRule = null;
     },
     createTag() {
-      const start = formatDate(this.startDate);
-      const end = formatDate(this.endDate);
+      const ruleContainerId = this.ticketingDateList.length
+        ? this.ticketingDateList[0].ruleContainerId
+        : null;
 
-      this.rules.push({
-        start,
-        end
+      this.ticketingDateList.push({
+        id: null,
+        ruleContainerId,
+        startDate: new Date(this.startDate),
+        endDate: new Date(this.endDate),
+        isDeleted: false
       });
       this.startDate = '';
       this.endDate = '';
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'TicketingDates');
-      }
+    async deleteTag(tag) {
+      const idx = this.ticketingDateList.indexOf(tag);
+      this.ticketingDateList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_TICKETING_DATES,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType,
+            ticketingDateList: this.ticketingDateList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TICKETING_DATE_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.ticketingDateList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.ticketingDateList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'TicketingDates');
+          }
+        });
     },
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = new Date(rule.start);
-        this.endDate = new Date(rule.end);
+        this.startDate = new Date(rule.startDate);
+        this.endDate = new Date(rule.endDate);
       } else return;
     },
     updateTag() {
-      const ruleIndex = this.rules.indexOf(this.updateRule);
-      this.rules[ruleIndex].start = formatDate(this.startDate);
-      this.rules[ruleIndex].end = formatDate(this.endDate);
+      const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
+      this.ticketingDateList[ruleIndex].startDate = new Date(this.startDate);
+      this.ticketingDateList[ruleIndex].endDate = new Date(this.endDate);
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';
+    },
+    formatDate(date) {
+      return formatDate(date);
     }
   }
 };

@@ -4,9 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -19,64 +19,143 @@
         multiple
       >
         <el-option
-          v-for="item in countries"
-          :key="item.value"
+          v-for="item in geographyRuleList"
+          :key="item.name"
           :label="item.name"
-          :value="item.name"
+          :value="item.code"
         ></el-option>
       </el-select>
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in pointOfOriginList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.code }}</el-tag
+        >{{ rule.countryCode }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { countries } from './helper';
+import { removeTypename } from '@/helper';
+import { GET_GEO_LIST, GET_POINT_OF_ORIGIN_LIST } from '@/graphql/queries';
+import { UPDATE_POINT_OF_ORIGIN } from '@/graphql/mutations';
 export default {
   name: 'PointOfOrigin',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    geographyRuleList: {
+      query: GET_GEO_LIST
+    },
+    pointOfOriginList: {
+      query: GET_POINT_OF_ORIGIN_LIST,
+      variables() {
+        return {
+          parentId: this.parentId,
+          parentType: this.parentType
+        };
+      },
+      result({ data: { pointOfOriginList } }) {
+        return removeTypename(pointOfOriginList);
+      }
+    }
+  },
   data() {
     return {
-      countries,
-      editMode: true,
+      geographyRuleList: [],
+      editMode: false,
       selectedCountry: [],
-      rules: []
+      pointOfOriginList: []
     };
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.pointOfOriginList.length) {
         this.$emit('delete-rule', 'PointOfOrigin');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_POINT_OF_ORIGIN,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType,
+            pointOfOriginList: this.pointOfOriginList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_POINT_OF_ORIGIN_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
     },
     createTag() {
-      this.selectedCountry.map(country => {
-        let matched = this.countries.filter(v => v.name === country)[0];
+      const ruleContainerId = this.pointOfOriginList.length
+        ? this.pointOfOriginList[0].ruleContainerId
+        : null;
 
-        this.rules.push({
-          name: matched.name,
-          code: matched.code
+      this.selectedCountry.map(country => {
+        this.pointOfOriginList.push({
+          id: null,
+          countryCode: country,
+          ruleContainerId,
+          isDeleted: false
         });
       });
 
       this.selectedCountry = [];
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'PointOfOrigin');
-      }
+    async deleteTag(tag) {
+      const idx = this.pointOfOriginList.indexOf(tag);
+      this.pointOfOriginList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_POINT_OF_ORIGIN,
+          variables: {
+            parentId: this.parentId,
+            pointOfOriginList: this.pointOfOriginList,
+            parentType: this.parentType
+          },
+          refetchQueries: () => [
+            {
+              query: GET_POINT_OF_ORIGIN_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType
+              }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.pointOfOriginList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.pointOfOriginList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'PointOfOrigin');
+          }
+        });
     }
   }
 };

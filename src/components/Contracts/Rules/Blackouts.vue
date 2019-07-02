@@ -4,9 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -16,7 +16,6 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="dd-MMM-yyyy"
       ></el-date-picker>
       <el-date-picker
         v-model="endDate"
@@ -24,7 +23,6 @@
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
-        format="dd-MMM-yyyy"
       ></el-date-picker>
       <button v-if="!updateRule" @click="createTag">Add</button>
       <button v-if="updateRule" @click="updateTag">
@@ -33,36 +31,76 @@
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in blackoutList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-        >{{ rule.start }} - {{ rule.end }}</el-tag
+        >{{ formatDate(rule.startDate) }} -
+        {{ formatDate(rule.endDate) }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { formatDate } from '../../../helper';
+import { formatDate, removeTypename } from '@/helper';
+import { GET_BLACKOUT_LIST } from '@/graphql/queries';
+import { UPDATE_BLACKOUT_LIST } from '@/graphql/mutations';
+
 export default {
   name: 'Blackouts',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    blackoutList: {
+      query: GET_BLACKOUT_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { blackoutList } }) {
+        return removeTypename(blackoutList);
+      }
+    }
+  },
   data() {
     return {
-      editMode: true,
+      editMode: false,
       startDate: '',
       endDate: '',
       updateRule: null,
-      rules: []
+      blackoutList: []
     };
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.blackoutList.length) {
         this.$emit('delete-rule', 'Blackouts');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_BLACKOUT_LIST,
+          variables: {
+            parentId: this.parentId,
+            blackoutList: this.blackoutList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_BLACKOUT_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
       this.startDate = '';
@@ -70,21 +108,46 @@ export default {
       this.updateRule = null;
     },
     createTag() {
-      const start = formatDate(this.startDate);
-      const end = formatDate(this.endDate);
+      const ruleContainerId = this.blackoutList.length
+        ? this.blackoutList[0].ruleContainerId
+        : null;
 
-      this.rules.push({
-        start,
-        end
+      this.blackoutList.push({
+        id: null,
+        ruleContainerId,
+        startDate: new Date(this.startDate),
+        endDate: new Date(this.endDate),
+        isDeleted: false
       });
       this.startDate = '';
       this.endDate = '';
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'Blackouts');
-      }
+    async deleteTag(tag) {
+      const idx = this.blackoutList.indexOf(tag);
+      this.blackoutList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_BLACKOUT_LIST,
+          variables: {
+            parentId: this.parentId,
+            blackoutList: this.blackoutList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_BLACKOUT_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.blackoutList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.blackoutList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'Blackouts');
+          }
+        });
     },
     editTag(rule) {
       if (this.editMode) {
@@ -94,12 +157,15 @@ export default {
       } else return;
     },
     updateTag() {
-      const ruleIndex = this.rules.indexOf(this.updateRule);
-      this.rules[ruleIndex].start = formatDate(this.startDate);
-      this.rules[ruleIndex].end = formatDate(this.endDate);
+      const ruleIndex = this.blackoutList.indexOf(this.updateRule);
+      this.blackoutList[ruleIndex].start = formatDate(this.startDate);
+      this.blackoutList[ruleIndex].end = formatDate(this.endDate);
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';
+    },
+    formatDate(date) {
+      return formatDate(date);
     }
   }
 };

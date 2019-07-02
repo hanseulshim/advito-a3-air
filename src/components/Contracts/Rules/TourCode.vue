@@ -4,58 +4,126 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
-      <el-input v-model="tourcode" size="mini" class="number-input" clearable />
+      <el-input v-model="tourCode" size="mini" class="number-input" clearable />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in tourCodeList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ ` ${rule.tourcode}` }}</el-tag
+        >{{ ` ${rule.tourCode}` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import { GET_TOUR_CODE_LIST } from '@/graphql/queries';
+import { UPDATE_TOUR_CODE_LIST } from '@/graphql/mutations';
 export default {
   name: 'TourCode',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    tourCodeList: {
+      query: GET_TOUR_CODE_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { tourCodeList } }) {
+        return removeTypename(tourCodeList);
+      }
+    }
+  },
   data() {
     return {
-      editMode: true,
-      tourcode: '',
-      rules: []
+      editMode: false,
+      tourCode: '',
+      tourCodeList: []
     };
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.tourCodeList.length) {
         this.$emit('delete-rule', 'TourCode');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_TOUR_CODE_LIST,
+          variables: {
+            parentId: this.parentId,
+            tourCodeList: this.tourCodeList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TOUR_CODE_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.tourCode = '';
     },
     createTag() {
-      this.rules.push({
-        tourcode: this.tourcode
+      const ruleContainerId = this.tourCodeList.length
+        ? this.tourCodeList[0].ruleContainerId
+        : null;
+
+      this.tourCodeList.push({
+        id: null,
+        ruleContainerId,
+        tourCode: this.tourCode,
+        isDeleted: false
       });
 
-      this.tourcode = '';
+      this.tourCode = '';
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'TourCode');
-      }
+    async deleteTag(tag) {
+      const idx = this.tourCodeList.indexOf(tag);
+      this.tourCodeList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_TOUR_CODE_LIST,
+          variables: {
+            parentId: this.parentId,
+            tourCodeList: this.tourCodeList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TOUR_CODE_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.tourCodeList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.tourCodeList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'TourCode');
+          }
+        });
     }
   }
 };

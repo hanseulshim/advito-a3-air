@@ -54,7 +54,7 @@ export default {
         targetTermId: null,
         targetAmount: null,
         incentiveDescription: null,
-        scoringTarget: false
+        scoringTarget: true
       },
       rules: {
         targetAmount: [

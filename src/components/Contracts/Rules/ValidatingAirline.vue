@@ -4,9 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
+    <button v-if="editMode" class="save-rule" @click="saveRules">
       Save
     </button>
     <div v-if="editMode" class="control-row">
@@ -19,7 +19,7 @@
         multiple
       >
         <el-option
-          v-for="item in airlines"
+          v-for="item in airlineCodeList"
           :key="item.code"
           :label="item.name"
           :value="item.code"
@@ -38,7 +38,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.name }}</el-tag
+        >{{ rule.carrierCode }}</el-tag
       >
     </div>
     <div class="rule-tags">
@@ -50,55 +50,146 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.name }}</el-tag
+        >{{ rule.carrierCode }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
-import { airlines } from './helper';
+import { removeTypename } from '@/helper';
+import {
+  GET_AIRLINE_CODE_LIST,
+  GET_AIRLINE_RULE_LIST
+} from '@/graphql/queries';
+import { UPDATE_AIRLINE } from '@/graphql/mutations';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
   name: 'ValidatingAirline',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    },
+    parentType: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    airlineCodeList: {
+      query: GET_AIRLINE_CODE_LIST
+    },
+    airlineList: {
+      query: GET_AIRLINE_RULE_LIST,
+      variables() {
+        return {
+          parentId: this.parentId,
+          parentType: this.parentType,
+          airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+        };
+      },
+      result({ data: { airlineList } }) {
+        return removeTypename(airlineList);
+      }
+    }
+  },
   data() {
     return {
-      airlines,
+      airlineCodeList: [],
+      airlineList: [],
       exclude: false,
-      editMode: true,
-      selectedAirline: [],
-      rules: []
+      editMode: false,
+      selectedAirline: []
     };
   },
   computed: {
     excludedRules() {
-      return this.rules.filter(rule => rule.exclude);
+      return this.airlineList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.rules.filter(rule => !rule.exclude);
+      return this.airlineList.filter(rule => !rule.exclude);
     }
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.airlineList.length) {
         this.$emit('delete-rule', 'ValidatingAirline');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_AIRLINE,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType,
+            airlineList: this.airlineList,
+            airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+          },
+          refetchQueries: () => [
+            {
+              query: GET_AIRLINE_RULE_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType,
+                airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+              }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.selectedAirline = [];
     },
     createTag() {
+      const ruleContainerId = this.airlineList.length
+        ? this.airlineList[0].ruleContainerId
+        : null;
+
       this.selectedAirline.map(v => {
-        this.rules.push({
-          name: v,
-          exclude: this.exclude
+        this.airlineList.push({
+          id: null,
+          ruleContainerId,
+          ruleType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE,
+          carrierCode: v,
+          exclude: this.exclude,
+          isDeleted: false
         });
       });
 
       this.selectedAirline = [];
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'ValidatingAirline');
-      }
+    async deleteTag(tag) {
+      const idx = this.airlineList.indexOf(tag);
+      this.airlineList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_AIRLINE,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType,
+            airlineList: this.airlineList,
+            airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+          },
+          refetchQueries: () => [
+            {
+              query: GET_AIRLINE_RULE_LIST,
+              variables: {
+                parentId: this.parentId,
+                parentType: this.parentType,
+                airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+              }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.airlineList.some(rule => !rule.isDeleted);
+          if (!this.airlineList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'ValidatingAirline');
+          }
+        });
     }
   }
 };
