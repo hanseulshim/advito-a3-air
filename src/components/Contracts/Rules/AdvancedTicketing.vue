@@ -1,89 +1,160 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Advanced Ticketing</p>
+    <p class="rule-title">Advance Ticketing</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
-      <label>Within: </label>
-      <el-input
-        v-model="timeframe"
+      <label>Within:</label>
+      <el-inputNumber
+        v-model="endRange"
         size="mini"
+        :min="0"
         class="number-input"
-        type="number"
         clearable
-        min="0"
       />
-      <label>Unit: </label>
+      <label>Unit:</label>
       <el-select
         v-model="selectedUnit"
         filterable
         placeholder="Select"
         size="mini"
         clearable
+        disabled
       >
         <el-option
           v-for="unit in units"
-          :key="unit"
-          :label="unit"
-          :value="unit"
+          :key="unit.label"
+          :label="unit.label"
+          :value="unit.value"
         ></el-option>
       </el-select>
-
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in advancedTicketingList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ `Within ${rule.timeframe} ${rule.unit}` }}</el-tag
+        >{{ `Within ${rule.endRange} Days` }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
+import { TIME_UNIT_LOOKUP } from '@/graphql/constants';
+import { removeTypename } from '@/helper';
+import { GET_ADVANCED_TICKETING_LIST } from '@/graphql/queries';
+import { UPDATE_ADVANCED_TICKETING_LIST } from '@/graphql/mutations';
 export default {
-  name: 'AdvancedTicketing',
-  apollo: {},
+  name: 'AdvanceTicketing',
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    advancedTicketingList: {
+      query: GET_ADVANCED_TICKETING_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { advancedTicketingList } }) {
+        return removeTypename(advancedTicketingList);
+      }
+    }
+  },
   data() {
     return {
-      units: ['Hours', 'Days', 'Months'],
-      selectedUnit: '',
-      editMode: true,
-      timeframe: null,
-      rules: []
+      units: [
+        { label: 'Hours', value: TIME_UNIT_LOOKUP.HOURS },
+        { label: 'Days', value: TIME_UNIT_LOOKUP.DAYS },
+        { label: 'Months', value: TIME_UNIT_LOOKUP.MONTHS }
+      ],
+      selectedUnit: TIME_UNIT_LOOKUP.DAYS,
+      editMode: false,
+      startRange: 0,
+      endRange: null,
+      advancedTicketingList: []
     };
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
-        this.$emit('delete-rule', 'AdvancedTicketing');
+    async saveRules() {
+      if (this.editMode && !this.advancedTicketingList.length) {
+        this.$emit('delete-rule', 'AdvanceTicketing');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_ADVANCED_TICKETING_LIST,
+          variables: {
+            parentId: this.parentId,
+            advancedTicketingList: this.advancedTicketingList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_ADVANCED_TICKETING_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.endRange = null;
     },
     createTag() {
-      this.rules.push({
-        timeframe: this.timeframe,
-        unit: this.selectedUnit
+      const ruleContainerId = this.advancedTicketingList.length
+        ? this.advancedTicketingList[0].ruleContainerId
+        : null;
+
+      this.advancedTicketingList.push({
+        id: null,
+        ruleContainerId,
+        startRange: this.startRange,
+        endRange: this.endRange,
+        unit: this.selectedUnit,
+        isDeleted: false
       });
 
-      this.timeframe = null;
-      this.selectedUnit = '';
+      this.endRange = null;
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'AdvancedTicketing');
-      }
+    async deleteTag(tag) {
+      const idx = this.advancedTicketingList.indexOf(tag);
+      this.advancedTicketingList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_ADVANCED_TICKETING_LIST,
+          variables: {
+            parentId: this.parentId,
+            advancedTicketingList: this.advancedTicketingList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_ADVANCED_TICKETING_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.advancedTicketingList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.advancedTicketingList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'AdvanceTicketing');
+          }
+        });
     }
   }
 };

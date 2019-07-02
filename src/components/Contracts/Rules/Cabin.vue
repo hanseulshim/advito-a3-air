@@ -4,11 +4,9 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
         v-model="selectedCabins"
@@ -25,25 +23,65 @@
           :value="cabin"
         ></el-option>
       </el-select>
+      <label>Exclude:</label>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
+      <label v-if="includedRules.length">Included:</label>
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in includedRules"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule }}</el-tag
+        >{{ rule.cabin }}</el-tag
+      >
+    </div>
+    <div class="rule-tags">
+      <label v-if="excludedRules.length">Excluded:</label>
+      <el-tag
+        v-for="rule in excludedRules"
+        :key="rule.index"
+        type="info"
+        size="small"
+        closable
+        @close="deleteTag(rule)"
+        >{{ rule.cabin }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import { GET_CABIN_LIST } from '@/graphql/queries';
+import { UPDATE_CABIN_LIST } from '@/graphql/mutations';
 export default {
   name: 'Cabin',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    cabinList: {
+      query: GET_CABIN_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { cabinList } }) {
+        return removeTypename(cabinList);
+      }
+    }
+  },
   data() {
     return {
       cabins: [
@@ -54,41 +92,88 @@ export default {
         'Cabin P',
         'Cabin Y'
       ],
-      editMode: true,
       selectedCabins: [],
-      rules: []
+      cabinList: [],
+      exclude: false,
+      editMode: false
     };
   },
   computed: {
     cabinsInDropdown() {
-      return this.cabins.filter(cabin => !this.rules.includes(cabin));
+      return this.cabins.filter(
+        cabin => !this.cabinList.some(v => v.cabin === cabin)
+      );
+    },
+    excludedRules() {
+      return this.cabinList.filter(rule => rule.exclude);
+    },
+    includedRules() {
+      return this.cabinList.filter(rule => !rule.exclude);
     }
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.cabinList.length) {
         this.$emit('delete-rule', 'Cabin');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_CABIN_LIST,
+          variables: {
+            parentId: this.parentId,
+            cabinList: this.cabinList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CABIN_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.selectedCabins = [];
     },
     createTag() {
-      this.selectedCabins.map(v => {
-        const repeat = this.rules.includes(v);
+      const ruleContainerId = this.cabinList.length
+        ? this.cabinList[0].ruleContainerId
+        : null;
 
-        if (repeat) {
-          return;
-        } else {
-          this.rules.push(v);
-        }
-      });
+      this.selectedCabins.map(v =>
+        this.cabinList.push({
+          id: null,
+          ruleContainerId,
+          cabin: v,
+          exclude: this.exclude,
+          isDeleted: false
+        })
+      );
 
       this.selectedCabins = [];
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'Cabin');
-      }
+    async deleteTag(tag) {
+      const idx = this.cabinList.indexOf(tag);
+      this.cabinList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_CABIN_LIST,
+          variables: {
+            parentId: this.parentId,
+            cabinList: this.cabinList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_CABIN_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.cabinList.some(rule => !rule.isDeleted);
+          if (!this.cabinList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'Cabin');
+          }
+        });
     }
   }
 };

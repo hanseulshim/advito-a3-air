@@ -4,118 +4,200 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
-      <label>Value: </label>
-      <el-input
+      <label>Value:</label>
+      <el-input-number
         v-model="value"
         size="mini"
         class="number-input"
-        type="number"
-        min="0"
+        :min="0"
         clearable
       />
-      <label>Unit: </label>
+      <label>Unit:</label>
       <el-select
-        v-model="selectedUnit"
+        v-model="unit"
         filterable
         placeholder="Select"
         size="mini"
         clearable
       >
         <el-option
-          v-for="unit in units"
-          :key="unit"
-          :label="unit"
-          :value="unit"
+          v-for="dayUnit in dayUnitList"
+          :key="dayUnit.name"
+          :label="dayUnit.name"
+          :value="dayUnit.id"
         ></el-option>
       </el-select>
-      <label>Include Day of the week: </label>
+      <label>Include Day of the week:</label>
       <el-select
-        v-model="selectedDay"
+        v-model="dayOfWeekInclusion"
         filterable
         placeholder="Select"
         size="mini"
         clearable
       >
         <el-option
-          v-for="day in days"
-          :key="day"
-          :label="day"
-          :value="day"
+          v-for="day in dayOfWeekUnitList"
+          :key="day.id"
+          :label="day.name"
+          :value="day.id"
         ></el-option>
       </el-select>
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
       <el-tag
-        v-for="rule in rules"
+        v-for="rule in minStayList"
         :key="rule.index"
         type="info"
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{
-          `${rule.value} ${rule.unit} ${
-            !!rule.selectedDay && rule.selectedDay !== 'Undefined'
-              ? `including ${rule.selectedDay}`
-              : ''
-          } `
-        }}</el-tag
+        >{{ getTagString(rule) }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import {
+  GET_MIN_STAY_LIST,
+  GET_DAY_OF_WEEK_UNIT_LIST,
+  GET_DAY_UNIT_LIST
+} from '@/graphql/queries';
+import { UPDATE_MIN_STAY_LIST } from '@/graphql/mutations';
 export default {
   name: 'MinStay',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    minStayList: {
+      query: GET_MIN_STAY_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { minStayList } }) {
+        return removeTypename(minStayList);
+      }
+    },
+    dayOfWeekUnitList: {
+      query: GET_DAY_OF_WEEK_UNIT_LIST
+    },
+    dayUnitList: {
+      query: GET_DAY_UNIT_LIST
+    }
+  },
   data() {
     return {
-      units: ['Hours', 'Days', 'Months'],
-      days: [
-        'Undefined',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-      ],
-      selectedUnit: '',
-      selectedDay: 'Undefined',
-      editMode: true,
-      value: null,
-      rules: []
+      minStayList: [],
+      dayUnitList: [],
+      dayOfWeekUnitList: [],
+      value: 0,
+      unit: null,
+      dayOfWeekInclusion: null,
+      editMode: false
     };
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.minStayList.length) {
         this.$emit('delete-rule', 'MinStay');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_MIN_STAY_LIST,
+          variables: {
+            parentId: this.parentId,
+            minStayList: this.minStayList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_MIN_STAY_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.value = null;
+      this.unit = null;
+      this.dayOfWeekInclusion = null;
     },
     createTag() {
-      this.rules.push({
+      const ruleContainerId = this.minStayList.length
+        ? this.minStayList[0].ruleContainerId
+        : null;
+
+      this.minStayList.push({
+        id: null,
+        ruleContainerId,
+        unit: this.unit,
         value: this.value,
-        unit: this.selectedUnit,
-        selectedDay: this.selectedDay
+        dayOfWeekInclusion: this.dayOfWeekInclusion,
+        isDeleted: false
       });
 
       this.value = null;
-      this.selectedUnit = '';
-      this.selectedDay = '';
+      this.unit = null;
+      this.dayOfWeekInclusion = null;
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'MinStay');
+    async deleteTag(tag) {
+      const idx = this.minStayList.indexOf(tag);
+      this.minStayList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_MIN_STAY_LIST,
+          variables: {
+            parentId: this.parentId,
+            minStayList: this.minStayList
+          },
+          refetchQueries: () => [
+            {
+              query: GET_MIN_STAY_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.minStayList.some(rule => !rule.isDeleted);
+          if (!this.minStayList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'MinStay');
+          }
+        });
+    },
+    getTagString(rule) {
+      if (
+        !this.minStayList.length ||
+        !this.dayOfWeekUnitList.length ||
+        !this.dayUnitList.length
+      ) {
+        return;
+      } else {
+        const unit = this.dayUnitList.filter(unit => unit.id === rule.unit)[0];
+        const dayOfWeek = rule.dayOfWeekInclusion
+          ? this.dayOfWeekUnitList.filter(
+              day => day.id === rule.dayOfWeekInclusion
+            )[0]
+          : null;
+
+        return `${rule.value} ${unit.name} ${
+          !!rule.dayOfWeekInclusion && rule.dayOfWeekInclusion !== 'Undefined'
+            ? `including ${dayOfWeek.name}`
+            : ''
+        }`;
       }
     }
   }

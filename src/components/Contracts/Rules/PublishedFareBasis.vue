@@ -4,34 +4,45 @@
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
-      @click="toggleEditMode"
+      @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="toggleEditMode">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
-        v-model="selectedBasis"
+        v-model="basisType"
         filterable
         placeholder="Select"
         size="mini"
         clearable
+        value-key="name"
       >
         <el-option
-          v-for="item in basis"
-          :key="item"
-          :label="item"
+          v-for="item in fareBasisUnitList"
+          :key="item.id"
+          :label="item.name"
           :value="item"
         ></el-option>
       </el-select>
-      <el-input
-        v-model="input"
+      <el-input v-model="value" size="mini" class="number-input" clearable />
+      <label
+        v-if="
+          (basisType && basisType.id === 86) ||
+            (basisType && basisType.id === 87)
+        "
+        >Position:</label
+      >
+      <el-input-number
+        v-if="
+          (basisType && basisType.id === 86) ||
+            (basisType && basisType.id === 87)
+        "
+        v-model="position"
         size="mini"
         class="number-input"
-        min="0"
+        :min="0"
         clearable
       />
-      <label for="exclude"> Exclude: </label>
+      <label for="exclude">Exclude:</label>
       <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
@@ -44,7 +55,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ `${rule.basis} ${rule.input}` }}</el-tag
+        >{{ getTagString(rule) }}</el-tag
       >
     </div>
     <div class="rule-tags">
@@ -56,60 +67,273 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ `${rule.basis} ${rule.input}` }}</el-tag
+        >{{ getTagString(rule) }}</el-tag
       >
     </div>
   </div>
 </template>
 <script>
+import { removeTypename } from '@/helper';
+import {
+  GET_FARE_BASIS_LIST,
+  GET_FARE_BASIS_UNIT_LIST
+} from '@/graphql/queries';
+import { UPDATE_FARE_BASIS_LIST } from '@/graphql/mutations';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
   name: 'PublishedFareBasis',
-  apollo: {},
+  props: {
+    parentId: {
+      default: null,
+      type: Number
+    },
+    tableId: {
+      default: null,
+      type: Number
+    }
+  },
+  apollo: {
+    fareBasisUnitList: {
+      query: GET_FARE_BASIS_UNIT_LIST
+    },
+    fareBasisList: {
+      query: GET_FARE_BASIS_LIST,
+      variables() {
+        return {
+          parentId: this.parentId
+        };
+      },
+      result({ data: { fareBasisList } }) {
+        return removeTypename(fareBasisList);
+      }
+    }
+  },
   data() {
     return {
-      basis: [
-        'Matches',
-        'Starts With',
-        'Ends With',
-        'Contains Any',
-        'Contains All'
-      ],
-      selectedBasis: '',
+      fareBasisList: [],
+      fareBasisUnitList: [],
+      basisType: null,
       exclude: false,
-      editMode: true,
-      input: '',
-      rules: []
+      editMode: false,
+      value: '',
+      position: null
     };
   },
   computed: {
     excludedRules() {
-      return this.rules.filter(rule => rule.exclude);
+      return this.fareBasisList.filter(
+        rule =>
+          rule.matchExclude ||
+          rule.endsWithExclude ||
+          rule.startsWithExclude ||
+          rule.containsExclude ||
+          rule.containsMultipleExclude
+      );
     },
     includedRules() {
-      return this.rules.filter(rule => !rule.exclude);
+      return this.fareBasisList.filter(
+        rule =>
+          !rule.matchExclude &&
+          !rule.endsWithExclude &&
+          !rule.startsWithExclude &&
+          !rule.containsExclude &&
+          !rule.containsMultipleExclude
+      );
     }
   },
   methods: {
-    toggleEditMode() {
-      if (this.editMode && !this.rules.length) {
+    async saveRules() {
+      if (this.editMode && !this.fareBasisList.length) {
         this.$emit('delete-rule', 'PublishedFareBasis');
+      } else if (this.editMode) {
+        await this.$apollo.mutate({
+          mutation: UPDATE_FARE_BASIS_LIST,
+          variables: {
+            parentId: this.parentId,
+            fareBasisList: this.fareBasisList,
+            fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+          },
+          refetchQueries: () => [
+            {
+              query: GET_FARE_BASIS_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        });
       }
       this.editMode = !this.editMode;
+      this.basisType = null;
+      this.value = '';
+      this.position = null;
     },
     createTag() {
-      this.rules.push({
-        basis: this.selectedBasis,
-        input: this.input,
-        exclude: this.exclude
-      });
+      const ruleContainerId = this.fareBasisList.length
+        ? this.fareBasisList[0].ruleContainerId
+        : null;
 
-      this.selectedBasis = '';
-      this.input = '';
+      if (this.basisType.id === 83) {
+        this.fareBasisList.push({
+          id: null,
+          ruleContainerId,
+          name: this.basisType.name,
+          type: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE,
+          basisType: this.basisType.id,
+          matchExclude: this.exclude,
+          matchValue: this.value,
+          endsWithExclude: null,
+          endsWithValue: null,
+          startsWithExclude: null,
+          startsWithValue: null,
+          containsExclude: null,
+          containsValue: null,
+          containsPosition: null,
+          containsMultipleExclude: null,
+          containsMultipleValue: null,
+          containsMultiplePosition: null,
+          isDeleted: false
+        });
+      }
+
+      if (this.basisType.id === 84) {
+        this.fareBasisList.push({
+          id: null,
+          ruleContainerId,
+          name: this.basisType.name,
+          type: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE,
+          basisType: this.basisType.id,
+          matchExclude: null,
+          matchValue: null,
+          endsWithExclude: null,
+          endsWithValue: null,
+          startsWithExclude: this.exclude,
+          startsWithValue: this.value,
+          containsExclude: null,
+          containsValue: null,
+          containsPosition: null,
+          containsMultipleExclude: null,
+          containsMultipleValue: null,
+          containsMultiplePosition: null,
+          isDeleted: false
+        });
+      }
+
+      if (this.basisType.id === 85) {
+        this.fareBasisList.push({
+          id: null,
+          ruleContainerId,
+          name: this.basisType.name,
+          type: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE,
+          basisType: this.basisType.id,
+          matchExclude: null,
+          matchValue: null,
+          endsWithExclude: this.exclude,
+          endsWithValue: this.value,
+          startsWithExclude: null,
+          startsWithValue: null,
+          containsExclude: null,
+          containsValue: null,
+          containsPosition: null,
+          containsMultipleExclude: null,
+          containsMultipleValue: null,
+          containsMultiplePosition: null,
+          isDeleted: false
+        });
+      }
+
+      if (this.basisType.id === 86) {
+        this.fareBasisList.push({
+          id: null,
+          ruleContainerId,
+          name: this.basisType.name,
+          type: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE,
+          basisType: this.basisType.id,
+          matchExclude: null,
+          matchValue: null,
+          endsWithExclude: null,
+          endsWithValue: null,
+          startsWithExclude: null,
+          startsWithValue: null,
+          containsExclude: this.exclude,
+          containsValue: this.value,
+          containsPosition: this.position,
+          containsMultipleExclude: null,
+          containsMultipleValue: null,
+          containsMultiplePosition: null,
+          isDeleted: false
+        });
+      }
+
+      if (this.basisType.id === 87) {
+        this.fareBasisList.push({
+          id: null,
+          ruleContainerId,
+          name: this.basisType.name,
+          type: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE,
+          basisType: this.basisType.id,
+          matchExclude: null,
+          matchValue: null,
+          endsWithExclude: null,
+          endsWithValue: null,
+          startsWithExclude: null,
+          startsWithValue: null,
+          containsExclude: null,
+          containsValue: null,
+          containsPosition: null,
+          containsMultipleExclude: this.exclude,
+          containsMultipleValue: this.value,
+          containsMultiplePosition: this.position,
+          isDeleted: false
+        });
+      }
+
+      this.basisType = null;
+      this.value = '';
+      this.position = null;
     },
-    deleteTag(tag) {
-      this.rules.splice(this.rules.indexOf(tag), 1);
-      if (!this.rules.length) {
-        this.$emit('delete-rule', 'PublishedFareBasis');
+    async deleteTag(tag) {
+      const idx = this.fareBasisList.indexOf(tag);
+      this.fareBasisList[idx].isDeleted = true;
+
+      await this.$apollo
+        .mutate({
+          mutation: UPDATE_FARE_BASIS_LIST,
+          variables: {
+            parentId: this.parentId,
+            fareBasisList: this.fareBasisList,
+            fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+          },
+          refetchQueries: () => [
+            {
+              query: GET_FARE_BASIS_LIST,
+              variables: { parentId: this.parentId }
+            }
+          ]
+        })
+        .then(() => {
+          const rulesRemaining = this.fareBasisList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.fareBasisList.length || !rulesRemaining) {
+            this.$emit('delete-rule', 'PublishedFareBasis');
+          }
+        });
+    },
+    getTagString(rule) {
+      if (!this.fareBasisList.length || !this.fareBasisUnitList.length) {
+        return;
+      } else {
+        const propName = Object.keys(rule).filter(
+          key => key.includes('Value') && rule[key] !== null
+        );
+
+        const value = rule[propName];
+
+        return `${rule.name} ${value} ${
+          rule.basisType === 86 || rule.basisType === 87
+            ? ` at position ${rule.containsPosition ||
+                rule.containsMultiplePosition}`
+            : ''
+        }`;
       }
     }
   }

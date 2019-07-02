@@ -168,7 +168,9 @@
       />
       <el-table-column label="Rules" prop="ruleCount" :min-width="term.rules">
         <template slot-scope="props">
-          <button class="button number">{{ props.row.ruleCount }}</button>
+          <button class="button number" @click="toggleRulesModal(props.row)">
+            {{ props.row.ruleCount }}
+          </button>
         </template>
       </el-table-column>
       <el-table-column
@@ -223,6 +225,7 @@
     <EditTargetTermModal />
     <DeleteTargetTermModal @clear-bulk-actions="clearBulkActions" />
     <TargetTermNoteModal />
+    <TargetTermRulesModal />
   </div>
 </template>
 
@@ -244,6 +247,7 @@ import CopyTargetTermModal from './CopyTargetTermModal';
 import EditTargetTermModal from './EditTargetTermModal';
 import DeleteTargetTermModal from './DeleteTargetTermModal';
 import TargetTermNoteModal from './TargetTermNoteModal';
+import TargetTermRulesModal from './TargetTermRulesModal';
 export default {
   name: 'TargetTerms',
   components: {
@@ -253,7 +257,8 @@ export default {
     CopyTargetTermModal,
     EditTargetTermModal,
     DeleteTargetTermModal,
-    TargetTermNoteModal
+    TargetTermNoteModal,
+    TargetTermRulesModal
   },
   apollo: {
     selectedContract: {
@@ -364,6 +369,11 @@ export default {
       this.$modal.show('delete-target-term', {
         contractId: this.selectedContract.id,
         idList
+      });
+    },
+    toggleRulesModal(term) {
+      this.$modal.show('targetTermRulesModal', {
+        term
       });
     },
     toggleNoteModal(targetTerm) {
