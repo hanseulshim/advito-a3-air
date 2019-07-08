@@ -15,7 +15,7 @@ input TicketingDateInput {
   isDeleted: Boolean
 }
 
- TravelDate {
+type TravelDate {
   id: Int
   ruleContainerId: String
   startDate: Date
