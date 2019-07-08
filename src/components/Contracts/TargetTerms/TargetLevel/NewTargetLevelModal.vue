@@ -28,7 +28,7 @@
           >
         </div>
       </el-form-item>
-      <el-form-item label="Incentive Description">
+      <el-form-item v-if="showIncentiveInput()" label="Incentive Description">
         <el-input v-model="form.incentiveDescription" type="textarea" />
       </el-form-item>
       <el-form-item label="Make Scoring Target">
@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       targetTypeId: null,
+      incentiveTypeId: null,
       form: {
         targetTermId: null,
         targetAmount: null,
@@ -92,6 +93,13 @@ export default {
         return false;
       }
     },
+    showIncentiveInput() {
+      if (this.incentiveTypeId === TARGET_TERM_LOOKUP.NONE) {
+        return false;
+      } else {
+        return true;
+      }
+    },
     async createTargetLevel() {
       try {
         await this.$apollo.mutate({
@@ -124,6 +132,7 @@ export default {
     beforeOpen(event) {
       this.targetTypeId = event.params.targetTypeId;
       this.form.targetTermId = event.params.targetTermId;
+      this.incentiveTypeId = event.params.incentiveTypeId;
     },
     beforeClose() {
       this.targetTypeId = null;

@@ -45,6 +45,7 @@
           <TargetLevel
             :target-term-id="props.row.id"
             :target-type-id="props.row.targetTypeId"
+            :incentive-type-id="props.row.incentiveTypeId"
             @toggle-row="toggleRow"
           />
         </template>

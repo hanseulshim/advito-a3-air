@@ -78,6 +78,7 @@ export default {
   apollo: {
     ruleList: {
       query: GET_RULE_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.discount.id
@@ -154,24 +155,27 @@ export default {
         rule => rule.value === ruleType
       )[0];
       this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
-      //Call Apollo refetch of RuleList here!
       const {
         data: { ruleList }
       } = await this.$apollo.query({
         query: GET_RULE_LIST,
+        fetchPolicy: 'network-only',
         variables: {
-          parentId: this.discount.id
+          parentId: this.term.id,
+          parentType: 1
         }
       });
-      this.data = ruleList;
+      this.ruleList = ruleList;
+
+      // this.ruleList = ruleList;
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
     },
     beforeClose() {
       this.discount = {};
-      this.renderedRules = [];
       this.ruleList = [];
+      this.renderedRules = [];
       this.selectedRule = '';
     }
   }
