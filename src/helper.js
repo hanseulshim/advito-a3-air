@@ -10,7 +10,7 @@ export const formatDate = date => {
 };
 
 export const formatDataSetCol = date =>
-  date ? moment(date, 'MM/DD/YYYY').format('YYYY-MM') : '';
+  date ? moment(new Date(date), 'MM/DD/YYYY').format('YYYY-MM') : '';
 
 export const formatDateFromNow = date => (date ? moment(date).fromNow() : '');
 

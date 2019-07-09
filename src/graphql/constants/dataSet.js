@@ -1,28 +1,16 @@
-export const DATA_SET = `id
-        name
+export const DATA_SET = `name
         dateUpdated
-        status
-        posTrendList {
-          id
-          countryId
-          name
+        qc
+        countryData {
           tickets
           segments
           farePaid
-        }
-        divisionTrendList {
-          id
-          divisionId
-          name
-          tickets
-          segments
-          farePaid
-        }
-        importErrorsList {
-          id
-          countryId
-          name
           importedTickets
           errorTickets
           errorRatio
+        }
+        divisionData {
+          tickets
+          segments
+          farePaid
         }`;

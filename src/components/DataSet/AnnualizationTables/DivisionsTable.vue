@@ -3,7 +3,7 @@
     <div class="annualize-container">
       <div class="enable-annualization">
         <p>Annualization</p>
-        <el-switch v-model="annualized" />
+        <el-switch v-model="annualized" @change="setAnnualization" />
       </div>
       <div v-if="annualized" class="annualize-controls">
         <el-input v-model="annualizeAllBy" type="number" size="mini" />
@@ -17,11 +17,11 @@
       show-summary
       :summary-method="getTotal"
     >
-      <el-table-column prop="name">
+      <el-table-column :min-width="100" prop="name">
         <template slot="header">
           <span class="header-container">
             <div class="updated-date" />
-            <span class="header-text">Countries</span>
+            <span class="header-text">Divisions</span>
           </span>
         </template>
       </el-table-column>
@@ -69,7 +69,11 @@
 </template>
 <script>
 import { formatNumber, formatDataSetCol, formatDateTime } from '@/helper';
-import { GET_DATA_SET_DIVISION_LIST } from '@/graphql/queries';
+import {
+  GET_DATA_SET_DIVISION_LIST,
+  GET_DATA_SET_COLUMN_LIST
+} from '@/graphql/queries';
+import { SET_ANNUALIZATION } from '@/graphql/mutations';
 export default {
   name: 'DivisionsTable',
   props: {
@@ -83,8 +87,7 @@ export default {
       query: GET_DATA_SET_DIVISION_LIST,
       result({ data: { dataSetDivisionList } }) {
         this.dataSetDivisionListCopy = dataSetDivisionList.map(division => ({
-          ...division,
-          annMonths: division.numberDatasets
+          ...division
         }));
       }
     }
@@ -144,7 +147,10 @@ export default {
           } else if (i === lastIdx - 1) {
             return this.formatNumber(
               data.reduce(
-                (a, b) => a + b[this.selectorTotal] * (12 / b.annMonths),
+                (a, b) =>
+                  a +
+                  b[this.selectorTotal] *
+                    (12 / (b.annMonths === 0 ? 1 : b.annMonths)),
                 0
               )
             );
@@ -166,11 +172,30 @@ export default {
       } else return '';
     },
     calcRowTotal(row) {
-      const multiplier = 12 / row.annMonths;
+      const multiplier = row.annMonths ? 12 / row.annMonths : 1;
       if (this.annualized) {
         return this.formatNumber(row[this.selectorTotal] * multiplier);
       } else {
         return this.formatNumber(row[this.selectorTotal]);
+      }
+    },
+    async setAnnualization(value) {
+      if (!value) {
+        await this.$apollo.mutate({
+          mutation: SET_ANNUALIZATION,
+          variables: {
+            type: 2,
+            annMonthsList: this.dataSetDivisionListCopy.map(set => ({
+              id: set.id,
+              annMonths: set.annMonths
+            }))
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DATA_SET_COLUMN_LIST
+            }
+          ]
+        });
       }
     }
   }

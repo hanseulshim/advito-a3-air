@@ -40,24 +40,20 @@ export default {
       if (this.selectedFilter === 'all') {
         return this.dataSetColumnList;
       } else if (this.selectedFilter === 'need') {
-        return this.dataSetColumnList.filter(set => set.status === null);
+        return this.dataSetColumnList.filter(set => set.qc === null);
       } else if (this.selectedFilter === 'accept') {
-        return this.dataSetColumnList.filter(set => set.status === 'accept');
+        return this.dataSetColumnList.filter(set => set.qc);
       } else if (this.selectedFilter === 'reject') {
-        return this.dataSetColumnList.filter(set => set.status === 'reject');
+        return this.dataSetColumnList.filter(set => set.qc === false);
       }
       return [];
     },
     filterSelectList() {
       const all = this.dataSetColumnList.length;
-      const need = this.dataSetColumnList.filter(set => set.status === null)
+      const need = this.dataSetColumnList.filter(set => set.qc === null).length;
+      const accepted = this.dataSetColumnList.filter(set => set.qc).length;
+      const rejected = this.dataSetColumnList.filter(set => set.qc === false)
         .length;
-      const accepted = this.dataSetColumnList.filter(
-        set => set.status === 'accept'
-      ).length;
-      const rejected = this.dataSetColumnList.filter(
-        set => set.status === 'reject'
-      ).length;
       return [
         {
           value: 'all',
@@ -83,9 +79,7 @@ export default {
       this.selectedFilter = value;
     },
     checkStatus() {
-      const check = this.dataSetColumnList.every(
-        col => col.status === 'accept'
-      );
+      const check = this.dataSetColumnList.every(col => col.qc);
       const status = check ? 'valid' : 'invalid';
       this.$apollo.mutate({
         mutation: UPDATE_PROJECT_STATUS,

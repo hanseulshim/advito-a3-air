@@ -11,42 +11,42 @@
           <el-tooltip effect="dark" content="Accept" placement="top">
             <i
               class="fas fa-check data-icon accept"
-              :class="{ active: column.status === 'accept' }"
-              @click="toggleDataSet(column.id, 'accept')"
+              :class="{ active: column.qc }"
+              @click="toggleDataSet(column.name, true)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Need QC" placement="top">
             <i
               class="fas fa-minus data-icon qc"
-              :class="{ active: column.status === null }"
-              @click="toggleDataSet(column.id, null)"
+              :class="{ active: column.qc === null }"
+              @click="toggleDataSet(column.name, null)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Reject" placement="top">
             <i
               class="fas fa-times data-icon reject"
-              :class="{ active: column.status === 'reject' }"
-              @click="toggleDataSet(column.id, 'reject')"
+              :class="{ active: column.qc === false }"
+              @click="toggleDataSet(column.name, false)"
             />
           </el-tooltip>
           <el-tooltip
-            v-if="column.status === 'reject'"
+            v-if="column.qc === false"
             effect="dark"
             content="Delete"
             placement="top"
           >
             <i
               class="fas fa-trash-alt delete"
-              @click="deleteDataSet(column.id)"
+              @click="deleteDataSet(column.name)"
             />
           </el-tooltip>
           <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table
-          :data="column.divisionTrendList"
+          :data="column.divisionData"
           show-summary
           :summary-method="getSummaries"
-          :row-class-name="tableRowClassName(column.status)"
+          :row-class-name="tableRowClassName(column.qc)"
         >
           <el-table-column
             align="right"
@@ -142,38 +142,39 @@ export default {
         );
       });
     },
-    toggleDataSet(id, status) {
+    toggleDataSet(name, qc) {
+      const [year, month] = name.split('-');
       this.$apollo.mutate({
         mutation: TOGGLE_DATA_SET,
         variables: {
-          id,
-          status
-        }
+          month: parseInt(month),
+          year: parseInt(year),
+          qc
+        },
+        refetchQueries: () => [
+          {
+            query: GET_DATA_SET_COLUMN_LIST
+          }
+        ]
       });
     },
-    deleteDataSet(id) {
+    deleteDataSet(name) {
+      const [year, month] = name.split('-');
       this.$apollo.mutate({
         mutation: DELETE_DATA_SET,
-        variables: { id },
-        update: (store, data) => {
-          const id = data.data.deleteDataSet;
-          const newData = store.readQuery({
+        variables: {
+          month: parseInt(month),
+          year: parseInt(year)
+        },
+        refetchQueries: () => [
+          {
             query: GET_DATA_SET_COLUMN_LIST
-          });
-          const index = newData.dataSetColumnList.filter(
-            col => col.id === id
-          )[0];
-          newData.dataSetColumnList.splice(index, 1);
-          store.writeQuery({
-            query: GET_DATA_SET_COLUMN_LIST,
-            variables: { id },
-            data: newData
-          });
-        }
+          }
+        ]
       });
     },
     tableRowClassName(status) {
-      if (status === null || status === 'reject') {
+      if (!status) {
         return 'need-qc-row';
       }
       return '';
