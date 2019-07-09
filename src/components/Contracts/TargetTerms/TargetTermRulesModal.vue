@@ -126,24 +126,24 @@ export default {
       )[0];
       this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
       //Call Apollo refetch of RuleList here!
-      const {
-        data: { ruleList }
-      } = await this.$apollo.query({
+      await this.$apollo.query({
         query: GET_RULE_LIST,
         fetchPolicy: "network-only",
         variables: {
           parentId: this.term.id,
           parentType: TARGET_TERM_LOOKUP.RULE_TYPE
         },
-        refetchQueries: () => [
-          {
-            query: GET_TARGET_TERM,
-            fetchPolicy: "network-only",
-            variables: { id: this.term.id }
-          }
-        ]
+        result({ data }) {
+          this.ruleList = data.ruleList;
+        }
       });
-      this.ruleList = ruleList;
+      await this.$apollo.query({
+        query: GET_TARGET_TERM,
+        fetchPolicy: "network-only",
+        variables: {
+          id: this.term.id
+        }
+      });
     },
     beforeOpen(event) {
       this.term = event.params.term;
