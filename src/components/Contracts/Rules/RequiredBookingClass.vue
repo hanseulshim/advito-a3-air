@@ -1,11 +1,7 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Required Booking Class</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
@@ -24,7 +20,7 @@
         ></el-option>
       </el-select>
       <label for="exclude">Exclude:</label>
-      <el-checkbox v-model="exclude" name="exclude" />
+      <el-checkbox v-model="exclude" name="exclude"/>
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -36,8 +32,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.bookingClass }}</el-tag
-      >
+      >{{ rule.bookingClass }}</el-tag>
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -48,21 +43,21 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.bookingClass }}</el-tag
-      >
+      >{{ rule.bookingClass }}</el-tag>
     </div>
   </div>
 </template>
 <script>
 import {
   GET_BOOKING_CLASS_CODES,
-  GET_BOOKING_CLASS_LIST
-} from '@/graphql/queries';
-import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
-import { UPDATE_BOOKING_CLASS } from '@/graphql/mutations';
-import { removeTypename } from '@/helper';
+  GET_BOOKING_CLASS_LIST,
+  GET_DISCOUNT
+} from "@/graphql/queries";
+import { PRICING_TERM_LOOKUP } from "@/graphql/constants";
+import { UPDATE_BOOKING_CLASS } from "@/graphql/mutations";
+import { removeTypename } from "@/helper";
 export default {
-  name: 'RequiredBookingClass',
+  name: "RequiredBookingClass",
   props: {
     parentId: {
       default: null,
@@ -110,7 +105,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.bookingClassList.length) {
-        this.$emit('delete-rule', 'RequiredBookingClass');
+        this.$emit("delete-rule", "RequiredBookingClass");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_BOOKING_CLASS,
@@ -126,6 +121,12 @@ export default {
                 parentId: this.parentId,
                 bookingClassType:
                   PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE
+              }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
               }
             }
           ]
@@ -180,7 +181,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.bookingClassList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'RequiredBookingClass');
+            this.$emit("delete-rule", "RequiredBookingClass");
           }
         });
     }
@@ -188,5 +189,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>

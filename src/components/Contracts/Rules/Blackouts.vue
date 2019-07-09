@@ -1,14 +1,8 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Blackouts</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
@@ -25,9 +19,7 @@
         class="date-picker"
       ></el-date-picker>
       <button v-if="!updateRule" @click="createTag">Add</button>
-      <button v-if="updateRule" @click="updateTag">
-        Update
-      </button>
+      <button v-if="updateRule" @click="updateTag">Update</button>
     </div>
     <div class="rule-tags">
       <el-tag
@@ -38,19 +30,20 @@
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-        >{{ formatDate(rule.startDate) }} -
-        {{ formatDate(rule.endDate) }}</el-tag
       >
+        {{ formatDate(rule.startDate) }} -
+        {{ formatDate(rule.endDate) }}
+      </el-tag>
     </div>
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from '@/helper';
-import { GET_BLACKOUT_LIST } from '@/graphql/queries';
-import { UPDATE_BLACKOUT_LIST } from '@/graphql/mutations';
+import { formatDate, removeTypename } from "@/helper";
+import { GET_BLACKOUT_LIST, GET_DISCOUNT } from "@/graphql/queries";
+import { UPDATE_BLACKOUT_LIST } from "@/graphql/mutations";
 
 export default {
-  name: 'Blackouts',
+  name: "Blackouts",
   props: {
     parentId: {
       default: null,
@@ -77,8 +70,8 @@ export default {
   data() {
     return {
       editMode: false,
-      startDate: '',
-      endDate: '',
+      startDate: "",
+      endDate: "",
       updateRule: null,
       blackoutList: []
     };
@@ -86,7 +79,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.blackoutList.length) {
-        this.$emit('delete-rule', 'Blackouts');
+        this.$emit("delete-rule", "Blackouts");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_BLACKOUT_LIST,
@@ -98,13 +91,19 @@ export default {
             {
               query: GET_BLACKOUT_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });
       }
       this.editMode = !this.editMode;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
       this.updateRule = null;
     },
     createTag() {
@@ -119,8 +118,8 @@ export default {
         endDate: new Date(this.endDate),
         isDeleted: false
       });
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     },
     async deleteTag(tag) {
       const idx = this.blackoutList.indexOf(tag);
@@ -145,7 +144,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.blackoutList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'Blackouts');
+            this.$emit("delete-rule", "Blackouts");
           }
         });
     },
@@ -161,8 +160,8 @@ export default {
       this.blackoutList[ruleIndex].start = formatDate(this.startDate);
       this.blackoutList[ruleIndex].end = formatDate(this.endDate);
       this.updateRule = null;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     },
     formatDate(date) {
       return formatDate(date);
@@ -171,5 +170,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>

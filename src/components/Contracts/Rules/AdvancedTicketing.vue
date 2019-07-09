@@ -1,21 +1,11 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Advance Ticketing</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Within:</label>
-      <el-inputNumber
-        v-model="endRange"
-        size="mini"
-        :min="0"
-        class="number-input"
-        clearable
-      />
+      <el-inputNumber v-model="endRange" size="mini" :min="0" class="number-input" clearable/>
       <label>Unit:</label>
       <el-select
         v-model="selectedUnit"
@@ -25,12 +15,7 @@
         clearable
         disabled
       >
-        <el-option
-          v-for="unit in units"
-          :key="unit.label"
-          :label="unit.label"
-          :value="unit.value"
-        ></el-option>
+        <el-option v-for="unit in units" :key="unit.label" :label="unit.label" :value="unit.value"></el-option>
       </el-select>
       <button @click="createTag">Add</button>
     </div>
@@ -42,18 +27,17 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ `Within ${rule.endRange} Days` }}</el-tag
-      >
+      >{{ `Within ${rule.endRange} Days` }}</el-tag>
     </div>
   </div>
 </template>
 <script>
-import { TIME_UNIT_LOOKUP } from '@/graphql/constants';
-import { removeTypename } from '@/helper';
-import { GET_ADVANCED_TICKETING_LIST } from '@/graphql/queries';
-import { UPDATE_ADVANCED_TICKETING_LIST } from '@/graphql/mutations';
+import { TIME_UNIT_LOOKUP } from "@/graphql/constants";
+import { removeTypename } from "@/helper";
+import { GET_ADVANCED_TICKETING_LIST, GET_DISCOUNT } from "@/graphql/queries";
+import { UPDATE_ADVANCED_TICKETING_LIST } from "@/graphql/mutations";
 export default {
-  name: 'AdvanceTicketing',
+  name: "AdvanceTicketing",
   props: {
     parentId: {
       default: null,
@@ -80,9 +64,9 @@ export default {
   data() {
     return {
       units: [
-        { label: 'Hours', value: TIME_UNIT_LOOKUP.HOURS },
-        { label: 'Days', value: TIME_UNIT_LOOKUP.DAYS },
-        { label: 'Months', value: TIME_UNIT_LOOKUP.MONTHS }
+        { label: "Hours", value: TIME_UNIT_LOOKUP.HOURS },
+        { label: "Days", value: TIME_UNIT_LOOKUP.DAYS },
+        { label: "Months", value: TIME_UNIT_LOOKUP.MONTHS }
       ],
       selectedUnit: TIME_UNIT_LOOKUP.DAYS,
       editMode: false,
@@ -94,7 +78,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.advancedTicketingList.length) {
-        this.$emit('delete-rule', 'AdvanceTicketing');
+        this.$emit("delete-rule", "AdvanceTicketing");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_ADVANCED_TICKETING_LIST,
@@ -106,6 +90,12 @@ export default {
             {
               query: GET_ADVANCED_TICKETING_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });
@@ -152,7 +142,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.advancedTicketingList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'AdvanceTicketing');
+            this.$emit("delete-rule", "AdvanceTicketing");
           }
         });
     }
@@ -160,5 +150,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>

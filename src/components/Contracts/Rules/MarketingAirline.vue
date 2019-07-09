@@ -1,14 +1,8 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Marketing Airline</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
         v-model="selectedAirline"
@@ -25,8 +19,8 @@
           :value="item.code"
         ></el-option>
       </el-select>
-      <label for="exclude"> Exclude: </label>
-      <el-checkbox v-model="exclude" name="exclude" />
+      <label for="exclude">Exclude:</label>
+      <el-checkbox v-model="exclude" name="exclude"/>
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -38,8 +32,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.carrierCode }}</el-tag
-      >
+      >{{ rule.carrierCode }}</el-tag>
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -50,21 +43,22 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.carrierCode }}</el-tag
-      >
+      >{{ rule.carrierCode }}</el-tag>
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename } from "@/helper";
 import {
   GET_AIRLINE_CODE_LIST,
-  GET_AIRLINE_RULE_LIST
-} from '@/graphql/queries';
-import { UPDATE_AIRLINE } from '@/graphql/mutations';
-import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
+  GET_AIRLINE_RULE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
+} from "@/graphql/queries";
+import { UPDATE_AIRLINE } from "@/graphql/mutations";
+import { PRICING_TERM_LOOKUP } from "@/graphql/constants";
 export default {
-  name: 'MarketingAirline',
+  name: "MarketingAirline",
   props: {
     parentId: {
       default: null,
@@ -117,7 +111,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.airlineList.length) {
-        this.$emit('delete-rule', 'MarketingAirline');
+        this.$emit("delete-rule", "MarketingAirline");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_AIRLINE,
@@ -134,6 +128,12 @@ export default {
                 parentId: this.parentId,
                 parentType: this.parentType,
                 airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
+              }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
               }
             }
           ]
@@ -187,7 +187,7 @@ export default {
         .then(() => {
           const rulesRemaining = this.airlineList.some(rule => !rule.isDeleted);
           if (!this.airlineList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'MarketingAirline');
+            this.$emit("delete-rule", "MarketingAirline");
           }
         });
     }
@@ -195,5 +195,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>

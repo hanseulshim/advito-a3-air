@@ -1,21 +1,10 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Ticket Designator</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
-      <el-input
-        v-model="ticketDesignator"
-        size="mini"
-        class="number-input"
-        clearable
-      />
+      <el-input v-model="ticketDesignator" size="mini" class="number-input" clearable/>
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -26,17 +15,16 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ ` ${rule.ticketDesignator}` }}</el-tag
-      >
+      >{{ ` ${rule.ticketDesignator}` }}</el-tag>
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
-import { GET_TICKET_DESIGNATOR_LIST } from '@/graphql/queries';
-import { UPDATE_TICKETING_DESIGNATOR } from '@/graphql/mutations';
+import { removeTypename } from "@/helper";
+import { GET_TICKET_DESIGNATOR_LIST, GET_DISCOUNT } from "@/graphql/queries";
+import { UPDATE_TICKETING_DESIGNATOR } from "@/graphql/mutations";
 export default {
-  name: 'TicketDesignator',
+  name: "TicketDesignator",
   props: {
     parentId: {
       default: null,
@@ -63,14 +51,14 @@ export default {
   data() {
     return {
       editMode: false,
-      ticketDesignator: '',
+      ticketDesignator: "",
       ticketDesignatorList: []
     };
   },
   methods: {
     async saveRules() {
       if (this.editMode && !this.ticketDesignatorList.length) {
-        this.$emit('delete-rule', 'TicketDesignator');
+        this.$emit("delete-rule", "TicketDesignator");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_TICKETING_DESIGNATOR,
@@ -82,12 +70,18 @@ export default {
             {
               query: GET_TICKET_DESIGNATOR_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });
       }
       this.editMode = !this.editMode;
-      this.ticketDesignator = '';
+      this.ticketDesignator = "";
     },
     createTag() {
       const ruleContainerId = this.ticketDesignatorList.length
@@ -101,7 +95,7 @@ export default {
         isDeleted: false
       });
 
-      this.ticketDesignator = '';
+      this.ticketDesignator = "";
     },
     async deleteTag(tag) {
       const idx = this.ticketDesignatorList.indexOf(tag);
@@ -126,7 +120,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.ticketDesignatorList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TicketDesignator');
+            this.$emit("delete-rule", "TicketDesignator");
           }
         });
     }
@@ -134,5 +128,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>
