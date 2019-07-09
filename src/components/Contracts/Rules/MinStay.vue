@@ -18,7 +18,7 @@
       />
       <label>Unit:</label>
       <el-select
-        v-model="unit"
+        :value="unit"
         filterable
         placeholder="Select"
         size="mini"
@@ -110,6 +110,9 @@ export default {
       dayOfWeekInclusion: null,
       editMode: false
     };
+  },
+  created() {
+    this.unit = this.dayUnitList[1].id;
   },
   methods: {
     async saveRules() {

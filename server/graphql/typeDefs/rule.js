@@ -435,10 +435,10 @@ extend type Query {
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
   pointOfOriginList(parentId: Int, parentType: Int): [PointOfOrigin] @auth
   marketList(parentId: Int, parentType: Int): [Market] @auth
-  fareBasisList(parentId: Int): [FareBasis] @auth
+  fareBasisList(parentId: Int, fareBasisType: Int): [FareBasis] @auth
   bookingClassList(parentId: Int, bookingClassType: Int): [BookingClass] @auth
   bookingClassCodeList: [BookingClassCode] @auth
-  airlineList(parentId: Int, airlineType: Int): [Airline] @auth
+  airlineList(parentId: Int, parentType: Int, airlineType: Int): [Airline] @auth
   airlineCodeList: [AirlineCode] @auth
   ticketDesignatorList(parentId: Int): [TicketDesignator] @auth
   tourCodeList(parentId: Int): [TourCode] @auth
@@ -462,7 +462,7 @@ extend type Mutation {
   updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
   updateMarket(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
   updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClass] @auth
-  updateAirline(parentId: Int!, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
+  updateAirline(parentId: Int!, parentType: Int, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
   updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
   updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
   updateStops(parentId: Int! stopsList: [StopsInput]!): [Stops] @auth

@@ -121,11 +121,11 @@ exports.rule = {
         RULE_LOOKUP.BOOKING_CLASS,
         bookingClassType
       ),
-    airlineList: async (_, { parentId, airlineType = 1 }, { db }) =>
+    airlineList: async (_, { parentId, parentType, airlineType = 1 }, { db }) =>
       await getRuleList(
         db,
         parentId,
-        undefined,
+        parentType,
         RULE_LOOKUP.AIRLINE,
         airlineType
       ),
@@ -163,8 +163,14 @@ exports.rule = {
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY),
     blackoutList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.BLACKOUT),
-    fareBasisList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_BASIS)
+    fareBasisList: async (_, { parentId, fareBasisType }, { db }) =>
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.FARE_BASIS,
+        fareBasisType
+      )
   },
   Mutation: {
     updateTicketingDate: async (
@@ -238,13 +244,13 @@ exports.rule = {
       ),
     updateAirline: async (
       _,
-      { parentId, airlineType = 1, airlineList },
+      { parentId, parentType, airlineType = 1, airlineList },
       { db }
     ) =>
       await updateRule(
         db,
         parentId,
-        undefined,
+        parentType,
         airlineList,
         RULE_LOOKUP.AIRLINE,
         airlineType

@@ -16,7 +16,7 @@
         </el-tooltip>
       </div>
       <div class="rules-menu-container">
-        <p class="rule-count">9 RULES</p>
+        <p class="rule-count">{{ `${renderedRules.length} Rules` }}</p>
         <el-select
           v-model="selectedRule"
           placeholder="Create New Rule"
@@ -62,6 +62,7 @@ export default {
   apollo: {
     ruleList: {
       query: GET_RULE_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.term.id,
@@ -129,12 +130,13 @@ export default {
         data: { ruleList }
       } = await this.$apollo.query({
         query: GET_RULE_LIST,
+        fetchPolicy: 'network-only',
         variables: {
           parentId: this.term.id,
           parentType: TARGET_TERM_LOOKUP.RULE_TYPE
         }
       });
-      this.data = ruleList;
+      this.ruleList = ruleList;
     },
     beforeOpen(event) {
       this.term = event.params.term;

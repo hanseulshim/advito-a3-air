@@ -96,6 +96,11 @@ export default {
       type: Number,
       required: true,
       default: null
+    },
+    incentiveTypeId: {
+      type: Number,
+      required: true,
+      default: null
     }
   },
   data() {
@@ -126,7 +131,8 @@ export default {
     showNewTargetLevelModal() {
       this.$modal.show('new-target-level', {
         targetTermId: this.targetTermId,
-        targetTypeId: this.targetTypeId
+        targetTypeId: this.targetTypeId,
+        incentiveTypeId: this.incentiveTypeId
       });
     },
     showEditTargetLevelModal(targetLevel) {
