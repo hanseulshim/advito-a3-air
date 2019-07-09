@@ -1,16 +1,22 @@
 import gql from 'graphql-tag';
-import { DATA_SET } from '../constants';
 
 export const TOGGLE_DATA_SET = gql`
-  mutation toggleDataSet($id: Int!, $status: String) {
-    toggleDataSet(id: $id, status: $status) {
-      ${DATA_SET}
-    }
+  mutation toggleDataSet($month: Int!, $year: Int!, $qc: Boolean) {
+    toggleDataSet(month: $month, year: $year, qc: $qc)
   }
 `;
 
 export const DELETE_DATA_SET = gql`
-  mutation deleteDataSet($id: Int!) {
-    deleteDataSet(id: $id)
+  mutation deleteDataSet($month: Int!, $year: Int!) {
+    deleteDataSet(month: $month, year: $year)
+  }
+`;
+
+export const SET_ANNUALIZATION = gql`
+  mutation setAnnualization(
+    $type: Int
+    $annMonthsList: [DataSetAnnualization]!
+  ) {
+    setAnnualization(type: $type, annMonthsList: $annMonthsList)
   }
 `;

@@ -13,6 +13,7 @@ export const GET_DATA_SET_COUNTRY_LIST = gql`
       errorTicketsTotal
       errorRatioTotal
       numberDatasets
+      annMonths
     }
   }
 `;
@@ -26,6 +27,7 @@ export const GET_DATA_SET_DIVISION_LIST = gql`
       segmentsTotal
       farePaidTotal
       numberDatasets
+      annMonths
     }
   }
 `;

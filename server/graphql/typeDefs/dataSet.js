@@ -9,6 +9,7 @@ type DataSetCountry {
   errorTicketsTotal: Int
   errorRatioTotal: Int
   numberDatasets: Int
+  annMonths: Int
 }
 type DataSetDivision {
   id: Int
@@ -17,47 +18,41 @@ type DataSetDivision {
   segmentsTotal: Int
   farePaidTotal: Int
   numberDatasets: Int
+  annMonths: Int
+}
+input DataSetAnnualization {
+  id: Int
+  annMonths: Int
 }
 type DataSetColumn {
-  id: Int
   name: String
   dateUpdated: Date
-  status: String
-  posTrendList: [PosTrend]
-  divisionTrendList: [DivisionTrend]
-  importErrorsList: [ImportError]
+  qc: Boolean
+  countryData: [CountryData]
+  divisionData: [DivisionData]
 }
-type PosTrend {
-  id: Int
-  countryId: Int
-  name: String
+type CountryData {
   tickets: Int
   segments: Int
   farePaid: Int
-}
-type DivisionTrend {
-  id: Int
-  divisionId: Int
-  name: String
-  tickets: Int
-  segments: Int
-  farePaid: Int
-}
-type ImportError {
-  id: Int
-  countryId: Int
-  name: String
   importedTickets: Int
   errorTickets: Int
   errorRatio: Int
 }
+type DivisionData {
+  tickets: Int
+  segments: Int
+  farePaid: Int
+}
+
 extend type Query {
   dataSetCountryList: [DataSetCountry] @auth
   dataSetDivisionList: [DataSetDivision] @auth
   dataSetColumnList: [DataSetColumn] @auth
 }
 extend type Mutation {
-  toggleDataSet(id: Int!, status: String): DataSetColumn @auth
-  deleteDataSet(id: Int!): Int @auth
+  toggleDataSet(month: Int!, year: Int!, qc: Boolean): Boolean @auth
+  deleteDataSet(month: Int!, year: Int!): Int @auth
+  setAnnualization(type: Int, annMonthsList: [DataSetAnnualization]!): Int @auth
 }
 `;
