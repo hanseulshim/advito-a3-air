@@ -5,7 +5,7 @@
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Origin:</label>
-      <el-select
+      <!-- <el-select
         v-model="origin"
         filterable
         placeholder="Select"
@@ -19,9 +19,16 @@
           :label="country.name"
           :value="country"
         ></el-option>
-      </el-select>
-      <label>Destination:</label>
-      <el-select
+      </el-select>-->
+      <el-autocomplete
+        v-model="origin"
+        :fetch-suggestions="querySearchAsync"
+        placeholder="Select"
+        size="mini"
+        @select="handleSelect"
+      ></el-autocomplete>
+      <!-- <label>Destination:</label> -->
+      <!-- <el-select
         v-model="arrival"
         filterable
         placeholder="Select"
@@ -35,7 +42,7 @@
           :label="country.name"
           :value="country"
         ></el-option>
-      </el-select>
+      </el-select>-->
       <label>Exclude:</label>
       <el-checkbox v-model="exclude" name="exclude"/>
       <button @click="createTag">Add</button>
@@ -109,6 +116,7 @@ export default {
   data() {
     return {
       marketGeoList: [],
+      results,
       exclude: false,
       editMode: false,
       origin: {},
@@ -205,6 +213,27 @@ export default {
             this.$emit("delete-rule", "Market");
           }
         });
+    },
+    querySearchAsync(queryString, cb) {
+      const markets = this.marketGeoList;
+      this.results = queryString
+        ? markets.filter(this.createFilter(queryString))
+        : null;
+
+      // clearTimeout(this.timeout);
+      // this.timeout = setTimeout(() => {
+      //   cb(results);
+      // }, 3000 * Math.random());
+    },
+    createFilter(queryString) {
+      return link => {
+        return (
+          link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    handleSelect(item) {
+      console.log(item);
     }
   }
 };
