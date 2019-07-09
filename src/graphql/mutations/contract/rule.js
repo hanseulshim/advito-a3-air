@@ -137,6 +137,7 @@ export const UPDATE_AIRLINE = gql`
   ) {
     updateAirline(
       parentId: $parentId
+      parentType: $parentType
       airlineType: $airlineType
       airlineList: $airlineList
     ) {

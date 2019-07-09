@@ -67,7 +67,7 @@ exports.targetTerm = {
           ${currencyId},
           ${softTarget},
           ${internalTarget},
-          ${qsi ? qsi / 100 : 0},
+          ${qsi},
           ${dpmPrice},
           ${dpmStartDate ? `'${dpmStartDate}'` : null},
           ${baselineDateFrom ? `'${baselineDateFrom}'` : null},
@@ -132,7 +132,7 @@ exports.targetTerm = {
           ${currencyId},
           ${softTarget},
           ${internalTarget},
-          ${qsi ? qsi / 100 : 0},
+          ${qsi},
           ${dpmPrice},
           ${dpmStartDate ? `'${dpmStartDate}'` : null},
           ${baselineDateFrom ? `'${baselineDateFrom}'` : null},
@@ -180,9 +180,9 @@ const getTargetTermList = async (db, contractId) =>
       targetTypeId: 'targettype',
       targetTypeName: 'l1_name_val',
       cabinF: 'targetterm_v2_cabinf',
-      cabinC: 'targetterm_v2_cabinC',
+      cabinC: 'targetterm_v2_cabinc',
       cabinP: 'targetterm_v2_cabinp',
-      cabinY: 'targetterm_v2_cabinY',
+      cabinY: 'targetterm_v2_cabiny',
       qsi: 'servedmarketqsithreshold',
       incentiveTypeId: 'l2_id',
       incentiveTypeName: 'l2_name_val',
@@ -265,7 +265,9 @@ const getTargetTermList = async (db, contractId) =>
             from targetkpg
             where targettermid = targetterm_v2_id
             and isdeleted = false) end`),
-      ruleCount: 0,
+      ruleCount: db.raw(
+        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+      ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = usernote_id) = 0 THEN FALSE else TRUE END '
@@ -297,9 +299,9 @@ const getTargetTerm = async (db, id) => {
       targetTypeId: 'targettype',
       targetTypeName: 'l1_name_val',
       cabinF: 'targetterm_v2_cabinf',
-      cabinC: 'targetterm_v2_cabinC',
+      cabinC: 'targetterm_v2_cabinc',
       cabinP: 'targetterm_v2_cabinp',
-      cabinY: 'targetterm_v2_cabinY',
+      cabinY: 'targetterm_v2_cabiny',
       qsi: 'servedmarketqsithreshold',
       incentiveTypeId: 'l2_id',
       incentiveTypeName: 'l2_name_val',
@@ -372,7 +374,9 @@ const getTargetTerm = async (db, id) => {
       from targetkpg
       where targettermid = targetterm_v2_id
       and isdeleted = false) end`),
-      ruleCount: 0,
+      ruleCount: db.raw(
+        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+      ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = usernote_id) = 0 THEN FALSE else TRUE END '
