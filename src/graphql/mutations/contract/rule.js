@@ -131,6 +131,7 @@ export const UPDATE_BOOKING_CLASS = gql`
 export const UPDATE_AIRLINE = gql`
   mutation updateAirline(
     $parentId: Int!
+    $parentType: Int!
     $airlineType: Int!
     $airlineList: [AirlineInput]!
   ) {

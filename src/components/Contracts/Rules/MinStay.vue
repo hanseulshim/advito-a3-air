@@ -1,29 +1,13 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Min Stay</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Value:</label>
-      <el-input-number
-        v-model="value"
-        size="mini"
-        class="number-input"
-        :min="0"
-        clearable
-      />
+      <el-input-number v-model="value" size="mini" class="number-input" :min="0" clearable/>
       <label>Unit:</label>
-      <el-select
-        :value="unit"
-        filterable
-        placeholder="Select"
-        size="mini"
-        clearable
-      >
+      <el-select v-model="unit" filterable placeholder="Select" size="mini" clearable>
         <el-option
           v-for="dayUnit in dayUnitList"
           :key="dayUnit.name"
@@ -32,19 +16,8 @@
         ></el-option>
       </el-select>
       <label>Include Day of the week:</label>
-      <el-select
-        v-model="dayOfWeekInclusion"
-        filterable
-        placeholder="Select"
-        size="mini"
-        clearable
-      >
-        <el-option
-          v-for="day in dayOfWeekUnitList"
-          :key="day.id"
-          :label="day.name"
-          :value="day.id"
-        ></el-option>
+      <el-select v-model="dayOfWeekInclusion" filterable placeholder="Select" size="mini" clearable>
+        <el-option v-for="day in dayOfWeekUnitList" :key="day.id" :label="day.name" :value="day.id"></el-option>
       </el-select>
       <button @click="createTag">Add</button>
     </div>
@@ -56,21 +29,20 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ getTagString(rule) }}</el-tag
-      >
+      >{{ getTagString(rule) }}</el-tag>
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename } from "@/helper";
 import {
   GET_MIN_STAY_LIST,
   GET_DAY_OF_WEEK_UNIT_LIST,
   GET_DAY_UNIT_LIST
-} from '@/graphql/queries';
-import { UPDATE_MIN_STAY_LIST } from '@/graphql/mutations';
+} from "@/graphql/queries";
+import { UPDATE_MIN_STAY_LIST } from "@/graphql/mutations";
 export default {
-  name: 'MinStay',
+  name: "MinStay",
   props: {
     parentId: {
       default: null,
@@ -106,7 +78,7 @@ export default {
       dayUnitList: [],
       dayOfWeekUnitList: [],
       value: 0,
-      unit: null,
+      unit: 70,
       dayOfWeekInclusion: null,
       editMode: false
     };
@@ -117,7 +89,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.minStayList.length) {
-        this.$emit('delete-rule', 'MinStay');
+        this.$emit("delete-rule", "MinStay");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_MIN_STAY_LIST,
@@ -135,7 +107,6 @@ export default {
       }
       this.editMode = !this.editMode;
       this.value = null;
-      this.unit = null;
       this.dayOfWeekInclusion = null;
     },
     createTag() {
@@ -177,7 +148,7 @@ export default {
         .then(() => {
           const rulesRemaining = this.minStayList.some(rule => !rule.isDeleted);
           if (!this.minStayList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'MinStay');
+            this.$emit("delete-rule", "MinStay");
           }
         });
     },
@@ -197,9 +168,9 @@ export default {
           : null;
 
         return `${rule.value} ${unit.name} ${
-          !!rule.dayOfWeekInclusion && rule.dayOfWeekInclusion !== 'Undefined'
+          !!rule.dayOfWeekInclusion && rule.dayOfWeekInclusion !== "Undefined"
             ? `including ${dayOfWeek.name}`
-            : ''
+            : ""
         }`;
       }
     }
@@ -207,5 +178,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>
