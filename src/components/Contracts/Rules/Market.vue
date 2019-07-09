@@ -18,7 +18,7 @@
         value-key="name"
       >
         <el-option
-          v-for="country in geographyRuleList"
+          v-for="country in marketGeoList"
           :key="country.index"
           :label="country.name"
           :value="country"
@@ -34,7 +34,7 @@
         value-key="name"
       >
         <el-option
-          v-for="country in geographyRuleList"
+          v-for="country in marketGeoList"
           :key="country.index"
           :label="country.name"
           :value="country"
@@ -72,7 +72,7 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_GEO_LIST, GET_MARKET_RULE_LIST } from '@/graphql/queries';
+import { GET_MARKET_GEO_LIST, GET_MARKET_RULE_LIST } from '@/graphql/queries';
 import { UPDATE_MARKET } from '@/graphql/mutations';
 export default {
   name: 'Market',
@@ -91,8 +91,8 @@ export default {
     }
   },
   apollo: {
-    geographyRuleList: {
-      query: GET_GEO_LIST
+    marketGeoList: {
+      query: GET_MARKET_GEO_LIST
     },
     marketList: {
       query: GET_MARKET_RULE_LIST,
@@ -109,7 +109,7 @@ export default {
   },
   data() {
     return {
-      geographyRuleList: [],
+      marketGeoList: [],
       exclude: false,
       editMode: false,
       origin: {},

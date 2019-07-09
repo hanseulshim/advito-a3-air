@@ -45,6 +45,7 @@
           <TargetLevel
             :target-term-id="props.row.id"
             :target-type-id="props.row.targetTypeId"
+            :incentive-type-id="props.row.incentiveTypeId"
             @toggle-row="toggleRow"
           />
         </template>
@@ -139,9 +140,9 @@
       <el-table-column label="Cabins" :min-width="term.cabins">
         <template slot-scope="props">
           {{ props.row.cabinF ? 'F' : '' }}
-          {{ props.row.cabinB ? 'B' : '' }}
+          {{ props.row.cabinC ? 'C' : '' }}
           {{ props.row.cabinP ? 'P' : '' }}
-          {{ props.row.cabinE ? 'E' : '' }}
+          {{ props.row.cabinY ? 'Y' : '' }}
         </template>
       </el-table-column>
       <el-table-column

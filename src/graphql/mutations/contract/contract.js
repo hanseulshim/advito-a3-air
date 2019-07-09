@@ -275,9 +275,9 @@ mutation createTargetTerm(
   $targetTypeId: Int!
   $timeframe: Int
   $cabinF: Boolean
-  $cabinB: Boolean
+  $cabinC: Boolean
   $cabinP: Boolean
-  $cabinE: Boolean
+  $cabinY: Boolean
   $incentiveTypeId: Int
   $currencyId: Int
   $softTarget: Boolean
@@ -300,9 +300,9 @@ mutation createTargetTerm(
     targetTypeId: $targetTypeId
     timeframe: $timeframe
     cabinF: $cabinF
-    cabinB: $cabinB
+    cabinC: $cabinC
     cabinP: $cabinP
-    cabinE: $cabinE
+    cabinY: $cabinY
     incentiveTypeId: $incentiveTypeId
     currencyId: $currencyId
     softTarget: $softTarget
@@ -344,9 +344,9 @@ mutation editTargetTerm(
   $name: String!
   $timeframe: Int
   $cabinF: Boolean
-  $cabinB: Boolean
+  $cabinC: Boolean
   $cabinP: Boolean
-  $cabinE: Boolean
+  $cabinY: Boolean
   $currencyId: Int
   $softTarget: Boolean
   $internalTarget: Boolean
@@ -367,9 +367,9 @@ mutation editTargetTerm(
     name: $name
     timeframe: $timeframe
     cabinF: $cabinF
-    cabinB: $cabinB
+    cabinC: $cabinC
     cabinP: $cabinP
-    cabinE: $cabinE
+    cabinY: $cabinY
     currencyId: $currencyId
     softTarget: $softTarget
     internalTarget: $internalTarget
