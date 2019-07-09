@@ -166,8 +166,6 @@ export default {
         }
       });
       this.ruleList = ruleList;
-
-      // this.ruleList = ruleList;
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
