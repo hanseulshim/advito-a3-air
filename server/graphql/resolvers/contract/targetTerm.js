@@ -265,7 +265,9 @@ const getTargetTermList = async (db, contractId) =>
             from targetkpg
             where targettermid = targetterm_v2_id
             and isdeleted = false) end`),
-      ruleCount: 0,
+      ruleCount: db.raw(
+        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+      ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = usernote_id) = 0 THEN FALSE else TRUE END '
@@ -372,7 +374,9 @@ const getTargetTerm = async (db, id) => {
       from targetkpg
       where targettermid = targetterm_v2_id
       and isdeleted = false) end`),
-      ruleCount: 0,
+      ruleCount: db.raw(
+        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+      ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = usernote_id) = 0 THEN FALSE else TRUE END '
