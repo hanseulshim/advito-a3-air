@@ -28,7 +28,8 @@
         <span class="nav-title">Target Terms</span>
       </router-link>
       <div class="contract-name">
-        {{ selectedContract.name }} | {{ selectedContract.qc * 100 }}% QC
+        {{ selectedContract.name }} | {{ formatPercent(selectedContract.qc) }}
+        QC
       </div>
     </div>
     <div class="sub-navigation-container">
@@ -45,6 +46,7 @@
 
 <script>
 import { GET_SELECTED_CONTRACT } from '@/graphql/queries';
+import { formatPercent } from '@/helper';
 export default {
   name: 'ContractNavigation',
   apollo: {
@@ -56,6 +58,11 @@ export default {
     return {
       selectedContract: {}
     };
+  },
+  methods: {
+    formatPercent(num) {
+      return formatPercent(num);
+    }
   }
 };
 </script>

@@ -47,6 +47,8 @@ type Discount {
   contractOrder: Int
   appliedOrder: Int
   name: String
+  effectiveFrom: Date
+  effectiveTo: Date
   discountTypeId: Int
   discountTypeName: String
   discountValue: Float
