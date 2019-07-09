@@ -163,8 +163,14 @@ exports.rule = {
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_CATEGORY),
     blackoutList: async (_, { parentId }, { db }) =>
       await getRuleList(db, parentId, undefined, RULE_LOOKUP.BLACKOUT),
-    fareBasisList: async (_, { parentId }, { db }) =>
-      await getRuleList(db, parentId, undefined, RULE_LOOKUP.FARE_BASIS)
+    fareBasisList: async (_, { parentId, fareBasisType }, { db }) =>
+      await getRuleList(
+        db,
+        parentId,
+        undefined,
+        RULE_LOOKUP.FARE_BASIS,
+        fareBasisType
+      )
   },
   Mutation: {
     updateTicketingDate: async (
