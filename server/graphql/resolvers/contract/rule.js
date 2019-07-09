@@ -121,11 +121,11 @@ exports.rule = {
         RULE_LOOKUP.BOOKING_CLASS,
         bookingClassType
       ),
-    airlineList: async (_, { parentId, airlineType = 1 }, { db }) =>
+    airlineList: async (_, { parentId, parentType, airlineType = 1 }, { db }) =>
       await getRuleList(
         db,
         parentId,
-        undefined,
+        parentType,
         RULE_LOOKUP.AIRLINE,
         airlineType
       ),
@@ -238,13 +238,13 @@ exports.rule = {
       ),
     updateAirline: async (
       _,
-      { parentId, airlineType = 1, airlineList },
+      { parentId, parentType, airlineType = 1, airlineList },
       { db }
     ) =>
       await updateRule(
         db,
         parentId,
-        undefined,
+        parentType,
         airlineList,
         RULE_LOOKUP.AIRLINE,
         airlineType
