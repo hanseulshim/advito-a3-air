@@ -121,10 +121,5 @@ export const ruleTypes = [
     value: 'Distance',
     label: 'Distance',
     id: 23
-  },
-  {
-    value: 'Cabin',
-    label: 'Cabin',
-    id: 24
   }
 ];

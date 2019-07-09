@@ -82,9 +82,9 @@ type TargetTerm {
   targetTypeId: Int
   targetTypeName: String
   cabinF: Boolean
-  cabinB: Boolean
+  cabinC: Boolean
   cabinP: Boolean
-  cabinE: Boolean
+  cabinY: Boolean
   qsi: Float
   incentiveTypeId: Int
   incentiveTypeName: String
@@ -206,9 +206,9 @@ extend type Mutation {
     targetTypeId: Int!
     timeframe: Int
     cabinF: Boolean
-    cabinB: Boolean
+    cabinC: Boolean
     cabinP: Boolean
-    cabinE: Boolean
+    cabinY: Boolean
     incentiveTypeId: Int
     currencyId: Int
     softTarget: Boolean
@@ -231,9 +231,9 @@ extend type Mutation {
     name: String!
     timeframe: Int
     cabinF: Boolean
-    cabinB: Boolean
+    cabinC: Boolean
     cabinP: Boolean
-    cabinE: Boolean
+    cabinY: Boolean
     currencyId: Int
     softTarget: Boolean
     internalTarget: Boolean

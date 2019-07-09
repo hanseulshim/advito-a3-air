@@ -40,9 +40,9 @@ const TARGET_TERM = `id
         targetTypeId
         targetTypeName
         cabinF
-        cabinB
+        cabinC
         cabinP
-        cabinE
+        cabinY
         qsi
         incentiveTypeId
         incentiveTypeName

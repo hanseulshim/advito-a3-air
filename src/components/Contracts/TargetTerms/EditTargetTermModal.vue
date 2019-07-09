@@ -68,9 +68,9 @@
         label="Cabins *"
       >
         <el-checkbox v-model="form.cabinF">F</el-checkbox>
-        <el-checkbox v-model="form.cabinB">B</el-checkbox>
+        <el-checkbox v-model="form.cabinC">C</el-checkbox>
         <el-checkbox v-model="form.cabinP">P</el-checkbox>
-        <el-checkbox v-model="form.cabinE">E</el-checkbox>
+        <el-checkbox v-model="form.cabinY">Y</el-checkbox>
       </el-form-item>
       <el-form-item
         v-if="targetTypeId !== TARGET_TERM_LOOKUP.KPG"
@@ -262,9 +262,9 @@ export default {
         name: null,
         currencyId: null,
         cabinF: false,
-        cabinB: false,
+        cabinC: false,
         cabinP: false,
-        cabinE: false,
+        cabinY: false,
         qsi: null,
         softTarget: null,
         internalTarget: null,
@@ -386,9 +386,9 @@ export default {
         targetTypeId,
         currencyId,
         cabinF,
-        cabinB,
+        cabinC,
         cabinP,
-        cabinE,
+        cabinY,
         incentiveTypeId,
         qsi,
         softTarget,
@@ -411,9 +411,9 @@ export default {
       this.form.name = name;
       this.form.currencyId = currencyId;
       this.form.cabinF = cabinF;
-      this.form.cabinB = cabinB;
+      this.form.cabinC = cabinC;
       this.form.cabinP = cabinP;
-      this.form.cabinE = cabinE;
+      this.form.cabinY = cabinY;
       this.form.qsi = qsi ? qsi * 100 : null;
       this.form.softTarget = softTarget;
       this.form.internalTarget = internalTarget;
@@ -436,9 +436,9 @@ export default {
       this.form.name = null;
       this.form.currencyId = null;
       this.form.cabinF = false;
-      this.form.cabinB = false;
+      this.form.cabinC = false;
       this.form.cabinP = false;
-      this.form.cabinE = false;
+      this.form.cabinY = false;
       this.form.qsi = null;
       this.form.softTarget = null;
       this.form.internalTarget = null;

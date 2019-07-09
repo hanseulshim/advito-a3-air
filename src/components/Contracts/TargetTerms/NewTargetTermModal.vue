@@ -72,9 +72,9 @@
         label="Cabins *"
       >
         <el-checkbox v-model="form.cabinF">F</el-checkbox>
-        <el-checkbox v-model="form.cabinB">B</el-checkbox>
+        <el-checkbox v-model="form.cabinC">C</el-checkbox>
         <el-checkbox v-model="form.cabinP">P</el-checkbox>
-        <el-checkbox v-model="form.cabinE">E</el-checkbox>
+        <el-checkbox v-model="form.cabinY">Y</el-checkbox>
       </el-form-item>
       <el-form-item
         v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG"
@@ -278,9 +278,9 @@ export default {
         targetTypeId: null,
         currencyId: null,
         cabinF: true,
-        cabinB: true,
+        cabinC: true,
         cabinP: true,
-        cabinE: true,
+        cabinY: true,
         incentiveTypeId: TARGET_TERM_LOOKUP.NONE,
         qsi: 0,
         softTarget: null,
@@ -460,9 +460,9 @@ export default {
       this.form.targetTypeId = null;
       this.form.currencyId = null;
       this.form.cabinF = false;
-      this.form.cabinB = false;
+      this.form.cabinC = false;
       this.form.cabinP = false;
-      this.form.cabinE = false;
+      this.form.cabinY = false;
       this.form.incentiveTypeId = TARGET_TERM_LOOKUP.NONE;
       this.form.qsi = 0;
       this.form.softTarget = null;
