@@ -83,9 +83,6 @@ export default {
       editMode: false
     };
   },
-  created() {
-    this.unit = this.dayUnitList[1].id;
-  },
   methods: {
     async saveRules() {
       if (this.editMode && !this.minStayList.length) {

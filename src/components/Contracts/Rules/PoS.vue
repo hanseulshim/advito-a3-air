@@ -1,14 +1,8 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Point of Sale</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
         v-model="selectedCountry"
@@ -35,17 +29,16 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ rule.countryCode }}</el-tag
-      >
+      >{{ rule.countryCode }}</el-tag>
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
-import { GET_GEO_LIST, GET_POINT_OF_SALE_LIST } from '@/graphql/queries';
-import { UPDATE_POINT_OF_SALE } from '@/graphql/mutations';
+import { removeTypename } from "@/helper";
+import { GET_GEO_LIST, GET_POINT_OF_SALE_LIST } from "@/graphql/queries";
+import { UPDATE_POINT_OF_SALE } from "@/graphql/mutations";
 export default {
-  name: 'PointOfSale',
+  name: "PointOfSale",
   props: {
     parentId: {
       default: null,
@@ -88,7 +81,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.pointOfSaleList.length) {
-        this.$emit('delete-rule', 'PointOfSale');
+        this.$emit("delete-rule", "PointOfSale");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_POINT_OF_SALE,
@@ -103,6 +96,12 @@ export default {
               variables: {
                 parentId: this.parentId,
                 parentType: this.parentType
+              }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
               }
             }
           ]
@@ -153,7 +152,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.pointOfSaleList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'PointOfSale');
+            this.$emit("delete-rule", "PointOfSale");
           }
         });
     }
@@ -161,5 +160,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>

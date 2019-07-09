@@ -1,14 +1,8 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Travel Dates</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
@@ -25,9 +19,7 @@
         class="date-picker"
       ></el-date-picker>
       <button v-if="!updateRule" @click="createTag">Add</button>
-      <button v-if="updateRule" @click="updateTag">
-        Update
-      </button>
+      <button v-if="updateRule" @click="updateTag">Update</button>
     </div>
     <div class="rule-tags">
       <el-tag
@@ -38,18 +30,23 @@
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-        >{{ formatDate(rule.startDate) }} -
-        {{ formatDate(rule.endDate) }}</el-tag
       >
+        {{ formatDate(rule.startDate) }} -
+        {{ formatDate(rule.endDate) }}
+      </el-tag>
     </div>
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from '@/helper';
-import { GET_TRAVEL_DATE_LIST } from '@/graphql/queries';
-import { UPDATE_TRAVEL_DATES } from '@/graphql/mutations';
+import { formatDate, removeTypename } from "@/helper";
+import {
+  GET_TRAVEL_DATE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
+} from "@/graphql/queries";
+import { UPDATE_TRAVEL_DATES } from "@/graphql/mutations";
 export default {
-  name: 'TravelDates',
+  name: "TravelDates",
   props: {
     parentId: {
       default: null,
@@ -81,8 +78,8 @@ export default {
   data() {
     return {
       editMode: false,
-      startDate: '',
-      endDate: '',
+      startDate: "",
+      endDate: "",
       updateRule: null,
       travelDateList: []
     };
@@ -90,7 +87,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.travelDateList.length) {
-        this.$emit('delete-rule', 'TravelDates');
+        this.$emit("delete-rule", "TravelDates");
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_TRAVEL_DATES,
@@ -106,13 +103,19 @@ export default {
                 parentId: this.parentId,
                 parentType: this.parentType
               }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });
       }
       this.editMode = !this.editMode;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
       this.updateRule = null;
     },
     createTag() {
@@ -127,8 +130,8 @@ export default {
         endDate: new Date(this.endDate),
         isDeleted: false
       });
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     },
     async deleteTag(tag) {
       const idx = this.travelDateList.indexOf(tag);
@@ -157,7 +160,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.travelDateList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TravelDates');
+            this.$emit("delete-rule", "TravelDates");
           }
         });
     },
@@ -173,8 +176,8 @@ export default {
       this.travelDateList[ruleIndex].startDate = new Date(this.startDate);
       this.travelDateList[ruleIndex].endDate = new Date(this.endDate);
       this.updateRule = null;
-      this.startDate = '';
-      this.endDate = '';
+      this.startDate = "";
+      this.endDate = "";
     },
     formatDate(date) {
       return formatDate(date);
@@ -183,5 +186,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import './ruleStyles.scss';
+@import "./ruleStyles.scss";
 </style>
