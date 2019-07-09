@@ -435,7 +435,7 @@ extend type Query {
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
   pointOfOriginList(parentId: Int, parentType: Int): [PointOfOrigin] @auth
   marketList(parentId: Int, parentType: Int): [Market] @auth
-  fareBasisList(parentId: Int): [FareBasis] @auth
+  fareBasisList(parentId: Int, fareBasisType: Int): [FareBasis] @auth
   bookingClassList(parentId: Int, bookingClassType: Int): [BookingClass] @auth
   bookingClassCodeList: [BookingClassCode] @auth
   airlineList(parentId: Int, parentType: Int, airlineType: Int): [Airline] @auth
