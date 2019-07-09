@@ -140,9 +140,9 @@
       <el-table-column label="Cabins" :min-width="term.cabins">
         <template slot-scope="props">
           {{ props.row.cabinF ? 'F' : '' }}
-          {{ props.row.cabinC ? 'B' : '' }}
+          {{ props.row.cabinC ? 'C' : '' }}
           {{ props.row.cabinP ? 'P' : '' }}
-          {{ props.row.cabinY ? 'E' : '' }}
+          {{ props.row.cabinY ? 'Y' : '' }}
         </template>
       </el-table-column>
       <el-table-column
