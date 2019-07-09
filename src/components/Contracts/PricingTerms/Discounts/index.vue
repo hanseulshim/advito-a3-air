@@ -77,6 +77,14 @@
         :min-width="discount.name"
       />
       <el-table-column
+        label="Effective Dates"
+        :min-width="discount.effectiveDates"
+        :formatter="formatDate"
+        sortable
+        :sort-orders="['ascending', 'descending']"
+        sort-by="effectiveTo"
+      />
+      <el-table-column
         prop="discountTypeName"
         label="Type"
         sortable
@@ -241,8 +249,8 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return `${formatDate(row.effectiveStartDate)} — ${formatDate(
-        row.effectiveEndDate
+      return `${formatDate(row.effectiveFrom)} — ${formatDate(
+        row.effectiveTo
       )}`;
     },
     formatPercent(num) {

@@ -134,8 +134,12 @@ const getContractList = async db =>
       typeName: 'l.name_val',
       description: 'c.description',
       round: 'c.round',
-      effectiveFrom: 'c.effectivefrom',
-      effectiveTo: 'c.effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from contract_effectivedate(c.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from contract_effectivedate(c.id))'
+      ),
       qc: 'c.qc',
       pricingTermCount: db.raw(
         '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
@@ -173,8 +177,12 @@ const getContract = async (db, id) =>
       typeName: 'l.name_val',
       description: 'c.description',
       round: 'c.round',
-      effectiveFrom: 'c.effectivefrom',
-      effectiveTo: 'c.effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from contract_effectivedate(c.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from contract_effectivedate(c.id))'
+      ),
       qc: 'c.qc',
       pricingTermCount: db.raw(
         '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
