@@ -35,7 +35,12 @@
 </template>
 <script>
 import { removeTypename } from "@/helper";
-import { GET_GEO_LIST, GET_POINT_OF_SALE_LIST } from "@/graphql/queries";
+import {
+  GET_GEO_LIST,
+  GET_POINT_OF_SALE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
+} from "@/graphql/queries";
 import { UPDATE_POINT_OF_SALE } from "@/graphql/mutations";
 export default {
   name: "PointOfSale",
