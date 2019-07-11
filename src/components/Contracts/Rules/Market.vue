@@ -9,44 +9,47 @@
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Origin:</label>
-      <!-- <el-select
+      <el-select
         v-model="origin"
         filterable
-        placeholder="Select"
-        size="mini"
         clearable
+        remote
+        size="mini"
+        reserve-keyword
+        placeholder="Please enter a keyword"
+        :remote-method="filterOriginMarkets"
+        :loading="loadingOrigin"
         value-key="name"
       >
         <el-option
-          v-for="country in marketGeoList"
-          :key="country.index"
-          :label="country.name"
-          :value="country"
-        ></el-option>
-      </el-select>-->
-      <el-autocomplete
-        v-model="origin"
-        :fetch-suggestions="querySearchAsync"
-        placeholder="Select"
-        size="mini"
-        @select="handleSelect"
-      ></el-autocomplete>
-      <!-- <label>Destination:</label> -->
-      <!-- <el-select
+          v-for="item in originOptions"
+          :key="item.index"
+          :label="item.name"
+          :value="item"
+        >
+        </el-option>
+      </el-select>
+      <label>Arrival:</label>
+      <el-select
         v-model="arrival"
         filterable
-        placeholder="Select"
-        size="mini"
         clearable
+        remote
+        size="mini"
+        reserve-keyword
+        placeholder="Please enter a keyword"
+        :remote-method="filterArrivalMarkets"
+        :loading="loadingArrival"
         value-key="name"
       >
         <el-option
-          v-for="country in marketGeoList"
-          :key="country.index"
-          :label="country.name"
-          :value="country"
-        ></el-option>
-      </el-select>-->
+          v-for="item in arrivalOptions"
+          :key="item.index"
+          :label="item.name"
+          :value="item"
+        >
+        </el-option>
+      </el-select>
       <label>Exclude:</label>
       <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
@@ -122,8 +125,11 @@ export default {
   data() {
     return {
       marketGeoList: [],
-      results,
+      originOptions: [],
+      arrivalOptions: [],
       exclude: false,
+      loadingOrigin: false,
+      loadingArrival: false,
       editMode: false,
       origin: {},
       arrival: {},
@@ -220,26 +226,27 @@ export default {
           }
         });
     },
-    querySearchAsync(queryString, cb) {
-      const markets = this.marketGeoList;
-      this.results = queryString
-        ? markets.filter(this.createFilter(queryString))
-        : null;
-
-      // clearTimeout(this.timeout);
-      // this.timeout = setTimeout(() => {
-      //   cb(results);
-      // }, 3000 * Math.random());
+    filterOriginMarkets(query) {
+      if (query !== '') {
+        this.loadingOrigin = true;
+        this.originOptions = this.marketGeoList.filter(item => {
+          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+        this.loadingOrigin = false;
+      } else {
+        this.originOptions = [];
+      }
     },
-    createFilter(queryString) {
-      return link => {
-        return (
-          link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-        );
-      };
-    },
-    handleSelect(item) {
-      console.log(item);
+    filterArrivalMarkets(query) {
+      if (query !== '') {
+        this.loadingArrival = true;
+        this.arrivalOptions = this.marketGeoList.filter(item => {
+          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+        this.loadingArrival = false;
+      } else {
+        this.arrivalOptions = [];
+      }
     }
   }
 };
