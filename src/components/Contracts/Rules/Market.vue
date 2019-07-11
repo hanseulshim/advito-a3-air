@@ -29,7 +29,7 @@
         >
         </el-option>
       </el-select>
-      <label>Arrival:</label>
+      <label>Destination:</label>
       <el-select
         v-model="arrival"
         filterable
