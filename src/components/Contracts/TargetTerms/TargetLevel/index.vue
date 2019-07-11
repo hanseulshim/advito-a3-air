@@ -138,6 +138,7 @@ export default {
     showEditTargetLevelModal(targetLevel) {
       this.$modal.show('edit-target-level', {
         targetTypeId: this.targetTypeId,
+        incentiveTypeId: this.incentiveTypeId,
         targetLevel
       });
     },
