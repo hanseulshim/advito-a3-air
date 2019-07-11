@@ -57,7 +57,8 @@
 import { removeTypename } from '@/helper';
 import {
   GET_FARE_CATEGORY_LIST,
-  GET_FARE_CATEGORY_UNIT_LIST
+  GET_FARE_CATEGORY_UNIT_LIST,
+  GET_DISCOUNT
 } from '@/graphql/queries';
 import { UPDATE_FARE_CATEGORY_LIST } from '@/graphql/mutations';
 export default {
@@ -125,6 +126,12 @@ export default {
             {
               query: GET_FARE_CATEGORY_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

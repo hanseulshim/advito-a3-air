@@ -56,7 +56,11 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_GEO_LIST, GET_CONNECTION_POINT_LIST } from '@/graphql/queries';
+import {
+  GET_GEO_LIST,
+  GET_CONNECTION_POINT_LIST,
+  GET_DISCOUNT
+} from '@/graphql/queries';
 import { UPDATE_CONNECTION_POINT_LIST } from '@/graphql/mutations';
 export default {
   name: 'ConnectionPoint',
@@ -117,6 +121,12 @@ export default {
             {
               query: GET_CONNECTION_POINT_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

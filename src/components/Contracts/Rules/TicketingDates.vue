@@ -43,7 +43,11 @@
 </template>
 <script>
 import { formatDate, removeTypename } from '@/helper';
-import { GET_TICKETING_DATE_LIST } from '@/graphql/queries';
+import {
+  GET_TICKETING_DATE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
+} from '@/graphql/queries';
 import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
 export default {
   name: 'TicketingDates',
@@ -103,6 +107,12 @@ export default {
               variables: {
                 parentId: this.parentId,
                 parentType: this.parentType
+              }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
               }
             }
           ]

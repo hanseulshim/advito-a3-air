@@ -6,9 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
         v-model="selectedCountry"
@@ -42,7 +40,12 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_GEO_LIST, GET_POINT_OF_ORIGIN_LIST } from '@/graphql/queries';
+import {
+  GET_GEO_LIST,
+  GET_POINT_OF_ORIGIN_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
+} from '@/graphql/queries';
 import { UPDATE_POINT_OF_ORIGIN } from '@/graphql/mutations';
 export default {
   name: 'PointOfOrigin',
@@ -103,6 +106,12 @@ export default {
               variables: {
                 parentId: this.parentId,
                 parentType: this.parentType
+              }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
               }
             }
           ]

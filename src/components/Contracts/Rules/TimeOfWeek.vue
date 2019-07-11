@@ -93,7 +93,8 @@
 import { removeTypename } from '@/helper';
 import {
   GET_DAY_OF_WEEK_LIST,
-  GET_DAY_OF_WEEK_UNIT_LIST
+  GET_DAY_OF_WEEK_UNIT_LIST,
+  GET_DISCOUNT
 } from '@/graphql/queries';
 import { UPDATE_DAY_OF_WEEK_LIST } from '@/graphql/mutations';
 import moment from 'moment';
@@ -161,6 +162,12 @@ export default {
             {
               query: GET_DAY_OF_WEEK_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

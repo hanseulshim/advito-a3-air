@@ -48,7 +48,11 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_MAX_STAY_LIST, GET_DAY_UNIT_LIST } from '@/graphql/queries';
+import {
+  GET_MAX_STAY_LIST,
+  GET_DAY_UNIT_LIST,
+  GET_DISCOUNT
+} from '@/graphql/queries';
 import { UPDATE_MAX_STAY_LIST } from '@/graphql/mutations';
 export default {
   name: 'MaxStay',
@@ -103,6 +107,12 @@ export default {
             {
               query: GET_MAX_STAY_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

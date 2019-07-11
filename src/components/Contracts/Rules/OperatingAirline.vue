@@ -6,9 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
         v-model="selectedAirline"
@@ -25,7 +23,7 @@
           :value="item.code"
         ></el-option>
       </el-select>
-      <label for="exclude"> Exclude: </label>
+      <label for="exclude">Exclude:</label>
       <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
@@ -59,7 +57,9 @@
 import { removeTypename } from '@/helper';
 import {
   GET_AIRLINE_CODE_LIST,
-  GET_AIRLINE_RULE_LIST
+  GET_AIRLINE_RULE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
 } from '@/graphql/queries';
 import { UPDATE_AIRLINE } from '@/graphql/mutations';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
@@ -134,6 +134,12 @@ export default {
                 parentId: this.parentId,
                 parentType: this.parentType,
                 airlineType: PRICING_TERM_LOOKUP.OPERATING_AIRLINE_RULETYPE
+              }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
               }
             }
           ]

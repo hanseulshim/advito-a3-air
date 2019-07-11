@@ -334,8 +334,8 @@ export const GET_FARE_BASIS_UNIT_LIST = gql`
 `;
 
 export const GET_FARE_BASIS_LIST = gql`
-  query fareBasisList($parentId: Int) {
-    fareBasisList(parentId: $parentId) {
+  query fareBasisList($parentId: Int, $fareBasisType: Int) {
+    fareBasisList(parentId: $parentId, fareBasisType: $fareBasisType) {
       id
       ruleContainerId
       name

@@ -18,7 +18,7 @@
       />
       <label>Unit:</label>
       <el-select
-        :value="unit"
+        v-model="unit"
         filterable
         placeholder="Select"
         size="mini"
@@ -66,7 +66,8 @@ import { removeTypename } from '@/helper';
 import {
   GET_MIN_STAY_LIST,
   GET_DAY_OF_WEEK_UNIT_LIST,
-  GET_DAY_UNIT_LIST
+  GET_DAY_UNIT_LIST,
+  GET_DISCOUNT
 } from '@/graphql/queries';
 import { UPDATE_MIN_STAY_LIST } from '@/graphql/mutations';
 export default {
@@ -106,13 +107,10 @@ export default {
       dayUnitList: [],
       dayOfWeekUnitList: [],
       value: 0,
-      unit: null,
+      unit: 70,
       dayOfWeekInclusion: null,
       editMode: false
     };
-  },
-  created() {
-    this.unit = this.dayUnitList[1].id;
   },
   methods: {
     async saveRules() {
@@ -129,13 +127,18 @@ export default {
             {
               query: GET_MIN_STAY_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });
       }
       this.editMode = !this.editMode;
       this.value = null;
-      this.unit = null;
       this.dayOfWeekInclusion = null;
     },
     createTag() {

@@ -72,7 +72,7 @@ import Cabin from '../../Rules/Cabin';
 import FareCategory from '../../Rules/FareCategory';
 
 import { ruleTypes } from '../../Rules/helper';
-import { GET_RULE_LIST } from '@/graphql/queries';
+import { GET_RULE_LIST, GET_DISCOUNT } from '@/graphql/queries';
 export default {
   name: 'PricingTermRulesModal',
   apollo: {
@@ -147,7 +147,7 @@ export default {
     },
     createRule(selected) {
       const match = this.ruleTypes.filter(rule => rule.id === selected)[0];
-      this.renderedRules.push(match);
+      this.renderedRules.unshift(match);
       this.selectedRule = '';
     },
     async deleteRule(ruleType) {
@@ -155,17 +155,24 @@ export default {
         rule => rule.value === ruleType
       )[0];
       this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
-      const {
-        data: { ruleList }
-      } = await this.$apollo.query({
+      await this.$apollo.query({
         query: GET_RULE_LIST,
         fetchPolicy: 'network-only',
         variables: {
-          parentId: this.term.id,
+          parentId: this.discount.id,
           parentType: 1
+        },
+        result({ data }) {
+          this.ruleList = data.ruleList;
         }
       });
-      this.ruleList = ruleList;
+      await this.$apollo.query({
+        query: GET_DISCOUNT,
+        fetchPolicy: 'network-only',
+        variables: {
+          id: this.discount.id
+        }
+      });
     },
     beforeOpen(event) {
       this.discount = event.params.discount;

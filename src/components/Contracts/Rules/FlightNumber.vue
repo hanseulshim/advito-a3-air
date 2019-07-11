@@ -87,7 +87,8 @@
 import { removeTypename } from '@/helper';
 import {
   GET_AIRLINE_CODE_LIST,
-  GET_FLIGHT_NUMBER_LIST
+  GET_FLIGHT_NUMBER_LIST,
+  GET_DISCOUNT
 } from '@/graphql/queries';
 import { UPDATE_FLIGHT_NUMBER_LIST } from '@/graphql/mutations';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
@@ -154,6 +155,12 @@ export default {
             {
               query: GET_FLIGHT_NUMBER_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

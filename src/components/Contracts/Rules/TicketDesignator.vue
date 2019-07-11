@@ -6,9 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-input
         v-model="ticketDesignator"
@@ -33,7 +31,7 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_TICKET_DESIGNATOR_LIST } from '@/graphql/queries';
+import { GET_TICKET_DESIGNATOR_LIST, GET_DISCOUNT } from '@/graphql/queries';
 import { UPDATE_TICKETING_DESIGNATOR } from '@/graphql/mutations';
 export default {
   name: 'TicketDesignator',
@@ -82,6 +80,12 @@ export default {
             {
               query: GET_TICKET_DESIGNATOR_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

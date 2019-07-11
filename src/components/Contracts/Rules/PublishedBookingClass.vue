@@ -56,7 +56,8 @@
 <script>
 import {
   GET_BOOKING_CLASS_CODES,
-  GET_BOOKING_CLASS_LIST
+  GET_BOOKING_CLASS_LIST,
+  GET_DISCOUNT
 } from '@/graphql/queries';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 import { UPDATE_BOOKING_CLASS } from '@/graphql/mutations';
@@ -126,6 +127,12 @@ export default {
                 parentId: this.parentId,
                 bookingClassType:
                   PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE
+              }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
               }
             }
           ]

@@ -6,9 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-input v-model="tourCode" size="mini" class="number-input" clearable />
       <button @click="createTag">Add</button>
@@ -28,7 +26,7 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_TOUR_CODE_LIST } from '@/graphql/queries';
+import { GET_TOUR_CODE_LIST, GET_DISCOUNT } from '@/graphql/queries';
 import { UPDATE_TOUR_CODE_LIST } from '@/graphql/mutations';
 export default {
   name: 'TourCode',
@@ -77,6 +75,12 @@ export default {
             {
               query: GET_TOUR_CODE_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });
