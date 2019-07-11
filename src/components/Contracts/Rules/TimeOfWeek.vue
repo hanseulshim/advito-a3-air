@@ -1,11 +1,21 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Time/Day Of Week</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Start Day:</label>
-      <el-select v-model="startDay" filterable placeholder="Select" size="mini" clearable>
+      <el-select
+        v-model="startDay"
+        filterable
+        placeholder="Select"
+        size="mini"
+        clearable
+      >
         <el-option
           v-for="dayUnit in dayOfWeekUnitList"
           :key="dayUnit.name"
@@ -14,7 +24,13 @@
         ></el-option>
       </el-select>
       <label>End Day:</label>
-      <el-select v-model="endDay" filterable placeholder="Select" size="mini" clearable>
+      <el-select
+        v-model="endDay"
+        filterable
+        placeholder="Select"
+        size="mini"
+        clearable
+      >
         <el-option
           v-for="dayUnit in dayOfWeekUnitList"
           :key="dayUnit.name"
@@ -33,9 +49,15 @@
         format="HH:mm"
       />
       <label>End Time:</label>
-      <el-time-picker v-model="endTime" placeholder="Select" size="mini" format="HH:mm" clearable/>
+      <el-time-picker
+        v-model="endTime"
+        placeholder="Select"
+        size="mini"
+        format="HH:mm"
+        clearable
+      />
       <label>Exclude:</label>
-      <el-checkbox v-model="exclude" name="exclude"/>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button v-if="!updateRule" @click="createTag">Add</button>
       <button v-if="updateRule" @click="updateTag">Update</button>
     </div>
@@ -49,7 +71,8 @@
         closable
         @click="editTag(rule)"
         @close="deleteTag(rule)"
-      >{{ getTagString(rule) }}</el-tag>
+        >{{ getTagString(rule) }}</el-tag
+      >
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -61,21 +84,22 @@
         closable
         @click="editTag(rule)"
         @close="deleteTag(rule)"
-      >{{ getTagString(rule) }}</el-tag>
+        >{{ getTagString(rule) }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
+import { removeTypename } from '@/helper';
 import {
   GET_DAY_OF_WEEK_LIST,
   GET_DAY_OF_WEEK_UNIT_LIST,
   GET_DISCOUNT
-} from "@/graphql/queries";
-import { UPDATE_DAY_OF_WEEK_LIST } from "@/graphql/mutations";
-import moment from "moment";
+} from '@/graphql/queries';
+import { UPDATE_DAY_OF_WEEK_LIST } from '@/graphql/mutations';
+import moment from 'moment';
 export default {
-  name: "TimeOfWeek",
+  name: 'TimeOfWeek',
   props: {
     parentId: {
       default: null,
@@ -108,8 +132,8 @@ export default {
       dayOfWeekUnitList: [],
       startDay: null,
       endDay: null,
-      startTime: "",
-      endTime: "",
+      startTime: '',
+      endTime: '',
       exclude: false,
       updateRule: null,
       editMode: false
@@ -126,7 +150,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.dayOfWeekList.length) {
-        this.$emit("delete-rule", "TimeOfWeek");
+        this.$emit('delete-rule', 'TimeOfWeek');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_DAY_OF_WEEK_LIST,
@@ -151,8 +175,8 @@ export default {
       this.editMode = !this.editMode;
       this.startDay = null;
       this.endDay = null;
-      this.startTime = "";
-      this.endTime = "";
+      this.startTime = '';
+      this.endTime = '';
       this.updateRule = null;
     },
     createTag() {
@@ -173,8 +197,8 @@ export default {
 
       this.startDay = null;
       this.endDay = null;
-      this.startTime = "";
-      this.endTime = "";
+      this.startTime = '';
+      this.endTime = '';
       this.updateRule = null;
     },
     async deleteTag(tag) {
@@ -200,7 +224,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.dayOfWeekList.length || !rulesRemaining) {
-            this.$emit("delete-rule", "TimeOfWeek");
+            this.$emit('delete-rule', 'TimeOfWeek');
           }
         });
     },
@@ -225,13 +249,13 @@ export default {
       this.dayOfWeekList[ruleIndex].endTime = formattedEnd;
 
       this.updateRule = null;
-      this.startDay = "";
-      this.endDay = "";
-      this.startTime = "";
-      this.endTime = "";
+      this.startDay = '';
+      this.endDay = '';
+      this.startTime = '';
+      this.endTime = '';
     },
     formatTime(date) {
-      return date ? moment(date).format("H:mm") : "";
+      return date ? moment(date).format('H:mm') : '';
     },
     getTagString(rule) {
       if (!this.dayOfWeekList.length || !this.dayOfWeekUnitList.length) {
@@ -254,5 +278,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

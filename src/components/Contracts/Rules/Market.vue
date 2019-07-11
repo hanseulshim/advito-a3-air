@@ -1,7 +1,11 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Market</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Origin:</label>
@@ -44,7 +48,7 @@
         ></el-option>
       </el-select>-->
       <label>Exclude:</label>
-      <el-checkbox v-model="exclude" name="exclude"/>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -56,7 +60,8 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ `${rule.origin} - ${rule.arrival}` }}</el-tag>
+        >{{ `${rule.origin} - ${rule.arrival}` }}</el-tag
+      >
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -67,21 +72,22 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ `${rule.origin} - ${rule.arrival}` }}</el-tag>
+        >{{ `${rule.origin} - ${rule.arrival}` }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
+import { removeTypename } from '@/helper';
 import {
   GET_MARKET_GEO_LIST,
   GET_MARKET_RULE_LIST,
   GET_DISCOUNT,
   GET_TARGET_TERM
-} from "@/graphql/queries";
-import { UPDATE_MARKET } from "@/graphql/mutations";
+} from '@/graphql/queries';
+import { UPDATE_MARKET } from '@/graphql/mutations';
 export default {
-  name: "Market",
+  name: 'Market',
   props: {
     parentId: {
       default: null,
@@ -135,7 +141,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.marketList.length) {
-        this.$emit("delete-rule", "Market");
+        this.$emit('delete-rule', 'Market');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_MARKET,
@@ -210,7 +216,7 @@ export default {
         .then(() => {
           const rulesRemaining = this.marketList.some(rule => !rule.isDeleted);
           if (!this.marketList.length || !rulesRemaining) {
-            this.$emit("delete-rule", "Market");
+            this.$emit('delete-rule', 'Market');
           }
         });
     },
@@ -239,5 +245,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

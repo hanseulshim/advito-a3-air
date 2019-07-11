@@ -11,7 +11,7 @@
       <div class="title-row space-between">
         <div class="section-header">Discount : {{ discount.name }}</div>
         <el-tooltip effect="dark" content="Close Modal" placement="top">
-          <i class="fas fa-times close-modal-button" @click="hideModal"/>
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
       </div>
       <div class="rules-menu-container">
@@ -45,40 +45,40 @@
 </template>
 
 <script>
-import TicketingDates from "../../Rules/TicketingDates";
-import TravelDates from "../../Rules/TravelDates";
-import PointOfSale from "../../Rules/PoS";
-import PointOfOrigin from "../../Rules/PoO";
-import PublishedBookingClass from "../../Rules/PublishedBookingClass";
-import RequiredBookingClass from "../../Rules/RequiredBookingClass";
-import Market from "../../Rules/Market";
-import MarketingAirline from "../../Rules/MarketingAirline";
-import ValidatingAirline from "../../Rules/ValidatingAirline";
-import OperatingAirline from "../../Rules/OperatingAirline";
-import AdvanceTicketing from "../../Rules/AdvancedTicketing";
-import TourCode from "../../Rules/TourCode";
-import TicketDesignator from "../../Rules/TicketDesignator";
-import TimeOfWeek from "../../Rules/TimeOfWeek";
-import MinStay from "../../Rules/MinStay";
-import MaxStay from "../../Rules/MaxStay";
-import Stops from "../../Rules/Stops";
-import ConnectionPoint from "../../Rules/ConnectionPoint";
-import FlightNumber from "../../Rules/FlightNumber";
-import Blackouts from "../../Rules/Blackouts";
-import Distance from "../../Rules/Distance";
-import PublishedFareBasis from "../../Rules/PublishedFareBasis";
-import CorporateFareBasis from "../../Rules/CorporateFareBasis";
-import Cabin from "../../Rules/Cabin";
-import FareCategory from "../../Rules/FareCategory";
+import TicketingDates from '../../Rules/TicketingDates';
+import TravelDates from '../../Rules/TravelDates';
+import PointOfSale from '../../Rules/PoS';
+import PointOfOrigin from '../../Rules/PoO';
+import PublishedBookingClass from '../../Rules/PublishedBookingClass';
+import RequiredBookingClass from '../../Rules/RequiredBookingClass';
+import Market from '../../Rules/Market';
+import MarketingAirline from '../../Rules/MarketingAirline';
+import ValidatingAirline from '../../Rules/ValidatingAirline';
+import OperatingAirline from '../../Rules/OperatingAirline';
+import AdvanceTicketing from '../../Rules/AdvancedTicketing';
+import TourCode from '../../Rules/TourCode';
+import TicketDesignator from '../../Rules/TicketDesignator';
+import TimeOfWeek from '../../Rules/TimeOfWeek';
+import MinStay from '../../Rules/MinStay';
+import MaxStay from '../../Rules/MaxStay';
+import Stops from '../../Rules/Stops';
+import ConnectionPoint from '../../Rules/ConnectionPoint';
+import FlightNumber from '../../Rules/FlightNumber';
+import Blackouts from '../../Rules/Blackouts';
+import Distance from '../../Rules/Distance';
+import PublishedFareBasis from '../../Rules/PublishedFareBasis';
+import CorporateFareBasis from '../../Rules/CorporateFareBasis';
+import Cabin from '../../Rules/Cabin';
+import FareCategory from '../../Rules/FareCategory';
 
-import { ruleTypes } from "../../Rules/helper";
-import { GET_RULE_LIST, GET_DISCOUNT } from "@/graphql/queries";
+import { ruleTypes } from '../../Rules/helper';
+import { GET_RULE_LIST, GET_DISCOUNT } from '@/graphql/queries';
 export default {
-  name: "PricingTermRulesModal",
+  name: 'PricingTermRulesModal',
   apollo: {
     ruleList: {
       query: GET_RULE_LIST,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.discount.id
@@ -126,7 +126,7 @@ export default {
       ruleTypes,
       ruleList: [],
       renderedRules: [],
-      selectedRule: "",
+      selectedRule: '',
       parentType: 1
     };
   },
@@ -143,12 +143,12 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide("pricingTermRulesModal");
+      this.$modal.hide('pricingTermRulesModal');
     },
     createRule(selected) {
       const match = this.ruleTypes.filter(rule => rule.id === selected)[0];
       this.renderedRules.unshift(match);
-      this.selectedRule = "";
+      this.selectedRule = '';
     },
     async deleteRule(ruleType) {
       const matched = this.renderedRules.filter(
@@ -157,7 +157,7 @@ export default {
       this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
       await this.$apollo.query({
         query: GET_RULE_LIST,
-        fetchPolicy: "network-only",
+        fetchPolicy: 'network-only',
         variables: {
           parentId: this.discount.id,
           parentType: 1
@@ -168,7 +168,7 @@ export default {
       });
       await this.$apollo.query({
         query: GET_DISCOUNT,
-        fetchPolicy: "network-only",
+        fetchPolicy: 'network-only',
         variables: {
           id: this.discount.id
         }
@@ -181,7 +181,7 @@ export default {
       this.discount = {};
       this.ruleList = [];
       this.renderedRules = [];
-      this.selectedRule = "";
+      this.selectedRule = '';
     }
   }
 };

@@ -17,14 +17,18 @@
       <div class="title-row space-between">
         <div class="section-header">new target term</div>
         <el-tooltip effect="dark" content="Close Modal" placement="top">
-          <i class="fas fa-times close-modal-button" @click="hideModal"/>
+          <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
       </div>
       <el-form-item label="Name *" prop="name">
-        <el-input v-model="form.name"/>
+        <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="Target Type *" prop="targetTypeId">
-        <el-select v-model="form.targetTypeId" class="select-modal" @change="updateType">
+        <el-select
+          v-model="form.targetTypeId"
+          class="select-modal"
+          @change="updateType"
+        >
           <el-option
             v-for="item in targetTypeList"
             :key="item.id"
@@ -59,17 +63,23 @@
         prop="timeframe"
       >
         <div class="text-input-container">
-          <el-input v-model.number="form.timeframe"/>
+          <el-input v-model.number="form.timeframe" />
           <span>Months</span>
         </div>
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG" label="Cabins *">
+      <el-form-item
+        v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG"
+        label="Cabins *"
+      >
         <el-checkbox v-model="form.cabinF">F</el-checkbox>
         <el-checkbox v-model="form.cabinC">C</el-checkbox>
         <el-checkbox v-model="form.cabinP">P</el-checkbox>
         <el-checkbox v-model="form.cabinY">Y</el-checkbox>
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG" label="Incentive Type">
+      <el-form-item
+        v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG"
+        label="Incentive Type"
+      >
         <el-select v-model="form.incentiveTypeId" class="select-modal">
           <el-option
             v-for="item in incentiveTypeList"
@@ -85,32 +95,41 @@
         prop="qsi"
       >
         <div class="text-input-container qsi">
-          <el-input v-model.number="form.qsi"/>
+          <el-input v-model.number="form.qsi" />
           <span>
             {{
-            form.targetTypeId === 21 || form.targetTypeId === 20
-            ? '%'
-            : form.targetTypeId === 24
-            ? 'points'
-            : ''
+              form.targetTypeId === 21 || form.targetTypeId === 20
+                ? '%'
+                : form.targetTypeId === 24
+                ? 'points'
+                : ''
             }}
           </span>
         </div>
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG" label="Soft Target?">
-        <el-checkbox v-model="form.softTarget"/>
+      <el-form-item
+        v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG"
+        label="Soft Target?"
+      >
+        <el-checkbox v-model="form.softTarget" />
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG" label="Internal Target?">
-        <el-checkbox v-model="form.internalTarget"/>
+      <el-form-item
+        v-if="form.targetTypeId !== TARGET_TERM_LOOKUP.KPG"
+        label="Internal Target?"
+      >
+        <el-checkbox v-model="form.internalTarget" />
       </el-form-item>
       <el-form-item
         v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG"
         label="DPM Price *"
         prop="dpmPrice"
       >
-        <el-input v-model="form.dpmPrice"/>
+        <el-input v-model="form.dpmPrice" />
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG" label="DPM Start Date *">
+      <el-form-item
+        v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG"
+        label="DPM Start Date *"
+      >
         <div class="date-picker-container">
           <el-form-item prop="dpmStartDate" class="date-picker-item">
             <el-date-picker
@@ -145,7 +164,10 @@
           </el-form-item>
         </div>
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG" label="Goal Date Range *">
+      <el-form-item
+        v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG"
+        label="Goal Date Range *"
+      >
         <div class="date-picker-container">
           <el-form-item prop="goalDateFrom" class="date-picker-item">
             <el-date-picker
@@ -165,7 +187,10 @@
           </el-form-item>
         </div>
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG" label="From Airline Group">
+      <el-form-item
+        v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG"
+        label="From Airline Group"
+      >
         <div class="date-picker-container">
           <el-form-item class="date-picker-item">
             <el-date-picker
@@ -185,7 +210,10 @@
           </el-form-item>
         </div>
       </el-form-item>
-      <el-form-item v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG" label="From Fare Category">
+      <el-form-item
+        v-if="form.targetTypeId === TARGET_TERM_LOOKUP.KPG"
+        label="From Fare Category"
+      >
         <div class="date-picker-container">
           <el-form-item class="date-picker-item">
             <el-date-picker
@@ -219,11 +247,11 @@ import {
   GET_INCENTIVE_TYPE_LIST,
   GET_CURRENCY_LIST,
   GET_CONTRACT
-} from "@/graphql/queries";
-import { TARGET_TERM_LOOKUP } from "@/graphql/constants";
-import { CREATE_TARGET_TERM } from "@/graphql/mutations";
+} from '@/graphql/queries';
+import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
+import { CREATE_TARGET_TERM } from '@/graphql/mutations';
 export default {
-  name: "NewTargetTermModal",
+  name: 'NewTargetTermModal',
   apollo: {
     targetTypeList: {
       query: GET_TARGET_TYPE_LIST,
@@ -275,72 +303,72 @@ export default {
         name: [
           {
             required: true,
-            message: "Please input a target term name.",
-            trigger: "change"
+            message: 'Please input a target term name.',
+            trigger: 'change'
           }
         ],
         targetTypeId: [
           {
             required: true,
-            message: "Please select a target type.",
-            trigger: "change"
+            message: 'Please select a target type.',
+            trigger: 'change'
           }
         ],
-        timeframe: [{ type: "number", message: "Timeframe must be a number" }],
+        timeframe: [{ type: 'number', message: 'Timeframe must be a number' }],
         currencyId: [
           {
             required: true,
-            message: "Please select a currency.",
-            trigger: "change"
+            message: 'Please select a currency.',
+            trigger: 'change'
           }
         ],
         qsi: [
           {
             required: true,
-            message: "Please input a QSI",
-            trigger: "change"
+            message: 'Please input a QSI',
+            trigger: 'change'
           }
         ],
         dpmPrice: [
           {
             required: true,
-            message: "Please input a DPM Price",
-            trigger: "change"
+            message: 'Please input a DPM Price',
+            trigger: 'change'
           }
         ],
         dpmStartDate: [
           {
             required: true,
-            message: "Please select a DPM Start date",
-            trigger: "change"
+            message: 'Please select a DPM Start date',
+            trigger: 'change'
           }
         ],
         baselineDateFrom: [
           {
             required: true,
-            message: "Please select a baseline date",
-            trigger: "change"
+            message: 'Please select a baseline date',
+            trigger: 'change'
           }
         ],
         baselineDateTo: [
           {
             required: true,
-            message: "Please select a baseline end date",
-            trigger: "change"
+            message: 'Please select a baseline end date',
+            trigger: 'change'
           }
         ],
         goalDateFrom: [
           {
             required: true,
-            message: "Please select a goal start date",
-            trigger: "change"
+            message: 'Please select a goal start date',
+            trigger: 'change'
           }
         ],
         goalDateTo: [
           {
             required: true,
-            message: "Please select a goal end date",
-            trigger: "change"
+            message: 'Please select a goal end date',
+            trigger: 'change'
           }
         ]
       }
@@ -348,7 +376,7 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide("new-target-term");
+      this.$modal.hide('new-target-term');
     },
     validateForm() {
       this.$refs.newTargetTerm.validate(valid => {
@@ -416,12 +444,12 @@ export default {
             }
           ]
         });
-        this.$modal.show("success", {
-          message: "Target Term successfully created.",
-          name: "new-target-term"
+        this.$modal.show('success', {
+          message: 'Target Term successfully created.',
+          name: 'new-target-term'
         });
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }

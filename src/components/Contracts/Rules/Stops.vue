@@ -1,13 +1,29 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Stops</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Min:</label>
-      <el-inputNumber v-model="minStops" size="mini" :min="0" class="number-input" clearable/>
+      <el-inputNumber
+        v-model="minStops"
+        size="mini"
+        :min="0"
+        class="number-input"
+        clearable
+      />
       <label>Max:</label>
-      <el-inputNumber v-model="maxStops" size="mini" :min="0" class="number-input" clearable/>
+      <el-inputNumber
+        v-model="maxStops"
+        size="mini"
+        :min="0"
+        class="number-input"
+        clearable
+      />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -20,18 +36,18 @@
         @close="deleteTag(rule)"
       >
         {{
-        ` ${rule.minStops !== null ? rule.minStops : '0'} - ${rule.maxStops}`
+          ` ${rule.minStops !== null ? rule.minStops : '0'} - ${rule.maxStops}`
         }}
       </el-tag>
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
-import { GET_STOPS_LIST, GET_DISCOUNT } from "@/graphql/queries";
-import { UPDATE_STOPS_LIST } from "@/graphql/mutations";
+import { removeTypename } from '@/helper';
+import { GET_STOPS_LIST, GET_DISCOUNT } from '@/graphql/queries';
+import { UPDATE_STOPS_LIST } from '@/graphql/mutations';
 export default {
-  name: "Stops",
+  name: 'Stops',
   props: {
     parentId: {
       default: null,
@@ -66,7 +82,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.stopsList.length) {
-        this.$emit("delete-rule", "Stops");
+        this.$emit('delete-rule', 'Stops');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_STOPS_LIST,
@@ -129,7 +145,7 @@ export default {
         .then(() => {
           const rulesRemaining = this.stopsList.some(rule => !rule.isDeleted);
           if (!this.stopsList.length || !rulesRemaining) {
-            this.$emit("delete-rule", "Stops");
+            this.$emit('delete-rule', 'Stops');
           }
         });
     }
@@ -137,5 +153,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

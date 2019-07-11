@@ -1,7 +1,11 @@
 <template>
   <div class="rule-container">
     <p class="rule-title">Fare Category</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules"/>
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
@@ -20,7 +24,7 @@
         ></el-option>
       </el-select>
       <label>Exclude:</label>
-      <el-checkbox v-model="exclude" name="exclude"/>
+      <el-checkbox v-model="exclude" name="exclude" />
       <button @click="createTag">Add</button>
     </div>
     <div class="rule-tags">
@@ -32,7 +36,8 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ getTagString(rule) }}</el-tag>
+        >{{ getTagString(rule) }}</el-tag
+      >
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -43,20 +48,21 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ getTagString(rule) }}</el-tag>
+        >{{ getTagString(rule) }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
+import { removeTypename } from '@/helper';
 import {
   GET_FARE_CATEGORY_LIST,
   GET_FARE_CATEGORY_UNIT_LIST,
   GET_DISCOUNT
-} from "@/graphql/queries";
-import { UPDATE_FARE_CATEGORY_LIST } from "@/graphql/mutations";
+} from '@/graphql/queries';
+import { UPDATE_FARE_CATEGORY_LIST } from '@/graphql/mutations';
 export default {
-  name: "FareCategory",
+  name: 'FareCategory',
   props: {
     parentId: {
       default: null,
@@ -108,7 +114,7 @@ export default {
   methods: {
     async saveRules() {
       if (this.editMode && !this.fareCategoryList.length) {
-        this.$emit("delete-rule", "FareCategory");
+        this.$emit('delete-rule', 'FareCategory');
       } else if (this.editMode) {
         await this.$apollo.mutate({
           mutation: UPDATE_FARE_CATEGORY_LIST,
@@ -173,7 +179,7 @@ export default {
             rule => !rule.isDeleted
           );
           if (!this.fareCategoryList.length || !rulesRemaining) {
-            this.$emit("delete-rule", "FareCategory");
+            this.$emit('delete-rule', 'FareCategory');
           }
         });
     },
@@ -192,5 +198,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>
