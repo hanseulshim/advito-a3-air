@@ -39,26 +39,14 @@ export default {
             id: this.id,
             targetTermId: this.targetTermId
           },
-          update: (store, { data: { deleteTargetLevel } }) => {
-            const query = {
-              query: GET_TARGET_LEVEL_LIST,
-              variables: {
-                targetTermId: this.targetTermId
-              }
-            };
-            const data = store.readQuery(query);
-            data.targetLevelList = data.targetLevelList.filter(
-              term => deleteTargetLevel !== term.id
-            );
-            store.writeQuery({
-              ...query,
-              data
-            });
-          },
           refetchQueries: () => [
             {
               query: GET_TARGET_TERM,
               variables: { id: this.targetTermId }
+            },
+            {
+              query: GET_TARGET_LEVEL_LIST,
+              variables: { targetTermId: this.targetTermId }
             }
           ]
         });
