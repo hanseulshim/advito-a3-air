@@ -59,7 +59,9 @@ import {
   GET_AIRLINE_CODE_LIST,
   GET_AIRLINE_RULE_LIST,
   GET_DISCOUNT,
-  GET_TARGET_TERM
+  GET_TARGET_TERM,
+  GET_PRICING_TERM,
+  GET_CONTRACT
 } from '@/graphql/queries';
 import { UPDATE_AIRLINE } from '@/graphql/mutations';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
@@ -75,6 +77,14 @@ export default {
       type: Number
     },
     parentType: {
+      default: null,
+      type: Number
+    },
+    pricingTermId: {
+      default: null,
+      type: Number
+    },
+    contractId: {
       default: null,
       type: Number
     }
@@ -103,7 +113,55 @@ export default {
       airlineList: [],
       exclude: false,
       editMode: false,
-      selectedAirline: []
+      selectedAirline: [],
+      discountQueries: [
+        {
+          query: GET_AIRLINE_RULE_LIST,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType
+          }
+        },
+        {
+          query: GET_DISCOUNT,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_PRICING_TERM,
+          variables: {
+            id: this.pricingTermId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      targetTermQueries: [
+        {
+          query: GET_AIRLINE_RULE_LIST,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType
+          }
+        },
+        {
+          query: GET_TARGET_TERM,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ]
     };
   },
   computed: {
@@ -127,22 +185,10 @@ export default {
             airlineList: this.airlineList,
             airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
           },
-          refetchQueries: () => [
-            {
-              query: GET_AIRLINE_RULE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType,
-                airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
-              }
-            },
-            {
-              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
-              variables: {
-                id: this.parentId
-              }
-            }
-          ]
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.targetTermQueries
         });
       }
       this.editMode = !this.editMode;
@@ -179,16 +225,10 @@ export default {
             airlineList: this.airlineList,
             airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
           },
-          refetchQueries: () => [
-            {
-              query: GET_AIRLINE_RULE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType,
-                airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
-              }
-            }
-          ]
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.targetTermQueries
         })
         .then(() => {
           const rulesRemaining = this.airlineList.some(rule => !rule.isDeleted);

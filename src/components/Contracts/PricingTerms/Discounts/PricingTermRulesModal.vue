@@ -72,7 +72,6 @@ import PublishedFareBasis from '../../Rules/PublishedFareBasis';
 import CorporateFareBasis from '../../Rules/CorporateFareBasis';
 import Cabin from '../../Rules/Cabin';
 import FareCategory from '../../Rules/FareCategory';
-
 import { ruleTypes } from '../../Rules/helper';
 import {
   GET_RULE_LIST,

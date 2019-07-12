@@ -196,15 +196,10 @@ export default {
             parentType: this.parentType,
             ticketingDateList: this.ticketingDateList
           },
-          refetchQueries: () => [
-            {
-              query: GET_TICKETING_DATE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
-            }
-          ]
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.targetTermQueries
         })
         .then(() => {
           const rulesRemaining = this.ticketingDateList.some(
