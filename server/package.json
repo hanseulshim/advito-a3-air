@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "sls offline -s dev --cacheInvalidationRegex 'node_modules|handler.js'",
+    "start": "sls offline -s dev --cacheInvalidationRegex 'node_modules'",
     "alpha": "sls deploy -s alpha --aws-profile advito",
     "beta": "sls deploy -s beta --aws-profile advito",
     "dev": "sls deploy -s dev --aws-profile advito",
