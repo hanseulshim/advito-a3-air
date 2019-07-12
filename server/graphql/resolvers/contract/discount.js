@@ -78,22 +78,14 @@ exports.discount = {
       },
       { db }
     ) => {
-      const { rows } = await db.raw(`SELECT discount_createcopy(${id})`);
-      const [{ discount_createcopy: newId }] = rows;
-      const [pricingTermId] = await db('discount').update(
-        {
-          generateddiscountname: name,
-          discounttype: discountTypeId,
-          discountvalue:
-            discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-              ? discountValue / 100
-              : discountValue,
-          direction: directionTypeId,
-          journeytype: journeyTypeId
-        },
-        'pricingtermid'
+      const value =
+        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+          ? discountValue / 100
+          : discountValue;
+      const { rows } = await db.raw(
+        `SELECT discount_createcopy(${id}, '${name}', ${discountTypeId}, ${value}, ${journeyTypeId}, ${directionTypeId})`
       );
-      await updateDiscountOrder(db, pricingTermId);
+      const [{ discount_createcopy: newId }] = rows;
       return await getDiscount(db, parseInt(newId));
     },
     editDiscount: async (
