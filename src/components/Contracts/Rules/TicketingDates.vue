@@ -46,7 +46,9 @@ import { formatDate, removeTypename } from '@/helper';
 import {
   GET_TICKETING_DATE_LIST,
   GET_DISCOUNT,
-  GET_TARGET_TERM
+  GET_TARGET_TERM,
+  GET_PRICING_TERM,
+  GET_CONTRACT
 } from '@/graphql/queries';
 import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
 export default {
@@ -61,6 +63,14 @@ export default {
       type: Number
     },
     parentType: {
+      default: null,
+      type: Number
+    },
+    pricingTermId: {
+      default: null,
+      type: Number
+    },
+    contractId: {
       default: null,
       type: Number
     }
@@ -85,10 +95,57 @@ export default {
       startDate: '',
       endDate: '',
       updateRule: null,
-      ticketingDateList: []
+      ticketingDateList: [],
+      discountQueries: [
+        {
+          query: GET_TICKETING_DATE_LIST,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType
+          }
+        },
+        {
+          query: GET_DISCOUNT,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_PRICING_TERM,
+          variables: {
+            id: this.pricingTermId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      targetTermQueries: [
+        {
+          query: GET_TICKETING_DATE_LIST,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType
+          }
+        },
+        {
+          query: GET_TARGET_TERM,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ]
     };
   },
-
   methods: {
     async saveRules() {
       if (this.editMode && !this.ticketingDateList.length) {
@@ -101,21 +158,10 @@ export default {
             parentType: this.parentType,
             ticketingDateList: this.ticketingDateList
           },
-          refetchQueries: () => [
-            {
-              query: GET_TICKETING_DATE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
-            },
-            {
-              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
-              variables: {
-                id: this.parentId
-              }
-            }
-          ]
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.targetTermQueries
         });
       }
       this.editMode = !this.editMode;
@@ -150,15 +196,10 @@ export default {
             parentType: this.parentType,
             ticketingDateList: this.ticketingDateList
           },
-          refetchQueries: () => [
-            {
-              query: GET_TICKETING_DATE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
-            }
-          ]
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.targetTermQueries
         })
         .then(() => {
           const rulesRemaining = this.ticketingDateList.some(

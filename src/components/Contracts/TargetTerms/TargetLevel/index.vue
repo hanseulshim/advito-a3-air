@@ -30,9 +30,11 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="showIncentiveColumn()"
         prop="incentiveDescription"
         label="Incentive Description"
       />
+      <el-table-column v-if="!showIncentiveColumn()" />
       <el-table-column label="Actions" :width="target.actions">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="Edit Target Level" placement="top">
@@ -147,6 +149,13 @@ export default {
         id,
         targetTermId: this.targetTermId
       });
+    },
+    showIncentiveColumn() {
+      if (this.incentiveTypeId === TARGET_TERM_LOOKUP.NONE) {
+        return false;
+      } else {
+        return true;
+      }
     },
     async toggleTargetLevel({ id, targetTermId }) {
       try {

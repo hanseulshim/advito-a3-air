@@ -37,7 +37,9 @@
         :key="rule.id"
         :parent-id="discount.id"
         :table-id="rule.id"
+        :pricing-term-id="discount.pricingTermId"
         :parent-type="parentType"
+        :contract-id="selectedContract.id"
         @delete-rule="deleteRule"
       ></component>
     </div>
@@ -70,9 +72,12 @@ import PublishedFareBasis from '../../Rules/PublishedFareBasis';
 import CorporateFareBasis from '../../Rules/CorporateFareBasis';
 import Cabin from '../../Rules/Cabin';
 import FareCategory from '../../Rules/FareCategory';
-
 import { ruleTypes } from '../../Rules/helper';
-import { GET_RULE_LIST, GET_DISCOUNT } from '@/graphql/queries';
+import {
+  GET_RULE_LIST,
+  GET_DISCOUNT,
+  GET_SELECTED_CONTRACT
+} from '@/graphql/queries';
 export default {
   name: 'PricingTermRulesModal',
   apollo: {
@@ -91,6 +96,9 @@ export default {
           );
         }
       }
+    },
+    selectedContract: {
+      query: GET_SELECTED_CONTRACT
     }
   },
   components: {
@@ -127,7 +135,8 @@ export default {
       ruleList: [],
       renderedRules: [],
       selectedRule: '',
-      parentType: 1
+      parentType: 1,
+      selectedContract: null
     };
   },
   computed: {

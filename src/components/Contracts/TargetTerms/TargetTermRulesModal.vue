@@ -39,6 +39,7 @@
         :parent-id="term.id"
         :table-id="rule.id"
         :parent-type="parentType"
+        :contract-id="selectedContract.id"
         @delete-rule="deleteRule"
       ></component>
     </div>
@@ -56,7 +57,11 @@ import ValidatingAirline from '../Rules/ValidatingAirline';
 import OperatingAirline from '../Rules/OperatingAirline';
 import { ruleTypes } from '../Rules/helper';
 import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
-import { GET_RULE_LIST, GET_TARGET_TERM } from '@/graphql/queries';
+import {
+  GET_RULE_LIST,
+  GET_TARGET_TERM,
+  GET_SELECTED_CONTRACT
+} from '@/graphql/queries';
 export default {
   name: 'TargetTermRulesModal',
   apollo: {
@@ -76,6 +81,9 @@ export default {
           );
         }
       }
+    },
+    selectedContract: {
+      query: GET_SELECTED_CONTRACT
     }
   },
   components: {
@@ -95,7 +103,8 @@ export default {
       ruleTypes,
       ruleList: [],
       renderedRules: [],
-      selectedRule: ''
+      selectedRule: '',
+      selectedContract: null
     };
   },
   computed: {
