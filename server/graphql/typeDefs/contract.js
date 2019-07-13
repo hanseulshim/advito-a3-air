@@ -47,6 +47,8 @@ type Discount {
   contractOrder: Int
   appliedOrder: Int
   name: String
+  effectiveFrom: Date
+  effectiveTo: Date
   discountTypeId: Int
   discountTypeName: String
   discountValue: Float
@@ -108,7 +110,7 @@ type TargetTerm {
   fareCategoryTo: Date
 }
 type TargetLevel {
-  id: Int
+  id: String
   targetTermId: Int
   targetAmount: Float
   scoringTarget: Boolean
@@ -161,7 +163,7 @@ extend type Query {
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth
   targetLevelList(targetTermId: Int): [TargetLevel] @auth
-  targetLevel(id: Int!, targetTermId: Int!): TargetLevel @auth
+  targetLevel(id: String!, targetTermId: Int!): TargetLevel @auth
   targetTypeList: [TargetType] @auth
   incentiveTypeList: [IncentiveType] @auth
 
@@ -259,14 +261,14 @@ extend type Mutation {
     incentiveDescription: String
   ): Int @auth
   editTargetLevel(
-    id: Int!
+    id: String!
     targetTermId: Int!
     targetAmount: Float!
     scoringTarget: Boolean!
     incentiveDescription: String
   ): [TargetLevel] @auth
-  toggleTargetLevel(id: Int!, targetTermId: Int!): [TargetLevel] @auth
-  deleteTargetLevel(id: Int!, targetTermId: Int!): Int @auth
+  toggleTargetLevel(id: String!, targetTermId: Int!): [TargetLevel] @auth
+  deleteTargetLevel(id: String!, targetTermId: Int!): String @auth
 
   createDiscount(
     pricingTermId: Int!

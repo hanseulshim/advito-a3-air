@@ -134,8 +134,12 @@ const getContractList = async db =>
       typeName: 'l.name_val',
       description: 'c.description',
       round: 'c.round',
-      effectiveFrom: 'c.effectivefrom',
-      effectiveTo: 'c.effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from contract_effectivedate(c.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from contract_effectivedate(c.id))'
+      ),
       qc: 'c.qc',
       pricingTermCount: db.raw(
         '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
@@ -145,22 +149,16 @@ const getContractList = async db =>
       ),
       divisionId: 'd.id',
       pointOfOriginList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+        '(select * from contract_pointoforigin_getlist(c.id))'
       ),
       pointOfSaleList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+        '(select * from contract_pointofsale_getlist(c.id))'
       ),
-      airlineList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
-      )
+      airlineList: db.raw('(select * from contract_carrier_getlist(c.id))')
     })
     .leftJoin('lov_lookup as l', 'c.contracttype', 'l.id')
     .leftJoin('contractdivision as cd', 'c.id', 'cd.contractid')
     .leftJoin('division as d', 'cd.divisionid', 'd.id')
-    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
-    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
-    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
-    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
     .where('c.isdeleted', false)
     .groupBy('c.id', 'l.id', 'd.id');
 
@@ -173,8 +171,12 @@ const getContract = async (db, id) =>
       typeName: 'l.name_val',
       description: 'c.description',
       round: 'c.round',
-      effectiveFrom: 'c.effectivefrom',
-      effectiveTo: 'c.effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from contract_effectivedate(c.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from contract_effectivedate(c.id))'
+      ),
       qc: 'c.qc',
       pricingTermCount: db.raw(
         '(SELECT COUNT(*) from pricingterm as p where p.contractcontainerid = c.id and p.isdeleted = false)'
@@ -184,22 +186,16 @@ const getContract = async (db, id) =>
       ),
       divisionId: 'd.id',
       pointOfOriginList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+        '(select * from contract_pointoforigin_getlist(c.id))'
       ),
       pointOfSaleList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+        '(select * from contract_pointofsale_getlist(c.id))'
       ),
-      airlineList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
-      )
+      airlineList: db.raw('(select * from contract_carrier_getlist(c.id))')
     })
     .leftJoin('lov_lookup as l', 'c.contracttype', 'l.id')
     .leftJoin('contractdivision as cd', 'c.id', 'cd.contractid')
     .leftJoin('division as d', 'cd.divisionid', 'd.id')
-    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
-    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
-    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
-    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
     .where('c.isdeleted', false)
     .andWhere('c.id', id)
     .groupBy('c.id', 'l.id', 'd.id');

@@ -78,6 +78,8 @@ export const DISCOUNT = `id
         contractOrder
         appliedOrder
         name
+        effectiveFrom
+        effectiveTo
         discountTypeId
         discountTypeName
         discountValue
