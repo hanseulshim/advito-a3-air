@@ -210,6 +210,7 @@ export default {
           );
           if (!this.ticketingDateList.length || !rulesRemaining) {
             this.$emit('delete-rule', 'TicketingDates');
+            this.$emit('toggle-row', this.pricingTermId);
           }
         });
       if (this.parentType === 1) {

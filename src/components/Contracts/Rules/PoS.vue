@@ -208,6 +208,7 @@ export default {
           );
           if (!this.pointOfSaleList.length || !rulesRemaining) {
             this.$emit('delete-rule', 'PointOfSale');
+            this.$emit('toggle-row', this.pricingTermId);
           }
         });
       if (this.parentType === 1) {

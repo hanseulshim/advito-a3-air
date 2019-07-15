@@ -239,6 +239,7 @@ export default {
           const rulesRemaining = this.airlineList.some(rule => !rule.isDeleted);
           if (!this.airlineList.length || !rulesRemaining) {
             this.$emit('delete-rule', 'MarketingAirline');
+            this.$emit('toggle-row', this.pricingTermId);
           }
         });
       if (this.parentType === 1) {

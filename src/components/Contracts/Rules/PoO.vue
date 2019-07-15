@@ -208,6 +208,7 @@ export default {
           );
           if (!this.pointOfOriginList.length || !rulesRemaining) {
             this.$emit('delete-rule', 'PointOfOrigin');
+            this.$emit('toggle-row', this.pricingTermId);
           }
         });
       if (this.parentType === 1) {

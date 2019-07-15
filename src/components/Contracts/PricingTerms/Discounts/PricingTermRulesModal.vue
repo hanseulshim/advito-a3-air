@@ -183,7 +183,6 @@ export default {
           id: this.discount.id
         }
       });
-      this.$emit('toggle-row', this.discount.pricingTermId);
     },
     beforeOpen(event) {
       this.discount = event.params.discount;

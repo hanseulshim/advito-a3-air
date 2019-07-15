@@ -309,7 +309,6 @@ export default {
     },
     toggleRow(id) {
       this.$emit('toggle-row', id);
-      this.toggleRulesModal(this.discount);
     },
     sortByNote(a, b) {
       if (a.noteImportant && !b.noteImportant) {
