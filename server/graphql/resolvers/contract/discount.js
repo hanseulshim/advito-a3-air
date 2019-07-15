@@ -155,10 +155,10 @@ const getDiscountList = async (db, pricingTermId) =>
       appliedOrder: 'd.sequence',
       name: 'd.generateddiscountname',
       effectiveFrom: db.raw(
-        '(select _effectivefrom from discount_pricingterm_effectivedate(d.id))'
+        '(select _effectivefrom from discount_effectivedate(d.id))'
       ),
       effectiveTo: db.raw(
-        '(select _effectiveto from discount_pricingterm_effectivedate(d.id))'
+        '(select _effectiveto from discount_effectivedate(d.id))'
       ),
       discountTypeId: 'l.id',
       discountTypeName: 'l.name_val',
@@ -193,10 +193,10 @@ const getDiscount = async (db, id) => {
       appliedOrder: 'd.sequence',
       name: 'd.generateddiscountname',
       effectiveFrom: db.raw(
-        '(select _effectivefrom from discount_pricingterm_effectivedate(d.id))'
+        '(select _effectivefrom from discount_effectivedate(d.id))'
       ),
       effectiveTo: db.raw(
-        '(select _effectiveto from discount_pricingterm_effectivedate(d.id))'
+        '(select _effectiveto from discount_effectivedate(d.id))'
       ),
       discountTypeId: 'l.id',
       discountTypeName: 'l.name_val',

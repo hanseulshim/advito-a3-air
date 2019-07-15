@@ -174,10 +174,10 @@ const getTargetTermList = async (db, contractId) =>
       id: 'targetterm_v2_id',
       name: 'targetterm_v2_name',
       effectiveFrom: db.raw(
-        '(select _effectivefrom from targetterm_Effectivedate(targetterm_v2_id))'
+        '(select _effectivefrom from targetterm_effectivedate(targetterm_v2_id))'
       ),
       effectiveTo: db.raw(
-        '(select _effectiveto from targetterm_Effectivedate(targetterm_v2_id))'
+        '(select _effectiveto from targetterm_effectivedate(targetterm_v2_id))'
       ),
       timeframe: 'periodinmonths',
       qc: 'targetterm_v2_qc',
@@ -297,10 +297,10 @@ const getTargetTerm = async (db, id) => {
       id: 'targetterm_v2_id',
       name: 'targetterm_v2_name',
       effectiveFrom: db.raw(
-        '(select _effectivefrom from targetterm_Effectivedate(targetterm_v2_id))'
+        '(select _effectivefrom from targetterm_effectivedate(targetterm_v2_id))'
       ),
       effectiveTo: db.raw(
-        '(select _effectiveto from targetterm_Effectivedate(targetterm_v2_id))'
+        '(select _effectiveto from targetterm_effectivedate(targetterm_v2_id))'
       ),
       timeframe: 'periodinmonths',
       qc: 'targetterm_v2_qc',

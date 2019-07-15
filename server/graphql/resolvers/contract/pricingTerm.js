@@ -92,10 +92,10 @@ const getPricingTermList = async (db, contractId) =>
       appliedOrder: 'p.sequence',
       name: 'p.name',
       effectiveFrom: db.raw(
-        '(select _effectivefrom from pricingterm_effectivedate2(p.id))'
+        '(select _effectivefrom from pricingterm_effectivedate(p.id))'
       ),
       effectiveTo: db.raw(
-        '(select _effectiveto from pricingterm_effectivedate2(p.id))'
+        '(select _effectiveto from pricingterm_effectivedate(p.id))'
       ),
       qc: 'p.qc',
       discountCount: db.raw(
@@ -137,10 +137,10 @@ const getPricingTerm = async (db, id) => {
       appliedOrder: 'p.sequence',
       name: 'p.name',
       effectiveFrom: db.raw(
-        '(select _effectivefrom from pricingterm_effectivedate2(p.id))'
+        '(select _effectivefrom from pricingterm_effectivedate(p.id))'
       ),
       effectiveTo: db.raw(
-        '(select _effectiveto from pricingterm_effectivedate2(p.id))'
+        '(select _effectiveto from pricingterm_effectivedate(p.id))'
       ),
       qc: 'p.qc',
       discountCount: db.raw(
