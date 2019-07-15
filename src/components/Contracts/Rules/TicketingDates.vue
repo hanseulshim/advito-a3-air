@@ -163,6 +163,9 @@ export default {
               ? this.discountQueries
               : this.targetTermQueries
         });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
       }
       this.editMode = !this.editMode;
       this.startDate = '';
@@ -209,6 +212,9 @@ export default {
             this.$emit('delete-rule', 'TicketingDates');
           }
         });
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
+      }
     },
     editTag(rule) {
       if (this.editMode) {

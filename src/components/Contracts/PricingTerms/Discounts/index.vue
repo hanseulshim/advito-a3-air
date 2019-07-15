@@ -184,7 +184,7 @@
     <DeleteDiscountModal @toggle-row="toggleRow" />
     <DiscountNoteModal @toggle-row="toggleRow" />
     <ChangeDiscountAppliedOrderModal />
-    <PricingTermRulesModal />
+    <PricingTermRulesModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -309,6 +309,7 @@ export default {
     },
     toggleRow(id) {
       this.$emit('toggle-row', id);
+      this.toggleRulesModal(this.discount);
     },
     sortByNote(a, b) {
       if (a.noteImportant && !b.noteImportant) {

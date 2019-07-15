@@ -119,7 +119,8 @@ export default {
           query: GET_AIRLINE_RULE_LIST,
           variables: {
             parentId: this.parentId,
-            parentType: this.parentType
+            parentType: this.parentType,
+            airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
           }
         },
         {
@@ -146,7 +147,8 @@ export default {
           query: GET_AIRLINE_RULE_LIST,
           variables: {
             parentId: this.parentId,
-            parentType: this.parentType
+            parentType: this.parentType,
+            airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
           }
         },
         {
@@ -190,6 +192,9 @@ export default {
               ? this.discountQueries
               : this.targetTermQueries
         });
+      }
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
       }
       this.editMode = !this.editMode;
       this.selectedAirline = [];
@@ -236,6 +241,9 @@ export default {
             this.$emit('delete-rule', 'MarketingAirline');
           }
         });
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
+      }
     }
   }
 };

@@ -41,6 +41,7 @@
         :parent-type="parentType"
         :contract-id="selectedContract.id"
         @delete-rule="deleteRule"
+        @toggle-row="toggleRow"
       ></component>
     </div>
   </modal>
@@ -182,6 +183,7 @@ export default {
           id: this.discount.id
         }
       });
+      this.$emit('toggle-row', this.discount.pricingTermId);
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
@@ -191,6 +193,9 @@ export default {
       this.ruleList = [];
       this.renderedRules = [];
       this.selectedRule = '';
+    },
+    toggleRow(id) {
+      this.$emit('toggle-row', id);
     }
   }
 };
