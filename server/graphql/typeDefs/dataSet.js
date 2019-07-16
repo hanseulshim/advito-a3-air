@@ -51,8 +51,8 @@ extend type Query {
   dataSetColumnList(projectId: Int): [DataSetColumn] @auth
 }
 extend type Mutation {
-  toggleDataSet(month: Int!, year: Int!, qc: Boolean): Boolean @auth
-  deleteDataSet(month: Int!, year: Int!): Int @auth
+  toggleDataSet(projectId: Int!, month: Int!, year: Int!, qc: Boolean): Boolean @auth
+  deleteDataSet(projectId: Int!, month: Int!, year: Int!): Int @auth
   setAnnualization(type: Int, annMonthsList: [DataSetAnnualization]!): Int @auth
 }
 `;

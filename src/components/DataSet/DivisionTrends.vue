@@ -156,13 +156,17 @@ export default {
       this.$apollo.mutate({
         mutation: TOGGLE_DATA_SET,
         variables: {
+          projectId: this.projectId,
           month: parseInt(month),
           year: parseInt(year),
           qc
         },
         refetchQueries: () => [
           {
-            query: GET_DATA_SET_COLUMN_LIST
+            query: GET_DATA_SET_COLUMN_LIST,
+            variables: {
+              projectId: this.projectId
+            }
           }
         ]
       });
@@ -172,13 +176,14 @@ export default {
       this.$apollo.mutate({
         mutation: DELETE_DATA_SET,
         variables: {
+          projectId: this.projectId,
           month: parseInt(month),
           year: parseInt(year)
         },
         refetchQueries: () => [
           {
             query: GET_DATA_SET_COLUMN_LIST,
-            variable: {
+            variables: {
               projectId: this.projectId
             }
           }

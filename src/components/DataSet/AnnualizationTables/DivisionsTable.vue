@@ -202,7 +202,7 @@ export default {
           refetchQueries: () => [
             {
               query: GET_DATA_SET_COLUMN_LIST,
-              variable: {
+              variables: {
                 projectId: this.projectId
               }
             }

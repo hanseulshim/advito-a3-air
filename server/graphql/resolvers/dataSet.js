@@ -13,7 +13,7 @@ exports.dataSet = {
               errorTicketsTotal: 'g.trend_count_error',
               errorRatioTotal: 'g.stat_ratio_error',
               numberDatasets: db.raw(
-                '(SELECT COUNT(*) from geo_country_stats_activity where geo_country_stats_id = g.id)'
+                `(SELECT COUNT(*) from geo_country_stats_activity where geo_country_stats_id = g.id and project_id = ${projectId} and isdeleted = FALSE)`
               ),
               annMonths: 'g.ann_months'
             })
@@ -32,7 +32,7 @@ exports.dataSet = {
               segmentsTotal: 'ds.trend_count_segments',
               farePaidTotal: 'ds.stat_sum_farepaid',
               numberDatasets: db.raw(
-                '(SELECT COUNT(*) from division_stats_activity where division_stats_id = ds.id)'
+                `(SELECT COUNT(*) from division_stats_activity where division_stats_id = ds.id and project_id = ${projectId} and isdeleted = FALSE)`
               ),
               annMonths: 'ds.ann_months'
             })
@@ -91,14 +91,14 @@ exports.dataSet = {
     }
   },
   Mutation: {
-    toggleDataSet: async (_, { month, year, qc }, { db }) => {
+    toggleDataSet: async (_, { projectId, month, year, qc }, { db }) => {
       await db.raw(`
-          SELECT dataset_update_qc(${month}, ${year}, ${qc})
+          SELECT dataset_update_qc(${projectId}, ${month}, ${year}, ${qc})
         `);
     },
-    deleteDataSet: async (_, { month, year }, { db }) => {
+    deleteDataSet: async (_, { projectId, month, year }, { db }) => {
       await db.raw(`
-        SELECT dataset_delete(${month}, ${year})
+        SELECT dataset_delete( ${projectId}, ${month}, ${year})
       `);
     },
     setAnnualization: async (_, { type = 1, annMonthsList }, { db }) => {
