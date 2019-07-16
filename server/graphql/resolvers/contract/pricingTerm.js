@@ -6,24 +6,14 @@ exports.pricingTerm = {
   },
   Mutation: {
     createPricingTerm: async (_, { contractId, name, ignore }, { db }) => {
-      const [{ maxAppliedOrder, maxContractOrder }] = await db('pricingterm')
-        .max({ maxAppliedOrder: 'sequence' })
-        .max({ maxContractOrder: 'readorder' })
-        .where('contractcontainerid', contractId)
-        .andWhere('isdeleted', false);
-      const [id] = await db('pricingterm').insert(
-        {
-          contractcontainerid: contractId,
-          name,
-          type: 1,
-          sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
-          readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
-          qc: false,
-          ignore
-        },
-        'id'
+      const { rows } = await db.raw(
+        `SELECT pricingterm_create(
+          '${name}',
+          ${contractId},
+          ${ignore}
+        )`
       );
-      await updatePricingTermOrder(db, contractId);
+      const [{ pricingterm_create: id }] = rows;
       return await getPricingTerm(db, id);
     },
     copyPricingTerm: async (_, { id, contractId, name }, { db }) => {
@@ -36,12 +26,13 @@ exports.pricingTerm = {
       return pricingTerm;
     },
     editPricingTerm: async (_, { id, name, ignore }, { db }) => {
-      await db('pricingterm')
-        .where('id', id)
-        .update({
-          name,
-          ignore
-        });
+      await db.raw(
+        `SELECT pricingterm_update(
+          ${id},
+          '${name}',
+          ${ignore}
+        )`
+      );
       return await getPricingTerm(db, id);
     },
     togglePricingTermQC: async (_, { contractId, idList }, { db }) => {
@@ -53,11 +44,13 @@ exports.pricingTerm = {
       await Promise.all(queries);
       return await getPricingTermList(db, contractId);
     },
-    deletePricingTerms: async (_, { contractId, idList }, { db }) => {
-      await db('pricingterm')
-        .update({ isdeleted: true })
-        .whereIn('id', idList);
-      await updatePricingTermOrder(db, contractId);
+    deletePricingTerms: async (_, { idList }, { db }) => {
+      const queries = idList.map(id =>
+        db.raw(`
+        SELECT pricingterm_delete(${id})
+      `)
+      );
+      await Promise.all(queries);
       return idList;
     },
     updateAppliedOrder: async (_, { updatePricingTermList }, { db }) => {

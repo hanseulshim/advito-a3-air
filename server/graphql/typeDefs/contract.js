@@ -197,7 +197,7 @@ extend type Mutation {
   copyPricingTerm(id: Int!, contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(contractId: Int!, idList: [Int]!): [PricingTerm] @auth
-  deletePricingTerms(contractId: Int!, idList: [Int]!): [Int] @auth
+  deletePricingTerms(idList: [Int]!): [Int] @auth
   updateAppliedOrder(
     updatePricingTermList: [NewAppliedOrder]!
   ): [PricingTerm] @auth

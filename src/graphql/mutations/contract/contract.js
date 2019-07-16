@@ -111,8 +111,8 @@ export const TOGGLE_PRICING_TERM_QC = gql`
 `;
 
 export const DELETE_PRICING_TERMS = gql`
-  mutation deletePricingTerms($contractId: Int!, $idList: [Int]!) {
-    deletePricingTerms(contractId: $contractId, idList: $idList)
+  mutation deletePricingTerms($idList: [Int]!) {
+    deletePricingTerms(idList: $idList)
   }
 `;
 
