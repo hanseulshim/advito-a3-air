@@ -37,7 +37,7 @@
           >
             <i
               class="fas fa-trash-alt delete"
-              @click="deleteDataSet(column.name)"
+              @click="showDeleteDatasetModal(column.name)"
             />
           </el-tooltip>
           <i v-else class="fas fa-trash-alt reject-hide" />
@@ -66,6 +66,7 @@
         </el-table>
       </div>
     </div>
+    <DeleteDatasetModal @delete-dataset="deleteDataSet" />
   </div>
 </template>
 
@@ -77,10 +78,12 @@ import {
   GET_DATA_SET_COLUMN_LIST
 } from '@/graphql/queries';
 import { TOGGLE_DATA_SET, DELETE_DATA_SET } from '@/graphql/mutations';
+import DeleteDatasetModal from './DeleteDatasetModal';
 export default {
   name: 'DivisionTrends',
   components: {
-    DivisionsTable
+    DivisionsTable,
+    DeleteDatasetModal
   },
   props: {
     filteredDataSetList: {
@@ -156,6 +159,11 @@ export default {
             query: GET_DATA_SET_COLUMN_LIST
           }
         ]
+      });
+    },
+    showDeleteDatasetModal(name) {
+      this.$modal.show('deleteDataset', {
+        id: name
       });
     },
     deleteDataSet(name) {
