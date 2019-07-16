@@ -80,11 +80,20 @@ export default {
     selected: {
       type: String,
       required: true
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
   apollo: {
     dataSetCountryList: {
       query: GET_DATA_SET_COUNTRY_LIST,
+      variables() {
+        return {
+          projectId: this.projectId
+        };
+      },
       result({ data: { dataSetCountryList } }) {
         this.dataSetCountryListCopy = dataSetCountryList.map(country => ({
           ...country
@@ -190,7 +199,10 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_DATA_SET_COLUMN_LIST
+              query: GET_DATA_SET_COLUMN_LIST,
+              variable: {
+                projectId: this.projectId
+              }
             }
           ]
         });

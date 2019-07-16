@@ -8,6 +8,7 @@
     <router-view
       :filtered-data-set-list="filteredDataSetList"
       :check-status="checkStatus"
+      :project-id="projectId"
     />
   </div>
 </template>
@@ -24,6 +25,11 @@ export default {
   apollo: {
     dataSetColumnList: {
       query: GET_DATA_SET_COLUMN_LIST,
+      variables() {
+        return {
+          projectId: this.projectId
+        };
+      },
       result({ data }) {
         this.checkStatus(data.dataSetColumnList);
       }
@@ -36,6 +42,9 @@ export default {
     };
   },
   computed: {
+    projectId() {
+      return parseInt(this.$route.params.projectId);
+    },
     filteredDataSetList() {
       if (this.selectedFilter === 'all') {
         return this.dataSetColumnList;

@@ -110,11 +110,20 @@ export default {
     filteredDataSetList: {
       required: true,
       type: Array
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
   apollo: {
     dataSetCountryList: {
-      query: GET_DATA_SET_COUNTRY_LIST
+      query: GET_DATA_SET_COUNTRY_LIST,
+      variables() {
+        return {
+          projectId: this.projectId
+        };
+      }
     }
   },
   data() {
@@ -192,7 +201,10 @@ export default {
         },
         refetchQueries: () => [
           {
-            query: GET_DATA_SET_COLUMN_LIST
+            query: GET_DATA_SET_COLUMN_LIST,
+            variable: {
+              projectId: this.projectId
+            }
           }
         ]
       });

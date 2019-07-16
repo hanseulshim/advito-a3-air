@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { DATA_SET } from '../constants';
 
 export const GET_DATA_SET_COUNTRY_LIST = gql`
-  {
-    dataSetCountryList {
+  query dataSetCountryList($projectId: Int) {
+    dataSetCountryList(projectId: $projectId) {
       id
       name
       ticketsTotal
@@ -19,8 +19,8 @@ export const GET_DATA_SET_COUNTRY_LIST = gql`
 `;
 
 export const GET_DATA_SET_DIVISION_LIST = gql`
-  {
-    dataSetDivisionList {
+  query dataSetDivisionList($projectId: Int) {
+    dataSetDivisionList(projectId: $projectId) {
       id
       name
       ticketsTotal
@@ -33,8 +33,8 @@ export const GET_DATA_SET_DIVISION_LIST = gql`
 `;
 
 export const GET_DATA_SET_COLUMN_LIST = gql`
-  {
-    dataSetColumnList {
+  query dataSetColumnList($projectId: Int) {
+    dataSetColumnList(projectId: $projectId) {
       ${DATA_SET}
     }
   }

@@ -80,11 +80,20 @@ export default {
     selected: {
       type: String,
       required: true
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
   apollo: {
     dataSetDivisionList: {
       query: GET_DATA_SET_DIVISION_LIST,
+      variables() {
+        return {
+          projectId: this.projectId
+        };
+      },
       result({ data: { dataSetDivisionList } }) {
         this.dataSetDivisionListCopy = dataSetDivisionList.map(division => ({
           ...division
@@ -192,7 +201,10 @@ export default {
           },
           refetchQueries: () => [
             {
-              query: GET_DATA_SET_COLUMN_LIST
+              query: GET_DATA_SET_COLUMN_LIST,
+              variable: {
+                projectId: this.projectId
+              }
             }
           ]
         });
