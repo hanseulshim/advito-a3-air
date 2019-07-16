@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from '@/helper';
+import { formatDate } from '@/helper';
 // import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
 export default {
   name: 'TicketDate',

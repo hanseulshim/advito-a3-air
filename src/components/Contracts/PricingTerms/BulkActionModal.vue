@@ -6,6 +6,12 @@
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
+    <div class="title-row space-between">
+      <div class="section-header">Bulk Action</div>
+      <el-tooltip effect="dark" content="Close Modal" placement="top">
+        <i class="fas fa-times close-modal-button" @click="hideModal" />
+      </el-tooltip>
+    </div>
     <component :is="componentToRender" :parent-type="parentType"></component>
   </modal>
 </template>
