@@ -181,7 +181,7 @@
     <NewDiscountModal @toggle-row="toggleRow" />
     <CopyDiscountModal @toggle-row="toggleRow" />
     <EditDiscountModal />
-    <BulkActionDiscountModal
+    <DiscountBulkActionModal
       :bulk-action-list="bulkActionList"
       :parent-type="2"
       @clear-selection="clearBulkActionSelection"
@@ -199,7 +199,7 @@ import { discount } from '@/config';
 import { GET_DISCOUNT_LIST, GET_BULK_ACTION_LIST } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import NewDiscountModal from './NewDiscountModal';
-import BulkActionDiscountModal from './BulkActionDiscountModal';
+import DiscountBulkActionModal from './DiscountBulkActionModal';
 import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
 import DeleteDiscountModal from './DeleteDiscountModal';
@@ -210,7 +210,7 @@ export default {
   name: 'Discounts',
   components: {
     NewDiscountModal,
-    BulkActionDiscountModal,
+    DiscountBulkActionModal,
     CopyDiscountModal,
     EditDiscountModal,
     DeleteDiscountModal,
@@ -299,7 +299,7 @@ export default {
       });
     },
     showBulkActionModal(value) {
-      this.$modal.show('bulk-action-discount-modal', {
+      this.$modal.show('discount-bulk-action-modal', {
         bulkActionId: value
       });
     },

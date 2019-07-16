@@ -1,7 +1,7 @@
 <template>
   <modal
     classes="modal-container"
-    name="bulk-action-discount-modal"
+    name="discount-bulk-action-modal"
     height="auto"
     @before-open="beforeOpen"
     @before-close="beforeClose"
@@ -21,7 +21,7 @@ import TicketDesignation from '../../BulkActionRules/TicketDesignation';
 import TourCode from '../../BulkActionRules/TourCode';
 import TravelData from '../../BulkActionRules/TravelData';
 export default {
-  name: 'BulkActionDiscountModal',
+  name: 'DiscountBulkActionModal',
   components: {
     TicketDate,
     TicketDesignation,
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('bulk-action-discount-modal');
+      this.$modal.hide('discount-bulk-action-modal');
     },
     beforeOpen(event) {
       this.bulkActionId = event.params.bulkActionId;
