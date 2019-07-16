@@ -15,7 +15,7 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">edit target term</div>
+        <div class="section-header">edit target level</div>
         <el-tooltip effect="dark" content="Close Modal" placement="top">
           <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
@@ -28,7 +28,7 @@
           >
         </div>
       </el-form-item>
-      <el-form-item label="Incentive Description">
+      <el-form-item v-if="showIncentiveInput()" label="Incentive Description">
         <el-input v-model="form.incentiveDescription" type="textarea" />
       </el-form-item>
       <el-form-item label="Make Scoring Target">
@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       targetTypeId: null,
+      incentiveTypeId: null,
       form: {
         id: null,
         targetTermId: null,
@@ -93,6 +94,13 @@ export default {
         return false;
       }
     },
+    showIncentiveInput() {
+      if (this.incentiveTypeId === TARGET_TERM_LOOKUP.NONE) {
+        return false;
+      } else {
+        return true;
+      }
+    },
     async editTargetLevel() {
       try {
         await this.$apollo.mutate({
@@ -131,6 +139,7 @@ export default {
       this.form.targetTermId = targetTermId;
       this.form.targetAmount = targetAmount * 100;
       this.form.incentiveDescription = incentiveDescription;
+      this.incentiveTypeId = event.params.incentiveTypeId;
       this.form.scoringTarget = scoringTarget;
     },
     beforeClose() {

@@ -51,15 +51,14 @@
         closable
         @click="editTag(rule)"
         @close="deleteTag(rule)"
+        >{{ getTagString(rule) }}</el-tag
       >
-        {{ getTagString(rule) }}
-      </el-tag>
     </div>
   </div>
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_DISTANCE_LIST } from '@/graphql/queries';
+import { GET_DISTANCE_LIST, GET_DISCOUNT } from '@/graphql/queries';
 import { UPDATE_DISTANCE_LIST } from '@/graphql/mutations';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
@@ -116,6 +115,12 @@ export default {
             {
               query: GET_DISTANCE_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

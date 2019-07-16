@@ -50,7 +50,7 @@
 <script>
 import { TIME_UNIT_LOOKUP } from '@/graphql/constants';
 import { removeTypename } from '@/helper';
-import { GET_ADVANCED_TICKETING_LIST } from '@/graphql/queries';
+import { GET_ADVANCED_TICKETING_LIST, GET_DISCOUNT } from '@/graphql/queries';
 import { UPDATE_ADVANCED_TICKETING_LIST } from '@/graphql/mutations';
 export default {
   name: 'AdvanceTicketing',
@@ -106,6 +106,12 @@ export default {
             {
               query: GET_ADVANCED_TICKETING_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

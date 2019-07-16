@@ -150,17 +150,21 @@
         <template slot-scope="props">
           <el-tooltip
             v-if="
-              props.row.pointOfSaleList.length &&
-                props.row.pointOfOriginList.length
+              props.row.pointOfSaleList.length > 1 ||
+                props.row.pointOfOriginList.length > 1
             "
             effect="dark"
             placement="top"
             popper-class="pos-popup-container"
           >
             <div slot="content">
-              PoS: {{ props.row.pointOfSaleList.join(', ') }}
-              <br />
-              PoO: {{ props.row.pointOfOriginList.join(', ') }}
+              <span v-if="props.row.pointOfSaleList.length > 1"
+                >PoS: {{ props.row.pointOfSaleList.join(', ') }}</span
+              >
+              <br v-if="props.row.pointOfSaleList.length > 1" />
+              <span v-if="props.row.pointOfOriginList.length > 1"
+                >PoO: {{ props.row.pointOfOriginList.join(', ') }}</span
+              >
             </div>
             <span>
               <span>
@@ -171,20 +175,15 @@
                     : props.row.pointOfSaleList.join('')
                 }}
               </span>
-              <span
-                v-if="
+              /
+              <span>
+                {{
                   props.row.pointOfOriginList.length > 1 ||
-                    !props.row.pointOfOriginList.length
-                "
-              >
-                /
+                  !props.row.pointOfOriginList.length
+                    ? props.row.pointOfOriginList.length
+                    : props.row.pointOfOriginList.join('')
+                }}
               </span>
-              <span>{{
-                props.row.pointOfOriginList.length > 1 ||
-                !props.row.pointOfOriginList.length
-                  ? props.row.pointOfOriginList.length
-                  : props.row.pointOfOriginList.join('')
-              }}</span>
             </span>
           </el-tooltip>
           <span v-else>

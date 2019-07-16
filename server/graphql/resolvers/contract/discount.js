@@ -78,22 +78,14 @@ exports.discount = {
       },
       { db }
     ) => {
-      const { rows } = await db.raw(`SELECT discount_createcopy(${id})`);
-      const [{ discount_createcopy: newId }] = rows;
-      const [pricingTermId] = await db('discount').update(
-        {
-          generateddiscountname: name,
-          discounttype: discountTypeId,
-          discountvalue:
-            discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-              ? discountValue / 100
-              : discountValue,
-          direction: directionTypeId,
-          journeytype: journeyTypeId
-        },
-        'pricingtermid'
+      const value =
+        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+          ? discountValue / 100
+          : discountValue;
+      const { rows } = await db.raw(
+        `SELECT discount_createcopy(${id}, '${name}', ${discountTypeId}, ${value}, ${journeyTypeId}, ${directionTypeId})`
       );
-      await updateDiscountOrder(db, pricingTermId);
+      const [{ discount_createcopy: newId }] = rows;
       return await getDiscount(db, parseInt(newId));
     },
     editDiscount: async (
@@ -162,6 +154,12 @@ const getDiscountList = async (db, pricingTermId) =>
       contractOrder: 'd.readorder',
       appliedOrder: 'd.sequence',
       name: 'd.generateddiscountname',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from discount_effectivedate(d.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from discount_effectivedate(d.id))'
+      ),
       discountTypeId: 'l.id',
       discountTypeName: 'l.name_val',
       discountValue: 'd.discountvalue',
@@ -170,7 +168,7 @@ const getDiscountList = async (db, pricingTermId) =>
       directionTypeId: 'l2.id',
       directionTypeName: 'l2.name_val',
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(d.rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
       normalizationCount: 'd.count_normalizations',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
@@ -194,6 +192,12 @@ const getDiscount = async (db, id) => {
       contractOrder: 'd.readorder',
       appliedOrder: 'd.sequence',
       name: 'd.generateddiscountname',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from discount_effectivedate(d.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from discount_effectivedate(d.id))'
+      ),
       discountTypeId: 'l.id',
       discountTypeName: 'l.name_val',
       discountValue: 'd.discountvalue',
@@ -202,7 +206,7 @@ const getDiscount = async (db, id) => {
       directionTypeId: 'l2.id',
       directionTypeName: 'l2.name_val',
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(d.rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
       normalizationCount: 'd.count_normalizations',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),

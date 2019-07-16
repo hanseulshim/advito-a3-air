@@ -6,24 +6,14 @@ exports.pricingTerm = {
   },
   Mutation: {
     createPricingTerm: async (_, { contractId, name, ignore }, { db }) => {
-      const [{ maxAppliedOrder, maxContractOrder }] = await db('pricingterm')
-        .max({ maxAppliedOrder: 'sequence' })
-        .max({ maxContractOrder: 'readorder' })
-        .where('contractcontainerid', contractId)
-        .andWhere('isdeleted', false);
-      const [id] = await db('pricingterm').insert(
-        {
-          contractcontainerid: contractId,
-          name,
-          type: 1,
-          sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
-          readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
-          qc: false,
-          ignore
-        },
-        'id'
+      const { rows } = await db.raw(
+        `SELECT pricingterm_create(
+          '${name}',
+          ${contractId},
+          ${ignore}
+        )`
       );
-      await updatePricingTermOrder(db, contractId);
+      const [{ pricingterm_create: id }] = rows;
       return await getPricingTerm(db, id);
     },
     copyPricingTerm: async (_, { id, contractId, name }, { db }) => {
@@ -36,12 +26,13 @@ exports.pricingTerm = {
       return pricingTerm;
     },
     editPricingTerm: async (_, { id, name, ignore }, { db }) => {
-      await db('pricingterm')
-        .where('id', id)
-        .update({
-          name,
-          ignore
-        });
+      await db.raw(
+        `SELECT pricingterm_update(
+          ${id},
+          '${name}',
+          ${ignore}
+        )`
+      );
       return await getPricingTerm(db, id);
     },
     togglePricingTermQC: async (_, { contractId, idList }, { db }) => {
@@ -53,11 +44,13 @@ exports.pricingTerm = {
       await Promise.all(queries);
       return await getPricingTermList(db, contractId);
     },
-    deletePricingTerms: async (_, { contractId, idList }, { db }) => {
-      await db('pricingterm')
-        .update({ isdeleted: true })
-        .whereIn('id', idList);
-      await updatePricingTermOrder(db, contractId);
+    deletePricingTerms: async (_, { idList }, { db }) => {
+      const queries = idList.map(id =>
+        db.raw(`
+        SELECT pricingterm_delete(${id})
+      `)
+      );
+      await Promise.all(queries);
       return idList;
     },
     updateAppliedOrder: async (_, { updatePricingTermList }, { db }) => {
@@ -91,8 +84,12 @@ const getPricingTermList = async (db, contractId) =>
       contractOrder: 'p.readorder',
       appliedOrder: 'p.sequence',
       name: 'p.name',
-      effectiveFrom: 'c.effectivefrom',
-      effectiveTo: 'c.effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from pricingterm_effectivedate(p.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from pricingterm_effectivedate(p.id))'
+      ),
       qc: 'p.qc',
       discountCount: db.raw(
         '(SELECT COUNT(*) from discount as d where d.pricingtermid = p.id and d.isdeleted = false)'
@@ -113,24 +110,17 @@ const getPricingTermList = async (db, contractId) =>
           FROM discount WHERE pricingtermid = p.id AND isdeleted = FALSE
         ) as count)`),
       pointOfOriginList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+        '(select * from pricingterm_pointoforigin_getlist(p.id))'
       ),
       pointOfSaleList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+        '(select * from pricingterm_pointofsale_getlist(p.id))'
       ),
-      airlineList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
-      )
+      airlineList: db.raw('(select * from pricingterm_carrier_getlist(p.id))')
     })
-    .leftJoin('contractcontainer as c', 'c.id', contractId)
-    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
-    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
-    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
-    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
     .leftJoin('usernote as n', 'p.notesid', 'n.id')
     .where('p.isdeleted', false)
     .andWhere('p.contractcontainerid', contractId)
-    .groupBy('p.id', 'c.id', 'n.important', 'n.id');
+    .groupBy('p.id', 'n.important', 'n.id');
 
 const getPricingTerm = async (db, id) => {
   const [pricingTerm] = await db('pricingterm as p')
@@ -139,8 +129,12 @@ const getPricingTerm = async (db, id) => {
       contractOrder: 'p.readorder',
       appliedOrder: 'p.sequence',
       name: 'p.name',
-      effectiveFrom: 'c.effectivefrom',
-      effectiveTo: 'c.effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from pricingterm_effectivedate(p.id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from pricingterm_effectivedate(p.id))'
+      ),
       qc: 'p.qc',
       discountCount: db.raw(
         '(SELECT COUNT(*) from discount as d where d.pricingtermid = p.id and d.isdeleted = false)'
@@ -161,24 +155,17 @@ const getPricingTerm = async (db, id) => {
           FROM discount WHERE pricingtermid = p.id AND isdeleted = FALSE
         ) as count)`),
       pointOfOriginList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT po.countrycode), NULL)'
+        '(select * from pricingterm_pointoforigin_getlist(p.id))'
       ),
       pointOfSaleList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT ps.countrycode), NULL)'
+        '(select * from pricingterm_pointofsale_getlist(p.id))'
       ),
-      airlineList: db.raw(
-        'ARRAY_REMOVE(ARRAY_AGG(DISTINCT cr.carriercode), NULL)'
-      )
+      airlineList: db.raw('(select * from pricingterm_carrier_getlist(p.id))')
     })
-    .leftJoin('contractcontainer as c', 'c.id', 'p.contractcontainerid')
-    .leftJoin('rulescontainer as r', 'c.guidref', 'r.guidref')
-    .leftJoin('pointoforigin as po', 'r.guidref', 'po.rulescontainerguidref')
-    .leftJoin('pointofsale as ps', 'r.guidref', 'ps.rulescontainerguidref')
-    .leftJoin('carrierrule as cr', 'r.guidref', 'cr.rulescontainerguidref')
     .leftJoin('usernote as n', 'p.notesid', 'n.id')
     .where('p.isdeleted', false)
     .andWhere('p.id', id)
-    .groupBy('p.id', 'c.id', 'n.important', 'n.id');
+    .groupBy('p.id', 'n.important', 'n.id');
   return pricingTerm;
 };
 

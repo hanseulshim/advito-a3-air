@@ -173,8 +173,12 @@ const getTargetTermList = async (db, contractId) =>
     .select({
       id: 'targetterm_v2_id',
       name: 'targetterm_v2_name',
-      effectiveFrom: 'contractcontainer_effectivefrom',
-      effectiveTo: 'contractcontainer_effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from targetterm_effectivedate(targetterm_v2_id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from targetterm_effectivedate(targetterm_v2_id))'
+      ),
       timeframe: 'periodinmonths',
       qc: 'targetterm_v2_qc',
       targetTypeId: 'targettype',
@@ -266,7 +270,7 @@ const getTargetTermList = async (db, contractId) =>
             where targettermid = targetterm_v2_id
             and isdeleted = false) end`),
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(rulescontainerguidref)) as c)'
       ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
@@ -292,8 +296,12 @@ const getTargetTerm = async (db, id) => {
     .select({
       id: 'targetterm_v2_id',
       name: 'targetterm_v2_name',
-      effectiveFrom: 'contractcontainer_effectivefrom',
-      effectiveTo: 'contractcontainer_effectiveto',
+      effectiveFrom: db.raw(
+        '(select _effectivefrom from targetterm_effectivedate(targetterm_v2_id))'
+      ),
+      effectiveTo: db.raw(
+        '(select _effectiveto from targetterm_effectivedate(targetterm_v2_id))'
+      ),
       timeframe: 'periodinmonths',
       qc: 'targetterm_v2_qc',
       targetTypeId: 'targettype',
@@ -375,7 +383,7 @@ const getTargetTerm = async (db, id) => {
       where targettermid = targetterm_v2_id
       and isdeleted = false) end`),
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(rulescontainerguidref)) as c)'
       ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(

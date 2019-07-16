@@ -39,6 +39,7 @@
         :parent-id="term.id"
         :table-id="rule.id"
         :parent-type="parentType"
+        :contract-id="selectedContract.id"
         @delete-rule="deleteRule"
       ></component>
     </div>
@@ -56,7 +57,11 @@ import ValidatingAirline from '../Rules/ValidatingAirline';
 import OperatingAirline from '../Rules/OperatingAirline';
 import { ruleTypes } from '../Rules/helper';
 import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
-import { GET_RULE_LIST } from '@/graphql/queries';
+import {
+  GET_RULE_LIST,
+  GET_TARGET_TERM,
+  GET_SELECTED_CONTRACT
+} from '@/graphql/queries';
 export default {
   name: 'TargetTermRulesModal',
   apollo: {
@@ -76,6 +81,9 @@ export default {
           );
         }
       }
+    },
+    selectedContract: {
+      query: GET_SELECTED_CONTRACT
     }
   },
   components: {
@@ -95,7 +103,8 @@ export default {
       ruleTypes,
       ruleList: [],
       renderedRules: [],
-      selectedRule: ''
+      selectedRule: '',
+      selectedContract: null
     };
   },
   computed: {
@@ -117,7 +126,7 @@ export default {
     },
     createRule(selected) {
       const match = this.ruleTypes.filter(rule => rule.id === selected)[0];
-      this.renderedRules.push(match);
+      this.renderedRules.unshift(match);
       this.selectedRule = '';
     },
     async deleteRule(ruleType) {
@@ -126,17 +135,24 @@ export default {
       )[0];
       this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
       //Call Apollo refetch of RuleList here!
-      const {
-        data: { ruleList }
-      } = await this.$apollo.query({
+      await this.$apollo.query({
         query: GET_RULE_LIST,
         fetchPolicy: 'network-only',
         variables: {
           parentId: this.term.id,
           parentType: TARGET_TERM_LOOKUP.RULE_TYPE
+        },
+        result({ data }) {
+          this.ruleList = data.ruleList;
         }
       });
-      this.ruleList = ruleList;
+      await this.$apollo.query({
+        query: GET_TARGET_TERM,
+        fetchPolicy: 'network-only',
+        variables: {
+          id: this.term.id
+        }
+      });
     },
     beforeOpen(event) {
       this.term = event.params.term;

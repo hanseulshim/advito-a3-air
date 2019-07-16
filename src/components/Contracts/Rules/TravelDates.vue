@@ -6,9 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
         v-model="startDate"
@@ -25,9 +23,7 @@
         class="date-picker"
       ></el-date-picker>
       <button v-if="!updateRule" @click="createTag">Add</button>
-      <button v-if="updateRule" @click="updateTag">
-        Update
-      </button>
+      <button v-if="updateRule" @click="updateTag">Update</button>
     </div>
     <div class="rule-tags">
       <el-tag
@@ -38,15 +34,20 @@
         closable
         @close="deleteTag(rule)"
         @click="editTag(rule)"
-        >{{ formatDate(rule.startDate) }} -
-        {{ formatDate(rule.endDate) }}</el-tag
       >
+        {{ formatDate(rule.startDate) }} -
+        {{ formatDate(rule.endDate) }}
+      </el-tag>
     </div>
   </div>
 </template>
 <script>
 import { formatDate, removeTypename } from '@/helper';
-import { GET_TRAVEL_DATE_LIST } from '@/graphql/queries';
+import {
+  GET_TRAVEL_DATE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
+} from '@/graphql/queries';
 import { UPDATE_TRAVEL_DATES } from '@/graphql/mutations';
 export default {
   name: 'TravelDates',
@@ -105,6 +106,12 @@ export default {
               variables: {
                 parentId: this.parentId,
                 parentType: this.parentType
+              }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
               }
             }
           ]

@@ -78,6 +78,8 @@ export const DISCOUNT = `id
         contractOrder
         appliedOrder
         name
+        effectiveFrom
+        effectiveTo
         discountTypeId
         discountTypeName
         discountValue
@@ -134,7 +136,7 @@ export const PRICING_TERM_LOOKUP = {
   DISTANCE_UNIT_MILES: 1,
   DISTANCE_UNIT_KILOMETERS: 2,
   PUBLISHED_FARE_BASIS_TYPE: 2,
-  CORPORATE_FARE_BASIS_TYPE: 2
+  CORPORATE_FARE_BASIS_TYPE: 1
 };
 
 export const TARGET_TERM_LOOKUP = {

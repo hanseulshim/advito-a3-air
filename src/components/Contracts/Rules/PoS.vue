@@ -6,9 +6,7 @@
       class="fas fa-pencil-alt edit-rule"
       @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
         v-model="selectedCountry"
@@ -42,7 +40,14 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_GEO_LIST, GET_POINT_OF_SALE_LIST } from '@/graphql/queries';
+import {
+  GET_GEO_LIST,
+  GET_POINT_OF_SALE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM,
+  GET_PRICING_TERM,
+  GET_CONTRACT
+} from '@/graphql/queries';
 import { UPDATE_POINT_OF_SALE } from '@/graphql/mutations';
 export default {
   name: 'PointOfSale',
@@ -56,6 +61,14 @@ export default {
       type: Number
     },
     parentType: {
+      default: null,
+      type: Number
+    },
+    pricingTermId: {
+      default: null,
+      type: Number
+    },
+    contractId: {
       default: null,
       type: Number
     }
@@ -82,7 +95,55 @@ export default {
       geographyRuleList: [],
       editMode: false,
       selectedCountry: [],
-      pointOfSaleList: []
+      pointOfSaleList: [],
+      discountQueries: [
+        {
+          query: GET_POINT_OF_SALE_LIST,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType
+          }
+        },
+        {
+          query: GET_DISCOUNT,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_PRICING_TERM,
+          variables: {
+            id: this.pricingTermId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      targetTermQueries: [
+        {
+          query: GET_POINT_OF_SALE_LIST,
+          variables: {
+            parentId: this.parentId,
+            parentType: this.parentType
+          }
+        },
+        {
+          query: GET_TARGET_TERM,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ]
     };
   },
   methods: {
@@ -97,15 +158,10 @@ export default {
             parentType: this.parentType,
             pointOfSaleList: this.pointOfSaleList
           },
-          refetchQueries: () => [
-            {
-              query: GET_POINT_OF_SALE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
-            }
-          ]
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.targetTermQueries
         });
       }
       this.editMode = !this.editMode;
@@ -138,15 +194,10 @@ export default {
             pointOfSaleList: this.pointOfSaleList,
             parentType: this.parentType
           },
-          refetchQueries: () => [
-            {
-              query: GET_POINT_OF_SALE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
-            }
-          ]
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.targetTermQueries
         })
         .then(() => {
           const rulesRemaining = this.pointOfSaleList.some(

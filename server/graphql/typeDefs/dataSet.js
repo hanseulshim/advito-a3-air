@@ -2,21 +2,21 @@ exports.dataSet = `
 type DataSetCountry {
   id: Int
   name: String
-  ticketsTotal: Int
-  segmentsTotal: Int
-  farePaidTotal: Int
-  importedTicketsTotal: Int
-  errorTicketsTotal: Int
-  errorRatioTotal: Int
+  ticketsTotal: Float
+  segmentsTotal: Float
+  farePaidTotal: Float
+  importedTicketsTotal: Float
+  errorTicketsTotal: Float
+  errorRatioTotal: Float
   numberDatasets: Int
   annMonths: Int
 }
 type DataSetDivision {
   id: Int
   name: String
-  ticketsTotal: Int
-  segmentsTotal: Int
-  farePaidTotal: Int
+  ticketsTotal: Float
+  segmentsTotal: Float
+  farePaidTotal: Float
   numberDatasets: Int
   annMonths: Int
 }
@@ -32,27 +32,27 @@ type DataSetColumn {
   divisionData: [DivisionData]
 }
 type CountryData {
-  tickets: Int
-  segments: Int
-  farePaid: Int
-  importedTickets: Int
-  errorTickets: Int
-  errorRatio: Int
+  tickets: Float
+  segments: Float
+  farePaid: Float
+  importedTickets: Float
+  errorTickets: Float
+  errorRatio: Float
 }
 type DivisionData {
-  tickets: Int
-  segments: Int
-  farePaid: Int
+  tickets: Float
+  segments: Float
+  farePaid: Float
 }
 
 extend type Query {
-  dataSetCountryList: [DataSetCountry] @auth
-  dataSetDivisionList: [DataSetDivision] @auth
-  dataSetColumnList: [DataSetColumn] @auth
+  dataSetCountryList(projectId: Int): [DataSetCountry] @auth
+  dataSetDivisionList(projectId: Int): [DataSetDivision] @auth
+  dataSetColumnList(projectId: Int): [DataSetColumn] @auth
 }
 extend type Mutation {
-  toggleDataSet(month: Int!, year: Int!, qc: Boolean): Boolean @auth
-  deleteDataSet(month: Int!, year: Int!): Int @auth
+  toggleDataSet(projectId: Int!, month: Int!, year: Int!, qc: Boolean): Boolean @auth
+  deleteDataSet(projectId: Int!, month: Int!, year: Int!): Int @auth
   setAnnualization(type: Int, annMonthsList: [DataSetAnnualization]!): Int @auth
 }
 `;

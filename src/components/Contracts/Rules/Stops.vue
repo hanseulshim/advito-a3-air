@@ -6,11 +6,9 @@
       class="fas fa-pencil-alt edit-rule"
       @click="saveRules"
     />
-    <button v-if="editMode" class="save-rule" @click="saveRules">
-      Save
-    </button>
+    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
-      <label>Min: </label>
+      <label>Min:</label>
       <el-inputNumber
         v-model="minStops"
         size="mini"
@@ -18,7 +16,7 @@
         class="number-input"
         clearable
       />
-      <label>Max: </label>
+      <label>Max:</label>
       <el-inputNumber
         v-model="maxStops"
         size="mini"
@@ -36,16 +34,17 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{
-          ` ${rule.minStops !== null ? rule.minStops : '0'} - ${rule.maxStops}`
-        }}</el-tag
       >
+        {{
+          ` ${rule.minStops !== null ? rule.minStops : '0'} - ${rule.maxStops}`
+        }}
+      </el-tag>
     </div>
   </div>
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_STOPS_LIST } from '@/graphql/queries';
+import { GET_STOPS_LIST, GET_DISCOUNT } from '@/graphql/queries';
 import { UPDATE_STOPS_LIST } from '@/graphql/mutations';
 export default {
   name: 'Stops',
@@ -95,6 +94,12 @@ export default {
             {
               query: GET_STOPS_LIST,
               variables: { parentId: this.parentId }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });

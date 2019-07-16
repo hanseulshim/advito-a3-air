@@ -156,7 +156,7 @@ query targetLevelList($targetTermId: Int) {
 `;
 
 export const GET_TARGET_LEVEL = gql`
-query targetLevel($id: Int!, $targetTermId: Int!) {
+query targetLevel($id: String!, $targetTermId: Int!) {
   targetLevel(id: $id, targetTermId: $targetTermId) {
     ${TARGET_LEVEL}
   }

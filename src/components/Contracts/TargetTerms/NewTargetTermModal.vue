@@ -96,13 +96,15 @@
       >
         <div class="text-input-container qsi">
           <el-input v-model.number="form.qsi" />
-          <span>{{
-            form.targetTypeId === 21
-              ? '%'
-              : form.targetTypeId === 24
-              ? 'points'
-              : ''
-          }}</span>
+          <span>
+            {{
+              form.targetTypeId === 21 || form.targetTypeId === 20
+                ? '%'
+                : form.targetTypeId === 24
+                ? 'points'
+                : ''
+            }}
+          </span>
         </div>
       </el-form-item>
       <el-form-item
@@ -459,10 +461,10 @@ export default {
       this.form.name = null;
       this.form.targetTypeId = null;
       this.form.currencyId = null;
-      this.form.cabinF = false;
-      this.form.cabinC = false;
-      this.form.cabinP = false;
-      this.form.cabinY = false;
+      this.form.cabinF = true;
+      this.form.cabinC = true;
+      this.form.cabinP = true;
+      this.form.cabinY = true;
       this.form.incentiveTypeId = TARGET_TERM_LOOKUP.NONE;
       this.form.qsi = 0;
       this.form.softTarget = null;

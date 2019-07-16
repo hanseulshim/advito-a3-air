@@ -11,6 +11,7 @@ export const GET_GEO_LIST = gql`
     geographyRuleList {
       code
       name
+      locationType
     }
   }
 `;
@@ -118,8 +119,12 @@ export const GET_AIRLINE_CODE_LIST = gql`
 `;
 
 export const GET_AIRLINE_RULE_LIST = gql`
-  query airlineList($parentId: Int, $airlineType: Int) {
-    airlineList(parentId: $parentId, airlineType: $airlineType) {
+  query airlineList($parentId: Int, $airlineType: Int, $parentType: Int) {
+    airlineList(
+      parentId: $parentId
+      airlineType: $airlineType
+      parentType: $parentType
+    ) {
       id
       ruleContainerId
       exclude
@@ -334,8 +339,8 @@ export const GET_FARE_BASIS_UNIT_LIST = gql`
 `;
 
 export const GET_FARE_BASIS_LIST = gql`
-  query fareBasisList($parentId: Int) {
-    fareBasisList(parentId: $parentId) {
+  query fareBasisList($parentId: Int, $fareBasisType: Int) {
+    fareBasisList(parentId: $parentId, fareBasisType: $fareBasisType) {
       id
       ruleContainerId
       name

@@ -76,7 +76,8 @@
 import { removeTypename } from '@/helper';
 import {
   GET_FARE_BASIS_LIST,
-  GET_FARE_BASIS_UNIT_LIST
+  GET_FARE_BASIS_UNIT_LIST,
+  GET_DISCOUNT
 } from '@/graphql/queries';
 import { UPDATE_FARE_BASIS_LIST } from '@/graphql/mutations';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
@@ -100,7 +101,8 @@ export default {
       query: GET_FARE_BASIS_LIST,
       variables() {
         return {
-          parentId: this.parentId
+          parentId: this.parentId,
+          fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
         };
       },
       result({ data: { fareBasisList } }) {
@@ -156,7 +158,16 @@ export default {
           refetchQueries: () => [
             {
               query: GET_FARE_BASIS_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+              }
+            },
+            {
+              query: GET_DISCOUNT,
+              variables: {
+                id: this.parentId
+              }
             }
           ]
         });
@@ -305,7 +316,10 @@ export default {
           refetchQueries: () => [
             {
               query: GET_FARE_BASIS_LIST,
-              variables: { parentId: this.parentId }
+              variables: {
+                parentId: this.parentId,
+                fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+              }
             }
           ]
         })

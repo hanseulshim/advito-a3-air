@@ -12,33 +12,43 @@
       <el-select
         v-model="origin"
         filterable
-        placeholder="Select"
-        size="mini"
         clearable
+        remote
+        size="mini"
+        reserve-keyword
+        placeholder="Please enter a keyword"
+        :remote-method="filterOriginMarkets"
+        :loading="loadingOrigin"
         value-key="name"
       >
         <el-option
-          v-for="country in marketGeoList"
-          :key="country.index"
-          :label="country.name"
-          :value="country"
-        ></el-option>
+          v-for="item in originOptions"
+          :key="item.index"
+          :label="item.name"
+          :value="item"
+        >
+        </el-option>
       </el-select>
       <label>Destination:</label>
       <el-select
         v-model="arrival"
         filterable
-        placeholder="Select"
-        size="mini"
         clearable
+        remote
+        size="mini"
+        reserve-keyword
+        placeholder="Please enter a keyword"
+        :remote-method="filterArrivalMarkets"
+        :loading="loadingArrival"
         value-key="name"
       >
         <el-option
-          v-for="country in marketGeoList"
-          :key="country.index"
-          :label="country.name"
-          :value="country"
-        ></el-option>
+          v-for="item in arrivalOptions"
+          :key="item.index"
+          :label="item.name"
+          :value="item"
+        >
+        </el-option>
       </el-select>
       <label>Exclude:</label>
       <el-checkbox v-model="exclude" name="exclude" />
@@ -72,7 +82,12 @@
 </template>
 <script>
 import { removeTypename } from '@/helper';
-import { GET_MARKET_GEO_LIST, GET_MARKET_RULE_LIST } from '@/graphql/queries';
+import {
+  GET_MARKET_GEO_LIST,
+  GET_MARKET_RULE_LIST,
+  GET_DISCOUNT,
+  GET_TARGET_TERM
+} from '@/graphql/queries';
 import { UPDATE_MARKET } from '@/graphql/mutations';
 export default {
   name: 'Market',
@@ -110,7 +125,11 @@ export default {
   data() {
     return {
       marketGeoList: [],
+      originOptions: [],
+      arrivalOptions: [],
       exclude: false,
+      loadingOrigin: false,
+      loadingArrival: false,
       editMode: false,
       origin: {},
       arrival: {},
@@ -143,6 +162,12 @@ export default {
               variables: {
                 parentId: this.parentId,
                 parentType: this.parentType
+              }
+            },
+            {
+              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+              variables: {
+                id: this.parentId
               }
             }
           ]
@@ -200,6 +225,28 @@ export default {
             this.$emit('delete-rule', 'Market');
           }
         });
+    },
+    filterOriginMarkets(query) {
+      if (query !== '') {
+        this.loadingOrigin = true;
+        this.originOptions = this.marketGeoList.filter(item => {
+          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+        this.loadingOrigin = false;
+      } else {
+        this.originOptions = [];
+      }
+    },
+    filterArrivalMarkets(query) {
+      if (query !== '') {
+        this.loadingArrival = true;
+        this.arrivalOptions = this.marketGeoList.filter(item => {
+          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+        this.loadingArrival = false;
+      } else {
+        this.arrivalOptions = [];
+      }
     }
   }
 };

@@ -37,7 +37,7 @@ exports.pricingTerm = {
         ${PRICING_TERM}
       }
 
-      deletePricingTerms(contractId: 134, idList: [72, 73, 74]
+      deletePricingTerms(idList: [72, 73, 74]
 
       updateAppliedOrder(
         updatePricingTermList: [

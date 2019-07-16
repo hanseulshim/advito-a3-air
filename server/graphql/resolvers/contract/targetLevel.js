@@ -14,7 +14,7 @@ exports.targetLevel = {
       { db }
     ) => {
       const targetLevelName = await getTargetLevelName(db, targetTermId);
-      await db.raw(`SELECT targetlevel_create4(
+      await db.raw(`SELECT targetlevel_create(
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',
@@ -35,7 +35,7 @@ exports.targetLevel = {
     ) => {
       const targetLevelName = await getTargetLevelName(db, targetTermId);
       await db.raw(`SELECT targetlevel_update(
-        ${id},
+        '${id}',
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',
@@ -55,14 +55,14 @@ exports.targetLevel = {
       await db.raw(
         `SELECT targetlevel_toggle('${
           targetLevel.tableName
-        }', ${id}, ${targetTermId})`
+        }', '${id}', ${targetTermId})`
       );
       return await getTargetLevelList(db, targetTermId);
     },
     deleteTargetLevel: async (_, { id, targetTermId }, { db }) => {
       const targetLevel = await getTargetLevelName(db, targetTermId);
       await db.raw(
-        `SELECT targetlevel_delete('${targetLevel.tableName}', ${id})`
+        `SELECT targetlevel_delete('${targetLevel.tableName}', '${id}')`
       );
       return id;
     }
@@ -73,13 +73,13 @@ const getTargetLevelList = async (db, targetTermId) => {
   const targetLevel = await getTargetLevelName(db, targetTermId);
   return await db(targetLevel.tableName)
     .select({
-      id: 'id',
+      id: 'control',
       targetTermId: 'targettermid',
       targetAmount: targetLevel.targetAmount,
       scoringTarget: 'overallscore',
       incentiveDescription: 'incentivedescription'
     })
-    .orderBy('id')
+    .orderBy('control')
     .where('isdeleted', false)
     .andWhere('targettermid', targetTermId);
 };
@@ -88,14 +88,14 @@ const getTargetLevel = async (db, id, targetTermId) => {
   const targetLevel = await getTargetLevelName(db, targetTermId);
   const [level] = await db(targetLevel.tableName)
     .select({
-      id: 'id',
+      id: 'control',
       targetTermId: 'targettermid',
       targetAmount: targetLevel.targetAmount,
       scoringTarget: 'overallscore',
       incentiveDescription: 'incentivedescription'
     })
-    .orderBy('id')
-    .where('id', id);
+    .orderBy('control')
+    .where('control', id);
   return level;
 };
 
