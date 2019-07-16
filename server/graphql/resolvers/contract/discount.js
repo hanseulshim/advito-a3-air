@@ -168,7 +168,7 @@ const getDiscountList = async (db, pricingTermId) =>
       directionTypeId: 'l2.id',
       directionTypeName: 'l2.name_val',
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(d.rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
       normalizationCount: 'd.count_normalizations',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
@@ -206,7 +206,7 @@ const getDiscount = async (db, id) => {
       directionTypeId: 'l2.id',
       directionTypeName: 'l2.name_val',
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(d.rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
       normalizationCount: 'd.count_normalizations',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),

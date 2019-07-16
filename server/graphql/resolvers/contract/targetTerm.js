@@ -270,7 +270,7 @@ const getTargetTermList = async (db, contractId) =>
             where targettermid = targetterm_v2_id
             and isdeleted = false) end`),
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(rulescontainerguidref)) as c)'
       ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
@@ -383,7 +383,7 @@ const getTargetTerm = async (db, id) => {
       where targettermid = targetterm_v2_id
       and isdeleted = false) end`),
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(rulescontainerguidref)) as c)'
       ),
       noteImportant: db.raw('COALESCE(important, FALSE)'),
       noteContent: db.raw(
