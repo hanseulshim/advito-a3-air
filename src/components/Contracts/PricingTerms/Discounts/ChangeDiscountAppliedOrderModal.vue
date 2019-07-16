@@ -12,6 +12,9 @@
         <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
+    <div class="applied-order-warning-text">
+      Please press ENTER once you changed order number before saving the change
+    </div>
     <el-table ref="changeAppliedOrderDiscountList" :data="discountOrderList">
       <el-table-column prop="contractOrder" :min-width="term.contractOrder">
         <template slot="header">
@@ -88,7 +91,13 @@ export default {
           mutation: UPDATE_DISCOUNT_APPLIED_ORDER,
           variables: {
             updateDiscountList: this.discountOrderList
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DISCOUNT_LIST,
+              variables: { pricingTermId: this.pricingTermId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Applied Order successfully changed.',

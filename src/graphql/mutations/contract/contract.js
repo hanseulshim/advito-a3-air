@@ -87,8 +87,8 @@ export const CREATE_PRICING_TERM = gql`
 `;
 
 export const COPY_PRICING_TERM = gql`
-  mutation copyPricingTerm($id: Int!, $contractId: Int!, $name: String!, $ignore: Boolean!) {
-    copyPricingTerm(id: $id, contractId: $contractId, name: $name, ignore: $ignore) {
+  mutation copyPricingTerm($id: Int!, $name: String!, $ignore: Boolean!) {
+    copyPricingTerm(id: $id, name: $name, ignore: $ignore) {
       ${PRICING_TERM}
     }
   }
@@ -111,8 +111,8 @@ export const TOGGLE_PRICING_TERM_QC = gql`
 `;
 
 export const DELETE_PRICING_TERMS = gql`
-  mutation deletePricingTerms($idList: [Int]!) {
-    deletePricingTerms(idList: $idList)
+  mutation deletePricingTerms($contractId: Int!, $idList: [Int]!) {
+    deletePricingTerms(contractId: $contractId, idList: $idList)
   }
 `;
 
@@ -250,21 +250,13 @@ export const DELETE_NOTE = gql`
 
 export const UPDATE_APPLIED_ORDER = gql`
   mutation updateAppliedOrder($updatePricingTermList: [NewAppliedOrder]!) {
-    updateAppliedOrder(updatePricingTermList: $updatePricingTermList) {
-      ${PRICING_TERM}
-    }
+    updateAppliedOrder(updatePricingTermList: $updatePricingTermList)
   }
 `;
 
 export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
-  mutation updateDiscountAppliedOrder(
-    $updateDiscountList: [NewAppliedOrder]!
-  ) {
-    updateDiscountAppliedOrder(
-      updateDiscountList: $updateDiscountList
-    ) {
-      ${DISCOUNT}
-    }
+  mutation updateDiscountAppliedOrder($updateDiscountList: [NewAppliedOrder]!) {
+    updateDiscountAppliedOrder(updateDiscountList: $updateDiscountList)
   }
 `;
 

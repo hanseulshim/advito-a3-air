@@ -12,6 +12,9 @@
         <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
+    <div class="applied-order-warning-text">
+      Please press ENTER once you changed order number before saving the change
+    </div>
     <el-table
       ref="changeAppliedOrderPricingTermList"
       :data="pricingTermOrderList"
@@ -89,7 +92,13 @@ export default {
           mutation: UPDATE_APPLIED_ORDER,
           variables: {
             updatePricingTermList: this.pricingTermOrderList
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_PRICING_TERM_LIST,
+              variables: { contractId: this.contractId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Applied Order successfully changed.',
@@ -148,5 +157,9 @@ export default {
       }
     }
   }
+}
+.applied-order-warning-text {
+  color: $monza;
+  margin-bottom: 5px;
 }
 </style>

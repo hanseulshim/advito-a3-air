@@ -150,7 +150,7 @@ exports.targetTerm = {
     toggleTargetTermQC: async (_, { contractId, idList }, { db }) => {
       const queries = idList.map(id =>
         db.raw(`
-        SELECT targetterm_toggleqc(${id})
+        SELECT targetterm_toggle_qc(${id})
       `)
       );
       await Promise.all(queries);

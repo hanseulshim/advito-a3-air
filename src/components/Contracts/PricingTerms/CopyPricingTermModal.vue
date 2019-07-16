@@ -43,9 +43,9 @@ export default {
       form: {
         id: null,
         name: null,
-        ignore: false,
-        contractId: null
+        ignore: false
       },
+      contractId: null,
       rules: {
         name: [
           {
@@ -81,7 +81,7 @@ export default {
             const query = {
               query: GET_PRICING_TERM_LIST,
               variables: {
-                contractId: this.form.contractId
+                contractId: this.contractId
               }
             };
             const data = store.readQuery(query);
@@ -94,7 +94,7 @@ export default {
           refetchQueries: () => [
             {
               query: GET_CONTRACT_LIST,
-              variables: { id: this.form.contractId }
+              variables: { id: this.contractId }
             }
           ]
         });
@@ -113,13 +113,13 @@ export default {
       const { id, ignore } = event.params.pricingTerm;
       this.form.id = id;
       this.form.ignore = ignore;
-      this.form.contractId = contractId;
+      this.contractId = contractId;
     },
     beforeClose() {
       this.form.id = null;
       this.form.name = null;
       this.form.ignore = false;
-      this.form.contractId = null;
+      this.contractId = null;
     }
   }
 };
