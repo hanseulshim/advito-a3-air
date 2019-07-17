@@ -237,6 +237,18 @@ exports.rule = {
         endDate
         isDeleted
       }
+      updateTicketingDateBulk(parentType: 2, ticketingDateList: [
+        {
+          id: 95,
+          startDate: 1483246800001,
+          endDate: 1485838800001
+        },
+        {
+          id: 98,
+          startDate: 1483246800001,
+          endDate: 1485838800001
+        }
+      ])
       updateTravelDate(parentId: 34, travelDateList: [
         {
           id: 10,
@@ -252,6 +264,13 @@ exports.rule = {
         endDate
         isDeleted
       }
+      updateTravelDateBulk(parentType: 3, travelDateList: [
+        {
+          id: 217,
+          startDate: 1483246800001,
+          endDate: 1485838800001
+        }
+      ])
       updatePointOfSale(parentId: 34, pointOfSaleList: [
         {
           id: 179,
@@ -346,6 +365,12 @@ exports.rule = {
         ticketDesignator
         isDeleted
       }
+      updateTicketDesignatorBulk(parentType: 3, ticketDesignatorList: [
+        {
+          id: 217,
+          ticketDesignator: "tour"
+        }
+      ])
       updateTourCode(parentId: 34, tourCodeList: [
         {
           id: null,
@@ -359,6 +384,12 @@ exports.rule = {
         tourCode
         isDeleted
       }
+      updateTourCodeBulk(parentType: 3, tourCodeList: [
+        {
+          id: 217,
+          tourCode: "tour"
+        }
+      ])
       updateStops(parentId: 34, stopsList: [
         {
           id: null,
