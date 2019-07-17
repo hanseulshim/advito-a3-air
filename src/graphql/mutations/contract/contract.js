@@ -260,6 +260,18 @@ export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
   }
 `;
 
+export const UPDATE_TICKETING_DATE_BULK = gql`
+  mutation updateTicketingDateBulk(
+    $parentType: Int!
+    $ticketingDateList: [TicketingDateBulkInput]!
+  ) {
+    updateTicketingDateBulk(
+      parentType: $parentType
+      ticketingDateList: $ticketingDateList
+    )
+  }
+`;
+
 export const CREATE_TARGET_TERM = gql`
 mutation createTargetTerm(
   $contractId: Int!

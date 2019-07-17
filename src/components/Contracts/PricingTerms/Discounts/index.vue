@@ -182,9 +182,11 @@
     <CopyDiscountModal @toggle-row="toggleRow" />
     <EditDiscountModal />
     <DiscountBulkActionModal
-      :bulk-action-list="bulkActionList"
-      :parent-type="2"
+      :bulk-id-list="bulkIdList"
+      :parent-type="DISCOUNT_LOOKUP.RULE_TYPE"
+      :pricing-term-id="pricingTermId"
       @clear-selection="clearBulkActionSelection"
+      @toggle-row="toggleRow"
     />
     <DeleteDiscountModal @toggle-row="toggleRow" />
     <DiscountNoteModal @toggle-row="toggleRow" />

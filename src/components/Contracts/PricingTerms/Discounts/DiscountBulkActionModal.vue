@@ -12,7 +12,14 @@
         <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
-    <component :is="componentToRender" :parent-type="parentType"></component>
+    <component
+      :is="componentToRender"
+      :parent-type="parentType"
+      :parent-id="parentId"
+      :bulk-id-list="bulkIdList"
+      :selected-contract="selectedContract"
+      @toggle-row="toggleRow"
+    ></component>
   </modal>
 </template>
 <script>
@@ -20,8 +27,14 @@ import TicketDate from '../../BulkActionRules/TicketDate';
 import TicketDesignation from '../../BulkActionRules/TicketDesignation';
 import TourCode from '../../BulkActionRules/TourCode';
 import TravelData from '../../BulkActionRules/TravelData';
+import { GET_SELECTED_CONTRACT } from '@/graphql/queries';
 export default {
   name: 'DiscountBulkActionModal',
+  apollo: {
+    selectedContract: {
+      query: GET_SELECTED_CONTRACT
+    }
+  },
   components: {
     TicketDate,
     TicketDesignation,
@@ -32,11 +45,20 @@ export default {
     parentType: {
       default: null,
       type: Number
+    },
+    parentId: {
+      default: null,
+      type: Number
+    },
+    bulkIdList: {
+      default: null,
+      type: Array
     }
   },
   data() {
     return {
       bulkActionId: null,
+      selectedContract: null,
       bulkActionComponents: [
         {
           name: 'Travel Data',
@@ -73,6 +95,9 @@ export default {
   methods: {
     hideModal() {
       this.$modal.hide('discount-bulk-action-modal');
+    },
+    toggleRow(id) {
+      this.$emit('toggle-row', id);
     },
     beforeOpen(event) {
       this.bulkActionId = event.params.bulkActionId;

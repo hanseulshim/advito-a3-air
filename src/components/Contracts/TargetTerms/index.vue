@@ -229,7 +229,7 @@
     <TargetTermRulesModal />
     <TargetTermBulkActionModal
       :bulk-action-list="bulkActionList"
-      :parent-type="3"
+      :parent-type="TARGET_TERM_LOOKUP.RULE_TYPE"
       @clear-selection="clearBulkActionSelection"
     />
   </div>

@@ -266,7 +266,7 @@
     <ChangeAppliedOrderModal />
     <BulkActionModal
       :bulk-action-list="bulkActionList"
-      :parent-type="1"
+      :parent-type="parentType"
       @clear-selection="clearBulkActionSelection"
     />
   </div>
@@ -333,7 +333,8 @@ export default {
       term,
       bulkIdList: [],
       toggleRowId: null,
-      bulkActionList: []
+      bulkActionList: [],
+      parentType: PRICING_TERM_LOOKUP.RULE_TYPE
     };
   },
   computed: {
