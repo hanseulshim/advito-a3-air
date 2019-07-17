@@ -294,13 +294,13 @@ export const UPDATE_TOUR_CODE_BULK = gql`
 `;
 
 export const UPDATE_TICKET_DESIGNATION_BULK = gql`
-  mutation updateTicketDesignationBulk(
+  mutation updateTicketDesignatorBulk(
     $parentType: Int!
-    $ticketDesignationList: [TicketDesignationBulkInput]!
+    $ticketDesignatorList: [TicketDesignatorBulkInput]!
   ) {
-    updateTicketDesignationBulk(
+    updateTicketDesignatorBulk(
       parentType: $parentType
-      ticketDesignationList: $ticketDesignationList
+      ticketDesignatorList: $ticketDesignatorList
     )
   }
 `;
