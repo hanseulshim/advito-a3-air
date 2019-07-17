@@ -265,9 +265,11 @@
     <NoteModal />
     <ChangeAppliedOrderModal />
     <BulkActionModal
-      :bulk-action-list="bulkActionList"
+      :bulk-id-list="bulkIdList"
       :parent-type="parentType"
+      :parent-id="selectedContract.id"
       @clear-selection="clearBulkActionSelection"
+      @toggle-row="toggleRow"
     />
   </div>
 </template>

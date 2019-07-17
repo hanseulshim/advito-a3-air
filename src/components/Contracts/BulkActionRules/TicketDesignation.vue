@@ -27,49 +27,122 @@
   </div>
 </template>
 <script>
-// import { UPDATE_TICKETING_DESIGNATOR } from '@/graphql/mutations';
+import { UPDATE_TICKET_DESIGNATION_BULK } from '@/graphql/mutations';
+import {
+  GET_DISCOUNT_LIST,
+  GET_PRICING_TERM,
+  GET_CONTRACT,
+  GET_TARGET_TERM_LIST,
+  GET_PRICING_TERM_LIST
+} from '@/graphql/mutations';
 export default {
   name: 'TicketDesignator',
   props: {
-    parentTypw: {
+    parentType: {
       default: null,
       type: Number
+    },
+    parentId: {
+      default: null,
+      type: Number
+    },
+    selectedContract: {
+      default: null,
+      type: Number
+    },
+    bulkIdList: {
+      default: null,
+      type: Array
     }
   },
   data() {
     return {
       ticketDesignator: '',
-      ticketDesignatorList: []
+      ticketDesignatorList: [],
+      discountQueries: [
+        {
+          query: GET_DISCOUNT_LIST,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_PRICING_TERM,
+          variables: {
+            id: this.pricingTermId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      targetTermQueries: [
+        {
+          query: GET_TARGET_TERM_LIST,
+          variables: {
+            contractId: this.contractId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      pricingTermQueries: [
+        {
+          query: GET_PRICING_TERM_LIST,
+          vairables: {
+            contractId: this.contractId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          vairables: {
+            contractId: this.contractId
+          }
+        }
+      ]
     };
   },
   methods: {
     async saveRules() {
-      // await this.$apollo.mutate({
-      //   mutation: UPDATE_TICKETING_DESIGNATOR,
-      //   variables: {
-      //     parentId: this.parentId,
-      //     ticketDesignatorList: this.ticketDesignatorList
-      //   },
-      //   refetchQueries: () => [
-      //     {
-      //       query: GET_TICKET_DESIGNATOR_LIST,
-      //       variables: { parentId: this.parentId }
-      //     },
-      //     {
-      //       query: GET_DISCOUNT,
-      //       variables: {
-      //         id: this.parentId
-      //       }
-      //     }
-      //   ]
-      // });
+      let bulkList = [];
+
+      this.bulkIdList.map(bulkId =>
+        this.ticketDesignatorList.map(v =>
+          bulkList.push({
+            id: bulkId,
+            ...v
+          })
+        )
+      );
+
+      await this.$apollo.mutate({
+        mutation: UPDATE_TICKET_DESIGNATION_BULK,
+        variables: {
+          parentType: this.parentType,
+          ticketDesignatorList: bulkList
+        },
+        refetchQueries: () =>
+          this.parentType === 1
+            ? this.discountQueries
+            : this.parentType === 2
+            ? this.targetTermQueries
+            : this.pricingTermQueries
+      });
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
+      }
       this.ticketDesignator = '';
     },
     createTag() {
       this.ticketDesignatorList.push({
-        id: null,
-        ticketDesignator: this.ticketDesignator,
-        isDeleted: false
+        ticketDesignator: this.ticketDesignator
       });
 
       this.ticketDesignator = '';
@@ -77,30 +150,6 @@ export default {
     async deleteTag(tag) {
       const idx = this.ticketDesignatorList.indexOf(tag);
       this.ticketDesignatorList.splice(idx, 1);
-      // this.ticketDesignatorList[idx].isDeleted = true;
-
-      // await this.$apollo
-      //   .mutate({
-      //     mutation: UPDATE_TICKETING_DESIGNATOR,
-      //     variables: {
-      //       parentId: this.parentId,
-      //       ticketDesignatorList: this.ticketDesignatorList
-      //     },
-      //     refetchQueries: () => [
-      //       {
-      //         query: GET_TICKET_DESIGNATOR_LIST,
-      //         variables: { parentId: this.parentId }
-      //       }
-      //     ]
-      //   })
-      //   .then(() => {
-      //     const rulesRemaining = this.ticketDesignatorList.some(
-      //       rule => !rule.isDeleted
-      //     );
-      //     if (!this.ticketDesignatorList.length || !rulesRemaining) {
-      //       this.$emit('delete-rule', 'TicketDesignator');
-      //     }
-      //   });
     }
   }
 };

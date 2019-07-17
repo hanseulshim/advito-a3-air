@@ -228,9 +228,11 @@
     <TargetTermNoteModal />
     <TargetTermRulesModal />
     <TargetTermBulkActionModal
-      :bulk-action-list="bulkActionList"
-      :parent-type="TARGET_TERM_LOOKUP.RULE_TYPE"
+      :bulk-id-list="bulkIdList"
+      :parent-type="parentType"
+      :parent-id="selectedContract.id"
       @clear-selection="clearBulkActionSelection"
+      @toggle-row="toggleRow"
     />
   </div>
 </template>
@@ -296,7 +298,8 @@ export default {
       term,
       toggleRowId: null,
       bulkIdList: [],
-      bulkActionList: []
+      bulkActionList: [],
+      parentType: TARGET_TERM_LOOKUP.RULE_TYPE
     };
   },
   computed: {

@@ -40,13 +40,32 @@
 </template>
 <script>
 import { formatDate } from '@/helper';
-// import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
+import { UPDATE_TRAVEL_DATE_BULK } from '@/graphql/mutations';
+import {
+  GET_DISCOUNT_LIST,
+  GET_PRICING_TERM,
+  GET_CONTRACT,
+  GET_TARGET_TERM_LIST,
+  GET_PRICING_TERM_LIST
+} from '@/graphql/mutations';
 export default {
-  name: 'TravelData',
+  name: 'TravelDate',
   props: {
     parentType: {
       default: null,
       type: Number
+    },
+    parentId: {
+      default: null,
+      type: Number
+    },
+    selectedContract: {
+      default: null,
+      type: Number
+    },
+    bulkIdList: {
+      default: null,
+      type: Array
     }
   },
   data() {
@@ -54,35 +73,94 @@ export default {
       startDate: '',
       endDate: '',
       updateRule: null,
-      travelDateList: []
+      travelDateList: [],
+      discountQueries: [
+        {
+          query: GET_DISCOUNT_LIST,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_PRICING_TERM,
+          variables: {
+            id: this.pricingTermId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      targetTermQueries: [
+        {
+          query: GET_TARGET_TERM_LIST,
+          variables: {
+            contractId: this.contractId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      pricingTermQueries: [
+        {
+          query: GET_PRICING_TERM_LIST,
+          vairables: {
+            contractId: this.contractId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          vairables: {
+            contractId: this.contractId
+          }
+        }
+      ]
     };
   },
   methods: {
     async saveRules() {
-      // await this.$apollo.mutate({
-      //   mutation: UPDATE_TICKETING_DATES,
-      //   variables: {
-      //     parentId: this.parentId,
-      //     parentType: this.parentType,
-      //     travelDateList: this.travelDateList
-      //   },
-      //   refetchQueries: () =>
-      //     this.parentType === 1 ? this.discountQueries : this.targetTermQueries
-      // });
-      // if (this.parentType === 1) {
-      //   this.$emit('toggle-row', this.pricingTermId);
-      // }
-      alert('rule saved!');
+      let bulkList = [];
+
+      this.bulkIdList.map(bulkId =>
+        this.travelDateList.map(travelDate =>
+          bulkList.push({
+            id: bulkId,
+            ...travelDate
+          })
+        )
+      );
+
+      await this.$apollo.mutate({
+        mutation: UPDATE_TRAVEL_DATE_BULK,
+        variables: {
+          parentType: this.parentType,
+          travelDateList: bulkList
+        },
+        refetchQueries: () =>
+          this.parentType === 1
+            ? this.discountQueries
+            : this.parentType === 2
+            ? this.targetTermQueries
+            : this.pricingTermQueries
+      });
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
+      }
       this.startDate = '';
       this.endDate = '';
       this.updateRule = null;
     },
     createTag() {
       this.travelDateList.push({
-        id: null,
         startDate: new Date(this.startDate),
-        endDate: new Date(this.endDate),
-        isDeleted: false
+        endDate: new Date(this.endDate)
       });
       this.startDate = '';
       this.endDate = '';
@@ -90,31 +168,6 @@ export default {
     async deleteTag(tag) {
       const idx = this.travelDateList.indexOf(tag);
       this.travelDateList.splice(idx, 1);
-      // await this.$apollo
-      //   .mutate({
-      //     mutation: UPDATE_TICKETING_DATES,
-      //     variables: {
-      //       parentId: this.parentId,
-      //       parentType: this.parentType,
-      //       travelDateList: this.travelDateList
-      //     },
-      //     refetchQueries: () =>
-      //       this.parentType === 1
-      //         ? this.discountQueries
-      //         : this.targetTermQueries
-      //   })
-      //   .then(() => {
-      //     const rulesRemaining = this.travelDateList.some(
-      //       rule => !rule.isDeleted
-      //     );
-      //     if (!this.travelDateList.length || !rulesRemaining) {
-      //       this.$emit('delete-rule', 'TicketingDates');
-      //       this.$emit('toggle-row', this.pricingTermId);
-      //     }
-      //   });
-      // if (this.parentType === 1) {
-      //   this.$emit('toggle-row', this.pricingTermId);
-      // }
     },
     editTag(rule) {
       this.updateRule = rule;

@@ -12,36 +12,58 @@
         <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
-    <component :is="componentToRender" :parent-type="parentType"></component>
+    <component
+      :is="componentToRender"
+      :parent-type="parentType"
+      :parent-id="parentId"
+      :bulk-id-list="bulkIdList"
+      :selected-contract="selectedContract.id"
+      @toggle-row="toggleRow"
+    ></component>
   </modal>
 </template>
 <script>
 import TicketDate from '../BulkActionRules/TicketDate';
 import TicketDesignation from '../BulkActionRules/TicketDesignation';
 import TourCode from '../BulkActionRules/TourCode';
-import TravelData from '../BulkActionRules/TravelData';
+import TravelDate from '../BulkActionRules/TravelDate';
+import { GET_SELECTED_CONTRACT } from '@/graphql/queries';
 export default {
   name: 'BulkActionModal',
   components: {
     TicketDate,
     TicketDesignation,
     TourCode,
-    TravelData
+    TravelDate
+  },
+  apollo: {
+    selectedContract: {
+      query: GET_SELECTED_CONTRACT
+    }
   },
   props: {
     parentType: {
       default: null,
       type: Number
+    },
+    parentId: {
+      default: null,
+      type: Number
+    },
+    bulkIdList: {
+      default: null,
+      type: Array
     }
   },
   data() {
     return {
       bulkActionId: null,
+      selectedContract: null,
       bulkActionComponents: [
         {
-          name: 'Travel Data',
+          name: 'Travel Date',
           id: 10,
-          component: 'TravelData'
+          component: 'TravelDate'
         },
         {
           name: 'Ticket Date',
@@ -76,6 +98,9 @@ export default {
     },
     beforeOpen(event) {
       this.bulkActionId = event.params.bulkActionId;
+    },
+    toggleRow(id) {
+      this.$emit('toggle-row', id);
     },
     beforeClose() {
       this.bulkActionId = null;

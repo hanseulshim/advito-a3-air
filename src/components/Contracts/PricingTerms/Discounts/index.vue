@@ -183,8 +183,8 @@
     <EditDiscountModal />
     <DiscountBulkActionModal
       :bulk-id-list="bulkIdList"
-      :parent-type="DISCOUNT_LOOKUP.RULE_TYPE"
-      :pricing-term-id="pricingTermId"
+      :parent-type="parentType"
+      :parent-id="pricingTermId"
       @clear-selection="clearBulkActionSelection"
       @toggle-row="toggleRow"
     />
@@ -245,7 +245,7 @@ export default {
   },
   data() {
     return {
-      DISCOUNT_LOOKUP,
+      parentType: DISCOUNT_LOOKUP.RULE_TYPE,
       discountList: [],
       bulkActionId: null,
       discount,

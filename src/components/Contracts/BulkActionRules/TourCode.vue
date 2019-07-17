@@ -22,49 +22,123 @@
   </div>
 </template>
 <script>
-// import { UPDATE_TOUR_CODE_LIST } from '@/graphql/mutations';
+import { UPDATE_TOUR_CODE_BULK } from '@/graphql/mutations';
+import {
+  GET_DISCOUNT_LIST,
+  GET_PRICING_TERM,
+  GET_CONTRACT,
+  GET_TARGET_TERM_LIST,
+  GET_PRICING_TERM_LIST
+} from '@/graphql/mutations';
 export default {
   name: 'TourCode',
   props: {
     parentType: {
       default: null,
       type: Number
+    },
+    parentId: {
+      default: null,
+      type: Number
+    },
+    selectedContract: {
+      default: null,
+      type: Number
+    },
+    bulkIdList: {
+      default: null,
+      type: Array
     }
   },
   data() {
     return {
       tourCode: '',
-      tourCodeList: []
+      tourCodeList: [],
+      discountQueries: [
+        {
+          query: GET_DISCOUNT_LIST,
+          variables: {
+            id: this.parentId
+          }
+        },
+        {
+          query: GET_PRICING_TERM,
+          variables: {
+            id: this.pricingTermId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      targetTermQueries: [
+        {
+          query: GET_TARGET_TERM_LIST,
+          variables: {
+            contractId: this.contractId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          variables: {
+            id: this.contractId
+          }
+        }
+      ],
+      pricingTermQueries: [
+        {
+          query: GET_PRICING_TERM_LIST,
+          vairables: {
+            contractId: this.contractId
+          }
+        },
+        {
+          query: GET_CONTRACT,
+          vairables: {
+            contractId: this.contractId
+          }
+        }
+      ]
     };
   },
   methods: {
     async saveRules() {
-      // await this.$apollo.mutate({
-      //   mutation: UPDATE_TOUR_CODE_LIST,
-      //   variables: {
-      //     parentId: this.parentId,
-      //     tourCodeList: this.tourCodeList
-      //   },
-      //   refetchQueries: () => [
-      //     {
-      //       query: GET_TOUR_CODE_LIST,
-      //       variables: { parentId: this.parentId }
-      //     },
-      //     {
-      //       query: GET_DISCOUNT,
-      //       variables: {
-      //         id: this.parentId
-      //       }
-      //     }
-      //   ]
+      let bulkList = [];
+
+      this.bulkIdList.map(bulkId =>
+        this.tourCodeList.map(tourcode =>
+          bulkList.push({
+            id: bulkId,
+            ...tourcode
+          })
+        )
+      );
+
+      await this.$apollo.mutate({
+        mutation: UPDATE_TOUR_CODE_BULK,
+        variables: {
+          parentType: this.parentType,
+          tourCodeList: bulkList
+        },
+        refetchQueries: () =>
+          this.parentType === 1
+            ? this.discountQueries
+            : this.parentType === 2
+            ? this.targetTermQueries
+            : this.pricingTermQueries
+      });
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
+      }
 
       this.tourCode = '';
     },
     createTag() {
       this.tourCodeList.push({
-        id: null,
-        tourCode: this.tourCode,
-        isDeleted: false
+        tourCode: this.tourCode
       });
 
       this.tourCode = '';
@@ -72,30 +146,6 @@ export default {
     async deleteTag(tag) {
       const idx = this.tourCodeList.indexOf(tag);
       this.tourCodeList.splice(idx, 1);
-      // this.tourCodeList[idx].isDeleted = true;
-
-      // await this.$apollo
-      //   .mutate({
-      //     mutation: UPDATE_TOUR_CODE_LIST,
-      //     variables: {
-      //       parentId: this.parentId,
-      //       tourCodeList: this.tourCodeList
-      //     },
-      //     refetchQueries: () => [
-      //       {
-      //         query: GET_TOUR_CODE_LIST,
-      //         variables: { parentId: this.parentId }
-      //       }
-      //     ]
-      //   })
-      //   .then(() => {
-      //     const rulesRemaining = this.tourCodeList.some(
-      //       rule => !rule.isDeleted
-      //     );
-      //     if (!this.tourCodeList.length || !rulesRemaining) {
-      //       this.$emit('delete-rule', 'TourCode');
-      //     }
-      //   });
     }
   }
 };

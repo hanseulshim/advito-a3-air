@@ -17,7 +17,7 @@
       :parent-type="parentType"
       :parent-id="parentId"
       :bulk-id-list="bulkIdList"
-      :selected-contract="selectedContract"
+      :selected-contract="selectedContract.id"
       @toggle-row="toggleRow"
     ></component>
   </modal>
@@ -26,7 +26,7 @@
 import TicketDate from '../../BulkActionRules/TicketDate';
 import TicketDesignation from '../../BulkActionRules/TicketDesignation';
 import TourCode from '../../BulkActionRules/TourCode';
-import TravelData from '../../BulkActionRules/TravelData';
+import TravelDate from '../../BulkActionRules/TravelDate';
 import { GET_SELECTED_CONTRACT } from '@/graphql/queries';
 export default {
   name: 'DiscountBulkActionModal',
@@ -39,7 +39,7 @@ export default {
     TicketDate,
     TicketDesignation,
     TourCode,
-    TravelData
+    TravelDate
   },
   props: {
     parentType: {
@@ -61,9 +61,9 @@ export default {
       selectedContract: null,
       bulkActionComponents: [
         {
-          name: 'Travel Data',
+          name: 'Travel Date',
           id: 16,
-          component: 'TravelData'
+          component: 'TravelDate'
         },
         {
           name: 'Ticket Date',

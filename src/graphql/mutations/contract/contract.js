@@ -272,6 +272,39 @@ export const UPDATE_TICKETING_DATE_BULK = gql`
   }
 `;
 
+export const UPDATE_TRAVEL_DATE_BULK = gql`
+  mutation updateTravelDateBulk(
+    $parentType: Int!
+    $travelDateList: [TravelDateBulkInput]!
+  ) {
+    updateTravelDateBulk(
+      parentType: $parentType
+      travelDateList: $travelDateList
+    )
+  }
+`;
+
+export const UPDATE_TOUR_CODE_BULK = gql`
+  mutation updateTourCodeBulk(
+    $parentType: Int!
+    $tourCodeList: [TourCodeBulkInput]!
+  ) {
+    updateTourCodeBulk(parentType: $parentType, tourCodeList: $tourCodeList)
+  }
+`;
+
+export const UPDATE_TICKET_DESIGNATION_BULK = gql`
+  mutation updateTicketDesignationBulk(
+    $parentType: Int!
+    $ticketDesignationList: [TicketDesignationBulkInput]!
+  ) {
+    updateTicketDesignationBulk(
+      parentType: $parentType
+      ticketDesignationList: $ticketDesignationList
+    )
+  }
+`;
+
 export const CREATE_TARGET_TERM = gql`
 mutation createTargetTerm(
   $contractId: Int!
