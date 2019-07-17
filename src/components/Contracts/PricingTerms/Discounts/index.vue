@@ -100,7 +100,7 @@
       >
         <template slot-scope="props">
           {{
-            props.row.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+            props.row.discountTypeId === discountLookup.PERCENTAGE
               ? formatPercent(props.row.discountValue)
               : props.row.discountValue
           }}
@@ -250,7 +250,8 @@ export default {
       bulkActionId: null,
       discount,
       bulkIdList: [],
-      bulkActionList: []
+      bulkActionList: [],
+      discountLookup: DISCOUNT_LOOKUP
     };
   },
   methods: {

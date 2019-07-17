@@ -34,7 +34,7 @@ import {
   GET_CONTRACT,
   GET_TARGET_TERM_LIST,
   GET_PRICING_TERM_LIST
-} from '@/graphql/mutations';
+} from '@/graphql/queries';
 export default {
   name: 'TicketDesignator',
   props: {
@@ -63,19 +63,19 @@ export default {
         {
           query: GET_DISCOUNT_LIST,
           variables: {
-            id: this.parentId
+            pricingTermId: this.parentId
           }
         },
         {
           query: GET_PRICING_TERM,
           variables: {
-            id: this.pricingTermId
+            id: this.parentId
           }
         },
         {
           query: GET_CONTRACT,
           variables: {
-            id: this.contractId
+            id: this.selectedContract
           }
         }
       ],
@@ -83,27 +83,27 @@ export default {
         {
           query: GET_TARGET_TERM_LIST,
           variables: {
-            contractId: this.contractId
+            contractId: this.selectedContract
           }
         },
         {
           query: GET_CONTRACT,
           variables: {
-            id: this.contractId
+            id: this.selectedContract
           }
         }
       ],
       pricingTermQueries: [
         {
           query: GET_PRICING_TERM_LIST,
-          vairables: {
-            contractId: this.contractId
+          variables: {
+            contractId: this.selectedContract
           }
         },
         {
           query: GET_CONTRACT,
-          vairables: {
-            contractId: this.contractId
+          variables: {
+            id: this.selectedContract
           }
         }
       ]
@@ -136,7 +136,7 @@ export default {
             : this.pricingTermQueries
       });
       if (this.parentType === 1) {
-        this.$emit('toggle-row', this.pricingTermId);
+        this.$emit('toggle-row', this.parentId);
       }
       this.ticketDesignator = '';
     },
