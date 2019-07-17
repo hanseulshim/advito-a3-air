@@ -205,7 +205,7 @@
 
 <script>
 import { pluralize, formatDate, formatPercent } from '@/helper';
-import { GET_CONTRACT_LIST } from '@/graphql/queries';
+import { GET_CONTRACT_LIST, GET_CLIENT } from '@/graphql/queries';
 import { UPDATE_CONTRACT } from '@/graphql/mutations';
 import { contract } from '@/config';
 import NewContractModal from './NewContractModal';
@@ -223,10 +223,14 @@ export default {
   apollo: {
     contractList: {
       query: GET_CONTRACT_LIST
+    },
+    client: {
+      query: GET_CLIENT
     }
   },
   data() {
     return {
+      client: {},
       contractList: [],
       contract
     };
@@ -250,13 +254,13 @@ export default {
       return qc !== 1;
     },
     showNewContractModal() {
-      this.$modal.show('new-contract');
+      this.$modal.show('new-contract', { clientId: this.client.id });
     },
     showCopyContractModal(id) {
       this.$modal.show('copy-contract', { id });
     },
     showEditContractModal(contract) {
-      this.$modal.show('edit-contract', { contract });
+      this.$modal.show('edit-contract', { contract, clientId: this.client.id });
     },
     showDeleteContractModal(id) {
       this.$modal.show('delete-contract', { id });

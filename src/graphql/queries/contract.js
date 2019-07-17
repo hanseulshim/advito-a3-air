@@ -32,8 +32,8 @@ export const GET_SELECTED_CONTRACT = gql`
 `;
 
 export const GET_DIVISION_TYPE_LIST = gql`
-  {
-    divisionTypeList {
+  query divisionTypeList($clientId: Int) {
+    divisionTypeList(clientId: $clientId) {
       id
       name
     }
