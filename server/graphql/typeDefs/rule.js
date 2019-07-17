@@ -15,6 +15,12 @@ input TicketingDateInput {
   isDeleted: Boolean
 }
 
+input TicketingDateBulkInput {
+  id: Int
+  startDate: Date
+  endDate: Date
+}
+
 type TravelDate {
   id: Int
   ruleContainerId: String
@@ -24,6 +30,14 @@ type TravelDate {
 }
 
 input TravelDateInput {
+  id: Int
+  ruleContainerId: String
+  startDate: Date
+  endDate: Date
+  isDeleted: Boolean
+}
+
+input TravelDateBulkInput {
   id: Int
   ruleContainerId: String
   startDate: Date
@@ -457,7 +471,9 @@ extend type Query {
 
 extend type Mutation {
   updateTicketingDate(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]!): [TicketingDate] @auth
-  updateTravelDate(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
+  updateTicketingDateBulk(parentType: Int, ticketingDateList: [TicketingDateBulkInput]!): Int @auth
+  updateTravelDate(parentId: Int!, parentType: Int, travelDateList: [TravelDateBulkInput]!): [TravelDate] @auth
+  updateTravelDateBulk(parentType: Int, travelDateList: [TicketingDateBulkInput]!): Int @auth
   updatePointOfSale(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
   updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
   updateMarket(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
