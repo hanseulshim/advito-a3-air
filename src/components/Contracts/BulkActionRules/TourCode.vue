@@ -106,36 +106,41 @@ export default {
   },
   methods: {
     async saveRules() {
-      let bulkList = [];
+      try {
+        let bulkList = [];
 
-      this.bulkIdList.map(bulkId =>
-        this.tourCodeList.map(tourcode =>
-          bulkList.push({
-            id: bulkId,
-            ...tourcode
-          })
-        )
-      );
+        this.bulkIdList.map(bulkId =>
+          this.tourCodeList.map(tourcode =>
+            bulkList.push({
+              id: bulkId,
+              ...tourcode
+            })
+          )
+        );
 
-      await this.$apollo.mutate({
-        mutation: UPDATE_TOUR_CODE_BULK,
-        variables: {
-          parentType: this.parentType,
-          tourCodeList: bulkList
-        },
-        refetchQueries: () =>
-          this.parentType === 1
-            ? this.discountQueries
-            : this.parentType === 2
-            ? this.targetTermQueries
-            : this.pricingTermQueries
-      });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.parentId);
+        await this.$apollo.mutate({
+          mutation: UPDATE_TOUR_CODE_BULK,
+          variables: {
+            parentType: this.parentType,
+            tourCodeList: bulkList
+          },
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.parentType === 2
+              ? this.targetTermQueries
+              : this.pricingTermQueries
+        });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.parentId);
+        }
+        this.$emit('hide-modal');
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
       }
-
       this.tourCode = '';
-      this.$emit('hide-modal');
     },
     createTag() {
       this.tourCodeList.push({

@@ -126,38 +126,41 @@ export default {
   },
   methods: {
     async saveRules() {
-      let bulkList = [];
-
-      this.bulkIdList.map(bulkId =>
-        this.ticketingDateList.map(ticketingDate =>
-          bulkList.push({
-            id: bulkId,
-            ...ticketingDate
-          })
-        )
-      );
-
-      await this.$apollo.mutate({
-        mutation: UPDATE_TICKETING_DATE_BULK,
-        variables: {
-          parentType: this.parentType,
-          ticketingDateList: bulkList
-        },
-        refetchQueries: () =>
-          this.parentType === 1
-            ? this.discountQueries
-            : this.parentType === 2
-            ? this.targetTermQueries
-            : this.pricingTermQueries
-      });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.parentId);
+      try {
+        let bulkList = [];
+        this.bulkIdList.map(bulkId =>
+          this.ticketingDateList.map(ticketingDate =>
+            bulkList.push({
+              id: bulkId,
+              ...ticketingDate
+            })
+          )
+        );
+        await this.$apollo.mutate({
+          mutation: UPDATE_TICKETING_DATE_BULK,
+          variables: {
+            parentType: this.parentType,
+            ticketingDateList: bulkList
+          },
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.parentType === 2
+              ? this.targetTermQueries
+              : this.pricingTermQueries
+        });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.parentId);
+          this.$emit('hide-modal');
+        }
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
       }
-
       this.startDate = '';
       this.endDate = '';
       this.updateRule = null;
-      this.$emit('hide-modal');
     },
     createTag() {
       this.ticketingDateList.push({

@@ -111,35 +111,39 @@ export default {
   },
   methods: {
     async saveRules() {
-      let bulkList = [];
-
-      this.bulkIdList.map(bulkId =>
-        this.ticketDesignatorList.map(v =>
-          bulkList.push({
-            id: bulkId,
-            ...v
-          })
-        )
-      );
-
-      await this.$apollo.mutate({
-        mutation: UPDATE_TICKET_DESIGNATION_BULK,
-        variables: {
-          parentType: this.parentType,
-          ticketDesignatorList: bulkList
-        },
-        refetchQueries: () =>
-          this.parentType === 1
-            ? this.discountQueries
-            : this.parentType === 2
-            ? this.targetTermQueries
-            : this.pricingTermQueries
-      });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.parentId);
+      try {
+        let bulkList = [];
+        this.bulkIdList.map(bulkId =>
+          this.ticketDesignatorList.map(v =>
+            bulkList.push({
+              id: bulkId,
+              ...v
+            })
+          )
+        );
+        await this.$apollo.mutate({
+          mutation: UPDATE_TICKET_DESIGNATION_BULK,
+          variables: {
+            parentType: this.parentType,
+            ticketDesignatorList: bulkList
+          },
+          refetchQueries: () =>
+            this.parentType === 1
+              ? this.discountQueries
+              : this.parentType === 2
+              ? this.targetTermQueries
+              : this.pricingTermQueries
+        });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.parentId);
+        }
+        this.$emit('hide-modal');
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
       }
       this.ticketDesignator = '';
-      this.$emit('hide-modal');
     },
     createTag() {
       this.ticketDesignatorList.push({
