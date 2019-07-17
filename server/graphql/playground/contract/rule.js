@@ -365,6 +365,12 @@ exports.rule = {
         ticketDesignator
         isDeleted
       }
+      updateTicketDesignatorBulk(parentType: 3, ticketDesignatorList: [
+        {
+          id: 217,
+          ticketDesignator: "tour"
+        }
+      ])
       updateTourCode(parentId: 34, tourCodeList: [
         {
           id: null,
@@ -378,6 +384,12 @@ exports.rule = {
         tourCode
         isDeleted
       }
+      updateTourCodeBulk(parentType: 3, tourCodeList: [
+        {
+          id: 217,
+          tourCode: "tour"
+        }
+      ])
       updateStops(parentId: 34, stopsList: [
         {
           id: null,

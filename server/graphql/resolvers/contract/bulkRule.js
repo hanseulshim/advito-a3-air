@@ -14,7 +14,7 @@ exports.bulkRule = {
       const tableName = getParentTable(parentType);
       const queries = ticketingDateList.map(({ id, startDate, endDate }) =>
         db.raw(`
-        SELECT ticketdaterule_create_update_bulk(${id}, '${tableName}', '${new Date(
+        SELECT ticketdaterule_create_bulk(${id}, '${tableName}', '${new Date(
           startDate
         ).toISOString()}', '${new Date(endDate).toISOString()}')
       `)
@@ -25,9 +25,31 @@ exports.bulkRule = {
       const tableName = getParentTable(parentType);
       const queries = travelDateList.map(({ id, startDate, endDate }) =>
         db.raw(`
-        SELECT traveldaterule_create_update_bulk(${id}, '${tableName}', '${new Date(
+        SELECT traveldaterule_create_bulk(${id}, '${tableName}', '${new Date(
           startDate
         ).toISOString()}', '${new Date(endDate).toISOString()}')
+      `)
+      );
+      await Promise.all(queries);
+    },
+    updateTourCodeBulk: async (_, { parentType, tourCodeList }, { db }) => {
+      const tableName = getParentTable(parentType);
+      const queries = tourCodeList.map(({ id, tourCode }) =>
+        db.raw(`
+        SELECT tourcoderule_create_bulk(${id}, '${tableName}', '${tourCode}')
+      `)
+      );
+      await Promise.all(queries);
+    },
+    updateTicketDesignatorBulk: async (
+      _,
+      { parentType, ticketDesignatorList },
+      { db }
+    ) => {
+      const tableName = getParentTable(parentType);
+      const queries = ticketDesignatorList.map(({ id, ticketDesignator }) =>
+        db.raw(`
+        SELECT ticketdesignatorrule_create_bulk(${id}, '${tableName}', '${ticketDesignator}')
       `)
       );
       await Promise.all(queries);
