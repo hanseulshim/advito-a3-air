@@ -227,6 +227,13 @@
     <DeleteTargetTermModal @clear-bulk-actions="clearBulkActions" />
     <TargetTermNoteModal />
     <TargetTermRulesModal />
+    <TargetTermBulkActionModal
+      :bulk-id-list="bulkIdList"
+      :parent-type="parentType"
+      :parent-id="selectedContract.id"
+      @clear-selection="clearBulkActionSelection"
+      @toggle-row="toggleRow"
+    />
   </div>
 </template>
 
@@ -249,6 +256,7 @@ import EditTargetTermModal from './EditTargetTermModal';
 import DeleteTargetTermModal from './DeleteTargetTermModal';
 import TargetTermNoteModal from './TargetTermNoteModal';
 import TargetTermRulesModal from './TargetTermRulesModal';
+import TargetTermBulkActionModal from './TargetTermBulkActionModal';
 export default {
   name: 'TargetTerms',
   components: {
@@ -259,7 +267,8 @@ export default {
     EditTargetTermModal,
     DeleteTargetTermModal,
     TargetTermNoteModal,
-    TargetTermRulesModal
+    TargetTermRulesModal,
+    TargetTermBulkActionModal
   },
   apollo: {
     selectedContract: {
@@ -289,7 +298,8 @@ export default {
       term,
       toggleRowId: null,
       bulkIdList: [],
-      bulkActionList: []
+      bulkActionList: [],
+      parentType: TARGET_TERM_LOOKUP.RULE_TYPE
     };
   },
   computed: {
@@ -383,11 +393,21 @@ export default {
         important: targetTerm.noteImportant
       });
     },
+    showBulkActionModal(value) {
+      this.$modal.show('target-term-bulk-action-modal', {
+        bulkActionId: value
+      });
+    },
+    clearBulkActionSelection() {
+      this.bulkActionId = null;
+    },
     bulkAction(value) {
       if (value === TARGET_TERM_LOOKUP.BULK_ACTION_DELETE) {
         this.showDeleteTargetTermModal(this.bulkIdList);
       } else if (value === TARGET_TERM_LOOKUP.BULK_ACTION_QC) {
         this.toggleTargetTermQC(this.bulkIdList);
+      } else {
+        this.showBulkActionModal(value);
       }
     },
     clearBulkActions() {

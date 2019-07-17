@@ -260,6 +260,51 @@ export const UPDATE_DISCOUNT_APPLIED_ORDER = gql`
   }
 `;
 
+export const UPDATE_TICKETING_DATE_BULK = gql`
+  mutation updateTicketingDateBulk(
+    $parentType: Int!
+    $ticketingDateList: [TicketingDateBulkInput]!
+  ) {
+    updateTicketingDateBulk(
+      parentType: $parentType
+      ticketingDateList: $ticketingDateList
+    )
+  }
+`;
+
+export const UPDATE_TRAVEL_DATE_BULK = gql`
+  mutation updateTravelDateBulk(
+    $parentType: Int!
+    $travelDateList: [TravelDateBulkInput]!
+  ) {
+    updateTravelDateBulk(
+      parentType: $parentType
+      travelDateList: $travelDateList
+    )
+  }
+`;
+
+export const UPDATE_TOUR_CODE_BULK = gql`
+  mutation updateTourCodeBulk(
+    $parentType: Int!
+    $tourCodeList: [TourCodeBulkInput]!
+  ) {
+    updateTourCodeBulk(parentType: $parentType, tourCodeList: $tourCodeList)
+  }
+`;
+
+export const UPDATE_TICKET_DESIGNATION_BULK = gql`
+  mutation updateTicketDesignatorBulk(
+    $parentType: Int!
+    $ticketDesignatorList: [TicketDesignatorBulkInput]!
+  ) {
+    updateTicketDesignatorBulk(
+      parentType: $parentType
+      ticketDesignatorList: $ticketDesignatorList
+    )
+  }
+`;
+
 export const CREATE_TARGET_TERM = gql`
 mutation createTargetTerm(
   $contractId: Int!

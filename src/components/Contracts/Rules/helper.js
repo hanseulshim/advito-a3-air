@@ -79,7 +79,7 @@ export const ruleTypes = [
   },
   {
     value: 'AdvanceTicketing',
-    label: 'Advanced Ticketing',
+    label: 'Advance Ticketing',
     id: 15
   },
   {

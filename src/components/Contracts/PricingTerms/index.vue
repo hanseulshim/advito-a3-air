@@ -264,6 +264,13 @@
     <DeletePricingTermModal @clear-bulk-actions="clearBulkActions" />
     <NoteModal />
     <ChangeAppliedOrderModal />
+    <BulkActionModal
+      :bulk-id-list="bulkIdList"
+      :parent-type="parentType"
+      :parent-id="selectedContract.id"
+      @clear-selection="clearBulkActionSelection"
+      @toggle-row="toggleRow"
+    />
   </div>
 </template>
 
@@ -283,6 +290,7 @@ import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
 import DeletePricingTermModal from './DeletePricingTermModal';
+import BulkActionModal from './BulkActionModal';
 import NoteModal from './NoteModal';
 import Discounts from './Discounts';
 import ChangeAppliedOrderModal from './ChangeAppliedOrderModal';
@@ -296,7 +304,8 @@ export default {
     EditPricingTermModal,
     DeletePricingTermModal,
     NoteModal,
-    ChangeAppliedOrderModal
+    ChangeAppliedOrderModal,
+    BulkActionModal
   },
   apollo: {
     selectedContract: {
@@ -326,7 +335,8 @@ export default {
       term,
       bulkIdList: [],
       toggleRowId: null,
-      bulkActionList: []
+      bulkActionList: [],
+      parentType: PRICING_TERM_LOOKUP.RULE_TYPE
     };
   },
   computed: {
@@ -393,6 +403,11 @@ export default {
         contractId: this.selectedContract.id
       });
     },
+    showBulkActionModal(value) {
+      this.$modal.show('bulk-action-modal', {
+        bulkActionId: value
+      });
+    },
     toggleNoteModal(pricingTerm) {
       this.$modal.show('save-note', {
         parentId: pricingTerm.id,
@@ -404,10 +419,15 @@ export default {
         this.showDeletePricingTermModal(this.bulkIdList);
       } else if (value === PRICING_TERM_LOOKUP.BULK_ACTION_QC) {
         this.togglePricingTermQC(this.bulkIdList);
+      } else {
+        this.showBulkActionModal(value);
       }
     },
     clearBulkActions() {
       this.bulkIdList = [];
+      this.bulkActionId = null;
+    },
+    clearBulkActionSelection() {
       this.bulkActionId = null;
     },
     toggleRow(id) {

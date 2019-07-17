@@ -163,6 +163,9 @@ export default {
               ? this.discountQueries
               : this.targetTermQueries
         });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
       }
       this.editMode = !this.editMode;
       this.startDate = '';
@@ -207,8 +210,12 @@ export default {
           );
           if (!this.ticketingDateList.length || !rulesRemaining) {
             this.$emit('delete-rule', 'TicketingDates');
+            this.$emit('toggle-row', this.pricingTermId);
           }
         });
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
+      }
     },
     editTag(rule) {
       if (this.editMode) {
