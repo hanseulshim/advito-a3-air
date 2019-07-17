@@ -49,7 +49,6 @@ extend type Query {
   airportList: [Airport] @auth
   bookingClassLibraryList: [BookingClassLibrary] @auth
   currencyList: [Currency] @auth
-  locationList: [Location] @auth
   distanceUnitList: [DistanceUnit] @auth
 }
 `;

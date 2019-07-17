@@ -2,6 +2,15 @@ const LIBRARY_LOOKUP = {
   DISTANCE_TYPE: 10
 };
 
+const LOCATION_LOOKUP = {
+  AIRPORT: 0,
+  CITY: 1,
+  COUNTRY: 3,
+  REGION: 5,
+  COLLECTION: 6
+};
+
 module.exports = {
-  LIBRARY_LOOKUP
+  LIBRARY_LOOKUP,
+  LOCATION_LOOKUP
 };

@@ -11,7 +11,7 @@ exports.contract = {
           name: 'name_val'
         })
         .where('type', CONTRACT_LOOKUP.TYPE),
-    divisionTypeList: async (_, __, { db }) =>
+    divisionTypeList: async (_, { clientId }, { db }) =>
       await db('division')
         .select({
           id: 'division.id',
@@ -19,7 +19,7 @@ exports.contract = {
         })
         .distinct('division.id')
         .where('division.isdeleted', false)
-        .andWhere('division.clientid', CONTRACT_LOOKUP.ID),
+        .andWhere('division.clientid', clientId),
     bulkActionList: async (_, { parentId }, { db }) =>
       await db('bulkoperation')
         .select({

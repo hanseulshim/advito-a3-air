@@ -148,7 +148,7 @@ extend type Query {
   contractList: [Contract] @auth
   contract(id: Int!): [Contract] @auth
   contractTypeList: [ContractType] @auth
-  divisionTypeList: [DivisionType] @auth
+  divisionTypeList(clientId: Int): [DivisionType] @auth
   bulkActionList(parentId: Int!): [BulkAction] @auth
 
   pricingTermList(contractId: Int): [PricingTerm] @auth

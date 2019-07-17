@@ -33,12 +33,6 @@ exports.library = {
       name
       code
     }
-    locationList {
-      id
-      locationType
-      code
-      name
-    }
     distanceUnitList {
       id
       name
