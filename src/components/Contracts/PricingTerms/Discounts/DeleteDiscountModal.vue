@@ -43,28 +43,16 @@ export default {
             idList: this.idList,
             pricingTermId: this.pricingTermId
           },
-          update: (store, { data: { deleteDiscounts } }) => {
-            const query = {
-              query: GET_DISCOUNT_LIST,
-              variables: {
-                pricingTermId: this.pricingTermId
-              }
-            };
-            const data = store.readQuery(query);
-            data.discountList = data.discountList.filter(
-              term => deleteDiscounts.indexOf(term.id) === -1
-            );
-            store.writeQuery({
-              ...query,
-              data
-            });
-          },
           refetchQueries: () => [
             {
               query: GET_PRICING_TERM,
               variables: {
                 id: this.pricingTermId
               }
+            },
+            {
+              query: GET_DISCOUNT_LIST,
+              variables: { pricingTermId: this.pricingTermId }
             }
           ]
         });

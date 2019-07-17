@@ -6,80 +6,61 @@ exports.pricingTerm = {
   },
   Mutation: {
     createPricingTerm: async (_, { contractId, name, ignore }, { db }) => {
-      const [{ maxAppliedOrder, maxContractOrder }] = await db('pricingterm')
-        .max({ maxAppliedOrder: 'sequence' })
-        .max({ maxContractOrder: 'readorder' })
-        .where('contractcontainerid', contractId)
-        .andWhere('isdeleted', false);
-      const [id] = await db('pricingterm').insert(
-        {
-          contractcontainerid: contractId,
-          name,
-          type: 1,
-          sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
-          readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
-          qc: false,
-          ignore
-        },
-        'id'
+      const { rows } = await db.raw(
+        `SELECT pricingterm_create(
+          '${name}',
+          ${contractId},
+          ${ignore}
+        )`
       );
-      await updatePricingTermOrder(db, contractId);
+      const [{ pricingterm_create: id }] = rows;
       return await getPricingTerm(db, id);
     },
-    copyPricingTerm: async (_, { id, contractId, name }, { db }) => {
+    copyPricingTerm: async (_, { id, name }, { db }) => {
       const { rows } = await db.raw(
         `SELECT pricingterm_createcopy(${id}, '${name}')`
       );
       const [{ pricingterm_createcopy: newId }] = rows;
-      await updatePricingTermOrder(db, contractId);
-      const [pricingTerm] = await getPricingTerm(db, parseInt(newId));
-      return pricingTerm;
+      return await getPricingTerm(db, newId);
     },
     editPricingTerm: async (_, { id, name, ignore }, { db }) => {
-      await db('pricingterm')
-        .where('id', id)
-        .update({
-          name,
-          ignore
-        });
+      await db.raw(
+        `SELECT pricingterm_update(
+          ${id},
+          '${name}',
+          ${ignore}
+        )`
+      );
       return await getPricingTerm(db, id);
     },
     togglePricingTermQC: async (_, { contractId, idList }, { db }) => {
       const queries = idList.map(id =>
         db.raw(`
-        SELECT pricingterm_toggleqc(${id})
+        SELECT pricingterm_toggle_qc(${id})
       `)
       );
       await Promise.all(queries);
       return await getPricingTermList(db, contractId);
     },
     deletePricingTerms: async (_, { contractId, idList }, { db }) => {
-      await db('pricingterm')
-        .update({ isdeleted: true })
-        .whereIn('id', idList);
-      await updatePricingTermOrder(db, contractId);
+      const queries = idList.map(id =>
+        db.raw(`
+        SELECT pricingterm_delete(${id})
+      `)
+      );
+      await Promise.all(queries);
+      await db.raw(`SELECT pricingterm_update_sequence_all(${contractId})`);
       return idList;
     },
     updateAppliedOrder: async (_, { updatePricingTermList }, { db }) => {
-      const [[contractId]] = await db.transaction(trx => {
-        const queries = [];
-        updatePricingTermList.forEach(term => {
-          const query = db('pricingterm')
-            .where('id', term.id)
-            .update(
-              {
-                sequence: term.appliedOrder
-              },
-              'contractcontainerid'
-            )
-            .transacting(trx);
-          queries.push(query);
-        });
-        Promise.all(queries)
-          .then(trx.commit)
-          .catch(trx.rollback);
-      });
-      return await getPricingTermList(db, parseInt(contractId));
+      const queries = updatePricingTermList.map(term =>
+        db.raw(`
+        SELECT pricingterm_update_sequence_single(${term.id}, ${
+          term.appliedOrder
+        })
+      `)
+      );
+      await Promise.all(queries);
     }
   }
 };
@@ -174,8 +155,4 @@ const getPricingTerm = async (db, id) => {
     .andWhere('p.id', id)
     .groupBy('p.id', 'n.important', 'n.id');
   return pricingTerm;
-};
-
-const updatePricingTermOrder = async (db, contractId) => {
-  await db.raw(`SELECT pricingterm_update_sequence(${contractId})`);
 };

@@ -43,26 +43,14 @@ export default {
             contractId: this.contractId,
             idList: this.idList
           },
-          update: (store, { data: { deletePricingTerms } }) => {
-            const query = {
-              query: GET_PRICING_TERM_LIST,
-              variables: {
-                contractId: this.contractId
-              }
-            };
-            const data = store.readQuery(query);
-            data.pricingTermList = data.pricingTermList.filter(
-              term => deletePricingTerms.indexOf(term.id) === -1
-            );
-            store.writeQuery({
-              ...query,
-              data
-            });
-          },
           refetchQueries: () => [
             {
               query: GET_CONTRACT,
               variables: { id: this.contractId }
+            },
+            {
+              query: GET_PRICING_TERM_LIST,
+              variables: { contractId: this.contractId }
             }
           ]
         });

@@ -15,7 +15,7 @@ exports.rule = {
       );
       if (!ruleContainerId) return [];
       const { rows } = await db.raw(
-        `SELECT tableid from rules_checker3('${ruleContainerId}')`
+        `SELECT tableid from rules_checker('${ruleContainerId}')`
       );
       return rows.map(row => row.tableid);
     },
@@ -576,7 +576,7 @@ const getRuleInfo = id => {
         containsMultipleValue: 'containsmultiplevalue',
         containsMultiplePosition: 'containsmultipleposition'
       },
-      update: 'farebasis_update2',
+      update: 'farebasis_update',
       params: [
         {
           name: 'name',

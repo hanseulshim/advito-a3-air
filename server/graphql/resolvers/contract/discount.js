@@ -40,30 +40,17 @@ exports.discount = {
       },
       { db }
     ) => {
-      const [{ maxAppliedOrder, maxContractOrder }] = await db('discount')
-        .max({ maxAppliedOrder: 'sequence' })
-        .max({ maxContractOrder: 'readorder' })
-        .where('pricingtermid', pricingTermId)
-        .andWhere('isdeleted', false);
-      const [id] = await db('discount').insert(
-        {
-          pricingtermid: pricingTermId,
-          sequence: maxAppliedOrder ? parseInt(maxAppliedOrder) + 1 : 1,
-          readorder: maxContractOrder ? parseInt(maxContractOrder) + 1 : 1,
-          generateddiscountname: name,
-          discounttype: discountTypeId,
-          discountvalue:
-            discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-              ? discountValue / 100
-              : discountValue,
-          direction: directionTypeId,
-          journeytype: journeyTypeId,
-          count_normalizations: 0,
-          ignore: false
-        },
-        'id'
+      const { rows } = await db.raw(
+        `SELECT discount_create(
+          ${pricingTermId},
+          '${name}',
+          ${discountTypeId},
+          ${discountValue},
+          ${journeyTypeId},
+          ${directionTypeId}
+        )`
       );
-      await updateDiscountOrder(db, pricingTermId);
+      const [{ discount_create: id }] = rows;
       return await getDiscount(db, id);
     },
     copyDiscount: async (
@@ -100,48 +87,34 @@ exports.discount = {
       },
       { db }
     ) => {
-      await db('discount')
-        .where('id', id)
-        .update({
-          generateddiscountname: name,
-          discounttype: discountTypeId,
-          discountvalue:
-            discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-              ? discountValue / 100
-              : discountValue,
-          direction: directionTypeId,
-          journeytype: journeyTypeId
-        });
+      const value =
+        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+          ? discountValue / 100
+          : discountValue;
+      await db.raw(
+        `SELECT discount_update(${id}, '${name}', ${discountTypeId}, ${value}, ${journeyTypeId}, ${directionTypeId})`
+      );
       return await getDiscount(db, id);
     },
     deleteDiscounts: async (_, { pricingTermId, idList }, { db }) => {
-      await db('discount')
-        .update({ isdeleted: true }, 'id')
-        .whereIn('id', idList);
-      await updateDiscountOrder(db, pricingTermId);
+      const queries = idList.map(id =>
+        db.raw(`
+        SELECT discount_delete(${id})
+      `)
+      );
+      await Promise.all(queries);
+      await db.raw(`SELECT discount_update_sequence_all(${pricingTermId})`);
       return idList;
     },
     updateDiscountAppliedOrder: async (_, { updateDiscountList }, { db }) => {
-      const [[pricingTermid]] = await db.transaction(trx => {
-        const queries = [];
-        updateDiscountList.forEach(discount => {
-          const query = db('discount')
-            .where('id', discount.id)
-            .update(
-              {
-                sequence: discount.appliedOrder
-              },
-              'pricingtermid'
-            )
-            .transacting(trx);
-          queries.push(query);
-        });
-
-        Promise.all(queries)
-          .then(trx.commit)
-          .catch(trx.rollback);
-      });
-      return await getDiscountList(db, parseInt(pricingTermid));
+      const queries = updateDiscountList.map(discount =>
+        db.raw(`
+        SELECT discount_update_sequence_single(${discount.id}, ${
+          discount.appliedOrder
+        })
+      `)
+      );
+      await Promise.all(queries);
     }
   }
 };
@@ -168,7 +141,7 @@ const getDiscountList = async (db, pricingTermId) =>
       directionTypeId: 'l2.id',
       directionTypeName: 'l2.name_val',
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(d.rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
       normalizationCount: 'd.count_normalizations',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
@@ -206,7 +179,7 @@ const getDiscount = async (db, id) => {
       directionTypeId: 'l2.id',
       directionTypeName: 'l2.name_val',
       ruleCount: db.raw(
-        '(SELECT COUNT(*) from (select rules_checker3(d.rulescontainerguidref)) as c)'
+        '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
       normalizationCount: 'd.count_normalizations',
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
@@ -222,8 +195,4 @@ const getDiscount = async (db, id) => {
     .andWhere('d.id', id)
     .groupBy('d.id', 'l.id', 'l1.id', 'l2.id', 'n.important', 'n.id');
   return discount;
-};
-
-const updateDiscountOrder = async (db, pricingTermId) => {
-  await db.raw(`SELECT discount_update_sequence(${pricingTermId})`);
 };

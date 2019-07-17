@@ -1,6 +1,6 @@
 <template>
   <div class="data-set-table-container">
-    <CountriesTable :selected="selector" />
+    <CountriesTable :selected="selector" :project-id="projectId" />
     <div class="column-table-container">
       <div
         v-for="column in filteredDataSetList"
@@ -93,11 +93,20 @@ export default {
     checkStatus: {
       required: true,
       type: Function
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
   apollo: {
     dataSetCountryList: {
-      query: GET_DATA_SET_COUNTRY_LIST
+      query: GET_DATA_SET_COUNTRY_LIST,
+      variables() {
+        return {
+          projectId: this.projectId
+        };
+      }
     }
   },
   data() {
@@ -154,13 +163,17 @@ export default {
       this.$apollo.mutate({
         mutation: TOGGLE_DATA_SET,
         variables: {
+          projectId: this.projectId,
           month: parseInt(month),
           year: parseInt(year),
           qc
         },
         refetchQueries: () => [
           {
-            query: GET_DATA_SET_COLUMN_LIST
+            query: GET_DATA_SET_COLUMN_LIST,
+            variables: {
+              projectId: this.projectId
+            }
           }
         ]
       });
@@ -175,12 +188,16 @@ export default {
       this.$apollo.mutate({
         mutation: DELETE_DATA_SET,
         variables: {
+          projectId: this.projectId,
           month: parseInt(month),
           year: parseInt(year)
         },
         refetchQueries: () => [
           {
-            query: GET_DATA_SET_COLUMN_LIST
+            query: GET_DATA_SET_COLUMN_LIST,
+            variables: {
+              projectId: this.projectId
+            }
           }
         ]
       });

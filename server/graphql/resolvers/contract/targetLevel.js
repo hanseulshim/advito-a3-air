@@ -14,7 +14,7 @@ exports.targetLevel = {
       { db }
     ) => {
       const targetLevelName = await getTargetLevelName(db, targetTermId);
-      await db.raw(`SELECT targetlevel_create4(
+      await db.raw(`SELECT targetlevel_create(
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',

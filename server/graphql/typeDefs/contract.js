@@ -194,13 +194,13 @@ extend type Mutation {
   deleteContract(id: Int!): Int @auth
 
   createPricingTerm(contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
-  copyPricingTerm(id: Int!, contractId: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
+  copyPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   editPricingTerm(id: Int!, name: String!, ignore: Boolean!): PricingTerm @auth
   togglePricingTermQC(contractId: Int!, idList: [Int]!): [PricingTerm] @auth
   deletePricingTerms(contractId: Int!, idList: [Int]!): [Int] @auth
   updateAppliedOrder(
     updatePricingTermList: [NewAppliedOrder]!
-  ): [PricingTerm] @auth
+  ): Int @auth
 
   createTargetTerm(
     contractId: Int!
@@ -297,7 +297,7 @@ extend type Mutation {
   deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!
-  ): [Discount] @auth
+  ): Int @auth
   
   addNote(
     parentId: Int!
