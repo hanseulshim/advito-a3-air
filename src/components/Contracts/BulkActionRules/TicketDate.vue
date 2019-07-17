@@ -157,6 +157,7 @@ export default {
       this.startDate = '';
       this.endDate = '';
       this.updateRule = null;
+      this.$emit('hide-modal');
     },
     createTag() {
       this.ticketingDateList.push({

@@ -139,6 +139,7 @@ export default {
         this.$emit('toggle-row', this.parentId);
       }
       this.ticketDesignator = '';
+      this.$emit('hide-modal');
     },
     createTag() {
       this.ticketDesignatorList.push({

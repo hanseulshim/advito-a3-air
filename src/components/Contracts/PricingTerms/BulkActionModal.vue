@@ -19,6 +19,7 @@
       :bulk-id-list="bulkIdList"
       :selected-contract="selectedContract.id"
       @toggle-row="toggleRow"
+      @hide-modal="hideModal"
     ></component>
   </modal>
 </template>

@@ -135,6 +135,7 @@ export default {
       }
 
       this.tourCode = '';
+      this.$emit('hide-modal');
     },
     createTag() {
       this.tourCodeList.push({
