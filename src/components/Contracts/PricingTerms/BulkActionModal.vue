@@ -18,7 +18,6 @@
       :parent-id="parentId"
       :bulk-id-list="bulkIdList"
       :selected-contract="selectedContract.id"
-      @toggle-row="toggleRow"
       @hide-modal="hideModal"
     ></component>
   </modal>
@@ -99,9 +98,6 @@ export default {
     },
     beforeOpen(event) {
       this.bulkActionId = event.params.bulkActionId;
-    },
-    toggleRow(id) {
-      this.$emit('toggle-row', id);
     },
     beforeClose() {
       this.bulkActionId = null;

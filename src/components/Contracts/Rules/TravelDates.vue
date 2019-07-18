@@ -70,6 +70,7 @@ export default {
   apollo: {
     travelDateList: {
       query: GET_TRAVEL_DATE_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.parentId,

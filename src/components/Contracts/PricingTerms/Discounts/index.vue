@@ -14,6 +14,7 @@
             placeholder="Bulk Actions"
             filterable
             clearable
+            :disabled="!bulkIdList.length"
             @change="bulkAction"
           >
             <el-option
@@ -220,6 +221,7 @@ export default {
   apollo: {
     discountList: {
       query: GET_DISCOUNT_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           pricingTermId: this.pricingTermId

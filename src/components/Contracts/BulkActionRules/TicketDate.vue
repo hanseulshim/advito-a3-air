@@ -153,8 +153,8 @@ export default {
         });
         if (this.parentType === 1) {
           this.$emit('toggle-row', this.parentId);
-          this.$emit('hide-modal');
         }
+        this.$emit('hide-modal');
       } catch (error) {
         this.$modal.show('error', {
           message: error.message

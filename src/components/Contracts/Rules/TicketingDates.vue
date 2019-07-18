@@ -80,6 +80,7 @@ export default {
   apollo: {
     ticketingDateList: {
       query: GET_TICKETING_DATE_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.parentId,
