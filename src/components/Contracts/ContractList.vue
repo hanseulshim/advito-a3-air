@@ -2,7 +2,11 @@
   <div class="table-spacer">
     <div class="section-header title-row space-between">
       <div>
-        <el-tooltip v-if="checkQc" placement="top" effect="light">
+        <el-tooltip
+          v-if="contractList.some(contract => !contract.qc)"
+          placement="top"
+          effect="light"
+        >
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
@@ -205,7 +209,7 @@
 
 <script>
 import { pluralize, formatDate, formatPercent } from '@/helper';
-import { GET_CONTRACT_LIST } from '@/graphql/queries';
+import { GET_CONTRACT_LIST, GET_CLIENT } from '@/graphql/queries';
 import { UPDATE_CONTRACT } from '@/graphql/mutations';
 import { contract } from '@/config';
 import NewContractModal from './NewContractModal';
@@ -223,10 +227,14 @@ export default {
   apollo: {
     contractList: {
       query: GET_CONTRACT_LIST
+    },
+    client: {
+      query: GET_CLIENT
     }
   },
   data() {
     return {
+      client: {},
       contractList: [],
       contract
     };
@@ -243,20 +251,17 @@ export default {
     formatPercent(num) {
       return formatPercent(num);
     },
-    checkQc() {
-      return this.contractList.some(contract => contract.qc !== 1);
-    },
     checkErrorQc(qc) {
       return qc !== 1;
     },
     showNewContractModal() {
-      this.$modal.show('new-contract');
+      this.$modal.show('new-contract', { clientId: this.client.id });
     },
     showCopyContractModal(id) {
       this.$modal.show('copy-contract', { id });
     },
     showEditContractModal(contract) {
-      this.$modal.show('edit-contract', { contract });
+      this.$modal.show('edit-contract', { contract, clientId: this.client.id });
     },
     showDeleteContractModal(id) {
       this.$modal.show('delete-contract', { id });

@@ -41,38 +41,39 @@
         :parent-type="parentType"
         :contract-id="selectedContract.id"
         @delete-rule="deleteRule"
+        @toggle-row="toggleRow"
       ></component>
     </div>
   </modal>
 </template>
 
 <script>
-import TicketingDates from '../../Rules/TicketingDates';
-import TravelDates from '../../Rules/TravelDates';
-import PointOfSale from '../../Rules/PoS';
-import PointOfOrigin from '../../Rules/PoO';
-import PublishedBookingClass from '../../Rules/PublishedBookingClass';
-import RequiredBookingClass from '../../Rules/RequiredBookingClass';
-import Market from '../../Rules/Market';
-import MarketingAirline from '../../Rules/MarketingAirline';
-import ValidatingAirline from '../../Rules/ValidatingAirline';
-import OperatingAirline from '../../Rules/OperatingAirline';
-import AdvanceTicketing from '../../Rules/AdvancedTicketing';
-import TourCode from '../../Rules/TourCode';
-import TicketDesignator from '../../Rules/TicketDesignator';
-import TimeOfWeek from '../../Rules/TimeOfWeek';
-import MinStay from '../../Rules/MinStay';
-import MaxStay from '../../Rules/MaxStay';
-import Stops from '../../Rules/Stops';
-import ConnectionPoint from '../../Rules/ConnectionPoint';
-import FlightNumber from '../../Rules/FlightNumber';
-import Blackouts from '../../Rules/Blackouts';
-import Distance from '../../Rules/Distance';
-import PublishedFareBasis from '../../Rules/PublishedFareBasis';
-import CorporateFareBasis from '../../Rules/CorporateFareBasis';
-import Cabin from '../../Rules/Cabin';
-import FareCategory from '../../Rules/FareCategory';
-import { ruleTypes } from '../../Rules/helper';
+import TicketingDates from '../Rules/TicketingDates';
+import TravelDates from '../Rules/TravelDates';
+import PointOfSale from '../Rules/PoS';
+import PointOfOrigin from '../Rules/PoO';
+import PublishedBookingClass from '../Rules/PublishedBookingClass';
+import RequiredBookingClass from '../Rules/RequiredBookingClass';
+import Market from '../Rules/Market';
+import MarketingAirline from '../Rules/MarketingAirline';
+import ValidatingAirline from '../Rules/ValidatingAirline';
+import OperatingAirline from '../Rules/OperatingAirline';
+import AdvanceTicketing from '../Rules/AdvancedTicketing';
+import TourCode from '../Rules/TourCode';
+import TicketDesignator from '../Rules/TicketDesignator';
+import TimeOfWeek from '../Rules/TimeOfWeek';
+import MinStay from '../Rules/MinStay';
+import MaxStay from '../Rules/MaxStay';
+import Stops from '../Rules/Stops';
+import ConnectionPoint from '../Rules/ConnectionPoint';
+import FlightNumber from '../Rules/FlightNumber';
+import Blackouts from '../Rules/Blackouts';
+import Distance from '../Rules/Distance';
+import PublishedFareBasis from '../Rules/PublishedFareBasis';
+import CorporateFareBasis from '../Rules/CorporateFareBasis';
+import Cabin from '../Rules/Cabin';
+import FareCategory from '../Rules/FareCategory';
+import { ruleTypes } from '../Rules/helper';
 import {
   GET_RULE_LIST,
   GET_DISCOUNT,
@@ -191,6 +192,9 @@ export default {
       this.ruleList = [];
       this.renderedRules = [];
       this.selectedRule = '';
+    },
+    toggleRow(id) {
+      this.$emit('toggle-row', id);
     }
   }
 };

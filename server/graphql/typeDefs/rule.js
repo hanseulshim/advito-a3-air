@@ -15,6 +15,12 @@ input TicketingDateInput {
   isDeleted: Boolean
 }
 
+input TicketingDateBulkInput {
+  id: Int
+  startDate: Date
+  endDate: Date
+}
+
 type TravelDate {
   id: Int
   ruleContainerId: String
@@ -29,6 +35,12 @@ input TravelDateInput {
   startDate: Date
   endDate: Date
   isDeleted: Boolean
+}
+
+input TravelDateBulkInput {
+  id: Int
+  startDate: Date
+  endDate: Date
 }
 
 type PointOfSale {
@@ -194,6 +206,11 @@ input TicketDesignatorInput {
   isDeleted: Boolean
 }
 
+input TicketDesignatorBulkInput {
+  id: Int
+  ticketDesignator: String
+}
+
 type TourCode {
   id: Int
   ruleContainerId: String
@@ -206,6 +223,11 @@ input TourCodeInput {
   ruleContainerId: String
   tourCode: String
   isDeleted: Boolean
+}
+
+input TourCodeBulkInput {
+  id: Int
+  tourCode: String
 }
 
 type AdvancedTicketing {
@@ -457,14 +479,18 @@ extend type Query {
 
 extend type Mutation {
   updateTicketingDate(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]!): [TicketingDate] @auth
-  updateTravelDate(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
+  updateTicketingDateBulk(parentType: Int, ticketingDateList: [TicketingDateBulkInput]!): Int @auth
+  updateTravelDate(parentId: Int!, parentType: Int, travelDateList: [TravelDateBulkInput]!): [TravelDate] @auth
+  updateTravelDateBulk(parentType: Int, travelDateList: [TravelDateBulkInput]!): Int @auth
   updatePointOfSale(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
   updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
   updateMarket(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
   updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClass] @auth
   updateAirline(parentId: Int!, parentType: Int, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
   updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
+  updateTicketDesignatorBulk(parentType: Int ticketDesignatorList: [TicketDesignatorBulkInput]!): Int @auth
   updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
+  updateTourCodeBulk(parentType: Int tourCodeList: [TourCodeBulkInput]!): Int @auth
   updateStops(parentId: Int! stopsList: [StopsInput]!): [Stops] @auth
   updateAdvancedTicketing(parentId: Int! advancedTicketingList: [AdvancedTicketingInput]!): [AdvancedTicketing] @auth
   updateMinStay(parentId: Int! minStayList: [MinStayInput]!): [MinStay] @auth

@@ -12,11 +12,13 @@
         v-model="startDate"
         type="date"
         size="mini"
+        format="dd MMM yyyy"
         placeholder="Pick a day"
         class="date-picker"
       ></el-date-picker>
       <el-date-picker
         v-model="endDate"
+        format="dd MMM yyyy"
         type="date"
         size="mini"
         placeholder="Pick a day"
@@ -163,6 +165,9 @@ export default {
               ? this.discountQueries
               : this.targetTermQueries
         });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
       }
       this.editMode = !this.editMode;
       this.startDate = '';
@@ -170,19 +175,25 @@ export default {
       this.updateRule = null;
     },
     createTag() {
-      const ruleContainerId = this.ticketingDateList.length
-        ? this.ticketingDateList[0].ruleContainerId
-        : null;
+      if (this.startDate && this.endDate) {
+        const ruleContainerId = this.ticketingDateList.length
+          ? this.ticketingDateList[0].ruleContainerId
+          : null;
 
-      this.ticketingDateList.push({
-        id: null,
-        ruleContainerId,
-        startDate: new Date(this.startDate),
-        endDate: new Date(this.endDate),
-        isDeleted: false
-      });
-      this.startDate = '';
-      this.endDate = '';
+        this.ticketingDateList.push({
+          id: null,
+          ruleContainerId,
+          startDate: new Date(this.startDate),
+          endDate: new Date(this.endDate),
+          isDeleted: false
+        });
+        this.startDate = '';
+        this.endDate = '';
+      } else {
+        this.$modal.show('error', {
+          message: 'Please enter both a start date and an end date.'
+        });
+      }
     },
     async deleteTag(tag) {
       const idx = this.ticketingDateList.indexOf(tag);
@@ -207,8 +218,12 @@ export default {
           );
           if (!this.ticketingDateList.length || !rulesRemaining) {
             this.$emit('delete-rule', 'TicketingDates');
+            this.$emit('toggle-row', this.pricingTermId);
           }
         });
+      if (this.parentType === 1) {
+        this.$emit('toggle-row', this.pricingTermId);
+      }
     },
     editTag(rule) {
       if (this.editMode) {

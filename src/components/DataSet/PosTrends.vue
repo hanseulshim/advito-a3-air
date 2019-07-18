@@ -37,7 +37,7 @@
           >
             <i
               class="fas fa-trash-alt delete"
-              @click="deleteDataSet(column.name)"
+              @click="showDeleteDatasetModal(column.name)"
             />
           </el-tooltip>
           <i v-else class="fas fa-trash-alt reject-hide" />
@@ -176,6 +176,11 @@ export default {
             }
           }
         ]
+      });
+    },
+    showDeleteDatasetModal(name) {
+      this.$modal.show('deleteDataset', {
+        id: name
       });
     },
     deleteDataSet(name) {

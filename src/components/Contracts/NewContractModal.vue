@@ -3,6 +3,7 @@
     classes="modal-container"
     name="new-contract"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
@@ -98,7 +99,12 @@ export default {
       query: GET_CONTRACT_TYPE_LIST
     },
     divisionTypeList: {
-      query: GET_DIVISION_TYPE_LIST
+      query: GET_DIVISION_TYPE_LIST,
+      variables() {
+        return {
+          clientId: this.clientId
+        };
+      }
     }
   },
   data() {
@@ -113,6 +119,7 @@ export default {
         divisionId: null
       },
       CONTRACT_LOOKUP,
+      clientId: null,
       contractTypeList: [],
       divisionTypeList: [],
       rules: {
@@ -194,6 +201,9 @@ export default {
       if (value !== CONTRACT_LOOKUP.PROPOSAL) {
         this.form.round = null;
       }
+    },
+    beforeOpen(event) {
+      this.clientId = event.params.clientId;
     },
     beforeClose() {
       Object.keys(this.form).forEach(key => {

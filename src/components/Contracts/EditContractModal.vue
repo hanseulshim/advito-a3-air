@@ -98,7 +98,12 @@ export default {
       query: GET_CONTRACT_TYPE_LIST
     },
     divisionTypeList: {
-      query: GET_DIVISION_TYPE_LIST
+      query: GET_DIVISION_TYPE_LIST,
+      variables() {
+        return {
+          clientId: this.clientId
+        };
+      }
     }
   },
   data() {
@@ -113,6 +118,7 @@ export default {
         description: null,
         divisionId: null
       },
+      clientId: null,
       contractTypeList: [],
       divisionTypeList: [],
       CONTRACT_LOOKUP,
@@ -197,6 +203,7 @@ export default {
         description,
         divisionId
       } = event.params.contract;
+      this.clientId = event.params.clientId;
       this.form.id = id;
       this.form.name = name;
       this.form.typeId = typeId;

@@ -4,10 +4,6 @@
   padding: 1em 0.5em;
   border-top: 1px solid #eeecec;
   position: relative;
-  
-  //   display: flex;
-  //   flex-direction: column;
-  //   justify-content: space-between;
 }
 
 .rule-title {
@@ -44,16 +40,33 @@
 
   .el-tag {
     margin-right: 1em;
+    margin-top: 1em;
   }
 
   label {
     margin-right: 1em;
   }
 
-  // span{
-  //   margin-right: 1em;
-  // }
 }
+
+    .bulk-save-container{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 3em;
+    }
+
+    .save-rule-bulk{
+    color: #ff9e16;
+    border: 1px solid #ff9e16;
+    border-radius: 10px;
+    padding: .5em 1em;
+    font-size: 0.8em;
+    cursor: pointer;
+    background: transparent;
+    text-transform: uppercase;
+    }
 
 //DatePicker Styling. Ticketing Dates, Travel Dates,
 

@@ -3,7 +3,11 @@
     <Navigation />
     <div class="title-row space-between">
       <div class="section-header">
-        <el-tooltip v-if="checkQc" placement="top" effect="light">
+        <el-tooltip
+          v-if="targetTermList.some(term => !term.qc)"
+          placement="top"
+          effect="light"
+        >
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
@@ -19,6 +23,7 @@
             placeholder="Bulk Actions"
             filterable
             clearable
+            :disabled="!bulkIdList.length"
             @change="bulkAction"
           >
             <el-option
@@ -227,6 +232,13 @@
     <DeleteTargetTermModal @clear-bulk-actions="clearBulkActions" />
     <TargetTermNoteModal />
     <TargetTermRulesModal />
+    <TargetTermBulkActionModal
+      :bulk-id-list="bulkIdList"
+      :parent-type="parentType"
+      :parent-id="selectedContract.id"
+      @clear-selection="clearBulkActionSelection"
+      @toggle-row="toggleRow"
+    />
   </div>
 </template>
 
@@ -249,6 +261,7 @@ import EditTargetTermModal from './EditTargetTermModal';
 import DeleteTargetTermModal from './DeleteTargetTermModal';
 import TargetTermNoteModal from './TargetTermNoteModal';
 import TargetTermRulesModal from './TargetTermRulesModal';
+import TargetTermBulkActionModal from './TargetTermBulkActionModal';
 export default {
   name: 'TargetTerms',
   components: {
@@ -259,7 +272,8 @@ export default {
     EditTargetTermModal,
     DeleteTargetTermModal,
     TargetTermNoteModal,
-    TargetTermRulesModal
+    TargetTermRulesModal,
+    TargetTermBulkActionModal
   },
   apollo: {
     selectedContract: {
@@ -289,7 +303,8 @@ export default {
       term,
       toggleRowId: null,
       bulkIdList: [],
-      bulkActionList: []
+      bulkActionList: [],
+      parentType: TARGET_TERM_LOOKUP.RULE_TYPE
     };
   },
   computed: {
@@ -334,9 +349,6 @@ export default {
       } else {
         return targetAmount;
       }
-    },
-    checkQc() {
-      return this.targetTermList.some(term => term.qc !== 1);
     },
     checkErrorQc(qc) {
       return qc !== 1;
@@ -383,11 +395,21 @@ export default {
         important: targetTerm.noteImportant
       });
     },
+    showBulkActionModal(value) {
+      this.$modal.show('target-term-bulk-action-modal', {
+        bulkActionId: value
+      });
+    },
+    clearBulkActionSelection() {
+      this.bulkActionId = null;
+    },
     bulkAction(value) {
       if (value === TARGET_TERM_LOOKUP.BULK_ACTION_DELETE) {
         this.showDeleteTargetTermModal(this.bulkIdList);
       } else if (value === TARGET_TERM_LOOKUP.BULK_ACTION_QC) {
         this.toggleTargetTermQC(this.bulkIdList);
+      } else {
+        this.showBulkActionModal(value);
       }
     },
     clearBulkActions() {

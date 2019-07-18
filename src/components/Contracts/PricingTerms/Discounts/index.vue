@@ -100,7 +100,7 @@
       >
         <template slot-scope="props">
           {{
-            props.row.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+            props.row.discountTypeId === discountLookup.PERCENTAGE
               ? formatPercent(props.row.discountValue)
               : props.row.discountValue
           }}
@@ -181,10 +181,16 @@
     <NewDiscountModal @toggle-row="toggleRow" />
     <CopyDiscountModal @toggle-row="toggleRow" />
     <EditDiscountModal />
+    <DiscountBulkActionModal
+      :bulk-id-list="bulkIdList"
+      :parent-type="parentType"
+      :parent-id="pricingTermId"
+      @clear-selection="clearBulkActionSelection"
+      @toggle-row="toggleRow"
+    />
     <DeleteDiscountModal @toggle-row="toggleRow" />
     <DiscountNoteModal @toggle-row="toggleRow" />
     <ChangeDiscountAppliedOrderModal />
-    <PricingTermRulesModal />
   </div>
 </template>
 
@@ -194,22 +200,22 @@ import { discount } from '@/config';
 import { GET_DISCOUNT_LIST, GET_BULK_ACTION_LIST } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import NewDiscountModal from './NewDiscountModal';
+import DiscountBulkActionModal from './DiscountBulkActionModal';
 import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
 import DeleteDiscountModal from './DeleteDiscountModal';
 import DiscountNoteModal from './DiscountNoteModal';
-import PricingTermRulesModal from './PricingTermRulesModal';
 import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
 export default {
   name: 'Discounts',
   components: {
     NewDiscountModal,
+    DiscountBulkActionModal,
     CopyDiscountModal,
     EditDiscountModal,
     DeleteDiscountModal,
     DiscountNoteModal,
-    ChangeDiscountAppliedOrderModal,
-    PricingTermRulesModal
+    ChangeDiscountAppliedOrderModal
   },
   apollo: {
     discountList: {
@@ -236,12 +242,13 @@ export default {
   },
   data() {
     return {
-      DISCOUNT_LOOKUP,
+      parentType: DISCOUNT_LOOKUP.RULE_TYPE,
       discountList: [],
       bulkActionId: null,
       discount,
       bulkIdList: [],
-      bulkActionList: []
+      bulkActionList: [],
+      discountLookup: DISCOUNT_LOOKUP
     };
   },
   methods: {
@@ -267,6 +274,8 @@ export default {
     bulkAction(value) {
       if (value === DISCOUNT_LOOKUP.BULK_ACTION_DELETE) {
         this.showDeleteDiscountModal(this.bulkIdList);
+      } else {
+        this.showBulkActionModal(value);
       }
     },
     showNewDiscountModal() {
@@ -289,6 +298,11 @@ export default {
         discount
       });
     },
+    showBulkActionModal(value) {
+      this.$modal.show('discount-bulk-action-modal', {
+        bulkActionId: value
+      });
+    },
     toggleNoteModal(discount) {
       this.$modal.show('save-discount-note', {
         parentId: discount.id,
@@ -306,6 +320,9 @@ export default {
         pricingTermId: this.pricingTermId,
         discountList: this.discountList
       });
+    },
+    clearBulkActionSelection() {
+      this.bulkActionId = null;
     },
     toggleRow(id) {
       this.$emit('toggle-row', id);
