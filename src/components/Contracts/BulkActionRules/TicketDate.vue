@@ -5,6 +5,7 @@
       <el-date-picker
         v-model="startDate"
         type="date"
+        format="dd MMM yyyy"
         size="mini"
         placeholder="Pick a day"
         class="date-picker"
@@ -12,6 +13,7 @@
       <el-date-picker
         v-model="endDate"
         type="date"
+        format="dd MMM yyyy"
         size="mini"
         placeholder="Pick a day"
         class="date-picker"

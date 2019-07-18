@@ -12,6 +12,7 @@
         v-model="startDate"
         type="date"
         size="mini"
+        format="dd MMM yyyy"
         placeholder="Pick a day"
         class="date-picker"
       ></el-date-picker>
@@ -19,6 +20,7 @@
         v-model="endDate"
         type="date"
         size="mini"
+        format="dd MMM yyyy"
         placeholder="Pick a day"
         class="date-picker"
       ></el-date-picker>
@@ -123,19 +125,25 @@ export default {
       this.updateRule = null;
     },
     createTag() {
-      const ruleContainerId = this.travelDateList.length
-        ? this.travelDateList[0].ruleContainerId
-        : null;
+      if (this.startDate && this.endDate) {
+        const ruleContainerId = this.travelDateList.length
+          ? this.travelDateList[0].ruleContainerId
+          : null;
 
-      this.travelDateList.push({
-        id: null,
-        ruleContainerId,
-        startDate: new Date(this.startDate),
-        endDate: new Date(this.endDate),
-        isDeleted: false
-      });
-      this.startDate = '';
-      this.endDate = '';
+        this.travelDateList.push({
+          id: null,
+          ruleContainerId,
+          startDate: new Date(this.startDate),
+          endDate: new Date(this.endDate),
+          isDeleted: false
+        });
+        this.startDate = '';
+        this.endDate = '';
+      } else {
+        this.$modal.show('error', {
+          message: 'Please enter both a start date and an end date'
+        });
+      }
     },
     async deleteTag(tag) {
       const idx = this.travelDateList.indexOf(tag);
