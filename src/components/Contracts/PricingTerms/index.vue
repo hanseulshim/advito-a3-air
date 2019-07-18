@@ -272,6 +272,7 @@
       @clear-selection="clearBulkActionSelection"
       @toggle-row="toggleRow"
     />
+    <PricingTermRulesModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -290,6 +291,7 @@ import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
+import PricingTermRulesModal from './PricingTermRulesModal';
 import DeletePricingTermModal from './DeletePricingTermModal';
 import BulkActionModal from './BulkActionModal';
 import NoteModal from './NoteModal';
@@ -304,6 +306,7 @@ export default {
     NewPricingTermModal,
     EditPricingTermModal,
     DeletePricingTermModal,
+    PricingTermRulesModal,
     NoteModal,
     ChangeAppliedOrderModal,
     BulkActionModal
