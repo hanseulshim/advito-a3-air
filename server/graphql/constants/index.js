@@ -14,11 +14,17 @@ const {
 const { DATA_SET } = require('./dataSet');
 const { PROCESS } = require('./process');
 const { PROJECT, PROJECT_LOOKUP } = require('./project');
-const { AIR_APPLICATION_ID } = require('./client');
+const {
+  AIR_APPLICATION_ID,
+  ADVITO_CLIENT,
+  ADVIT_GEOSET_ID
+} = require('./client');
 const { LIBRARY_LOOKUP } = require('./library');
 
 module.exports = {
   AIR_APPLICATION_ID,
+  ADVITO_CLIENT,
+  ADVIT_GEOSET_ID,
   CONTRACT,
   PRICING_TERM,
   TARGET_TERM,

@@ -88,15 +88,24 @@ import {
   GET_USER_LIST,
   GET_DISCOUNT,
   GET_PRICING_TERM,
-  GET_NOTE_LIST
+  GET_NOTE_LIST,
+  GET_CLIENT
 } from '@/graphql/queries';
 import { ADD_NOTE, EDIT_NOTE, DELETE_NOTE } from '@/graphql/mutations';
 import { formatDate } from '@/helper';
 export default {
   name: 'DiscountNoteModal',
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
     userList: {
-      query: GET_USER_LIST
+      query: GET_USER_LIST,
+      variables() {
+        return {
+          clientId: this.client ? this.client.id : null
+        };
+      }
     },
     user: {
       query: GET_USER,
@@ -117,6 +126,7 @@ export default {
   },
   data() {
     return {
+      client: null,
       parentId: null,
       parentTable: 'discount',
       important: false,
