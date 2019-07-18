@@ -24,10 +24,10 @@ type DataSpecialistUser {
 }
 
 extend type Query {
-  userList: [User] @auth
+  userList(clientId: Int): [User] @auth
   user: User @auth
-  projectManagerList: [ProjectManagerUser] @auth
-  leadAnalystList: [LeadAnalystUser] @auth
-  dataSpecialistList: [DataSpecialistUser] @auth
+  projectManagerList(clientId: Int): [ProjectManagerUser] @auth
+  leadAnalystList(clientId: Int): [LeadAnalystUser] @auth
+  dataSpecialistList(clientId: Int): [DataSpecialistUser] @auth
 }
 `;

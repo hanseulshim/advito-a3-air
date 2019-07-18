@@ -11,8 +11,8 @@ export const GET_USER = gql`
 `;
 
 export const GET_USER_LIST = gql`
-  {
-    userList {
+  query userList($clientId: Int) {
+    userList(clientId: $clientId) {
       id
       name
       email
@@ -21,8 +21,8 @@ export const GET_USER_LIST = gql`
 `;
 
 export const GET_PROJECT_MANAGER_LIST = gql`
-  {
-    projectManagerList {
+  query projectManagerList($clientId: Int) {
+    projectManagerList(clientId: $clientId) {
       id
       name
       email
@@ -31,8 +31,8 @@ export const GET_PROJECT_MANAGER_LIST = gql`
 `;
 
 export const GET_LEAD_ANALYST_LIST = gql`
-  {
-    leadAnalystList {
+  query leadAnalystList($clientId: Int) {
+    leadAnalystList(clientId: $clientId) {
       id
       name
       email
@@ -41,8 +41,8 @@ export const GET_LEAD_ANALYST_LIST = gql`
 `;
 
 export const GET_DATA_SPECIALIST_LIST = gql`
-  {
-    dataSpecialistList {
+  query dataSpecialistList($clientId: Int) {
+    dataSpecialistList(clientId: $clientId) {
       id
       name
       email
