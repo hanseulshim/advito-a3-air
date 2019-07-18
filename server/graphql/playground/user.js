@@ -5,7 +5,7 @@ exports.user = {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
-      userList {
+      userList(clientId: null) {
         id
         name
         email
@@ -15,17 +15,17 @@ exports.user = {
         name
         email
       }
-      projectManagerList {
+      projectManagerList(clientId: null) {
         id
         name
         email
       }
-      leadAnalystList {
+      leadAnalystList(clientId: null) {
         id
         name
         email
       }
-      dataSpecialistList {
+      dataSpecialistList(clientId: null) {
         id
         name
         email

@@ -176,13 +176,28 @@ export default {
       query: GET_DISTANCE_UNIT_LIST
     },
     projectManagerList: {
-      query: GET_PROJECT_MANAGER_LIST
+      query: GET_PROJECT_MANAGER_LIST,
+      variables() {
+        return {
+          clientId: this.form.clientId
+        };
+      }
     },
     leadAnalystList: {
-      query: GET_LEAD_ANALYST_LIST
+      query: GET_LEAD_ANALYST_LIST,
+      variables() {
+        return {
+          clientId: this.form.clientId
+        };
+      }
     },
     dataSpecialistList: {
-      query: GET_DATA_SPECIALIST_LIST
+      query: GET_DATA_SPECIALIST_LIST,
+      variables() {
+        return {
+          clientId: this.form.clientId
+        };
+      }
     },
     projectTypeList: {
       query: GET_PROJECT_TYPE_LIST
