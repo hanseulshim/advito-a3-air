@@ -4,7 +4,7 @@
     <div class="title-row space-between">
       <div class="section-header">
         <el-tooltip
-          v-if="pricingTermList.some(term => term.qc !== 1)"
+          v-if="pricingTermList.some(term => !term.qc)"
           placement="top"
           effect="light"
         >

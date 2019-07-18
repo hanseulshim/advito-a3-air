@@ -2,7 +2,11 @@
   <div class="table-spacer">
     <div class="section-header title-row space-between">
       <div>
-        <el-tooltip v-if="checkQc" placement="top" effect="light">
+        <el-tooltip
+          v-if="contractList.some(contract => !contract.qc)"
+          placement="top"
+          effect="light"
+        >
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
@@ -246,9 +250,6 @@ export default {
     },
     formatPercent(num) {
       return formatPercent(num);
-    },
-    checkQc() {
-      return this.contractList.some(contract => contract.qc !== 1);
     },
     checkErrorQc(qc) {
       return qc !== 1;

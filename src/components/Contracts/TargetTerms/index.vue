@@ -3,7 +3,11 @@
     <Navigation />
     <div class="title-row space-between">
       <div class="section-header">
-        <el-tooltip v-if="checkQc" placement="top" effect="light">
+        <el-tooltip
+          v-if="targetTermList.some(term => !term.qc)"
+          placement="top"
+          effect="light"
+        >
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
@@ -344,9 +348,6 @@ export default {
       } else {
         return targetAmount;
       }
-    },
-    checkQc() {
-      return this.targetTermList.some(term => term.qc !== 1);
     },
     checkErrorQc(qc) {
       return qc !== 1;
