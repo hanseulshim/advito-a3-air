@@ -480,7 +480,7 @@ extend type Query {
 extend type Mutation {
   updateTicketingDate(parentId: Int!, parentType: Int, ticketingDateList: [TicketingDateInput]!): [TicketingDate] @auth
   updateTicketingDateBulk(parentType: Int, ticketingDateList: [TicketingDateBulkInput]!): Int @auth
-  updateTravelDate(parentId: Int!, parentType: Int, travelDateList: [TravelDateBulkInput]!): [TravelDate] @auth
+  updateTravelDate(parentId: Int!, parentType: Int, travelDateList: [TravelDateInput]!): [TravelDate] @auth
   updateTravelDateBulk(parentType: Int, travelDateList: [TravelDateBulkInput]!): Int @auth
   updatePointOfSale(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
   updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
