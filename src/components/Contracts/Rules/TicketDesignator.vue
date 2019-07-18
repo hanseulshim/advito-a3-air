@@ -48,6 +48,7 @@ export default {
   apollo: {
     ticketDesignatorList: {
       query: GET_TICKET_DESIGNATOR_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.parentId

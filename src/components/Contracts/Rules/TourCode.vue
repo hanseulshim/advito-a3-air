@@ -43,6 +43,7 @@ export default {
   apollo: {
     tourCodeList: {
       query: GET_TOUR_CODE_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.parentId
