@@ -19,6 +19,7 @@
             placeholder="Bulk Actions"
             filterable
             clearable
+            :disabled="!bulkIdList.length"
             @change="bulkAction"
           >
             <el-option
