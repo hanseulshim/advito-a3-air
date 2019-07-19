@@ -63,7 +63,7 @@ import {
   GET_PRICING_TERM,
   GET_CONTRACT
 } from '@/graphql/queries';
-import { UPDATE_AIRLINE } from '@/graphql/mutations';
+import { UPDATE_AIRLINE_RULE } from '@/graphql/mutations';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
   name: 'MarketingAirline',
@@ -93,7 +93,7 @@ export default {
     airlineCodeList: {
       query: GET_AIRLINE_CODE_LIST
     },
-    airlineList: {
+    airlineRuleList: {
       query: GET_AIRLINE_RULE_LIST,
       variables() {
         return {
@@ -102,15 +102,15 @@ export default {
           airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
         };
       },
-      result({ data: { airlineList } }) {
-        return removeTypename(airlineList);
+      result({ data: { airlineRuleList } }) {
+        return removeTypename(airlineRuleList);
       }
     }
   },
   data() {
     return {
       airlineCodeList: [],
-      airlineList: [],
+      airlineRuleList: [],
       exclude: false,
       editMode: false,
       selectedAirline: [],
@@ -168,23 +168,23 @@ export default {
   },
   computed: {
     excludedRules() {
-      return this.airlineList.filter(rule => rule.exclude);
+      return this.airlineRuleList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.airlineList.filter(rule => !rule.exclude);
+      return this.airlineRuleList.filter(rule => !rule.exclude);
     }
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.airlineList.length) {
+      if (this.editMode && !this.airlineRuleList.length) {
         this.$emit('delete-rule', 'MarketingAirline');
       } else if (this.editMode) {
         await this.$apollo.mutate({
-          mutation: UPDATE_AIRLINE,
+          mutation: UPDATE_AIRLINE_RULE,
           variables: {
             parentId: this.parentId,
             parentType: this.parentType,
-            airlineList: this.airlineList,
+            airlineRuleList: this.airlineRuleList,
             airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
           },
           refetchQueries: () =>
@@ -200,12 +200,12 @@ export default {
       this.selectedAirline = [];
     },
     createTag() {
-      const ruleContainerId = this.airlineList.length
-        ? this.airlineList[0].ruleContainerId
+      const ruleContainerId = this.airlineRuleList.length
+        ? this.airlineRuleList[0].ruleContainerId
         : null;
 
       this.selectedAirline.map(v => {
-        this.airlineList.push({
+        this.airlineRuleList.push({
           id: null,
           ruleContainerId,
           ruleType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE,
@@ -218,16 +218,16 @@ export default {
       this.selectedAirline = [];
     },
     async deleteTag(tag) {
-      const idx = this.airlineList.indexOf(tag);
-      this.airlineList[idx].isDeleted = true;
+      const idx = this.airlineRuleList.indexOf(tag);
+      this.airlineRuleList[idx].isDeleted = true;
 
       await this.$apollo
         .mutate({
-          mutation: UPDATE_AIRLINE,
+          mutation: UPDATE_AIRLINE_RULE,
           variables: {
             parentId: this.parentId,
             parentType: this.parentType,
-            airlineList: this.airlineList,
+            airlineRuleList: this.airlineRuleList,
             airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
           },
           refetchQueries: () =>
@@ -236,8 +236,10 @@ export default {
               : this.targetTermQueries
         })
         .then(() => {
-          const rulesRemaining = this.airlineList.some(rule => !rule.isDeleted);
-          if (!this.airlineList.length || !rulesRemaining) {
+          const rulesRemaining = this.airlineRuleList.some(
+            rule => !rule.isDeleted
+          );
+          if (!this.airlineRuleList.length || !rulesRemaining) {
             this.$emit('delete-rule', 'MarketingAirline');
             this.$emit('toggle-row', this.pricingTermId);
           }
