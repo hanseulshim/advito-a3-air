@@ -27,10 +27,28 @@ type AirlineMappingException {
   overrideFareCategory: String
 }
 
+type Airline {
+  id: Int,
+  code: String,
+  name: String
+}
+
 type Currency {
   id: Int,
   name: String,
   code: String
+}
+
+type DistanceUnit {
+  id: Int,
+  name: String
+}
+
+type Geography {
+  id: Int
+  code: String
+  name: String
+  locationType: Int
 }
 
 type Location {
@@ -40,15 +58,12 @@ type Location {
   name: String
 }
 
-type DistanceUnit {
-  id: Int,
-  name: String
-}
-
 extend type Query {
+  airlineList: [Airline] @auth
   airportList: [Airport] @auth
   bookingClassLibraryList: [BookingClassLibrary] @auth
   currencyList: [Currency] @auth
+  marketList: [Geography] @auth
   distanceUnitList: [DistanceUnit] @auth
 }
 `;

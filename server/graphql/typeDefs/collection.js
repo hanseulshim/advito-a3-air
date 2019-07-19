@@ -30,9 +30,9 @@ type Sector {
   id: Int
   name: String
   shortName: String
-  geographyList: [Geography]
+  geographyList: [Geography1]
 }
-type Geography {
+type Geography1 {
   origin: GeographyRegion
   destination: GeographyRegion
   exclude: Boolean

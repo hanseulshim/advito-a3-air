@@ -38,27 +38,6 @@ exports.rule = {
           },
           'code'
         ]),
-    marketGeoList: async (_, __, { db }) =>
-      await db('location')
-        .select({
-          name: 'name',
-          code: 'code',
-          locationType: 'locationtype'
-        })
-        .where(function() {
-          this.where('locationtype', 5).andWhere('geosetid', ADVIT_GEOSET_ID);
-        })
-        .orWhere('locationtype', 3)
-        .orWhere('locationtype', 1)
-        .orWhere('locationtype', 0)
-        .andWhere('isdeleted', false)
-        .orderBy([
-          {
-            column: 'locationtype',
-            order: 'desc'
-          },
-          'code'
-        ]),
     bookingClassCodeList: async (_, __, { db }) =>
       await db('bookingclass')
         .select({
@@ -110,7 +89,7 @@ exports.rule = {
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.POINT_OF_SALE),
     pointOfOriginList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.POINT_OF_ORIGIN),
-    marketList: async (_, { parentId, parentType }, { db }) =>
+    marketRuleList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.MARKET),
     bookingClassList: async (_, { parentId, bookingClassType = 1 }, { db }) =>
       await getRuleList(
@@ -120,7 +99,11 @@ exports.rule = {
         RULE_LOOKUP.BOOKING_CLASS,
         bookingClassType
       ),
-    airlineList: async (_, { parentId, parentType, airlineType = 1 }, { db }) =>
+    airlineRuleList: async (
+      _,
+      { parentId, parentType, airlineType = 1 },
+      { db }
+    ) =>
       await getRuleList(
         db,
         parentId,
@@ -220,12 +203,16 @@ exports.rule = {
         pointOfOriginList,
         RULE_LOOKUP.POINT_OF_ORIGIN
       ),
-    updateMarket: async (_, { parentId, parentType, marketList }, { db }) =>
+    updateMarketRule: async (
+      _,
+      { parentId, parentType, marketRuleList },
+      { db }
+    ) =>
       await updateRule(
         db,
         parentId,
         parentType,
-        marketList,
+        marketRuleList,
         RULE_LOOKUP.MARKET
       ),
     updateBookingClass: async (
@@ -241,7 +228,7 @@ exports.rule = {
         RULE_LOOKUP.BOOKING_CLASS,
         bookingClassType
       ),
-    updateAirline: async (
+    updateAirlineRule: async (
       _,
       { parentId, parentType, airlineType = 1, airlineList },
       { db }
