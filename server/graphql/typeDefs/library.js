@@ -51,13 +51,6 @@ type Geography {
   locationType: Int
 }
 
-type Location {
-  id: Int,
-  locationType: Int,
-  code: String,
-  name: String
-}
-
 extend type Query {
   airlineList: [Airline] @auth
   airportList: [Airport] @auth
