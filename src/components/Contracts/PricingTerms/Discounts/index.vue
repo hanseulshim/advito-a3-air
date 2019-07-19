@@ -208,7 +208,7 @@ import NewDiscountModal from './NewDiscountModal';
 import DiscountBulkActionModal from './DiscountBulkActionModal';
 import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
-import NormalizationModal from '../Normalization/NormalizationModal';
+import NormalizationModal from './NormalizationModal';
 import DeleteDiscountModal from './DeleteDiscountModal';
 import DiscountNoteModal from './DiscountNoteModal';
 import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
