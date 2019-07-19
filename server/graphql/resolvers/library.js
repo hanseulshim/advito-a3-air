@@ -36,7 +36,7 @@ exports.library = {
           name: 'c.currency_name',
           code: 'c.currency_code'
         })
-        .orderBy('c.currency_name'),
+        .orderBy('c.currency_code'),
     distanceUnitList: async (_, __, { db }) =>
       await db('lov_lookup')
         .select({
