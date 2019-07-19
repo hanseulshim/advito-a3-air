@@ -33,6 +33,11 @@ exports.library = {
       code
       name
     }
+    countryList {
+      id
+      code
+      name
+    }
     currencyList {
       id
       name
@@ -40,6 +45,11 @@ exports.library = {
     }
     distanceUnitList {
       id
+      name
+    }
+    geographyList {
+      id
+      code
       name
     }
     marketList {

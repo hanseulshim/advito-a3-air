@@ -6,9 +6,20 @@ export const GET_RULE_LIST = gql`
   }
 `;
 
-export const GET_GEO_LIST = gql`
-  query geographyRuleList {
-    geographyRuleList {
+export const GET_COUNTRY_LIST = gql`
+  query countryList {
+    countryList {
+      code
+      name
+      locationType
+    }
+  }
+`;
+
+export const GET_GEOGRAPHY_LIST = gql`
+  query geographyList {
+    geographyList {
+      id
       code
       name
       locationType

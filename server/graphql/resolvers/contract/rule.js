@@ -1,7 +1,6 @@
 const {
   DISCOUNT_LOOKUP,
   TARGET_TERM_LOOKUP,
-  ADVIT_GEOSET_ID,
   RULE_LOOKUP
 } = require('../../constants');
 
@@ -19,25 +18,6 @@ exports.rule = {
       );
       return rows.map(row => row.tableid);
     },
-    geographyRuleList: async (_, __, { db }) =>
-      await db('location')
-        .select({
-          name: 'name',
-          code: 'code',
-          locationType: 'locationtype'
-        })
-        .where(function() {
-          this.where('locationtype', 5).andWhere('geosetid', ADVIT_GEOSET_ID);
-        })
-        .orWhere('locationtype', 3)
-        .andWhere('isdeleted', false)
-        .orderBy([
-          {
-            column: 'locationtype',
-            order: 'desc'
-          },
-          'code'
-        ]),
     bookingClassCodeList: async (_, __, { db }) =>
       await db('bookingclass')
         .select({

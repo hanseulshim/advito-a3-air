@@ -62,7 +62,9 @@ extend type Query {
   airlineList: [Airline] @auth
   airportList: [Airport] @auth
   bookingClassLibraryList: [BookingClassLibrary] @auth
+  countryList: [Geography] @auth
   currencyList: [Currency] @auth
+  geographyList: [Geography] @auth
   marketList: [Geography] @auth
   distanceUnitList: [DistanceUnit] @auth
 }

@@ -71,12 +71,6 @@ input PointOfOriginInput {
   isDeleted: Boolean
 }
 
-type GeographyRule {
-  code: String
-  name: String
-  locationType: Int
-}
-
 type MarketRule {
   id: Int
   ruleContainerId: String
@@ -446,7 +440,6 @@ type DayOfWeekUnit {
 
 extend type Query {
   ruleList(parentId: Int, parentType: Int): [Int] @auth
-  geographyRuleList: [GeographyRule] @auth
   dayUnitList: [DayUnit] @auth
   dayOfWeekUnitList: [DayOfWeekUnit] @auth
   fareCategoryUnitList: [FareCategoryUnit] @auth

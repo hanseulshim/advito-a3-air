@@ -1,5 +1,9 @@
 const { airportList, bookingClassList } = require('../../data');
-const { LIBRARY_LOOKUP, LOCATION_LOOKUP } = require('../constants');
+const {
+  LIBRARY_LOOKUP,
+  LOCATION_LOOKUP,
+  ADVIT_GEOSET_ID
+} = require('../constants');
 
 exports.library = {
   Query: {
@@ -14,6 +18,17 @@ exports.library = {
         .orderBy('code'),
     airportList: () => airportList,
     bookingClassLibraryList: () => bookingClassList,
+    countryList: async (_, __, { db }) =>
+      await db('location')
+        .select({
+          id: 'id',
+          name: 'name',
+          code: 'code',
+          locationType: 'locationtype'
+        })
+        .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)
+        .andWhere('isdeleted', false)
+        .orderBy('code'),
     currencyList: async (_, __, { db }) =>
       await db('blops.currency as c')
         .select({
@@ -29,6 +44,25 @@ exports.library = {
           name: 'name_val'
         })
         .where('type', LIBRARY_LOOKUP.DISTANCE_TYPE),
+    geographyList: async (_, __, { db }) =>
+      await db('location')
+        .select({
+          id: 'id',
+          name: 'name',
+          code: 'code',
+          locationType: 'locationtype'
+        })
+        .where(function() {
+          this.where('locationtype', LOCATION_LOOKUP.REGION).andWhere(
+            'geosetid',
+            ADVIT_GEOSET_ID
+          );
+        })
+        .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)
+        .orWhere('locationtype', LOCATION_LOOKUP.CITY)
+        .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
+        .andWhere('isdeleted', false)
+        .orderBy('code'),
     marketList: async (_, __, { db }) =>
       await db('location')
         .select({
@@ -37,7 +71,6 @@ exports.library = {
           code: 'code',
           locationType: 'locationtype'
         })
-        .where('isdeleted', false)
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
         .orWhere('locationtype', LOCATION_LOOKUP.CITY)
         .andWhere('isdeleted', false)

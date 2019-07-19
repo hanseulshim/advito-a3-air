@@ -6,10 +6,6 @@ exports.rule = {
     query: `
     {
       ruleList(parentId: 34)
-      #geographyRuleList {
-      #  name
-      #  code
-      #}
       #bookingClassCodeList {
       #  fareCategoryId
       #  code
