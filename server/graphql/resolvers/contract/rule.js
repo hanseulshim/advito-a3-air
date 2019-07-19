@@ -210,14 +210,14 @@ exports.rule = {
       ),
     updateAirlineRule: async (
       _,
-      { parentId, parentType, airlineType = 1, airlineList },
+      { parentId, parentType, airlineType = 1, airlineRuleList },
       { db }
     ) =>
       await updateRule(
         db,
         parentId,
         parentType,
-        airlineList,
+        airlineRuleList,
         RULE_LOOKUP.AIRLINE,
         airlineType
       ),

@@ -326,7 +326,7 @@ exports.rule = {
         bookingClass
         isDeleted
       }
-      updateAirlineRule(parentId: 34, airlineList: [
+      updateAirlineRule(parentId: 34, airlineRuleList: [
         {
           id: null,
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
