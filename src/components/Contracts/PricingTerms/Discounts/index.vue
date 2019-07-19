@@ -129,7 +129,10 @@
         :min-width="discount.normalization"
       >
         <template slot-scope="props">
-          <button class="button number">
+          <button
+            class="button number"
+            @click="showNormalizationModal(props.row)"
+          >
             {{ props.row.normalizationCount }}
           </button>
         </template>
@@ -189,6 +192,7 @@
       @clear-selection="clearBulkActionSelection"
       @toggle-row="toggleRow"
     />
+    <NormalizationModal />
     <DeleteDiscountModal @toggle-row="toggleRow" />
     <DiscountNoteModal @toggle-row="toggleRow" />
     <ChangeDiscountAppliedOrderModal />
@@ -204,6 +208,7 @@ import NewDiscountModal from './NewDiscountModal';
 import DiscountBulkActionModal from './DiscountBulkActionModal';
 import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
+import NormalizationModal from '../Normalization/NormalizationModal';
 import DeleteDiscountModal from './DeleteDiscountModal';
 import DiscountNoteModal from './DiscountNoteModal';
 import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
@@ -212,6 +217,7 @@ export default {
   components: {
     NewDiscountModal,
     DiscountBulkActionModal,
+    NormalizationModal,
     CopyDiscountModal,
     EditDiscountModal,
     DeleteDiscountModal,
@@ -303,6 +309,11 @@ export default {
     showBulkActionModal(value) {
       this.$modal.show('discount-bulk-action-modal', {
         bulkActionId: value
+      });
+    },
+    showNormalizationModal(discount) {
+      this.$modal.show('normalization-modal', {
+        discount
       });
     },
     toggleNoteModal(discount) {

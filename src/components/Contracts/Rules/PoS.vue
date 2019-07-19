@@ -148,26 +148,32 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.pointOfSaleList.length) {
-        this.$emit('delete-rule', 'PointOfSale');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_POINT_OF_SALE,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            pointOfSaleList: this.pointOfSaleList
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        });
-        if (this.parentType === 1) {
-          this.$emit('toggle-row', this.pricingTermId);
+      try {
+        if (this.editMode && !this.pointOfSaleList.length) {
+          this.$emit('delete-rule', 'PointOfSale');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_POINT_OF_SALE,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              pointOfSaleList: this.pointOfSaleList
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          });
+          if (this.parentType === 1) {
+            this.$emit('toggle-row', this.pricingTermId);
+          }
         }
+        this.editMode = !this.editMode;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
       }
-      this.editMode = !this.editMode;
     },
     createTag() {
       const ruleContainerId = this.pointOfSaleList.length
@@ -186,33 +192,39 @@ export default {
       this.selectedCountry = [];
     },
     async deleteTag(tag) {
-      const idx = this.pointOfSaleList.indexOf(tag);
-      this.pointOfSaleList[idx].isDeleted = true;
+      try {
+        const idx = this.pointOfSaleList.indexOf(tag);
+        this.pointOfSaleList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_POINT_OF_SALE,
-          variables: {
-            parentId: this.parentId,
-            pointOfSaleList: this.pointOfSaleList,
-            parentType: this.parentType
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        })
-        .then(() => {
-          const rulesRemaining = this.pointOfSaleList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.pointOfSaleList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'PointOfSale');
-            this.$emit('toggle-row', this.pricingTermId);
-          }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_POINT_OF_SALE,
+            variables: {
+              parentId: this.parentId,
+              pointOfSaleList: this.pointOfSaleList,
+              parentType: this.parentType
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          })
+          .then(() => {
+            const rulesRemaining = this.pointOfSaleList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.pointOfSaleList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'PointOfSale');
+              this.$emit('toggle-row', this.pricingTermId);
+            }
+          });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.pricingTermId);
       }
     }
   }

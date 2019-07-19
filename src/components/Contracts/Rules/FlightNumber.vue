@@ -142,33 +142,39 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.flightNumberList.length) {
-        this.$emit('delete-rule', 'FlightNumber');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_FLIGHT_NUMBER_LIST,
-          variables: {
-            parentId: this.parentId,
-            flightNumberList: this.flightNumberList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FLIGHT_NUMBER_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.flightNumberList.length) {
+          this.$emit('delete-rule', 'FlightNumber');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_FLIGHT_NUMBER_LIST,
+            variables: {
+              parentId: this.parentId,
+              flightNumberList: this.flightNumberList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_FLIGHT_NUMBER_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.startRange = null;
+        this.endRange = null;
+        this.selectedAirline = [];
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.startRange = null;
-      this.endRange = null;
-      this.selectedAirline = [];
     },
     createTag() {
       const ruleContainerId = this.flightNumberList.length
@@ -193,31 +199,37 @@ export default {
       this.selectedAirline = [];
     },
     async deleteTag(tag) {
-      const idx = this.flightNumberList.indexOf(tag);
-      this.flightNumberList[idx].isDeleted = true;
+      try {
+        const idx = this.flightNumberList.indexOf(tag);
+        this.flightNumberList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_FLIGHT_NUMBER_LIST,
-          variables: {
-            parentId: this.parentId,
-            flightNumberList: this.flightNumberList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FLIGHT_NUMBER_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_FLIGHT_NUMBER_LIST,
+            variables: {
+              parentId: this.parentId,
+              flightNumberList: this.flightNumberList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_FLIGHT_NUMBER_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.flightNumberList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.flightNumberList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'FlightNumber');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.flightNumberList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.flightNumberList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'FlightNumber');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

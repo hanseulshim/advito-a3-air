@@ -63,31 +63,37 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.tourCodeList.length) {
-        this.$emit('delete-rule', 'TourCode');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_TOUR_CODE_LIST,
-          variables: {
-            parentId: this.parentId,
-            tourCodeList: this.tourCodeList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_TOUR_CODE_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.tourCodeList.length) {
+          this.$emit('delete-rule', 'TourCode');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_TOUR_CODE_LIST,
+            variables: {
+              parentId: this.parentId,
+              tourCodeList: this.tourCodeList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_TOUR_CODE_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.tourCode = '';
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.tourCode = '';
     },
     createTag() {
       const ruleContainerId = this.tourCodeList.length
@@ -104,31 +110,37 @@ export default {
       this.tourCode = '';
     },
     async deleteTag(tag) {
-      const idx = this.tourCodeList.indexOf(tag);
-      this.tourCodeList[idx].isDeleted = true;
+      try {
+        const idx = this.tourCodeList.indexOf(tag);
+        this.tourCodeList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_TOUR_CODE_LIST,
-          variables: {
-            parentId: this.parentId,
-            tourCodeList: this.tourCodeList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_TOUR_CODE_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_TOUR_CODE_LIST,
+            variables: {
+              parentId: this.parentId,
+              tourCodeList: this.tourCodeList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_TOUR_CODE_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.tourCodeList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.tourCodeList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'TourCode');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.tourCodeList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.tourCodeList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TourCode');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

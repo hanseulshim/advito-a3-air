@@ -113,25 +113,31 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.cabinList.length) {
-        this.$emit('delete-rule', 'Cabin');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_CABIN_LIST,
-          variables: {
-            parentId: this.parentId,
-            cabinList: this.cabinList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_CABIN_LIST,
-              variables: { parentId: this.parentId }
-            }
-          ]
+      try {
+        if (this.editMode && !this.cabinList.length) {
+          this.$emit('delete-rule', 'Cabin');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_CABIN_LIST,
+            variables: {
+              parentId: this.parentId,
+              cabinList: this.cabinList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_CABIN_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.selectedCabins = [];
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.selectedCabins = [];
     },
     createTag() {
       const ruleContainerId = this.cabinList.length
@@ -151,29 +157,35 @@ export default {
       this.selectedCabins = [];
     },
     async deleteTag(tag) {
-      const idx = this.cabinList.indexOf(tag);
-      this.cabinList[idx].isDeleted = true;
+      try {
+        const idx = this.cabinList.indexOf(tag);
+        this.cabinList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_CABIN_LIST,
-          variables: {
-            parentId: this.parentId,
-            cabinList: this.cabinList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_CABIN_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_CABIN_LIST,
+            variables: {
+              parentId: this.parentId,
+              cabinList: this.cabinList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_CABIN_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.cabinList.some(rule => !rule.isDeleted);
+            if (!this.cabinList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'Cabin');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.cabinList.some(rule => !rule.isDeleted);
-          if (!this.cabinList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'Cabin');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

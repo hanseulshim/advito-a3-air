@@ -146,36 +146,42 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.marketList.length) {
-        this.$emit('delete-rule', 'Market');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_MARKET,
-          variables: {
-            parentId: this.parentId,
-            marketList: this.marketList,
-            parentType: this.parentType
-          },
-          refetchQueries: () => [
-            {
-              query: GET_MARKET_RULE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
+      try {
+        if (this.editMode && !this.marketList.length) {
+          this.$emit('delete-rule', 'Market');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_MARKET,
+            variables: {
+              parentId: this.parentId,
+              marketList: this.marketList,
+              parentType: this.parentType
             },
-            {
-              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_MARKET_RULE_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  parentType: this.parentType
+                }
+              },
+              {
+                query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.origin = {};
+        this.arrival = {};
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.origin = {};
-      this.arrival = {};
     },
     createTag() {
       const ruleContainerId = this.marketList.length
@@ -198,33 +204,41 @@ export default {
       this.arrival = {};
     },
     async deleteTag(tag) {
-      const idx = this.marketList.indexOf(tag);
-      this.marketList[idx].isDeleted = true;
+      try {
+        const idx = this.marketList.indexOf(tag);
+        this.marketList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_MARKET,
-          variables: {
-            parentId: this.parentId,
-            marketList: this.marketList,
-            parentType: this.parentType
-          },
-          refetchQueries: () => [
-            {
-              query: GET_MARKET_RULE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_MARKET,
+            variables: {
+              parentId: this.parentId,
+              marketList: this.marketList,
+              parentType: this.parentType
+            },
+            refetchQueries: () => [
+              {
+                query: GET_MARKET_RULE_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  parentType: this.parentType
+                }
               }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.marketList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.marketList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'Market');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.marketList.some(rule => !rule.isDeleted);
-          if (!this.marketList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'Market');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     filterOriginMarkets(query) {
       if (query !== '') {

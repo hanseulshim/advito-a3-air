@@ -145,37 +145,43 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.fareBasisList.length) {
-        this.$emit('delete-rule', 'CorporateFareBasis');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_FARE_BASIS_LIST,
-          variables: {
-            parentId: this.parentId,
-            fareBasisList: this.fareBasisList,
-            fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FARE_BASIS_LIST,
-              variables: {
-                parentId: this.parentId,
-                fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
-              }
+      try {
+        if (this.editMode && !this.fareBasisList.length) {
+          this.$emit('delete-rule', 'CorporateFareBasis');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_FARE_BASIS_LIST,
+            variables: {
+              parentId: this.parentId,
+              fareBasisList: this.fareBasisList,
+              fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_FARE_BASIS_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
+                }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.basisType = null;
+        this.value = '';
+        this.position = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.basisType = null;
-      this.value = '';
-      this.position = null;
     },
     createTag() {
       const ruleContainerId = this.fareBasisList.length
@@ -302,35 +308,41 @@ export default {
       this.position = null;
     },
     async deleteTag(tag) {
-      const idx = this.fareBasisList.indexOf(tag);
-      this.fareBasisList[idx].isDeleted = true;
+      try {
+        const idx = this.fareBasisList.indexOf(tag);
+        this.fareBasisList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_FARE_BASIS_LIST,
-          variables: {
-            parentId: this.parentId,
-            fareBasisList: this.fareBasisList,
-            fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FARE_BASIS_LIST,
-              variables: {
-                parentId: this.parentId,
-                fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_FARE_BASIS_LIST,
+            variables: {
+              parentId: this.parentId,
+              fareBasisList: this.fareBasisList,
+              fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
+            },
+            refetchQueries: () => [
+              {
+                query: GET_FARE_BASIS_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  fareBasisType: PRICING_TERM_LOOKUP.CORPORATE_FARE_BASIS_TYPE
+                }
               }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.fareBasisList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.fareBasisList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'CorporateFareBasis');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.fareBasisList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.fareBasisList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'CorporateFareBasis');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     getTagString(rule) {
       if (!this.fareBasisList.length || !this.fareBasisUnitList.length) {

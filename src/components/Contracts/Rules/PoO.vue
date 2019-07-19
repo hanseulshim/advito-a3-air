@@ -148,26 +148,32 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.pointOfOriginList.length) {
-        this.$emit('delete-rule', 'PointOfOrigin');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_POINT_OF_ORIGIN,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            pointOfOriginList: this.pointOfOriginList
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        });
-        if (this.parentType === 1) {
-          this.$emit('toggle-row', this.pricingTermId);
+      try {
+        if (this.editMode && !this.pointOfOriginList.length) {
+          this.$emit('delete-rule', 'PointOfOrigin');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_POINT_OF_ORIGIN,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              pointOfOriginList: this.pointOfOriginList
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          });
+          if (this.parentType === 1) {
+            this.$emit('toggle-row', this.pricingTermId);
+          }
         }
+        this.editMode = !this.editMode;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
       }
-      this.editMode = !this.editMode;
     },
     createTag() {
       const ruleContainerId = this.pointOfOriginList.length
@@ -186,33 +192,39 @@ export default {
       this.selectedCountry = [];
     },
     async deleteTag(tag) {
-      const idx = this.pointOfOriginList.indexOf(tag);
-      this.pointOfOriginList[idx].isDeleted = true;
+      try {
+        const idx = this.pointOfOriginList.indexOf(tag);
+        this.pointOfOriginList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_POINT_OF_ORIGIN,
-          variables: {
-            parentId: this.parentId,
-            pointOfOriginList: this.pointOfOriginList,
-            parentType: this.parentType
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        })
-        .then(() => {
-          const rulesRemaining = this.pointOfOriginList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.pointOfOriginList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'PointOfOrigin');
-            this.$emit('toggle-row', this.pricingTermId);
-          }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_POINT_OF_ORIGIN,
+            variables: {
+              parentId: this.parentId,
+              pointOfOriginList: this.pointOfOriginList,
+              parentType: this.parentType
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          })
+          .then(() => {
+            const rulesRemaining = this.pointOfOriginList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.pointOfOriginList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'PointOfOrigin');
+              this.$emit('toggle-row', this.pricingTermId);
+            }
+          });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.pricingTermId);
       }
     }
   }

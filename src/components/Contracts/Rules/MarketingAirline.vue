@@ -176,28 +176,34 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.airlineList.length) {
-        this.$emit('delete-rule', 'MarketingAirline');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_AIRLINE,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            airlineList: this.airlineList,
-            airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
+      try {
+        if (this.editMode && !this.airlineList.length) {
+          this.$emit('delete-rule', 'MarketingAirline');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_AIRLINE,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              airlineList: this.airlineList,
+              airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          });
+        }
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
+        this.editMode = !this.editMode;
+        this.selectedAirline = [];
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.pricingTermId);
-      }
-      this.editMode = !this.editMode;
-      this.selectedAirline = [];
     },
     createTag() {
       const ruleContainerId = this.airlineList.length
@@ -218,32 +224,40 @@ export default {
       this.selectedAirline = [];
     },
     async deleteTag(tag) {
-      const idx = this.airlineList.indexOf(tag);
-      this.airlineList[idx].isDeleted = true;
+      try {
+        const idx = this.airlineList.indexOf(tag);
+        this.airlineList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_AIRLINE,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            airlineList: this.airlineList,
-            airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        })
-        .then(() => {
-          const rulesRemaining = this.airlineList.some(rule => !rule.isDeleted);
-          if (!this.airlineList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'MarketingAirline');
-            this.$emit('toggle-row', this.pricingTermId);
-          }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_AIRLINE,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              airlineList: this.airlineList,
+              airlineType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          })
+          .then(() => {
+            const rulesRemaining = this.airlineList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.airlineList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'MarketingAirline');
+              this.$emit('toggle-row', this.pricingTermId);
+            }
+          });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.pricingTermId);
       }
     }
   }

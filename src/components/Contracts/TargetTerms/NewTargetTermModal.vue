@@ -418,10 +418,16 @@ export default {
         if (this.form.dpmPrice) {
           this.form.dpmPrice = parseFloat(this.form.dpmPrice);
         }
+
         await this.$apollo.mutate({
           mutation: CREATE_TARGET_TERM,
           variables: {
-            ...this.form
+            ...this.form,
+            qsi:
+              this.form.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
+              this.form.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE
+                ? this.form.qsi / 100
+                : this.form.qsi
           },
           update: (store, { data: { createTargetTerm } }) => {
             const query = {

@@ -68,31 +68,37 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.ticketDesignatorList.length) {
-        this.$emit('delete-rule', 'TicketDesignator');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_TICKETING_DESIGNATOR,
-          variables: {
-            parentId: this.parentId,
-            ticketDesignatorList: this.ticketDesignatorList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_TICKET_DESIGNATOR_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.ticketDesignatorList.length) {
+          this.$emit('delete-rule', 'TicketDesignator');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_TICKETING_DESIGNATOR,
+            variables: {
+              parentId: this.parentId,
+              ticketDesignatorList: this.ticketDesignatorList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_TICKET_DESIGNATOR_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.ticketDesignator = '';
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.ticketDesignator = '';
     },
     createTag() {
       const ruleContainerId = this.ticketDesignatorList.length
@@ -109,31 +115,37 @@ export default {
       this.ticketDesignator = '';
     },
     async deleteTag(tag) {
-      const idx = this.ticketDesignatorList.indexOf(tag);
-      this.ticketDesignatorList[idx].isDeleted = true;
+      try {
+        const idx = this.ticketDesignatorList.indexOf(tag);
+        this.ticketDesignatorList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_TICKETING_DESIGNATOR,
-          variables: {
-            parentId: this.parentId,
-            ticketDesignatorList: this.ticketDesignatorList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_TICKET_DESIGNATOR_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_TICKETING_DESIGNATOR,
+            variables: {
+              parentId: this.parentId,
+              ticketDesignatorList: this.ticketDesignatorList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_TICKET_DESIGNATOR_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.ticketDesignatorList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.ticketDesignatorList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'TicketDesignator');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.ticketDesignatorList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.ticketDesignatorList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TicketDesignator');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

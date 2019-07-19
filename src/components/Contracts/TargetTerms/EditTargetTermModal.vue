@@ -366,7 +366,12 @@ export default {
         await this.$apollo.mutate({
           mutation: EDIT_TARGET_TERM,
           variables: {
-            ...this.form
+            ...this.form,
+            qsi:
+              this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
+              this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE
+                ? this.form.qsi / 100
+                : this.form.qsi
           }
         });
         this.$modal.show('success', {
