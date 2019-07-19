@@ -156,13 +156,28 @@ export default {
       query: GET_DISTANCE_UNIT_LIST
     },
     projectManagerList: {
-      query: GET_PROJECT_MANAGER_LIST
+      query: GET_PROJECT_MANAGER_LIST,
+      variables() {
+        return {
+          clientId: this.clientId
+        };
+      }
     },
     leadAnalystList: {
-      query: GET_LEAD_ANALYST_LIST
+      query: GET_LEAD_ANALYST_LIST,
+      variables() {
+        return {
+          clientId: this.clientId
+        };
+      }
     },
     dataSpecialistList: {
-      query: GET_DATA_SPECIALIST_LIST
+      query: GET_DATA_SPECIALIST_LIST,
+      variables() {
+        return {
+          clientId: this.clientId
+        };
+      }
     },
     projectTypeList: {
       query: GET_PROJECT_TYPE_LIST
@@ -262,6 +277,7 @@ export default {
       projectTypeName: null,
       projectTypeId: null,
       clientName: null,
+      clientId: null,
       currencyList: [],
       distanceUnitList: [],
       projectManagerList: [],
@@ -305,6 +321,7 @@ export default {
     beforeOpen(event) {
       const project = event.params.project;
       this.clientName = project.clientName;
+      this.clientId = project.clientId;
       this.projectTypeName = project.projectTypeName;
       this.projectTypeId = project.projectTypeId;
       this.form.id = project.id;

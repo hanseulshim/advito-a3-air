@@ -1,43 +1,44 @@
-const { CONTRACT_LOOKUP } = require('../constants');
+const { ADVITO_CLIENT } = require('../constants');
 
 exports.user = {
   Query: {
-    userList: async (_, __, { db, user }) =>
+    userList: async (_, { clientId }, { db }) =>
       await db('blops.advito_user')
         .select({
           id: 'id',
           name: db.raw("CONCAT(name_first, ' ', name_last)"),
           email: 'email'
         })
-        .where('client_id', CONTRACT_LOOKUP.ID)
-        .orWhere('id', user.id),
+        .where('client_id', clientId)
+        .orWhere('client_id', ADVITO_CLIENT)
+        .orderBy('name_first'),
     user: (_, __, { user }) => user,
-    projectManagerList: async (_, __, { db, user }) =>
+    projectManagerList: async (_, { clientId }, { db }) =>
       await db('blops.advito_user')
         .select({
           id: 'id',
           name: db.raw("CONCAT(name_first, ' ', name_last)"),
           email: 'email'
         })
-        .where('client_id', CONTRACT_LOOKUP.ID)
-        .orWhere('id', user.id),
-    leadAnalystList: async (_, __, { db, user }) =>
+        .where('client_id', clientId)
+        .orWhere('client_id', ADVITO_CLIENT),
+    leadAnalystList: async (_, { clientId }, { db }) =>
       await db('blops.advito_user')
         .select({
           id: 'id',
           name: db.raw("CONCAT(name_first, ' ', name_last)"),
           email: 'email'
         })
-        .where('client_id', CONTRACT_LOOKUP.ID)
-        .orWhere('id', user.id),
-    dataSpecialistList: async (_, __, { db, user }) =>
+        .where('client_id', clientId)
+        .orWhere('client_id', ADVITO_CLIENT),
+    dataSpecialistList: async (_, { clientId }, { db }) =>
       await db('blops.advito_user')
         .select({
           id: 'id',
           name: db.raw("CONCAT(name_first, ' ', name_last)"),
           email: 'email'
         })
-        .where('client_id', CONTRACT_LOOKUP.ID)
-        .orWhere('id', user.id)
+        .where('client_id', clientId)
+        .orWhere('client_id', ADVITO_CLIENT)
   }
 };

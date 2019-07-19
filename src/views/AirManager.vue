@@ -63,7 +63,12 @@ export default {
       }
     },
     userList: {
-      query: GET_USER_LIST
+      query: GET_USER_LIST,
+      variables() {
+        return {
+          clientId: this.client ? this.client.id : null
+        };
+      }
     },
     client: {
       query: GET_CLIENT
