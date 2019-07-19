@@ -83,12 +83,12 @@
 <script>
 import { removeTypename } from '@/helper';
 import {
-  GET_MARKET_GEO_LIST,
+  GET_MARKET_LIST,
   GET_MARKET_RULE_LIST,
   GET_DISCOUNT,
   GET_TARGET_TERM
 } from '@/graphql/queries';
-import { UPDATE_MARKET } from '@/graphql/mutations';
+import { UPDATE_MARKET_RULE } from '@/graphql/mutations';
 export default {
   name: 'Market',
   props: {
@@ -106,10 +106,10 @@ export default {
     }
   },
   apollo: {
-    marketGeoList: {
-      query: GET_MARKET_GEO_LIST
-    },
     marketList: {
+      query: GET_MARKET_LIST
+    },
+    marketRuleList: {
       query: GET_MARKET_RULE_LIST,
       variables() {
         return {
@@ -117,14 +117,14 @@ export default {
           parentType: this.parentType
         };
       },
-      result({ data: { marketList } }) {
-        return removeTypename(marketList);
+      result({ data: { marketRuleList } }) {
+        return removeTypename(marketRuleList);
       }
     }
   },
   data() {
     return {
-      marketGeoList: [],
+      marketList: [],
       originOptions: [],
       arrivalOptions: [],
       exclude: false,
@@ -133,28 +133,28 @@ export default {
       editMode: false,
       origin: {},
       arrival: {},
-      marketList: []
+      marketRuleList: []
     };
   },
   computed: {
     excludedRules() {
-      return this.marketList.filter(rule => rule.exclude);
+      return this.marketRuleList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.marketList.filter(rule => !rule.exclude);
+      return this.marketRuleList.filter(rule => !rule.exclude);
     }
   },
   methods: {
     async saveRules() {
       try {
-        if (this.editMode && !this.marketList.length) {
+        if (this.editMode && !this.marketRuleList.length) {
           this.$emit('delete-rule', 'Market');
         } else if (this.editMode) {
           await this.$apollo.mutate({
-            mutation: UPDATE_MARKET,
+            mutation: UPDATE_MARKET_RULE,
             variables: {
               parentId: this.parentId,
-              marketList: this.marketList,
+              marketRuleList: this.marketRuleList,
               parentType: this.parentType
             },
             refetchQueries: () => [
@@ -184,11 +184,11 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.marketList.length
-        ? this.marketList[0].ruleContainerId
+      const ruleContainerId = this.marketRuleList.length
+        ? this.marketRuleList[0].ruleContainerId
         : null;
 
-      this.marketList.push({
+      this.marketRuleList.push({
         id: null,
         ruleContainerId,
         origin: this.origin.name,
@@ -205,15 +205,15 @@ export default {
     },
     async deleteTag(tag) {
       try {
-        const idx = this.marketList.indexOf(tag);
-        this.marketList[idx].isDeleted = true;
+        const idx = this.marketRuleList.indexOf(tag);
+        this.marketRuleList[idx].isDeleted = true;
 
         await this.$apollo
           .mutate({
-            mutation: UPDATE_MARKET,
+            mutation: UPDATE_MARKET_RULE,
             variables: {
               parentId: this.parentId,
-              marketList: this.marketList,
+              marketRuleList: this.marketRuleList,
               parentType: this.parentType
             },
             refetchQueries: () => [
@@ -227,10 +227,10 @@ export default {
             ]
           })
           .then(() => {
-            const rulesRemaining = this.marketList.some(
+            const rulesRemaining = this.marketRuleList.some(
               rule => !rule.isDeleted
             );
-            if (!this.marketList.length || !rulesRemaining) {
+            if (!this.marketRuleList.length || !rulesRemaining) {
               this.$emit('delete-rule', 'Market');
             }
           });
@@ -243,7 +243,7 @@ export default {
     filterOriginMarkets(query) {
       if (query !== '') {
         this.loadingOrigin = true;
-        this.originOptions = this.marketGeoList.filter(item => {
+        this.originOptions = this.marketList.filter(item => {
           return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
         this.loadingOrigin = false;
@@ -254,7 +254,7 @@ export default {
     filterArrivalMarkets(query) {
       if (query !== '') {
         this.loadingArrival = true;
-        this.arrivalOptions = this.marketGeoList.filter(item => {
+        this.arrivalOptions = this.marketList.filter(item => {
           return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
         });
         this.loadingArrival = false;

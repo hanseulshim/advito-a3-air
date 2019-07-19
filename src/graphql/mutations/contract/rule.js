@@ -84,16 +84,16 @@ export const UPDATE_POINT_OF_ORIGIN = gql`
   }
 `;
 
-export const UPDATE_MARKET = gql`
-  mutation updateMarket(
+export const UPDATE_MARKET_RULE = gql`
+  mutation updateMarketRule(
     $parentId: Int!
     $parentType: Int
-    $marketList: [MarketInput]!
+    $marketRuleList: [MarketInput]!
   ) {
-    updateMarket(
+    updateMarketRule(
       parentId: $parentId
       parentType: $parentType
-      marketList: $marketList
+      marketRuleList: $marketRuleList
     ) {
       id
       ruleContainerId
@@ -128,18 +128,18 @@ export const UPDATE_BOOKING_CLASS = gql`
   }
 `;
 
-export const UPDATE_AIRLINE = gql`
-  mutation updateAirline(
+export const UPDATE_AIRLINE_RULE = gql`
+  mutation updateAirlineRule(
     $parentId: Int!
     $parentType: Int!
     $airlineType: Int!
-    $airlineList: [AirlineInput]!
+    $airlineRuleList: [AirlineInput]!
   ) {
-    updateAirline(
+    updateAirlineRule(
       parentId: $parentId
       parentType: $parentType
       airlineType: $airlineType
-      airlineList: $airlineList
+      airlineRuleList: $airlineRuleList
     ) {
       id
       ruleContainerId

@@ -44,26 +44,6 @@
       >
         <el-input v-model.number="form.round" />
       </el-form-item>
-      <el-form-item label="Effective Dates *">
-        <div class="date-picker-container">
-          <el-form-item prop="effectiveFrom" class="date-picker-item">
-            <el-date-picker
-              v-model="form.effectiveFrom"
-              type="date"
-              format="dd MMM yyyy"
-              class="date-picker"
-            />
-          </el-form-item>
-          <el-form-item prop="effectiveTo" class="date-picker-item">
-            <el-date-picker
-              v-model="form.effectiveTo"
-              type="date"
-              format="dd MMM yyyy"
-              class="date-picker"
-            />
-          </el-form-item>
-        </div>
-      </el-form-item>
       <el-form-item label="Division">
         <el-select v-model="form.divisionId" class="select-modal">
           <el-option
@@ -113,8 +93,6 @@ export default {
         name: null,
         typeId: null,
         round: null,
-        effectiveFrom: null,
-        effectiveTo: null,
         description: null,
         divisionId: null
       },
@@ -144,13 +122,6 @@ export default {
             trigger: 'change'
           },
           { type: 'number', message: 'Round must be a number' }
-        ],
-        effectiveFrom: [
-          {
-            required: true,
-            message: 'Please select a start date',
-            trigger: 'change'
-          }
         ]
       }
     };
@@ -198,8 +169,6 @@ export default {
         name,
         typeId,
         round,
-        effectiveFrom,
-        effectiveTo,
         description,
         divisionId
       } = event.params.contract;
@@ -208,8 +177,6 @@ export default {
       this.form.name = name;
       this.form.typeId = typeId;
       this.form.round = round;
-      this.form.effectiveFrom = effectiveFrom;
-      this.form.effectiveTo = effectiveTo;
       this.form.description = description;
       this.form.divisionId = divisionId;
     },

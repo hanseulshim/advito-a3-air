@@ -17,7 +17,7 @@
         multiple
       >
         <el-option
-          v-for="item in geographyRuleList"
+          v-for="item in countryList"
           :key="item.name"
           :label="item.name"
           :value="item.code"
@@ -41,7 +41,7 @@
 <script>
 import { removeTypename } from '@/helper';
 import {
-  GET_GEO_LIST,
+  GET_COUNTRY_LIST,
   GET_POINT_OF_SALE_LIST,
   GET_DISCOUNT,
   GET_TARGET_TERM,
@@ -74,8 +74,8 @@ export default {
     }
   },
   apollo: {
-    geographyRuleList: {
-      query: GET_GEO_LIST
+    countryList: {
+      query: GET_COUNTRY_LIST
     },
     pointOfSaleList: {
       query: GET_POINT_OF_SALE_LIST,
@@ -92,7 +92,7 @@ export default {
   },
   data() {
     return {
-      geographyRuleList: [],
+      countryList: [],
       editMode: false,
       selectedCountry: [],
       pointOfSaleList: [],

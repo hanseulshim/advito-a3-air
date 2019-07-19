@@ -6,9 +6,9 @@ export const GET_RULE_LIST = gql`
   }
 `;
 
-export const GET_GEO_LIST = gql`
-  query geographyRuleList {
-    geographyRuleList {
+export const GET_COUNTRY_LIST = gql`
+  query countryList {
+    countryList {
       code
       name
       locationType
@@ -16,9 +16,20 @@ export const GET_GEO_LIST = gql`
   }
 `;
 
-export const GET_MARKET_GEO_LIST = gql`
-  query marketGeoList {
-    marketGeoList {
+export const GET_GEOGRAPHY_LIST = gql`
+  query geographyList {
+    geographyList {
+      id
+      code
+      name
+      locationType
+    }
+  }
+`;
+
+export const GET_MARKET_LIST = gql`
+  query marketList {
+    marketList {
       code
       name
       locationType
@@ -73,8 +84,8 @@ export const GET_POINT_OF_ORIGIN_LIST = gql`
 `;
 
 export const GET_MARKET_RULE_LIST = gql`
-  query marketList($parentId: Int, $parentType: Int) {
-    marketList(parentId: $parentId, parentType: $parentType) {
+  query marketRuleList($parentId: Int, $parentType: Int) {
+    marketRuleList(parentId: $parentId, parentType: $parentType) {
       id
       ruleContainerId
       origin
@@ -119,8 +130,8 @@ export const GET_AIRLINE_CODE_LIST = gql`
 `;
 
 export const GET_AIRLINE_RULE_LIST = gql`
-  query airlineList($parentId: Int, $airlineType: Int, $parentType: Int) {
-    airlineList(
+  query airlineRuleList($parentId: Int, $airlineType: Int, $parentType: Int) {
+    airlineRuleList(
       parentId: $parentId
       airlineType: $airlineType
       parentType: $parentType

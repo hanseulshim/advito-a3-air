@@ -71,13 +71,7 @@ input PointOfOriginInput {
   isDeleted: Boolean
 }
 
-type GeographyRule {
-  code: String
-  name: String
-  locationType: Int
-}
-
-type Market {
+type MarketRule {
   id: Int
   ruleContainerId: String
   origin: String
@@ -169,7 +163,7 @@ input BookingClassInput {
   isDeleted: Boolean
 }
 
-type Airline {
+type AirlineRule {
   id: Int
   ruleContainerId: String
   exclude: Boolean
@@ -446,8 +440,6 @@ type DayOfWeekUnit {
 
 extend type Query {
   ruleList(parentId: Int, parentType: Int): [Int] @auth
-  geographyRuleList: [GeographyRule] @auth
-  marketGeoList: [GeographyRule] @auth
   dayUnitList: [DayUnit] @auth
   dayOfWeekUnitList: [DayOfWeekUnit] @auth
   fareCategoryUnitList: [FareCategoryUnit] @auth
@@ -456,11 +448,11 @@ extend type Query {
   travelDateList(parentId: Int, parentType: Int): [TravelDate] @auth
   pointOfSaleList(parentId: Int, parentType: Int): [PointOfSale] @auth
   pointOfOriginList(parentId: Int, parentType: Int): [PointOfOrigin] @auth
-  marketList(parentId: Int, parentType: Int): [Market] @auth
+  marketRuleList(parentId: Int, parentType: Int): [MarketRule] @auth
   fareBasisList(parentId: Int, fareBasisType: Int): [FareBasis] @auth
   bookingClassList(parentId: Int, bookingClassType: Int): [BookingClass] @auth
   bookingClassCodeList: [BookingClassCode] @auth
-  airlineList(parentId: Int, parentType: Int, airlineType: Int): [Airline] @auth
+  airlineRuleList(parentId: Int, parentType: Int, airlineType: Int): [AirlineRule] @auth
   airlineCodeList: [AirlineCode] @auth
   ticketDesignatorList(parentId: Int): [TicketDesignator] @auth
   tourCodeList(parentId: Int): [TourCode] @auth
@@ -484,9 +476,9 @@ extend type Mutation {
   updateTravelDateBulk(parentType: Int, travelDateList: [TravelDateBulkInput]!): Int @auth
   updatePointOfSale(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
   updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
-  updateMarket(parentId: Int!, parentType: Int, marketList: [MarketInput]!): [Market] @auth
+  updateMarketRule(parentId: Int!, parentType: Int, marketRuleList: [MarketInput]!): [MarketRule] @auth
   updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClass] @auth
-  updateAirline(parentId: Int!, parentType: Int, airlineType: Int, airlineList: [AirlineInput]!): [Airline] @auth
+  updateAirlineRule(parentId: Int!, parentType: Int, airlineType: Int, airlineRuleList: [AirlineInput]!): [AirlineRule] @auth
   updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
   updateTicketDesignatorBulk(parentType: Int ticketDesignatorList: [TicketDesignatorBulkInput]!): Int @auth
   updateTourCode(parentId: Int! tourCodeList: [TourCodeInput]!): [TourCode] @auth
