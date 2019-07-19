@@ -1,6 +1,6 @@
 <template>
   <div class="rule-container">
-    <p class="rule-title">Operating Airline</p>
+    <p class="rule-title">Operating Airline (Information Purpose Only)</p>
     <i
       v-if="!editMode"
       class="fas fa-pencil-alt edit-rule"
@@ -193,12 +193,12 @@ export default {
                 ? this.discountQueries
                 : this.targetTermQueries
           });
-          if (this.parentType === 1) {
-            this.$emit('toggle-row', this.pricingTermId);
-          }
-          this.editMode = !this.editMode;
-          this.selectedAirline = [];
         }
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
+        this.editMode = !this.editMode;
+        this.selectedAirline = [];
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
@@ -210,18 +210,24 @@ export default {
         ? this.airlineRuleList[0].ruleContainerId
         : null;
 
-      this.selectedAirline.map(v => {
-        this.airlineRuleList.push({
-          id: null,
-          ruleContainerId,
-          ruleType: PRICING_TERM_LOOKUP.OPERATING_AIRLINE_RULETYPE,
-          carrierCode: v,
-          exclude: this.exclude,
-          isDeleted: false
+      if (this.selectedAirline.length) {
+        this.selectedAirline.map(v => {
+          this.airlineRuleList.push({
+            id: null,
+            ruleContainerId,
+            ruleType: PRICING_TERM_LOOKUP.OPERATING_AIRLINE_RULETYPE,
+            carrierCode: v,
+            exclude: this.exclude,
+            isDeleted: false
+          });
         });
-      });
 
-      this.selectedAirline = [];
+        this.selectedAirline = [];
+      } else {
+        this.$modal.show('error', {
+          message: 'Please select an airline'
+        });
+      }
     },
     async deleteTag(tag) {
       try {

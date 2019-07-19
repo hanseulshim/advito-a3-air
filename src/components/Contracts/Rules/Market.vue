@@ -184,24 +184,31 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.marketRuleList.length
-        ? this.marketRuleList[0].ruleContainerId
-        : null;
+      if (this.origin.locationType && this.arrival.locationType) {
+        const ruleContainerId = this.marketRuleList.length
+          ? this.marketRuleList[0].ruleContainerId
+          : null;
 
-      this.marketRuleList.push({
-        id: null,
-        ruleContainerId,
-        origin: this.origin.name,
-        originType: this.origin.locationType,
-        arrival: this.arrival.name,
-        arrivalType: this.arrival.locationType,
-        exclude: this.exclude,
-        isDeleted: false
-      });
+        this.marketRuleList.push({
+          id: null,
+          ruleContainerId,
+          origin: this.origin.name,
+          originType: this.origin.locationType,
+          arrival: this.arrival.name,
+          arrivalType: this.arrival.locationType,
+          exclude: this.exclude,
+          isDeleted: false
+        });
 
-      this.selectedCountry = [];
-      this.origin = {};
-      this.arrival = {};
+        this.selectedCountry = [];
+        this.origin = {};
+        this.arrival = {};
+      } else {
+        this.$modal.show('error', {
+          message:
+            'Origin/Arrival cannot be found or is ambiguous, please make selection from the list'
+        });
+      }
     },
     async deleteTag(tag) {
       try {

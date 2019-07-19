@@ -210,18 +210,24 @@ export default {
         ? this.airlineRuleList[0].ruleContainerId
         : null;
 
-      this.selectedAirline.map(v => {
-        this.airlineRuleList.push({
-          id: null,
-          ruleContainerId,
-          ruleType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE,
-          carrierCode: v,
-          exclude: this.exclude,
-          isDeleted: false
+      if (this.selectedAirline.length) {
+        this.selectedAirline.map(v => {
+          this.airlineRuleList.push({
+            id: null,
+            ruleContainerId,
+            ruleType: PRICING_TERM_LOOKUP.MARKETING_AIRLINE_RULETYPE,
+            carrierCode: v,
+            exclude: this.exclude,
+            isDeleted: false
+          });
         });
-      });
 
-      this.selectedAirline = [];
+        this.selectedAirline = [];
+      } else {
+        this.$modal.show('error', {
+          message: 'Please select an airline'
+        });
+      }
     },
     async deleteTag(tag) {
       try {
