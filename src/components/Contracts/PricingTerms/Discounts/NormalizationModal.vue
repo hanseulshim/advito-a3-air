@@ -30,7 +30,7 @@
       :row-class-name="tableRowClassName"
     >
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template>
           <p>Expanded!</p>
         </template>
       </el-table-column>
@@ -64,7 +64,7 @@
         sort-by="effectiveTo"
       />
       <el-table-column label="Markets" :min-width="discount.effectiveDates">
-        <template slot-scope="props">
+        <template>
           <p>2</p>
         </template>
       </el-table-column>
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { formatDate, formatPercent, pluralize } from '@/helper';
+import { formatDate, pluralize } from '@/helper';
 export default {
   name: 'NormalizationModal',
   components: {},
