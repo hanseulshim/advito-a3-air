@@ -2,9 +2,9 @@ exports.collection = `
 type LocationCollection {
   id: Int
   name: String
-  regionList: [Region]
   description: String
   dateUpdated: Date
+  regionCount: Int
   active: Boolean
 }
 type Region {

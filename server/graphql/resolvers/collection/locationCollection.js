@@ -6,8 +6,21 @@ const {
 
 exports.locationCollection = {
   Query: {
-    locationCollectionList: () =>
-      locationCollectionList.filter(collection => !collection.isDeleted),
+    locationCollectionList: async (_, __, { db }) =>
+      await db('location as l')
+        .select({
+          id: 'l.id',
+          name: 'l.name',
+          description: 'l.description',
+          dateUpdated: 'l.created',
+          regionCount: 0,
+          active: 'l.isactive'
+        })
+        .innerJoin('projectdataref as pd', 'l.geosetid', 'pd.datarefid')
+        .innerJoin('project as p', 'pd.projectid', 'p.id')
+        .where('l.isdeleted', false)
+        .andWhere('p.id', 17)
+        .orderBy('l.isstandard', 'desc'),
     preferredAirlineCollectionList: () => preferredAirlineCollectionList
   },
   Mutation: {

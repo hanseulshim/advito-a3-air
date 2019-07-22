@@ -34,7 +34,7 @@
       v-loading="$apollo.loading"
       :data="locationCollectionList"
     >
-      <el-table-column type="expand">
+      <!-- <el-table-column type="expand">
         <template slot-scope="props">
           <button
             v-if="props.row.id !== 1"
@@ -82,7 +82,7 @@
             </el-table-column>
           </el-table>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
         prop="name"
         label="Location Collection"
@@ -91,7 +91,7 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="regionList.length"
+        prop="regionCount"
         label="Regions"
         :min-width="collection.count"
         sortable

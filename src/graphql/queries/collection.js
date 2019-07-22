@@ -7,17 +7,8 @@ export const GET_LOCATION_COLLECTION_LIST = gql`
       name
       description
       dateUpdated
+      regionCount
       active
-      regionList {
-        id
-        name
-        code
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
     }
   }
 `;

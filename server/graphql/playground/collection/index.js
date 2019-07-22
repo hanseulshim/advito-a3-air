@@ -14,17 +14,8 @@ exports.collection = {
         name
         description
         dateUpdated
+        regionCount
         active
-        regionList {
-          id
-          name
-          code
-          countryList {
-            id
-            regionId
-            name
-          }
-        }
       }
       travelSectorCollectionList {
         id
