@@ -114,7 +114,7 @@ input PreferredAirlineInput {
 }
 
 extend type Query {
-  locationCollectionList: [LocationCollection] @auth
+  locationCollectionList(projectId: Int): [LocationCollection] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
@@ -125,7 +125,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  createLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
+  copyLocationCollection(projectId: Int!, id: Int!, name: String!, description: String): Int @auth
   editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   deleteLocationCollection(id: Int!): Int @auth
   toggleLocationCollection(id: Int!): [LocationCollection] @auth

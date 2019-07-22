@@ -1,27 +1,19 @@
 import gql from 'graphql-tag';
+import { LOCATION_COLLECTION } from '../../constants';
 
-export const CREATE_LOCATION_COLLECTION = gql`
-  mutation createLocationCollection(
+export const COPY_LOCATION_COLLECTION = gql`
+  mutation copyLocationCollection(
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
-    createLocationCollection(id: $id, name: $name, description: $description) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+    copyLocationCollection(
+      projectId: $projectId
+      id: $id
+      name: $name
+      description: $description
+    )
   }
 `;
 
@@ -32,10 +24,7 @@ export const EDIT_LOCATION_COLLECTION = gql`
     $description: String
   ) {
     editLocationCollection(id: $id, name: $name, description: $description) {
-      id
-      name
-      description
-      dateUpdated
+      ${LOCATION_COLLECTION}
     }
   }
 `;

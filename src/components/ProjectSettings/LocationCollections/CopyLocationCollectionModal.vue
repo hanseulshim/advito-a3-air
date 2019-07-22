@@ -1,13 +1,13 @@
 <template>
   <modal
     classes="modal-container"
-    name="new-location-collection"
+    name="copy-location-collection"
     height="auto"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
-      ref="newLocationCollection"
+      ref="copyLocationCollection"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -42,22 +42,10 @@
 </template>
 
 <script>
-import {
-  GET_CLIENT,
-  GET_PROJECT,
-  GET_LOCATION_COLLECTION_LIST
-} from '@/graphql/queries';
-import { CREATE_LOCATION_COLLECTION } from '@/graphql/mutations';
+import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
+import { COPY_LOCATION_COLLECTION } from '@/graphql/mutations';
 export default {
-  name: 'NewLocationCollectionModal',
-  apollo: {
-    client: {
-      query: GET_CLIENT
-    },
-    project: {
-      query: GET_PROJECT
-    }
-  },
+  name: 'CopyLocationCollectionModal',
   data() {
     return {
       form: {
@@ -74,49 +62,41 @@ export default {
           }
         ]
       },
-      client: {},
-      project: {}
+      project: {},
+      client: {}
     };
   },
   methods: {
     hideModal() {
-      this.$modal.hide('new-location-collection');
+      this.$modal.hide('copy-location-collection');
     },
     validateForm() {
-      this.$refs.newLocationCollection.validate(valid => {
+      this.$refs.copyLocationCollection.validate(valid => {
         if (valid) {
-          this.createLocationCollection();
+          this.copyLocationCollection();
         } else {
           return false;
         }
       });
     },
-    async createLocationCollection() {
+    async copyLocationCollection() {
       try {
-        const data = await this.$apollo.mutate({
-          mutation: CREATE_LOCATION_COLLECTION,
+        await this.$apollo.mutate({
+          mutation: COPY_LOCATION_COLLECTION,
           variables: {
-            ...this.form
+            ...this.form,
+            projectId: this.project.id
           },
-          update: (store, data) => {
-            const locationCollection = data.data.createLocationCollection;
-            const newData = store.readQuery({
-              query: GET_LOCATION_COLLECTION_LIST
-            });
-            newData.locationCollectionList.forEach(
-              collection => (collection.active = false)
-            );
-            newData.locationCollectionList.push(locationCollection);
-            store.writeQuery({
+          refetchQueries: () => [
+            {
               query: GET_LOCATION_COLLECTION_LIST,
-              data: newData
-            });
-          }
+              variables: { projectId: this.project.id }
+            }
+          ]
         });
-        this.$emit('toggle-row', data.data.createLocationCollection.id);
         this.$modal.show('success', {
-          message: 'Location Collection successfully created.',
-          name: 'new-location-collection'
+          message: 'Location Collection successfully copied.',
+          name: 'copy-location-collection'
         });
       } catch (error) {
         this.$modal.show('error', {
@@ -125,9 +105,11 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.form.id = collection.id;
-      this.form.name = collection.name;
+      const { id, name } = event.params.collection;
+      this.client = event.params.client;
+      this.project = event.params.project;
+      this.form.id = id;
+      this.form.name = name;
     },
     beforeClose() {
       this.form.id = null;

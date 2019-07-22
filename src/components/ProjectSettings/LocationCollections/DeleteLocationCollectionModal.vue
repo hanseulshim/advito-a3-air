@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       id: null,
-      active: null
+      projectId: null
     };
   },
   methods: {
@@ -38,26 +38,12 @@ export default {
           variables: {
             id: this.id
           },
-          update: (store, data) => {
-            const id = data.data.deleteLocationCollection;
-            const newData = store.readQuery({
-              query: GET_LOCATION_COLLECTION_LIST
-            });
-            const projectIndex = newData.locationCollectionList.findIndex(
-              project => project.id === id
-            );
-            newData.locationCollectionList.splice(projectIndex, 1);
-            if (this.active) {
-              const advitoStandard = newData.locationCollectionList.filter(
-                collection => collection.id === 1
-              )[0];
-              advitoStandard.active = true;
-            }
-            store.writeQuery({
+          refetchQueries: () => [
+            {
               query: GET_LOCATION_COLLECTION_LIST,
-              data: newData
-            });
-          }
+              variables: { projectId: this.projectId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Location Collection successfully deleted.',
@@ -70,13 +56,12 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.id = collection.id;
-      this.active = collection.active;
+      this.id = event.params.id;
+      this.projectId = event.params.projectId;
     },
     beforeClose() {
       this.id = null;
-      this.active = null;
+      this.projectId = null;
     }
   }
 };

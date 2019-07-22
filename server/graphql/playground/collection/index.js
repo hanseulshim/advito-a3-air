@@ -2,6 +2,7 @@ const { locationCollection } = require('./locationCollection');
 const { travelSectorCollection } = require('./travelSectorCollection');
 const { airlineGroupCollection } = require('./airlineGroupCollection');
 const { preferredAirlineCollection } = require('./preferredAirlineCollection');
+const { LOCATION_COLLECTION } = require('../../constants');
 exports.collection = {
   queries: {
     name: 'Collection Queries',
@@ -10,12 +11,7 @@ exports.collection = {
     query: `
     {
       locationCollectionList {
-        id
-        name
-        description
-        dateUpdated
-        regionCount
-        active
+        ${LOCATION_COLLECTION}
       }
       travelSectorCollectionList {
         id

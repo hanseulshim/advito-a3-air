@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
-  {
-    locationCollectionList {
+  query locationCollectionList($projectId: Int) {
+    locationCollectionList(projectId: $projectId) {
       id
       name
       description

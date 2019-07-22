@@ -1,24 +1,12 @@
+const { LOCATION_COLLECTION } = require('../../constants');
 exports.locationCollection = {
   name: 'Location Collection Mutations',
   endpoint: 'http://localhost:8085/graphql',
   headers: { sessiontoken: 'MY^PR3TTYP0NY' },
   query: `
     mutation {
-      createLocationCollection(id: 1, name: "Collection 1", description: "Collection 1 description") {
-        id
-        name
-        description
-        dateUpdated
-        active
-        regionList {
-          id
-          name
-          countryList {
-            id
-            regionId
-            name
-          }
-        }
+      copyLocationCollection(projectId: 17, id: 1, name: "Collection 1", description: "Collection 1 description") {
+        ${LOCATION_COLLECTION}
       }
       editLocationCollection(id: 2, name: "Updated Collection", description: "new description") {
         id

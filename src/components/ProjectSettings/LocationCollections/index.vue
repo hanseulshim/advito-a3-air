@@ -123,7 +123,7 @@
           <el-tooltip effect="dark" content="Copy" placement="top">
             <i
               class="far fa-copy icon-spacer"
-              @click="showNewLocationCollection(scope.row)"
+              @click="showCopyLocationCollection(scope.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Edit" placement="top">
@@ -143,7 +143,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <NewLocationCollectionModal @toggle-row="toggleRow" />
+    <CopyLocationCollectionModal />
     <EditLocationCollectionModal @toggle-row="toggleRow" />
     <DeleteLocationCollectionModal />
     <NewRegionModal @toggle-row="toggleRow" />
@@ -155,9 +155,13 @@
 <script>
 import { pluralize, formatDate } from '@/helper';
 import { collection, region } from '@/config';
-import { GET_LOCATION_COLLECTION_LIST } from '@/graphql/queries';
+import {
+  GET_LOCATION_COLLECTION_LIST,
+  GET_PROJECT,
+  GET_CLIENT
+} from '@/graphql/queries';
 import { TOGGLE_LOCATION_COLLECTION } from '@/graphql/mutations';
-import NewLocationCollectionModal from './NewLocationCollectionModal';
+import CopyLocationCollectionModal from './CopyLocationCollectionModal';
 import EditLocationCollectionModal from './EditLocationCollectionModal';
 import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
 import NewRegionModal from './NewRegionModal';
@@ -167,7 +171,7 @@ import DeleteRegionModal from './DeleteRegionModal';
 export default {
   name: 'LocationCollections',
   components: {
-    NewLocationCollectionModal,
+    CopyLocationCollectionModal,
     EditLocationCollectionModal,
     DeleteLocationCollectionModal,
     NewRegionModal,
@@ -175,13 +179,26 @@ export default {
     DeleteRegionModal
   },
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
     locationCollectionList: {
-      query: GET_LOCATION_COLLECTION_LIST
+      query: GET_LOCATION_COLLECTION_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
     }
   },
   data() {
     return {
       locationCollectionList: [],
+      project: {},
+      client: {},
       collection,
       region
     };
@@ -199,17 +216,28 @@ export default {
         ? countryListCopy.slice(0, 9).join(', ') + '...'
         : countryListCopy.join(', ');
     },
-    showNewLocationCollection(collection) {
-      this.$modal.show('new-location-collection', { collection });
+    showCopyLocationCollection(collection) {
+      this.$modal.show('copy-location-collection', {
+        collection,
+        client: this.client,
+        project: this.project
+      });
     },
     showNewRegionCollection(collection) {
       this.$modal.show('new-region', { collection });
     },
     showEditLocationCollection(collection) {
-      this.$modal.show('edit-location-collection', { collection });
+      this.$modal.show('edit-location-collection', {
+        collection,
+        client: this.client,
+        project: this.project
+      });
     },
-    showDeleteLocationCollection(collection) {
-      this.$modal.show('delete-location-collection', { collection });
+    showDeleteLocationCollection({ id }) {
+      this.$modal.show('delete-location-collection', {
+        id,
+        projectId: this.project.id
+      });
     },
     showEditRegionModal(collection, region) {
       this.$modal.show('edit-region', { collection, region });

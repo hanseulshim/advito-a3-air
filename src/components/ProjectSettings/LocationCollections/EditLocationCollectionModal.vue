@@ -42,18 +42,9 @@
 </template>
 
 <script>
-import { GET_CLIENT, GET_PROJECT } from '@/graphql/queries';
 import { EDIT_LOCATION_COLLECTION } from '@/graphql/mutations';
 export default {
   name: 'EditLocationCollectionModal',
-  apollo: {
-    client: {
-      query: GET_CLIENT
-    },
-    project: {
-      query: GET_PROJECT
-    }
-  },
   data() {
     return {
       form: {
@@ -89,13 +80,12 @@ export default {
     },
     async editLocationCollection() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: EDIT_LOCATION_COLLECTION,
           variables: {
             ...this.form
           }
         });
-        this.$emit('toggle-row', data.data.editLocationCollection.id);
         this.$modal.show('success', {
           message: 'Location Collection successfully edited.',
           name: 'edit-location-collection'
@@ -107,10 +97,12 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.form.id = collection.id;
-      this.form.name = collection.name;
-      this.form.description = collection.description;
+      const { id, name, description } = event.params.collection;
+      this.form.id = id;
+      this.form.name = name;
+      this.form.description = description;
+      this.client = event.params.client;
+      this.project = event.params.project;
     },
     beforeClose() {
       this.form.id = null;

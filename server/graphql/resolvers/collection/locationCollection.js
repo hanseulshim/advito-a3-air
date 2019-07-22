@@ -6,7 +6,7 @@ const {
 
 exports.locationCollection = {
   Query: {
-    locationCollectionList: async (_, __, { db }) =>
+    locationCollectionList: async (_, { projectId = null }, { db }) =>
       await db('location as l')
         .select({
           id: 'l.id',
@@ -19,82 +19,37 @@ exports.locationCollection = {
         .innerJoin('projectdataref as pd', 'l.geosetid', 'pd.datarefid')
         .innerJoin('project as p', 'pd.projectid', 'p.id')
         .where('l.isdeleted', false)
-        .andWhere('p.id', 17)
+        .andWhere('p.id', projectId)
         .orderBy('l.isstandard', 'desc'),
     preferredAirlineCollectionList: () => preferredAirlineCollectionList
   },
   Mutation: {
-    createLocationCollection: (_, { id, name, description }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const checkNames = locationCollectionList.some(
-        collection => collection.name === name
+    copyLocationCollection: async (
+      _,
+      { projectId, id, name, description },
+      { db }
+    ) => {
+      await db.raw(
+        `SELECT location_collection_copy(
+          ${projectId},
+          ${id},
+          '${name}',
+          ${description ? `'${description}'` : null}
+        )`
       );
-      if (checkNames) {
-        throw new ApolloError(
-          'A duplicate collection name already exists. Please input a unique collection name.',
-          400
-        );
-      }
-      const maxId =
-        Math.max(...locationCollectionList.map(collection => collection.id)) +
-        1;
-      locationCollectionList.forEach(collection => {
-        collection.active = false;
-      });
-      const newLocationCollection = {
-        ...locationCollection,
-        id: maxId,
-        name,
-        description,
-        active: true,
-        dateUpdated: new Date()
-      };
-      locationCollectionList.push(newLocationCollection);
-      return newLocationCollection;
     },
-    editLocationCollection: (_, { id, name, description }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const checkNames = locationCollectionList.some(
-        collection => collection.name === name && collection.id !== id
+    editLocationCollection: async (_, { id, name, description }, { db }) => {
+      await db.raw(
+        `SELECT location_collection_update(
+          ${id},
+          '${name}',
+          ${description ? `'${description}'` : null}
+        )`
       );
-      if (checkNames) {
-        throw new ApolloError(
-          'A duplicate collection name already exists. Please input a unique collection name.',
-          400
-        );
-      }
-      locationCollection.name = name;
-      locationCollection.description = description;
-      locationCollection.dateUpdated = new Date();
-      return locationCollection;
+      return await getLocationCollection(db, id);
     },
-    deleteLocationCollection: (_, { id }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      locationCollection.isDeleted = true;
-      if (locationCollection.active) {
-        const advitoStandard = locationCollectionList.filter(
-          collection => collection.id === 1
-        )[0];
-        advitoStandard.active = true;
-        locationCollection.active = false;
-      }
-      locationCollection.dateUpdated = new Date();
-      return id;
+    deleteLocationCollection: async (_, { id }, { db }) => {
+      await db.raw(`SELECT location_collection_delete(${id})`);
     },
     toggleLocationCollection: (_, { id }) => {
       const locationCollection = locationCollectionList.filter(
@@ -190,4 +145,18 @@ exports.locationCollection = {
       return locationCollection;
     }
   }
+};
+
+const getLocationCollection = async (db, id) => {
+  const [locationCollection] = await db('location')
+    .select({
+      id: 'id',
+      name: 'name',
+      description: 'description',
+      dateUpdated: 'created',
+      regionCount: 0,
+      active: 'isactive'
+    })
+    .where('id', id);
+  return locationCollection;
 };
