@@ -189,24 +189,30 @@ export default {
       }
     },
     async setAnnualization(value) {
-      if (!value) {
-        await this.$apollo.mutate({
-          mutation: SET_ANNUALIZATION,
-          variables: {
-            type: 2,
-            annMonthsList: this.dataSetDivisionListCopy.map(set => ({
-              id: set.id,
-              annMonths: set.annMonths
-            }))
-          },
-          refetchQueries: () => [
-            {
-              query: GET_DATA_SET_COLUMN_LIST,
-              variables: {
-                projectId: this.projectId
+      try {
+        if (!value) {
+          await this.$apollo.mutate({
+            mutation: SET_ANNUALIZATION,
+            variables: {
+              type: 2,
+              annMonthsList: this.dataSetDivisionListCopy.map(set => ({
+                id: set.id,
+                annMonths: set.annMonths
+              }))
+            },
+            refetchQueries: () => [
+              {
+                query: GET_DATA_SET_COLUMN_LIST,
+                variables: {
+                  projectId: this.projectId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
     }

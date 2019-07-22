@@ -81,32 +81,38 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.stopsList.length) {
-        this.$emit('delete-rule', 'Stops');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_STOPS_LIST,
-          variables: {
-            parentId: this.parentId,
-            stopsList: this.stopsList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_STOPS_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.stopsList.length) {
+          this.$emit('delete-rule', 'Stops');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_STOPS_LIST,
+            variables: {
+              parentId: this.parentId,
+              stopsList: this.stopsList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_STOPS_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.min = null;
+        this.max = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.min = null;
-      this.max = null;
     },
     createTag() {
       const ruleContainerId = this.stopsList.length
@@ -125,29 +131,35 @@ export default {
       this.maxStops = null;
     },
     async deleteTag(tag) {
-      const idx = this.stopsList.indexOf(tag);
-      this.stopsList[idx].isDeleted = true;
+      try {
+        const idx = this.stopsList.indexOf(tag);
+        this.stopsList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_STOPS_LIST,
-          variables: {
-            parentId: this.parentId,
-            stopsList: this.stopsList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_STOPS_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_STOPS_LIST,
+            variables: {
+              parentId: this.parentId,
+              stopsList: this.stopsList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_STOPS_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.stopsList.some(rule => !rule.isDeleted);
+            if (!this.stopsList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'Stops');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.stopsList.some(rule => !rule.isDeleted);
-          if (!this.stopsList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'Stops');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

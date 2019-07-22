@@ -152,7 +152,7 @@ export default {
 
       this.ticketDesignator = '';
     },
-    async deleteTag(tag) {
+    deleteTag(tag) {
       const idx = this.ticketDesignatorList.indexOf(tag);
       this.ticketDesignatorList.splice(idx, 1);
     }

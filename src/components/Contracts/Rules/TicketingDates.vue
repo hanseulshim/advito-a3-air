@@ -80,6 +80,7 @@ export default {
   apollo: {
     ticketingDateList: {
       query: GET_TICKETING_DATE_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.parentId,
@@ -150,29 +151,35 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.ticketingDateList.length) {
-        this.$emit('delete-rule', 'TicketingDates');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_TICKETING_DATES,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            ticketingDateList: this.ticketingDateList
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        });
-        if (this.parentType === 1) {
-          this.$emit('toggle-row', this.pricingTermId);
+      try {
+        if (this.editMode && !this.ticketingDateList.length) {
+          this.$emit('delete-rule', 'TicketingDates');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_TICKETING_DATES,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              ticketingDateList: this.ticketingDateList
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          });
+          if (this.parentType === 1) {
+            this.$emit('toggle-row', this.pricingTermId);
+          }
         }
+        this.editMode = !this.editMode;
+        this.startDate = '';
+        this.endDate = '';
+        this.updateRule = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
       }
-      this.editMode = !this.editMode;
-      this.startDate = '';
-      this.endDate = '';
-      this.updateRule = null;
     },
     createTag() {
       if (this.startDate && this.endDate) {
@@ -196,33 +203,39 @@ export default {
       }
     },
     async deleteTag(tag) {
-      const idx = this.ticketingDateList.indexOf(tag);
-      this.ticketingDateList[idx].isDeleted = true;
+      try {
+        const idx = this.ticketingDateList.indexOf(tag);
+        this.ticketingDateList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_TICKETING_DATES,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            ticketingDateList: this.ticketingDateList
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        })
-        .then(() => {
-          const rulesRemaining = this.ticketingDateList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.ticketingDateList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TicketingDates');
-            this.$emit('toggle-row', this.pricingTermId);
-          }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_TICKETING_DATES,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              ticketingDateList: this.ticketingDateList
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          })
+          .then(() => {
+            const rulesRemaining = this.ticketingDateList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.ticketingDateList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'TicketingDates');
+              this.$emit('toggle-row', this.pricingTermId);
+            }
+          });
+        if (this.parentType === 1) {
+          this.$emit('toggle-row', this.pricingTermId);
+        }
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.pricingTermId);
       }
     },
     editTag(rule) {
