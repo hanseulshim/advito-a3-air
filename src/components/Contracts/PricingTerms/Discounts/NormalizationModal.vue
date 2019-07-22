@@ -3,7 +3,7 @@
     classes="modal-container normalization-modal"
     name="normalization-modal"
     height="auto"
-    width="1000px"
+    width="1200px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
@@ -78,13 +78,25 @@
       />
       <el-table-column label="Actions" :min-width="discount.actions">
         <template slot-scope="props">
-          <el-tooltip effect="dark" content="Copy Discount" placement="top">
+          <el-tooltip
+            effect="dark"
+            content="Copy Normalization"
+            placement="top"
+          >
             <i class="far fa-copy icon-spacer" />
           </el-tooltip>
-          <el-tooltip effect="dark" content="Edit Discount" placement="top">
+          <el-tooltip
+            effect="dark"
+            content="Edit Normalization"
+            placement="top"
+          >
             <i class="fas fa-pencil-alt icon-spacer" />
           </el-tooltip>
-          <el-tooltip effect="dark" content="Delete Discount" placement="top">
+          <el-tooltip
+            effect="dark"
+            content="Delete Normalization"
+            placement="top"
+          >
             <i class="fas fa-trash-alt" />
           </el-tooltip>
         </template>
