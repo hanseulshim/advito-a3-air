@@ -3,7 +3,7 @@
     classes="modal-container normalization-modal"
     name="normalization-modal"
     height="auto"
-    width="1200px"
+    width="1300px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
@@ -18,7 +18,7 @@
         <span>{{ pluralize('normalization', normalizationList.length) }}</span>
       </div>
       <div class="menu-container">
-        <button class="button long" @click="hideModal">
+        <button class="button long" @click="showNewNormalizationModal()">
           + NEW NORMALIZATION
         </button>
       </div>
@@ -31,7 +31,7 @@
     >
       <el-table-column type="expand">
         <template>
-          <p>Expanded!</p>
+          <NormalizationMarkets />
         </template>
       </el-table-column>
       <el-table-column
@@ -83,33 +83,56 @@
             content="Copy Normalization"
             placement="top"
           >
-            <i class="far fa-copy icon-spacer" />
+            <i
+              class="far fa-copy icon-spacer"
+              @click="showCopyNormalizationModal()"
+            />
           </el-tooltip>
           <el-tooltip
             effect="dark"
             content="Edit Normalization"
             placement="top"
           >
-            <i class="fas fa-pencil-alt icon-spacer" />
+            <i
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditNormalizationModal()"
+            />
           </el-tooltip>
           <el-tooltip
             effect="dark"
             content="Delete Normalization"
             placement="top"
           >
-            <i class="fas fa-trash-alt" />
+            <i
+              class="fas fa-trash-alt"
+              @click="showDeleteNormalizationModal()"
+            />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
+    <CopyNormalizationModal />
+    <NewNormalizationModal />
+    <DeleteNormalizationModal />
+    <EditNormalizationModal />
   </modal>
 </template>
-
 <script>
+import CopyNormalizationModal from './Normalization/CopyNormalizationModal';
+import NewNormalizationModal from './Normalization/NewNormalizationModal';
+import DeleteNormalizationModal from './Normalization/DeleteNormalizationModal';
+import EditNormalizationModal from './Normalization/EditNormalizationModal';
+import NormalizationMarkets from './Normalization/NormalizationMarkets';
 import { formatDate, pluralize } from '@/helper';
 export default {
   name: 'NormalizationModal',
-  components: {},
+  components: {
+    CopyNormalizationModal,
+    NewNormalizationModal,
+    DeleteNormalizationModal,
+    EditNormalizationModal,
+    NormalizationMarkets
+  },
   data() {
     return {
       discount: {},
@@ -131,6 +154,18 @@ export default {
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
+    },
+    showCopyNormalizationModal() {
+      this.$modal.show('copy-normalization-modal');
+    },
+    showNewNormalizationModal() {
+      this.$modal.show('new-normalization-modal');
+    },
+    showDeleteNormalizationModal() {
+      this.$modal.show('delete-normalization-modal');
+    },
+    showEditNormalizationModal() {
+      this.$modal.show('edit-normalization-modal');
     },
     tableRowClassName({ row }) {
       return row.inactive ? 'inactive-row' : '';
