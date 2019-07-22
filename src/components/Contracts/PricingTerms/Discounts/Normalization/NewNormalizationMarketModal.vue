@@ -3,25 +3,44 @@
     classes="modal-container"
     name="new-normalization-market-modal"
     height="auto"
+    width="1000px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
-    <el-form
-      ref="newMarket"
-      :model="form"
-      :rules="rules"
-      label-position="left"
-      label-width="150px"
-      hide-required-asterisk
-    >
-      <div class="title-row space-between">
-        <div class="section-header">new normalization market</div>
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+    <div class="newMarketContainer">
+      <el-form
+        ref="newMarket"
+        :model="form"
+        :rules="rules"
+        label-position="top"
+        label-width="150px"
+        hide-required-asterisk
+        :inline="true"
+        class="newMarketForm"
+      >
+        <div class="title-row space-between">
+          <div class="section-header">new normalization market</div>
+          <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        </div>
+        <el-form-item label="Select New Market *">
+          <el-select placeholder="Select Top Market" />
+        </el-form-item>
+        <el-form-item label="Override Usage">
+          <el-input-number />
+        </el-form-item>
+        <el-form-item label="Travel Date *">
+          <el-date-picker />
+        </el-form-item>
+        <el-form-item class="save-container">
+          <button class="button" type="button" @click="validateForm">
+            SAVE
+          </button>
+        </el-form-item>
+      </el-form>
+      <div class="newMarketTables">
+        <p>Im the table</p>
       </div>
-      <el-form-item class="save-container">
-        <button class="button" type="button" @click="validateForm">SAVE</button>
-      </el-form-item>
-    </el-form>
+    </div>
   </modal>
 </template>
 <script>
@@ -119,4 +138,16 @@ export default {
 <style lang="scss">
 @import '@/styles/global.scss';
 @import './styles.scss';
+
+.newMarketContainer {
+  display: flex;
+
+  .newMarketForm {
+    flex: 2;
+  }
+
+  .newMarkettables {
+    flex: 1;
+  }
+}
 </style>
