@@ -37,22 +37,7 @@ export const DELETE_LOCATION_COLLECTION = gql`
 
 export const TOGGLE_LOCATION_COLLECTION = gql`
   mutation toggleLocationCollection($id: Int!) {
-    toggleLocationCollection(id: $id) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+    toggleLocationCollection(id: $id)
   }
 `;
 

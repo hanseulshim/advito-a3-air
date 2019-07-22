@@ -257,7 +257,13 @@ export default {
           mutation: TOGGLE_LOCATION_COLLECTION,
           variables: {
             id
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_LOCATION_COLLECTION_LIST,
+              variables: { projectId: this.project.id }
+            }
+          ]
         });
       }
     },

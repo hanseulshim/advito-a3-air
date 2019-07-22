@@ -1,8 +1,5 @@
 const { ApolloError } = require('apollo-server-lambda');
-const {
-  locationCollectionList,
-  preferredAirlineCollectionList
-} = require('../../../data');
+const { locationCollectionList } = require('../../../data');
 
 exports.locationCollection = {
   Query: {
@@ -20,8 +17,7 @@ exports.locationCollection = {
         .innerJoin('project as p', 'pd.projectid', 'p.id')
         .where('l.isdeleted', false)
         .andWhere('p.id', projectId)
-        .orderBy('l.isstandard', 'desc'),
-    preferredAirlineCollectionList: () => preferredAirlineCollectionList
+        .orderBy('l.isstandard', 'desc')
   },
   Mutation: {
     copyLocationCollection: async (
@@ -51,27 +47,8 @@ exports.locationCollection = {
     deleteLocationCollection: async (_, { id }, { db }) => {
       await db.raw(`SELECT location_collection_delete(${id})`);
     },
-    toggleLocationCollection: (_, { id }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      if (locationCollection.active && locationCollection.id !== 1) {
-        const advitoStandard = locationCollectionList.filter(
-          collection => collection.id === 1
-        )[0];
-        advitoStandard.active = true;
-        locationCollection.active = false;
-      } else {
-        locationCollectionList.forEach(collection => {
-          collection.active = false;
-        });
-        locationCollection.active = true;
-      }
-      locationCollection.dateUpdated = new Date();
-      return locationCollectionList;
+    toggleLocationCollection: async (_, { id }, { db }) => {
+      await db.raw(`SELECT location_collection_toggle(${id})`);
     },
     addRegion: (_, { id, name, code }) => {
       const locationCollection = locationCollectionList.filter(

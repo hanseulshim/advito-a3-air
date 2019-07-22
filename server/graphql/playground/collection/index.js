@@ -10,7 +10,7 @@ exports.collection = {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
-      locationCollectionList {
+      locationCollectionList(projectId: 17) {
         ${LOCATION_COLLECTION}
       }
       travelSectorCollectionList {

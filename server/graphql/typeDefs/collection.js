@@ -128,7 +128,7 @@ extend type Mutation {
   copyLocationCollection(projectId: Int!, id: Int!, name: String!, description: String): Int @auth
   editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   deleteLocationCollection(id: Int!): Int @auth
-  toggleLocationCollection(id: Int!): [LocationCollection] @auth
+  toggleLocationCollection(id: Int!): Int @auth
   addRegion(id: Int!, name: String!, code: String!): LocationCollection @auth
   deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
   moveCountries(id: Int!, collectionId: Int!, countryList: [MoveCountry]): LocationCollection @auth
