@@ -30,7 +30,7 @@
       :row-class-name="tableRowClassName"
     >
       <el-table-column type="expand">
-        <template slot-scope="props">
+        <template>
           <p>Expanded!</p>
         </template>
       </el-table-column>
@@ -64,7 +64,7 @@
         sort-by="effectiveTo"
       />
       <el-table-column label="Markets" :min-width="discount.effectiveDates">
-        <template slot-scope="props">
+        <template>
           <p>2</p>
         </template>
       </el-table-column>
@@ -77,7 +77,7 @@
         sort-by="effectiveTo"
       />
       <el-table-column label="Actions" :min-width="discount.actions">
-        <template slot-scope="props">
+        <template>
           <el-tooltip effect="dark" content="Copy Discount" placement="top">
             <i class="far fa-copy icon-spacer" />
           </el-tooltip>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { formatDate, formatPercent, pluralize } from '@/helper';
+import { formatDate, pluralize } from '@/helper';
 export default {
   name: 'NormalizationModal',
   components: {},
