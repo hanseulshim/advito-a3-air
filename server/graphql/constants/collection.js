@@ -3,6 +3,7 @@ const LOCATION_COLLECTION = `id
         description
         dateUpdated
         regionCount
+        standard
         active
 `;
 

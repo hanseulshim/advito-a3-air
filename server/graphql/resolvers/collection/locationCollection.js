@@ -1,23 +1,37 @@
 const { ApolloError } = require('apollo-server-lambda');
 const { locationCollectionList } = require('../../../data');
+const { LOCATION_LOOKUP } = require('../../constants');
 
 exports.locationCollection = {
   Query: {
     locationCollectionList: async (_, { projectId = null }, { db }) =>
       await db('location as l')
         .select({
-          id: 'l.id',
-          name: 'l.name',
-          description: 'l.description',
-          dateUpdated: 'l.created',
-          regionCount: 0,
-          active: 'l.isactive'
+          id: 'id',
+          name: 'name',
+          description: 'description',
+          dateUpdated: 'created',
+          regionCount: db.raw(
+            `(SELECT COUNT(*) FROM location WHERE geosetid = l.id AND isdeleted = FALSE)`
+          ),
+          standard: 'isstandard',
+          active: 'isactive'
         })
-        .innerJoin('projectdataref as pd', 'l.geosetid', 'pd.datarefid')
-        .innerJoin('project as p', 'pd.projectid', 'p.id')
-        .where('l.isdeleted', false)
-        .andWhere('p.id', projectId)
-        .orderBy('l.isstandard', 'desc')
+        .where('isdeleted', false)
+        .andWhere('projectid', projectId)
+        .andWhere('locationtype', LOCATION_LOOKUP.COLLECTION)
+        .orderBy('isstandard', 'desc'),
+    regionList: async (_, { geoSetId = null }, { db }) =>
+      await db('location')
+        .select({
+          id: 'id',
+          code: 'code',
+          name: 'name',
+          locationType: 'locationtype'
+        })
+        .where('isdeleted', false)
+        .andWhere('locationtype', LOCATION_LOOKUP.REGION)
+        .andWhere('geosetid', geoSetId)
   },
   Mutation: {
     copyLocationCollection: async (

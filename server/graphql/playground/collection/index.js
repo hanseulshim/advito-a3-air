@@ -13,6 +13,12 @@ exports.collection = {
       locationCollectionList(projectId: 17) {
         ${LOCATION_COLLECTION}
       }
+      regionList(collectionId: null) {
+        id
+        code
+        name
+        locationType
+      }
       travelSectorCollectionList {
         id
         name

@@ -409,6 +409,8 @@ export default {
       this.form.projectTypeName = null;
       this.form.leadAnalystId = null;
       this.form.dataSpecialistId = null;
+      this.form.currencyId = null;
+      this.form.distanceUnitId = null;
     }
   }
 };

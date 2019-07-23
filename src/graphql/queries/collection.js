@@ -1,14 +1,10 @@
 import gql from 'graphql-tag';
+import { LOCATION_COLLECTION } from '../constants';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
   query locationCollectionList($projectId: Int) {
     locationCollectionList(projectId: $projectId) {
-      id
-      name
-      description
-      dateUpdated
-      regionCount
-      active
+      ${LOCATION_COLLECTION}
     }
   }
 `;

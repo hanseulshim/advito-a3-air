@@ -5,6 +5,7 @@ type LocationCollection {
   description: String
   dateUpdated: Date
   regionCount: Int
+  standard: Boolean
   active: Boolean
 }
 type Region {
@@ -115,6 +116,7 @@ input PreferredAirlineInput {
 
 extend type Query {
   locationCollectionList(projectId: Int): [LocationCollection] @auth
+  regionList(geoSetId: Int): [Geography] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth

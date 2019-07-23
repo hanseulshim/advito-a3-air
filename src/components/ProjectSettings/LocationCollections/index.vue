@@ -128,14 +128,14 @@
           </el-tooltip>
           <el-tooltip effect="dark" content="Edit" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="scope.row.standard"
               class="fas fa-pencil-alt icon-spacer"
               @click="showEditLocationCollection(scope.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="scope.row.standard"
               class="fas fa-trash-alt"
               @click="showDeleteLocationCollection(scope.row)"
             />
