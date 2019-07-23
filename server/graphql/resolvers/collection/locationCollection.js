@@ -27,6 +27,7 @@ exports.locationCollection = {
           id: 'id',
           code: 'code',
           name: 'name',
+          standard: 'isstandard',
           locationType: 'locationtype'
         })
         .where('isdeleted', false)

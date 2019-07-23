@@ -19,24 +19,24 @@
         {{ getCountryNames(scope.row.countryList) }}
       </template>
     </el-table-column> -->
-    <!-- <el-table-column label="Actions" :min-width="region.actions">
+    <el-table-column label="Actions" :min-width="region.actions">
       <template slot-scope="scope">
         <el-tooltip effect="dark" content="Edit" placement="top">
           <i
-            v-if="props.row.id !== 1"
+            v-if="!scope.row.standard"
             class="fas fa-pencil-alt icon-spacer"
-            @click="showEditRegionModal(props.row, scope.row)"
+            @click="showEditRegionModal(scope.row)"
           />
         </el-tooltip>
         <el-tooltip effect="dark" content="Delete" placement="top">
           <i
-            v-if="props.row.id !== 1"
+            v-if="!scope.row.standard"
             class="fas fa-trash-alt"
-            @click="showDeleteRegionModal(props.row, scope.row)"
+            @click="showDeleteRegionModal(scope.row)"
           />
         </el-tooltip>
       </template>
-    </el-table-column> -->
+    </el-table-column>
   </el-table>
 </template>
 
@@ -66,6 +66,14 @@ export default {
       regionList: [],
       region
     };
+  },
+  methods: {
+    showEditRegionModal(collection, region) {
+      this.$modal.show('edit-region', { collection, region });
+    },
+    showDeleteRegionModal(collection, region) {
+      this.$modal.show('delete-region', { collection, region });
+    }
   }
 };
 </script>

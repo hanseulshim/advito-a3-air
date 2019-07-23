@@ -17,6 +17,7 @@ exports.collection = {
         id
         code
         name
+        standard
         locationType
       }
       travelSectorCollectionList {
