@@ -58,7 +58,7 @@
           >
             <i
               class="fas fa-pencil-alt icon-spacer"
-              @click="showEditNormalizationModal()"
+              @click="showEditNormalizationMarketModal()"
             />
           </el-tooltip>
           <el-tooltip
@@ -68,13 +68,15 @@
           >
             <i
               class="fas fa-trash-alt"
-              @click="showDeleteNormalizationModal()"
+              @click="showDeleteNormalizationMarketModal()"
             />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <NewNormalizationMarketModal />
+    <EditNormalizationMarketModal />
+    <DeleteNormalizationMarketModal />
   </div>
 </template>
 <script>
@@ -83,11 +85,15 @@
 // import DeleteNormalizationModal from './Normalization/DeleteNormalizationModal';
 // import EditNormalizationModal from './Normalization/EditNormalizationModal';
 import NewNormalizationMarketModal from './NewNormalizationMarketModal';
+import EditNormalizationMarketModal from './EditNormalizationMarketModal';
+import DeleteNormalizationMarketModal from './DeleteNormalizationMarketModal';
 import { formatDate, pluralize } from '@/helper';
 export default {
   name: 'NormalizationMarkets',
   components: {
-    NewNormalizationMarketModal
+    NewNormalizationMarketModal,
+    EditNormalizationMarketModal,
+    DeleteNormalizationMarketModal
     // CopyNormalizationModal,
     // NewNormalizationModal,
     // DeleteNormalizationModal
@@ -126,11 +132,11 @@ export default {
     showNewNormalizationMarketModal() {
       this.$modal.show('new-normalization-market-modal');
     },
-    showDeleteNormalizationModal() {
-      this.$modal.show('delete-normalization-modal');
+    showDeleteNormalizationMarketModal() {
+      this.$modal.show('delete-normalization-market-modal');
     },
-    showEditNormalizationModal() {
-      this.$modal.show('edit-normalization-modal');
+    showEditNormalizationMarketModal() {
+      this.$modal.show('edit-normalization-market-modal');
     },
     tableRowClassName({ row }) {
       return row.inactive ? 'inactive-row' : '';
