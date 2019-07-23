@@ -13,7 +13,7 @@ exports.collection = {
       locationCollectionList(projectId: 17) {
         ${LOCATION_COLLECTION}
       }
-      regionList(collectionId: null) {
+      regionList(geoSetId: null) {
         id
         code
         name

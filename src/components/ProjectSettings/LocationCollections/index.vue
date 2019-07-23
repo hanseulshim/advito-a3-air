@@ -34,55 +34,17 @@
       v-loading="$apollo.loading"
       :data="locationCollectionList"
     >
-      <!-- <el-table-column type="expand">
-        <template slot-scope="props">
-          <button
-            v-if="props.row.id !== 1"
+      <el-table-column type="expand">
+        <template slot-scope="props"
+          ><button
+            v-if="!props.row.standard"
             class="button collection-add"
             @click="showNewRegionCollection(props.row)"
           >
-            + NEW REGION
-          </button>
-          <el-table :data="props.row.regionList" class="level-two-table">
-            <el-table-column label="Region" :min-width="region.name">
-              <template slot-scope="scope">
-                {{ scope.row.name }} ({{ scope.row.code }})
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="countryList.length"
-              label="Countries"
-              :min-width="region.countries"
-            />
-            <el-table-column
-              label="Country Name"
-              :min-width="region.countryName"
-            >
-              <template slot-scope="scope">
-                {{ getCountryNames(scope.row.countryList) }}
-              </template>
-            </el-table-column>
-            <el-table-column label="Actions" :min-width="region.actions">
-              <template slot-scope="scope">
-                <el-tooltip effect="dark" content="Edit" placement="top">
-                  <i
-                    v-if="props.row.id !== 1"
-                    class="fas fa-pencil-alt icon-spacer"
-                    @click="showEditRegionModal(props.row, scope.row)"
-                  />
-                </el-tooltip>
-                <el-tooltip effect="dark" content="Delete" placement="top">
-                  <i
-                    v-if="props.row.id !== 1"
-                    class="fas fa-trash-alt"
-                    @click="showDeleteRegionModal(props.row, scope.row)"
-                  />
-                </el-tooltip>
-              </template>
-            </el-table-column>
-          </el-table>
-        </template>
-      </el-table-column>-->
+            + NEW REGION</button
+          ><Regions :geo-set-id="props.row.id"
+        /></template>
+      </el-table-column>
       <el-table-column
         prop="name"
         label="Location Collection"
@@ -128,14 +90,14 @@
           </el-tooltip>
           <el-tooltip effect="dark" content="Edit" placement="top">
             <i
-              v-if="scope.row.standard"
+              v-if="!scope.row.standard"
               class="fas fa-pencil-alt icon-spacer"
               @click="showEditLocationCollection(scope.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete" placement="top">
             <i
-              v-if="scope.row.standard"
+              v-if="!scope.row.standard"
               class="fas fa-trash-alt"
               @click="showDeleteLocationCollection(scope.row)"
             />
@@ -167,6 +129,7 @@ import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
 import NewRegionModal from './NewRegionModal';
 import EditRegionModal from './EditRegionModal';
 import DeleteRegionModal from './DeleteRegionModal';
+import Regions from './Regions';
 
 export default {
   name: 'LocationCollections',
@@ -176,7 +139,8 @@ export default {
     DeleteLocationCollectionModal,
     NewRegionModal,
     EditRegionModal,
-    DeleteRegionModal
+    DeleteRegionModal,
+    Regions
   },
   apollo: {
     client: {

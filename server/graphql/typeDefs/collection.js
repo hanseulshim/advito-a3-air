@@ -127,7 +127,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  copyLocationCollection(projectId: Int!, id: Int!, name: String!, description: String): Int @auth
+  copyLocationCollection(clientId: Int!, projectId: Int!, id: Int!, name: String!, description: String): Int @auth
   editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   deleteLocationCollection(id: Int!): Int @auth
   toggleLocationCollection(id: Int!): Int @auth

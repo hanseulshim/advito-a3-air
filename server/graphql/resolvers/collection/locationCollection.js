@@ -32,15 +32,17 @@ exports.locationCollection = {
         .where('isdeleted', false)
         .andWhere('locationtype', LOCATION_LOOKUP.REGION)
         .andWhere('geosetid', geoSetId)
+        .orderBy('code')
   },
   Mutation: {
     copyLocationCollection: async (
       _,
-      { projectId, id, name, description },
+      { clientId, projectId, id, name, description },
       { db }
     ) => {
       await db.raw(
         `SELECT location_collection_copy(
+          ${clientId},
           ${projectId},
           ${id},
           '${name}',

@@ -3,5 +3,6 @@ name
 description
 dateUpdated
 regionCount
+standard
 active
 `;

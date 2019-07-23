@@ -85,7 +85,8 @@ export default {
           mutation: COPY_LOCATION_COLLECTION,
           variables: {
             ...this.form,
-            projectId: this.project.id
+            projectId: this.project.id,
+            clientId: this.client.id
           },
           refetchQueries: () => [
             {

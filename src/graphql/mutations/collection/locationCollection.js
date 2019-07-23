@@ -3,12 +3,14 @@ import { LOCATION_COLLECTION } from '../../constants';
 
 export const COPY_LOCATION_COLLECTION = gql`
   mutation copyLocationCollection(
+    $clientId: Int!
     $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
     copyLocationCollection(
+      clientId: $clientId
       projectId: $projectId
       id: $id
       name: $name
