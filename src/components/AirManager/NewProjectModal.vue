@@ -20,7 +20,11 @@
         </el-tooltip>
       </div>
       <el-form-item label="Client *" prop="clientId">
-        <el-select v-model="form.clientId" class="select-modal">
+        <el-select
+          v-model="form.clientId"
+          class="select-modal"
+          @change="updateClientName"
+        >
           <el-option
             v-for="item in clientList"
             :key="item.id"
@@ -30,7 +34,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Project Type *" prop="projectTypeId">
-        <el-select v-model="form.projectTypeId" class="select-modal">
+        <el-select
+          v-model="form.projectTypeId"
+          class="select-modal"
+          @change="updateProjectTypeName"
+        >
           <el-option
             v-for="item in projectTypeList"
             :key="item.id"
@@ -210,7 +218,9 @@ export default {
     return {
       form: {
         clientId: null,
+        clientName: null,
         projectTypeId: null,
+        projectTypeName: null,
         savingsTypeId: null,
         effectiveFrom:
           'Mon Jan 01 2018 00:00:00 GMT-0500 (Eastern Standard Time)',
@@ -339,6 +349,14 @@ export default {
         }
       });
     },
+    updateClientName(id) {
+      const client = this.clientList.find(c => c.id === id);
+      this.form.clientName = client.name;
+    },
+    updateProjectTypeName(id) {
+      const projectType = this.projectTypeList.find(t => t.id === id);
+      this.form.projectTypeName = projectType.name;
+    },
     async addProject() {
       try {
         await this.$apollo.mutate({
@@ -375,6 +393,7 @@ export default {
     },
     beforeClose() {
       this.form.clientId = null;
+      this.form.clientName = null;
       this.form.projectTypeId = null;
       this.form.savingsTypeId = null;
       this.form.effectiveFrom =
@@ -387,6 +406,7 @@ export default {
         'Mon Dec 31 2018 00:00:00 GMT-0500 (Eastern Standard Time)';
       this.form.description = null;
       this.form.projectManagerId = null;
+      this.form.projectTypeName = null;
       this.form.leadAnalystId = null;
       this.form.dataSpecialistId = null;
     }
