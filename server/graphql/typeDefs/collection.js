@@ -115,7 +115,7 @@ input PreferredAirlineInput {
 }
 
 extend type Query {
-  locationCollectionList(projectId: Int): [LocationCollection] @auth
+  locationCollectionList(clientId: Int): [LocationCollection] @auth
   locationCollection(id: Int!): LocationCollection @auth
   regionList(geoSetId: Int): [Geography] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth

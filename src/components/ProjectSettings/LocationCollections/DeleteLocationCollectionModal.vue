@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       id: null,
-      projectId: null
+      clientId: null
     };
   },
   methods: {
@@ -41,7 +41,7 @@ export default {
           refetchQueries: () => [
             {
               query: GET_LOCATION_COLLECTION_LIST,
-              variables: { projectId: this.projectId }
+              variables: { clientId: this.clientId }
             }
           ]
         });
@@ -57,11 +57,11 @@ export default {
     },
     beforeOpen(event) {
       this.id = event.params.id;
-      this.projectId = event.params.projectId;
+      this.clientId = event.params.clientId;
     },
     beforeClose() {
       this.id = null;
-      this.projectId = null;
+      this.clientId = null;
     }
   }
 };

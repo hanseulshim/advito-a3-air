@@ -144,7 +144,7 @@ export default {
       query: GET_LOCATION_COLLECTION_LIST,
       variables() {
         return {
-          projectId: this.project.id
+          clientId: this.client.id
         };
       }
     }
@@ -201,7 +201,7 @@ export default {
     showDeleteLocationCollection({ id }) {
       this.$modal.show('delete-location-collection', {
         id,
-        projectId: this.project.id
+        clientId: this.client.id
       });
     },
     toggleRow(id) {
@@ -217,7 +217,7 @@ export default {
           refetchQueries: () => [
             {
               query: GET_LOCATION_COLLECTION_LIST,
-              variables: { projectId: this.project.id }
+              variables: { clientId: this.client.id }
             }
           ]
         });

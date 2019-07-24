@@ -4,7 +4,7 @@ const { LOCATION_LOOKUP } = require('../../constants');
 
 exports.locationCollection = {
   Query: {
-    locationCollectionList: async (_, { projectId = null }, { db }) =>
+    locationCollectionList: async (_, { clientId = null }, { db }) =>
       await db('location as l')
         .select({
           id: 'id',
@@ -18,7 +18,7 @@ exports.locationCollection = {
           active: 'isactive'
         })
         .where('isdeleted', false)
-        .andWhere('projectid', projectId)
+        .andWhere('clientid', clientId)
         .andWhere('locationtype', LOCATION_LOOKUP.COLLECTION)
         .orderBy('isstandard', 'desc'),
     locationCollection: async (_, { id }, { db }) =>
