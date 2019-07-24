@@ -117,12 +117,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Currency *" prop="currencyId">
-        <el-select
-          v-model="form.currencyId"
-          filterable
-          class="select-modal"
-          filterable
-        >
+        <el-select v-model="form.currencyId" filterable class="select-modal">
           <el-option
             v-for="item in currencyList"
             :key="item.id"
