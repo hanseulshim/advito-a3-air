@@ -1,50 +1,63 @@
 <template>
-  <el-table
-    v-loading="$apollo.loading"
-    :data="regionList"
-    class="level-two-table"
-  >
-    <el-table-column label="Region" :min-width="region.name">
-      <template slot-scope="scope">
-        {{ scope.row.name }} ({{ scope.row.code }})
-      </template>
-    </el-table-column>
-    <!-- <el-table-column
+  <div>
+    <el-table
+      v-loading="$apollo.loading"
+      :data="regionList"
+      class="level-two-table"
+    >
+      <el-table-column label="Region" :min-width="region.name">
+        <template slot-scope="scope">
+          {{ scope.row.name }} ({{ scope.row.code }})
+        </template>
+      </el-table-column>
+      <!-- <el-table-column
       prop="countryList.length"
       label="Countries"
       :min-width="region.countries"
     /> -->
-    <!-- <el-table-column label="Country Name" :min-width="region.countryName">
+      <!-- <el-table-column label="Country Name" :min-width="region.countryName">
       <template slot-scope="scope">
         {{ getCountryNames(scope.row.countryList) }}
       </template>
     </el-table-column> -->
-    <el-table-column label="Actions" :min-width="region.actions">
-      <template slot-scope="scope">
-        <el-tooltip effect="dark" content="Edit" placement="top">
-          <i
-            v-if="!scope.row.standard"
-            class="fas fa-pencil-alt icon-spacer"
-            @click="showEditRegionModal(scope.row)"
-          />
-        </el-tooltip>
-        <el-tooltip effect="dark" content="Delete" placement="top">
-          <i
-            v-if="!scope.row.standard"
-            class="fas fa-trash-alt"
-            @click="showDeleteRegionModal(scope.row)"
-          />
-        </el-tooltip>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column label="Actions" :min-width="region.actions">
+        <template slot-scope="scope">
+          <el-tooltip effect="dark" content="Edit" placement="top">
+            <i
+              v-if="!scope.row.standard"
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditRegionModal(scope.row)"
+            />
+          </el-tooltip>
+          <el-tooltip effect="dark" content="Delete" placement="top">
+            <i
+              v-if="!scope.row.standard"
+              class="fas fa-trash-alt"
+              @click="showDeleteRegionModal(scope.row.id)"
+            />
+          </el-tooltip>
+        </template>
+      </el-table-column>
+    </el-table>
+    <NewRegionModal @toggle-row="toggleRow" />
+    <EditRegionModal />
+    <DeleteRegionModal @toggle-row="toggleRow" />
+  </div>
 </template>
 
 <script>
 import { GET_REGION_LIST } from '@/graphql/queries';
+import NewRegionModal from './NewRegionModal';
+import EditRegionModal from './EditRegionModal';
+import DeleteRegionModal from './DeleteRegionModal';
 import { region } from '@/config';
 export default {
   name: 'Regions',
+  components: {
+    NewRegionModal,
+    EditRegionModal,
+    DeleteRegionModal
+  },
   apollo: {
     regionList: {
       query: GET_REGION_LIST,
@@ -71,8 +84,15 @@ export default {
     showEditRegionModal(collection, region) {
       this.$modal.show('edit-region', { collection, region });
     },
-    showDeleteRegionModal(collection, region) {
-      this.$modal.show('delete-region', { collection, region });
+    showDeleteRegionModal(id) {
+      this.$modal.show('delete-region', {
+        id,
+        geoSetId: this.geoSetId,
+        countryListLength: 0
+      });
+    },
+    toggleRow(id) {
+      this.$emit('toggle-row', id);
     }
   }
 };

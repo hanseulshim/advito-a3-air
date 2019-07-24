@@ -81,7 +81,9 @@ export default {
     },
     async copyLocationCollection() {
       try {
-        await this.$apollo.mutate({
+        const {
+          data: { copyLocationCollection }
+        } = await this.$apollo.mutate({
           mutation: COPY_LOCATION_COLLECTION,
           variables: {
             ...this.form,
@@ -95,6 +97,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', copyLocationCollection);
         this.$modal.show('success', {
           message: 'Location Collection successfully copied.',
           name: 'copy-location-collection'

@@ -116,6 +116,7 @@ input PreferredAirlineInput {
 
 extend type Query {
   locationCollectionList(projectId: Int): [LocationCollection] @auth
+  locationCollection(id: Int!): LocationCollection @auth
   regionList(geoSetId: Int): [Geography] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
@@ -131,8 +132,8 @@ extend type Mutation {
   editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
   deleteLocationCollection(id: Int!): Int @auth
   toggleLocationCollection(id: Int!): Int @auth
-  addRegion(id: Int!, name: String!, code: String!): LocationCollection @auth
-  deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
+  addRegion(geoSetId: Int!, name: String!, code: String!): Int @auth
+  deleteRegion(id: Int!): Int @auth
   moveCountries(id: Int!, collectionId: Int!, countryList: [MoveCountry]): LocationCollection @auth
 
   createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth

@@ -21,6 +21,8 @@ exports.locationCollection = {
         .andWhere('projectid', projectId)
         .andWhere('locationtype', LOCATION_LOOKUP.COLLECTION)
         .orderBy('isstandard', 'desc'),
+    locationCollection: async (_, { id }, { db }) =>
+      await getLocationCollection(db, id),
     regionList: async (_, { geoSetId = null }, { db }) =>
       await db('location')
         .select({
@@ -33,7 +35,6 @@ exports.locationCollection = {
         .where('isdeleted', false)
         .andWhere('locationtype', LOCATION_LOOKUP.REGION)
         .andWhere('geosetid', geoSetId)
-        .orderBy('code')
   },
   Mutation: {
     copyLocationCollection: async (
@@ -41,7 +42,7 @@ exports.locationCollection = {
       { clientId, projectId, id, name, description },
       { db }
     ) => {
-      await db.raw(
+      const { rows } = await db.raw(
         `SELECT location_collection_copy(
           ${clientId},
           ${projectId},
@@ -50,6 +51,8 @@ exports.locationCollection = {
           ${description ? `'${description}'` : null}
         )`
       );
+      const [{ location_collection_copy: newId }] = rows;
+      return newId;
     },
     editLocationCollection: async (_, { id, name, description }, { db }) => {
       await db.raw(
@@ -67,52 +70,18 @@ exports.locationCollection = {
     toggleLocationCollection: async (_, { id }, { db }) => {
       await db.raw(`SELECT location_collection_toggle(${id})`);
     },
-    addRegion: (_, { id, name, code }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const checkNames = locationCollection.regionList.some(
-        region => region.name === name || region.code === code
+    addRegion: async (_, { geoSetId, name, code }, { db }) => {
+      await db.raw(
+        `SELECT region_create(
+          ${geoSetId},
+          '${name}',
+          '${code}'
+        )`
       );
-      if (checkNames) {
-        throw new ApolloError(
-          'Region name/code already exists. Please input a unique region name/code.',
-          400
-        );
-      }
-      const maxId =
-        Math.max(...locationCollection.regionList.map(region => region.id)) + 1;
-      const region = {
-        id: maxId,
-        name,
-        code,
-        countryList: []
-      };
-      locationCollection.regionList.push(region);
-      return locationCollection;
     },
-    deleteRegion: (_, { id, collectionId }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const index = locationCollection.regionList.findIndex(
-        region => region.id === id
-      );
-      if (index === -1) {
-        throw new ApolloError('Region not found', 400);
-      }
-      const countryList = locationCollection.regionList[index].countryList;
-      if (countryList.length !== 0) {
-        throw new ApolloError('Cannot delete region', 400);
-      }
-      locationCollection.regionList.splice(index, 1);
-      return locationCollection;
+    deleteRegion: async (_, { id }, { db }) => {
+      await db.raw(`SELECT region_delete(${id})`);
+      return id;
     },
     moveCountries: (_, { collectionId, id, countryList }) => {
       const locationCollection = locationCollectionList.filter(
@@ -142,13 +111,16 @@ exports.locationCollection = {
 };
 
 const getLocationCollection = async (db, id) => {
-  const [locationCollection] = await db('location')
+  const [locationCollection] = await db('location as l')
     .select({
       id: 'id',
       name: 'name',
       description: 'description',
       dateUpdated: 'created',
-      regionCount: 0,
+      regionCount: db.raw(
+        `(SELECT COUNT(*) FROM location WHERE geosetid = l.id AND isdeleted = FALSE)`
+      ),
+      standard: 'isstandard',
       active: 'isactive'
     })
     .where('id', id);

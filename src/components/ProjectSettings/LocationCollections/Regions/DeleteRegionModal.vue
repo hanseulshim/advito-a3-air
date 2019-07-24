@@ -12,7 +12,7 @@
         <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
-    <div v-if="deleteRegionStatus" class="delete-modal-text">
+    <div v-if="!countryListLength" class="delete-modal-text">
       Are you sure you want to delete this region?
     </div>
     <div v-else class="delete-modal-text">
@@ -21,10 +21,10 @@
       Region.
     </div>
     <div class="delete-modal-button-container">
-      <button v-if="deleteRegionStatus" class="button" @click="deleteRegion">
+      <button v-if="!countryListLength" class="button" @click="deleteRegion">
         Yes
       </button>
-      <button v-if="deleteRegionStatus" class="button" @click="hideModal">
+      <button v-if="!countryListLength" class="button" @click="hideModal">
         No
       </button>
       <button v-else class="button" @click="hideModal">
@@ -35,16 +35,14 @@
 </template>
 
 <script>
+import { GET_REGION_LIST, GET_LOCATION_COLLECTION } from '@/graphql/queries';
 import { DELETE_REGION } from '@/graphql/mutations';
 export default {
   name: 'DeleteRegionModal',
   data() {
     return {
-      form: {
-        id: null,
-        collectionId: null
-      },
-      deleteRegionStatus: null,
+      id: null,
+      geoSetId: null,
       countryListLength: null
     };
   },
@@ -57,10 +55,32 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_REGION,
           variables: {
-            ...this.form
-          }
+            id: this.id
+          },
+          update: (store, { data: { deleteRegion } }) => {
+            const query = {
+              query: GET_REGION_LIST,
+              variables: {
+                geoSetId: this.geoSetId
+              }
+            };
+            const data = store.readQuery(query);
+            data.regionList = data.regionList.filter(
+              r => r.id !== deleteRegion
+            );
+            store.writeQuery({
+              ...query,
+              data
+            });
+          },
+          refetchQueries: () => [
+            {
+              query: GET_LOCATION_COLLECTION,
+              variables: { id: this.geoSetId }
+            }
+          ]
         });
-        this.$emit('toggle-row', this.form.collectionId);
+        this.$emit('toggle-row', this.geoSetId);
         this.$modal.show('success', {
           message: 'Region successfully deleted.',
           name: 'delete-region'
@@ -73,17 +93,14 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      const region = event.params.region;
-      this.form.id = region.id;
-      this.form.collectionId = collection.id;
-      this.deleteRegionStatus = region.countryList.length === 0;
-      this.countryListLength = region.countryList.length;
+      const { id, countryListLength, geoSetId } = event.params;
+      this.id = id;
+      this.geoSetId = geoSetId;
+      this.countryListLength = countryListLength;
     },
     beforeClose() {
-      this.form.id = null;
-      this.form.collectionId = null;
-      this.deleteRegionStatus = null;
+      this.id = null;
+      this.geoSetId = null;
       this.countryListLength = null;
     }
   }

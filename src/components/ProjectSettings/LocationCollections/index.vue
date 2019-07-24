@@ -39,10 +39,10 @@
           ><button
             v-if="!props.row.standard"
             class="button collection-add"
-            @click="showNewRegionCollection(props.row)"
+            @click="showNewRegionCollection(props.row.id)"
           >
             + NEW REGION</button
-          ><Regions :geo-set-id="props.row.id"
+          ><Regions :geo-set-id="props.row.id" @toggle-row="toggleRow"
         /></template>
       </el-table-column>
       <el-table-column
@@ -105,12 +105,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <CopyLocationCollectionModal />
-    <EditLocationCollectionModal @toggle-row="toggleRow" />
+    <CopyLocationCollectionModal @toggle-row="toggleRow" />
+    <EditLocationCollectionModal />
     <DeleteLocationCollectionModal />
-    <NewRegionModal @toggle-row="toggleRow" />
-    <EditRegionModal @toggle-row="toggleRow" />
-    <DeleteRegionModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -126,9 +123,6 @@ import { TOGGLE_LOCATION_COLLECTION } from '@/graphql/mutations';
 import CopyLocationCollectionModal from './CopyLocationCollectionModal';
 import EditLocationCollectionModal from './EditLocationCollectionModal';
 import DeleteLocationCollectionModal from './DeleteLocationCollectionModal';
-import NewRegionModal from './NewRegionModal';
-import EditRegionModal from './EditRegionModal';
-import DeleteRegionModal from './DeleteRegionModal';
 import Regions from './Regions';
 
 export default {
@@ -137,9 +131,6 @@ export default {
     CopyLocationCollectionModal,
     EditLocationCollectionModal,
     DeleteLocationCollectionModal,
-    NewRegionModal,
-    EditRegionModal,
-    DeleteRegionModal,
     Regions
   },
   apollo: {
@@ -163,9 +154,19 @@ export default {
       locationCollectionList: [],
       project: {},
       client: {},
+      toggleRowId: null,
       collection,
       region
     };
+  },
+  updated() {
+    if (this.toggleRowId) {
+      const row = this.$refs.locationCollection.data.filter(
+        c => c.id === this.toggleRowId
+      )[0];
+      this.$refs.locationCollection.toggleRowExpansion(row, true);
+      this.toggleRowId = null;
+    }
   },
   methods: {
     pluralize(word, count) {
@@ -187,8 +188,8 @@ export default {
         project: this.project
       });
     },
-    showNewRegionCollection(collection) {
-      this.$modal.show('new-region', { collection });
+    showNewRegionCollection(geoSetId) {
+      this.$modal.show('new-region', { geoSetId });
     },
     showEditLocationCollection(collection) {
       this.$modal.show('edit-location-collection', {
@@ -203,17 +204,8 @@ export default {
         projectId: this.project.id
       });
     },
-    showEditRegionModal(collection, region) {
-      this.$modal.show('edit-region', { collection, region });
-    },
-    showDeleteRegionModal(collection, region) {
-      this.$modal.show('delete-region', { collection, region });
-    },
     toggleRow(id) {
-      const row = this.$refs.locationCollection.data.filter(
-        collection => collection.id === id
-      )[0];
-      this.$refs.locationCollection.toggleRowExpansion(row);
+      this.toggleRowId = id;
     },
     toggleLocationCollection(id) {
       if (this.locationCollectionList.length) {

@@ -9,6 +9,14 @@ export const GET_LOCATION_COLLECTION_LIST = gql`
   }
 `;
 
+export const GET_LOCATION_COLLECTION = gql`
+  query locationCollection($id: Int!) {
+    locationCollection(id: $id) {
+      ${LOCATION_COLLECTION}
+    }
+  }
+`;
+
 export const GET_REGION_LIST = gql`
   query regionList($geoSetId: Int) {
     regionList(geoSetId: $geoSetId) {

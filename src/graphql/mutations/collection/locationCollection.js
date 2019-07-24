@@ -44,37 +44,14 @@ export const TOGGLE_LOCATION_COLLECTION = gql`
 `;
 
 export const ADD_REGION = gql`
-  mutation addRegion($id: Int!, $name: String!, $code: String!) {
-    addRegion(id: $id, name: $name, code: $code) {
-      id
-      regionList {
-        id
-        name
-        code
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+  mutation addRegion($geoSetId: Int!, $name: String!, $code: String!) {
+    addRegion(geoSetId: $geoSetId, name: $name, code: $code)
   }
 `;
 
 export const DELETE_REGION = gql`
-  mutation deleteRegion($id: Int!, $collectionId: Int!) {
-    deleteRegion(id: $id, collectionId: $collectionId) {
-      id
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+  mutation deleteRegion($id: Int!) {
+    deleteRegion(id: $id)
   }
 `;
 
