@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { LOCATION_COLLECTION } from '../constants';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
-  query locationCollectionList($clientId: Int) {
-    locationCollectionList(clientId: $clientId) {
+  query locationCollectionList($clientId: Int, $projectId: Int) {
+    locationCollectionList(clientId: $clientId, projectId: $projectId) {
       ${LOCATION_COLLECTION}
     }
   }

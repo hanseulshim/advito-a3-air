@@ -4,7 +4,11 @@ const { LOCATION_LOOKUP } = require('../../constants');
 
 exports.locationCollection = {
   Query: {
-    locationCollectionList: async (_, { clientId = null }, { db }) =>
+    locationCollectionList: async (
+      _,
+      { clientId = null, projectId = null },
+      { db }
+    ) =>
       await db('location as l')
         .select({
           id: 'id',
@@ -15,7 +19,9 @@ exports.locationCollection = {
             `(SELECT COUNT(*) FROM location WHERE geosetid = l.id AND isdeleted = FALSE)`
           ),
           standard: 'isstandard',
-          active: 'isactive'
+          active: db.raw(
+            `COALESCE((SELECT status FROM projectdataref as p WHERE p.datarefid = l.id AND p.projectid = ${projectId}) = 1, FALSE)`
+          )
         })
         .where('isdeleted', false)
         .andWhere('clientid', clientId)
@@ -64,11 +70,11 @@ exports.locationCollection = {
       );
       return await getLocationCollection(db, id);
     },
-    deleteLocationCollection: async (_, { id }, { db }) => {
-      await db.raw(`SELECT location_collection_delete(${id})`);
+    deleteLocationCollection: async (_, { id, projectId }, { db }) => {
+      await db.raw(`SELECT location_collection_delete(${id}, ${projectId})`);
     },
-    toggleLocationCollection: async (_, { id }, { db }) => {
-      await db.raw(`SELECT location_collection_toggle(${id})`);
+    toggleLocationCollection: async (_, { id, projectId }, { db }) => {
+      await db.raw(`SELECT location_collection_toggle(${id}, ${projectId})`);
     },
     addRegion: async (_, { geoSetId, name, code }, { db }) => {
       await db.raw(

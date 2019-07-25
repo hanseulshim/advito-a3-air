@@ -32,14 +32,14 @@ export const EDIT_LOCATION_COLLECTION = gql`
 `;
 
 export const DELETE_LOCATION_COLLECTION = gql`
-  mutation deleteLocationCollection($id: Int!) {
-    deleteLocationCollection(id: $id)
+  mutation deleteLocationCollection($id: Int!, $projectId: Int!) {
+    deleteLocationCollection(id: $id, projectId: $projectId)
   }
 `;
 
 export const TOGGLE_LOCATION_COLLECTION = gql`
-  mutation toggleLocationCollection($id: Int!) {
-    toggleLocationCollection(id: $id)
+  mutation toggleLocationCollection($id: Int!, $projectId: Int!) {
+    toggleLocationCollection(id: $id, projectId: $projectId)
   }
 `;
 

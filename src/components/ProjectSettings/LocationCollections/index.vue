@@ -142,9 +142,11 @@ export default {
     },
     locationCollectionList: {
       query: GET_LOCATION_COLLECTION_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
-          clientId: this.client.id
+          clientId: this.client.id,
+          projectId: this.project.id
         };
       }
     }
@@ -201,7 +203,8 @@ export default {
     showDeleteLocationCollection({ id }) {
       this.$modal.show('delete-location-collection', {
         id,
-        clientId: this.client.id
+        clientId: this.client.id,
+        projectId: this.project.id
       });
     },
     toggleRow(id) {
@@ -212,12 +215,16 @@ export default {
         this.$apollo.mutate({
           mutation: TOGGLE_LOCATION_COLLECTION,
           variables: {
-            id
+            id,
+            projectId: this.project.id
           },
           refetchQueries: () => [
             {
               query: GET_LOCATION_COLLECTION_LIST,
-              variables: { clientId: this.client.id }
+              variables: {
+                clientId: this.client.id,
+                projectId: this.project.id
+              }
             }
           ]
         });

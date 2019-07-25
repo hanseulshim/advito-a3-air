@@ -93,7 +93,10 @@ export default {
           refetchQueries: () => [
             {
               query: GET_LOCATION_COLLECTION_LIST,
-              variables: { clientId: this.client.id }
+              variables: {
+                clientId: this.client.id,
+                projectId: this.project.id
+              }
             }
           ]
         });

@@ -24,7 +24,8 @@ export default {
   data() {
     return {
       id: null,
-      clientId: null
+      clientId: null,
+      projectId: null
     };
   },
   methods: {
@@ -36,12 +37,13 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_LOCATION_COLLECTION,
           variables: {
-            id: this.id
+            id: this.id,
+            projectId: this.projectId
           },
           refetchQueries: () => [
             {
               query: GET_LOCATION_COLLECTION_LIST,
-              variables: { clientId: this.clientId }
+              variables: { clientId: this.clientId, projectId: this.projectId }
             }
           ]
         });
@@ -56,12 +58,15 @@ export default {
       }
     },
     beforeOpen(event) {
-      this.id = event.params.id;
-      this.clientId = event.params.clientId;
+      const { id, clientId, projectId } = event.params;
+      this.id = id;
+      this.clientId = clientId;
+      this.projectId = projectId;
     },
     beforeClose() {
       this.id = null;
       this.clientId = null;
+      this.projectId = null;
     }
   }
 };
