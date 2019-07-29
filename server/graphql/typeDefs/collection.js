@@ -12,13 +12,10 @@ type Region {
   id: Int
   name: String
   code: String
-  countryList: [Country]
+  standard: Boolean
+  countryList: [Geography]
 }
-type Country {
-  id: Int
-  regionId: Int
-  name: String
-}
+
 type TravelSectorCollection {
   id: Int
   name: String
@@ -117,7 +114,7 @@ input PreferredAirlineInput {
 extend type Query {
   locationCollectionList(clientId: Int, projectId: Int): [LocationCollection] @auth
   locationCollection(id: Int!): LocationCollection @auth
-  regionList(geoSetId: Int): [Geography] @auth
+  regionList(geoSetId: Int): [Region] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth

@@ -10,16 +10,16 @@
           {{ scope.row.name }} ({{ scope.row.code }})
         </template>
       </el-table-column>
-      <!-- <el-table-column
-      prop="countryList.length"
-      label="Countries"
-      :min-width="region.countries"
-    /> -->
-      <!-- <el-table-column label="Country Name" :min-width="region.countryName">
-      <template slot-scope="scope">
-        {{ getCountryNames(scope.row.countryList) }}
-      </template>
-    </el-table-column> -->
+      <el-table-column
+        prop="countryList.length"
+        label="Countries"
+        :min-width="region.countries"
+      />
+      <el-table-column label="Country Name" :min-width="region.countryName">
+        <template slot-scope="scope">
+          {{ getCountryNames(scope.row.countryList) }}
+        </template>
+      </el-table-column>
       <el-table-column label="Actions" :min-width="region.actions">
         <template slot-scope="scope">
           <el-tooltip effect="dark" content="Edit" placement="top">
@@ -93,6 +93,12 @@ export default {
     },
     toggleRow(id) {
       this.$emit('toggle-row', id);
+    },
+    getCountryNames(countryList) {
+      const countryListCopy = countryList.map(country => country.name);
+      return countryListCopy.length > 10
+        ? countryListCopy.slice(0, 9).join(', ') + '...'
+        : countryListCopy.join(', ');
     }
   }
 };

@@ -29,7 +29,9 @@ exports.project = {
     mutation {
       addProject(
         clientId: 1
+        clientName: "Test"
         projectTypeId: 1
+        projectTypeName: "Test project"
         savingsTypeId: 3
         effectiveFrom: 1483246800001
         effectiveTo: 1483246800001

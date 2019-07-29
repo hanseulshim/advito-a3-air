@@ -29,18 +29,33 @@ exports.locationCollection = {
         .orderBy('isstandard', 'desc'),
     locationCollection: async (_, { id }, { db }) =>
       await getLocationCollection(db, id),
-    regionList: async (_, { geoSetId = null }, { db }) =>
-      await db('location')
+    regionList: async (_, { geoSetId = null }, { db }) => {
+      const regionList = await db('location')
         .select({
           id: 'id',
           code: 'code',
           name: 'name',
-          standard: 'isstandard',
-          locationType: 'locationtype'
+          standard: 'isstandard'
         })
         .where('isdeleted', false)
         .andWhere('locationtype', LOCATION_LOOKUP.REGION)
-        .andWhere('geosetid', geoSetId)
+        .andWhere('geosetid', geoSetId);
+      const countryRequests = regionList.map(async region => {
+        const countryList = await db('locationmapping as l1')
+          .select({
+            id: 'l3.id',
+            code: 'l3.code',
+            name: 'l3.name'
+          })
+          .leftJoin('locationmapping as l2', 'l1.childid', 'l2.parentid')
+          .leftJoin('location as l3', 'l2.childid', 'l3.id')
+          .where('l1.parentid', region.id)
+          .orderBy('code');
+        region.countryList = countryList;
+      });
+      await Promise.all(countryRequests);
+      return regionList;
+    }
   },
   Mutation: {
     copyLocationCollection: async (

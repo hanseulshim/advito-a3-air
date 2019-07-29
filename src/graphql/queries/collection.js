@@ -24,7 +24,11 @@ export const GET_REGION_LIST = gql`
       code
       name
       standard
-      locationType
+      countryList {
+        id
+        code
+        name
+      }
     }
   }
 `;

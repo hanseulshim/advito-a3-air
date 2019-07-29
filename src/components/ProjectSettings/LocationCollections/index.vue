@@ -177,12 +177,6 @@ export default {
     formatDate(row) {
       return formatDate(row.dateUpdated);
     },
-    getCountryNames(countryList) {
-      const countryListCopy = countryList.map(country => country.name);
-      return countryListCopy.length > 10
-        ? countryListCopy.slice(0, 9).join(', ') + '...'
-        : countryListCopy.join(', ');
-    },
     showCopyLocationCollection(collection) {
       this.$modal.show('copy-location-collection', {
         collection,
