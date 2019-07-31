@@ -20,6 +20,7 @@ const {
   ADVITO_GEOSET_ID
 } = require('./client');
 const { LIBRARY_LOOKUP, LOCATION_LOOKUP } = require('./library');
+const { LOCATION_COLLECTION } = require('./collection');
 
 module.exports = {
   AIR_APPLICATION_ID,
@@ -41,5 +42,6 @@ module.exports = {
   PROJECT,
   LIBRARY_LOOKUP,
   LOCATION_LOOKUP,
-  PROJECT_LOOKUP
+  PROJECT_LOOKUP,
+  LOCATION_COLLECTION
 };

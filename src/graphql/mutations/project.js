@@ -10,7 +10,9 @@ export const UPDATE_PROJECT = gql`
 export const ADD_PROJECT = gql`
   mutation addProject(
     $clientId: Int!
+    $clientName: String!
     $projectTypeId: Int!
+    $projectTypeName: String!
     $savingsTypeId: Int!
     $effectiveFrom: Date!
     $effectiveTo: Date!
@@ -25,7 +27,9 @@ export const ADD_PROJECT = gql`
   ) {
     addProject(
       clientId: $clientId
+      clientName: $clientName
       projectTypeId: $projectTypeId
+      projectTypeName: $projectTypeName
       savingsTypeId: $savingsTypeId
       effectiveFrom: $effectiveFrom
       effectiveTo: $effectiveTo

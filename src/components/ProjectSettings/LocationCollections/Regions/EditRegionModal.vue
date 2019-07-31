@@ -58,12 +58,14 @@
 </template>
 
 <script>
+import { GET_REGION_LIST } from '@/graphql/queries';
 import { MOVE_COUNTRIES } from '@/graphql/mutations';
 export default {
   name: 'EditRegionModal',
   data() {
     return {
-      collectionId: null,
+      geoSetId: null,
+      regionId: null,
       selectedRegion: null,
       regionList: [],
       countryList: []
@@ -90,24 +92,27 @@ export default {
     },
     async moveCountries() {
       try {
-        const countryList = this.countryList.map(country => ({
-          id: country.id,
-          regionId: country.regionId,
-          name: country.name
-        }));
-        const data = await this.$apollo.mutate({
+        const countryList = this.countryList.map(country => country.id);
+        await this.$apollo.mutate({
           mutation: MOVE_COUNTRIES,
           variables: {
-            collectionId: this.collectionId,
-            id: this.selectedRegion,
+            geoSetId: this.geoSetId,
+            regionId: this.selectedRegion,
             countryList
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_REGION_LIST,
+              variables: {
+                geoSetId: this.geoSetId
+              }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Countries successfully moved.',
           name: 'edit-region'
         });
-        this.$emit('toggle-row', data.data.moveCountries.id);
       } catch (error) {
         this.$modal.show('error', {
           message: 'Failed to move countries. Please try again.'
@@ -115,15 +120,15 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.collectionId = collection.id;
-      this.regionList = collection.regionList.map(region => ({
+      const { geoSetId, regionList } = event.params;
+      this.geoSetId = geoSetId;
+      this.regionList = regionList.map(region => ({
         ...region,
         expand: false
       }));
     },
     beforeClose() {
-      this.collectionId = null;
+      this.geoSetId = null;
       this.countryList = [];
       this.selectedRegion = null;
     }

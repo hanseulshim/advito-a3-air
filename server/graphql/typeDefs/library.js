@@ -48,6 +48,7 @@ type Geography {
   id: Int
   code: String
   name: String
+  standard: Boolean
   locationType: Int
 }
 

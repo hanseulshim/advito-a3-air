@@ -53,7 +53,9 @@ extend type Query {
 extend type Mutation {
   addProject(
     clientId: Int!,
+    clientName: String!,
     projectTypeId: Int!,
+    projectTypeName: String!,
     savingsTypeId: Int!,
     effectiveFrom: Date!,
     effectiveTo: Date!,

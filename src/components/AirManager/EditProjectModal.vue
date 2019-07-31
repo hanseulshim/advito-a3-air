@@ -79,7 +79,11 @@
         <el-input v-model="form.description" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="Project Manager *" prop="projectManagerId">
-        <el-select v-model="form.projectManagerId" class="select-modal">
+        <el-select
+          v-model="form.projectManagerId"
+          class="select-modal"
+          filterable
+        >
           <el-option
             v-for="item in projectManagerList"
             :key="item.id"
@@ -89,7 +93,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Lead Analyst *" prop="leadAnalystId">
-        <el-select v-model="form.leadAnalystId" class="select-modal">
+        <el-select v-model="form.leadAnalystId" class="select-modal" filterable>
           <el-option
             v-for="item in leadAnalystList"
             :key="item.id"
@@ -99,7 +103,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Data Specialist *" prop="dataSpecialistId">
-        <el-select v-model="form.dataSpecialistId" class="select-modal">
+        <el-select
+          v-model="form.dataSpecialistId"
+          class="select-modal"
+          filterable
+        >
           <el-option
             v-for="item in dataSpecialistList"
             :key="item.id"

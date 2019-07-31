@@ -1,180 +1,144 @@
 const { ApolloError } = require('apollo-server-lambda');
-const {
-  locationCollectionList,
-  preferredAirlineCollectionList
-} = require('../../../data');
+const { locationCollectionList } = require('../../../data');
+const { LOCATION_LOOKUP } = require('../../constants');
 
 exports.locationCollection = {
   Query: {
-    locationCollectionList: () =>
-      locationCollectionList.filter(collection => !collection.isDeleted),
-    preferredAirlineCollectionList: () => preferredAirlineCollectionList
+    locationCollectionList: async (
+      _,
+      { clientId = null, projectId = null },
+      { db }
+    ) =>
+      await db('location as l')
+        .select({
+          id: 'id',
+          name: 'name',
+          description: 'description',
+          dateUpdated: 'created',
+          regionCount: db.raw(
+            `(SELECT COUNT(*) FROM location WHERE geosetid = l.id AND isdeleted = FALSE AND locationtype = ${
+              LOCATION_LOOKUP.REGION
+            })`
+          ),
+          standard: 'isstandard',
+          active: db.raw(
+            `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = l.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 1) = 1, FALSE)`
+          )
+        })
+        .where('isdeleted', false)
+        .andWhere(function() {
+          this.where('clientid', clientId).orWhere('isstandard', true);
+        })
+        .andWhere('locationtype', LOCATION_LOOKUP.COLLECTION)
+        .orderBy('isstandard', 'desc'),
+    locationCollection: async (_, { id, projectId = null }, { db }) =>
+      await getLocationCollection(db, id, projectId),
+    regionList: async (_, { geoSetId = null }, { db }) => {
+      const regionList = await db('location')
+        .select({
+          id: 'id',
+          code: 'code',
+          name: 'name',
+          standard: 'isstandard'
+        })
+        .where('isdeleted', false)
+        .andWhere('locationtype', LOCATION_LOOKUP.REGION)
+        .andWhere('geosetid', geoSetId);
+      const countryRequests = regionList.map(async region => {
+        const countryList = await db('locationmapping as l1')
+          .select({
+            id: 'l2.id',
+            code: 'l2.code',
+            name: 'l2.name'
+          })
+          .leftJoin('location as l2', 'l1.childid', 'l2.id')
+          .where('l1.parentid', region.id)
+          .orderBy('code');
+        region.countryList = countryList;
+      });
+      await Promise.all(countryRequests);
+      return regionList;
+    }
   },
   Mutation: {
-    createLocationCollection: (_, { id, name, description }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const checkNames = locationCollectionList.some(
-        collection => collection.name === name
+    copyLocationCollection: async (
+      _,
+      { clientId, projectId, id, name, description },
+      { db }
+    ) => {
+      const { rows } = await db.raw(
+        `SELECT location_collection_copy(
+          ${clientId},
+          ${projectId},
+          ${id},
+          '${name}',
+          ${description ? `'${description}'` : null}
+        )`
       );
-      if (checkNames) {
-        throw new ApolloError(
-          'A duplicate collection name already exists. Please input a unique collection name.',
-          400
-        );
-      }
-      const maxId =
-        Math.max(...locationCollectionList.map(collection => collection.id)) +
-        1;
-      locationCollectionList.forEach(collection => {
-        collection.active = false;
-      });
-      const newLocationCollection = {
-        ...locationCollection,
-        id: maxId,
-        name,
-        description,
-        active: true,
-        dateUpdated: new Date()
-      };
-      locationCollectionList.push(newLocationCollection);
-      return newLocationCollection;
+      const [{ location_collection_copy: newId }] = rows;
+      return newId;
     },
-    editLocationCollection: (_, { id, name, description }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const checkNames = locationCollectionList.some(
-        collection => collection.name === name && collection.id !== id
+    editLocationCollection: async (
+      _,
+      { projectId, id, name, description },
+      { db }
+    ) => {
+      await db.raw(
+        `SELECT location_collection_update(
+          ${id},
+          '${name}',
+          ${description ? `'${description}'` : null}
+        )`
       );
-      if (checkNames) {
-        throw new ApolloError(
-          'A duplicate collection name already exists. Please input a unique collection name.',
-          400
-        );
-      }
-      locationCollection.name = name;
-      locationCollection.description = description;
-      locationCollection.dateUpdated = new Date();
-      return locationCollection;
+      return await getLocationCollection(db, id, projectId);
     },
-    deleteLocationCollection: (_, { id }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      locationCollection.isDeleted = true;
-      if (locationCollection.active) {
-        const advitoStandard = locationCollectionList.filter(
-          collection => collection.id === 1
-        )[0];
-        advitoStandard.active = true;
-        locationCollection.active = false;
-      }
-      locationCollection.dateUpdated = new Date();
+    deleteLocationCollection: async (_, { id, projectId }, { db }) => {
+      await db.raw(`SELECT location_collection_delete(${id}, ${projectId})`);
+    },
+    toggleLocationCollection: async (_, { id, projectId }, { db }) => {
+      await db.raw(`SELECT location_collection_toggle(${id}, ${projectId})`);
+    },
+    addRegion: async (_, { geoSetId, name, code }, { db }) => {
+      await db.raw(
+        `SELECT region_create(
+          ${geoSetId},
+          '${name}',
+          '${code}'
+        )`
+      );
+    },
+    deleteRegion: async (_, { id }, { db }) => {
+      await db.raw(`SELECT region_delete(${id})`);
       return id;
     },
-    toggleLocationCollection: (_, { id }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      if (locationCollection.active && locationCollection.id !== 1) {
-        const advitoStandard = locationCollectionList.filter(
-          collection => collection.id === 1
-        )[0];
-        advitoStandard.active = true;
-        locationCollection.active = false;
-      } else {
-        locationCollectionList.forEach(collection => {
-          collection.active = false;
-        });
-        locationCollection.active = true;
-      }
-      locationCollection.dateUpdated = new Date();
-      return locationCollectionList;
-    },
-    addRegion: (_, { id, name, code }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const checkNames = locationCollection.regionList.some(
-        region => region.name === name || region.code === code
+    moveCountries: async (_, { geoSetId, regionId, countryList }, { db }) => {
+      const queries = countryList.map(childId =>
+        db.raw(`
+        SELECT region_move_country(${geoSetId}, ${childId}, ${regionId})
+      `)
       );
-      if (checkNames) {
-        throw new ApolloError(
-          'Region name/code already exists. Please input a unique region name/code.',
-          400
-        );
-      }
-      const maxId =
-        Math.max(...locationCollection.regionList.map(region => region.id)) + 1;
-      const region = {
-        id: maxId,
-        name,
-        code,
-        countryList: []
-      };
-      locationCollection.regionList.push(region);
-      return locationCollection;
-    },
-    deleteRegion: (_, { id, collectionId }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const index = locationCollection.regionList.findIndex(
-        region => region.id === id
-      );
-      if (index === -1) {
-        throw new ApolloError('Region not found', 400);
-      }
-      const countryList = locationCollection.regionList[index].countryList;
-      if (countryList.length !== 0) {
-        throw new ApolloError('Cannot delete region', 400);
-      }
-      locationCollection.regionList.splice(index, 1);
-      return locationCollection;
-    },
-    moveCountries: (_, { collectionId, id, countryList }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const regionList = locationCollection.regionList;
-      const destinationRegion = regionList.filter(
-        region => region.id === id
-      )[0];
-      countryList.forEach(country => {
-        const originRegion = regionList.filter(
-          region => region.id === country.regionId
-        )[0];
-        destinationRegion.countryList.push(country);
-        const index = originRegion.countryList.findIndex(
-          c => c.id === country.id
-        );
-        originRegion.countryList.splice(index, 1);
-      });
-      destinationRegion.countryList.sort((a, b) => a.id - b.id);
-      return locationCollection;
+      await Promise.all(queries);
     }
   }
+};
+
+const getLocationCollection = async (db, id, projectId) => {
+  const [locationCollection] = await db('location as l')
+    .select({
+      id: 'id',
+      name: 'name',
+      description: 'description',
+      dateUpdated: 'created',
+      regionCount: db.raw(
+        `(SELECT COUNT(*) FROM location WHERE geosetid = l.id AND isdeleted = FALSE AND locationtype = ${
+          LOCATION_LOOKUP.REGION
+        })`
+      ),
+      standard: 'isstandard',
+      active: db.raw(
+        `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = l.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 1) = 1, FALSE)`
+      )
+    })
+    .where('id', id);
+  return locationCollection;
 };

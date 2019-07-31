@@ -358,8 +358,8 @@ export default {
         term => term.id === this.toggleRowId
       )[0];
       this.$refs.pricingTermList.toggleRowExpansion(row, true);
+      this.toggleRowId = null;
     }
-    this.toggleRowId = null;
   },
   methods: {
     pluralize(word, count) {

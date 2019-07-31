@@ -2,22 +2,20 @@ exports.collection = `
 type LocationCollection {
   id: Int
   name: String
-  regionList: [Region]
   description: String
   dateUpdated: Date
+  regionCount: Int
+  standard: Boolean
   active: Boolean
 }
 type Region {
   id: Int
   name: String
   code: String
-  countryList: [Country]
+  standard: Boolean
+  countryList: [Geography]
 }
-type Country {
-  id: Int
-  regionId: Int
-  name: String
-}
+
 type TravelSectorCollection {
   id: Int
   name: String
@@ -90,11 +88,6 @@ type PreferredAirlinePreference {
   id: Int
   name: String
 }
-input MoveCountry {
-  id: Int
-  regionId: Int
-  name: String
-}
 input SectorGeography {
   origin: Int
   destination: Int
@@ -114,7 +107,9 @@ input PreferredAirlineInput {
 }
 
 extend type Query {
-  locationCollectionList: [LocationCollection] @auth
+  locationCollectionList(clientId: Int, projectId: Int): [LocationCollection] @auth
+  locationCollection(projectId: Int!, id: Int!): LocationCollection @auth
+  regionList(geoSetId: Int): [Region] @auth
   travelSectorCollectionList: [TravelSectorCollection] @auth
   travelSectorRegionList: [GeographyRegion] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
@@ -125,13 +120,13 @@ extend type Query {
 }
 
 extend type Mutation {
-  createLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
-  editLocationCollection(id: Int!, name: String!, description: String): LocationCollection @auth
-  deleteLocationCollection(id: Int!): Int @auth
-  toggleLocationCollection(id: Int!): [LocationCollection] @auth
-  addRegion(id: Int!, name: String!, code: String!): LocationCollection @auth
-  deleteRegion(id: Int!, collectionId: Int!): LocationCollection @auth
-  moveCountries(id: Int!, collectionId: Int!, countryList: [MoveCountry]): LocationCollection @auth
+  copyLocationCollection(clientId: Int!, projectId: Int!, id: Int!, name: String!, description: String): Int @auth
+  editLocationCollection(projectId: Int!, id: Int!, name: String!, description: String): LocationCollection @auth
+  deleteLocationCollection(id: Int!, projectId: Int!): Int @auth
+  toggleLocationCollection(id: Int!, projectId: Int!): Int @auth
+  addRegion(geoSetId: Int!, name: String!, code: String!): Int @auth
+  deleteRegion(id: Int!): Int @auth
+  moveCountries(geoSetId: Int!, regionId: Int!, countryList: [Int]): Int @auth
 
   createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
