@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Validating Airline</p>
     <i
       v-if="!editMode"
@@ -120,7 +120,7 @@ export default {
           variables: {
             parentId: this.parentId,
             parentType: this.parentType,
-            ruleType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+            airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
           }
         },
         {
@@ -148,7 +148,7 @@ export default {
           variables: {
             parentId: this.parentId,
             parentType: this.parentType,
-            ruleType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+            airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
           }
         },
         {
@@ -176,76 +176,91 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.airlineRuleList.length) {
-        this.$emit('delete-rule', 'ValidatingAirline');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_AIRLINE_RULE,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            airlineRuleList: this.airlineRuleList,
-            airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        });
+      try {
+        if (this.editMode && !this.airlineRuleList.length) {
+          this.$emit('delete-rule', 'ValidatingAirline');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_AIRLINE_RULE,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              airlineRuleList: this.airlineRuleList,
+              airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          });
+        }
         if (this.parentType === 1) {
           this.$emit('toggle-row', this.pricingTermId);
         }
+        this.editMode = !this.editMode;
+        this.selectedAirline = [];
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
       }
-      this.editMode = !this.editMode;
-      this.selectedAirline = [];
     },
     createTag() {
       const ruleContainerId = this.airlineRuleList.length
         ? this.airlineRuleList[0].ruleContainerId
         : null;
 
-      this.selectedAirline.map(v => {
-        this.airlineRuleList.push({
-          id: null,
-          ruleContainerId,
-          ruleType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE,
-          carrierCode: v,
-          exclude: this.exclude,
-          isDeleted: false
+      if (this.selectedAirline.length) {
+        this.selectedAirline.map(v => {
+          this.airlineRuleList.push({
+            id: null,
+            ruleContainerId,
+            ruleType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE,
+            carrierCode: v,
+            exclude: this.exclude,
+            isDeleted: false
+          });
         });
-      });
 
-      this.selectedAirline = [];
+        this.selectedAirline = [];
+      } else {
+        this.$modal.show('error', {
+          message: 'Please select an airline'
+        });
+      }
     },
     async deleteTag(tag) {
-      const idx = this.airlineRuleList.indexOf(tag);
-      this.airlineRuleList[idx].isDeleted = true;
+      try {
+        const idx = this.airlineRuleList.indexOf(tag);
+        this.airlineRuleList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_AIRLINE_RULE,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            airlineRuleList: this.airlineRuleList,
-            airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
-          },
-          refetchQueries: () =>
-            this.parentType === 1
-              ? this.discountQueries
-              : this.targetTermQueries
-        })
-        .then(() => {
-          const rulesRemaining = this.airlineRuleList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.airlineRuleList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'ValidatingAirline');
-            this.$emit('toggle-row', this.pricingTermId);
-          }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_AIRLINE_RULE,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              airlineRuleList: this.airlineRuleList,
+              airlineType: PRICING_TERM_LOOKUP.VALIDATING_AIRLINE_RULETYPE
+            },
+            refetchQueries: () =>
+              this.parentType === 1
+                ? this.discountQueries
+                : this.targetTermQueries
+          })
+          .then(() => {
+            const rulesRemaining = this.airlineRuleList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.airlineRuleList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'ValidatingAirline');
+              this.$emit('toggle-row', this.pricingTermId);
+            }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
-      if (this.parentType === 1) {
-        this.$emit('toggle-row', this.pricingTermId);
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Connection Point</p>
     <i
       v-if="!editMode"
@@ -108,31 +108,37 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.connectionPointList.length) {
-        this.$emit('delete-rule', 'ConnectionPoint');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_CONNECTION_POINT_LIST,
-          variables: {
-            parentId: this.parentId,
-            connectionPointList: this.connectionPointList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_CONNECTION_POINT_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.connectionPointList.length) {
+          this.$emit('delete-rule', 'ConnectionPoint');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_CONNECTION_POINT_LIST,
+            variables: {
+              parentId: this.parentId,
+              connectionPointList: this.connectionPointList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_CONNECTION_POINT_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.connection = {};
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.connection = {};
     },
     createTag() {
       const ruleContainerId = this.connectionPointList.length
@@ -151,31 +157,37 @@ export default {
       this.connection = {};
     },
     async deleteTag(tag) {
-      const idx = this.connectionPointList.indexOf(tag);
-      this.connectionPointList[idx].isDeleted = true;
+      try {
+        const idx = this.connectionPointList.indexOf(tag);
+        this.connectionPointList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_CONNECTION_POINT_LIST,
-          variables: {
-            parentId: this.parentId,
-            connectionPointList: this.connectionPointList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_CONNECTION_POINT_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_CONNECTION_POINT_LIST,
+            variables: {
+              parentId: this.parentId,
+              connectionPointList: this.connectionPointList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_CONNECTION_POINT_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.connectionPointList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.connectionPointList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'ConnectionPoint');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.connectionPointList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.connectionPointList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'ConnectionPoint');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Travel Dates</p>
     <i
       v-if="!editMode"
@@ -70,6 +70,7 @@ export default {
   apollo: {
     travelDateList: {
       query: GET_TRAVEL_DATE_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.parentId,
@@ -92,37 +93,43 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.travelDateList.length) {
-        this.$emit('delete-rule', 'TravelDates');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_TRAVEL_DATES,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            travelDateList: this.travelDateList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_TRAVEL_DATE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
+      try {
+        if (this.editMode && !this.travelDateList.length) {
+          this.$emit('delete-rule', 'TravelDates');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_TRAVEL_DATES,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              travelDateList: this.travelDateList
             },
-            {
-              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_TRAVEL_DATE_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  parentType: this.parentType
+                }
+              },
+              {
+                query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.startDate = '';
+        this.endDate = '';
+        this.updateRule = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.startDate = '';
-      this.endDate = '';
-      this.updateRule = null;
     },
     createTag() {
       if (this.startDate && this.endDate) {
@@ -146,35 +153,41 @@ export default {
       }
     },
     async deleteTag(tag) {
-      const idx = this.travelDateList.indexOf(tag);
-      this.travelDateList[idx].isDeleted = true;
+      try {
+        const idx = this.travelDateList.indexOf(tag);
+        this.travelDateList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_TRAVEL_DATES,
-          variables: {
-            parentId: this.parentId,
-            parentType: this.parentType,
-            travelDateList: this.travelDateList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_TRAVEL_DATE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_TRAVEL_DATES,
+            variables: {
+              parentId: this.parentId,
+              parentType: this.parentType,
+              travelDateList: this.travelDateList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_TRAVEL_DATE_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  parentType: this.parentType
+                }
               }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.travelDateList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.travelDateList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'TravelDates');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.travelDateList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.travelDateList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TravelDates');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     editTag(rule) {
       if (this.editMode) {

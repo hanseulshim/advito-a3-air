@@ -2,7 +2,7 @@ const { airportList, bookingClassList } = require('../../data');
 const {
   LIBRARY_LOOKUP,
   LOCATION_LOOKUP,
-  ADVIT_GEOSET_ID
+  ADVITO_GEOSET_ID
 } = require('../constants');
 
 exports.library = {
@@ -55,7 +55,7 @@ exports.library = {
         .where(function() {
           this.where('locationtype', LOCATION_LOOKUP.REGION).andWhere(
             'geosetid',
-            ADVIT_GEOSET_ID
+            ADVITO_GEOSET_ID
           );
         })
         .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)

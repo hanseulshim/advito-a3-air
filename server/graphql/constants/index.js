@@ -17,7 +17,7 @@ const { PROJECT, PROJECT_LOOKUP } = require('./project');
 const {
   AIR_APPLICATION_ID,
   ADVITO_CLIENT,
-  ADVIT_GEOSET_ID
+  ADVITO_GEOSET_ID
 } = require('./client');
 const { LIBRARY_LOOKUP, LOCATION_LOOKUP } = require('./library');
 const { LOCATION_COLLECTION } = require('./collection');
@@ -25,7 +25,7 @@ const { LOCATION_COLLECTION } = require('./collection');
 module.exports = {
   AIR_APPLICATION_ID,
   ADVITO_CLIENT,
-  ADVIT_GEOSET_ID,
+  ADVITO_GEOSET_ID,
   CONTRACT,
   PRICING_TERM,
   TARGET_TERM,

@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Published Fare Basis</p>
     <i
       v-if="!editMode"
@@ -31,7 +31,7 @@
         "
         >Position:</label
       >
-      <el-input-number
+      <el-input
         v-if="
           (basisType && basisType.id === 86) ||
             (basisType && basisType.id === 87)
@@ -145,37 +145,43 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.fareBasisList.length) {
-        this.$emit('delete-rule', 'PublishedFareBasis');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_FARE_BASIS_LIST,
-          variables: {
-            parentId: this.parentId,
-            fareBasisList: this.fareBasisList,
-            fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FARE_BASIS_LIST,
-              variables: {
-                parentId: this.parentId,
-                fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
-              }
+      try {
+        if (this.editMode && !this.fareBasisList.length) {
+          this.$emit('delete-rule', 'PublishedFareBasis');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_FARE_BASIS_LIST,
+            variables: {
+              parentId: this.parentId,
+              fareBasisList: this.fareBasisList,
+              fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_FARE_BASIS_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+                }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.basisType = null;
+        this.value = '';
+        this.position = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.basisType = null;
-      this.value = '';
-      this.position = null;
     },
     createTag() {
       const ruleContainerId = this.fareBasisList.length
@@ -266,7 +272,7 @@ export default {
           startsWithValue: null,
           containsExclude: this.exclude,
           containsValue: this.value,
-          containsPosition: this.position,
+          containsPosition: parseInt(this.position),
           containsMultipleExclude: null,
           containsMultipleValue: null,
           containsMultiplePosition: null,
@@ -292,7 +298,7 @@ export default {
           containsPosition: null,
           containsMultipleExclude: this.exclude,
           containsMultipleValue: this.value,
-          containsMultiplePosition: this.position,
+          containsMultiplePosition: parseInt(this.position),
           isDeleted: false
         });
       }
@@ -302,35 +308,41 @@ export default {
       this.position = null;
     },
     async deleteTag(tag) {
-      const idx = this.fareBasisList.indexOf(tag);
-      this.fareBasisList[idx].isDeleted = true;
+      try {
+        const idx = this.fareBasisList.indexOf(tag);
+        this.fareBasisList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_FARE_BASIS_LIST,
-          variables: {
-            parentId: this.parentId,
-            fareBasisList: this.fareBasisList,
-            fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FARE_BASIS_LIST,
-              variables: {
-                parentId: this.parentId,
-                fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_FARE_BASIS_LIST,
+            variables: {
+              parentId: this.parentId,
+              fareBasisList: this.fareBasisList,
+              fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+            },
+            refetchQueries: () => [
+              {
+                query: GET_FARE_BASIS_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  fareBasisType: PRICING_TERM_LOOKUP.PUBLISHED_FARE_BASIS_TYPE
+                }
               }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.fareBasisList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.fareBasisList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'PublishedFareBasis');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.fareBasisList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.fareBasisList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'PublishedFareBasis');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     getTagString(rule) {
       if (!this.fareBasisList.length || !this.fareBasisUnitList.length) {
@@ -343,9 +355,10 @@ export default {
         const value = rule[propName];
 
         return `${rule.name} ${value} ${
-          rule.basisType === 86 || rule.basisType === 87
-            ? ` at position ${rule.containsPosition ||
-                rule.containsMultiplePosition}`
+          rule.containsPosition
+            ? ` at position ${rule.containsPosition}`
+            : rule.containsMultiplePosition
+            ? `at posiiton ${rule.containsMultiplePosition}`
             : ''
         }`;
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Time/Day Of Week</p>
     <i
       v-if="!editMode"
@@ -149,35 +149,41 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.dayOfWeekList.length) {
-        this.$emit('delete-rule', 'TimeOfWeek');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_DAY_OF_WEEK_LIST,
-          variables: {
-            parentId: this.parentId,
-            dayOfWeekList: this.dayOfWeekList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_DAY_OF_WEEK_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.dayOfWeekList.length) {
+          this.$emit('delete-rule', 'TimeOfWeek');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_DAY_OF_WEEK_LIST,
+            variables: {
+              parentId: this.parentId,
+              dayOfWeekList: this.dayOfWeekList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_DAY_OF_WEEK_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.startDay = null;
+        this.endDay = null;
+        this.startTime = '';
+        this.endTime = '';
+        this.updateRule = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.startDay = null;
-      this.endDay = null;
-      this.startTime = '';
-      this.endTime = '';
-      this.updateRule = null;
     },
     createTag() {
       const ruleContainerId = this.dayOfWeekList.length
@@ -202,31 +208,37 @@ export default {
       this.updateRule = null;
     },
     async deleteTag(tag) {
-      const idx = this.dayOfWeekList.indexOf(tag);
-      this.dayOfWeekList[idx].isDeleted = true;
+      try {
+        const idx = this.dayOfWeekList.indexOf(tag);
+        this.dayOfWeekList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_DAY_OF_WEEK_LIST,
-          variables: {
-            parentId: this.parentId,
-            dayOfWeekList: this.dayOfWeekList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_DAY_OF_WEEK_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_DAY_OF_WEEK_LIST,
+            variables: {
+              parentId: this.parentId,
+              dayOfWeekList: this.dayOfWeekList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_DAY_OF_WEEK_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.dayOfWeekList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.dayOfWeekList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'TimeOfWeek');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.dayOfWeekList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.dayOfWeekList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'TimeOfWeek');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     editTag(rule) {
       if (this.editMode) {

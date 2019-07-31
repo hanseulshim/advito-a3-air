@@ -14,6 +14,7 @@
             placeholder="Bulk Actions"
             filterable
             clearable
+            :disabled="!bulkIdList.length"
             @change="bulkAction"
           >
             <el-option
@@ -128,7 +129,10 @@
         :min-width="discount.normalization"
       >
         <template slot-scope="props">
-          <button class="button number">
+          <button
+            class="button number"
+            @click="showNormalizationModal(props.row)"
+          >
             {{ props.row.normalizationCount }}
           </button>
         </template>
@@ -188,6 +192,7 @@
       @clear-selection="clearBulkActionSelection"
       @toggle-row="toggleRow"
     />
+    <NormalizationModal />
     <DeleteDiscountModal @toggle-row="toggleRow" />
     <DiscountNoteModal @toggle-row="toggleRow" />
     <ChangeDiscountAppliedOrderModal />
@@ -203,6 +208,7 @@ import NewDiscountModal from './NewDiscountModal';
 import DiscountBulkActionModal from './DiscountBulkActionModal';
 import CopyDiscountModal from './CopyDiscountModal';
 import EditDiscountModal from './EditDiscountModal';
+import NormalizationModal from './NormalizationModal';
 import DeleteDiscountModal from './DeleteDiscountModal';
 import DiscountNoteModal from './DiscountNoteModal';
 import ChangeDiscountAppliedOrderModal from './ChangeDiscountAppliedOrderModal';
@@ -211,6 +217,7 @@ export default {
   components: {
     NewDiscountModal,
     DiscountBulkActionModal,
+    NormalizationModal,
     CopyDiscountModal,
     EditDiscountModal,
     DeleteDiscountModal,
@@ -220,6 +227,7 @@ export default {
   apollo: {
     discountList: {
       query: GET_DISCOUNT_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           pricingTermId: this.pricingTermId
@@ -301,6 +309,11 @@ export default {
     showBulkActionModal(value) {
       this.$modal.show('discount-bulk-action-modal', {
         bulkActionId: value
+      });
+    },
+    showNormalizationModal(discount) {
+      this.$modal.show('normalization-modal', {
+        discount
       });
     },
     toggleNoteModal(discount) {

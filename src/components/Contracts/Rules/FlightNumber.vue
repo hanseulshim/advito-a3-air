@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Flight Number: Main Segment</p>
     <i
       v-if="!editMode"
@@ -24,16 +24,18 @@
         ></el-option>
       </el-select>
       <label>Start:</label>
-      <el-input-number
+      <el-input
         v-model="startRange"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
         clearable
       />
       <label>End:</label>
-      <el-input-number
+      <el-input
         v-model="endRange"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
@@ -142,33 +144,39 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.flightNumberList.length) {
-        this.$emit('delete-rule', 'FlightNumber');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_FLIGHT_NUMBER_LIST,
-          variables: {
-            parentId: this.parentId,
-            flightNumberList: this.flightNumberList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FLIGHT_NUMBER_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.flightNumberList.length) {
+          this.$emit('delete-rule', 'FlightNumber');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_FLIGHT_NUMBER_LIST,
+            variables: {
+              parentId: this.parentId,
+              flightNumberList: this.flightNumberList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_FLIGHT_NUMBER_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.startRange = null;
+        this.endRange = null;
+        this.selectedAirline = [];
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.startRange = null;
-      this.endRange = null;
-      this.selectedAirline = [];
     },
     createTag() {
       const ruleContainerId = this.flightNumberList.length
@@ -181,8 +189,8 @@ export default {
           ruleContainerId,
           carrierCode: v,
           segmentType: this.segmentType,
-          startRange: this.startRange,
-          endRange: this.endRange,
+          startRange: parseInt(this.startRange),
+          endRange: parseInt(this.endRange),
           exclude: this.exclude,
           isDeleted: false
         });
@@ -193,31 +201,37 @@ export default {
       this.selectedAirline = [];
     },
     async deleteTag(tag) {
-      const idx = this.flightNumberList.indexOf(tag);
-      this.flightNumberList[idx].isDeleted = true;
+      try {
+        const idx = this.flightNumberList.indexOf(tag);
+        this.flightNumberList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_FLIGHT_NUMBER_LIST,
-          variables: {
-            parentId: this.parentId,
-            flightNumberList: this.flightNumberList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FLIGHT_NUMBER_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_FLIGHT_NUMBER_LIST,
+            variables: {
+              parentId: this.parentId,
+              flightNumberList: this.flightNumberList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_FLIGHT_NUMBER_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.flightNumberList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.flightNumberList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'FlightNumber');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.flightNumberList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.flightNumberList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'FlightNumber');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

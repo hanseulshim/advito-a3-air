@@ -270,7 +270,6 @@
       :parent-type="parentType"
       :parent-id="selectedContract.id"
       @clear-selection="clearBulkActionSelection"
-      @toggle-row="toggleRow"
     />
     <PricingTermRulesModal @toggle-row="toggleRow" />
   </div>

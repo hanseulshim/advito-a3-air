@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Fare Category</p>
     <i
       v-if="!editMode"
@@ -113,31 +113,37 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.fareCategoryList.length) {
-        this.$emit('delete-rule', 'FareCategory');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_FARE_CATEGORY_LIST,
-          variables: {
-            parentId: this.parentId,
-            fareCategoryList: this.fareCategoryList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FARE_CATEGORY_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.fareCategoryList.length) {
+          this.$emit('delete-rule', 'FareCategory');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_FARE_CATEGORY_LIST,
+            variables: {
+              parentId: this.parentId,
+              fareCategoryList: this.fareCategoryList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_FARE_CATEGORY_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.selectedFares = [];
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.selectedFares = [];
     },
     createTag() {
       const ruleContainerId = this.fareCategoryList.length
@@ -157,31 +163,37 @@ export default {
       this.selectedFares = [];
     },
     async deleteTag(tag) {
-      const idx = this.fareCategoryList.indexOf(tag);
-      this.fareCategoryList[idx].isDeleted = true;
+      try {
+        const idx = this.fareCategoryList.indexOf(tag);
+        this.fareCategoryList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_FARE_CATEGORY_LIST,
-          variables: {
-            parentId: this.parentId,
-            fareCategoryList: this.fareCategoryList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_FARE_CATEGORY_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_FARE_CATEGORY_LIST,
+            variables: {
+              parentId: this.parentId,
+              fareCategoryList: this.fareCategoryList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_FARE_CATEGORY_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.fareCategoryList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.fareCategoryList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'FareCategory');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.fareCategoryList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.fareCategoryList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'FareCategory');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     getTagString(rule) {
       if (!this.fareCategoryList.length || !this.fareCategoryUnitList.length) {

@@ -158,7 +158,13 @@
       <el-table-column
         label="QSI"
         :min-width="term.qsi"
-        :formatter="row => formatPercent(row.qsi)"
+        :formatter="
+          row =>
+            row.targetTypeName === 'Segment Share' ||
+            row.targetTypeName === 'Revenue Share'
+              ? formatPercent(row.qsi)
+              : row.qsi
+        "
       />
       <el-table-column
         label="Incentive"

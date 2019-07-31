@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Distance</p>
     <i
       v-if="!editMode"
@@ -24,16 +24,18 @@
         ></el-option>
       </el-select>
       <label>Min:</label>
-      <el-input-number
+      <el-input
         v-model="minDistance"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
         clearable
       />
       <label>Max:</label>
-      <el-input-number
+      <el-input
         v-model="maxDistance"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
@@ -102,34 +104,40 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.distanceList.length) {
-        this.$emit('delete-rule', 'Distance');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_DISTANCE_LIST,
-          variables: {
-            parentId: this.parentId,
-            distanceList: this.distanceList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_DISTANCE_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.distanceList.length) {
+          this.$emit('delete-rule', 'Distance');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_DISTANCE_LIST,
+            variables: {
+              parentId: this.parentId,
+              distanceList: this.distanceList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_DISTANCE_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.updateRule = null;
+        this.minDistance = null;
+        this.maxDistance = null;
+        this.distanceUnit = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.updateRule = null;
-      this.minDistance = null;
-      this.maxDistance = null;
-      this.distanceUnit = null;
     },
     createTag() {
       const ruleContainerId = this.distanceList.length
@@ -140,8 +148,8 @@ export default {
         id: null,
         ruleContainerId,
         distanceUnit: this.distanceUnit,
-        minDistance: this.minDistance,
-        maxDistance: this.maxDistance,
+        minDistance: parseInt(this.minDistance),
+        maxDistance: parseInt(this.maxDistance),
         isDeleted: false
       });
 
@@ -151,31 +159,37 @@ export default {
       this.distanceUnit = null;
     },
     async deleteTag(tag) {
-      const idx = this.distanceList.indexOf(tag);
-      this.distanceList[idx].isDeleted = true;
+      try {
+        const idx = this.distanceList.indexOf(tag);
+        this.distanceList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_DISTANCE_LIST,
-          variables: {
-            parentId: this.parentId,
-            distanceList: this.distanceList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_DISTANCE_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_DISTANCE_LIST,
+            variables: {
+              parentId: this.parentId,
+              distanceList: this.distanceList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_DISTANCE_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.distanceList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.distanceList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'Distance');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.distanceList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.distanceList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'Distance');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     editTag(rule) {
       if (this.editMode) {
@@ -187,8 +201,8 @@ export default {
     },
     updateTag() {
       const ruleIndex = this.distanceList.indexOf(this.updateRule);
-      this.distanceList[ruleIndex].minDistance = this.minDistance;
-      this.distanceList[ruleIndex].maxDistance = this.maxDistance;
+      this.distanceList[ruleIndex].minDistance = parseInt(this.minDistance);
+      this.distanceList[ruleIndex].maxDistance = parseInt(this.maxDistance);
       this.distanceList[ruleIndex].distanceUnit = this.distanceUnit;
       this.updateRule = null;
       this.minDistance = null;
