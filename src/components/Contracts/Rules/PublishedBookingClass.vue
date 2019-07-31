@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Published Booking Class</p>
     <i
       v-if="!editMode"
@@ -110,36 +110,43 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.bookingClassList.length) {
-        this.$emit('delete-rule', 'PublishedBookingClass');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_BOOKING_CLASS,
-          variables: {
-            parentId: this.parentId,
-            bookingClassType: PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
-            bookingClassList: this.bookingClassList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_BOOKING_CLASS_LIST,
-              variables: {
-                parentId: this.parentId,
-                bookingClassType:
-                  PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE
-              }
+      try {
+        if (this.editMode && !this.bookingClassList.length) {
+          this.$emit('delete-rule', 'PublishedBookingClass');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_BOOKING_CLASS,
+            variables: {
+              parentId: this.parentId,
+              bookingClassType:
+                PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
+              bookingClassList: this.bookingClassList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_BOOKING_CLASS_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  bookingClassType:
+                    PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE
+                }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.selectedClass = [];
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.selectedClass = [];
     },
     createTag() {
       const ruleContainerId = this.bookingClassList.length
@@ -160,36 +167,43 @@ export default {
       this.selectedClass = [];
     },
     async deleteTag(tag) {
-      const idx = this.bookingClassList.indexOf(tag);
-      this.bookingClassList[idx].isDeleted = true;
+      try {
+        const idx = this.bookingClassList.indexOf(tag);
+        this.bookingClassList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_BOOKING_CLASS,
-          variables: {
-            parentId: this.parentId,
-            bookingClassType: PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
-            bookingClassList: this.bookingClassList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_BOOKING_CLASS_LIST,
-              variables: {
-                parentId: this.parentId,
-                bookingClassType:
-                  PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_BOOKING_CLASS,
+            variables: {
+              parentId: this.parentId,
+              bookingClassType:
+                PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
+              bookingClassList: this.bookingClassList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_BOOKING_CLASS_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  bookingClassType:
+                    PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE
+                }
               }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.bookingClassList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.bookingClassList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'PublishedBookingClass');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.bookingClassList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.bookingClassList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'PublishedBookingClass');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     }
   }
 };

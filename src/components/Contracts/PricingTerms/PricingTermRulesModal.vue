@@ -161,28 +161,34 @@ export default {
       this.selectedRule = '';
     },
     async deleteRule(ruleType) {
-      const matched = this.renderedRules.filter(
-        rule => rule.value === ruleType
-      )[0];
-      this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
-      await this.$apollo.query({
-        query: GET_RULE_LIST,
-        fetchPolicy: 'network-only',
-        variables: {
-          parentId: this.discount.id,
-          parentType: 1
-        },
-        result({ data }) {
-          this.ruleList = data.ruleList;
-        }
-      });
-      await this.$apollo.query({
-        query: GET_DISCOUNT,
-        fetchPolicy: 'network-only',
-        variables: {
-          id: this.discount.id
-        }
-      });
+      try {
+        const matched = this.renderedRules.filter(
+          rule => rule.value === ruleType
+        )[0];
+        this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
+        await this.$apollo.query({
+          query: GET_RULE_LIST,
+          fetchPolicy: 'network-only',
+          variables: {
+            parentId: this.discount.id,
+            parentType: 1
+          },
+          result({ data }) {
+            this.ruleList = data.ruleList;
+          }
+        });
+        await this.$apollo.query({
+          query: GET_DISCOUNT,
+          fetchPolicy: 'network-only',
+          variables: {
+            id: this.discount.id
+          }
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
     beforeOpen(event) {
       this.discount = event.params.discount;

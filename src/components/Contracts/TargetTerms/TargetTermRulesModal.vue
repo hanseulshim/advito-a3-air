@@ -130,29 +130,35 @@ export default {
       this.selectedRule = '';
     },
     async deleteRule(ruleType) {
-      const matched = this.renderedRules.filter(
-        rule => rule.value === ruleType
-      )[0];
-      this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
-      //Call Apollo refetch of RuleList here!
-      await this.$apollo.query({
-        query: GET_RULE_LIST,
-        fetchPolicy: 'network-only',
-        variables: {
-          parentId: this.term.id,
-          parentType: TARGET_TERM_LOOKUP.RULE_TYPE
-        },
-        result({ data }) {
-          this.ruleList = data.ruleList;
-        }
-      });
-      await this.$apollo.query({
-        query: GET_TARGET_TERM,
-        fetchPolicy: 'network-only',
-        variables: {
-          id: this.term.id
-        }
-      });
+      try {
+        const matched = this.renderedRules.filter(
+          rule => rule.value === ruleType
+        )[0];
+        this.renderedRules.splice(this.renderedRules.indexOf(matched), 1);
+        //Call Apollo refetch of RuleList here!
+        await this.$apollo.query({
+          query: GET_RULE_LIST,
+          fetchPolicy: 'network-only',
+          variables: {
+            parentId: this.term.id,
+            parentType: TARGET_TERM_LOOKUP.RULE_TYPE
+          },
+          result({ data }) {
+            this.ruleList = data.ruleList;
+          }
+        });
+        await this.$apollo.query({
+          query: GET_TARGET_TERM,
+          fetchPolicy: 'network-only',
+          variables: {
+            id: this.term.id
+          }
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
     beforeOpen(event) {
       this.term = event.params.term;

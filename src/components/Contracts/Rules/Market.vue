@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Market</p>
     <i
       v-if="!editMode"
@@ -146,87 +146,106 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.marketRuleList.length) {
-        this.$emit('delete-rule', 'Market');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_MARKET_RULE,
-          variables: {
-            parentId: this.parentId,
-            marketRuleList: this.marketRuleList,
-            parentType: this.parentType
-          },
-          refetchQueries: () => [
-            {
-              query: GET_MARKET_RULE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
-              }
+      try {
+        if (this.editMode && !this.marketRuleList.length) {
+          this.$emit('delete-rule', 'Market');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_MARKET_RULE,
+            variables: {
+              parentId: this.parentId,
+              marketRuleList: this.marketRuleList,
+              parentType: this.parentType
             },
-            {
-              query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_MARKET_RULE_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  parentType: this.parentType
+                }
+              },
+              {
+                query: this.parentType === 1 ? GET_DISCOUNT : GET_TARGET_TERM,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.origin = {};
+        this.arrival = {};
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.origin = {};
-      this.arrival = {};
     },
     createTag() {
-      const ruleContainerId = this.marketRuleList.length
-        ? this.marketRuleList[0].ruleContainerId
-        : null;
+      if (this.origin.locationType && this.arrival.locationType) {
+        const ruleContainerId = this.marketRuleList.length
+          ? this.marketRuleList[0].ruleContainerId
+          : null;
 
-      this.marketRuleList.push({
-        id: null,
-        ruleContainerId,
-        origin: this.origin.name,
-        originType: this.origin.locationType,
-        arrival: this.arrival.name,
-        arrivalType: this.arrival.locationType,
-        exclude: this.exclude,
-        isDeleted: false
-      });
+        this.marketRuleList.push({
+          id: null,
+          ruleContainerId,
+          origin: this.origin.name,
+          originType: this.origin.locationType,
+          arrival: this.arrival.name,
+          arrivalType: this.arrival.locationType,
+          exclude: this.exclude,
+          isDeleted: false
+        });
 
-      this.selectedCountry = [];
-      this.origin = {};
-      this.arrival = {};
+        this.selectedCountry = [];
+        this.origin = {};
+        this.arrival = {};
+      } else {
+        this.$modal.show('error', {
+          message:
+            'Origin/Arrival cannot be found or is ambiguous, please make selection from the list'
+        });
+      }
     },
     async deleteTag(tag) {
-      const idx = this.marketRuleList.indexOf(tag);
-      this.marketRuleList[idx].isDeleted = true;
+      try {
+        const idx = this.marketRuleList.indexOf(tag);
+        this.marketRuleList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_MARKET_RULE,
-          variables: {
-            parentId: this.parentId,
-            marketRuleList: this.marketRuleList,
-            parentType: this.parentType
-          },
-          refetchQueries: () => [
-            {
-              query: GET_MARKET_RULE_LIST,
-              variables: {
-                parentId: this.parentId,
-                parentType: this.parentType
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_MARKET_RULE,
+            variables: {
+              parentId: this.parentId,
+              marketRuleList: this.marketRuleList,
+              parentType: this.parentType
+            },
+            refetchQueries: () => [
+              {
+                query: GET_MARKET_RULE_LIST,
+                variables: {
+                  parentId: this.parentId,
+                  parentType: this.parentType
+                }
               }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.marketRuleList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.marketRuleList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'Market');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.marketRuleList.some(
-            rule => !rule.isDeleted
-          );
-          if (!this.marketRuleList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'Market');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     filterOriginMarkets(query) {
       if (query !== '') {

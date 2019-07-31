@@ -149,7 +149,7 @@ export default {
 
       this.tourCode = '';
     },
-    async deleteTag(tag) {
+    deleteTag(tag) {
       const idx = this.tourCodeList.indexOf(tag);
       this.tourCodeList.splice(idx, 1);
     }

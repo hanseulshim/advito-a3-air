@@ -165,14 +165,20 @@ export default {
       this.updateRule = null;
     },
     createTag() {
-      this.ticketingDateList.push({
-        startDate: new Date(this.startDate),
-        endDate: new Date(this.endDate)
-      });
-      this.startDate = '';
-      this.endDate = '';
+      if (this.startDate && this.endDate) {
+        this.ticketingDateList.push({
+          startDate: new Date(this.startDate),
+          endDate: new Date(this.endDate)
+        });
+        this.startDate = '';
+        this.endDate = '';
+      } else {
+        this.$modal.show('error', {
+          message: 'Please enter both a start date and an end date.'
+        });
+      }
     },
-    async deleteTag(tag) {
+    deleteTag(tag) {
       const idx = this.ticketingDateList.indexOf(tag);
       this.ticketingDateList.splice(idx, 1);
     },

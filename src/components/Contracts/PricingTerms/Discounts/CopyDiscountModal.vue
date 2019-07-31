@@ -18,7 +18,7 @@
         <div class="section-header">copy discount</div>
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
-      <el-form-item label="Term Name *" prop="name">
+      <el-form-item label="Discount Name *" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="Discount Type">

@@ -1,13 +1,13 @@
 <template>
   <modal
     classes="modal-container"
-    name="edit-discount"
+    name="edit-normalization-modal"
     height="auto"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
-      ref="editDiscount"
+      ref="editNormalization"
       :model="form"
       :rules="rules"
       label-position="left"
@@ -15,26 +15,26 @@
       hide-required-asterisk
     >
       <div class="title-row space-between">
-        <div class="section-header">edit discount</div>
+        <div class="section-header">edit normalization</div>
         <el-tooltip effect="dark" content="Close Modal" placement="top">
           <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
       </div>
-      <el-form-item label="Discount Name *" prop="name">
+      <el-form-item label="Term Name *" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="Discount Type">
-        <el-select v-model="form.discountTypeId" class="select-modal">
+        <el-select v-model="form.normalizationTypeId" class="select-modal">
           <el-option
-            v-for="item in discountTypeList"
+            v-for="item in normalizationTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Discount Value *" prop="discountValue">
-        <el-input v-model="form.discountValue" />
+      <el-form-item label="Discount Value *" prop="normalizationValue">
+        <el-input v-model="form.normalizationValue" />
       </el-form-item>
       <el-form-item label="Journey Type">
         <el-select v-model="form.journeyTypeId" class="select-modal">
@@ -64,36 +64,36 @@
 </template>
 
 <script>
-import {
-  GET_DISCOUNT_TYPE_LIST,
-  GET_JOURNEY_TYPE_LIST,
-  GET_DIRECTION_TYPE_LIST
-} from '@/graphql/queries';
+// import {
+//   GET_DISCOUNT_TYPE_LIST,
+//   GET_JOURNEY_TYPE_LIST,
+//   GET_DIRECTION_TYPE_LIST
+// } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
-import { EDIT_DISCOUNT } from '@/graphql/mutations';
+// import { EDIT_DISCOUNT } from '@/graphql/mutations';
 export default {
-  name: 'EditDiscountModal',
+  name: 'EditNormalizationModal',
   apollo: {
-    discountTypeList: {
-      query: GET_DISCOUNT_TYPE_LIST
-    },
-    journeyTypeList: {
-      query: GET_JOURNEY_TYPE_LIST
-    },
-    directionTypeList: {
-      query: GET_DIRECTION_TYPE_LIST
-    }
+    // normalizationTypeList: {
+    //   query: GET_DISCOUNT_TYPE_LIST
+    // },
+    // journeyTypeList: {
+    //   query: GET_JOURNEY_TYPE_LIST
+    // },
+    // directionTypeList: {
+    //   query: GET_DIRECTION_TYPE_LIST
+    // }
   },
   data() {
     return {
-      discountTypeList: [],
+      normalizationTypeList: [],
       journeyTypeList: [],
       directionTypeList: [],
       form: {
         id: null,
         name: null,
-        discountTypeId: null,
-        discountValue: null,
+        normalizationTypeId: null,
+        normalizationValue: null,
         journeyTypeId: null,
         directionTypeId: null
       },
@@ -101,14 +101,14 @@ export default {
         name: [
           {
             required: true,
-            message: 'Please input a discount name.',
+            message: 'Please input a normalization name.',
             trigger: 'change'
           }
         ],
-        discountValue: [
+        normalizationValue: [
           {
             required: true,
-            message: 'Please input a discount value.',
+            message: 'Please input a normalization value.',
             trigger: 'change'
           }
         ]
@@ -117,10 +117,10 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide('edit-discount');
+      this.$modal.hide('edit-normalization-modal');
     },
     validateForm() {
-      this.$refs.editDiscount.validate(valid => {
+      this.$refs.editNormalization.validate(valid => {
         if (valid) {
           this.createDiscount();
         } else {
@@ -129,42 +129,43 @@ export default {
       });
     },
     async createDiscount() {
-      try {
-        this.form.discountValue = parseFloat(this.form.discountValue)
-          ? parseFloat(this.form.discountValue)
-          : null;
-        await this.$apollo.mutate({
-          mutation: EDIT_DISCOUNT,
-          variables: {
-            ...this.form
-          }
-        });
-        this.$modal.show('success', {
-          message: 'Discount successfully updated.',
-          name: 'edit-discount'
-        });
-      } catch (error) {
-        this.$modal.show('error', {
-          message: error.message
-        });
-      }
+      //   try {
+      //     this.form.normalizationValue = parseFloat(this.form.normalizationValue)
+      //       ? parseFloat(this.form.normalizationValue)
+      //       : null;
+      //     await this.$apollo.mutate({
+      //       mutation: EDIT_DISCOUNT,
+      //       variables: {
+      //         ...this.form
+      //       }
+      //     });
+      //     this.$modal.show('success', {
+      //       message: 'Discount successfully updated.',
+      //       name: 'edit-normalization'
+      //     });
+      //   } catch (error) {
+      //     this.$modal.show('error', {
+      //       message: error.message
+      //     });
+      //   }
+      alert('Normalization successfully updated');
     },
     beforeOpen(event) {
       const {
         id,
         name,
-        discountTypeId,
-        discountValue,
+        normalizationTypeId,
+        normalizationValue,
         journeyTypeId,
         directionTypeId
-      } = event.params.discount;
+      } = event.params.normalization;
       this.form.id = id;
       this.form.name = name;
-      this.form.discountTypeId = discountTypeId;
-      this.form.discountValue =
-        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-          ? discountValue * 100
-          : discountValue;
+      this.form.normalizationTypeId = normalizationTypeId;
+      this.form.normalizationValue =
+        normalizationTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+          ? normalizationValue * 100
+          : normalizationValue;
       this.form.journeyTypeId = journeyTypeId;
       this.form.directionTypeId = directionTypeId;
     },

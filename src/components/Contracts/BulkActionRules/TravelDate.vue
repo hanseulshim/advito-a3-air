@@ -172,7 +172,7 @@ export default {
       this.startDate = '';
       this.endDate = '';
     },
-    async deleteTag(tag) {
+    deleteTag(tag) {
       const idx = this.travelDateList.indexOf(tag);
       this.travelDateList.splice(idx, 1);
     },

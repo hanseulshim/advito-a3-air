@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Min Stay</p>
     <i
       v-if="!editMode"
@@ -9,8 +9,9 @@
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Value:</label>
-      <el-input-number
+      <el-input
         v-model="value"
+        type="number"
         size="mini"
         class="number-input"
         :min="0"
@@ -114,32 +115,38 @@ export default {
   },
   methods: {
     async saveRules() {
-      if (this.editMode && !this.minStayList.length) {
-        this.$emit('delete-rule', 'MinStay');
-      } else if (this.editMode) {
-        await this.$apollo.mutate({
-          mutation: UPDATE_MIN_STAY_LIST,
-          variables: {
-            parentId: this.parentId,
-            minStayList: this.minStayList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_MIN_STAY_LIST,
-              variables: { parentId: this.parentId }
+      try {
+        if (this.editMode && !this.minStayList.length) {
+          this.$emit('delete-rule', 'MinStay');
+        } else if (this.editMode) {
+          await this.$apollo.mutate({
+            mutation: UPDATE_MIN_STAY_LIST,
+            variables: {
+              parentId: this.parentId,
+              minStayList: this.minStayList
             },
-            {
-              query: GET_DISCOUNT,
-              variables: {
-                id: this.parentId
+            refetchQueries: () => [
+              {
+                query: GET_MIN_STAY_LIST,
+                variables: { parentId: this.parentId }
+              },
+              {
+                query: GET_DISCOUNT,
+                variables: {
+                  id: this.parentId
+                }
               }
-            }
-          ]
+            ]
+          });
+        }
+        this.editMode = !this.editMode;
+        this.value = null;
+        this.dayOfWeekInclusion = null;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
       }
-      this.editMode = !this.editMode;
-      this.value = null;
-      this.dayOfWeekInclusion = null;
     },
     createTag() {
       const ruleContainerId = this.minStayList.length
@@ -150,7 +157,7 @@ export default {
         id: null,
         ruleContainerId,
         unit: this.unit,
-        value: this.value,
+        value: parseInt(this.value),
         dayOfWeekInclusion: this.dayOfWeekInclusion,
         isDeleted: false
       });
@@ -160,29 +167,37 @@ export default {
       this.dayOfWeekInclusion = null;
     },
     async deleteTag(tag) {
-      const idx = this.minStayList.indexOf(tag);
-      this.minStayList[idx].isDeleted = true;
+      try {
+        const idx = this.minStayList.indexOf(tag);
+        this.minStayList[idx].isDeleted = true;
 
-      await this.$apollo
-        .mutate({
-          mutation: UPDATE_MIN_STAY_LIST,
-          variables: {
-            parentId: this.parentId,
-            minStayList: this.minStayList
-          },
-          refetchQueries: () => [
-            {
-              query: GET_MIN_STAY_LIST,
-              variables: { parentId: this.parentId }
+        await this.$apollo
+          .mutate({
+            mutation: UPDATE_MIN_STAY_LIST,
+            variables: {
+              parentId: this.parentId,
+              minStayList: this.minStayList
+            },
+            refetchQueries: () => [
+              {
+                query: GET_MIN_STAY_LIST,
+                variables: { parentId: this.parentId }
+              }
+            ]
+          })
+          .then(() => {
+            const rulesRemaining = this.minStayList.some(
+              rule => !rule.isDeleted
+            );
+            if (!this.minStayList.length || !rulesRemaining) {
+              this.$emit('delete-rule', 'MinStay');
             }
-          ]
-        })
-        .then(() => {
-          const rulesRemaining = this.minStayList.some(rule => !rule.isDeleted);
-          if (!this.minStayList.length || !rulesRemaining) {
-            this.$emit('delete-rule', 'MinStay');
-          }
+          });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
         });
+      }
     },
     getTagString(rule) {
       if (

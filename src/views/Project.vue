@@ -69,6 +69,14 @@ export default {
           title: 'process'
         }
       ];
+
+      if (this.project.projectTypeId !== 3) {
+        if (this.project.savingsTypeId === 66) {
+          return navItems.filter(item => item.id !== 4 && item.id !== 3);
+        } else {
+          return navItems.filter(item => item.id !== 4);
+        }
+      }
       return navItems;
     }
   },

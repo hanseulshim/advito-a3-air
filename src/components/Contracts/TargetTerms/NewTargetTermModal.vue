@@ -298,8 +298,15 @@ export default {
         airlineGroupTo: null,
         fareCategoryFrom: null,
         fareCategoryTo: null
-      },
-      rules: {
+      }
+    };
+  },
+  computed: {
+    rules() {
+      const timeframeIsRequired =
+        this.form.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        this.form.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT;
+      return {
         name: [
           {
             required: true,
@@ -314,7 +321,13 @@ export default {
             trigger: 'change'
           }
         ],
-        timeframe: [{ type: 'number', message: 'Timeframe must be a number' }],
+        timeframe: [
+          {
+            required: timeframeIsRequired,
+            type: 'number',
+            message: 'Timeframe must be a number'
+          }
+        ],
         currencyId: [
           {
             required: true,
@@ -371,8 +384,8 @@ export default {
             trigger: 'change'
           }
         ]
-      }
-    };
+      };
+    }
   },
   methods: {
     hideModal() {
@@ -418,10 +431,16 @@ export default {
         if (this.form.dpmPrice) {
           this.form.dpmPrice = parseFloat(this.form.dpmPrice);
         }
+
         await this.$apollo.mutate({
           mutation: CREATE_TARGET_TERM,
           variables: {
-            ...this.form
+            ...this.form,
+            qsi:
+              this.form.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
+              this.form.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE
+                ? this.form.qsi / 100
+                : this.form.qsi
           },
           update: (store, { data: { createTargetTerm } }) => {
             const query = {
