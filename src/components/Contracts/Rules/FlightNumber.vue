@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Flight Number: Main Segment</p>
     <i
       v-if="!editMode"
@@ -24,16 +24,18 @@
         ></el-option>
       </el-select>
       <label>Start:</label>
-      <el-input-number
+      <el-input
         v-model="startRange"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
         clearable
       />
       <label>End:</label>
-      <el-input-number
+      <el-input
         v-model="endRange"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
@@ -187,8 +189,8 @@ export default {
           ruleContainerId,
           carrierCode: v,
           segmentType: this.segmentType,
-          startRange: this.startRange,
-          endRange: this.endRange,
+          startRange: parseInt(this.startRange),
+          endRange: parseInt(this.endRange),
           exclude: this.exclude,
           isDeleted: false
         });

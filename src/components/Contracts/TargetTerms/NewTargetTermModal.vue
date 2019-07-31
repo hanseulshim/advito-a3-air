@@ -298,8 +298,15 @@ export default {
         airlineGroupTo: null,
         fareCategoryFrom: null,
         fareCategoryTo: null
-      },
-      rules: {
+      }
+    };
+  },
+  computed: {
+    rules() {
+      const timeframeIsRequired =
+        this.form.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
+        this.form.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT;
+      return {
         name: [
           {
             required: true,
@@ -314,7 +321,13 @@ export default {
             trigger: 'change'
           }
         ],
-        timeframe: [{ type: 'number', message: 'Timeframe must be a number' }],
+        timeframe: [
+          {
+            required: timeframeIsRequired,
+            type: 'number',
+            message: 'Timeframe must be a number'
+          }
+        ],
         currencyId: [
           {
             required: true,
@@ -371,8 +384,8 @@ export default {
             trigger: 'change'
           }
         ]
-      }
-    };
+      };
+    }
   },
   methods: {
     hideModal() {

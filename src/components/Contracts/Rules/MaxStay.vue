@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Max Stay</p>
     <i
       v-if="!editMode"
@@ -9,8 +9,9 @@
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Value:</label>
-      <el-input-number
+      <el-input
         v-model="value"
+        :type="number"
         size="mini"
         class="number-input"
         :min="0"
@@ -136,7 +137,7 @@ export default {
         id: null,
         ruleContainerId,
         unit: this.unit,
-        value: this.value,
+        value: parseInt(this.value),
         isDeleted: false
       });
 
