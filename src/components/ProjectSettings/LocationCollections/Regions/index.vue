@@ -33,7 +33,12 @@
             <i
               v-if="!scope.row.standard"
               class="fas fa-trash-alt"
-              @click="showDeleteRegionModal(scope.row.id)"
+              @click="
+                showDeleteRegionModal(
+                  scope.row.id,
+                  scope.row.countryList.length
+                )
+              "
             />
           </el-tooltip>
         </template>
@@ -72,6 +77,10 @@ export default {
     geoSetId: {
       type: Number,
       required: true
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -84,11 +93,12 @@ export default {
     showEditRegionModal(collection, region) {
       this.$modal.show('edit-region', { collection, region });
     },
-    showDeleteRegionModal(id) {
+    showDeleteRegionModal(id, countryListLength) {
       this.$modal.show('delete-region', {
         id,
         geoSetId: this.geoSetId,
-        countryListLength: 0
+        countryListLength,
+        projectId: this.projectId
       });
     },
     toggleRow(id) {

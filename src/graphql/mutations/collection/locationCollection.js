@@ -21,11 +21,12 @@ export const COPY_LOCATION_COLLECTION = gql`
 
 export const EDIT_LOCATION_COLLECTION = gql`
   mutation editLocationCollection(
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
-    editLocationCollection(id: $id, name: $name, description: $description) {
+    editLocationCollection(projectId: $projectId, id: $id, name: $name, description: $description) {
       ${LOCATION_COLLECTION}
     }
   }

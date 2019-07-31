@@ -10,8 +10,8 @@ export const GET_LOCATION_COLLECTION_LIST = gql`
 `;
 
 export const GET_LOCATION_COLLECTION = gql`
-  query locationCollection($id: Int!) {
-    locationCollection(id: $id) {
+  query locationCollection($projectId: Int!, $id: Int!) {
+    locationCollection(projectId: $projectId, id: $id) {
       ${LOCATION_COLLECTION}
     }
   }

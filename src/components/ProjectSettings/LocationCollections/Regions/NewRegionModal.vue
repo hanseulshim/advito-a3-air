@@ -46,6 +46,7 @@ export default {
         code: null,
         geoSetId: null
       },
+      projectId: null,
       rules: {
         name: [
           {
@@ -97,7 +98,7 @@ export default {
             },
             {
               query: GET_LOCATION_COLLECTION,
-              variables: { id: this.form.geoSetId }
+              variables: { id: this.form.geoSetId, projectId: this.projectId }
             }
           ]
         });
@@ -113,9 +114,12 @@ export default {
       }
     },
     beforeOpen(event) {
-      this.form.geoSetId = event.params.geoSetId;
+      const { geoSetId, projectId } = event.params;
+      this.form.geoSetId = geoSetId;
+      this.projectId = projectId;
     },
     beforeClose() {
+      this.projectId = null;
       this.form.geoSetId = null;
       this.form.name = null;
       this.form.code = null;

@@ -83,7 +83,8 @@ export default {
         await this.$apollo.mutate({
           mutation: EDIT_LOCATION_COLLECTION,
           variables: {
-            ...this.form
+            ...this.form,
+            projectId: this.project.id
           }
         });
         this.$modal.show('success', {

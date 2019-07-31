@@ -43,7 +43,8 @@ export default {
     return {
       id: null,
       geoSetId: null,
-      countryListLength: null
+      countryListLength: null,
+      projectId: null
     };
   },
   methods: {
@@ -76,7 +77,7 @@ export default {
           refetchQueries: () => [
             {
               query: GET_LOCATION_COLLECTION,
-              variables: { id: this.geoSetId }
+              variables: { id: this.geoSetId, projectId: this.projectId }
             }
           ]
         });
@@ -93,15 +94,17 @@ export default {
       }
     },
     beforeOpen(event) {
-      const { id, countryListLength, geoSetId } = event.params;
+      const { id, countryListLength, geoSetId, projectId } = event.params;
       this.id = id;
       this.geoSetId = geoSetId;
       this.countryListLength = countryListLength;
+      this.projectId = projectId;
     },
     beforeClose() {
       this.id = null;
       this.geoSetId = null;
       this.countryListLength = null;
+      this.projectId = null;
     }
   }
 };

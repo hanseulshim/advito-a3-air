@@ -42,7 +42,10 @@
             @click="showNewRegionCollection(props.row.id)"
           >
             + NEW REGION</button
-          ><Regions :geo-set-id="props.row.id" @toggle-row="toggleRow"
+          ><Regions
+            :geo-set-id="props.row.id"
+            :project-id="project.id"
+            @toggle-row="toggleRow"
         /></template>
       </el-table-column>
       <el-table-column
@@ -185,7 +188,7 @@ export default {
       });
     },
     showNewRegionCollection(geoSetId) {
-      this.$modal.show('new-region', { geoSetId });
+      this.$modal.show('new-region', { geoSetId, projectId: this.project.id });
     },
     showEditLocationCollection(collection) {
       this.$modal.show('edit-location-collection', {
