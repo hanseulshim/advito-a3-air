@@ -14,12 +14,12 @@ const { process } = require('./process');
 
 exports.playground = {
   tabs: [
+    collection.queries,
     client,
     rule.queries,
     rule.mutations,
     project.queries,
     project.mutations,
-    collection.queries,
     ...collection.mutations,
     dataSet.queries,
     dataSet.mutations,

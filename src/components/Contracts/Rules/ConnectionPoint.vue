@@ -18,7 +18,7 @@
         value-key="name"
       >
         <el-option
-          v-for="country in geographyRuleList"
+          v-for="country in geographyList"
           :key="country.index"
           :label="country.name"
           :value="country"
@@ -57,7 +57,7 @@
 <script>
 import { removeTypename } from '@/helper';
 import {
-  GET_GEO_LIST,
+  GET_GEOGRAPHY_LIST,
   GET_CONNECTION_POINT_LIST,
   GET_DISCOUNT
 } from '@/graphql/queries';
@@ -75,8 +75,8 @@ export default {
     }
   },
   apollo: {
-    geographyRuleList: {
-      query: GET_GEO_LIST
+    geographyList: {
+      query: GET_GEOGRAPHY_LIST
     },
     connectionPointList: {
       query: GET_CONNECTION_POINT_LIST,

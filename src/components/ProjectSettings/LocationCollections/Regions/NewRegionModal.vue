@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { GET_REGION_LIST, GET_LOCATION_COLLECTION } from '@/graphql/queries';
 import { ADD_REGION } from '@/graphql/mutations';
 export default {
   name: 'NewRegionModal',
@@ -43,8 +44,9 @@ export default {
       form: {
         name: null,
         code: null,
-        id: null
+        geoSetId: null
       },
+      projectId: null,
       rules: {
         name: [
           {
@@ -84,17 +86,27 @@ export default {
     },
     async addRegion() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: ADD_REGION,
           variables: {
             ...this.form
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_REGION_LIST,
+              variables: { geoSetId: this.form.geoSetId }
+            },
+            {
+              query: GET_LOCATION_COLLECTION,
+              variables: { id: this.form.geoSetId, projectId: this.projectId }
+            }
+          ]
         });
+        this.$emit('toggle-row', this.form.geoSetId);
         this.$modal.show('success', {
           message: 'Region successfully created.',
           name: 'new-region'
         });
-        this.$emit('toggle-row', data.data.addRegion.id);
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
@@ -102,11 +114,13 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.form.id = collection.id;
+      const { geoSetId, projectId } = event.params;
+      this.form.geoSetId = geoSetId;
+      this.projectId = projectId;
     },
     beforeClose() {
-      this.form.id = null;
+      this.projectId = null;
+      this.form.geoSetId = null;
       this.form.name = null;
       this.form.code = null;
     }

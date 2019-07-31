@@ -175,8 +175,6 @@ extend type Mutation {
     name: String!
     typeId: Int!
     round: Int
-    effectiveFrom: Date!
-    effectiveTo: Date
     divisionId: Int
     description: String
   ): Contract @auth
@@ -186,8 +184,6 @@ extend type Mutation {
     name: String!
     typeId: Int!
     round: Int
-    effectiveFrom: Date!
-    effectiveTo: Date
     divisionId: Int
     description: String
   ): Contract @auth

@@ -32,15 +32,7 @@ exports.contract = {
   Mutation: {
     createContract: async (
       _,
-      {
-        name,
-        typeId,
-        round,
-        effectiveFrom,
-        effectiveTo,
-        divisionId,
-        description
-      },
+      { name, typeId, round, divisionId, description },
       { db }
     ) => {
       const [id] = await db('contractcontainer').insert(
@@ -48,10 +40,6 @@ exports.contract = {
           name,
           contracttype: typeId,
           round,
-          effectivefrom: new Date(effectiveFrom),
-          effectiveto: effectiveTo
-            ? new Date(effectiveTo)
-            : new Date(253402232400000),
           description,
           qc: 0
         },
@@ -79,16 +67,7 @@ exports.contract = {
     },
     editContract: async (
       _,
-      {
-        id,
-        name,
-        typeId,
-        round,
-        effectiveFrom,
-        effectiveTo,
-        divisionId,
-        description
-      },
+      { id, name, typeId, round, divisionId, description },
       { db }
     ) => {
       await db('contractcontainer')
@@ -97,10 +76,6 @@ exports.contract = {
           contracttype: typeId,
           name,
           round,
-          effectivefrom: new Date(effectiveFrom),
-          effectiveto: effectiveTo
-            ? new Date(effectiveTo)
-            : new Date(253402232400000),
           description
         });
       if (divisionId) {

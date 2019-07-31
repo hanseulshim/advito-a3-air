@@ -6,15 +6,6 @@ exports.rule = {
     query: `
     {
       ruleList(parentId: 34)
-      #geographyRuleList {
-      #  name
-      #  code
-      #}
-      #marketGeoList {
-      #  name
-      #  code
-      #  locationType
-      #}
       #bookingClassCodeList {
       #  fareCategoryId
       #  code
@@ -68,7 +59,7 @@ exports.rule = {
         countryCode
         isDeleted
       }
-      marketList(parentId: 34) {
+      marketRuleList(parentId: 34) {
         id
         ruleContainerId
         origin
@@ -297,7 +288,7 @@ exports.rule = {
         countryCode
         isDeleted
       }
-      updateMarket(parentId: 34, marketList: [
+      updateMarketRule(parentId: 34, marketRuleList: [
         {
           id: null,
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",
@@ -335,7 +326,7 @@ exports.rule = {
         bookingClass
         isDeleted
       }
-      updateAirline(parentId: 34, airlineList: [
+      updateAirlineRule(parentId: 34, airlineRuleList: [
         {
           id: null,
           ruleContainerId: "522498dd-8aad-43eb-99ae-a76058c3f3fb",

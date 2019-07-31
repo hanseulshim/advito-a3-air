@@ -28,6 +28,16 @@ exports.library = {
         }
       }
     }
+    airlineList {
+      id
+      code
+      name
+    }
+    countryList {
+      id
+      code
+      name
+    }
     currencyList {
       id
       name
@@ -36,6 +46,17 @@ exports.library = {
     distanceUnitList {
       id
       name
+    }
+    geographyList {
+      id
+      code
+      name
+    }
+    marketList {
+      id
+      code
+      name
+      locationType
     }
   }`
 };

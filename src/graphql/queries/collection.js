@@ -1,22 +1,33 @@
 import gql from 'graphql-tag';
+import { LOCATION_COLLECTION } from '../constants';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
-  {
-    locationCollectionList {
+  query locationCollectionList($clientId: Int, $projectId: Int) {
+    locationCollectionList(clientId: $clientId, projectId: $projectId) {
+      ${LOCATION_COLLECTION}
+    }
+  }
+`;
+
+export const GET_LOCATION_COLLECTION = gql`
+  query locationCollection($projectId: Int!, $id: Int!) {
+    locationCollection(projectId: $projectId, id: $id) {
+      ${LOCATION_COLLECTION}
+    }
+  }
+`;
+
+export const GET_REGION_LIST = gql`
+  query regionList($geoSetId: Int) {
+    regionList(geoSetId: $geoSetId) {
       id
+      code
       name
-      description
-      dateUpdated
-      active
-      regionList {
+      standard
+      countryList {
         id
-        name
         code
-        countryList {
-          id
-          regionId
-          name
-        }
+        name
       }
     }
   }

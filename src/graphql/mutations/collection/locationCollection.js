@@ -1,128 +1,71 @@
 import gql from 'graphql-tag';
+import { LOCATION_COLLECTION } from '../../constants';
 
-export const CREATE_LOCATION_COLLECTION = gql`
-  mutation createLocationCollection(
+export const COPY_LOCATION_COLLECTION = gql`
+  mutation copyLocationCollection(
+    $clientId: Int!
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
-    createLocationCollection(id: $id, name: $name, description: $description) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+    copyLocationCollection(
+      clientId: $clientId
+      projectId: $projectId
+      id: $id
+      name: $name
+      description: $description
+    )
   }
 `;
 
 export const EDIT_LOCATION_COLLECTION = gql`
   mutation editLocationCollection(
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
-    editLocationCollection(id: $id, name: $name, description: $description) {
-      id
-      name
-      description
-      dateUpdated
+    editLocationCollection(projectId: $projectId, id: $id, name: $name, description: $description) {
+      ${LOCATION_COLLECTION}
     }
   }
 `;
 
 export const DELETE_LOCATION_COLLECTION = gql`
-  mutation deleteLocationCollection($id: Int!) {
-    deleteLocationCollection(id: $id)
+  mutation deleteLocationCollection($id: Int!, $projectId: Int!) {
+    deleteLocationCollection(id: $id, projectId: $projectId)
   }
 `;
 
 export const TOGGLE_LOCATION_COLLECTION = gql`
-  mutation toggleLocationCollection($id: Int!) {
-    toggleLocationCollection(id: $id) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+  mutation toggleLocationCollection($id: Int!, $projectId: Int!) {
+    toggleLocationCollection(id: $id, projectId: $projectId)
   }
 `;
 
 export const ADD_REGION = gql`
-  mutation addRegion($id: Int!, $name: String!, $code: String!) {
-    addRegion(id: $id, name: $name, code: $code) {
-      id
-      regionList {
-        id
-        name
-        code
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+  mutation addRegion($geoSetId: Int!, $name: String!, $code: String!) {
+    addRegion(geoSetId: $geoSetId, name: $name, code: $code)
   }
 `;
 
 export const DELETE_REGION = gql`
-  mutation deleteRegion($id: Int!, $collectionId: Int!) {
-    deleteRegion(id: $id, collectionId: $collectionId) {
-      id
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+  mutation deleteRegion($id: Int!) {
+    deleteRegion(id: $id)
   }
 `;
 
 export const MOVE_COUNTRIES = gql`
   mutation moveCountries(
-    $id: Int!
-    $collectionId: Int!
-    $countryList: [MoveCountry]
+    $geoSetId: Int!
+    $regionId: Int!
+    $countryList: [Int]
   ) {
     moveCountries(
-      id: $id
-      collectionId: $collectionId
+      geoSetId: $geoSetId
+      regionId: $regionId
       countryList: $countryList
-    ) {
-      id
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+    )
   }
 `;

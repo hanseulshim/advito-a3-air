@@ -37,7 +37,9 @@ exports.project = {
       _,
       {
         clientId,
+        clientName,
         projectTypeId,
+        projectTypeName,
         savingsTypeId,
         effectiveFrom,
         effectiveTo,
@@ -52,16 +54,6 @@ exports.project = {
       },
       { db, user }
     ) => {
-      const [projectLookup] = await db('lov_lookup')
-        .select({ projectTypeName: 'name_val' })
-        .where('id', projectTypeId);
-      const [clientLookup] = await db('blops.client')
-        .select({
-          clientName: 'client_name'
-        })
-        .where('id', clientId);
-      const { projectTypeName } = projectLookup;
-      const { clientName } = clientLookup;
       const name = getProjectName(
         projectTypeName,
         clientName,

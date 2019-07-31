@@ -2,6 +2,7 @@ const { locationCollection } = require('./locationCollection');
 const { travelSectorCollection } = require('./travelSectorCollection');
 const { airlineGroupCollection } = require('./airlineGroupCollection');
 const { preferredAirlineCollection } = require('./preferredAirlineCollection');
+const { LOCATION_COLLECTION } = require('../../constants');
 exports.collection = {
   queries: {
     name: 'Collection Queries',
@@ -9,22 +10,14 @@ exports.collection = {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
-      locationCollectionList {
+      locationCollectionList(projectId: 17) {
+        ${LOCATION_COLLECTION}
+      }
+      regionList(geoSetId: null) {
         id
+        code
         name
-        description
-        dateUpdated
-        active
-        regionList {
-          id
-          name
-          code
-          countryList {
-            id
-            regionId
-            name
-          }
-        }
+        standard
       }
       travelSectorCollectionList {
         id

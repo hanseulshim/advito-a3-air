@@ -19,8 +19,6 @@ export const CREATE_CONTRACT = gql`
     $name: String!
     $typeId: Int!
     $round: Int
-    $effectiveFrom: Date!
-    $effectiveTo: Date
     $description: String
     $divisionId: Int
   ) {
@@ -28,8 +26,6 @@ export const CREATE_CONTRACT = gql`
       name: $name
       typeId: $typeId
       round: $round
-      effectiveFrom: $effectiveFrom
-      effectiveTo: $effectiveTo
       description: $description
       divisionId: $divisionId
     ) {
@@ -52,8 +48,6 @@ export const EDIT_CONTRACT = gql`
     $name: String!
     $typeId: Int!
     $round: Int
-    $effectiveFrom: Date!
-    $effectiveTo: Date
     $description: String
     $divisionId: Int
   ) {
@@ -62,8 +56,6 @@ export const EDIT_CONTRACT = gql`
       name: $name
       typeId: $typeId
       round: $round
-      effectiveFrom: $effectiveFrom
-      effectiveTo: $effectiveTo
       description: $description
       divisionId: $divisionId
     ) {
