@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Ticketing Dates</p>
     <i
       v-if="!editMode"
@@ -31,6 +31,7 @@
       <el-tag
         v-for="rule in ticketingDateList"
         :key="rule.index"
+        v-loading="$apollo.loading"
         type="info"
         size="small"
         closable

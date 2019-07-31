@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-container">
+  <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Published Fare Basis</p>
     <i
       v-if="!editMode"
@@ -31,7 +31,7 @@
         "
         >Position:</label
       >
-      <el-input-number
+      <el-input
         v-if="
           (basisType && basisType.id === 86) ||
             (basisType && basisType.id === 87)
@@ -272,7 +272,7 @@ export default {
           startsWithValue: null,
           containsExclude: this.exclude,
           containsValue: this.value,
-          containsPosition: this.position,
+          containsPosition: parseInt(this.position),
           containsMultipleExclude: null,
           containsMultipleValue: null,
           containsMultiplePosition: null,
@@ -298,7 +298,7 @@ export default {
           containsPosition: null,
           containsMultipleExclude: this.exclude,
           containsMultipleValue: this.value,
-          containsMultiplePosition: this.position,
+          containsMultiplePosition: parseInt(this.position),
           isDeleted: false
         });
       }
@@ -355,9 +355,10 @@ export default {
         const value = rule[propName];
 
         return `${rule.name} ${value} ${
-          rule.basisType === 86 || rule.basisType === 87
-            ? ` at position ${rule.containsPosition ||
-                rule.containsMultiplePosition}`
+          rule.containsPosition
+            ? ` at position ${rule.containsPosition}`
+            : rule.containsMultiplePosition
+            ? `at posiiton ${rule.containsMultiplePosition}`
             : ''
         }`;
       }
