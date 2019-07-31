@@ -58,25 +58,14 @@ export const DELETE_REGION = gql`
 
 export const MOVE_COUNTRIES = gql`
   mutation moveCountries(
-    $id: Int!
-    $collectionId: Int!
-    $countryList: [MoveCountry]
+    $geoSetId: Int!
+    $regionId: Int!
+    $countryList: [Int]
   ) {
     moveCountries(
-      id: $id
-      collectionId: $collectionId
+      geoSetId: $geoSetId
+      regionId: $regionId
       countryList: $countryList
-    ) {
-      id
-      regionList {
-        id
-        name
-        countryList {
-          id
-          regionId
-          name
-        }
-      }
-    }
+    )
   }
 `;

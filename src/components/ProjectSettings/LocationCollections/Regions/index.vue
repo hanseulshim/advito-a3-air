@@ -26,7 +26,7 @@
             <i
               v-if="!scope.row.standard"
               class="fas fa-pencil-alt icon-spacer"
-              @click="showEditRegionModal(scope.row)"
+              @click="showEditRegionModal()"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete" placement="top">
@@ -90,8 +90,11 @@ export default {
     };
   },
   methods: {
-    showEditRegionModal(collection, region) {
-      this.$modal.show('edit-region', { collection, region });
+    showEditRegionModal() {
+      this.$modal.show('edit-region', {
+        geoSetId: this.geoSetId,
+        regionList: this.regionList
+      });
     },
     showDeleteRegionModal(id, countryListLength) {
       this.$modal.show('delete-region', {

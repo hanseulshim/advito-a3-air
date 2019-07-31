@@ -111,29 +111,13 @@ exports.locationCollection = {
       await db.raw(`SELECT region_delete(${id})`);
       return id;
     },
-    moveCountries: (_, { collectionId, id, countryList }) => {
-      const locationCollection = locationCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!locationCollection) {
-        throw new ApolloError('Location Collection not found', 400);
-      }
-      const regionList = locationCollection.regionList;
-      const destinationRegion = regionList.filter(
-        region => region.id === id
-      )[0];
-      countryList.forEach(country => {
-        const originRegion = regionList.filter(
-          region => region.id === country.regionId
-        )[0];
-        destinationRegion.countryList.push(country);
-        const index = originRegion.countryList.findIndex(
-          c => c.id === country.id
-        );
-        originRegion.countryList.splice(index, 1);
-      });
-      destinationRegion.countryList.sort((a, b) => a.id - b.id);
-      return locationCollection;
+    moveCountries: async (_, { geoSetId, regionId, countryList }, { db }) => {
+      const queries = countryList.map(childId =>
+        db.raw(`
+        SELECT region_move_country(${geoSetId}, ${childId}, ${regionId})
+      `)
+      );
+      await Promise.all(queries);
     }
   }
 };

@@ -88,11 +88,6 @@ type PreferredAirlinePreference {
   id: Int
   name: String
 }
-input MoveCountry {
-  id: Int
-  regionId: Int
-  name: String
-}
 input SectorGeography {
   origin: Int
   destination: Int
@@ -131,7 +126,7 @@ extend type Mutation {
   toggleLocationCollection(id: Int!, projectId: Int!): Int @auth
   addRegion(geoSetId: Int!, name: String!, code: String!): Int @auth
   deleteRegion(id: Int!): Int @auth
-  moveCountries(id: Int!, collectionId: Int!, countryList: [MoveCountry]): LocationCollection @auth
+  moveCountries(geoSetId: Int!, regionId: Int!, countryList: [Int]): Int @auth
 
   createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
   editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
