@@ -6,7 +6,6 @@ node_modules
 /server/_warmup
 /server/.env
 /server/env.yml
-/src/main.js
 
 # local env files
 .env.local
