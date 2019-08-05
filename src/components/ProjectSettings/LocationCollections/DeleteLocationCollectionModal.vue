@@ -47,6 +47,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', this.id);
         this.$modal.show('success', {
           message: 'Location Collection successfully deleted.',
           name: 'delete-location-collection'

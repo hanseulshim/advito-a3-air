@@ -95,45 +95,15 @@ exports.travelSectorCollection = {
       );
       return await getTravelSectorCollection(db, id, projectId);
     },
-    deleteTravelSectorCollection: (_, { id }) => {
-      const travelSectorCollection = travelSectorCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!travelSectorCollection) {
-        throw new ApolloError('Travel Sector Collection not found', 400);
-      }
-      travelSectorCollection.isDeleted = true;
-      if (travelSectorCollection.active) {
-        const advitoStandard = travelSectorCollectionList.filter(
-          collection => collection.id === 1
-        )[0];
-        advitoStandard.active = true;
-        travelSectorCollection.active = false;
-      }
-      travelSectorCollection.dateUpdated = new Date();
-      return id;
+    deleteTravelSectorCollection: async (_, { id, projectId }, { db }) => {
+      await db.raw(
+        `SELECT travel_sector_collection_delete(${id}, ${projectId})`
+      );
     },
-    toggleTravelSectorCollection: (_, { id }) => {
-      const travelSectorCollection = travelSectorCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!travelSectorCollection) {
-        throw new ApolloError('Travel Sector Collection not found', 400);
-      }
-      if (travelSectorCollection.active && travelSectorCollection.id !== 1) {
-        const advitoStandard = travelSectorCollectionList.filter(
-          collection => collection.id === 1
-        )[0];
-        advitoStandard.active = true;
-        travelSectorCollection.active = false;
-      } else {
-        travelSectorCollectionList.forEach(collection => {
-          collection.active = false;
-        });
-        travelSectorCollection.active = true;
-      }
-      travelSectorCollection.dateUpdated = new Date();
-      return travelSectorCollectionList;
+    toggleTravelSectorCollection: async (_, { id, projectId }, { db }) => {
+      await db.raw(
+        `SELECT travel_sector_collection_toggle(${id}, ${projectId})`
+      );
     },
     addTravelSector: (_, { id, name, shortName, geographyList }) => {
       const travelSectorCollection = travelSectorCollectionList.filter(

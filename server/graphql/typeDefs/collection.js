@@ -132,8 +132,8 @@ extend type Mutation {
 
   copyTravelSectorCollection(clientId: Int!, projectId: Int!, id: Int!, name: String!, description: String): Int @auth
   editTravelSectorCollection(projectId: Int!, id: Int!, name: String!, description: String): TravelSectorCollection @auth
-  deleteTravelSectorCollection(id: Int!): Int @auth
-  toggleTravelSectorCollection(id: Int!): [TravelSectorCollection] @auth
+  deleteTravelSectorCollection(id: Int!, projectId: Int!): Int @auth
+  toggleTravelSectorCollection(id: Int!, projectId: Int!): Int @auth
   addTravelSector(id: Int!, name: String!, shortName: String!, geographyList: [SectorGeography1]): TravelSectorCollection @auth
   editTravelSector(id: Int!, collectionId: Int!, name: String!, shortName: String!, geographyList: [SectorGeography1]): TravelSectorCollection @auth
   deleteTravelSector(id: Int!, collectionId: Int!): TravelSectorCollection @auth

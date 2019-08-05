@@ -156,35 +156,13 @@ export const EDIT_TRAVEL_SECTOR_COLLECTION = gql`
 `;
 
 export const DELETE_TRAVEL_SECTOR_COLLECTION = gql`
-  mutation deleteTravelSectorCollection($id: Int!) {
-    deleteTravelSectorCollection(id: $id)
+  mutation deleteTravelSectorCollection($id: Int!, $projectId: Int!) {
+    deleteTravelSectorCollection(id: $id, projectId: $projectId)
   }
 `;
 
 export const TOGGLE_TRAVEL_SECTOR_COLLECTION = gql`
-  mutation toggleTravelSectorCollection($id: Int!) {
-    toggleTravelSectorCollection(id: $id) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      sectorList {
-        id
-        name
-        shortName
-        geographyList {
-          origin {
-            id
-            name
-          }
-          destination {
-            id
-            name
-          }
-          exclude
-        }
-      }
-    }
+  mutation toggleTravelSectorCollection($id: Int!, $projectId: Int!) {
+    toggleTravelSectorCollection(id: $id, projectId: $projectId)
   }
 `;

@@ -87,6 +87,7 @@ export default {
             projectId: this.project.id
           }
         });
+        this.$emit('toggle-row', this.form.id);
         this.$modal.show('success', {
           message: 'Travel Sector Collection successfully edited.',
           name: 'edit-travel-sector-collection'

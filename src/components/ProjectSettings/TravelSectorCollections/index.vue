@@ -76,15 +76,15 @@
             <i
               v-if="!scope.row.standard"
               class="fas fa-trash-alt"
-              @click="showDeleteTravelSectorCollection(scope.row)"
+              @click="showDeleteTravelSectorCollection(scope.row.id)"
             />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-    <CopyTravelSectorCollectionModal />
-    <EditTravelSectorCollectionModal />
-    <DeleteTravelSectorCollectionModal @toggle-row="toggleRow" />
+    <CopyTravelSectorCollectionModal @toggle-row="toggleRow" />
+    <EditTravelSectorCollectionModal @toggle-row="toggleRow" />
+    <DeleteTravelSectorCollectionModal />
     <!-- <NewTravelSectorModal @toggle-row="toggleRow" />
     <EditTravelSectorModal @toggle-row="toggleRow" />
     <DeleteTravelSectorModal @toggle-row="toggleRow" />
@@ -150,9 +150,9 @@ export default {
   },
   updated() {
     if (this.toggleRowId) {
-      const row = this.$refs.travelSectorCollection.data.filter(
+      const row = this.$refs.travelSectorCollection.data.find(
         c => c.id === this.toggleRowId
-      )[0];
+      );
       this.$refs.travelSectorCollection.toggleRowExpansion(row, true);
       this.toggleRowId = null;
     }
@@ -178,8 +178,12 @@ export default {
         project: this.project
       });
     },
-    showDeleteTravelSectorCollection(collection) {
-      this.$modal.show('delete-travel-sector-collection', { collection });
+    showDeleteTravelSectorCollection(id) {
+      this.$modal.show('delete-travel-sector-collection', {
+        id,
+        projectId: this.project.id,
+        clientId: this.client.id
+      });
     },
     showNewTravelSector(collection) {
       this.$modal.show('new-travel-sector', { collection });
@@ -192,8 +196,18 @@ export default {
         this.$apollo.mutate({
           mutation: TOGGLE_TRAVEL_SECTOR_COLLECTION,
           variables: {
-            id
-          }
+            id,
+            projectId: this.project.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TRAVEL_SECTOR_COLLECTION_LIST,
+              variables: {
+                clientId: this.client.id,
+                projectId: this.project.id
+              }
+            }
+          ]
         });
       }
     }

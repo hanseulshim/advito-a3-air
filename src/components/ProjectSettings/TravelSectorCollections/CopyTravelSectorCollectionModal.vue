@@ -81,7 +81,9 @@ export default {
     },
     async copyTravelSectorCollection() {
       try {
-        await this.$apollo.mutate({
+        const {
+          data: { copyTravelSectorCollection }
+        } = await this.$apollo.mutate({
           mutation: COPY_TRAVEL_SECTOR_COLLECTION,
           variables: {
             ...this.form,
@@ -98,6 +100,7 @@ export default {
             }
           ]
         });
+        this.$emit('toggle-row', copyTravelSectorCollection);
         this.$modal.show('success', {
           message: 'Travel Sector Collection successfully created.',
           name: 'new-travel-sector-collection'

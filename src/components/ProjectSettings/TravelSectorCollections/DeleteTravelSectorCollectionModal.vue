@@ -24,7 +24,8 @@ export default {
   data() {
     return {
       id: null,
-      active: null
+      clientId: null,
+      projectId: null
     };
   },
   methods: {
@@ -36,28 +37,15 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_TRAVEL_SECTOR_COLLECTION,
           variables: {
-            id: this.id
+            id: this.id,
+            projectId: this.projectId
           },
-          update: (store, data) => {
-            const id = data.data.deleteTravelSectorCollection;
-            const newData = store.readQuery({
-              query: GET_TRAVEL_SECTOR_COLLECTION_LIST
-            });
-            const projectIndex = newData.travelSectorCollectionList.findIndex(
-              project => project.id === id
-            );
-            newData.travelSectorCollectionList.splice(projectIndex, 1);
-            if (this.active) {
-              const advitoStandard = newData.travelSectorCollectionList.filter(
-                collection => collection.id === 1
-              )[0];
-              advitoStandard.active = true;
-            }
-            store.writeQuery({
+          refetchQueries: () => [
+            {
               query: GET_TRAVEL_SECTOR_COLLECTION_LIST,
-              data: newData
-            });
-          }
+              variables: { clientId: this.clientId, projectId: this.projectId }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Travel Sector Collection successfully deleted.',
@@ -71,13 +59,15 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.id = collection.id;
-      this.active = collection.active;
+      const { id, clientId, projectId } = event.params;
+      this.id = id;
+      this.clientId = clientId;
+      this.projectId = projectId;
     },
     beforeClose() {
       this.id = null;
-      this.active = null;
+      this.clientId = null;
+      this.projectId = null;
     }
   }
 };
