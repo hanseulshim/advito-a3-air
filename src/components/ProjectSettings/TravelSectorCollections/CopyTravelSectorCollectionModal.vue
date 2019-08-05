@@ -42,22 +42,10 @@
 </template>
 
 <script>
-import {
-  GET_CLIENT,
-  GET_PROJECT,
-  GET_TRAVEL_SECTOR_COLLECTION_LIST
-} from '@/graphql/queries';
-import { CREATE_TRAVEL_SECTOR_COLLECTION } from '@/graphql/mutations';
+import { GET_TRAVEL_SECTOR_COLLECTION_LIST } from '@/graphql/queries';
+import { COPY_TRAVEL_SECTOR_COLLECTION } from '@/graphql/mutations';
 export default {
-  name: 'NewTravelSectorCollectionModal',
-  apollo: {
-    client: {
-      query: GET_CLIENT
-    },
-    project: {
-      query: GET_PROJECT
-    }
-  },
+  name: 'CopyTravelSectorCollectionModal',
   data() {
     return {
       form: {
@@ -85,36 +73,31 @@ export default {
     validateForm() {
       this.$refs.newTravelSectorCollection.validate(valid => {
         if (valid) {
-          this.createTravelSectorCollection();
+          this.copyTravelSectorCollection();
         } else {
           return false;
         }
       });
     },
-    async createTravelSectorCollection() {
+    async copyTravelSectorCollection() {
       try {
-        const data = await this.$apollo.mutate({
-          mutation: CREATE_TRAVEL_SECTOR_COLLECTION,
+        await this.$apollo.mutate({
+          mutation: COPY_TRAVEL_SECTOR_COLLECTION,
           variables: {
-            ...this.form
+            ...this.form,
+            clientId: this.client.id,
+            projectId: this.project.id
           },
-          update: (store, data) => {
-            const travelSectorCollection =
-              data.data.createTravelSectorCollection;
-            const newData = store.readQuery({
-              query: GET_TRAVEL_SECTOR_COLLECTION_LIST
-            });
-            newData.travelSectorCollectionList.forEach(
-              collection => (collection.active = false)
-            );
-            newData.travelSectorCollectionList.push(travelSectorCollection);
-            store.writeQuery({
+          refetchQueries: () => [
+            {
               query: GET_TRAVEL_SECTOR_COLLECTION_LIST,
-              data: newData
-            });
-          }
+              variables: {
+                clientId: this.client.id,
+                projectId: this.project.id
+              }
+            }
+          ]
         });
-        this.$emit('toggle-row', data.data.createTravelSectorCollection.id);
         this.$modal.show('success', {
           message: 'Travel Sector Collection successfully created.',
           name: 'new-travel-sector-collection'
@@ -126,9 +109,11 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
+      const { collection, client, project } = event.params;
       this.form.id = collection.id;
       this.form.name = collection.name;
+      this.client = client;
+      this.project = project;
     },
     beforeClose() {
       this.form.id = null;

@@ -1,17 +1,22 @@
 <template>
-  <el-table ref="sectorList" :data="sectorList" class="level-two-table">
+  <el-table
+    ref="travelSectorList"
+    v-loading="$apollo.loading"
+    :data="travelSectorList"
+    class="level-two-table"
+  >
     <el-table-column type="expand">
       <template slot-scope="scope">
         <el-table
-          ref="geographyList"
-          :data="scope.row.geographyList"
+          ref="sectorGeographyList"
+          :data="scope.row.sectorGeographyList"
           class="level-three-table"
         >
           <el-table-column label="Bidirection">
             <template slot-scope="prop">
               <div>
-                {{ prop.row.origin.name }} &lt;—&gt;
-                {{ prop.row.destination.name }}
+                {{ prop.row.originName }} &lt;—&gt;
+                {{ prop.row.destinationName }}
               </div>
             </template>
           </el-table-column>
@@ -44,7 +49,7 @@
       :min-width="sector.shortName"
     />
     <el-table-column
-      prop="geographyList.length"
+      prop="sectorGeographyList.length"
       label="Geographies"
       :min-width="sector.geographies"
     />
@@ -52,14 +57,14 @@
       <template slot-scope="scope">
         <el-tooltip effect="dark" content="Edit" placement="top">
           <i
-            v-if="collectionId !== 1"
+            v-if="!scope.row.standard"
             class="fas fa-pencil-alt icon-spacer"
             @click="showEditTravelSector(scope.row)"
           ></i>
         </el-tooltip>
         <el-tooltip effect="dark" content="Delete" placement="top">
           <i
-            v-if="collectionId !== 1"
+            v-if="!scope.row.standard"
             class="fas fa-trash-alt"
             @click="showDeleteTravelSector(scope.row)"
           ></i>
@@ -70,17 +75,24 @@
 </template>
 
 <script>
+import { GET_TRAVEL_SECTOR_LIST } from '@/graphql/queries';
 import { sector } from '@/config';
 export default {
   name: 'SectorTable',
   props: {
-    sectorList: {
-      type: Array,
-      required: true
-    },
-    collectionId: {
+    groupId: {
       type: Number,
       required: true
+    }
+  },
+  apollo: {
+    travelSectorList: {
+      query: GET_TRAVEL_SECTOR_LIST,
+      variables() {
+        return {
+          groupId: this.groupId
+        };
+      }
     }
   },
   data() {
@@ -92,19 +104,19 @@ export default {
     showEditTravelSector(sector) {
       this.$modal.show('edit-travel-sector', {
         sector,
-        collectionId: this.collectionId
+        groupId: this.groupId
       });
     },
     showDeleteTravelSector(sector) {
       this.$modal.show('delete-travel-sector', {
         sector,
-        collectionId: this.collectionId
+        groupId: this.groupId
       });
     },
     showDeleteBidirection(id, bidirection) {
       this.$modal.show('delete-bidirection', {
         id,
-        collectionId: this.collectionId,
+        groupId: this.groupId,
         index: bidirection.$index
       });
     }

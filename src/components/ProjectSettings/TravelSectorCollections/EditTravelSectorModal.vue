@@ -101,7 +101,7 @@ import {
   GET_CLIENT,
   GET_PROJECT,
   GET_TRAVEL_SECTOR_COLLECTION_LIST,
-  GET_TRAVEL_SECTOR_REGION_LIST
+  GET_TRAVEL_SECTOR_LIST
 } from '@/graphql/queries';
 import { EDIT_TRAVEL_SECTOR } from '@/graphql/mutations';
 export default {
@@ -117,7 +117,7 @@ export default {
       query: GET_TRAVEL_SECTOR_COLLECTION_LIST
     },
     travelSectorRegionList: {
-      query: GET_TRAVEL_SECTOR_REGION_LIST
+      query: GET_TRAVEL_SECTOR_LIST
     }
   },
   data() {

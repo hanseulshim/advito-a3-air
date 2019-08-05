@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { LOCATION_COLLECTION } from '../constants';
+import { LOCATION_COLLECTION, TRAVEL_SECTOR_COLLECTION } from '../constants';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
   query locationCollectionList($clientId: Int, $projectId: Int) {
@@ -34,38 +34,28 @@ export const GET_REGION_LIST = gql`
 `;
 
 export const GET_TRAVEL_SECTOR_COLLECTION_LIST = gql`
-  {
-    travelSectorCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      active
-      sectorList {
-        id
-        name
-        shortName
-        geographyList {
-          origin {
-            id
-            name
-          }
-          destination {
-            id
-            name
-          }
-          exclude
-        }
+    query travelSectorCollectionList($clientId: Int, $projectId: Int) {
+      travelSectorCollectionList(clientId: $clientId, projectId: $projectId) {
+        ${TRAVEL_SECTOR_COLLECTION}
       }
     }
-  }
 `;
 
-export const GET_TRAVEL_SECTOR_REGION_LIST = gql`
-  {
-    travelSectorRegionList {
+export const GET_TRAVEL_SECTOR_LIST = gql`
+  query travelSectorList($groupId: Int) {
+    travelSectorList(groupId: $groupId) {
       id
       name
+      shortName
+      standard
+      sectorGeographyList {
+        id
+        originId
+        originName
+        destinationId
+        destinationName
+        exclude
+      }
     }
   }
 `;

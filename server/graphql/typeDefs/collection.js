@@ -19,25 +19,26 @@ type Region {
 type TravelSectorCollection {
   id: Int
   name: String
-  sectorList: [Sector]
   description: String
   dateUpdated: Date
+  sectorCount: Int
+  standard: Boolean
   active: Boolean
 }
-type Sector {
+type TravelSector {
   id: Int
   name: String
   shortName: String
-  geographyList: [Geography1]
+  standard: Boolean
+  sectorGeographyList: [SectorGeography]
 }
-type Geography1 {
-  origin: GeographyRegion
-  destination: GeographyRegion
-  exclude: Boolean
-}
-type GeographyRegion {
+type SectorGeography {
   id: Int
-  name: String
+  originId: Int
+  originName: String
+  destinationId: Int
+  destinationName: String
+  exclude: Boolean
 }
 type AirlineGroupCollection {
   id: Int
@@ -88,7 +89,7 @@ type PreferredAirlinePreference {
   id: Int
   name: String
 }
-input SectorGeography {
+input SectorGeography1 {
   origin: Int
   destination: Int
   exclude: Boolean
@@ -110,8 +111,9 @@ extend type Query {
   locationCollectionList(clientId: Int, projectId: Int): [LocationCollection] @auth
   locationCollection(projectId: Int!, id: Int!): LocationCollection @auth
   regionList(geoSetId: Int): [Region] @auth
-  travelSectorCollectionList: [TravelSectorCollection] @auth
-  travelSectorRegionList: [GeographyRegion] @auth
+  travelSectorCollectionList(clientId: Int, projectId: Int): [TravelSectorCollection] @auth
+  travelSectorCollection(projectId: Int!, id: Int!): TravelSectorCollection @auth
+  travelSectorList(groupId: Int): [TravelSector] @auth
   airlineGroupCollectionList: [AirlineGroupCollection] @auth
   airlineGroupAirlineList: [AirlineGroupAirline] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
@@ -128,12 +130,12 @@ extend type Mutation {
   deleteRegion(id: Int!): Int @auth
   moveCountries(geoSetId: Int!, regionId: Int!, countryList: [Int]): Int @auth
 
-  createTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
-  editTravelSectorCollection(id: Int!, name: String!, description: String): TravelSectorCollection @auth
+  copyTravelSectorCollection(clientId: Int!, projectId: Int!, id: Int!, name: String!, description: String): Int @auth
+  editTravelSectorCollection(projectId: Int!, id: Int!, name: String!, description: String): TravelSectorCollection @auth
   deleteTravelSectorCollection(id: Int!): Int @auth
   toggleTravelSectorCollection(id: Int!): [TravelSectorCollection] @auth
-  addTravelSector(id: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
-  editTravelSector(id: Int!, collectionId: Int!, name: String!, shortName: String!, geographyList: [SectorGeography]): TravelSectorCollection @auth
+  addTravelSector(id: Int!, name: String!, shortName: String!, geographyList: [SectorGeography1]): TravelSectorCollection @auth
+  editTravelSector(id: Int!, collectionId: Int!, name: String!, shortName: String!, geographyList: [SectorGeography1]): TravelSectorCollection @auth
   deleteTravelSector(id: Int!, collectionId: Int!): TravelSectorCollection @auth
   deleteBidirection(id: Int!, collectionId: Int!, index: Int!): TravelSectorCollection @auth
 

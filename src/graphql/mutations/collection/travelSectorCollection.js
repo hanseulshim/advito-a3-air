@@ -1,38 +1,21 @@
 import gql from 'graphql-tag';
+import { TRAVEL_SECTOR_COLLECTION } from '../../constants';
 
-export const CREATE_TRAVEL_SECTOR_COLLECTION = gql`
-  mutation createTravelSectorCollection(
+export const COPY_TRAVEL_SECTOR_COLLECTION = gql`
+  mutation copyTravelSectorCollection(
+    $clientId: Int!
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
-    createTravelSectorCollection(
+    copyTravelSectorCollection(
+      clientId: $clientId
+      projectId: $projectId
       id: $id
       name: $name
       description: $description
-    ) {
-      id
-      name
-      sectorList {
-        id
-        name
-        shortName
-        geographyList {
-          origin {
-            id
-            name
-          }
-          destination {
-            id
-            name
-          }
-          exclude
-        }
-      }
-      description
-      dateUpdated
-      active
-    }
+    )
   }
 `;
 
@@ -156,19 +139,18 @@ export const DELETE_BIDIRECTION = gql`
 
 export const EDIT_TRAVEL_SECTOR_COLLECTION = gql`
   mutation editTravelSectorCollection(
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
     editTravelSectorCollection(
+      projectId: $projectId
       id: $id
       name: $name
       description: $description
     ) {
-      id
-      name
-      description
-      dateUpdated
+      ${TRAVEL_SECTOR_COLLECTION}
     }
   }
 `;
