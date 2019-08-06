@@ -6,3 +6,12 @@ regionCount
 standard
 active
 `;
+
+export const TRAVEL_SECTOR_COLLECTION = `id
+name
+description
+dateUpdated
+sectorCount
+standard
+active
+`;
