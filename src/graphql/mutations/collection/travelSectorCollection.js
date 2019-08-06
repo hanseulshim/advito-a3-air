@@ -21,71 +21,35 @@ export const COPY_TRAVEL_SECTOR_COLLECTION = gql`
 
 export const ADD_TRAVEL_SECTOR = gql`
   mutation addTravelSector(
-    $id: Int!
+    $projectId: Int!
+    $groupId: Int!
     $name: String!
     $shortName: String!
-    $geographyList: [SectorGeography]
+    $geographyList: [SectorGeographyInput]
   ) {
     addTravelSector(
-      id: $id
+      projectId: $projectId
+      groupId: $groupId
       name: $name
       shortName: $shortName
       geographyList: $geographyList
-    ) {
-      id
-      sectorList {
-        id
-        name
-        shortName
-        geographyList {
-          origin {
-            id
-            name
-          }
-          destination {
-            id
-            name
-          }
-          exclude
-        }
-      }
-    }
+    )
   }
 `;
 
 export const EDIT_TRAVEL_SECTOR = gql`
   mutation editTravelSector(
-    $id: Int!
-    $collectionId: Int!
+    $sectorId: Int!
     $name: String!
     $shortName: String!
-    $geographyList: [SectorGeography]
+    $geographyList: [SectorGeographyInput]
   ) {
     editTravelSector(
-      id: $id
-      collectionId: $collectionId
+      sectorId: $sectorId
       name: $name
       shortName: $shortName
       geographyList: $geographyList
-    ) {
-      id
-      sectorList {
-        id
-        name
-        shortName
-        geographyList {
-          origin {
-            id
-            name
-          }
-          destination {
-            id
-            name
-          }
-          exclude
-        }
-      }
-    }
+    )
   }
 `;
 

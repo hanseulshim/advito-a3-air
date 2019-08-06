@@ -26,6 +26,13 @@ export const formatTime = num => numeral(num).format('00:00');
 
 export const formatPercent = num => numeral(num).format('0%');
 
+export const filterGeography = (list, query) =>
+  list.filter(
+    item =>
+      item.name.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+      item.code.toLowerCase().indexOf(query.toLowerCase()) > -1
+  );
+
 export const pluralize = (word, count) => {
   return count > 1
     ? word.substr(-2) === 'ss'

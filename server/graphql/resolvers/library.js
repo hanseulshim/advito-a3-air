@@ -22,7 +22,9 @@ exports.library = {
       await db('location')
         .select({
           id: 'id',
-          name: 'name',
+          name: db.raw(
+            `CONCAT(code, ' [', (SELECT location_gettypename(locationtype)), '] ', name)`
+          ),
           code: 'code',
           locationType: 'locationtype'
         })
@@ -48,7 +50,9 @@ exports.library = {
       await db('location')
         .select({
           id: 'id',
-          name: 'name',
+          name: db.raw(
+            `CONCAT(code, ' [', (SELECT location_gettypename(locationtype)), '] ', name)`
+          ),
           code: 'code',
           locationType: 'locationtype'
         })
@@ -67,7 +71,9 @@ exports.library = {
       await db('location')
         .select({
           id: 'id',
-          name: 'name',
+          name: db.raw(
+            `CONCAT(code, ' [', (SELECT location_gettypename(locationtype)), '] ', name)`
+          ),
           code: 'code',
           locationType: 'locationtype'
         })

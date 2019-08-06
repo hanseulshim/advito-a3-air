@@ -19,7 +19,13 @@
           >
             + NEW TRAVEL SECTOR
           </button>
-          <SectorTable :group-id="props.row.id" />
+          <TravelSector
+            :group-id="props.row.id"
+            :collection-name="props.row.name"
+            :project="project"
+            :client="client"
+            @toggle-row="toggleRow"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -85,10 +91,6 @@
     <CopyTravelSectorCollectionModal @toggle-row="toggleRow" />
     <EditTravelSectorCollectionModal @toggle-row="toggleRow" />
     <DeleteTravelSectorCollectionModal />
-    <!-- <NewTravelSectorModal @toggle-row="toggleRow" />
-    <EditTravelSectorModal @toggle-row="toggleRow" />
-    <DeleteTravelSectorModal @toggle-row="toggleRow" />
-    <DeleteBidirectionModal @toggle-row="toggleRow" /> -->
   </div>
 </template>
 
@@ -101,25 +103,17 @@ import {
   GET_TRAVEL_SECTOR_COLLECTION_LIST
 } from '@/graphql/queries';
 import { TOGGLE_TRAVEL_SECTOR_COLLECTION } from '@/graphql/mutations';
-import SectorTable from './SectorTable';
+import TravelSector from './TravelSector';
 import CopyTravelSectorCollectionModal from './CopyTravelSectorCollectionModal';
 import EditTravelSectorCollectionModal from './EditTravelSectorCollectionModal';
 import DeleteTravelSectorCollectionModal from './DeleteTravelSectorCollectionModal';
-import NewTravelSectorModal from './NewTravelSectorModal';
-import EditTravelSectorModal from './EditTravelSectorModal';
-import DeleteTravelSectorModal from './DeleteTravelSectorModal';
-import DeleteBidirectionModal from './DeleteBidirectionModal';
 export default {
   name: 'TravelSectorCollections',
   components: {
-    SectorTable,
+    TravelSector,
     CopyTravelSectorCollectionModal,
     EditTravelSectorCollectionModal,
-    DeleteTravelSectorCollectionModal,
-    NewTravelSectorModal,
-    EditTravelSectorModal,
-    DeleteTravelSectorModal,
-    DeleteBidirectionModal
+    DeleteTravelSectorCollectionModal
   },
   apollo: {
     client: {
@@ -186,7 +180,11 @@ export default {
       });
     },
     showNewTravelSector(collection) {
-      this.$modal.show('new-travel-sector', { collection });
+      this.$modal.show('new-travel-sector', {
+        collection,
+        client: this.client,
+        project: this.project
+      });
     },
     toggleRow(id) {
       this.toggleRowId = id;

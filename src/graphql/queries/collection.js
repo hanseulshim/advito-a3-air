@@ -41,6 +41,14 @@ export const GET_TRAVEL_SECTOR_COLLECTION_LIST = gql`
     }
 `;
 
+export const GET_TRAVEL_SECTOR_COLLECTION = gql`
+    query travelSectorCollection($projectId: Int!, $id: Int!) {
+      travelSectorCollection(projectId: $projectId, id: $id) {
+        ${TRAVEL_SECTOR_COLLECTION}
+      }
+    }
+`;
+
 export const GET_TRAVEL_SECTOR_LIST = gql`
   query travelSectorList($groupId: Int) {
     travelSectorList(groupId: $groupId) {

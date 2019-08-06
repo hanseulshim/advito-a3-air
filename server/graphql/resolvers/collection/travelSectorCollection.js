@@ -54,8 +54,9 @@ exports.travelSectorCollection = {
               exclude: 's.excluded'
             })
             .leftJoin('location as l1', 's.fromlocation', 'l1.id')
-            .leftJoin('location as l2', 's.fromlocation', 'l2.id')
-            .where('s.travelsectorid', travelSector.id);
+            .leftJoin('location as l2', 's.tolocation', 'l2.id')
+            .where('s.travelsectorid', travelSector.id)
+            .andWhere('s.isdeleted', false);
           travelSector.sectorGeographyList = sectorGeographyList;
         }
       );
@@ -105,71 +106,39 @@ exports.travelSectorCollection = {
         `SELECT travel_sector_collection_toggle(${id}, ${projectId})`
       );
     },
-    addTravelSector: (_, { id, name, shortName, geographyList }) => {
-      const travelSectorCollection = travelSectorCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!travelSectorCollection) {
-        throw new ApolloError('Travel Sector Collection not found', 400);
-      }
-      const maxId =
-        Math.max(
-          ...travelSectorCollection.sectorList.map(sector => sector.id)
-        ) + 1;
-      const geographyListCopy = geographyList.map(geography => {
-        const origin = travelSectorRegionList.filter(
-          region => region.id === geography.origin
-        )[0];
-        const destination = travelSectorRegionList.filter(
-          region => region.id === geography.destination
-        )[0];
-        return {
-          ...geography,
-          origin,
-          destination
-        };
-      });
-      const sector = {
-        id: maxId,
-        name,
-        shortName,
-        geographyList: geographyListCopy
-      };
-      travelSectorCollection.sectorList.push(sector);
-      return travelSectorCollection;
-    },
-    editTravelSector: (
+    addTravelSector: async (
       _,
-      { id, collectionId, name, shortName, geographyList }
+      { projectId, groupId, name, shortName, geographyList },
+      { db }
     ) => {
-      const travelSectorCollection = travelSectorCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!travelSectorCollection) {
-        throw new ApolloError('Travel Sector Collection not found', 400);
-      }
-      const travelSector = travelSectorCollection.sectorList.filter(
-        sector => sector.id === id
-      )[0];
-      if (!travelSector) {
-        throw new ApolloError('Travel Sector not found', 400);
-      }
-      travelSector.name = name;
-      travelSector.shortName = shortName;
-      travelSector.geographyList = geographyList.map(geography => {
-        const origin = travelSectorRegionList.filter(
-          region => region.id === geography.origin
-        )[0];
-        const destination = travelSectorRegionList.filter(
-          region => region.id === geography.destination
-        )[0];
-        return {
-          ...geography,
-          origin,
-          destination
-        };
-      });
-      return travelSectorCollection;
+      const { rows } = await db.raw(
+        `SELECT travel_sector_create(${groupId}, '${name}', '${shortName}')`
+      );
+      const [{ travel_sector_create: newId }] = rows;
+      const sectorGeographyRequests = geographyList.map(
+        ({ origin, destination, exclude }) =>
+          db.raw(
+            `SELECT sector_geography_create(${newId}, ${origin}, ${destination}, ${exclude})`
+          )
+      );
+      await Promise.all(sectorGeographyRequests);
+      return await getTravelSectorCollection(db, newId, projectId);
+    },
+    editTravelSector: async (
+      _,
+      { sectorId, name, shortName, geographyList },
+      { db }
+    ) => {
+      await db.raw(
+        `SELECT travel_sector_update(${sectorId}, '${name}', '${shortName}')`
+      );
+      const sectorGeographyRequests = geographyList.map(
+        ({ id, origin, destination, exclude }) =>
+          db.raw(
+            `SELECT sector_geography_update(${sectorId}, ${id}, ${origin}, ${destination}, ${exclude})`
+          )
+      );
+      await Promise.all(sectorGeographyRequests);
     },
     deleteTravelSector: (_, { id, collectionId }) => {
       const travelSectorCollection = travelSectorCollectionList.filter(
