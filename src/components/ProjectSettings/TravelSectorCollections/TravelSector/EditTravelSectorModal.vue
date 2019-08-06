@@ -113,11 +113,7 @@
 </template>
 
 <script>
-import {
-  GET_GEOGRAPHY_LIST,
-  GET_TRAVEL_SECTOR_LIST,
-  GET_TRAVEL_SECTOR_COLLECTION
-} from '@/graphql/queries';
+import { GET_GEOGRAPHY_LIST, GET_TRAVEL_SECTOR_LIST } from '@/graphql/queries';
 import { EDIT_TRAVEL_SECTOR } from '@/graphql/mutations';
 import { filterGeography } from '@/helper';
 export default {
