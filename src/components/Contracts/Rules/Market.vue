@@ -20,6 +20,7 @@
         :remote-method="filterOriginMarkets"
         :loading="loadingOrigin"
         value-key="name"
+        @change="selectMarket('origin')"
       >
         <el-option
           v-for="item in originOptions"
@@ -41,6 +42,7 @@
         :remote-method="filterArrivalMarkets"
         :loading="loadingArrival"
         value-key="name"
+        @change="selectMarket()"
       >
         <el-option
           v-for="item in arrivalOptions"
@@ -268,7 +270,21 @@ export default {
       } else {
         this.arrivalOptions = [];
       }
+    },
+    selectMarket(type) {
+      if (type === 'origin') {
+        this.originOptions = [];
+      } else {
+        this.arrivalOptions = [];
+      }
     }
+    // clearOptions(type) {
+    //   if (type === 'origin') {
+    //     this.originOptions = [];
+    //   } else {
+    //     this.arrivalOptions = [];
+    //   }
+    // }
   }
 };
 </script>
