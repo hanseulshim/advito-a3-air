@@ -87,6 +87,7 @@ export default {
             projectId: this.project.id
           }
         });
+        this.$emit('toggle-row', this.form.id);
         this.$modal.show('success', {
           message: 'Location Collection successfully edited.',
           name: 'edit-location-collection'

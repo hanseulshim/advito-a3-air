@@ -1,5 +1,3 @@
-const { ApolloError } = require('apollo-server-lambda');
-const { locationCollectionList } = require('../../../data');
 const { LOCATION_LOOKUP } = require('../../constants');
 
 exports.locationCollection = {

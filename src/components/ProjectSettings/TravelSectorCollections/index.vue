@@ -13,15 +13,18 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <button
-            v-if="props.row.id !== 1"
+            v-if="!props.row.standard"
             class="button long collection-add"
             @click="showNewTravelSector(props.row)"
           >
             + NEW TRAVEL SECTOR
           </button>
-          <SectorTable
-            :sector-list="props.row.sectorList"
-            :collection-id="props.row.id"
+          <TravelSector
+            :group-id="props.row.id"
+            :collection-name="props.row.name"
+            :project="project"
+            :client="client"
+            @toggle-row="toggleRow"
           />
         </template>
       </el-table-column>
@@ -33,7 +36,7 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="sectorList.length"
+        prop="sectorCount"
         label="Sectors"
         :min-width="collection.count"
         sortable
@@ -70,66 +73,83 @@
           </el-tooltip>
           <el-tooltip effect="dark" content="Edit" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="!scope.row.standard"
               class="fas fa-pencil-alt icon-spacer"
               @click="showEditTravelSectorCollection(scope.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="!scope.row.standard"
               class="fas fa-trash-alt"
-              @click="showDeleteTravelSectorCollection(scope.row)"
+              @click="showDeleteTravelSectorCollection(scope.row.id)"
             />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-    <NewTravelSectorCollectionModal @toggle-row="toggleRow" />
+    <CopyTravelSectorCollectionModal @toggle-row="toggleRow" />
     <EditTravelSectorCollectionModal @toggle-row="toggleRow" />
-    <DeleteTravelSectorCollectionModal @toggle-row="toggleRow" />
-    <NewTravelSectorModal @toggle-row="toggleRow" />
-    <EditTravelSectorModal @toggle-row="toggleRow" />
-    <DeleteTravelSectorModal @toggle-row="toggleRow" />
-    <DeleteBidirectionModal @toggle-row="toggleRow" />
+    <DeleteTravelSectorCollectionModal />
   </div>
 </template>
 
 <script>
 import { pluralize, formatDate } from '@/helper';
 import { collection } from '@/config';
-import { GET_TRAVEL_SECTOR_COLLECTION_LIST } from '@/graphql/queries';
+import {
+  GET_CLIENT,
+  GET_PROJECT,
+  GET_TRAVEL_SECTOR_COLLECTION_LIST
+} from '@/graphql/queries';
 import { TOGGLE_TRAVEL_SECTOR_COLLECTION } from '@/graphql/mutations';
-import SectorTable from './SectorTable';
-import NewTravelSectorCollectionModal from './NewTravelSectorCollectionModal';
+import TravelSector from './TravelSector';
+import CopyTravelSectorCollectionModal from './CopyTravelSectorCollectionModal';
 import EditTravelSectorCollectionModal from './EditTravelSectorCollectionModal';
 import DeleteTravelSectorCollectionModal from './DeleteTravelSectorCollectionModal';
-import NewTravelSectorModal from './NewTravelSectorModal';
-import EditTravelSectorModal from './EditTravelSectorModal';
-import DeleteTravelSectorModal from './DeleteTravelSectorModal';
-import DeleteBidirectionModal from './DeleteBidirectionModal';
 export default {
   name: 'TravelSectorCollections',
   components: {
-    SectorTable,
-    NewTravelSectorCollectionModal,
+    TravelSector,
+    CopyTravelSectorCollectionModal,
     EditTravelSectorCollectionModal,
-    DeleteTravelSectorCollectionModal,
-    NewTravelSectorModal,
-    EditTravelSectorModal,
-    DeleteTravelSectorModal,
-    DeleteBidirectionModal
+    DeleteTravelSectorCollectionModal
   },
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
     travelSectorCollectionList: {
-      query: GET_TRAVEL_SECTOR_COLLECTION_LIST
+      query: GET_TRAVEL_SECTOR_COLLECTION_LIST,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          clientId: this.client.id,
+          projectId: this.project.id
+        };
+      }
     }
   },
   data() {
     return {
       travelSectorCollectionList: [],
+      project: {},
+      client: {},
+      toggleRowId: null,
       collection
     };
+  },
+  updated() {
+    if (this.toggleRowId) {
+      const row = this.$refs.travelSectorCollection.data.find(
+        c => c.id === this.toggleRowId
+      );
+      this.$refs.travelSectorCollection.toggleRowExpansion(row, true);
+      this.toggleRowId = null;
+    }
   },
   methods: {
     pluralize(word, count) {
@@ -138,36 +158,54 @@ export default {
     formatDate(row) {
       return formatDate(row.dateUpdated);
     },
-    getCountryNames(countryList) {
-      return countryList.length > 10
-        ? countryList.slice(0, 9).join(', ') + '...'
-        : countryList.join(', ');
-    },
     showNewTravelSectorCollection(collection) {
-      this.$modal.show('new-travel-sector-collection', { collection });
+      this.$modal.show('new-travel-sector-collection', {
+        collection,
+        client: this.client,
+        project: this.project
+      });
     },
     showEditTravelSectorCollection(collection) {
-      this.$modal.show('edit-travel-sector-collection', { collection });
+      this.$modal.show('edit-travel-sector-collection', {
+        collection,
+        client: this.client,
+        project: this.project
+      });
     },
-    showDeleteTravelSectorCollection(collection) {
-      this.$modal.show('delete-travel-sector-collection', { collection });
+    showDeleteTravelSectorCollection(id) {
+      this.$modal.show('delete-travel-sector-collection', {
+        id,
+        projectId: this.project.id,
+        clientId: this.client.id
+      });
     },
     showNewTravelSector(collection) {
-      this.$modal.show('new-travel-sector', { collection });
+      this.$modal.show('new-travel-sector', {
+        collection,
+        client: this.client,
+        project: this.project
+      });
     },
     toggleRow(id) {
-      const row = this.$refs.travelSectorCollection.data.filter(
-        collection => collection.id === id
-      )[0];
-      this.$refs.travelSectorCollection.toggleRowExpansion(row);
+      this.toggleRowId = id;
     },
     toggleTravelSectorCollection(id) {
       if (this.travelSectorCollectionList.length) {
         this.$apollo.mutate({
           mutation: TOGGLE_TRAVEL_SECTOR_COLLECTION,
           variables: {
-            id
-          }
+            id,
+            projectId: this.project.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TRAVEL_SECTOR_COLLECTION_LIST,
+              variables: {
+                clientId: this.client.id,
+                projectId: this.project.id
+              }
+            }
+          ]
         });
       }
     }
