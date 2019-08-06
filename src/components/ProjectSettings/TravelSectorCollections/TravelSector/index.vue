@@ -27,11 +27,11 @@
               </template>
             </el-table-column>
             <el-table-column :width="sector.actions">
-              <template slot-scope="bidirection">
+              <template slot-scope="sectorGeography">
                 <el-tooltip effect="dark" content="Delete" placement="top">
                   <i
                     class="fas fa-trash-alt"
-                    @click="showDeleteBidirection(scope.row.id, bidirection)"
+                    @click="showDeleteSectorGeography(sectorGeography.row.id)"
                   />
                 </el-tooltip>
               </template>
@@ -67,16 +67,16 @@
             <i
               v-if="!scope.row.standard"
               class="fas fa-trash-alt"
-              @click="showDeleteTravelSector(scope.row)"
+              @click="showDeleteTravelSector(scope.row.id)"
             ></i>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <NewTravelSectorModal @toggle-row="toggleRow" />
-    <EditTravelSectorModal @toggle-row="toggleRow" />
-    <!--<DeleteTravelSectorModal @toggle-row="toggleRow" />
-    <DeleteBidirectionModal @toggle-row="toggleRow" /> -->
+    <EditTravelSectorModal />
+    <DeleteTravelSectorModal @toggle-row="toggleRow" />
+    <DeleteSectorGeographyModal />
   </div>
 </template>
 
@@ -86,14 +86,14 @@ import { sector } from '@/config';
 import NewTravelSectorModal from './NewTravelSectorModal';
 import EditTravelSectorModal from './EditTravelSectorModal';
 import DeleteTravelSectorModal from './DeleteTravelSectorModal';
-import DeleteBidirectionModal from './DeleteBidirectionModal';
+import DeleteSectorGeographyModal from './DeleteSectorGeographyModal';
 export default {
   name: 'TravelSector',
   components: {
     NewTravelSectorModal,
     EditTravelSectorModal,
     DeleteTravelSectorModal,
-    DeleteBidirectionModal
+    DeleteSectorGeographyModal
   },
   props: {
     groupId: {
@@ -138,20 +138,20 @@ export default {
         groupId: this.groupId
       });
     },
-    showDeleteTravelSector(sector) {
+    showDeleteTravelSector(id) {
       this.$modal.show('delete-travel-sector', {
-        sector,
-        groupId: this.groupId
+        id,
+        groupId: this.groupId,
+        projectId: this.project.id
       });
     },
     toggleRow(id) {
       this.$emit('toggle-row', id);
     },
-    showDeleteBidirection(id, bidirection) {
+    showDeleteSectorGeography(id) {
       this.$modal.show('delete-bidirection', {
         id,
-        groupId: this.groupId,
-        index: bidirection.$index
+        groupId: this.groupId
       });
     }
   }

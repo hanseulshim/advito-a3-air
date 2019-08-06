@@ -17,13 +17,18 @@
 </template>
 
 <script>
+import {
+  GET_TRAVEL_SECTOR_LIST,
+  GET_TRAVEL_SECTOR_COLLECTION
+} from '@/graphql/queries';
 import { DELETE_TRAVEL_SECTOR } from '@/graphql/mutations';
 export default {
   name: 'DeleteTravelSectorModal',
   data() {
     return {
       id: null,
-      collectionId: null
+      groupId: null,
+      projectId: null
     };
   },
   methods: {
@@ -32,14 +37,23 @@ export default {
     },
     async deleteTravelSector() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: DELETE_TRAVEL_SECTOR,
           variables: {
-            id: this.id,
-            collectionId: this.collectionId
-          }
+            id: this.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_TRAVEL_SECTOR_LIST,
+              variables: { groupId: this.groupId }
+            },
+            {
+              query: GET_TRAVEL_SECTOR_COLLECTION,
+              variables: { id: this.groupId, projectId: this.projectId }
+            }
+          ]
         });
-        this.$emit('toggle-row', data.data.deleteTravelSector.id);
+        this.$emit('toggle-row', this.groupId);
         this.$modal.show('success', {
           message: 'Travel Sector successfully deleted.',
           name: 'delete-travel-sector'
@@ -51,14 +65,15 @@ export default {
       }
     },
     beforeOpen(event) {
-      const sector = event.params.sector;
-      const collectionId = event.params.collectionId;
-      this.id = sector.id;
-      this.collectionId = collectionId;
+      const { id, groupId, projectId } = event.params;
+      this.id = id;
+      this.groupId = groupId;
+      this.projectId = projectId;
     },
     beforeClose() {
       this.id = null;
-      this.collectionId = null;
+      this.groupId = null;
+      this.projectId = null;
     }
   }
 };

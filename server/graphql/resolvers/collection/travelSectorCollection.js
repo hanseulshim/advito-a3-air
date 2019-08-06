@@ -140,37 +140,11 @@ exports.travelSectorCollection = {
       );
       await Promise.all(sectorGeographyRequests);
     },
-    deleteTravelSector: (_, { id, collectionId }) => {
-      const travelSectorCollection = travelSectorCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!travelSectorCollection) {
-        throw new ApolloError('Travel Sector Collection not found', 400);
-      }
-      const index = travelSectorCollection.sectorList.findIndex(
-        sector => sector.id === id
-      );
-      if (index === -1) {
-        throw new ApolloError('Travel Sector not found', 400);
-      }
-      travelSectorCollection.sectorList.splice(index, 1);
-      return travelSectorCollection;
+    deleteTravelSector: async (_, { id }, { db }) => {
+      await db.raw(`SELECT travel_sector_delete(${id})`);
     },
-    deleteBidirection: (_, { id, collectionId, index }) => {
-      const travelSectorCollection = travelSectorCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!travelSectorCollection) {
-        throw new ApolloError('Travel Sector Collection not found', 400);
-      }
-      const travelSector = travelSectorCollection.sectorList.filter(
-        sector => sector.id === id
-      )[0];
-      if (!travelSector) {
-        throw new ApolloError('Travel Sector not found', 400);
-      }
-      travelSector.geographyList.splice(index, 1);
-      return travelSectorCollection;
+    deleteSectorGeography: async (_, { id }, { db }) => {
+      await db.raw(`SELECT sector_geography_delete(${id})`);
     }
   }
 };

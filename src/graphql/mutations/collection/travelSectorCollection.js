@@ -54,50 +54,14 @@ export const EDIT_TRAVEL_SECTOR = gql`
 `;
 
 export const DELETE_TRAVEL_SECTOR = gql`
-  mutation deleteTravelSector($id: Int!, $collectionId: Int!) {
-    deleteTravelSector(id: $id, collectionId: $collectionId) {
-      id
-      sectorList {
-        id
-        name
-        shortName
-        geographyList {
-          origin {
-            id
-            name
-          }
-          destination {
-            id
-            name
-          }
-          exclude
-        }
-      }
-    }
+  mutation deleteTravelSector($id: Int!) {
+    deleteTravelSector(id: $id)
   }
 `;
 
-export const DELETE_BIDIRECTION = gql`
-  mutation deleteBidirection($id: Int!, $collectionId: Int!, $index: Int!) {
-    deleteBidirection(id: $id, collectionId: $collectionId, index: $index) {
-      id
-      sectorList {
-        id
-        name
-        shortName
-        geographyList {
-          origin {
-            id
-            name
-          }
-          destination {
-            id
-            name
-          }
-          exclude
-        }
-      }
-    }
+export const DELETE_SECTOR_GEOGRAPHY = gql`
+  mutation deleteSectorGeography($id: Int!) {
+    deleteSectorGeography(id: $id)
   }
 `;
 
