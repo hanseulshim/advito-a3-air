@@ -12,24 +12,38 @@ export const GET_AIRPORT_LIST = gql`
   }
 `;
 
-export const GET_BOOKING_CLASS_LIBRARY_LIST = gql`
+export const GET_BOOKING_CLASS_LIST = gql`
   {
-    bookingClassLibraryList {
-      class
-      defaultFareCategory
-      dateUpdated
-      airlineMappingList {
-        code
-        name
-        ticketingDate
-        travelDate
-        exceptionList {
-          recordOrder
-          originCode
-          destinationCode
-          overrideFareCategory
-        }
-      }
+    bookingClassList {
+      id
+      code
+      name
+      mappingCount
+    }
+  }
+`;
+
+export const GET_AIRLINE_MAPPING_LIST = gql`
+  query airlineMappingList($bookingClassId: Int!) {
+    airlineMappingList(bookingClassId: $bookingClassId) {
+      id
+      code
+      name
+      ticketingDate
+      travelDate
+      exceptionCount
+    }
+  }
+`;
+
+export const GET_EXCEPTION_LIST = gql`
+  query exceptionList($exceptionId: Int!) {
+    exceptionList(exceptionId: $exceptionId) {
+      id
+      order
+      originCode
+      destinationCode
+      overrideFareCategory
     }
   }
 `;

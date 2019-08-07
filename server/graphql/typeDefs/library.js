@@ -1,46 +1,48 @@
 exports.library = `
 type Airport {
-  countryName: String,
-  cityCode: String,
-  cityName: String,
-  airportCode: String,
+  countryName: String
+  cityCode: String
+  cityName: String
+  airportCode: String
   airportName: String
 }
-type BookingClassLibrary {
-  class: String,
-  defaultFareCategory: String,
-  dateUpdated: Date,
-  airlineMappingList: [AirlineMapping]
+type BookingClass {
+  id: Int
+  code: String
+  name: String
+  mappingCount: Int
 }
 type AirlineMapping {
-  code: String,
-  name: String,
-  ticketingDate: Date,
-  travelDate: Date,
-  exceptionList: [AirlineMappingException]
+  id: Int
+  code: String
+  name: String
+  ticketingDate: Date
+  travelDate: Date
+  exceptionCount: Int
 }
 
-type AirlineMappingException {
-  recordOrder: Int,
-  originCode: String,
-  destinationCode: String,
+type Exception {
+  id: Int
+  order: Int
+  originCode: String
+  destinationCode: String
   overrideFareCategory: String
 }
 
 type Airline {
-  id: Int,
-  code: String,
+  id: Int
+  code: String
   name: String
 }
 
 type Currency {
-  id: Int,
-  name: String,
+  id: Int
+  name: String
   code: String
 }
 
 type DistanceUnit {
-  id: Int,
+  id: Int
   name: String
 }
 
@@ -55,7 +57,9 @@ type Geography {
 extend type Query {
   airlineList: [Airline] @auth
   airportList: [Airport] @auth
-  bookingClassLibraryList: [BookingClassLibrary] @auth
+  bookingClassList: [BookingClass] @auth
+  airlineMappingList(bookingClassId: Int!): [AirlineMapping] @auth
+  exceptionList(exceptionId: Int!): [Exception] @auth
   countryList: [Geography] @auth
   currencyList: [Currency] @auth
   geographyList: [Geography] @auth

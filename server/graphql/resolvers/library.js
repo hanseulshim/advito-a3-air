@@ -1,4 +1,4 @@
-const { airportList, bookingClassList } = require('../../data');
+const { airportList } = require('../../data');
 const {
   LIBRARY_LOOKUP,
   LOCATION_LOOKUP,
@@ -17,7 +17,49 @@ exports.library = {
         .where('isdeleted', false)
         .orderBy('code'),
     airportList: () => airportList,
-    bookingClassLibraryList: () => bookingClassList,
+    bookingClassList: async (_, __, { db }) =>
+      await db('bookingclass as b')
+        .select({
+          id: 'b.id',
+          code: 'b.code',
+          name: 'f.name',
+          mappingCount: db.raw(
+            `(SELECT COUNT(*) FROM bcexception WHERE bookingclassid = b.id)`
+          )
+        })
+        .leftJoin('farecategory as f', 'b.farecategoryid', 'f.id'),
+    airlineMappingList: async (_, { bookingClassId }, { db }) =>
+      await db('bcexception as b')
+        .select({
+          id: 'b.id',
+          code: 'c.code',
+          name: 'c.name',
+          ticketingDate: 'b.ticketstartdate',
+          travelDate: 'b.travelstartdate',
+          exceptionCount: db.raw(
+            `(SELECT COUNT(*) FROM bcexceptionmember WHERE bcexceptionid = b.id)`
+          )
+        })
+        .leftJoin('carrier as c', 'b.carrierid', 'c.id')
+        .where('b.bookingclassid', bookingClassId),
+    exceptionList: async (_, { exceptionId }, { db }) =>
+      await db('bcexceptionmember as b')
+        .select({
+          id: 'b.id',
+          order: 'b.iorder',
+          originCode: db.raw(
+            `CONCAT(l1.code, ' ', (SELECT location_gettypename(l1.locationtype)))`
+          ),
+          destinationCode: db.raw(
+            `CONCAT(l2.code, ' ', (SELECT location_gettypename(l2.locationtype)))`
+          ),
+          overrideFareCategory: 'f.name'
+        })
+        .leftJoin('location as l1', 'l1.id', 'b.fromlocation')
+        .leftJoin('location as l2', 'l2.id', 'b.tolocation')
+        .leftJoin('farecategory as f', 'f.code', 'b.farecategorycode')
+        .where('b.bcexceptionid', exceptionId)
+        .orderBy('b.iorder'),
     countryList: async (_, __, { db }) =>
       await db('location')
         .select({

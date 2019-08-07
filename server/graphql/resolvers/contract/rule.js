@@ -71,7 +71,11 @@ exports.rule = {
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.POINT_OF_ORIGIN),
     marketRuleList: async (_, { parentId, parentType }, { db }) =>
       await getRuleList(db, parentId, parentType, RULE_LOOKUP.MARKET),
-    bookingClassList: async (_, { parentId, bookingClassType = 1 }, { db }) =>
+    bookingClassRuleList: async (
+      _,
+      { parentId, bookingClassType = 1 },
+      { db }
+    ) =>
       await getRuleList(
         db,
         parentId,

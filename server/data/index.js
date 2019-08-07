@@ -8,12 +8,11 @@ const {
   travelSectorCollectionList,
   travelSectorRegionList
 } = require('./collection');
-const { airportList, bookingClassList } = require('./library');
+const { airportList } = require('./library');
 const { process } = require('./process');
 
 module.exports = {
   airportList,
-  bookingClassList,
   airlineGroupAirlineList,
   airlineGroupCollectionList,
   locationCollectionList,
