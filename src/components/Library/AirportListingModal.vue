@@ -11,7 +11,11 @@
         <i class="fas fa-times close-modal-button" @click="hideModal" />
       </el-tooltip>
     </div>
-    <el-table :data="airportList" :max-height="700">
+    <el-table
+      v-loading="$apollo.loading"
+      :data="filteredAirportList"
+      :max-height="700"
+    >
       <el-table-column
         prop="countryName"
         label="Country"
@@ -48,6 +52,14 @@
         :min-width="airport.name"
       />
     </el-table>
+    <el-pagination
+      :page-size="pageSize"
+      :pager-count="21"
+      layout="prev, pager, next"
+      :total="airportList.length"
+      @current-change="filterAirportList"
+    >
+    </el-pagination>
   </modal>
 </template>
 
@@ -58,18 +70,30 @@ export default {
   name: 'AirportListingModal',
   apollo: {
     airportList: {
-      query: GET_AIRPORT_LIST
+      query: GET_AIRPORT_LIST,
+      result({ data: { airportList } }) {
+        this.filteredAirportList = airportList.slice(0, this.pageSize);
+      }
     }
   },
   data() {
     return {
       airportList: [],
+      filteredAirportList: [],
+      pageSize: 200,
       airport
     };
   },
   methods: {
     hideModal() {
       this.$modal.hide('airport-listing');
+    },
+    filterAirportList(val) {
+      const factor = (val - 1) * this.pageSize;
+      this.filteredAirportList = this.airportList.slice(
+        factor,
+        factor + this.pageSize
+      );
     }
   }
 };
