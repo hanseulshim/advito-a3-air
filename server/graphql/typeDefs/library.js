@@ -1,5 +1,6 @@
 exports.library = `
 type Airport {
+  id: Int
   countryName: String
   cityCode: String
   cityName: String

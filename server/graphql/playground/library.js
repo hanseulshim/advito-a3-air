@@ -5,6 +5,7 @@ exports.library = {
   query: `
   {
     airportList {
+      id
       countryName
       cityCode
       cityName

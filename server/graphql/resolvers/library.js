@@ -1,4 +1,3 @@
-const { airportList } = require('../../data');
 const {
   LIBRARY_LOOKUP,
   LOCATION_LOOKUP,
@@ -16,7 +15,18 @@ exports.library = {
         })
         .where('isdeleted', false)
         .orderBy('code'),
-    airportList: () => airportList,
+    airportList: async (_, __, { db }) =>
+      await db('allstandardlocation')
+        .select({
+          id: 'airportid',
+          countryName: 'countryname',
+          cityCode: 'citycode',
+          cityName: 'cityname',
+          airportCode: 'airportcode',
+          airportName: 'airportname'
+        })
+        .distinct('airportid')
+        .orderBy('airportid'),
     bookingClassList: async (_, __, { db }) =>
       await db('bookingclass as b')
         .select({
