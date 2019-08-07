@@ -11,38 +11,32 @@
         <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </el-tooltip>
     </div>
-    <el-table :data="bookingClassLibraryList" :max-height="700">
+    <el-table
+      v-loading="$apollo.loading"
+      :data="bookingClassList"
+      :max-height="700"
+    >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <AirlineMappingTable
-            :airline-mapping-list="props.row.airlineMappingList"
-          />
+          <AirlineMappingTable :booking-class-id="props.row.id" />
         </template>
       </el-table-column>
       <el-table-column
-        prop="class"
+        prop="code"
         label="Class"
         sortable
         :sort-orders="['ascending', 'descending']"
         :width="bookingClass.count"
       />
       <el-table-column
-        prop="defaultFareCategory"
+        prop="name"
         label="Default Fare Category"
         sortable
         :sort-orders="['ascending', 'descending']"
         :min-width="bookingClass.category"
       />
       <el-table-column
-        prop="dateUpdated"
-        label="Date Updated"
-        sortable
-        :sort-orders="['ascending', 'descending']"
-        :formatter="formatDate"
-        :width="bookingClass.date"
-      />
-      <el-table-column
-        prop="airlineMappingList.length"
+        prop="mappingCount"
         label="Mappings"
         :width="bookingClass.count"
       />
@@ -51,7 +45,7 @@
 </template>
 
 <script>
-import { GET_BOOKING_CLASS_LIBRARY_LIST } from '@/graphql/queries';
+import { GET_BOOKING_CLASS_LIST } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import { bookingClass } from '@/config';
 import AirlineMappingTable from './AirlineMappingTable';
@@ -61,13 +55,13 @@ export default {
     AirlineMappingTable
   },
   apollo: {
-    bookingClassLibraryList: {
-      query: GET_BOOKING_CLASS_LIBRARY_LIST
+    bookingClassList: {
+      query: GET_BOOKING_CLASS_LIST
     }
   },
   data() {
     return {
-      bookingClassLibraryList: [],
+      bookingClassList: [],
       bookingClass
     };
   },

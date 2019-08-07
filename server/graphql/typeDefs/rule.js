@@ -140,7 +140,7 @@ type FareBasisUnit {
   name: String
 }
 
-type BookingClass {
+type BookingClassRule {
   id: Int
   ruleContainerId: String
   exclude: Boolean
@@ -450,7 +450,7 @@ extend type Query {
   pointOfOriginList(parentId: Int, parentType: Int): [PointOfOrigin] @auth
   marketRuleList(parentId: Int, parentType: Int): [MarketRule] @auth
   fareBasisList(parentId: Int, fareBasisType: Int): [FareBasis] @auth
-  bookingClassList(parentId: Int, bookingClassType: Int): [BookingClass] @auth
+  bookingClassRuleList(parentId: Int, bookingClassType: Int): [BookingClassRule] @auth
   bookingClassCodeList: [BookingClassCode] @auth
   airlineRuleList(parentId: Int, parentType: Int, airlineType: Int): [AirlineRule] @auth
   airlineCodeList: [AirlineCode] @auth
@@ -477,7 +477,7 @@ extend type Mutation {
   updatePointOfSale(parentId: Int!, parentType: Int, pointOfSaleList: [PointOfSaleInput]!): [PointOfSale] @auth
   updatePointOfOrigin(parentId: Int!, parentType: Int, pointOfOriginList: [PointOfOriginInput]!): [PointOfOrigin] @auth
   updateMarketRule(parentId: Int!, parentType: Int, marketRuleList: [MarketInput]!): [MarketRule] @auth
-  updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClass] @auth
+  updateBookingClass(parentId: Int!, bookingClassType: Int, bookingClassList: [BookingClassInput]!): [BookingClassRule] @auth
   updateAirlineRule(parentId: Int!, parentType: Int, airlineType: Int, airlineRuleList: [AirlineInput]!): [AirlineRule] @auth
   updateTicketDesignator(parentId: Int! ticketDesignatorList: [TicketDesignatorInput]!): [TicketDesignator] @auth
   updateTicketDesignatorBulk(parentType: Int ticketDesignatorList: [TicketDesignatorBulkInput]!): Int @auth

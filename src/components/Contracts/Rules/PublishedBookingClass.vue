@@ -56,7 +56,7 @@
 <script>
 import {
   GET_BOOKING_CLASS_CODES,
-  GET_BOOKING_CLASS_LIST,
+  GET_BOOKING_CLASS_RULE_LIST,
   GET_DISCOUNT
 } from '@/graphql/queries';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
@@ -78,23 +78,23 @@ export default {
     bookingClassCodeList: {
       query: GET_BOOKING_CLASS_CODES
     },
-    bookingClassList: {
-      query: GET_BOOKING_CLASS_LIST,
+    bookingClassRuleList: {
+      query: GET_BOOKING_CLASS_RULE_LIST,
       variables() {
         return {
           parentId: this.parentId,
           bookingClassType: PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE
         };
       },
-      result({ data: { bookingClassList } }) {
-        return removeTypename(bookingClassList);
+      result({ data: { bookingClassRuleList } }) {
+        return removeTypename(bookingClassRuleList);
       }
     }
   },
   data() {
     return {
       bookingClassCodeList: [],
-      bookingClassList: [],
+      bookingClassRuleList: [],
       exclude: false,
       editMode: false,
       selectedClass: []
@@ -102,16 +102,16 @@ export default {
   },
   computed: {
     excludedRules() {
-      return this.bookingClassList.filter(rule => rule.exclude);
+      return this.bookingClassRuleList.filter(rule => rule.exclude);
     },
     includedRules() {
-      return this.bookingClassList.filter(rule => !rule.exclude);
+      return this.bookingClassRuleList.filter(rule => !rule.exclude);
     }
   },
   methods: {
     async saveRules() {
       try {
-        if (this.editMode && !this.bookingClassList.length) {
+        if (this.editMode && !this.bookingClassRuleList.length) {
           this.$emit('delete-rule', 'PublishedBookingClass');
         } else if (this.editMode) {
           await this.$apollo.mutate({
@@ -120,11 +120,11 @@ export default {
               parentId: this.parentId,
               bookingClassType:
                 PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
-              bookingClassList: this.bookingClassList
+              bookingClassRuleList: this.bookingClassRuleList
             },
             refetchQueries: () => [
               {
-                query: GET_BOOKING_CLASS_LIST,
+                query: GET_BOOKING_CLASS_RULE_LIST,
                 variables: {
                   parentId: this.parentId,
                   bookingClassType:
@@ -149,12 +149,12 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.bookingClassList.length
-        ? this.bookingClassList[0].ruleContainerId
+      const ruleContainerId = this.bookingClassRuleList.length
+        ? this.bookingClassRuleList[0].ruleContainerId
         : null;
 
       this.selectedClass.map(v => {
-        this.bookingClassList.push({
+        this.bookingClassRuleList.push({
           id: null,
           ruleContainerId,
           bookingClassType: PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
@@ -168,8 +168,8 @@ export default {
     },
     async deleteTag(tag) {
       try {
-        const idx = this.bookingClassList.indexOf(tag);
-        this.bookingClassList[idx].isDeleted = true;
+        const idx = this.bookingClassRuleList.indexOf(tag);
+        this.bookingClassRuleList[idx].isDeleted = true;
 
         await this.$apollo
           .mutate({
@@ -178,11 +178,11 @@ export default {
               parentId: this.parentId,
               bookingClassType:
                 PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
-              bookingClassList: this.bookingClassList
+              bookingClassRuleList: this.bookingClassRuleList
             },
             refetchQueries: () => [
               {
-                query: GET_BOOKING_CLASS_LIST,
+                query: GET_BOOKING_CLASS_RULE_LIST,
                 variables: {
                   parentId: this.parentId,
                   bookingClassType:
@@ -192,10 +192,10 @@ export default {
             ]
           })
           .then(() => {
-            const rulesRemaining = this.bookingClassList.some(
+            const rulesRemaining = this.bookingClassRuleList.some(
               rule => !rule.isDeleted
             );
-            if (!this.bookingClassList.length || !rulesRemaining) {
+            if (!this.bookingClassRuleList.length || !rulesRemaining) {
               this.$emit('delete-rule', 'PublishedBookingClass');
             }
           });
