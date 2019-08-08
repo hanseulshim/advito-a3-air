@@ -17,7 +17,7 @@
         multiple
       >
         <el-option
-          v-for="airline in airlineCodeList"
+          v-for="airline in filteredAirlineList"
           :key="airline.code"
           :label="airline.name"
           :value="airline.code"
@@ -28,7 +28,7 @@
         v-model="startRange"
         type="number"
         size="mini"
-        :min="0"
+        :min="1"
         class="number-input"
         clearable
       />
@@ -37,7 +37,7 @@
         v-model="endRange"
         type="number"
         size="mini"
-        :min="0"
+        :min="1"
         class="number-input"
         clearable
       />
@@ -140,6 +140,12 @@ export default {
     },
     includedRules() {
       return this.flightNumberList.filter(rule => !rule.exclude);
+    },
+    filteredAirlineList() {
+      return this.airlineCodeList.filter(
+        airline =>
+          !this.flightNumberList.some(rule => rule.carrierCode === airline.code)
+      );
     }
   },
   methods: {
@@ -179,26 +185,32 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.flightNumberList.length
-        ? this.flightNumberList[0].ruleContainerId
-        : null;
+      if (this.selectedAirline.length && this.startRange && this.endRange) {
+        const ruleContainerId = this.flightNumberList.length
+          ? this.flightNumberList[0].ruleContainerId
+          : null;
 
-      this.selectedAirline.map(v => {
-        this.flightNumberList.push({
-          id: null,
-          ruleContainerId,
-          carrierCode: v,
-          segmentType: this.segmentType,
-          startRange: parseInt(this.startRange),
-          endRange: parseInt(this.endRange),
-          exclude: this.exclude,
-          isDeleted: false
+        this.selectedAirline.map(v => {
+          this.flightNumberList.push({
+            id: null,
+            ruleContainerId,
+            carrierCode: v,
+            segmentType: this.segmentType,
+            startRange: parseInt(this.startRange),
+            endRange: parseInt(this.endRange),
+            exclude: this.exclude,
+            isDeleted: false
+          });
         });
-      });
 
-      this.startRange = null;
-      this.endRange = null;
-      this.selectedAirline = [];
+        this.startRange = null;
+        this.endRange = null;
+        this.selectedAirline = [];
+      } else {
+        this.$modal.show('error', {
+          message: 'Error: Airline, Start, & End are all required values'
+        });
+      }
     },
     async deleteTag(tag) {
       try {
