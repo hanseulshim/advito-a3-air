@@ -15,3 +15,14 @@ sectorCount
 standard
 active
 `;
+
+export const AIRLINE_GROUP_COLLECTION = `id
+name
+description
+dateUpdated
+effectiveStartDate
+effectiveEndDate
+active
+standard
+airlineGroupCount
+`;

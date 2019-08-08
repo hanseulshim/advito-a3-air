@@ -1,5 +1,9 @@
 import gql from 'graphql-tag';
-import { LOCATION_COLLECTION, TRAVEL_SECTOR_COLLECTION } from '../constants';
+import {
+  LOCATION_COLLECTION,
+  TRAVEL_SECTOR_COLLECTION,
+  AIRLINE_GROUP_COLLECTION
+} from '../constants';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
   query locationCollectionList($clientId: Int, $projectId: Int) {
@@ -69,37 +73,29 @@ export const GET_TRAVEL_SECTOR_LIST = gql`
 `;
 
 export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
-  {
-    airlineGroupCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      effectiveStartDate
-      effectiveEndDate
-      active
-      airlineGroupList {
-        id
-        name
-        effectiveStartDate
-        effectiveEndDate
-        airlineList {
-          id
-          name
-          effectiveStartDate
-          effectiveEndDate
-        }
-      }
+query airlineGroupCollectionList($clientId: Int, $projectId: Int) {
+    airlineGroupCollectionList(clientId: $clientId, projectId: $projectId) {
+      ${AIRLINE_GROUP_COLLECTION}
     }
   }
 `;
 
-export const GET_AIRLINE_LIST = gql`
-  {
-    airlineGroupAirlineList {
+export const GET_AIRLINE_GROUP_LIST = gql`
+  query airlineGroupList($collectionId: Int) {
+    airlineGroupList(collectionId: $collectionId) {
       id
       name
-      code
+      effectiveStartDate
+      effectiveEndDate
+      standard
+      airlineGroupMemberList {
+        id
+        airlineId
+        name
+        code
+        effectiveStartDate
+        effectiveEndDate
+      }
     }
   }
 `;

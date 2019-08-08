@@ -6,9 +6,65 @@ const {
 
 exports.airlineGroupCollection = {
   Query: {
-    airlineGroupCollectionList: () =>
-      airlineGroupCollectionList.filter(collection => !collection.isDeleted),
-    airlineGroupAirlineList: () => airlineGroupAirlineList
+    airlineGroupCollectionList: async (
+      _,
+      { clientId = null, projectId = null },
+      { db }
+    ) =>
+      await db('carriergroupcollection as c')
+        .select({
+          id: 'id',
+          name: 'name',
+          description: 'description',
+          dateUpdated: 'updated',
+          effectiveStartDate: 'startdate',
+          effectiveEndDate: 'enddate',
+          active: db.raw(
+            `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = c.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 3) = 1, FALSE)`
+          ),
+          airlineGroupCount: db.raw(
+            `(SELECT COUNT(*) FROM carriergroup WHERE collectionid = c.id AND isdeleted = FALSE)`
+          ),
+          standard: 'isstandard'
+        })
+        .where('isdeleted', false)
+        .andWhere(function() {
+          this.where('clientid', clientId).orWhere('isstandard', true);
+        })
+        .orderBy('isstandard', 'desc'),
+    airlineGroupCollection: async (_, { id, projectId }, { db }) =>
+      await getAirlineGroupCollection(db, id, projectId),
+    airlineGroupList: async (_, { collectionId }, { db }) => {
+      const airlineGroupList = await db('carriergroup')
+        .select({
+          id: 'id',
+          name: 'name',
+          standard: 'isstandard',
+          effectiveStartDate: 'activefrom',
+          effectiveEndDate: 'inactiveon'
+        })
+        .where('collectionid', collectionId)
+        .andWhere('isdeleted', false);
+      const airlineGroupMemberRequests = airlineGroupList.map(
+        async airlineGroup => {
+          const airlineGroupMemberList = await db('carriergroupmember as c')
+            .select({
+              id: 'c.id',
+              airlineId: 'c.carrierid',
+              name: 'c1.name',
+              code: 'c1.code',
+              effectiveStartDate: 'c.activefrom',
+              effectiveEndDate: 'c.inactiveon'
+            })
+            .leftJoin('carrier as c1', 'c.carrierid', 'c1.id')
+            .where('c.carriergroupid', airlineGroup.id)
+            .andWhere('c.isdeleted', false);
+          airlineGroup.airlineGroupMemberList = airlineGroupMemberList;
+        }
+      );
+      await Promise.all(airlineGroupMemberRequests);
+      return airlineGroupList;
+    }
   },
   Mutation: {
     editAirlineGroupCollection: (
@@ -170,4 +226,25 @@ exports.airlineGroupCollection = {
       return airlineGroupCollection;
     }
   }
+};
+
+const getAirlineGroupCollection = async (db, id, projectId) => {
+  const [airlineGroupCollection] = await db('carriergroupcollection as c')
+    .select({
+      id: 'id',
+      name: 'name',
+      description: 'description',
+      dateUpdated: 'updated',
+      effectiveStartDate: 'startdate',
+      effectiveEndDate: 'enddate',
+      active: db.raw(
+        `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = c.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 3) = 1, FALSE)`
+      ),
+      airlineGroupCount: db.raw(
+        `(SELECT COUNT(*) FROM carriergroup WHERE collectionid = c.id AND isdeleted = FALSE)`
+      ),
+      standard: 'isstandard'
+    })
+    .where('id', id);
+  return airlineGroupCollection;
 };

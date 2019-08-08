@@ -166,7 +166,7 @@ import {
   GET_POS_LIST,
   GET_PREFERENCE_LEVEL_LIST,
   GET_PREFERRED_AIRLINE_COLLECTION_LIST,
-  GET_AIRLINE_LIST
+  GET_AIRLINE_GROUP_LIST
 } from '@/graphql/queries';
 import { EDIT_PREFERRED_AIRLINE } from '@/graphql/mutations';
 export default {
@@ -182,7 +182,7 @@ export default {
       query: GET_PREFERENCE_LEVEL_LIST
     },
     airlineGroupAirlineList: {
-      query: GET_AIRLINE_LIST,
+      query: GET_AIRLINE_GROUP_LIST,
       update(data) {
         this.filteredOptions = data.airlineGroupAirlineList;
         return data.airlineGroupAirlineList;

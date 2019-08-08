@@ -43,22 +43,25 @@ type SectorGeography {
 type AirlineGroupCollection {
   id: Int
   name: String
-  airlineGroupList: [AirlineGroup]
   description: String
   dateUpdated: Date
   effectiveStartDate: Date
   effectiveEndDate: Date
   active: Boolean
+  standard: Boolean
+  airlineGroupCount: Int
 }
 type AirlineGroup {
   id: Int
   name: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  airlineList: [AirlineGroupAirline]
+  standard: Boolean
+  airlineGroupMemberList: [AirlineGroupMember]
 }
-type AirlineGroupAirline {
+type AirlineGroupMember {
   id: Int
+  airlineId: Int
   name: String
   code: String
   effectiveStartDate: Date
@@ -115,8 +118,9 @@ extend type Query {
   travelSectorCollectionList(clientId: Int, projectId: Int): [TravelSectorCollection] @auth
   travelSectorCollection(projectId: Int!, id: Int!): TravelSectorCollection @auth
   travelSectorList(groupId: Int): [TravelSector] @auth
-  airlineGroupCollectionList: [AirlineGroupCollection] @auth
-  airlineGroupAirlineList: [AirlineGroupAirline] @auth
+  airlineGroupCollectionList(clientId: Int, projectId: Int): [AirlineGroupCollection] @auth
+  airlineGroupCollection(projectId: Int!, id: Int!): AirlineGroupCollection @auth
+  airlineGroupList(collectionId: Int): [AirlineGroup] @auth
   preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
   posList: [PreferredAirlinePos]
   preferenceLevelList: [PreferredAirlinePreference] @auth

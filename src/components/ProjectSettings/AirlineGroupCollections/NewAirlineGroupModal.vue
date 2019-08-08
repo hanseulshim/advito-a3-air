@@ -124,7 +124,7 @@
 <script>
 import {
   GET_AIRLINE_GROUP_COLLECTION_LIST,
-  GET_AIRLINE_LIST
+  GET_AIRLINE_GROUP_LIST
 } from '@/graphql/queries';
 import { ADD_AIRLINE_GROUP } from '@/graphql/mutations';
 export default {
@@ -134,7 +134,7 @@ export default {
       query: GET_AIRLINE_GROUP_COLLECTION_LIST
     },
     airlineGroupAirlineList: {
-      query: GET_AIRLINE_LIST,
+      query: GET_AIRLINE_GROUP_LIST,
       update(data) {
         this.filteredOptions = data.airlineGroupAirlineList;
         return data.airlineGroupAirlineList;

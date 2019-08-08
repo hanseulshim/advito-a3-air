@@ -13,16 +13,13 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <button
-            v-if="props.row.id !== 1"
+            v-if="!props.row.standard"
             class="button long collection-add"
             @click="showNewAirlineGroup(props.row)"
           >
             + NEW AIRLINE GROUP
           </button>
-          <AirlineGroupTable
-            :airline-group-list="props.row.airlineGroupList"
-            :collection-id="props.row.id"
-          />
+          <AirlineGroupTable :collection-id="props.row.id" />
         </template>
       </el-table-column>
       <el-table-column
@@ -33,7 +30,7 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="airlineGroupList.length"
+        prop="airlineGroupCount"
         label="Groups"
         :min-width="collection.count"
         sortable
@@ -64,14 +61,14 @@
         <template slot-scope="scope">
           <el-tooltip effect="dark" content="Edit" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="!scope.row.standard"
               class="fas fa-pencil-alt icon-spacer"
               @click="showEditAirlineGroupCollection(scope.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="!scope.row.standard"
               class="fas fa-trash-alt icon-spacer"
               @click="showDeleteAirlineGroupCollection(scope.row)"
             />
@@ -79,18 +76,22 @@
         </template>
       </el-table-column>
     </el-table>
-    <EditAirlineGroupCollectionModal @toggle-row="toggleRow" />
+    <!-- <EditAirlineGroupCollectionModal @toggle-row="toggleRow" />
     <DeleteAirlineGroupCollectionModal />
     <NewAirlineGroupModal @toggle-row="toggleRow" />
     <EditAirlineGroupModal @toggle-row="toggleRow" />
-    <DeleteAirlineGroupModal @toggle-row="toggleRow" />
+    <DeleteAirlineGroupModal @toggle-row="toggleRow" /> -->
   </div>
 </template>
 
 <script>
 import { pluralize, formatDate } from '@/helper';
 import { collection } from '@/config';
-import { GET_AIRLINE_GROUP_COLLECTION_LIST } from '@/graphql/queries';
+import {
+  GET_AIRLINE_GROUP_COLLECTION_LIST,
+  GET_PROJECT,
+  GET_CLIENT
+} from '@/graphql/queries';
 import { TOGGLE_AIRLINE_GROUP_COLLECTION } from '@/graphql/mutations';
 import AirlineGroupTable from './AirlineGroupTable';
 import EditAirlineGroupCollectionModal from './EditAirlineGroupCollectionModal';
@@ -109,8 +110,21 @@ export default {
     DeleteAirlineGroupModal
   },
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
     airlineGroupCollectionList: {
-      query: GET_AIRLINE_GROUP_COLLECTION_LIST
+      query: GET_AIRLINE_GROUP_COLLECTION_LIST,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          clientId: this.client.id,
+          projectId: this.project.id
+        };
+      }
     }
   },
   data() {

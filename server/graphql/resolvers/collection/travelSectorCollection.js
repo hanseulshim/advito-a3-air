@@ -1,9 +1,3 @@
-const { ApolloError } = require('apollo-server-lambda');
-const {
-  travelSectorCollectionList,
-  travelSectorRegionList
-} = require('../../../data');
-
 exports.travelSectorCollection = {
   Query: {
     travelSectorCollectionList: async (

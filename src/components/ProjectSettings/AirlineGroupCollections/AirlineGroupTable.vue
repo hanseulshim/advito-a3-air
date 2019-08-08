@@ -1,12 +1,16 @@
 <template>
   <el-table
     ref="airlineGroupList"
+    v-loading="$apollo.loading"
     :data="airlineGroupList"
     class="level-two-table"
   >
     <el-table-column type="expand">
       <template slot-scope="scope">
-        <el-table :data="scope.row.airlineList" class="level-three-table">
+        <el-table
+          :data="scope.row.airlineGroupMemberList"
+          class="level-three-table"
+        >
           <el-table-column prop="name" label="Airlines" />
           <el-table-column
             prop="effectiveStartDate"
@@ -29,7 +33,7 @@
       :min-width="airline.name"
     />
     <el-table-column
-      prop="airlineList.length"
+      prop="airlineGroupMemberList.length"
       label="Airlines"
       :min-width="airline.count"
     />
@@ -67,22 +71,30 @@
 </template>
 
 <script>
+import { GET_AIRLINE_GROUP_LIST } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import { airline } from '@/config';
 export default {
   name: 'AirlineGroupTable',
   props: {
-    airlineGroupList: {
-      type: Array,
-      required: true
-    },
     collectionId: {
       type: Number,
       required: true
     }
   },
+  apollo: {
+    airlineGroupList: {
+      query: GET_AIRLINE_GROUP_LIST,
+      variables() {
+        return {
+          collectionId: this.collectionId
+        };
+      }
+    }
+  },
   data() {
     return {
+      airlineGroupList: [],
       airline
     };
   },

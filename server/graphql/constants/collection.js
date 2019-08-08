@@ -16,7 +16,19 @@ const TRAVEL_SECTOR_COLLECTION = `id
         active
         `;
 
+const AIRLINE_GROUP_COLLECTION = `id
+        name
+        description
+        dateUpdated
+        effectiveStartDate
+        effectiveEndDate
+        active
+        standard
+        airlineGroupCount
+`;
+
 module.exports = {
   LOCATION_COLLECTION,
-  TRAVEL_SECTOR_COLLECTION
+  TRAVEL_SECTOR_COLLECTION,
+  AIRLINE_GROUP_COLLECTION
 };

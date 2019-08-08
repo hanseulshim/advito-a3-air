@@ -4,7 +4,8 @@ const { airlineGroupCollection } = require('./airlineGroupCollection');
 const { preferredAirlineCollection } = require('./preferredAirlineCollection');
 const {
   LOCATION_COLLECTION,
-  TRAVEL_SECTOR_COLLECTION
+  TRAVEL_SECTOR_COLLECTION,
+  AIRLINE_GROUP_COLLECTION
 } = require('../../constants');
 exports.collection = {
   queries: {
@@ -39,31 +40,23 @@ exports.collection = {
           exclude
         }
       }
-      airlineGroupCollectionList {
+      airlineGroupCollectionList(clientId: null, projectId: null) {
+        ${AIRLINE_GROUP_COLLECTION}
+      }
+      airlineGroupList(collectionId: null) {
         id
         name
-        description
-        dateUpdated
         effectiveStartDate
         effectiveEndDate
-        active
-        airlineGroupList {
+        standard
+        airlineGroupMemberList {
           id
+          airlineId
           name
+          code
           effectiveStartDate
           effectiveEndDate
-          airlineList {
-            id
-            name
-            effectiveStartDate
-            effectiveEndDate
-          }
         }
-      }
-      airlineGroupAirlineList {
-        id
-        name
-        code
       }
       preferredAirlineCollectionList {
         id
