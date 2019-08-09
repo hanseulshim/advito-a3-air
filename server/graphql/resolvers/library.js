@@ -14,7 +14,7 @@ exports.library = {
           name: 'name'
         })
         .where('isdeleted', false)
-        .orderBy('code'),
+        .orderBy('name'),
     airportList: async (_, __, { db }) =>
       await db('allstandardlocation')
         .select({
@@ -114,6 +114,7 @@ exports.library = {
             ADVITO_GEOSET_ID
           );
         })
+        .orWhere('locationtype', LOCATION_LOOKUP.SUBREGION)
         .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)
         .orWhere('locationtype', LOCATION_LOOKUP.CITY)
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)

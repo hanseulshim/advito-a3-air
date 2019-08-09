@@ -54,6 +54,7 @@ type AirlineGroupCollection {
 type AirlineGroup {
   id: Int
   name: String
+  code: String
   effectiveStartDate: Date
   effectiveEndDate: Date
   standard: Boolean
@@ -100,6 +101,7 @@ input SectorGeographyInput {
 }
 input GroupAirline {
   id: Int
+  airlineId: Int
   effectiveStartDate: Date
   effectiveEndDate: Date
 }
@@ -139,17 +141,17 @@ extend type Mutation {
   editTravelSectorCollection(projectId: Int!, id: Int!, name: String!, description: String): TravelSectorCollection @auth
   deleteTravelSectorCollection(id: Int!, projectId: Int!): Int @auth
   toggleTravelSectorCollection(id: Int!, projectId: Int!): Int @auth
-  addTravelSector(projectId: Int!, groupId: Int!, name: String!, shortName: String!, geographyList: [SectorGeographyInput]): Int @auth
+  addTravelSector(groupId: Int!, name: String!, shortName: String!, geographyList: [SectorGeographyInput]): Int @auth
   editTravelSector(sectorId: Int!, name: String!, shortName: String!, geographyList: [SectorGeographyInput]): Int @auth
   deleteTravelSector(id: Int!): Int @auth
   deleteSectorGeography(id: Int!): Int @auth
 
-  editAirlineGroupCollection(id: Int!, name: String!, description: String, effectiveStartDate: Date, effectiveEndDate: Date): AirlineGroupCollection @auth
-  deleteAirlineGroupCollection(id: Int!): Int @auth
-  toggleAirlineGroupCollection(id: Int!): [AirlineGroupCollection] @auth
-  addAirlineGroup(id: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
-  editAirlineGroup(id: Int!, collectionId: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
-  deleteAirlineGroup(id: Int!, collectionId: Int!): AirlineGroupCollection @auth
+  editAirlineGroupCollection(projectId: Int!, id: Int!, name: String!, description: String, effectiveStartDate: Date!, effectiveEndDate: Date!): AirlineGroupCollection @auth
+  deleteAirlineGroupCollection(projectId: Int!, id: Int!): Int @auth
+  toggleAirlineGroupCollection(projectId: Int!, id: Int!): Int @auth
+  addAirlineGroup(collectionId: Int!, name: String!, code: String!, effectiveStartDate: Date!, effectiveEndDate: Date!, airlineList: [GroupAirline]): Int @auth
+  editAirlineGroup(carrierGroupId: Int!, name: String!, code: String!, effectiveStartDate: Date!, effectiveEndDate: Date!, airlineList: [GroupAirline]): Int @auth
+  deleteAirlineGroup(id: Int!): Int @auth
 
   editPreferredAirlineCollection(id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
   deletePreferredAirlineCollection(id: Int!): Int @auth

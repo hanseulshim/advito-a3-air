@@ -80,11 +80,20 @@ query airlineGroupCollectionList($clientId: Int, $projectId: Int) {
   }
 `;
 
+export const GET_AIRLINE_GROUP_COLLECTION = gql`
+query airlineGroupCollection($projectId: Int!, $id: Int!) {
+    airlineGroupCollection(projectId: $projectId, id: $id) {
+      ${AIRLINE_GROUP_COLLECTION}
+    }
+  }
+`;
+
 export const GET_AIRLINE_GROUP_LIST = gql`
   query airlineGroupList($collectionId: Int) {
     airlineGroupList(collectionId: $collectionId) {
       id
       name
+      code
       effectiveStartDate
       effectiveEndDate
       standard

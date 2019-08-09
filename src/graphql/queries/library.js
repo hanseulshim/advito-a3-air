@@ -13,6 +13,16 @@ export const GET_AIRPORT_LIST = gql`
   }
 `;
 
+export const GET_AIRLINE_LIST = gql`
+  {
+    airlineList {
+      id
+      code
+      name
+    }
+  }
+`;
+
 export const GET_BOOKING_CLASS_LIST = gql`
   {
     bookingClassList {

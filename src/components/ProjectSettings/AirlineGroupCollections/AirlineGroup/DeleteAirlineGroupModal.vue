@@ -17,13 +17,18 @@
 </template>
 
 <script>
+import {
+  GET_AIRLINE_GROUP_LIST,
+  GET_AIRLINE_GROUP_COLLECTION
+} from '@/graphql/queries';
 import { DELETE_AIRLINE_GROUP } from '@/graphql/mutations';
 export default {
   name: 'DeleteAirlineGroupModal',
   data() {
     return {
       id: null,
-      collectionId: null
+      collectionId: null,
+      projectId: null
     };
   },
   methods: {
@@ -32,14 +37,26 @@ export default {
     },
     async deleteAirlineGroup() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: DELETE_AIRLINE_GROUP,
           variables: {
-            id: this.id,
-            collectionId: this.collectionId
-          }
+            id: this.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_AIRLINE_GROUP_LIST,
+              variables: { collectionId: this.collectionId }
+            },
+            {
+              query: GET_AIRLINE_GROUP_COLLECTION,
+              variables: {
+                id: this.collectionId,
+                projectId: this.projectId
+              }
+            }
+          ]
         });
-        this.$emit('toggle-row', data.data.deleteAirlineGroup.id);
+        this.$emit('toggle-row', this.collectionId);
         this.$modal.show('success', {
           message: 'Airline Group successfully deleted.',
           name: 'delete-airline-group'
@@ -51,14 +68,15 @@ export default {
       }
     },
     beforeOpen(event) {
-      const airlineGroup = event.params.airlineGroup;
-      const collectionId = event.params.collectionId;
-      this.id = airlineGroup.id;
+      const { id, collectionId, projectId } = event.params;
+      this.id = id;
       this.collectionId = collectionId;
+      this.projectId = projectId;
     },
     beforeClose() {
       this.id = null;
       this.collectionId = null;
+      this.projectId = null;
     }
   }
 };
