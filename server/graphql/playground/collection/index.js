@@ -5,7 +5,8 @@ const { preferredAirlineCollection } = require('./preferredAirlineCollection');
 const {
   LOCATION_COLLECTION,
   TRAVEL_SECTOR_COLLECTION,
-  AIRLINE_GROUP_COLLECTION
+  AIRLINE_GROUP_COLLECTION,
+  PREFERRED_AIRLINE_COLLECTION
 } = require('../../constants');
 exports.collection = {
   queries: {
@@ -58,19 +59,23 @@ exports.collection = {
           effectiveEndDate
         }
       }
-      preferredAirlineCollectionList {
+      preferredAirlineCollectionList(clientId: null, projectId: null) {
+        ${PREFERRED_AIRLINE_COLLECTION}
+      }
+      preferredAirlineList(groupId: null) {
         id
+        airlineId
         name
-        description
-        dateUpdated
+        preferenceLevelId
+        preferenceLevelName
+        effectiveStartDate
+        effectiveEndDate
         active
-        airlineList {
+        posList {
+          id
+          locationId
           name
-          preferenceLevel
-          effectiveStartDate
-          effectiveEndDate
-          pos
-          active
+          code
         }
       }
       posList {

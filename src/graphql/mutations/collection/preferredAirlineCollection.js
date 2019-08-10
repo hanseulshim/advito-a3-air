@@ -1,48 +1,31 @@
 import gql from 'graphql-tag';
+import { PREFERRED_AIRLINE_COLLECTION } from '../../constants';
 
 export const EDIT_PREFERRED_AIRLINE_COLLECTION = gql`
   mutation editPreferredAirlineCollection(
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
   ) {
     editPreferredAirlineCollection(
+      projectId: $projectId
       id: $id
       name: $name
       description: $description
-    ) {
-      id
-      name
-      description
-      dateUpdated
-    }
+    ) { ${PREFERRED_AIRLINE_COLLECTION}}
   }
 `;
 
 export const DELETE_PREFERRED_AIRLINE_COLLECTION = gql`
-  mutation deletePreferredAirlineCollection($id: Int!) {
-    deletePreferredAirlineCollection(id: $id)
+  mutation deletePreferredAirlineCollection($projectId: Int!, $id: Int!) {
+    deletePreferredAirlineCollection(projectId: $projectId, id: $id)
   }
 `;
 
 export const TOGGLE_PREFERRED_AIRLINE_COLLECTION = gql`
-  mutation togglePreferredAirlineCollection($id: Int!) {
-    togglePreferredAirlineCollection(id: $id) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      airlineList {
-        id
-        name
-        preferenceLevel
-        effectiveStartDate
-        effectiveEndDate
-        pos
-        active
-      }
-    }
+  mutation togglePreferredAirlineCollection($projectId: Int!, $id: Int!) {
+    togglePreferredAirlineCollection(projectId: $projectId, id: $id)
   }
 `;
 

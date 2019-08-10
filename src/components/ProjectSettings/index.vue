@@ -3,7 +3,7 @@
     <LocationCollections />
     <TravelSectorCollections />
     <AirlineGroupCollections />
-    <!-- <PreferredAirlineCollections @check-status="checkStatus" /> -->
+    <PreferredAirlineCollections @check-status="checkStatus" />
     <AirportListingModal />
     <BookingClassModal />
   </div>

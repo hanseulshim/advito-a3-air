@@ -27,8 +27,17 @@ const AIRLINE_GROUP_COLLECTION = `id
         airlineGroupCount
 `;
 
+const PREFERRED_AIRLINE_COLLECTION = `id
+        name
+        description
+        dateUpdated
+        active
+        airlineCount
+        `;
+
 module.exports = {
   LOCATION_COLLECTION,
   TRAVEL_SECTOR_COLLECTION,
-  AIRLINE_GROUP_COLLECTION
+  AIRLINE_GROUP_COLLECTION,
+  PREFERRED_AIRLINE_COLLECTION
 };

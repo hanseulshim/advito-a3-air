@@ -2,7 +2,8 @@ import gql from 'graphql-tag';
 import {
   LOCATION_COLLECTION,
   TRAVEL_SECTOR_COLLECTION,
-  AIRLINE_GROUP_COLLECTION
+  AIRLINE_GROUP_COLLECTION,
+  PREFERRED_AIRLINE_COLLECTION
 } from '../constants';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
@@ -110,21 +111,29 @@ export const GET_AIRLINE_GROUP_LIST = gql`
 `;
 
 export const GET_PREFERRED_AIRLINE_COLLECTION_LIST = gql`
-  {
-    preferredAirlineCollectionList {
+query preferredAirlineCollectionList($clientId: Int, $projectId: Int) {
+  preferredAirlineCollectionList(clientId: $clientId, projectId: $projectId) {
+    ${PREFERRED_AIRLINE_COLLECTION}
+  }
+}
+`;
+
+export const GET_PREFERRED_AIRLINE_LIST = gql`
+  query preferredAirlineList($groupId: Int) {
+    preferredAirlineList(groupId: $groupId) {
       id
+      airlineId
       name
-      description
-      dateUpdated
+      preferenceLevelId
+      preferenceLevelName
+      effectiveStartDate
+      effectiveEndDate
       active
-      airlineList {
+      posList {
         id
+        locationId
         name
-        preferenceLevel
-        effectiveStartDate
-        effectiveEndDate
-        pos
-        active
+        code
       }
     }
   }

@@ -71,23 +71,27 @@ type AirlineGroupMember {
 type PreferredAirlineCollection {
   id: Int
   name: String
-  airlineList: [PreferredAirline]
   description: String
   dateUpdated: Date
   active: Boolean
+  airlineCount: Int
 }
 type PreferredAirline {
   id: Int
+  airlineId: Int
   name: String
-  preferenceLevel: String
+  preferenceLevelId: Int
+  preferenceLevelName: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  pos: [String]
   active: Boolean
+  posList: [PreferredAirlinePos]
 }
 type PreferredAirlinePos {
   id: Int
+  locationId: Int
   name: String
+  code: String
 }
 type PreferredAirlinePreference {
   id: Int
@@ -123,7 +127,8 @@ extend type Query {
   airlineGroupCollectionList(clientId: Int, projectId: Int): [AirlineGroupCollection] @auth
   airlineGroupCollection(projectId: Int!, id: Int!): AirlineGroupCollection @auth
   airlineGroupList(collectionId: Int): [AirlineGroup] @auth
-  preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
+  preferredAirlineCollectionList(clientId: Int, projectId: Int): [PreferredAirlineCollection] @auth
+  preferredAirlineList(groupId: Int): [PreferredAirline] @auth
   posList: [PreferredAirlinePos]
   preferenceLevelList: [PreferredAirlinePreference] @auth
 }
@@ -153,9 +158,9 @@ extend type Mutation {
   editAirlineGroup(carrierGroupId: Int!, name: String!, code: String!, effectiveStartDate: Date!, effectiveEndDate: Date!, airlineList: [GroupAirline]): Int @auth
   deleteAirlineGroup(id: Int!): Int @auth
 
-  editPreferredAirlineCollection(id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
-  deletePreferredAirlineCollection(id: Int!): Int @auth
-  togglePreferredAirlineCollection(id: Int!): [PreferredAirlineCollection] @auth
+  editPreferredAirlineCollection(projectId: Int!, id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
+  deletePreferredAirlineCollection(projectId: Int!, id: Int!): Int @auth
+  togglePreferredAirlineCollection(projectId: Int!, id: Int!): Int @auth
   addPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
   editPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
   deletePreferredAirline(id: Int!, collectionId: Int!): PreferredAirlineCollection @auth

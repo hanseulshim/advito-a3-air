@@ -31,10 +31,7 @@
           >
             + NEW AIRLINE
           </button>
-          <AirlineTable
-            :airline-list="props.row.airlineList"
-            :collection-id="props.row.id"
-          />
+          <Airline :group-id="props.row.id" />
         </template>
       </el-table-column>
       <el-table-column
@@ -51,8 +48,8 @@
         :sort-orders="['ascending', 'descending']"
       >
         <template slot-scope="scope">
-          <span :class="{ warning: !scope.row.airlineList.length }">{{
-            scope.row.airlineList.length
+          <span :class="{ warning: !scope.row.airlineCount }">{{
+            scope.row.airlineCount
           }}</span>
         </template>
       </el-table-column>
@@ -88,51 +85,69 @@
           <el-tooltip effect="dark" content="Delete" placement="top">
             <i
               class="fas fa-trash-alt"
-              @click="showDeletePreferredAirlineCollection(scope.row)"
+              @click="showDeletePreferredAirlineCollection(scope.row.id)"
             />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <EditPreferredAirlineCollectionModal @toggle-row="toggleRow" />
-    <EditPreferredAirlineModal @toggle-row="toggleRow" />
-    <NewPreferredAirlineModal @toggle-row="toggleRow" />
     <DeletePreferredAirlineCollectionModal />
-    <DeletePreferredAirlineModal @toggle-row="toggleRow" />
   </div>
 </template>
 
 <script>
 import { pluralize, formatDate } from '@/helper';
 import { collection } from '@/config';
-import { GET_PREFERRED_AIRLINE_COLLECTION_LIST } from '@/graphql/queries';
+import {
+  GET_PREFERRED_AIRLINE_COLLECTION_LIST,
+  GET_PROJECT,
+  GET_CLIENT
+} from '@/graphql/queries';
 import { TOGGLE_PREFERRED_AIRLINE_COLLECTION } from '@/graphql/mutations';
-import AirlineTable from './AirlineTable';
+import Airline from './Airline';
 import EditPreferredAirlineCollectionModal from './EditPreferredAirlineCollectionModal';
-import NewPreferredAirlineModal from './NewPreferredAirlineModal';
 import DeletePreferredAirlineCollectionModal from './DeletePreferredAirlineCollectionModal';
-import EditPreferredAirlineModal from './EditPreferredAirlineModal';
-import DeletePreferredAirlineModal from './DeletePreferredAirlineModal';
 export default {
   name: 'PreferredAirlineCollections',
   components: {
-    AirlineTable,
+    Airline,
     EditPreferredAirlineCollectionModal,
-    NewPreferredAirlineModal,
-    DeletePreferredAirlineCollectionModal,
-    EditPreferredAirlineModal,
-    DeletePreferredAirlineModal
+    DeletePreferredAirlineCollectionModal
   },
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
     preferredAirlineCollectionList: {
-      query: GET_PREFERRED_AIRLINE_COLLECTION_LIST
+      query: GET_PREFERRED_AIRLINE_COLLECTION_LIST,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          clientId: this.client.id,
+          projectId: this.project.id
+        };
+      }
     }
   },
   data() {
     return {
       preferredAirlineCollectionList: [],
+      toggleRowId: null,
       collection
     };
+  },
+  updated() {
+    if (this.toggleRowId) {
+      const row = this.$refs.preferredAirlineCollection.data.find(
+        c => c.id === this.toggleRowId
+      );
+      this.$refs.preferredAirlineCollection.toggleRowExpansion(row, true);
+      this.toggleRowId = null;
+    }
   },
   methods: {
     pluralize(word, count) {
@@ -145,30 +160,45 @@ export default {
       this.$modal.show('new-preferred-airline', { collection });
     },
     showEditPreferredAirlineCollection(collection) {
-      this.$modal.show('edit-preferred-airline-collection', { collection });
+      this.$modal.show('edit-preferred-airline-collection', {
+        collection,
+        project: this.project,
+        client: this.client
+      });
     },
-    showDeletePreferredAirlineCollection(collection) {
-      this.$modal.show('delete-preferred-airline-collection', { collection });
+    showDeletePreferredAirlineCollection(id) {
+      this.$modal.show('delete-preferred-airline-collection', {
+        id,
+        clientId: this.client.id,
+        projectId: this.project.id
+      });
     },
     toggleRow(id) {
-      const row = this.$refs.preferredAirlineCollection.data.filter(
-        collection => collection.id === id
-      )[0];
-      this.$refs.preferredAirlineCollection.toggleRowExpansion(row);
+      this.toggleRowId = id;
     },
     togglePreferredAirlineCollection(id) {
       if (this.preferredAirlineCollectionList.length) {
         this.$apollo.mutate({
           mutation: TOGGLE_PREFERRED_AIRLINE_COLLECTION,
           variables: {
-            id
-          }
+            id,
+            projectId: this.project.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_PREFERRED_AIRLINE_COLLECTION_LIST,
+              variables: {
+                clientId: this.client.id,
+                projectId: this.project.id
+              }
+            }
+          ]
         });
       }
     },
     checkAirlineWarning() {
-      const invalidStatus = this.preferredAirlineCollectionList.every(
-        collection => !collection.airlineList.length
+      const invalidStatus = this.preferredAirlineCollectionList.some(
+        collection => !collection.airlineCount
       );
       this.$emit('check-status', invalidStatus ? 'invalid' : 'valid');
       return invalidStatus;
