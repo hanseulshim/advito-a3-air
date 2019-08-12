@@ -9,6 +9,7 @@ export const GET_RULE_LIST = gql`
 export const GET_COUNTRY_LIST = gql`
   query countryList {
     countryList {
+      id
       code
       name
       locationType

@@ -1,9 +1,3 @@
-const { ApolloError } = require('apollo-server-lambda');
-const {
-  travelSectorCollectionList,
-  travelSectorRegionList
-} = require('../../../data');
-
 exports.travelSectorCollection = {
   Query: {
     travelSectorCollectionList: async (
@@ -108,7 +102,7 @@ exports.travelSectorCollection = {
     },
     addTravelSector: async (
       _,
-      { projectId, groupId, name, shortName, geographyList },
+      { groupId, name, shortName, geographyList },
       { db }
     ) => {
       const { rows } = await db.raw(
@@ -122,7 +116,6 @@ exports.travelSectorCollection = {
           )
       );
       await Promise.all(sectorGeographyRequests);
-      return await getTravelSectorCollection(db, newId, projectId);
     },
     editTravelSector: async (
       _,

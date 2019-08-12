@@ -29,8 +29,8 @@ export const formatPercent = num => numeral(num).format('0%');
 export const filterGeography = (list, query) =>
   list.filter(
     item =>
-      item.name.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-      item.code.toLowerCase().indexOf(query.toLowerCase()) > -1
+      item.name.toLowerCase().includes(query.toLowerCase()) ||
+      item.code.toLowerCase().includes(query.toLowerCase())
   );
 
 export const pluralize = (word, count) => {

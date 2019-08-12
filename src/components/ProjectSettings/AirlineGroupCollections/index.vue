@@ -13,15 +13,17 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <button
-            v-if="props.row.id !== 1"
+            v-if="!props.row.standard"
             class="button long collection-add"
             @click="showNewAirlineGroup(props.row)"
           >
             + NEW AIRLINE GROUP
           </button>
-          <AirlineGroupTable
-            :airline-group-list="props.row.airlineGroupList"
+          <AirlineGroup
             :collection-id="props.row.id"
+            :collection-name="props.row.name"
+            :project-id="project.id"
+            @toggle-row="toggleRow"
           />
         </template>
       </el-table-column>
@@ -33,7 +35,7 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="airlineGroupList.length"
+        prop="airlineGroupCount"
         label="Groups"
         :min-width="collection.count"
         sortable
@@ -64,16 +66,16 @@
         <template slot-scope="scope">
           <el-tooltip effect="dark" content="Edit" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="!scope.row.standard"
               class="fas fa-pencil-alt icon-spacer"
               @click="showEditAirlineGroupCollection(scope.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete" placement="top">
             <i
-              v-if="scope.row.id !== 1"
+              v-if="!scope.row.standard"
               class="fas fa-trash-alt icon-spacer"
-              @click="showDeleteAirlineGroupCollection(scope.row)"
+              @click="showDeleteAirlineGroupCollection(scope.row.id)"
             />
           </el-tooltip>
         </template>
@@ -81,43 +83,61 @@
     </el-table>
     <EditAirlineGroupCollectionModal @toggle-row="toggleRow" />
     <DeleteAirlineGroupCollectionModal />
-    <NewAirlineGroupModal @toggle-row="toggleRow" />
-    <EditAirlineGroupModal @toggle-row="toggleRow" />
-    <DeleteAirlineGroupModal @toggle-row="toggleRow" />
   </div>
 </template>
 
 <script>
 import { pluralize, formatDate } from '@/helper';
 import { collection } from '@/config';
-import { GET_AIRLINE_GROUP_COLLECTION_LIST } from '@/graphql/queries';
+import {
+  GET_AIRLINE_GROUP_COLLECTION_LIST,
+  GET_PROJECT,
+  GET_CLIENT
+} from '@/graphql/queries';
 import { TOGGLE_AIRLINE_GROUP_COLLECTION } from '@/graphql/mutations';
-import AirlineGroupTable from './AirlineGroupTable';
+import AirlineGroup from './AirlineGroup';
 import EditAirlineGroupCollectionModal from './EditAirlineGroupCollectionModal';
 import DeleteAirlineGroupCollectionModal from './DeleteAirlineGroupCollectionModal';
-import NewAirlineGroupModal from './NewAirlineGroupModal';
-import EditAirlineGroupModal from './EditAirlineGroupModal';
-import DeleteAirlineGroupModal from './DeleteAirlineGroupModal';
 export default {
   name: 'AirlineGroupCollections',
   components: {
-    AirlineGroupTable,
+    AirlineGroup,
     EditAirlineGroupCollectionModal,
-    DeleteAirlineGroupCollectionModal,
-    NewAirlineGroupModal,
-    EditAirlineGroupModal,
-    DeleteAirlineGroupModal
+    DeleteAirlineGroupCollectionModal
   },
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
     airlineGroupCollectionList: {
-      query: GET_AIRLINE_GROUP_COLLECTION_LIST
+      query: GET_AIRLINE_GROUP_COLLECTION_LIST,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          clientId: this.client.id,
+          projectId: this.project.id
+        };
+      }
     }
   },
   data() {
     return {
       airlineGroupCollectionList: [],
+      toggleRowId: null,
       collection
     };
+  },
+  updated() {
+    if (this.toggleRowId) {
+      const row = this.$refs.airlineGroupCollection.data.find(
+        c => c.id === this.toggleRowId
+      );
+      this.$refs.airlineGroupCollection.toggleRowExpansion(row, true);
+      this.toggleRowId = null;
+    }
   },
   methods: {
     pluralize(word, count) {
@@ -127,27 +147,46 @@ export default {
       return formatDate(row.dateUpdated);
     },
     showEditAirlineGroupCollection(collection) {
-      this.$modal.show('edit-airline-group-collection', { collection });
+      this.$modal.show('edit-airline-group-collection', {
+        collection,
+        project: this.project,
+        client: this.client
+      });
     },
-    showDeleteAirlineGroupCollection(collection) {
-      this.$modal.show('delete-airline-group-collection', { collection });
+    showDeleteAirlineGroupCollection(id) {
+      this.$modal.show('delete-airline-group-collection', {
+        id,
+        clientId: this.client.id,
+        projectId: this.project.id
+      });
     },
     showNewAirlineGroup(collection) {
-      this.$modal.show('new-airline-group', { collection });
+      this.$modal.show('new-airline-group', {
+        collection,
+        project: this.project,
+        client: this.client
+      });
     },
     toggleRow(id) {
-      const row = this.$refs.airlineGroupCollection.data.filter(
-        collection => collection.id === id
-      )[0];
-      this.$refs.airlineGroupCollection.toggleRowExpansion(row);
+      this.toggleRowId = id;
     },
     toggleAirlineGroupCollection(id) {
       if (this.airlineGroupCollectionList.length) {
         this.$apollo.mutate({
           mutation: TOGGLE_AIRLINE_GROUP_COLLECTION,
           variables: {
-            id
-          }
+            id,
+            projectId: this.project.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_AIRLINE_GROUP_COLLECTION_LIST,
+              variables: {
+                clientId: this.client.id,
+                projectId: this.project.id
+              }
+            }
+          ]
         });
       }
     }

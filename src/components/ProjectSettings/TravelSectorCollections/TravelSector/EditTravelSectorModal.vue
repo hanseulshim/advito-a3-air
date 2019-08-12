@@ -101,7 +101,7 @@
           {{ getRegion(geography.origin) }} &lt;—&gt;
           {{ getRegion(geography.destination) }}
           <el-tooltip effect="dark" content="Delete" placement="top">
-            <i class="fas fa-times" @click="removeGeography(index)" />
+            <i class="fas fa-times" @click="removeGeography(geography.id)" />
           </el-tooltip>
         </div>
       </div>
@@ -195,8 +195,8 @@ export default {
         this.exclude = false;
       }
     },
-    removeGeography(index) {
-      this.geographyListCopy[index].delete = true;
+    removeGeography(id) {
+      this.geographyListCopy.find(geo => geo.id === id).delete = true;
     },
     getRegion(id) {
       return this.geographyList.find(geo => geo.id === id).name;

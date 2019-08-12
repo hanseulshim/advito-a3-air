@@ -1,5 +1,10 @@
 import gql from 'graphql-tag';
-import { LOCATION_COLLECTION, TRAVEL_SECTOR_COLLECTION } from '../constants';
+import {
+  LOCATION_COLLECTION,
+  TRAVEL_SECTOR_COLLECTION,
+  AIRLINE_GROUP_COLLECTION,
+  PREFERRED_AIRLINE_COLLECTION
+} from '../constants';
 
 export const GET_LOCATION_COLLECTION_LIST = gql`
   query locationCollectionList($clientId: Int, $projectId: Int) {
@@ -69,67 +74,75 @@ export const GET_TRAVEL_SECTOR_LIST = gql`
 `;
 
 export const GET_AIRLINE_GROUP_COLLECTION_LIST = gql`
-  {
-    airlineGroupCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      effectiveStartDate
-      effectiveEndDate
-      active
-      airlineGroupList {
-        id
-        name
-        effectiveStartDate
-        effectiveEndDate
-        airlineList {
-          id
-          name
-          effectiveStartDate
-          effectiveEndDate
-        }
-      }
+query airlineGroupCollectionList($clientId: Int, $projectId: Int) {
+    airlineGroupCollectionList(clientId: $clientId, projectId: $projectId) {
+      ${AIRLINE_GROUP_COLLECTION}
     }
   }
 `;
 
-export const GET_AIRLINE_LIST = gql`
-  {
-    airlineGroupAirlineList {
+export const GET_AIRLINE_GROUP_COLLECTION = gql`
+query airlineGroupCollection($projectId: Int!, $id: Int!) {
+    airlineGroupCollection(projectId: $projectId, id: $id) {
+      ${AIRLINE_GROUP_COLLECTION}
+    }
+  }
+`;
+
+export const GET_AIRLINE_GROUP_LIST = gql`
+  query airlineGroupList($collectionId: Int) {
+    airlineGroupList(collectionId: $collectionId) {
       id
       name
       code
+      effectiveStartDate
+      effectiveEndDate
+      standard
+      airlineGroupMemberList {
+        id
+        airlineId
+        name
+        code
+        effectiveStartDate
+        effectiveEndDate
+      }
     }
   }
 `;
 
 export const GET_PREFERRED_AIRLINE_COLLECTION_LIST = gql`
-  {
-    preferredAirlineCollectionList {
-      id
-      name
-      description
-      dateUpdated
-      active
-      airlineList {
-        id
-        name
-        preferenceLevel
-        effectiveStartDate
-        effectiveEndDate
-        pos
-        active
-      }
-    }
+query preferredAirlineCollectionList($clientId: Int, $projectId: Int) {
+  preferredAirlineCollectionList(clientId: $clientId, projectId: $projectId) {
+    ${PREFERRED_AIRLINE_COLLECTION}
   }
+}
 `;
 
-export const GET_POS_LIST = gql`
-  {
-    posList {
+export const GET_PREFERRED_AIRLINE_COLLECTION = gql`
+query preferredAirlineCollection( $projectId: Int!, $id: Int!) {
+  preferredAirlineCollection(projectId: $projectId, id: $id) {
+    ${PREFERRED_AIRLINE_COLLECTION}
+  }
+}
+`;
+
+export const GET_PREFERRED_AIRLINE_LIST = gql`
+  query preferredAirlineList($groupId: Int) {
+    preferredAirlineList(groupId: $groupId) {
       id
+      airlineId
       name
+      preferenceLevelId
+      preferenceLevelName
+      effectiveStartDate
+      effectiveEndDate
+      active
+      posList {
+        id
+        locationId
+        name
+        code
+      }
     }
   }
 `;

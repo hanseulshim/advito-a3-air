@@ -62,18 +62,9 @@
 </template>
 
 <script>
-import { GET_CLIENT, GET_PROJECT } from '@/graphql/queries';
 import { EDIT_AIRLINE_GROUP_COLLECTION } from '@/graphql/mutations';
 export default {
   name: 'EditAirlineGroupCollectionModal',
-  apollo: {
-    client: {
-      query: GET_CLIENT
-    },
-    project: {
-      query: GET_PROJECT
-    }
-  },
   data() {
     return {
       form: {
@@ -125,13 +116,14 @@ export default {
     },
     async editAirlineGroupCollection() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: EDIT_AIRLINE_GROUP_COLLECTION,
           variables: {
-            ...this.form
+            ...this.form,
+            projectId: this.project.id
           }
         });
-        this.$emit('toggle-row', data.data.editAirlineGroupCollection.id);
+        this.$emit('toggle-row', this.form.id);
         this.$modal.show('success', {
           message: 'Airline Group collection successfully edited.',
           name: 'edit-airline-group-collection'
@@ -143,12 +135,20 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.form.id = collection.id;
-      this.form.name = collection.name;
-      this.form.description = collection.description;
-      this.form.effectiveStartDate = collection.effectiveStartDate;
-      this.form.effectiveEndDate = collection.effectiveEndDate;
+      const {
+        id,
+        name,
+        description,
+        effectiveStartDate,
+        effectiveEndDate
+      } = event.params.collection;
+      this.client = event.params.client;
+      this.project = event.params.project;
+      this.form.id = id;
+      this.form.name = name;
+      this.form.description = description;
+      this.form.effectiveStartDate = effectiveStartDate;
+      this.form.effectiveEndDate = effectiveEndDate;
     },
     beforeClose() {
       this.form.id = null;
