@@ -119,19 +119,35 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.blackoutList.length
-        ? this.blackoutList[0].ruleContainerId
-        : null;
+      if (!this.startDate || !this.endDate) {
+        this.$modal.show('error', {
+          message: 'Error: Please enter both start date and end date'
+        });
+      } else if (
+        this.blackoutList.some(
+          rule =>
+            rule.startDate === Date.parse(this.startDate) &&
+            rule.endDate === Date.parse(this.endDate)
+        )
+      ) {
+        this.$modal.show('error', {
+          message: 'Error: Duplicate Rule'
+        });
+      } else {
+        const ruleContainerId = this.blackoutList.length
+          ? this.blackoutList[0].ruleContainerId
+          : null;
 
-      this.blackoutList.push({
-        id: null,
-        ruleContainerId,
-        startDate: new Date(this.startDate),
-        endDate: new Date(this.endDate),
-        isDeleted: false
-      });
-      this.startDate = '';
-      this.endDate = '';
+        this.blackoutList.push({
+          id: null,
+          ruleContainerId,
+          startDate: new Date(this.startDate),
+          endDate: new Date(this.endDate),
+          isDeleted: false
+        });
+        this.startDate = '';
+        this.endDate = '';
+      }
     },
     async deleteTag(tag) {
       try {

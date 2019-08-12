@@ -131,7 +131,7 @@ export default {
       dayOfWeekList: [],
       dayOfWeekUnitList: [],
       startDay: null,
-      endDay: null,
+      endDay: 75,
       startTime: '',
       endTime: '',
       exclude: false,
@@ -175,7 +175,7 @@ export default {
         }
         this.editMode = !this.editMode;
         this.startDay = null;
-        this.endDay = null;
+        this.endDay = 75;
         this.startTime = '';
         this.endTime = '';
         this.updateRule = null;
@@ -186,26 +186,32 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.dayOfWeekList.length
-        ? this.dayOfWeekList[0].ruleContainerId
-        : null;
+      if (this.startDay) {
+        const ruleContainerId = this.dayOfWeekList.length
+          ? this.dayOfWeekList[0].ruleContainerId
+          : null;
 
-      this.dayOfWeekList.push({
-        id: null,
-        ruleContainerId,
-        startDay: this.startDay,
-        endDay: this.endDay,
-        startTime: this.formatTime(this.startTime),
-        endTime: this.formatTime(this.endTime),
-        exclude: this.exclude,
-        isDeleted: false
-      });
+        this.dayOfWeekList.push({
+          id: null,
+          ruleContainerId,
+          startDay: this.startDay,
+          endDay: this.endDay,
+          startTime: this.formatTime(this.startTime),
+          endTime: this.formatTime(this.endTime),
+          exclude: this.exclude,
+          isDeleted: false
+        });
 
-      this.startDay = null;
-      this.endDay = null;
-      this.startTime = '';
-      this.endTime = '';
-      this.updateRule = null;
+        this.startDay = null;
+        this.endDay = 75;
+        this.startTime = '';
+        this.endTime = '';
+        this.updateRule = null;
+      } else {
+        this.$modal.show('error', {
+          message: 'Start Date is required.'
+        });
+      }
     },
     async deleteTag(tag) {
       try {
@@ -261,8 +267,8 @@ export default {
       this.dayOfWeekList[ruleIndex].endTime = formattedEnd;
 
       this.updateRule = null;
-      this.startDay = '';
-      this.endDay = '';
+      this.startDay = null;
+      this.endDay = 75;
       this.startTime = '';
       this.endTime = '';
     },
@@ -275,15 +281,16 @@ export default {
       } else {
         const startDayMatch = rule.startDay
           ? this.dayOfWeekUnitList.filter(day => day.id === rule.startDay)[0]
-          : null;
+              .name
+          : '';
 
         const endDayMatch = rule.endDay
-          ? this.dayOfWeekUnitList.filter(day => day.id === rule.endDay)[0]
-          : null;
+          ? this.dayOfWeekUnitList.filter(day => day.id === rule.endDay)[0].name
+          : '';
 
-        return `${startDayMatch.name} after ${rule.startTime} -  ${
-          endDayMatch.name
-        } before ${rule.endTime}`;
+        return `${startDayMatch} ${
+          rule.startTime ? `after ${rule.startTime}` : ''
+        } - ${endDayMatch} ${rule.endTime ? `before ${rule.endTime}` : ''}`;
       }
     }
   }

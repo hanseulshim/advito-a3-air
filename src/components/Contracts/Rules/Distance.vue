@@ -37,7 +37,7 @@
         v-model="maxDistance"
         type="number"
         size="mini"
-        :min="0"
+        :min="1"
         class="number-input"
         clearable
       />
@@ -95,8 +95,8 @@ export default {
         { label: 'Km', value: PRICING_TERM_LOOKUP.DISTANCE_UNIT_KILOMETERS }
       ],
       distanceUnit: null,
-      minDistance: null,
-      maxDistance: null,
+      minDistance: 0,
+      maxDistance: 1,
       updateRule: null,
       distanceList: [],
       editMode: false
@@ -130,8 +130,8 @@ export default {
         }
         this.editMode = !this.editMode;
         this.updateRule = null;
-        this.minDistance = null;
-        this.maxDistance = null;
+        this.minDistance = 0;
+        this.maxDistance = 1;
         this.distanceUnit = null;
       } catch (error) {
         this.$modal.show('error', {
@@ -140,23 +140,48 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.distanceList.length
-        ? this.distanceList[0].ruleContainerId
-        : null;
+      if (
+        this.distanceList.some(
+          rule =>
+            rule.distanceUnit === this.distanceUnit &&
+            rule.minDistance === parseInt(this.minDistance) &&
+            rule.maxDistance === parseInt(this.maxDistance)
+        )
+      ) {
+        this.$modal.show('error', {
+          message: 'Error: Duplicate Rule'
+        });
+      } else if (this.minDistance === 0 && this.maxDistance === 0) {
+        this.$modal.show('error', {
+          message: 'Error: Please enter both minimum and maximum distance'
+        });
+      } else if (this.maxDistance === 0) {
+        this.$modal.show('error', {
+          message: 'Error: Maximum cannot be 0'
+        });
+      } else if (!this.distanceUnit) {
+        this.$modal.show('error', {
+          message: 'Error: Distance Unit is required'
+        });
+      } else {
+        const ruleContainerId = this.distanceList.length
+          ? this.distanceList[0].ruleContainerId
+          : null;
 
-      this.distanceList.push({
-        id: null,
-        ruleContainerId,
-        distanceUnit: this.distanceUnit,
-        minDistance: parseInt(this.minDistance),
-        maxDistance: parseInt(this.maxDistance),
-        isDeleted: false
-      });
+        this.distanceList.push({
+          id: null,
+          ruleContainerId,
+          distanceUnit: this.distanceUnit,
+          minDistance: parseInt(this.minDistance),
+          maxDistance: parseInt(this.maxDistance),
+          isDeleted: false
+        });
 
-      this.updateRule = null;
-      this.minDistance = null;
-      this.maxDistance = null;
-      this.distanceUnit = null;
+        this.updateRule = null;
+        this.minDistance = 0;
+        this.maxDistance = 1;
+        this.distanceUnit = null;
+      }
     },
     async deleteTag(tag) {
       try {
@@ -205,8 +230,8 @@ export default {
       this.distanceList[ruleIndex].maxDistance = parseInt(this.maxDistance);
       this.distanceList[ruleIndex].distanceUnit = this.distanceUnit;
       this.updateRule = null;
-      this.minDistance = null;
-      this.maxDistance = null;
+      this.minDistance = 0;
+      this.maxDistance = 1;
       this.distanceUnit = null;
     },
     getTagString(rule) {

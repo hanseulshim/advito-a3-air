@@ -9,16 +9,18 @@
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Min:</label>
-      <el-inputNumber
+      <el-input
         v-model="minStops"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
         clearable
       />
       <label>Max:</label>
-      <el-inputNumber
+      <el-input
         v-model="maxStops"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
@@ -74,8 +76,8 @@ export default {
   data() {
     return {
       editMode: false,
-      minStops: null,
-      maxStops: null,
+      minStops: 0,
+      maxStops: 0,
       stopsList: []
     };
   },
@@ -106,8 +108,8 @@ export default {
           });
         }
         this.editMode = !this.editMode;
-        this.min = null;
-        this.max = null;
+        this.minStops = 0;
+        this.maxStops = 0;
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
@@ -115,20 +117,36 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.stopsList.length
-        ? this.stopsList[0].ruleContainerId
-        : null;
+      if (
+        this.stopsList.some(
+          rule =>
+            rule.minStops === parseInt(this.minStops) &&
+            rule.maxStops === parseInt(this.maxStops)
+        )
+      ) {
+        this.$modal.show('error', {
+          message: 'Error: Duplicate range'
+        });
+      } else if (this.maxStops === 0 && this.minStops === 0) {
+        this.$modal.show('error', {
+          message: 'At least one numeric value should be entered as Min or Max'
+        });
+      } else {
+        const ruleContainerId = this.stopsList.length
+          ? this.stopsList[0].ruleContainerId
+          : null;
 
-      this.stopsList.push({
-        id: null,
-        ruleContainerId,
-        minStops: this.minStops,
-        maxStops: this.maxStops,
-        isDeleted: false
-      });
+        this.stopsList.push({
+          id: null,
+          ruleContainerId,
+          minStops: parseInt(this.minStops),
+          maxStops: parseInt(this.maxStops),
+          isDeleted: false
+        });
 
-      this.minStops = null;
-      this.maxStops = null;
+        this.minStops = 0;
+        this.maxStops = 0;
+      }
     },
     async deleteTag(tag) {
       try {

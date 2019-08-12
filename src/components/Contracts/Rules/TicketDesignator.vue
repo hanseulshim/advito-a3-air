@@ -101,18 +101,38 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.ticketDesignatorList.length
-        ? this.ticketDesignatorList[0].ruleContainerId
-        : null;
+      if (
+        this.ticketDesignator &&
+        !this.ticketDesignatorList.some(
+          rule => rule.ticketDesignator === this.ticketDesignator
+        )
+      ) {
+        const ruleContainerId = this.ticketDesignatorList.length
+          ? this.ticketDesignatorList[0].ruleContainerId
+          : null;
 
-      this.ticketDesignatorList.push({
-        id: null,
-        ruleContainerId,
-        ticketDesignator: this.ticketDesignator,
-        isDeleted: false
-      });
+        this.ticketDesignatorList.push({
+          id: null,
+          ruleContainerId,
+          ticketDesignator: this.ticketDesignator,
+          isDeleted: false
+        });
 
-      this.ticketDesignator = '';
+        this.ticketDesignator = '';
+      } else if (!this.ticketDesignator) {
+        this.$modal.show('error', {
+          message: 'Ticket Designator value is required'
+        });
+      } else if (
+        this.ticketDesignator &&
+        this.ticketDesignatorList.some(
+          rule => rule.ticketDesignator === this.ticketDesignator
+        )
+      ) {
+        this.$modal.show('error', {
+          message: 'Duplicate Ticket Designator Value'
+        });
+      }
     },
     async deleteTag(tag) {
       try {

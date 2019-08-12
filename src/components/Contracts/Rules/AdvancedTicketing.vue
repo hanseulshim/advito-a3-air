@@ -9,8 +9,9 @@
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <label>Within:</label>
-      <el-inputNumber
+      <el-input
         v-model="endRange"
+        type="number"
         size="mini"
         :min="0"
         class="number-input"
@@ -126,20 +127,34 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.advancedTicketingList.length
-        ? this.advancedTicketingList[0].ruleContainerId
-        : null;
+      if (!this.endRange) {
+        this.$modal.show('error', {
+          message: 'Error: Please enter a valid timeframe'
+        });
+      } else if (
+        this.advancedTicketingList.some(
+          rule => rule.endRange === parseInt(this.endRange)
+        )
+      ) {
+        this.$modal.show('error', {
+          message: 'Error: Duplicate range value'
+        });
+      } else {
+        const ruleContainerId = this.advancedTicketingList.length
+          ? this.advancedTicketingList[0].ruleContainerId
+          : null;
 
-      this.advancedTicketingList.push({
-        id: null,
-        ruleContainerId,
-        startRange: this.startRange,
-        endRange: this.endRange,
-        unit: this.selectedUnit,
-        isDeleted: false
-      });
+        this.advancedTicketingList.push({
+          id: null,
+          ruleContainerId,
+          startRange: this.startRange,
+          endRange: parseInt(this.endRange),
+          unit: this.selectedUnit,
+          isDeleted: false
+        });
 
-      this.endRange = null;
+        this.endRange = null;
+      }
     },
     async deleteTag(tag) {
       try {
