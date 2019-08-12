@@ -5,6 +5,7 @@ const {
   airlineGroupAirlineList,
   posList
 } = require('../../../data');
+const { PREFERRED_AIRLINE_LOOKUP } = require('../../constants');
 
 exports.preferredAirlineCollection = {
   Query: {
@@ -28,6 +29,8 @@ exports.preferredAirlineCollection = {
         })
         .where('isdeleted', false)
         .andWhere('clientid', clientId),
+    preferredAirlineCollection: async (_, { projectId, id }, { db }) =>
+      await getPreferredAirlineCollection(db, id, projectId),
     preferredAirlineList: async (_, { groupId }, { db }) => {
       const preferredAirlineList = await db('pcgcarrier as p')
         .select({
@@ -63,8 +66,13 @@ exports.preferredAirlineCollection = {
       await Promise.all(preferredAirlineRequests);
       return preferredAirlineList;
     },
-    posList: () => posList,
-    preferenceLevelList: () => preferenceLevelList
+    preferenceLevelList: async (_, __, { db }) =>
+      await db('lov_lookup')
+        .select({
+          id: 'id',
+          name: 'name_val'
+        })
+        .where('type', PREFERRED_AIRLINE_LOOKUP.PREFERENCE_LEVEL_TYPE)
   },
   Mutation: {
     editPreferredAirlineCollection: async (
@@ -91,103 +99,70 @@ exports.preferredAirlineCollection = {
         `SELECT preferred_carrier_group_toggle(${id}, ${projectId})`
       );
     },
-    addPreferredAirline: (_, { id, airlineList }) => {
-      const preferredAirlineCollection = preferredAirlineCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!preferredAirlineCollection) {
-        throw new ApolloError('Preferred Airline Collection not found', 400);
-      }
-      preferredAirlineCollection.dateUpdated = new Date();
-      airlineList.forEach(airline => {
-        const name = airlineGroupAirlineList.filter(
-          air => air.id === airline.id
-        )[0].name;
-        const pos = posList
-          .filter(p => airline.posIdList.indexOf(p.id) !== -1)
-          .map(p => p.name);
-        const preferenceLevel = preferenceLevelList.filter(
-          p => p.id === airline.preferenceLevelId
-        )[0].name;
-        preferredAirlineCollection.airlineList.push({
-          id: airline.id,
-          name,
-          pos,
-          preferenceLevel,
-          effectiveStartDate: airline.effectiveStartDate,
-          effectiveEndDate: airline.effectiveEndDate
-            ? airline.effectiveEndDate
-            : new Date(253402232400000),
-          active: true
-        });
-      });
-      return preferredAirlineCollection;
-    },
-    editPreferredAirline: (_, { id, airlineList }) => {
-      const preferredAirlineCollection = preferredAirlineCollectionList.filter(
-        collection => collection.id === id
-      )[0];
-      if (!preferredAirlineCollection) {
-        throw new ApolloError('Preferred Airline Collection not found', 400);
-      }
-      preferredAirlineCollection.dateUpdated = new Date();
-      const airlineListCopy = airlineList.map(airline => {
-        const airlineCopyArray = preferredAirlineCollection.airlineList.filter(
-          air => air.id === airline.id
-        );
-        const airlineCopy = airlineCopyArray.length
-          ? airlineCopyArray[0]
-          : null;
-        const name = airlineGroupAirlineList.filter(
-          air => air.id === airline.id
-        )[0].name;
-        const pos = posList
-          .filter(p => airline.posIdList.indexOf(p.id) !== -1)
-          .map(p => p.name);
-        const preferenceLevel = preferenceLevelList.filter(
-          p => p.id === airline.preferenceLevelId
-        )[0].name;
-        return airlineCopy
-          ? {
-              ...airlineCopy,
-              name,
-              pos,
-              preferenceLevel,
-              effectiveStartDate: airline.effectiveStartDate,
-              effectiveEndDate: airline.effectiveEndDate
-                ? airline.effectiveEndDate
-                : new Date(253402232400000)
-            }
-          : {
-              id: airline.id,
-              name,
-              pos,
-              preferenceLevel,
-              active: true,
-              effectiveStartDate: airline.effectiveStartDate,
-              effectiveEndDate: airline.effectiveEndDate
-                ? airline.effectiveEndDate
-                : new Date(253402232400000)
-            };
-      });
-      preferredAirlineCollection.airlineList = airlineListCopy;
-      return preferredAirlineCollection;
-    },
-    deletePreferredAirline: (_, { id, collectionId }) => {
-      const preferredAirlineCollection = preferredAirlineCollectionList.filter(
-        collection => collection.id === collectionId
-      )[0];
-      if (!preferredAirlineCollection) {
-        throw new ApolloError('Preferred Airline Collection not found', 400);
-      }
-      const index = preferredAirlineCollection.airlineList.findIndex(
-        group => group.id === id
+    addPreferredAirline: async (_, { groupId, airlineList }, { db }) => {
+      airlineList.forEach(
+        async ({
+          airlineId,
+          preferenceLevelId,
+          effectiveStartDate,
+          effectiveEndDate,
+          posIdList
+        }) => {
+          const { rows } = await db.raw(
+            `SELECT pcg_carrier_create(${groupId}, ${airlineId}, ${preferenceLevelId}, ${
+              effectiveStartDate
+                ? `'${new Date(effectiveStartDate).toISOString()}'`
+                : null
+            },
+            ${
+              effectiveEndDate
+                ? `'${new Date(effectiveEndDate).toISOString()}'`
+                : null
+            })`
+          );
+          const [{ pcg_carrier_create: newId }] = rows;
+          const posRequests = posIdList.map(id =>
+            db.raw(`SELECT pcgc_pos_create(${newId}, ${id})`)
+          );
+          await Promise.all(posRequests);
+        }
       );
-      if (index === -1) {
-        throw new ApolloError('Airline Group not found', 400);
-      }
-      preferredAirlineCollection.airlineList.splice(index, 1);
-      return preferredAirlineCollection;
+    },
+    editPreferredAirline: async (_, { groupId, airlineList }, { db }) => {
+      airlineList.forEach(
+        async ({
+          id,
+          airlineId,
+          preferenceLevelId,
+          effectiveStartDate,
+          effectiveEndDate,
+          deleted,
+          posIdList
+        }) => {
+          const { rows } = await db.raw(
+            `SELECT pcg_carrier_update(${groupId}, ${id}, ${airlineId}, ${preferenceLevelId}, ${
+              effectiveStartDate
+                ? `'${new Date(effectiveStartDate).toISOString()}'`
+                : null
+            },
+            ${
+              effectiveEndDate
+                ? `'${new Date(effectiveEndDate).toISOString()}'`
+                : null
+            },
+            ${deleted})`
+          );
+
+          const [{ pcg_carrier_update: newId }] = rows;
+          const posRequests = posIdList.map(id =>
+            db.raw(`SELECT pcgc_pos_create(${newId}, ${id})`)
+          );
+          await Promise.all(posRequests);
+        }
+      );
+    },
+    deletePreferredAirline: async (_, { id }, { db }) => {
+      await db.raw(`SELECT pcg_carrier_delete(${id})`);
     }
   }
 };

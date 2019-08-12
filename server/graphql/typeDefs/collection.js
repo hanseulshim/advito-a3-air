@@ -111,10 +111,12 @@ input GroupAirline {
 }
 input PreferredAirlineInput {
   id: Int
-  posIdList: [Int]
+  airlineId: Int
   preferenceLevelId: Int
   effectiveStartDate: Date
   effectiveEndDate: Date
+  deleted: Boolean
+  posIdList: [Int]
 }
 
 extend type Query {
@@ -128,8 +130,8 @@ extend type Query {
   airlineGroupCollection(projectId: Int!, id: Int!): AirlineGroupCollection @auth
   airlineGroupList(collectionId: Int): [AirlineGroup] @auth
   preferredAirlineCollectionList(clientId: Int, projectId: Int): [PreferredAirlineCollection] @auth
+  preferredAirlineCollection(projectId: Int!, id: Int!): PreferredAirlineCollection @auth
   preferredAirlineList(groupId: Int): [PreferredAirline] @auth
-  posList: [PreferredAirlinePos]
   preferenceLevelList: [PreferredAirlinePreference] @auth
 }
 
@@ -161,8 +163,8 @@ extend type Mutation {
   editPreferredAirlineCollection(projectId: Int!, id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
   deletePreferredAirlineCollection(projectId: Int!, id: Int!): Int @auth
   togglePreferredAirlineCollection(projectId: Int!, id: Int!): Int @auth
-  addPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
-  editPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
-  deletePreferredAirline(id: Int!, collectionId: Int!): PreferredAirlineCollection @auth
+  addPreferredAirline(groupId: Int!, airlineList: [PreferredAirlineInput]): Int @auth
+  editPreferredAirline(groupId: Int!, airlineList: [PreferredAirlineInput]): Int @auth
+  deletePreferredAirline(id: Int!): Int @auth
 }
 `;

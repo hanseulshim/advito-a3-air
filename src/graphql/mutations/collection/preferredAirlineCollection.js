@@ -31,69 +31,24 @@ export const TOGGLE_PREFERRED_AIRLINE_COLLECTION = gql`
 
 export const ADD_PREFERRED_AIRLINE = gql`
   mutation addPreferredAirline(
-    $id: Int!
+    $groupId: Int!
     $airlineList: [PreferredAirlineInput]
   ) {
-    addPreferredAirline(id: $id, airlineList: $airlineList) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      airlineList {
-        id
-        name
-        preferenceLevel
-        effectiveStartDate
-        effectiveEndDate
-        pos
-        active
-      }
-    }
+    addPreferredAirline(groupId: $groupId, airlineList: $airlineList)
   }
 `;
 
 export const EDIT_PREFERRED_AIRLINE = gql`
   mutation editPreferredAirline(
-    $id: Int!
+    $groupId: Int!
     $airlineList: [PreferredAirlineInput]
   ) {
-    editPreferredAirline(id: $id, airlineList: $airlineList) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      airlineList {
-        id
-        name
-        preferenceLevel
-        effectiveStartDate
-        effectiveEndDate
-        pos
-        active
-      }
-    }
+    editPreferredAirline(groupId: $groupId, airlineList: $airlineList)
   }
 `;
 
 export const DELETE_PREFERRED_AIRLINE = gql`
-  mutation deletePreferredAirline($id: Int!, $collectionId: Int!) {
-    deletePreferredAirline(id: $id, collectionId: $collectionId) {
-      id
-      name
-      description
-      dateUpdated
-      active
-      airlineList {
-        id
-        name
-        preferenceLevel
-        effectiveStartDate
-        effectiveEndDate
-        pos
-        active
-      }
-    }
+  mutation deletePreferredAirline($id: Int!) {
+    deletePreferredAirline(id: $id)
   }
 `;

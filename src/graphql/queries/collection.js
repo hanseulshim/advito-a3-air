@@ -118,6 +118,14 @@ query preferredAirlineCollectionList($clientId: Int, $projectId: Int) {
 }
 `;
 
+export const GET_PREFERRED_AIRLINE_COLLECTION = gql`
+query preferredAirlineCollection( $projectId: Int!, $id: Int!) {
+  preferredAirlineCollection(projectId: $projectId, id: $id) {
+    ${PREFERRED_AIRLINE_COLLECTION}
+  }
+}
+`;
+
 export const GET_PREFERRED_AIRLINE_LIST = gql`
   query preferredAirlineList($groupId: Int) {
     preferredAirlineList(groupId: $groupId) {
@@ -135,15 +143,6 @@ export const GET_PREFERRED_AIRLINE_LIST = gql`
         name
         code
       }
-    }
-  }
-`;
-
-export const GET_POS_LIST = gql`
-  {
-    posList {
-      id
-      name
     }
   }
 `;

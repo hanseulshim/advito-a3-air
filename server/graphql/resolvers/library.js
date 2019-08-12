@@ -11,7 +11,7 @@ exports.library = {
         .select({
           id: 'id',
           code: 'code',
-          name: 'name'
+          name: db.raw(`CONCAT(code, ' ', name)`)
         })
         .where('isdeleted', false)
         .orderBy('name'),

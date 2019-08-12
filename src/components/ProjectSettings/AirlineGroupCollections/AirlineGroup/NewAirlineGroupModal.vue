@@ -60,11 +60,10 @@
           v-model="airlineIdList"
           class="select-modal airline-group-content"
           filterable
-          :filter-method="filterMethod"
           multiple
         >
           <el-option
-            v-for="item in filteredOptions"
+            v-for="item in airlineList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -141,10 +140,7 @@ export default {
   name: 'NewAirlineGroupModal',
   apollo: {
     airlineList: {
-      query: GET_AIRLINE_LIST,
-      result({ data: { airlineList } }) {
-        this.filteredOptions = airlineList;
-      }
+      query: GET_AIRLINE_LIST
     }
   },
   data() {
@@ -191,8 +187,7 @@ export default {
           }
         ]
       },
-      airlineList: [],
-      filteredOptions: []
+      airlineList: []
     };
   },
   methods: {
@@ -263,13 +258,6 @@ export default {
         });
       }
     },
-    filterMethod(value) {
-      this.filteredOptions = this.airlineList.filter(
-        option =>
-          option.name.toLowerCase().includes(value) ||
-          option.code.toLowerCase().includes(value)
-      );
-    },
     beforeOpen(event) {
       const { name, id } = event.params.collection;
       this.project = event.params.project;
@@ -288,7 +276,6 @@ export default {
       this.effectiveStartDate = null;
       this.effectiveEndDate = null;
       this.collectionName = null;
-      this.filteredOptions = this.airlineList;
     }
   }
 };

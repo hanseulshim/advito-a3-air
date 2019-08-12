@@ -31,7 +31,11 @@
           >
             + NEW AIRLINE
           </button>
-          <Airline :group-id="props.row.id" />
+          <Airline
+            :group-id="props.row.id"
+            :collection-name="props.row.name"
+            :project-id="project.id"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -157,7 +161,11 @@ export default {
       return formatDate(row.dateUpdated);
     },
     showNewPreferredAirline(collection) {
-      this.$modal.show('new-preferred-airline', { collection });
+      this.$modal.show('new-preferred-airline', {
+        collection,
+        project: this.project,
+        client: this.client
+      });
     },
     showEditPreferredAirlineCollection(collection) {
       this.$modal.show('edit-preferred-airline-collection', {

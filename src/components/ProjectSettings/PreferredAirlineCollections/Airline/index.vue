@@ -12,7 +12,7 @@
         :min-width="airline.name"
       />
       <el-table-column
-        prop="preferenceLevel"
+        prop="preferenceLevelName"
         label="Preference Level"
         :min-width="airline.preferenceLevel"
       />
@@ -43,23 +43,21 @@
           <el-tooltip effect="dark" content="Edit" placement="top">
             <i
               class="fas fa-pencil-alt icon-spacer"
-              @click="
-                showEditPreferredAirline(preferredAirlineList, scope.row.id)
-              "
+              @click="showEditPreferredAirline(scope.row.id)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete" placement="top">
             <i
               class="fas fa-trash-alt"
-              @click="showDeletePreferredAirline(scope.row)"
+              @click="showDeletePreferredAirline(scope.row.id)"
             />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
-    <!-- <NewPreferredAirlineModal @toggle-row="toggleRow" />
+    <NewPreferredAirlineModal @toggle-row="toggleRow" />
     <EditPreferredAirlineModal @toggle-row="toggleRow" />
-    <DeletePreferredAirlineModal @toggle-row="toggleRow" /> -->
+    <DeletePreferredAirlineModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -91,6 +89,14 @@ export default {
     groupId: {
       type: Number,
       required: true
+    },
+    collectionName: {
+      type: String,
+      required: true
+    },
+    projectId: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -103,18 +109,24 @@ export default {
     formatDate(row, param) {
       return row[param] ? formatDate(row[param]) : 'Undefined';
     },
-    showEditPreferredAirline(preferredAirlineList, id) {
+    showEditPreferredAirline(id) {
       this.$modal.show('edit-preferred-airline', {
-        preferredAirlineList,
+        preferredAirlineList: this.preferredAirlineList,
+        collectionName: this.collectionName,
         groupId: this.groupId,
+        projectId: this.projectId,
         id
       });
     },
-    showDeletePreferredAirline(airline) {
+    showDeletePreferredAirline(id) {
       this.$modal.show('delete-preferred-airline', {
-        airline,
-        groupId: this.groupId
+        id,
+        groupId: this.groupId,
+        projectId: this.projectId
       });
+    },
+    toggleRow(id) {
+      this.$emit('toggle-row', id);
     },
     getPosList(posList) {
       return posList.map(pos => pos.code).join(', ');

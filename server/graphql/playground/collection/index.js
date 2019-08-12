@@ -78,10 +78,6 @@ exports.collection = {
           code
         }
       }
-      posList {
-        id
-        name
-      }
       preferenceLevelList {
         id
         name
