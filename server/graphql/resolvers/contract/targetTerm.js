@@ -94,7 +94,6 @@ exports.targetTerm = {
           null
         )`
       );
-      console.log(rows);
       const [{ targetterm_createcopy: newId }] = rows;
       return await getTargetTerm(db, newId);
     },
