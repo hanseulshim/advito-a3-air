@@ -43,22 +43,26 @@ type SectorGeography {
 type AirlineGroupCollection {
   id: Int
   name: String
-  airlineGroupList: [AirlineGroup]
   description: String
   dateUpdated: Date
   effectiveStartDate: Date
   effectiveEndDate: Date
   active: Boolean
+  standard: Boolean
+  airlineGroupCount: Int
 }
 type AirlineGroup {
   id: Int
   name: String
+  code: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  airlineList: [AirlineGroupAirline]
+  standard: Boolean
+  airlineGroupMemberList: [AirlineGroupMember]
 }
-type AirlineGroupAirline {
+type AirlineGroupMember {
   id: Int
+  airlineId: Int
   name: String
   code: String
   effectiveStartDate: Date
@@ -67,23 +71,27 @@ type AirlineGroupAirline {
 type PreferredAirlineCollection {
   id: Int
   name: String
-  airlineList: [PreferredAirline]
   description: String
   dateUpdated: Date
   active: Boolean
+  airlineCount: Int
 }
 type PreferredAirline {
   id: Int
+  airlineId: Int
   name: String
-  preferenceLevel: String
+  preferenceLevelId: Int
+  preferenceLevelName: String
   effectiveStartDate: Date
   effectiveEndDate: Date
-  pos: [String]
   active: Boolean
+  posList: [PreferredAirlinePos]
 }
 type PreferredAirlinePos {
   id: Int
+  locationId: Int
   name: String
+  code: String
 }
 type PreferredAirlinePreference {
   id: Int
@@ -97,15 +105,18 @@ input SectorGeographyInput {
 }
 input GroupAirline {
   id: Int
+  airlineId: Int
   effectiveStartDate: Date
   effectiveEndDate: Date
 }
 input PreferredAirlineInput {
   id: Int
-  posIdList: [Int]
+  airlineId: Int
   preferenceLevelId: Int
   effectiveStartDate: Date
   effectiveEndDate: Date
+  deleted: Boolean
+  posIdList: [Int]
 }
 
 extend type Query {
@@ -115,10 +126,12 @@ extend type Query {
   travelSectorCollectionList(clientId: Int, projectId: Int): [TravelSectorCollection] @auth
   travelSectorCollection(projectId: Int!, id: Int!): TravelSectorCollection @auth
   travelSectorList(groupId: Int): [TravelSector] @auth
-  airlineGroupCollectionList: [AirlineGroupCollection] @auth
-  airlineGroupAirlineList: [AirlineGroupAirline] @auth
-  preferredAirlineCollectionList: [PreferredAirlineCollection] @auth
-  posList: [PreferredAirlinePos]
+  airlineGroupCollectionList(clientId: Int, projectId: Int): [AirlineGroupCollection] @auth
+  airlineGroupCollection(projectId: Int!, id: Int!): AirlineGroupCollection @auth
+  airlineGroupList(collectionId: Int): [AirlineGroup] @auth
+  preferredAirlineCollectionList(clientId: Int, projectId: Int): [PreferredAirlineCollection] @auth
+  preferredAirlineCollection(projectId: Int!, id: Int!): PreferredAirlineCollection @auth
+  preferredAirlineList(groupId: Int): [PreferredAirline] @auth
   preferenceLevelList: [PreferredAirlinePreference] @auth
 }
 
@@ -135,23 +148,23 @@ extend type Mutation {
   editTravelSectorCollection(projectId: Int!, id: Int!, name: String!, description: String): TravelSectorCollection @auth
   deleteTravelSectorCollection(id: Int!, projectId: Int!): Int @auth
   toggleTravelSectorCollection(id: Int!, projectId: Int!): Int @auth
-  addTravelSector(projectId: Int!, groupId: Int!, name: String!, shortName: String!, geographyList: [SectorGeographyInput]): Int @auth
+  addTravelSector(groupId: Int!, name: String!, shortName: String!, geographyList: [SectorGeographyInput]): Int @auth
   editTravelSector(sectorId: Int!, name: String!, shortName: String!, geographyList: [SectorGeographyInput]): Int @auth
   deleteTravelSector(id: Int!): Int @auth
   deleteSectorGeography(id: Int!): Int @auth
 
-  editAirlineGroupCollection(id: Int!, name: String!, description: String, effectiveStartDate: Date, effectiveEndDate: Date): AirlineGroupCollection @auth
-  deleteAirlineGroupCollection(id: Int!): Int @auth
-  toggleAirlineGroupCollection(id: Int!): [AirlineGroupCollection] @auth
-  addAirlineGroup(id: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
-  editAirlineGroup(id: Int!, collectionId: Int!, name: String!, effectiveStartDate: Date, effectiveEndDate: Date, airlineList: [GroupAirline]): AirlineGroupCollection @auth
-  deleteAirlineGroup(id: Int!, collectionId: Int!): AirlineGroupCollection @auth
+  editAirlineGroupCollection(projectId: Int!, id: Int!, name: String!, description: String, effectiveStartDate: Date!, effectiveEndDate: Date!): AirlineGroupCollection @auth
+  deleteAirlineGroupCollection(projectId: Int!, id: Int!): Int @auth
+  toggleAirlineGroupCollection(projectId: Int!, id: Int!): Int @auth
+  addAirlineGroup(collectionId: Int!, name: String!, code: String!, effectiveStartDate: Date!, effectiveEndDate: Date!, airlineList: [GroupAirline]): Int @auth
+  editAirlineGroup(carrierGroupId: Int!, name: String!, code: String!, effectiveStartDate: Date!, effectiveEndDate: Date!, airlineList: [GroupAirline]): Int @auth
+  deleteAirlineGroup(id: Int!): Int @auth
 
-  editPreferredAirlineCollection(id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
-  deletePreferredAirlineCollection(id: Int!): Int @auth
-  togglePreferredAirlineCollection(id: Int!): [PreferredAirlineCollection] @auth
-  addPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
-  editPreferredAirline(id: Int!, airlineList: [PreferredAirlineInput]): PreferredAirlineCollection @auth
-  deletePreferredAirline(id: Int!, collectionId: Int!): PreferredAirlineCollection @auth
+  editPreferredAirlineCollection(projectId: Int!, id: Int!, name: String!, description: String): PreferredAirlineCollection @auth
+  deletePreferredAirlineCollection(projectId: Int!, id: Int!): Int @auth
+  togglePreferredAirlineCollection(projectId: Int!, id: Int!): Int @auth
+  addPreferredAirline(groupId: Int!, airlineList: [PreferredAirlineInput]): Int @auth
+  editPreferredAirline(groupId: Int!, airlineList: [PreferredAirlineInput]): Int @auth
+  deletePreferredAirline(id: Int!): Int @auth
 }
 `;

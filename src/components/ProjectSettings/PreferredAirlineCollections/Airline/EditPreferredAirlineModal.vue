@@ -9,7 +9,6 @@
     <el-form
       ref="editPreferredAirline"
       :model="form"
-      :rules="rules"
       label-position="left"
       label-width="200px"
       hide-required-asterisk
@@ -20,27 +19,20 @@
           <i class="fas fa-times close-modal-button" @click="hideModal" />
         </el-tooltip>
       </div>
-      <el-form-item label="Collection Name *" prop="id">
-        <el-select v-model="form.id" class="select-modal" disabled>
-          <el-option
-            v-for="item in preferredAirlineCollectionList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+      <div>
+        <div class="form-label-no-select airline-group">Collection Name</div>
+        <span>{{ collectionName }}</span>
+      </div>
       <div class="airline-group-item">
         <div class="airline-group-label">Airline Name *</div>
         <el-select
           v-model="airlineIdList"
           class="select-modal airline-group-content"
           filterable
-          :filter-method="filterMethod"
           multiple
         >
           <el-option
-            v-for="item in filteredOptions"
+            v-for="item in airlineList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -50,12 +42,13 @@
       <div class="airline-group-item">
         <div class="airline-group-label">Point of Sale *</div>
         <el-select
-          v-model="posId"
+          v-model="posIdList"
           class="select-modal airline-group-content"
           filterable
+          multiple
         >
           <el-option
-            v-for="item in posList"
+            v-for="item in countryList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -82,12 +75,14 @@
         <div class="date-picker-container airline-group-content">
           <el-date-picker
             v-model="effectiveStartDate"
+            :clearable="false"
             type="date"
             format="dd MMM yyyy"
             class="date-picker"
           />
           <el-date-picker
             v-model="effectiveEndDate"
+            :clearable="false"
             type="date"
             format="dd MMM yyyy"
             class="date-picker"
@@ -98,23 +93,25 @@
         ADD
       </button>
       <div class="airline-group-container">
-        <div v-for="(airline, index) in form.airlineList" :key="index">
+        <div v-for="(airline, index) in filteredAirlineList" :key="index">
           <div class="airline-group-item">
             <div class="airline-group-label">
               <el-tooltip effect="dark" content="Delete" placement="top">
-                <i class="fas fa-times" @click="removeAirline(index)" />
+                <i class="fas fa-times" @click="removeAirline(airline.id)" />
               </el-tooltip>
-              {{ getAirline(airline.id) }}
+              {{ getAirline(airline.airlineId) }}
             </div>
             <div class="date-picker-container airline-group-content">
               <el-date-picker
                 v-model="airline.effectiveStartDate"
+                :clearable="false"
                 type="date"
                 format="dd MMM yyyy"
                 class="date-picker"
               />
               <el-date-picker
                 v-model="airline.effectiveEndDate"
+                :clearable="false"
                 type="date"
                 format="dd MMM yyyy"
                 class="date-picker"
@@ -130,7 +127,7 @@
               multiple
             >
               <el-option
-                v-for="item in posList"
+                v-for="item in countryList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -163,59 +160,47 @@
 
 <script>
 import {
-  GET_POS_LIST,
+  GET_COUNTRY_LIST,
   GET_PREFERENCE_LEVEL_LIST,
-  GET_PREFERRED_AIRLINE_COLLECTION_LIST,
+  GET_PREFERRED_AIRLINE_LIST,
+  GET_PREFERRED_AIRLINE_COLLECTION,
   GET_AIRLINE_LIST
 } from '@/graphql/queries';
 import { EDIT_PREFERRED_AIRLINE } from '@/graphql/mutations';
 export default {
   name: 'EditPreferredAirlineModal',
   apollo: {
-    preferredAirlineCollectionList: {
-      query: GET_PREFERRED_AIRLINE_COLLECTION_LIST
-    },
-    posList: {
-      query: GET_POS_LIST
+    countryList: {
+      query: GET_COUNTRY_LIST
     },
     preferenceLevelList: {
       query: GET_PREFERENCE_LEVEL_LIST
     },
-    airlineGroupAirlineList: {
-      query: GET_AIRLINE_LIST,
-      update(data) {
-        this.filteredOptions = data.airlineGroupAirlineList;
-        return data.airlineGroupAirlineList;
-      }
+    airlineList: {
+      query: GET_AIRLINE_LIST
     }
   },
   data() {
     return {
       form: {
-        id: null,
+        groupId: null,
         airlineList: []
       },
+      collectionName: null,
       airlineIdList: [],
-      posId: null,
       posIdList: [],
       preferenceLevelId: null,
       effectiveStartDate: null,
       effectiveEndDate: null,
-      rules: {
-        id: [
-          {
-            required: true,
-            message: 'Please select a collection',
-            trigger: 'change'
-          }
-        ]
-      },
-      preferredAirlineCollectionList: [],
-      airlineGroupAirlineList: [],
-      posList: [],
-      preferenceLevelList: [],
-      filteredOptions: []
+      airlineList: [],
+      countryList: [],
+      preferenceLevelList: []
     };
+  },
+  computed: {
+    filteredAirlineList() {
+      return this.form.airlineList.filter(airline => !airline.deleted);
+    }
   },
   methods: {
     hideModal() {
@@ -233,43 +218,56 @@ export default {
     addAirline() {
       if (
         this.airlineIdList.length &&
-        this.posId &&
+        this.posIdList.length &&
         this.preferenceLevelId &&
-        this.effectiveStartDate
+        this.effectiveStartDate &&
+        this.effectiveEndDate
       ) {
-        const airlineList = this.airlineIdList.map(id => ({
-          id,
-          posIdList: [this.posId],
+        const airlineList = this.airlineIdList.map(airlineId => ({
+          id: null,
+          airlineId,
+          posIdList: [...this.posIdList],
           preferenceLevelId: this.preferenceLevelId,
           effectiveStartDate: this.effectiveStartDate,
-          effectiveEndDate: this.effectiveEndDate
+          effectiveEndDate: this.effectiveEndDate,
+          deleted: false
         }));
         this.form.airlineList.push(...airlineList);
         this.airlineIdList = [];
-        this.posId = null;
         this.posIdList = [];
         this.preferenceLevelId = null;
         this.effectiveStartDate = null;
         this.effectiveEndDate = null;
       }
     },
-    removeAirline(index) {
-      this.form.airlineList.splice(index, 1);
+    removeAirline(id) {
+      this.form.airlineList.find(airline => airline.id === id).deleted = true;
     },
     getAirline(id) {
-      return this.airlineGroupAirlineList.filter(
-        airline => airline.id === id
-      )[0].name;
+      return this.airlineList.filter(airline => airline.id === id)[0].name;
     },
     async editPreferredAirline() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: EDIT_PREFERRED_AIRLINE,
           variables: {
             ...this.form
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_PREFERRED_AIRLINE_LIST,
+              variables: { groupId: this.form.groupId }
+            },
+            {
+              query: GET_PREFERRED_AIRLINE_COLLECTION,
+              variables: {
+                id: this.form.groupId,
+                projectId: this.projectId
+              }
+            }
+          ]
         });
-        this.$emit('toggle-row', data.data.editPreferredAirline.id);
+        this.$emit('toggle-row', this.form.groupId);
         this.$modal.show('success', {
           message: 'Preferred Airline successfully edited.',
           name: 'edit-preferred-airline'
@@ -280,47 +278,40 @@ export default {
         });
       }
     },
-    filterMethod(value) {
-      this.filteredOptions = this.airlineGroupAirlineList.filter(option => {
-        return (
-          option.name.toLowerCase().includes(value) ||
-          option.code.toLowerCase().includes(value)
-        );
-      });
-    },
     beforeOpen(event) {
-      const { airlineList, collectionId, id } = event.params;
-      this.form.id = collectionId;
-      this.form.airlineList = airlineList
-        .map(airline => {
-          const posIdList = this.posList
-            .filter(pos => {
-              return airline.pos.indexOf(pos.name) !== -1;
-            })
-            .map(pos => pos.id);
-          const preferenceLevelId = this.preferenceLevelList.filter(
-            preferenceLevel => preferenceLevel.name === airline.preferenceLevel
-          )[0].id;
-          return {
-            id: airline.id,
-            posIdList,
-            preferenceLevelId,
-            effectiveStartDate: airline.effectiveStartDate,
-            effectiveEndDate: airline.effectiveEndDate
-          };
-        })
+      const {
+        id,
+        groupId,
+        collectionName,
+        preferredAirlineList,
+        projectId
+      } = event.params;
+      this.collectionName = collectionName;
+      this.form.groupId = groupId;
+      this.projectId = projectId;
+      this.form.airlineList = preferredAirlineList
+        .map(airline => ({
+          id: airline.id,
+          airlineId: airline.airlineId,
+          effectiveStartDate: airline.effectiveStartDate,
+          effectiveEndDate: airline.effectiveEndDate,
+          preferenceLevelId: airline.preferenceLevelId,
+          posIdList: airline.posList.map(pos => pos.locationId),
+          deleted: false
+        }))
         .sort(a => {
           return a.id === id ? -1 : 1;
         });
     },
     beforeClose() {
-      this.form.id = null;
+      this.form.groupId = null;
       this.form.airlineList = [];
+      this.collectionName = null;
       this.airlineIdList = [];
-      this.posId = null;
       this.posIdList = [];
       this.preferenceLevelId = null;
-      this.filteredOptions = this.airlineGroupAirlineList;
+      this.effectiveStartDate = null;
+      this.effectiveEndDate = null;
     }
   }
 };

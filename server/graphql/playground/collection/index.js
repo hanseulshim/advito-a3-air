@@ -4,7 +4,9 @@ const { airlineGroupCollection } = require('./airlineGroupCollection');
 const { preferredAirlineCollection } = require('./preferredAirlineCollection');
 const {
   LOCATION_COLLECTION,
-  TRAVEL_SECTOR_COLLECTION
+  TRAVEL_SECTOR_COLLECTION,
+  AIRLINE_GROUP_COLLECTION,
+  PREFERRED_AIRLINE_COLLECTION
 } = require('../../constants');
 exports.collection = {
   queries: {
@@ -39,50 +41,42 @@ exports.collection = {
           exclude
         }
       }
-      airlineGroupCollectionList {
+      airlineGroupCollectionList(clientId: null, projectId: null) {
+        ${AIRLINE_GROUP_COLLECTION}
+      }
+      airlineGroupList(collectionId: null) {
         id
         name
-        description
-        dateUpdated
+        effectiveStartDate
+        effectiveEndDate
+        standard
+        airlineGroupMemberList {
+          id
+          airlineId
+          name
+          code
+          effectiveStartDate
+          effectiveEndDate
+        }
+      }
+      preferredAirlineCollectionList(clientId: null, projectId: null) {
+        ${PREFERRED_AIRLINE_COLLECTION}
+      }
+      preferredAirlineList(groupId: null) {
+        id
+        airlineId
+        name
+        preferenceLevelId
+        preferenceLevelName
         effectiveStartDate
         effectiveEndDate
         active
-        airlineGroupList {
+        posList {
           id
+          locationId
           name
-          effectiveStartDate
-          effectiveEndDate
-          airlineList {
-            id
-            name
-            effectiveStartDate
-            effectiveEndDate
-          }
+          code
         }
-      }
-      airlineGroupAirlineList {
-        id
-        name
-        code
-      }
-      preferredAirlineCollectionList {
-        id
-        name
-        description
-        dateUpdated
-        active
-        airlineList {
-          name
-          preferenceLevel
-          effectiveStartDate
-          effectiveEndDate
-          pos
-          active
-        }
-      }
-      posList {
-        id
-        name
       }
       preferenceLevelList {
         id

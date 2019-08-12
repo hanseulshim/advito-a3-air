@@ -21,14 +21,12 @@ export const COPY_TRAVEL_SECTOR_COLLECTION = gql`
 
 export const ADD_TRAVEL_SECTOR = gql`
   mutation addTravelSector(
-    $projectId: Int!
     $groupId: Int!
     $name: String!
     $shortName: String!
     $geographyList: [SectorGeographyInput]
   ) {
     addTravelSector(
-      projectId: $projectId
       groupId: $groupId
       name: $name
       shortName: $shortName

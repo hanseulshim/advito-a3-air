@@ -86,6 +86,7 @@
           >
           <button
             class="button long bidirectional-spacer"
+            type="button"
             @click="addGeography"
           >
             ADD BIDIRECTION
@@ -201,8 +202,7 @@ export default {
         await this.$apollo.mutate({
           mutation: ADD_TRAVEL_SECTOR,
           variables: {
-            ...this.form,
-            projectId: this.project.id
+            ...this.form
           },
           refetchQueries: () => [
             {
