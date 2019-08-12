@@ -77,7 +77,8 @@
         sort-by="effectiveTo"
       />
       <el-table-column label="Actions" :min-width="discount.actions">
-        <template slot-scope="props">
+        <template>
+          <!-- <template slot-scope="props"> -->
           <el-tooltip
             effect="dark"
             content="Copy Normalization"

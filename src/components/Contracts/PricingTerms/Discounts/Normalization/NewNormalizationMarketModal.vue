@@ -258,7 +258,8 @@ export default {
       //   }
       alert('Successfuly created new normalization market!');
     },
-    beforeOpen(event) {
+    beforeOpen() {
+      // beforeOpen(event) {
       //   const {
       //     id,
       //     name,

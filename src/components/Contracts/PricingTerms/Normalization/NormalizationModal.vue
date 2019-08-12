@@ -47,11 +47,7 @@
 
 <script>
 import { ruleTypes } from '../Rules/helper';
-import {
-  GET_RULE_LIST,
-  GET_DISCOUNT,
-  GET_SELECTED_CONTRACT
-} from '@/graphql/queries';
+import { GET_RULE_LIST, GET_SELECTED_CONTRACT } from '@/graphql/queries';
 export default {
   name: 'PricingTermRulesModal',
   apollo: {

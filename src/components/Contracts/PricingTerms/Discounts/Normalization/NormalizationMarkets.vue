@@ -50,7 +50,8 @@
         :render-header="renderHeader"
       />
       <el-table-column :min-width="discount.actions">
-        <template slot-scope="props">
+        <template>
+          <!-- <template slot-scope="props"> -->
           <el-tooltip
             effect="dark"
             content="Edit Normalization Market"
