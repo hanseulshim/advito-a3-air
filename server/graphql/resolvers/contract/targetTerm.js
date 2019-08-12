@@ -87,9 +87,14 @@ exports.targetTerm = {
       const { rows } = await db.raw(
         `SELECT targetterm_createcopy(
           ${id},
-          '${name}'
+          '${name}',
+          null,
+          null,
+          null,
+          null
         )`
       );
+      console.log(rows);
       const [{ targetterm_createcopy: newId }] = rows;
       return await getTargetTerm(db, newId);
     },
