@@ -1,10 +1,3 @@
-const { ApolloError } = require('apollo-server-lambda');
-const {
-  preferredAirlineCollectionList,
-  preferenceLevelList,
-  airlineGroupAirlineList,
-  posList
-} = require('../../../data');
 const { PREFERRED_AIRLINE_LOOKUP } = require('../../constants');
 
 exports.preferredAirlineCollection = {
