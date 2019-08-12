@@ -22,7 +22,7 @@
         value-key="name"
         @change="clearGeo()"
         @clear="clearGeo()"
-        @blue="clearGeo()"
+        @blur="clearGeo()"
       >
         <el-option
           v-for="country in filteredGeoList"
