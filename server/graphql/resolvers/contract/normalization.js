@@ -119,6 +119,13 @@ exports.normalization = {
       );
       return await getNormalization(db, id);
     },
+    copyNormalization: async (_, { id }, { db }) => {
+      const { rows } = await db.raw(
+        `SELECT discountnormalisation_createcopy(${id}, null, null)`
+      );
+      const [{ discountnormalisation_createcopy: newId }] = rows;
+      return await getNormalization(db, newId);
+    },
     deleteNormalization: async (_, { id }, { db }) => {
       await db.raw(`SELECT discount_normalisation_delete(${id})`);
       return id;

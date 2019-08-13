@@ -358,6 +358,7 @@ extend type Mutation {
     effectiveTo: Date!
   ): Normalization @auth
   deleteNormalization(id: Int!): Int @auth
+  copyNormalization(id: Int!): Normalization @auth
   createNormalizationMarket(
     normalizationId: Int!
     marketA: String!
