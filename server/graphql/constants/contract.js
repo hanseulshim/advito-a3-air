@@ -92,6 +92,16 @@ const DISCOUNT = `id
         noteImportant
         noteContent`;
 
+const NORMALIZATION = `id
+        usageFrom
+        usageTo
+        effectiveFrom
+        effectiveTo
+        created
+        createdby
+        marketCount
+`;
+
 const NOTE = `id
         text
         lastUpdate
@@ -173,6 +183,7 @@ module.exports = {
   CONTRACT,
   PRICING_TERM,
   DISCOUNT,
+  NORMALIZATION,
   TARGET_TERM,
   TARGET_TERM_LOOKUP,
   TARGET_LEVEL,

@@ -100,6 +100,16 @@ export const NOTE = `id
         assignedToId
         assignedToName`;
 
+export const NORMALIZATION = `id
+usageFrom
+usageTo
+effectiveFrom
+effectiveTo
+created
+createdby
+marketCount
+`;
+
 export const CONTRACT_LOOKUP = {
   CONTRACT: 7,
   PROPOSAL: 8,

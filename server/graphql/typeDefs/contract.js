@@ -73,6 +73,19 @@ type DirectionType {
   id: Int
   name: String
 }
+
+type Normalization {
+  id: Int
+  usageFrom: Date
+  usageTo: Date
+  effectiveFrom: Date
+  effectiveTo: Date
+  created: Date
+  createdby: String
+  marketCount: Int
+}
+
+
 type TargetTerm {
   id: Int
   name: String
@@ -159,6 +172,9 @@ extend type Query {
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
+
+  normalizationList(discountId: Int): [Normalization] @auth
+  normalization(id: Int!): Normalization @auth
 
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth
@@ -294,6 +310,23 @@ extend type Mutation {
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!
   ): Int @auth
+
+
+  createNormalization(
+    discountId: Int!
+    usageFrom: Date!
+    usageTo: Date!
+    effectiveFrom: Date!
+    effectiveTo: Date!
+  ): Normalization @auth
+  updateNormalization(
+    id: Int!
+    usageFrom: Date!
+    usageTo: Date!
+    effectiveFrom: Date!
+    effectiveTo: Date!
+  ): Normalization @auth
+  deleteNormalization(id: Int!): Int @auth
   
   addNote(
     parentId: Int!

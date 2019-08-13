@@ -9,6 +9,7 @@ const {
   CONTRACT_LOOKUP,
   DISCOUNT_LOOKUP,
   PRICING_TERM_LOOKUP,
+  NORMALIZATION,
   RULE_LOOKUP
 } = require('./contract');
 const { DATA_SET } = require('./dataSet');
@@ -38,6 +39,7 @@ module.exports = {
   TARGET_LEVEL,
   TARGET_TERM_LOOKUP,
   DISCOUNT,
+  NORMALIZATION,
   NOTE,
   CONTRACT_LOOKUP,
   DISCOUNT_LOOKUP,

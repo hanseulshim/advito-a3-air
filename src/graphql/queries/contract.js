@@ -4,7 +4,8 @@ import {
   PRICING_TERM,
   DISCOUNT,
   TARGET_TERM,
-  TARGET_LEVEL
+  TARGET_LEVEL,
+  NORMALIZATION
 } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
@@ -179,4 +180,20 @@ export const GET_INCENTIVE_TYPE_LIST = gql`
       name
     }
   }
+`;
+
+export const GET_NORMALIZATION_LIST = gql`
+query targetLevel($discountId: Int) {
+  targetLevel(discountId: $discountId) {
+    ${NORMALIZATION}
+  }
+}
+`;
+
+export const GET_NORMALIZATION = gql`
+query normalization($id: Int!) {
+  normalization(id: $id) {
+    ${NORMALIZATION}
+  }
+}
 `;
