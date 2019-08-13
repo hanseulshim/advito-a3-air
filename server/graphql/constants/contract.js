@@ -92,6 +92,33 @@ const DISCOUNT = `id
         noteImportant
         noteContent`;
 
+const NORMALIZATION = `id
+        usageFrom
+        usageTo
+        effectiveFrom
+        effectiveTo
+        created
+        createdby
+        marketCount`;
+
+const NORMALIZATION_MARKET = `id
+        marketA
+        marketB
+        farePaid
+        usageOverride
+        farePullDate
+        notes
+        fareList {
+          id
+          fareType
+          fareBasis
+          amount
+          currencyCode
+          directionType
+          advancePurchase
+          minstay
+        }`;
+
 const NOTE = `id
         text
         lastUpdate
@@ -173,6 +200,8 @@ module.exports = {
   CONTRACT,
   PRICING_TERM,
   DISCOUNT,
+  NORMALIZATION,
+  NORMALIZATION_MARKET,
   TARGET_TERM,
   TARGET_TERM_LOOKUP,
   TARGET_LEVEL,
