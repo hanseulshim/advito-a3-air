@@ -114,6 +114,27 @@ input NormalizationFareInput {
   advancePurchase: String!
   minstay: String!
 }
+type TopMarket {
+  id: Int
+  value: String
+  marketA: String
+  marketB: String
+  farePaid: Float
+  usage: Float
+}
+type MarketAdvancedTicket {
+  label: String
+  value: Float
+}
+type MarketDeparture {
+  label: String
+  value: Float
+}
+type MarketFareBasis {
+  fareBasis: String
+  bookingClass: String
+  usage: Float
+}
 
 
 type TargetTerm {
@@ -206,6 +227,10 @@ extend type Query {
   normalizationList(discountId: Int): [Normalization] @auth
   normalization(id: Int!): Normalization @auth
   normalizationMarketList(normalizationId: Int): [NormalizationMarket] @auth
+  topMarketList(normalizationId: Int): [TopMarket] @auth
+  marketAdvancedTicketList(normalizationId: Int): [MarketAdvancedTicket] @auth
+  marketDepartureList(normalizationId: Int): [MarketDeparture] @auth
+  marketFareBasisList(normalizationId: Int): [MarketFareBasis] @auth
 
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth

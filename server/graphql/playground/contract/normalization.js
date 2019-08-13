@@ -16,6 +16,27 @@ exports.normalization = {
       normalizationMarketList(normalizationId: null) {
         ${NORMALIZATION_MARKET}
       }
+      topMarketList(normalizationId: null) {
+        id
+        value
+        marketA
+        marketB
+        farePaid
+        usage
+      }
+      marketAdvancedTicketList(normalizationId: null) {
+        label
+        value
+      }
+      marketDepartureList(normalizationId: null) {
+        label
+        value
+      }
+      marketFareBasisList(normalizationId: null) {
+        fareBasis
+        bookingClass
+        usage
+      }
     }`
   },
   mutations: {

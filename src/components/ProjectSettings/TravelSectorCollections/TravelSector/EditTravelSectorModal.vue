@@ -86,6 +86,7 @@
           >
           <button
             class="button long bidirectional-spacer"
+            type="button"
             @click="addGeography"
           >
             ADD BIDIRECTION

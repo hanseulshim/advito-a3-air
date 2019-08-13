@@ -49,7 +49,97 @@ exports.normalization = {
       await Promise.all(normalizationFareRequests);
       return normalizationMarketList;
     },
-    normalization: async (_, { id }, { db }) => await getNormalization(db, id)
+    normalization: async (_, { id }, { db }) => await getNormalization(db, id),
+    topMarketList: async () => [
+      {
+        id: 1,
+        value: 'LAX - JFK 12345 50%',
+        marketA: 'LAX',
+        marketB: 'JFK',
+        farePaid: 12345,
+        usage: 0.5
+      },
+      {
+        id: 2,
+        value: 'DFW - JFK 54321 90%',
+        marketA: 'DFW',
+        marketB: 'JFK',
+        farePaid: 54321,
+        usage: 0.9
+      },
+      {
+        id: 3,
+        value: 'BWI - OAK 34182 25%',
+        marketA: 'BWI',
+        marketB: 'OAK',
+        farePaid: 34182,
+        usage: 0.25
+      }
+    ],
+    marketAdvancedTicketList: async () => [
+      {
+        label: '0-2',
+        value: 0.34
+      },
+      {
+        label: '3-4',
+        value: 0.2
+      },
+      {
+        label: '7-10',
+        value: 0.11
+      },
+      {
+        label: '14-20',
+        value: 0.25
+      },
+      {
+        label: '21+',
+        value: 0.1
+      }
+    ],
+    marketDepartureList: async () => [
+      {
+        label: 'Sunday',
+        value: 0.14
+      },
+      {
+        label: 'Monday',
+        value: 0.2
+      },
+      {
+        label: 'Tuesday',
+        value: 0.11
+      },
+      {
+        label: 'Wednesday',
+        value: 0.25
+      },
+      {
+        label: 'Thursday',
+        value: 0.1
+      },
+      {
+        label: 'Friday',
+        value: 0.1
+      },
+      {
+        label: 'Saturday',
+        value: 0.1
+      }
+    ],
+    marketFareBasisList: async () => [
+      {
+        fareBasis: 'DGFBLM',
+        bookingClass: 'D',
+        usage: 0.98
+      },
+      {
+        fareBasis: 'J1NQO4C5',
+        bookingClass: 'D',
+        usage: 0.02
+      }
+    ]
   },
   Mutation: {
     createNormalization: async (
