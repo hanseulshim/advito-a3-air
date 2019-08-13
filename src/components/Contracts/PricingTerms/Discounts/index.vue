@@ -313,7 +313,8 @@ export default {
     },
     showNormalizationModal(discount) {
       this.$modal.show('normalization-modal', {
-        discount
+        discount,
+        pricingTermId: this.pricingTermId
       });
     },
     toggleNoteModal(discount) {

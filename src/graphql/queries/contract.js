@@ -184,8 +184,8 @@ export const GET_INCENTIVE_TYPE_LIST = gql`
 `;
 
 export const GET_NORMALIZATION_LIST = gql`
-query targetLevel($discountId: Int) {
-  targetLevel(discountId: $discountId) {
+query normalizationList($discountId: Int) {
+  normalizationList(discountId: $discountId) {
     ${NORMALIZATION}
   }
 }
