@@ -149,22 +149,39 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.minStayList.length
-        ? this.minStayList[0].ruleContainerId
-        : null;
+      if (!this.value) {
+        this.$modal.show('error', {
+          message: 'Error: Please enter a value'
+        });
+      } else if (
+        this.minStayList.some(
+          rule =>
+            rule.value === parseInt(this.value) &&
+            rule.unit === this.unit &&
+            rule.dayOfWeekInclusion === this.dayOfWeekInclusion
+        )
+      ) {
+        this.$modal.show('error', {
+          message: 'Error: Duplicate rule values'
+        });
+      } else {
+        const ruleContainerId = this.minStayList.length
+          ? this.minStayList[0].ruleContainerId
+          : null;
 
-      this.minStayList.push({
-        id: null,
-        ruleContainerId,
-        unit: this.unit,
-        value: parseInt(this.value),
-        dayOfWeekInclusion: this.dayOfWeekInclusion,
-        isDeleted: false
-      });
+        this.minStayList.push({
+          id: null,
+          ruleContainerId,
+          unit: this.unit,
+          value: parseInt(this.value),
+          dayOfWeekInclusion: this.dayOfWeekInclusion,
+          isDeleted: false
+        });
 
-      this.value = null;
-      this.unit = null;
-      this.dayOfWeekInclusion = null;
+        this.value = null;
+        this.unit = 70;
+        this.dayOfWeekInclusion = null;
+      }
     },
     async deleteTag(tag) {
       try {

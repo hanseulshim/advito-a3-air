@@ -96,18 +96,34 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.tourCodeList.length
-        ? this.tourCodeList[0].ruleContainerId
-        : null;
+      if (
+        this.tourCode &&
+        !this.tourCodeList.some(rule => rule.tourCode === this.tourCode)
+      ) {
+        const ruleContainerId = this.tourCodeList.length
+          ? this.tourCodeList[0].ruleContainerId
+          : null;
 
-      this.tourCodeList.push({
-        id: null,
-        ruleContainerId,
-        tourCode: this.tourCode,
-        isDeleted: false
-      });
+        this.tourCodeList.push({
+          id: null,
+          ruleContainerId,
+          tourCode: this.tourCode,
+          isDeleted: false
+        });
 
-      this.tourCode = '';
+        this.tourCode = '';
+      } else if (!this.tourCode) {
+        this.$modal.show('error', {
+          message: 'Tour Code value is required'
+        });
+      } else if (
+        this.tourCode &&
+        this.tourCodeList.some(rule => rule.tourCode === this.tourCode)
+      ) {
+        this.$modal.show('error', {
+          message: 'Duplicate Tour Code Value'
+        });
+      }
     },
     async deleteTag(tag) {
       try {

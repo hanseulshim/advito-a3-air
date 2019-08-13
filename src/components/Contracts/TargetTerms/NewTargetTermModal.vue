@@ -327,7 +327,7 @@ export default {
           {
             required: timeframeIsRequired,
             type: 'number',
-            message: 'Timeframe must be a number'
+            message: 'Please enter a valid timeframe'
           }
         ],
         currencyId: [

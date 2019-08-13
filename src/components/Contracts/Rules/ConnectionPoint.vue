@@ -12,13 +12,20 @@
       <el-select
         v-model="connection"
         filterable
-        placeholder="Select"
-        size="mini"
         clearable
+        remote
+        size="mini"
+        reserve-keyword
+        placeholder="Please enter a keyword"
+        :remote-method="filterGeoList"
+        :loading="loading"
         value-key="name"
+        @change="clearGeo()"
+        @clear="clearGeo()"
+        @blur="clearGeo()"
       >
         <el-option
-          v-for="country in geographyList"
+          v-for="country in filteredGeoList"
           :key="country.index"
           :label="country.name"
           :value="country"
@@ -95,7 +102,9 @@ export default {
       editMode: false,
       exclude: false,
       connection: {},
-      connectionPointList: []
+      connectionPointList: [],
+      options: [],
+      loading: false
     };
   },
   computed: {
@@ -104,6 +113,12 @@ export default {
     },
     includedRules() {
       return this.connectionPointList.filter(rule => !rule.exclude);
+    },
+    filteredGeoList() {
+      return this.options.filter(
+        geo =>
+          !this.connectionPointList.some(rule => rule.connection === geo.name)
+      );
     }
   },
   methods: {
@@ -141,20 +156,36 @@ export default {
       }
     },
     createTag() {
-      const ruleContainerId = this.connectionPointList.length
-        ? this.connectionPointList[0].ruleContainerId
-        : null;
+      if (
+        this.connectionPointList.some(
+          rule =>
+            rule.connection === this.connection.name &&
+            rule.connectionGeoType === this.connection.locationType
+        )
+      ) {
+        this.$modal.show('error', {
+          message: 'Error: Duplicate rule'
+        });
+      } else if (!this.connection.name) {
+        this.$modal.show('error', {
+          message: 'Error: Connection Point selection is required.'
+        });
+      } else {
+        const ruleContainerId = this.connectionPointList.length
+          ? this.connectionPointList[0].ruleContainerId
+          : null;
 
-      this.connectionPointList.push({
-        id: null,
-        ruleContainerId,
-        connection: this.connection.name,
-        connectionGeoType: this.connection.locationType,
-        exclude: this.exclude,
-        isDeleted: false
-      });
+        this.connectionPointList.push({
+          id: null,
+          ruleContainerId,
+          connection: this.connection.name,
+          connectionGeoType: this.connection.locationType,
+          exclude: this.exclude,
+          isDeleted: false
+        });
 
-      this.connection = {};
+        this.connection = {};
+      }
     },
     async deleteTag(tag) {
       try {
@@ -188,6 +219,20 @@ export default {
           message: error.message
         });
       }
+    },
+    filterGeoList(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.options = this.geographyList.filter(item => {
+          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+        });
+        this.loading = false;
+      } else {
+        this.options = [];
+      }
+    },
+    clearGeo() {
+      this.options = [];
     }
   }
 };
