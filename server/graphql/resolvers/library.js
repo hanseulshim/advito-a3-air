@@ -114,7 +114,12 @@ exports.library = {
             ADVITO_GEOSET_ID
           );
         })
-        .orWhere('locationtype', LOCATION_LOOKUP.SUBREGION)
+        .orWhere(function() {
+          this.where('locationtype', LOCATION_LOOKUP.SUBREGION).andWhere(
+            'geosetid',
+            ADVITO_GEOSET_ID
+          );
+        })
         .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)
         .orWhere('locationtype', LOCATION_LOOKUP.CITY)
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
