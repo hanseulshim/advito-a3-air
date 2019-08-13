@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename, filterGeography } from '@/helper';
 import {
   GET_GEOGRAPHY_LIST,
   GET_CONNECTION_POINT_LIST,
