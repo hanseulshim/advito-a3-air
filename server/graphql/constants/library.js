@@ -6,6 +6,7 @@ const LOCATION_LOOKUP = {
   AIRPORT: 0,
   CITY: 1,
   COUNTRY: 3,
+  SUBREGION: 4,
   REGION: 5,
   COLLECTION: 6
 };

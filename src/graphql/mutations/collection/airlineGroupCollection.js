@@ -1,147 +1,82 @@
 import gql from 'graphql-tag';
+import { AIRLINE_GROUP_COLLECTION } from '../../constants';
 
 export const EDIT_AIRLINE_GROUP_COLLECTION = gql`
   mutation editAirlineGroupCollection(
+    $projectId: Int!
     $id: Int!
     $name: String!
     $description: String
-    $effectiveStartDate: Date
-    $effectiveEndDate: Date
+    $effectiveStartDate: Date!
+    $effectiveEndDate: Date!
   ) {
     editAirlineGroupCollection(
+      projectId: $projectId
       id: $id
       name: $name
       description: $description
       effectiveStartDate: $effectiveStartDate
       effectiveEndDate: $effectiveEndDate
     ) {
-      id
-      name
-      description
-      dateUpdated
-      effectiveStartDate
-      effectiveEndDate
+      ${AIRLINE_GROUP_COLLECTION}
     }
   }
 `;
 
 export const DELETE_AIRLINE_GROUP_COLLECTION = gql`
-  mutation deleteAirlineGroupCollection($id: Int!) {
-    deleteAirlineGroupCollection(id: $id)
+  mutation deleteAirlineGroupCollection($projectId: Int!, $id: Int!) {
+    deleteAirlineGroupCollection(projectId: $projectId, id: $id)
   }
 `;
 
 export const TOGGLE_AIRLINE_GROUP_COLLECTION = gql`
-  mutation toggleAirlineGroupCollection($id: Int!) {
-    toggleAirlineGroupCollection(id: $id) {
-      id
-      name
-      description
-      dateUpdated
-      effectiveStartDate
-      effectiveEndDate
-      active
-      airlineGroupList {
-        id
-        name
-        effectiveStartDate
-        effectiveEndDate
-        airlineList {
-          id
-          name
-          effectiveStartDate
-          effectiveEndDate
-        }
-      }
-    }
+  mutation toggleAirlineGroupCollection($projectId: Int!, $id: Int!) {
+    toggleAirlineGroupCollection(projectId: $projectId, id: $id)
   }
 `;
 
 export const ADD_AIRLINE_GROUP = gql`
   mutation addAirlineGroup(
-    $id: Int!
+    $collectionId: Int!
     $name: String!
-    $effectiveStartDate: Date
-    $effectiveEndDate: Date
+    $code: String!
+    $effectiveStartDate: Date!
+    $effectiveEndDate: Date!
     $airlineList: [GroupAirline]
   ) {
     addAirlineGroup(
-      id: $id
+      collectionId: $collectionId
       name: $name
+      code: $code
       effectiveStartDate: $effectiveStartDate
       effectiveEndDate: $effectiveEndDate
       airlineList: $airlineList
-    ) {
-      id
-      name
-      airlineGroupList {
-        id
-        name
-        effectiveStartDate
-        effectiveEndDate
-        airlineList {
-          id
-          name
-          effectiveStartDate
-          effectiveEndDate
-        }
-      }
-    }
+    )
   }
 `;
 
 export const EDIT_AIRLINE_GROUP = gql`
   mutation editAirlineGroup(
-    $id: Int!
-    $collectionId: Int!
+    $carrierGroupId: Int!
     $name: String!
-    $effectiveStartDate: Date
-    $effectiveEndDate: Date
+    $code: String!
+    $effectiveStartDate: Date!
+    $effectiveEndDate: Date!
     $airlineList: [GroupAirline]
   ) {
     editAirlineGroup(
-      id: $id
-      collectionId: $collectionId
+      carrierGroupId: $carrierGroupId
       name: $name
+      code: $code
       effectiveStartDate: $effectiveStartDate
       effectiveEndDate: $effectiveEndDate
       airlineList: $airlineList
-    ) {
-      id
-      name
-      airlineGroupList {
-        id
-        name
-        effectiveStartDate
-        effectiveEndDate
-        airlineList {
-          id
-          name
-          effectiveStartDate
-          effectiveEndDate
-        }
-      }
-    }
+    )
   }
 `;
 
 export const DELETE_AIRLINE_GROUP = gql`
-  mutation deleteAirlineGroup($id: Int!, $collectionId: Int!) {
-    deleteAirlineGroup(id: $id, collectionId: $collectionId) {
-      id
-      name
-      airlineGroupList {
-        id
-        name
-        effectiveStartDate
-        effectiveEndDate
-        airlineList {
-          id
-          name
-          effectiveStartDate
-          effectiveEndDate
-        }
-      }
-    }
+  mutation deleteAirlineGroup($id: Int!) {
+    deleteAirlineGroup(id: $id)
   }
 `;

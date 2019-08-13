@@ -56,7 +56,7 @@ exports.contract = {
     },
     copyContract: async (_, { id, name }, { db }) => {
       const { rows } = await db.raw(
-        `SELECT contract_createcopy(${id}, '${name}')`
+        `SELECT contract_createcopy(${id}, '${name}', null, null)`
       );
       const [copyContract] = rows;
       const [contract] = await getContract(

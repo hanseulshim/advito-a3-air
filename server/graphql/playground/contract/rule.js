@@ -69,7 +69,7 @@ exports.rule = {
         exclude
         isDeleted
       }
-      bookingClassList(parentId: 34) {
+      bookingClassRuleList(parentId: 34) {
         id
         ruleContainerId
         exclude

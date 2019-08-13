@@ -2,7 +2,12 @@ const { locationCollection } = require('./locationCollection');
 const { travelSectorCollection } = require('./travelSectorCollection');
 const { airlineGroupCollection } = require('./airlineGroupCollection');
 const { preferredAirlineCollection } = require('./preferredAirlineCollection');
-const { LOCATION_COLLECTION } = require('../../constants');
+const {
+  LOCATION_COLLECTION,
+  TRAVEL_SECTOR_COLLECTION,
+  AIRLINE_GROUP_COLLECTION,
+  PREFERRED_AIRLINE_COLLECTION
+} = require('../../constants');
 exports.collection = {
   queries: {
     name: 'Collection Queries',
@@ -10,7 +15,7 @@ exports.collection = {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
-      locationCollectionList(projectId: 17) {
+      locationCollectionList(clientId: 5, projectId: 17) {
         ${LOCATION_COLLECTION}
       }
       regionList(geoSetId: null) {
@@ -19,77 +24,59 @@ exports.collection = {
         name
         standard
       }
-      travelSectorCollectionList {
+      travelSectorCollectionList(clientId: null, projectId: null) {
+        ${TRAVEL_SECTOR_COLLECTION}
+      }
+      travelSectorList(groupId: null) {
         id
         name
-        description
-        dateUpdated
-        active
-        sectorList {
+        shortName
+        standard
+        sectorGeographyList {
           id
-          name
-          shortName
-          geographyList {
-            origin {
-              id
-              name
-            }
-            destination {
-              id
-              name
-            }
-            exclude
-          }
+          originId
+          originName
+          destinationId
+          destinationName
+          exclude
         }
       }
-      travelSectorRegionList {
-        id
-        name
+      airlineGroupCollectionList(clientId: null, projectId: null) {
+        ${AIRLINE_GROUP_COLLECTION}
       }
-      airlineGroupCollectionList {
+      airlineGroupList(collectionId: null) {
         id
         name
-        description
-        dateUpdated
+        effectiveStartDate
+        effectiveEndDate
+        standard
+        airlineGroupMemberList {
+          id
+          airlineId
+          name
+          code
+          effectiveStartDate
+          effectiveEndDate
+        }
+      }
+      preferredAirlineCollectionList(clientId: null, projectId: null) {
+        ${PREFERRED_AIRLINE_COLLECTION}
+      }
+      preferredAirlineList(groupId: null) {
+        id
+        airlineId
+        name
+        preferenceLevelId
+        preferenceLevelName
         effectiveStartDate
         effectiveEndDate
         active
-        airlineGroupList {
+        posList {
           id
+          locationId
           name
-          effectiveStartDate
-          effectiveEndDate
-          airlineList {
-            id
-            name
-            effectiveStartDate
-            effectiveEndDate
-          }
+          code
         }
-      }
-      airlineGroupAirlineList {
-        id
-        name
-        code
-      }
-      preferredAirlineCollectionList {
-        id
-        name
-        description
-        dateUpdated
-        active
-        airlineList {
-          name
-          preferenceLevel
-          effectiveStartDate
-          effectiveEndDate
-          pos
-          active
-        }
-      }
-      posList {
-        id
-        name
       }
       preferenceLevelList {
         id

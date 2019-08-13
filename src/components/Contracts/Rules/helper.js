@@ -94,7 +94,7 @@ export const ruleTypes = [
   },
   {
     value: 'TimeOfWeek',
-    label: 'Time Of Week',
+    label: 'Time/Day Of Week',
     id: 18
   },
   {

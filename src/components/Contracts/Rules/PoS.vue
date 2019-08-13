@@ -17,7 +17,7 @@
         multiple
       >
         <el-option
-          v-for="item in countryList"
+          v-for="item in filteredCountryList"
           :key="item.name"
           :label="item.name"
           :value="item.code"
@@ -145,6 +145,14 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    filteredCountryList() {
+      return this.countryList.filter(
+        country =>
+          !this.pointOfSaleList.some(rule => rule.countryCode === country.code)
+      );
+    }
   },
   methods: {
     async saveRules() {

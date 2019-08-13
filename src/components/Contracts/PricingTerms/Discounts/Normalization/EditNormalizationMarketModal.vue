@@ -26,7 +26,7 @@
             <el-select placeholder="Select Top Market" />
           </el-form-item>
           <el-form-item label="Override Usage" class="flex1">
-            <el-input-number />
+            <el-input />
           </el-form-item>
           <el-form-item label="Travel Date *" class="flex1">
             <el-date-picker />
@@ -258,7 +258,8 @@ export default {
       //   }
       alert('Successfuly created new normalization market!');
     },
-    beforeOpen(event) {
+    beforeOpen() {
+      // beforeOpen(event) {
       //   const {
       //     id,
       //     name,

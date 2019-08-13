@@ -5,28 +5,33 @@ exports.library = {
   query: `
   {
     airportList {
+      id
       countryName
       cityCode
       cityName
       airportCode
       airportName
     }
-    bookingClassLibraryList {
-      class
-      defaultFareCategory
-      dateUpdated
-      airlineMappingList {
-        code
-        name
-        ticketingDate
-        travelDate
-        exceptionList {
-          recordOrder
-          originCode
-          destinationCode
-          overrideFareCategory
-        }
-      }
+    bookingClassList {
+      id
+      code
+      name
+      mappingCount
+    }
+    airlineMappingList(bookingClassId: 1) {
+      id
+      code
+      name
+      ticketingDate
+      travelDate
+      exceptionCount
+    }
+    exceptionList(exceptionId: 41) {
+      id
+      order
+      originCode
+      destinationCode
+      overrideFareCategory
     }
     airlineList {
       id

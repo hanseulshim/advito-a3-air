@@ -192,7 +192,8 @@ export default {
       //   }
       alert('copied normalization!');
     },
-    beforeOpen(event) {
+    beforeOpen() {
+      // beforeOpen(event) {
       //   const {
       //     id,
       //     name,

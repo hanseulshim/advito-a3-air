@@ -115,6 +115,13 @@ export const bookingClass = {
   exceptions: 110
 };
 
+export const exception = {
+  order: 125,
+  originCode: 150,
+  destinationCode: 150,
+  overrideFareCategory: 150
+};
+
 export const processCol = {
   date: 100,
   contracts: 75,

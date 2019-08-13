@@ -42,18 +42,9 @@
 </template>
 
 <script>
-import { GET_CLIENT, GET_PROJECT } from '@/graphql/queries';
 import { EDIT_PREFERRED_AIRLINE_COLLECTION } from '@/graphql/mutations';
 export default {
   name: 'EditPreferredAirlineCollectionModal',
-  apollo: {
-    client: {
-      query: GET_CLIENT
-    },
-    project: {
-      query: GET_PROJECT
-    }
-  },
   data() {
     return {
       form: {
@@ -89,13 +80,14 @@ export default {
     },
     async editPreferredAirlineCollection() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: EDIT_PREFERRED_AIRLINE_COLLECTION,
           variables: {
-            ...this.form
+            ...this.form,
+            projectId: this.project.id
           }
         });
-        this.$emit('toggle-row', data.data.editPreferredAirlineCollection.id);
+        // this.$emit('toggle-row', data.data.editPreferredAirlineCollection.id);
         this.$modal.show('success', {
           message: 'Preferred Airline Collection successfully edited.',
           name: 'edit-preferred-airline-collection'
@@ -107,10 +99,12 @@ export default {
       }
     },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.form.id = collection.id;
-      this.form.name = collection.name;
-      this.form.description = collection.description;
+      const { id, name, description } = event.params.collection;
+      this.form.id = id;
+      this.form.name = name;
+      this.form.description = description;
+      this.project = event.params.project;
+      this.client = event.params.client;
     },
     beforeClose() {
       this.form.id = null;

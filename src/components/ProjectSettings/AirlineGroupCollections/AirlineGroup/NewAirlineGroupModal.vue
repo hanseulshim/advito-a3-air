@@ -22,17 +22,21 @@
         </el-tooltip>
       </div>
       <div>
-        <div class="form-label-no-select">Collection Name</div>
+        <div class="form-label-no-select airline-group">Collection Name</div>
         <span>{{ collectionName }}</span>
       </div>
       <el-form-item label="Airline Group Name *" prop="name">
         <el-input v-model="form.name" />
+      </el-form-item>
+      <el-form-item label="Airline Group Code *" prop="code">
+        <el-input v-model="form.code" />
       </el-form-item>
       <el-form-item label="Effective Dates *">
         <div class="date-picker-container">
           <el-form-item prop="effectiveStartDate" class="date-picker-item">
             <el-date-picker
               v-model="form.effectiveStartDate"
+              :clearable="false"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
@@ -41,6 +45,7 @@
           <el-form-item prop="effectiveEndDate" class="date-picker-item">
             <el-date-picker
               v-model="form.effectiveEndDate"
+              :clearable="false"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
@@ -55,11 +60,10 @@
           v-model="airlineIdList"
           class="select-modal airline-group-content"
           filterable
-          :filter-method="filterMethod"
           multiple
         >
           <el-option
-            v-for="item in filteredOptions"
+            v-for="item in airlineList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -71,12 +75,14 @@
         <div class="date-picker-container airline-group-content">
           <el-date-picker
             v-model="effectiveStartDate"
+            :clearable="false"
             type="date"
             format="dd MMM yyyy"
             class="date-picker"
           />
           <el-date-picker
             v-model="effectiveEndDate"
+            :clearable="false"
             type="date"
             format="dd MMM yyyy"
             class="date-picker"
@@ -96,17 +102,19 @@
             <el-tooltip effect="dark" content="Delete" placement="top">
               <i class="fas fa-times" @click="removeAirline(index)" />
             </el-tooltip>
-            {{ getAirline(airline.id) }}
+            {{ getAirline(airline.airlineId) }}
           </div>
           <div class="date-picker-container airline-group-content">
             <el-date-picker
               v-model="airline.effectiveStartDate"
+              :clearable="false"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
             />
             <el-date-picker
               v-model="airline.effectiveEndDate"
+              :clearable="false"
               type="date"
               format="dd MMM yyyy"
               class="date-picker"
@@ -123,29 +131,24 @@
 
 <script>
 import {
-  GET_AIRLINE_GROUP_COLLECTION_LIST,
+  GET_AIRLINE_GROUP_LIST,
+  GET_AIRLINE_GROUP_COLLECTION,
   GET_AIRLINE_LIST
 } from '@/graphql/queries';
 import { ADD_AIRLINE_GROUP } from '@/graphql/mutations';
 export default {
   name: 'NewAirlineGroupModal',
   apollo: {
-    airlineGroupCollectionList: {
-      query: GET_AIRLINE_GROUP_COLLECTION_LIST
-    },
-    airlineGroupAirlineList: {
-      query: GET_AIRLINE_LIST,
-      update(data) {
-        this.filteredOptions = data.airlineGroupAirlineList;
-        return data.airlineGroupAirlineList;
-      }
+    airlineList: {
+      query: GET_AIRLINE_LIST
     }
   },
   data() {
     return {
       form: {
-        id: null,
+        collectionId: null,
         name: null,
+        code: null,
         effectiveStartDate: null,
         effectiveEndDate: null,
         airlineList: []
@@ -155,17 +158,17 @@ export default {
       effectiveStartDate: null,
       effectiveEndDate: null,
       rules: {
-        id: [
-          {
-            required: true,
-            message: 'Please select a collection',
-            trigger: 'change'
-          }
-        ],
         name: [
           {
             required: true,
             message: 'Please input a travel sector name.',
+            trigger: 'change'
+          }
+        ],
+        code: [
+          {
+            required: true,
+            message: 'Please input a travel sector code.',
             trigger: 'change'
           }
         ],
@@ -184,9 +187,7 @@ export default {
           }
         ]
       },
-      airlineGroupCollectionList: [],
-      airlineGroupAirlineList: [],
-      filteredOptions: []
+      airlineList: []
     };
   },
   methods: {
@@ -203,9 +204,13 @@ export default {
       });
     },
     addAirline() {
-      if (this.airlineIdList.length && this.effectiveStartDate) {
-        const airlineList = this.airlineIdList.map(id => ({
-          id,
+      if (
+        this.airlineIdList.length &&
+        this.effectiveStartDate &&
+        this.effectiveEndDate
+      ) {
+        const airlineList = this.airlineIdList.map(airlineId => ({
+          airlineId,
           effectiveStartDate: this.effectiveStartDate,
           effectiveEndDate: this.effectiveEndDate
         }));
@@ -219,19 +224,30 @@ export default {
       this.form.airlineList.splice(index, 1);
     },
     getAirline(id) {
-      return this.airlineGroupAirlineList.filter(
-        airline => airline.id === id
-      )[0].name;
+      return this.airlineList.find(airline => airline.id === id).name;
     },
     async addAirlineGroup() {
       try {
-        const data = await this.$apollo.mutate({
+        await this.$apollo.mutate({
           mutation: ADD_AIRLINE_GROUP,
           variables: {
             ...this.form
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_AIRLINE_GROUP_LIST,
+              variables: { collectionId: this.form.collectionId }
+            },
+            {
+              query: GET_AIRLINE_GROUP_COLLECTION,
+              variables: {
+                id: this.form.collectionId,
+                projectId: this.project.id
+              }
+            }
+          ]
         });
-        this.$emit('toggle-row', data.data.addAirlineGroup.id);
+        this.$emit('toggle-row', this.form.collectionId);
         this.$modal.show('success', {
           message: 'Airline Group successfully created.',
           name: 'new-airline-group'
@@ -242,22 +258,17 @@ export default {
         });
       }
     },
-    filterMethod(value) {
-      this.filteredOptions = this.airlineGroupAirlineList.filter(option => {
-        return (
-          option.name.toLowerCase().includes(value) ||
-          option.code.toLowerCase().includes(value)
-        );
-      });
-    },
     beforeOpen(event) {
-      const collection = event.params.collection;
-      this.collectionName = collection.name;
-      this.form.id = collection.id;
+      const { name, id } = event.params.collection;
+      this.project = event.params.project;
+      this.client = event.params.client;
+      this.collectionName = name;
+      this.form.collectionId = id;
     },
     beforeClose() {
-      this.form.id = null;
+      this.form.collectionId = null;
       this.form.name = null;
+      this.form.code = null;
       this.form.effectiveStartDate = null;
       this.form.effectiveEndDate = null;
       this.form.airlineList = [];
@@ -265,7 +276,6 @@ export default {
       this.effectiveStartDate = null;
       this.effectiveEndDate = null;
       this.collectionName = null;
-      this.filteredOptions = this.airlineGroupAirlineList;
     }
   }
 };
@@ -274,7 +284,9 @@ export default {
 <style lang="scss">
 @import '@/styles/global.scss';
 .form-label-no-select {
-  width: 200px;
+  &.airline-group {
+    width: 200px;
+  }
 }
 .airline-group-spacer {
   width: 200px;

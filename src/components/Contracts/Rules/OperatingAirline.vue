@@ -17,7 +17,7 @@
         multiple
       >
         <el-option
-          v-for="item in airlineCodeList"
+          v-for="item in filteredAirlineList"
           :key="item.code"
           :label="item.name"
           :value="item.code"
@@ -172,6 +172,12 @@ export default {
     },
     includedRules() {
       return this.airlineRuleList.filter(rule => !rule.exclude);
+    },
+    filteredAirlineList() {
+      return this.airlineCodeList.filter(
+        airline =>
+          !this.airlineRuleList.some(rule => rule.carrierCode === airline.code)
+      );
     }
   },
   methods: {

@@ -109,8 +109,8 @@
       </el-table-column>
     </el-table>
     <CopyLocationCollectionModal @toggle-row="toggleRow" />
-    <EditLocationCollectionModal />
-    <DeleteLocationCollectionModal />
+    <EditLocationCollectionModal @toggle-row="toggleRow" />
+    <DeleteLocationCollectionModal @toggle-row="toggleRow" />
   </div>
 </template>
 
@@ -166,9 +166,9 @@ export default {
   },
   updated() {
     if (this.toggleRowId) {
-      const row = this.$refs.locationCollection.data.filter(
+      const row = this.$refs.locationCollection.data.find(
         c => c.id === this.toggleRowId
-      )[0];
+      );
       this.$refs.locationCollection.toggleRowExpansion(row, true);
       this.toggleRowId = null;
     }

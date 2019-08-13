@@ -1,16 +1,12 @@
 <template>
-  <el-table :data="airlineMappingList" class="level-two-table">
+  <el-table
+    v-loading="$apollo.loading"
+    :data="airlineMappingList"
+    class="level-two-table"
+  >
     <el-table-column type="expand">
       <template slot-scope="props">
-        <el-table :data="props.row.exceptionList" class="level-three-table">
-          <el-table-column prop="recordOrder" label="Record Order" />
-          <el-table-column prop="originCode" label="Origin Code" />
-          <el-table-column prop="destinationCode" label="Destination Code" />
-          <el-table-column
-            prop="overrideFareCategory"
-            label="Override Fare Category"
-          />
-        </el-table>
+        <ExceptionTable :exception-id="props.row.id" />
       </template>
     </el-table-column>
     <el-table-column prop="code" label="Code" :width="bookingClass.count" />
@@ -28,7 +24,7 @@
       :width="bookingClass.date"
     />
     <el-table-column
-      prop="exceptionList.length"
+      prop="exceptionCount"
       label="Exceptions"
       :width="bookingClass.exceptions"
     />
@@ -36,18 +32,34 @@
 </template>
 
 <script>
+import { GET_AIRLINE_MAPPING_LIST } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import { bookingClass } from '@/config';
+import ExceptionTable from './ExceptionTable';
 export default {
   name: 'AirlineMappingTable',
+  components: {
+    ExceptionTable
+  },
   props: {
-    airlineMappingList: {
-      type: Array,
+    bookingClassId: {
+      type: Number,
       required: true
+    }
+  },
+  apollo: {
+    airlineMappingList: {
+      query: GET_AIRLINE_MAPPING_LIST,
+      variables() {
+        return {
+          bookingClassId: this.bookingClassId
+        };
+      }
     }
   },
   data() {
     return {
+      airlineMappingList: [],
       bookingClass
     };
   },

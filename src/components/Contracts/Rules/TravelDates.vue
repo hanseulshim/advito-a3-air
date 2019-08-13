@@ -132,7 +132,11 @@ export default {
       }
     },
     createTag() {
-      if (this.startDate && this.endDate) {
+      if (
+        this.startDate &&
+        this.endDate &&
+        this.startDate.getTime() !== this.endDate.getTime()
+      ) {
         const ruleContainerId = this.travelDateList.length
           ? this.travelDateList[0].ruleContainerId
           : null;
@@ -146,9 +150,13 @@ export default {
         });
         this.startDate = '';
         this.endDate = '';
-      } else {
+      } else if (!this.startDate || !this.endDate) {
         this.$modal.show('error', {
           message: 'Please enter both a start date and an end date'
+        });
+      } else if (this.startDate.getTime() === this.endDate.getTime()) {
+        this.$modal.show('error', {
+          message: 'Please enter a valid start date and end date.'
         });
       }
     },

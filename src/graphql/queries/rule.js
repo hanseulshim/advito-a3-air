@@ -9,6 +9,7 @@ export const GET_RULE_LIST = gql`
 export const GET_COUNTRY_LIST = gql`
   query countryList {
     countryList {
+      id
       code
       name
       locationType
@@ -107,9 +108,12 @@ export const GET_BOOKING_CLASS_CODES = gql`
   }
 `;
 
-export const GET_BOOKING_CLASS_LIST = gql`
-  query bookingClassList($parentId: Int, $bookingClassType: Int) {
-    bookingClassList(parentId: $parentId, bookingClassType: $bookingClassType) {
+export const GET_BOOKING_CLASS_RULE_LIST = gql`
+  query bookingClassRuleList($parentId: Int, $bookingClassType: Int) {
+    bookingClassRuleList(
+      parentId: $parentId
+      bookingClassType: $bookingClassType
+    ) {
       id
       ruleContainerId
       exclude
