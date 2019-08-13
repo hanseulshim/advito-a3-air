@@ -206,7 +206,6 @@ extend type Query {
   normalizationList(discountId: Int): [Normalization] @auth
   normalization(id: Int!): Normalization @auth
   normalizationMarketList(normalizationId: Int): [NormalizationMarket] @auth
-  normalizationMarket(id: Int!): NormalizationMarket @auth
 
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth

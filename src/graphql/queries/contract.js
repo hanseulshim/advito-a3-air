@@ -5,7 +5,8 @@ import {
   DISCOUNT,
   TARGET_TERM,
   TARGET_LEVEL,
-  NORMALIZATION
+  NORMALIZATION,
+  NORMALIZATION_MARKET
 } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
@@ -201,23 +202,7 @@ query normalization($id: Int!) {
 export const GET_NORMALIZATION_MARKET_LIST = gql`
   query normalization($normalizationId: Int) {
     normalization(normalizationId: $normalizationId) {
-      id
-      marketA
-      marketB
-      farePaid
-      usageOverride
-      farePullDate
-      notes
-      fareList {
-        id
-        fareType
-        fareBasis
-        amount
-        currencyCode
-        directionType
-        advancePurchase
-        minstay
-      }
+      ${NORMALIZATION_MARKET}
     }
   }
 `;

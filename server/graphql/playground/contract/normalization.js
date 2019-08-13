@@ -88,6 +88,9 @@ exports.normalization = {
       ) {
         ${NORMALIZATION_MARKET}
       }
+      deleteNormalizationMarket(
+        id: null
+      )
     }
     `
   }

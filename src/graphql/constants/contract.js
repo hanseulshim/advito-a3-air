@@ -110,6 +110,24 @@ createdby
 marketCount
 `;
 
+export const NORMALIZATION_MARKET = `id
+marketA
+marketB
+farePaid
+usageOverride
+farePullDate
+notes
+fareList {
+  id
+  fareType
+  fareBasis
+  amount
+  currencyCode
+  directionType
+  advancePurchase
+  minstay
+}`;
+
 export const CONTRACT_LOOKUP = {
   CONTRACT: 7,
   PROPOSAL: 8,
