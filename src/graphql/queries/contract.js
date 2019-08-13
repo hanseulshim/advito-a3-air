@@ -206,3 +206,44 @@ export const GET_NORMALIZATION_MARKET_LIST = gql`
     }
   }
 `;
+
+export const GET_TOP_MARKET_LIST = gql`
+  query topMarketList($normalizationId: Int) {
+    topMarketList(normalizationId: $normalizationId) {
+      id
+      value
+      marketA
+      marketB
+      farePaid
+      usage
+    }
+  }
+`;
+
+export const GET_MARKET_ADVANCED_TICKET_LIST = gql`
+  query marketAdvancedTicketList($normalizationId: Int) {
+    marketAdvancedTicketList(normalizationId: $normalizationId) {
+      label
+      value
+    }
+  }
+`;
+
+export const GET_MARKET_DEPARTURE_LIST = gql`
+  query marketDepartureList($normalizationId: Int) {
+    marketDepartureList(normalizationId: $normalizationId) {
+      label
+      value
+    }
+  }
+`;
+
+export const GET_MARKET_FARE_BASIS_LIST = gql`
+  query marketDepartureList($normalizationId: Int) {
+    marketDepartureList(normalizationId: $normalizationId) {
+      fareBasis
+      bookingClass
+      usage
+    }
+  }
+`;
