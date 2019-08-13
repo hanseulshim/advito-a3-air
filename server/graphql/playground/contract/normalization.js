@@ -65,6 +65,29 @@ exports.normalization = {
       ) {
         ${NORMALIZATION_MARKET}
       }
+      updateNormalizationMarket(
+        marketId: null
+        marketA: null
+        marketB: null
+        farePaid: null
+        usageOverride: null
+        farePullDate: 1485838800001
+        notes: null
+        fareList: [
+         {
+          id: null
+          fareType: null
+          fareBasis: null
+          amount: null
+          currencyCode: null
+          directionType: null
+          advancePurchase: null
+          minstay: null
+         }
+        ]
+      ) {
+        ${NORMALIZATION_MARKET}
+      }
     }
     `
   }

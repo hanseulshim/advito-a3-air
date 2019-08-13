@@ -368,7 +368,20 @@ extend type Mutation {
     farePullDate: Date!
     notes: String
     fareList: [NormalizationFareInput]
-  ): NormalizationMarket
+  ): NormalizationMarket  @auth
+  updateNormalizationMarket(
+    marketId: Int!
+    marketA: String!
+    marketB: String!
+    farePaid: Float!
+    usageOverride: Float
+    farePullDate: Date!
+    notes: String
+    fareList: [NormalizationFareInput]
+  ): NormalizationMarket  @auth
+  deleteNormalizationMarket(
+    id: Int!
+  ): Int @auth
   
   addNote(
     parentId: Int!

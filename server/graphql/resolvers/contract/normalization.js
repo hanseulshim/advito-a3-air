@@ -178,6 +178,66 @@ exports.normalization = {
       );
       await Promise.all(normalizationFareRequests);
       return await getNormalizationMarket(db, newId);
+    },
+    updateNormalizationMarket: async (
+      _,
+      {
+        marketId,
+        marketA,
+        marketB,
+        farePaid,
+        usageOverride,
+        farePullDate,
+        notes,
+        fareList
+      },
+      { db }
+    ) => {
+      await db.raw(
+        `SELECT discount_normalisation_market_update(
+          ${marketId},
+          '${marketA}',
+          '${marketB}',
+          ${farePaid},
+          ${usageOverride},
+          ${
+            new Date(farePullDate).toISOString()
+              ? `'${new Date(farePullDate).toISOString()}'`
+              : null
+          },
+          ${notes ? `'${notes}'` : null}
+        )`
+      );
+      const normalizationFareRequests = fareList.map(
+        ({
+          id,
+          fareType,
+          fareBasis,
+          amount,
+          currencyCode,
+          directionType,
+          advancePurchase,
+          minstay
+        }) =>
+          db.raw(`
+          SELECT discount_normalisation_fare_update(
+            ${id},
+            ${fareType},
+            ${fareBasis ? `'${fareBasis}'` : null},
+            ${amount},
+            '${currencyCode}',
+            '${directionType}',
+            '${advancePurchase}',
+            '${minstay}'
+          )
+        `)
+      );
+      await Promise.all(normalizationFareRequests);
+      return await getNormalizationMarket(db, marketId);
+    },
+    deleteNormalizationMarket: async (_, { id }, { db }) => {
+      await db.raw(`SELECT discount_normalisation_market_delete(${id})`);
+      return id;
     }
   }
 };
