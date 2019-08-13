@@ -84,6 +84,36 @@ type Normalization {
   createdby: String
   marketCount: Int
 }
+type NormalizationMarket {
+  id: Int
+  marketA: String
+  marketB: String
+  farePaid: Float
+  usageOverride: Float
+  farePullDate: Date
+  notes: String
+  fareList: [NormalizationFare]
+}
+type NormalizationFare {
+  id: Int
+  fareType: Int
+  fareBasis: String
+  amount: Float
+  currencyCode: String
+  directionType: String
+  advancePurchase: String
+  minstay: String
+}
+input NormalizationFareInput {
+  id: Int
+  fareType: Int!
+  fareBasis: String
+  amount: Float!
+  currencyCode: String!
+  directionType: String!
+  advancePurchase: String!
+  minstay: String!
+}
 
 
 type TargetTerm {
@@ -175,6 +205,8 @@ extend type Query {
 
   normalizationList(discountId: Int): [Normalization] @auth
   normalization(id: Int!): Normalization @auth
+  normalizationMarketList(normalizationId: Int): [NormalizationMarket] @auth
+  normalizationMarket(id: Int!): NormalizationMarket @auth
 
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth
@@ -327,6 +359,16 @@ extend type Mutation {
     effectiveTo: Date!
   ): Normalization @auth
   deleteNormalization(id: Int!): Int @auth
+  createNormalizationMarket(
+    normalizationId: Int!
+    marketA: String!
+    marketB: String!
+    farePaid: Float!
+    usageOverride: Float
+    farePullDate: Date!
+    notes: String
+    fareList: [NormalizationFareInput]
+  ): NormalizationMarket
   
   addNote(
     parentId: Int!

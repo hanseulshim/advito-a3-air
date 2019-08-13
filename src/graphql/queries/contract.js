@@ -197,3 +197,27 @@ query normalization($id: Int!) {
   }
 }
 `;
+
+export const GET_NORMALIZATION_MARKET_LIST = gql`
+  query normalization($normalizationId: Int) {
+    normalization(normalizationId: $normalizationId) {
+      id
+      marketA
+      marketB
+      farePaid
+      usageOverride
+      farePullDate
+      notes
+      fareList {
+        id
+        fareType
+        fareBasis
+        amount
+        currencyCode
+        directionType
+        advancePurchase
+        minstay
+      }
+    }
+  }
+`;

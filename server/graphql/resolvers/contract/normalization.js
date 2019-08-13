@@ -16,6 +16,39 @@ exports.normalization = {
         })
         .where('discountid', discountId)
         .andWhere('isdeleted', false),
+    normalizationMarketList: async (_, { normalizationId }, { db }) => {
+      const normalizationMarketList = await db('discountnormalisationmarket')
+        .select({
+          id: 'id',
+          marketA: 'marketa',
+          marketB: 'marketb',
+          farePaid: 'farepaid',
+          usageOverride: 'usageoverride',
+          farePullDate: 'farepulldate',
+          notes: 'notes'
+        })
+        .where('normalisationid', normalizationId)
+        .andWhere('isdeleted', false);
+      const normalizationFareRequests = normalizationMarketList.map(
+        async market => {
+          const normalizationFareList = await db('discountnormalisationfare')
+            .select({
+              id: 'id',
+              fareType: 'faretype',
+              fareBasis: 'farebasis',
+              amount: 'amount',
+              currencyCode: 'currencycode',
+              directionType: 'directiontype',
+              advancePurchase: 'advancepurchase',
+              minstay: 'minstay'
+            })
+            .where('normalisationmarketid', market.id);
+          market.fareList = normalizationFareList;
+        }
+      );
+      await Promise.all(normalizationFareRequests);
+      return normalizationMarketList;
+    },
     normalization: async (_, { id }, { db }) => await getNormalization(db, id)
   },
   Mutation: {
@@ -89,6 +122,62 @@ exports.normalization = {
     deleteNormalization: async (_, { id }, { db }) => {
       await db.raw(`SELECT discount_normalisation_delete(${id})`);
       return id;
+    },
+    createNormalizationMarket: async (
+      _,
+      {
+        normalizationId,
+        marketA,
+        marketB,
+        farePaid,
+        usageOverride,
+        farePullDate,
+        notes,
+        fareList
+      },
+      { db }
+    ) => {
+      const { rows } = await db.raw(
+        `SELECT discount_normalisation_market_create(
+          ${normalizationId},
+          '${marketA}',
+          '${marketB}',
+          ${farePaid},
+          ${usageOverride},
+          ${
+            new Date(farePullDate).toISOString()
+              ? `'${new Date(farePullDate).toISOString()}'`
+              : null
+          },
+          ${notes ? `'${notes}'` : null}
+        )`
+      );
+      const [{ discount_normalisation_market_create: newId }] = rows;
+      const normalizationFareRequests = fareList.map(
+        ({
+          fareType,
+          fareBasis,
+          amount,
+          currencyCode,
+          directionType,
+          advancePurchase,
+          minstay
+        }) =>
+          db.raw(`
+          SELECT discount_normalisation_fare_create(
+            ${newId},
+            ${fareType},
+            ${fareBasis ? `'${fareBasis}'` : null},
+            ${amount},
+            '${currencyCode}',
+            '${directionType}',
+            '${advancePurchase}',
+            '${minstay}'
+          )
+        `)
+      );
+      await Promise.all(normalizationFareRequests);
+      return await getNormalizationMarket(db, newId);
     }
   }
 };
@@ -109,4 +198,32 @@ const getNormalization = async (db, id) => {
     })
     .where('id', id);
   return normalization;
+};
+
+const getNormalizationMarket = async (db, id) => {
+  const [normalizationMarket] = await db('discountnormalisationmarket')
+    .select({
+      id: 'id',
+      marketA: 'marketa',
+      marketB: 'marketb',
+      farePaid: 'farepaid',
+      usageOverride: 'usageoverride',
+      farePullDate: 'farepulldate',
+      notes: 'notes'
+    })
+    .where('id', id);
+  const normalizationFareList = await db('discountnormalisationfare')
+    .select({
+      id: 'id',
+      fareType: 'faretype',
+      fareBasis: 'farebasis',
+      amount: 'amount',
+      currencyCode: 'currencycode',
+      directionType: 'directiontype',
+      advancePurchase: 'advancepurchase',
+      minstay: 'minstay'
+    })
+    .where('normalisationmarketid', normalizationMarket.id);
+  normalizationMarket.fareList = normalizationFareList;
+  return normalizationMarket;
 };

@@ -1,4 +1,4 @@
-const { NORMALIZATION } = require('../../constants');
+const { NORMALIZATION, NORMALIZATION_MARKET } = require('../../constants');
 
 exports.normalization = {
   queries: {
@@ -12,6 +12,9 @@ exports.normalization = {
       }
       normalization(id: null) {
         ${NORMALIZATION}
+      }
+      normalizationMarketList(normalizationId: null) {
+        ${NORMALIZATION_MARKET}
       }
     }`
   },
@@ -40,6 +43,28 @@ exports.normalization = {
         ${NORMALIZATION}
       }
       deleteNormalization(id: 12)
+      createNormalizationMarket(
+        normalizationId: null
+        marketA: null
+        marketB: null
+        farePaid: null
+        usageOverride: null
+        farePullDate: 1485838800001
+        notes: null
+        fareList: [
+         {
+          fareType: null
+          fareBasis: null
+          amount: null
+          currencyCode: null
+          directionType: null
+          advancePurchase: null
+          minstay: null
+         }
+        ]
+      ) {
+        ${NORMALIZATION_MARKET}
+      }
     }
     `
   }

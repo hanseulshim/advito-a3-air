@@ -99,8 +99,25 @@ const NORMALIZATION = `id
         effectiveTo
         created
         createdby
-        marketCount
-`;
+        marketCount`;
+
+const NORMALIZATION_MARKET = `id
+        marketA
+        marketB
+        farePaid
+        usageOverride
+        farePullDate
+        notes
+        fareList {
+          id
+          fareType
+          fareBasis
+          amount
+          currencyCode
+          directionType
+          advancePurchase
+          minstay
+        }`;
 
 const NOTE = `id
         text
@@ -184,6 +201,7 @@ module.exports = {
   PRICING_TERM,
   DISCOUNT,
   NORMALIZATION,
+  NORMALIZATION_MARKET,
   TARGET_TERM,
   TARGET_TERM_LOOKUP,
   TARGET_LEVEL,
