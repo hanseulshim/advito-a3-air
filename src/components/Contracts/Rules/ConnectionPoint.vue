@@ -223,9 +223,7 @@ export default {
     filterGeoList(query) {
       if (query !== '') {
         this.loading = true;
-        this.options = this.geographyList.filter(item => {
-          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        });
+        this.options = filterGeography(this.geographyList, query);
         this.loading = false;
       } else {
         this.options = [];
