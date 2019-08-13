@@ -73,6 +73,49 @@ type DirectionType {
   id: Int
   name: String
 }
+
+type Normalization {
+  id: Int
+  usageFrom: Date
+  usageTo: Date
+  effectiveFrom: Date
+  effectiveTo: Date
+  created: Date
+  createdby: String
+  marketCount: Int
+}
+type NormalizationMarket {
+  id: Int
+  marketA: String
+  marketB: String
+  farePaid: Float
+  usageOverride: Float
+  farePullDate: Date
+  notes: String
+  fareList: [NormalizationFare]
+}
+type NormalizationFare {
+  id: Int
+  fareType: Int
+  fareBasis: String
+  amount: Float
+  currencyCode: String
+  directionType: String
+  advancePurchase: String
+  minstay: String
+}
+input NormalizationFareInput {
+  id: Int
+  fareType: Int!
+  fareBasis: String
+  amount: Float!
+  currencyCode: String!
+  directionType: String!
+  advancePurchase: String!
+  minstay: String!
+}
+
+
 type TargetTerm {
   id: Int
   name: String
@@ -159,6 +202,10 @@ extend type Query {
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
+
+  normalizationList(discountId: Int): [Normalization] @auth
+  normalization(id: Int!): Normalization @auth
+  normalizationMarketList(normalizationId: Int): [NormalizationMarket] @auth
 
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth
@@ -293,6 +340,46 @@ extend type Mutation {
   deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!
+  ): Int @auth
+
+
+  createNormalization(
+    discountId: Int!
+    usageFrom: Date!
+    usageTo: Date!
+    effectiveFrom: Date!
+    effectiveTo: Date!
+  ): Normalization @auth
+  updateNormalization(
+    id: Int!
+    usageFrom: Date!
+    usageTo: Date!
+    effectiveFrom: Date!
+    effectiveTo: Date!
+  ): Normalization @auth
+  deleteNormalization(id: Int!): Int @auth
+  createNormalizationMarket(
+    normalizationId: Int!
+    marketA: String!
+    marketB: String!
+    farePaid: Float!
+    usageOverride: Float
+    farePullDate: Date!
+    notes: String
+    fareList: [NormalizationFareInput]
+  ): NormalizationMarket  @auth
+  updateNormalizationMarket(
+    marketId: Int!
+    marketA: String!
+    marketB: String!
+    farePaid: Float!
+    usageOverride: Float
+    farePullDate: Date!
+    notes: String
+    fareList: [NormalizationFareInput]
+  ): NormalizationMarket  @auth
+  deleteNormalizationMarket(
+    id: Int!
   ): Int @auth
   
   addNote(

@@ -18,7 +18,7 @@ exports.pricingTerm = {
     },
     copyPricingTerm: async (_, { id, name }, { db }) => {
       const { rows } = await db.raw(
-        `SELECT pricingterm_createcopy(${id}, '${name}')`
+        `SELECT pricingterm_createcopy(${id}, '${name}', null, null)`
       );
       const [{ pricingterm_createcopy: newId }] = rows;
       return await getPricingTerm(db, newId);

@@ -62,7 +62,8 @@ export default {
       //   }
       alert('Normalization Market deleted!');
     },
-    beforeOpen(event) {
+    beforeOpen() {
+      // beforeOpen(event) {
       //   this.contractId = event.params.contractId;
       //   this.idList = event.params.idList;
     },

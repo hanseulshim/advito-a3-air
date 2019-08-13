@@ -70,7 +70,17 @@ exports.discount = {
           ? discountValue / 100
           : discountValue;
       const { rows } = await db.raw(
-        `SELECT discount_createcopy(${id}, '${name}', ${discountTypeId}, ${value}, ${journeyTypeId}, ${directionTypeId})`
+        `SELECT discount_createcopy(
+        ${id},
+        '${name}',
+        ${discountTypeId},
+        ${value},
+        ${journeyTypeId},
+        ${directionTypeId},
+        null,
+        null,
+        null,
+        null)`
       );
       const [{ discount_createcopy: newId }] = rows;
       return await getDiscount(db, parseInt(newId));
