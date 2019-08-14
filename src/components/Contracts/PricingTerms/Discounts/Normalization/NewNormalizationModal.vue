@@ -161,7 +161,8 @@ export default {
         });
         this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
-          message: 'Normalization successfully created'
+          message: 'Normalization successfully created',
+          name: 'new-normalization-modal'
         });
       } catch (error) {
         this.$modal.show('error', {
