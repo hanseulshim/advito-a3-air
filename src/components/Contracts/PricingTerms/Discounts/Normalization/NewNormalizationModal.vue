@@ -176,12 +176,6 @@ export default {
     },
     beforeClose() {
       this.discountId = null;
-      this.form.id = null;
-      this.form.name = null;
-      this.form.normalizationTypeId = null;
-      this.form.normalizationValue = null;
-      this.form.journeyTypeId = null;
-      this.form.directionTypeId = null;
       this.form.effectiveFrom = null;
       this.form.effectiveTo = null;
       this.form.usageFrom = null;
