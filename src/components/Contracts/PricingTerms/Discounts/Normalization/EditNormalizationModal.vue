@@ -3,6 +3,7 @@
     classes="modal-container"
     name="edit-normalization-modal"
     height="auto"
+    width="700px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
@@ -16,46 +17,46 @@
     >
       <div class="title-row space-between">
         <div class="section-header">edit normalization</div>
-        <el-tooltip effect="dark" content="Close Modal" placement="top">
-          <i class="fas fa-times close-modal-button" @click="hideModal" />
-        </el-tooltip>
+        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
       </div>
-      <el-form-item label="Term Name *" prop="name">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      <el-form-item label="Discount Type">
-        <el-select v-model="form.normalizationTypeId" class="select-modal">
-          <el-option
-            v-for="item in normalizationTypeList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Discount Value *" prop="normalizationValue">
-        <el-input v-model="form.normalizationValue" />
-      </el-form-item>
-      <el-form-item label="Journey Type">
-        <el-select v-model="form.journeyTypeId" class="select-modal">
-          <el-option
-            v-for="item in journeyTypeList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Direction">
-        <el-select v-model="form.directionTypeId" class="select-modal">
-          <el-option
-            v-for="item in directionTypeList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+      <div class="date-row">
+        <el-form-item label="Effective Dates *" prop="effectiveFrom">
+          <el-date-picker
+            v-model="form.effectiveFrom"
+            size="mini"
+            format="dd MMM yyyy"
+            placeholder="Pick a day"
+            class="date-picker"
+          />
+        </el-form-item>
+        <el-form-item prop="effectiveTo" label-width="10px">
+          <el-date-picker
+            v-model="form.effectiveTo"
+            size="mini"
+            format="dd MMM yyyy"
+            placeholder="Pick a day"
+            class="date-picker"
+          />
+        </el-form-item>
+      </div>
+      <div class="date-row">
+        <el-form-item label="Data Date Range *" prop="usageFrom">
+          <el-date-picker
+            v-model="form.usageFrom"
+            size="mini"
+            format="dd MMM yyyy"
+            placeholder="Pick a day"
+          />
+        </el-form-item>
+        <el-form-item prop="usageTo" label-width="10px">
+          <el-date-picker
+            v-model="form.usageTo"
+            size="mini"
+            format="dd MMM yyyy"
+            placeholder="Pick a day"
+          />
+        </el-form-item>
+      </div>
       <el-form-item class="save-container">
         <button class="button" type="button" @click="validateForm">SAVE</button>
       </el-form-item>
@@ -64,51 +65,44 @@
 </template>
 
 <script>
-// import {
-//   GET_DISCOUNT_TYPE_LIST,
-//   GET_JOURNEY_TYPE_LIST,
-//   GET_DIRECTION_TYPE_LIST
-// } from '@/graphql/queries';
-import { DISCOUNT_LOOKUP } from '@/graphql/constants';
-// import { EDIT_DISCOUNT } from '@/graphql/mutations';
+import { UPDATE_NORMALIZATION } from '@/graphql/mutations';
 export default {
   name: 'EditNormalizationModal',
-  apollo: {
-    // normalizationTypeList: {
-    //   query: GET_DISCOUNT_TYPE_LIST
-    // },
-    // journeyTypeList: {
-    //   query: GET_JOURNEY_TYPE_LIST
-    // },
-    // directionTypeList: {
-    //   query: GET_DIRECTION_TYPE_LIST
-    // }
-  },
   data() {
     return {
-      normalizationTypeList: [],
-      journeyTypeList: [],
-      directionTypeList: [],
       form: {
         id: null,
-        name: null,
-        normalizationTypeId: null,
-        normalizationValue: null,
-        journeyTypeId: null,
-        directionTypeId: null
+        usageFrom: null,
+        usageTo: null,
+        effectiveFrom: null,
+        effectiveTo: null
       },
       rules: {
-        name: [
+        effectiveFrom: [
           {
             required: true,
-            message: 'Please input a normalization name.',
+            message: 'Please input an effective start date.',
             trigger: 'change'
           }
         ],
-        normalizationValue: [
+        effectiveTo: [
           {
             required: true,
-            message: 'Please input a normalization value.',
+            message: 'Please input an effective end date.',
+            trigger: 'change'
+          }
+        ],
+        usageFrom: [
+          {
+            required: true,
+            message: 'Please input a start date for data date range.',
+            trigger: 'change'
+          }
+        ],
+        usageTo: [
+          {
+            required: true,
+            message: 'Please input an end date for data date range.',
             trigger: 'change'
           }
         ]
@@ -122,52 +116,43 @@ export default {
     validateForm() {
       this.$refs.editNormalization.validate(valid => {
         if (valid) {
-          this.createDiscount();
+          this.editNormalization();
         } else {
           return false;
         }
       });
     },
-    async createDiscount() {
-      //   try {
-      //     this.form.normalizationValue = parseFloat(this.form.normalizationValue)
-      //       ? parseFloat(this.form.normalizationValue)
-      //       : null;
-      //     await this.$apollo.mutate({
-      //       mutation: EDIT_DISCOUNT,
-      //       variables: {
-      //         ...this.form
-      //       }
-      //     });
-      //     this.$modal.show('success', {
-      //       message: 'Discount successfully updated.',
-      //       name: 'edit-normalization'
-      //     });
-      //   } catch (error) {
-      //     this.$modal.show('error', {
-      //       message: error.message
-      //     });
-      //   }
-      alert('Normalization successfully updated');
+    async editNormalization() {
+      try {
+        await this.$apollo.mutate({
+          mutation: UPDATE_NORMALIZATION,
+          variables: {
+            ...this.form
+          }
+        });
+        this.$modal.show('success', {
+          message: 'Normalization successfully updated.',
+          name: 'edit-normalization-modal'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
     beforeOpen(event) {
       const {
         id,
-        name,
-        normalizationTypeId,
-        normalizationValue,
-        journeyTypeId,
-        directionTypeId
+        usageFrom,
+        usageTo,
+        effectiveFrom,
+        effectiveTo
       } = event.params.normalization;
       this.form.id = id;
-      this.form.name = name;
-      this.form.normalizationTypeId = normalizationTypeId;
-      this.form.normalizationValue =
-        normalizationTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-          ? normalizationValue * 100
-          : normalizationValue;
-      this.form.journeyTypeId = journeyTypeId;
-      this.form.directionTypeId = directionTypeId;
+      this.form.usageFrom = usageFrom;
+      this.form.usageTo = usageTo;
+      this.form.effectiveFrom = effectiveFrom;
+      this.form.effectiveTo = effectiveTo;
     },
     beforeClose() {
       Object.keys(this.form).forEach(key => {
