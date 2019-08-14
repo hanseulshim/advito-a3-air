@@ -101,7 +101,7 @@
           >
             <i
               class="fas fa-trash-alt"
-              @click="showDeleteNormalizationModal()"
+              @click="showDeleteNormalizationModal(props.row)"
             />
           </el-tooltip>
         </template>
@@ -180,8 +180,11 @@ export default {
         pricingTermId: this.pricingTermId
       });
     },
-    showDeleteNormalizationModal() {
-      this.$modal.show('delete-normalization-modal');
+    showDeleteNormalizationModal(normalization) {
+      this.$modal.show('delete-normalization-modal', {
+        id: normalization.id,
+        discountId: this.discount.id
+      });
     },
     showEditNormalizationModal(normalization) {
       this.$modal.show('edit-normalization-modal', {
