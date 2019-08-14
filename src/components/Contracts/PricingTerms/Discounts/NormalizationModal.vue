@@ -113,7 +113,7 @@
       </el-table-column>
     </el-table>
     <CopyNormalizationModal />
-    <NewNormalizationModal />
+    <NewNormalizationModal @toggle-row="toggleRow" />
     <DeleteNormalizationModal />
     <EditNormalizationModal />
   </modal>
@@ -125,6 +125,7 @@ import DeleteNormalizationModal from './Normalization/DeleteNormalizationModal';
 import EditNormalizationModal from './Normalization/EditNormalizationModal';
 import NormalizationMarkets from './Normalization/NormalizationMarkets';
 import { formatDate, pluralize } from '@/helper';
+import { GET_NORMALIZATION_LIST } from '@/graphql/queries';
 export default {
   name: 'NormalizationModal',
   components: {
@@ -134,10 +135,22 @@ export default {
     EditNormalizationModal,
     NormalizationMarkets
   },
+  apollo: {
+    normalizationList: {
+      query: GET_NORMALIZATION_LIST,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          discountId: this.discount.id
+        };
+      }
+    }
+  },
   data() {
     return {
       discount: {},
-      normalizationList: [{ id: 1 }, { id: 2 }]
+      pricingTermId: null,
+      normalizationList: []
     };
   },
   computed: {},
@@ -155,12 +168,16 @@ export default {
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
+      this.pricingTermId = event.params.pricingTermId;
     },
     showCopyNormalizationModal() {
       this.$modal.show('copy-normalization-modal');
     },
     showNewNormalizationModal() {
-      this.$modal.show('new-normalization-modal');
+      this.$modal.show('new-normalization-modal', {
+        discountId: this.discount.id,
+        pricingTermId: this.pricingTermId
+      });
     },
     showDeleteNormalizationModal() {
       this.$modal.show('delete-normalization-modal');

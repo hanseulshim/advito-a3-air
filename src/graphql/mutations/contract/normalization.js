@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { NORAMLIZATION, NORAMLIZATION_MARKET } from '../../constants';
+import { NORMALIZATION, NORMALIZATION_MARKET } from '../../constants';
 
 export const CREATE_NORMALIZATION = gql`
   mutation createNormalization(
@@ -16,7 +16,7 @@ export const CREATE_NORMALIZATION = gql`
       effectiveFrom: $effectiveFrom
       effectiveTo: $effectiveTo
     ) {
-      ${NORAMLIZATION}
+      ${NORMALIZATION}
     }
   }
 `;
@@ -36,7 +36,7 @@ export const UPDATE_NORMALIZATION = gql`
       effectiveFrom: $effectiveFrom
       effectiveTo: $effectiveTo
     ) {
-      ${NORAMLIZATION}
+      ${NORMALIZATION}
     }
   }
 `;
@@ -68,7 +68,7 @@ mutation createNormalization(
     notes: $notes
     fareList: $fareList
   ) {
-    ${NORAMLIZATION_MARKET}
+    ${NORMALIZATION_MARKET}
   }
 }
 `;
@@ -94,7 +94,7 @@ mutation updateNormalization(
     notes: $notes
     fareList: $fareList
   ) {
-    ${NORAMLIZATION_MARKET}
+    ${NORMALIZATION_MARKET}
   }
 }
 `;
