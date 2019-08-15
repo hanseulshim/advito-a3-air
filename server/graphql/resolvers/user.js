@@ -2,7 +2,7 @@ const { ADVITO_CLIENT } = require('../constants');
 
 exports.user = {
   Query: {
-    userList: async (_, { clientId }, { db }) =>
+    userList: async (_, { clientId = null }, { db }) =>
       await db('blops.advito_user')
         .select({
           id: 'id',

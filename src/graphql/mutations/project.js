@@ -9,6 +9,7 @@ export const UPDATE_PROJECT = gql`
 
 export const ADD_PROJECT = gql`
   mutation addProject(
+    $userId: Int!
     $clientId: Int!
     $clientName: String!
     $projectTypeId: Int!
@@ -26,6 +27,7 @@ export const ADD_PROJECT = gql`
     $distanceUnitId: Int!
   ) {
     addProject(
+      userId: $userId
       clientId: $clientId
       clientName: $clientName
       projectTypeId: $projectTypeId
@@ -49,6 +51,7 @@ export const ADD_PROJECT = gql`
 
 export const EDIT_PROJECT = gql`
   mutation editProject(
+    $userId: Int!
     $id: Int!
     $savingsTypeId: Int!
     $effectiveFrom: Date!
@@ -63,6 +66,7 @@ export const EDIT_PROJECT = gql`
     $distanceUnitId: Int!
   ) {
     editProject(
+      userId: $userId
       id: $id
       savingsTypeId: $savingsTypeId
       effectiveFrom: $effectiveFrom
@@ -88,8 +92,8 @@ export const DELETE_PROJECT = gql`
 `;
 
 export const TOGGLE_FAVORITE_PROJECT = gql`
-  mutation toggleFavoriteProject($id: Int!) {
-    toggleFavoriteProject(id: $id) {
+  mutation toggleFavoriteProject($id: Int!, $userId: Int!) {
+    toggleFavoriteProject(id: $id, userId: $userId) {
       id
       favorite
     }
