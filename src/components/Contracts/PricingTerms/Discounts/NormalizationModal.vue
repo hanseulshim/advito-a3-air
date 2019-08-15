@@ -30,8 +30,8 @@
       :row-class-name="tableRowClassName"
     >
       <el-table-column type="expand">
-        <template>
-          <NormalizationMarkets />
+        <template slot-scope="props">
+          <NormalizationMarkets :normalization="props.row" />
         </template>
       </el-table-column>
       <el-table-column
@@ -63,15 +63,6 @@
         sort-by="effectiveTo"
       />
       <el-table-column label="Markets" prop="marketCount" />
-
-      <el-table-column
-        label="Actions"
-        :min-width="discount.effectiveDates"
-        :formatter="formatDate"
-        sortable
-        :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveTo"
-      />
       <el-table-column label="Actions" :min-width="discount.actions">
         <template slot-scope="props">
           <el-tooltip
@@ -138,6 +129,11 @@ export default {
         return {
           discountId: this.discount.id
         };
+      },
+      result({ data }) {
+        if (data && this.discount.id) {
+          this.normalizationList === data.normalizationList;
+        }
       }
     }
   },
