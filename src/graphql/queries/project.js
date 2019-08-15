@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import { PROJECT } from '../constants';
 
 export const GET_PROJECTS = gql`
-  query projectList($clientId: Int) {
-    projectList(clientId: $clientId) {
+  query projectList($clientId: Int, $userId: Int) {
+    projectList(clientId: $clientId, userId: $userId) {
       ${PROJECT}
     }
   }

@@ -197,6 +197,7 @@ export default {
   data() {
     return {
       form: {
+        userId: null,
         id: null,
         savingsTypeId: null,
         effectiveFrom: null,
@@ -332,6 +333,7 @@ export default {
       this.clientId = project.clientId;
       this.projectTypeName = project.projectTypeName;
       this.projectTypeId = project.projectTypeId;
+      this.form.userId = event.params.userId;
       this.form.id = project.id;
       this.form.savingsTypeId = project.savingsTypeId;
       this.form.effectiveFrom = project.effectiveFrom;

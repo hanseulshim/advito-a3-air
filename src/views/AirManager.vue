@@ -5,12 +5,17 @@
         {{ pluralize('favorite project', favoriteProjectList.length) }}
       </div>
       <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
-      <el-select v-model="selectedUserEmail" placeholder="Select" filterable>
+      <el-select
+        :value="selectedUser.id"
+        placeholder="Select"
+        filterable
+        @change="updateSelectedUser"
+      >
         <el-option
           v-for="item in userList"
-          :key="item.email"
+          :key="item.id"
           :label="item.name"
-          :value="item.email"
+          :value="item.id"
         />
       </el-select>
       <button class="button long" @click="showNewProject">+ NEW PROJECT</button>
@@ -22,8 +27,16 @@
         <i class="fas fa-info project-top-item" @click="showInfoModal" />
       </el-tooltip>
     </div>
-    <FavoriteProjects :favorite-project-list="favoriteProjectList" />
-    <TotalProjects :total-project-list="totalProjectList" />
+    <FavoriteProjects
+      :favorite-project-list="favoriteProjectList"
+      :selected-user="selectedUser"
+      :client-id="client.id"
+    />
+    <TotalProjects
+      :total-project-list="totalProjectList"
+      :selected-user="selectedUser"
+      :client-id="client.id"
+    />
     <NewProjectModal />
     <EditProjectModal />
     <DeleteProjectModal />
@@ -58,7 +71,7 @@ export default {
     user: {
       query: GET_USER,
       update({ user }) {
-        this.selectedUserEmail = user.email;
+        this.selectedUser = user;
         return user;
       }
     },
@@ -66,7 +79,7 @@ export default {
       query: GET_USER_LIST,
       variables() {
         return {
-          clientId: this.client ? this.client.id : null
+          clientId: this.client.id
         };
       }
     },
@@ -78,16 +91,18 @@ export default {
     },
     projectList: {
       query: GET_PROJECTS,
+      fetchPolicy: 'network-only',
       variables() {
         return {
-          clientId: this.client.id
+          clientId: this.client.id,
+          userId: this.selectedUser.id
         };
       }
     }
   },
   data() {
     return {
-      selectedUserEmail: '',
+      selectedUser: {},
       showInactive: false,
       projectList: [],
       clientList: [],
@@ -95,7 +110,7 @@ export default {
       user: {
         email: null
       },
-      client: null
+      client: {}
     };
   },
   computed: {
@@ -108,13 +123,7 @@ export default {
       );
     },
     favoriteProjectList() {
-      return this.filteredProjectList.filter(
-        project =>
-          project.favorite &&
-          (project.projectManagerEmail === this.selectedUserEmail ||
-            project.leadAnalystEmail === this.selectedUserEmail ||
-            project.dataSpecialistEmail === this.selectedUserEmail)
-      );
+      return this.filteredProjectList.filter(project => project.favorite);
     },
     totalProjectList() {
       return this.filteredProjectList.filter(project => !project.favorite);
@@ -132,10 +141,16 @@ export default {
       return pluralize(word, count);
     },
     showNewProject() {
-      this.$modal.show('new-project');
+      this.$modal.show('new-project', {
+        userId: this.selectedUser.id,
+        clientId: this.client.id
+      });
     },
     showInfoModal() {
       this.$modal.show('info');
+    },
+    updateSelectedUser(id) {
+      this.selectedUser = this.userList.find(user => user.id === id);
     }
   }
 };

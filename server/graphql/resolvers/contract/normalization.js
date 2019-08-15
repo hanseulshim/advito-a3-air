@@ -1,6 +1,6 @@
 exports.normalization = {
   Query: {
-    normalizationList: async (_, { discountId }, { db }) =>
+    normalizationList: async (_, { discountId = null }, { db }) =>
       await db('discountnormalisation as n')
         .select({
           id: 'n.id',
@@ -16,7 +16,7 @@ exports.normalization = {
         })
         .where('discountid', discountId)
         .andWhere('isdeleted', false),
-    normalizationMarketList: async (_, { normalizationId }, { db }) => {
+    normalizationMarketList: async (_, { normalizationId = null }, { db }) => {
       const normalizationMarketList = await db('discountnormalisationmarket')
         .select({
           id: 'id',

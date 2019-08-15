@@ -18,12 +18,14 @@
 
 <script>
 import { DELETE_PROJECT } from '@/graphql/mutations';
-import { GET_CLIENT, GET_PROJECTS } from '@/graphql/queries';
+import { GET_PROJECTS } from '@/graphql/queries';
 export default {
   name: 'DeleteModal',
   data() {
     return {
-      id: null
+      id: null,
+      clientId: null,
+      userId: null
     };
   },
   methods: {
@@ -34,23 +36,18 @@ export default {
           variables: {
             id: this.id
           },
-          update: (store, data) => {
-            const id = data.data.deleteProject;
-            const client = store.readQuery({
-              query: GET_CLIENT
-            }).client;
-            const newData = store.readQuery({
+          update: (store, { data: { deleteProject } }) => {
+            const query = {
               query: GET_PROJECTS,
-              variables: { clientId: client.id }
-            });
-            const projectIndex = newData.projectList.findIndex(
-              project => project.id === id
+              variables: { clientId: this.clientId, userId: this.userId }
+            };
+            const data = store.readQuery(query);
+            data.projectList = data.projectList.filter(
+              p => p.id !== deleteProject
             );
-            newData.projectList.splice(projectIndex, 1);
             store.writeQuery({
-              query: GET_PROJECTS,
-              variables: { clientId: client.id },
-              data: newData
+              ...query,
+              data
             });
           }
         });
@@ -65,7 +62,10 @@ export default {
       }
     },
     beforeOpen(event) {
-      this.id = event.params.id;
+      const { id, clientId, userId } = event.params;
+      this.id = id;
+      this.clientId = clientId;
+      this.userId = userId;
     },
     hideModal() {
       this.$modal.hide('delete');
