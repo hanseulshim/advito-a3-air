@@ -74,7 +74,7 @@
                 v-for="item in directionOptions"
                 :key="item.index"
                 :label="item.label"
-                :value="item.value"
+                :value="item.label"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -182,6 +182,7 @@ export default {
     return {
       topMarketList: [],
       currencyList: [],
+      normalization: {},
       form: {
         topMarket: null,
         notes: '',
@@ -321,7 +322,6 @@ export default {
     validateForm() {
       this.$refs.newMarket.validate(valid => {
         if (valid) {
-          console.log(valid);
           this.newMarket();
         } else {
           return false;
@@ -340,7 +340,7 @@ export default {
             marketA: this.form.topMarket.marketA,
             marketB: this.form.topMarket.marketB,
             farePaid: this.form.topMarket.farePaid,
-            usageOverride: this.form.usageOverride,
+            usageOverride: parseInt(this.form.usageOverride),
             farePullDate: this.form.farePullDate,
             notes: this.form.notes,
             fareList: [
@@ -348,7 +348,7 @@ export default {
                 id: null,
                 fareType: this.form.fareType,
                 fareBasis: this.form.fareBasis,
-                amount: this.form.amount,
+                amount: parseInt(this.form.amount),
                 currencyCode: this.form.currencyCode,
                 directionType: this.form.directionType,
                 advancePurchase: this.form.advancePurchase,
@@ -360,17 +360,15 @@ export default {
             {
               query: GET_NORMALIZATION_MARKET_LIST,
               fetchPolicy: 'network-only',
-              variables() {
-                return {
-                  normalizationId: this.normalization.id
-                };
+              variables: {
+                normalizationId: this.normalization.id
               }
             }
           ]
         });
         // this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
-          message: 'Normalization market successfully copied.',
+          message: 'Normalization market successfully created.',
           name: 'new-normalization-market-modal'
         });
       } catch (error) {
@@ -379,7 +377,9 @@ export default {
         });
       }
     },
-    beforeOpen() {},
+    beforeOpen(event) {
+      this.normalization = event.params.normalization;
+    },
     beforeClose() {
       this.form.topMarket = null;
       this.form.notes = '';

@@ -3,7 +3,7 @@
     <div class="title-row space-between">
       <div class="section-header">
         <span>{{
-          pluralize('normalization markets', normalizationMarketList)
+          pluralize('normalization market', normalizationMarketList.length)
         }}</span>
       </div>
       <div class="menu-container">
@@ -95,7 +95,7 @@ export default {
     }
   },
   apollo: {
-    normalizationList: {
+    normalizationMarketList: {
       query: GET_NORMALIZATION_MARKET_LIST,
       fetchPolicy: 'network-only',
       variables() {
@@ -116,8 +116,7 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return `${formatDate(row.farePullDate)} 
-      )}`;
+      return `${formatDate(row.farePullDate)} `;
     },
     formatMarkets(row) {
       return `${row.marketA} - ${row.marketB}`;
@@ -138,7 +137,9 @@ export default {
       );
     },
     showNewNormalizationMarketModal() {
-      this.$modal.show('new-normalization-market-modal');
+      this.$modal.show('new-normalization-market-modal', {
+        normalization: this.normalization
+      });
     },
     showDeleteNormalizationMarketModal() {
       this.$modal.show('delete-normalization-market-modal');
