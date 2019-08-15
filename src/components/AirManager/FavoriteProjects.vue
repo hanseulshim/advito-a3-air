@@ -75,12 +75,15 @@ export default {
     favoriteProjectList: {
       type: Array,
       required: true
+    },
+    selectedUser: {
+      type: Object,
+      required: true
+    },
+    clientId: {
+      type: Number,
+      default: 0
     }
-  },
-  data() {
-    return {
-      projectList: []
-    };
   },
   methods: {
     formatDate(date) {
@@ -100,16 +103,23 @@ export default {
       });
     },
     editProject(project) {
-      this.$modal.show('edit-project', { project });
+      this.$modal.show('edit-project', {
+        project,
+        userId: this.selectedUser.id
+      });
     },
     deleteProject(id) {
-      this.$modal.show('delete', { id });
+      this.$modal.show('delete', {
+        id,
+        userId: this.selectedUser.id,
+        clientId: this.clientId
+      });
     },
     async toggleFavoriteProject(id) {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { id }
+          variables: { id, userId: this.selectedUser.id }
         });
       } catch (error) {
         return 'this was an error';

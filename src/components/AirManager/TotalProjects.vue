@@ -37,7 +37,6 @@
       <el-table-column
         :width="project.role"
         label="My Role"
-        prop="projectManagerEmail"
         sortable
         :sort-orders="['ascending', 'descending']"
         :sort-method="sortByRole"
@@ -45,9 +44,9 @@
         <template slot-scope="scope">
           <i
             v-if="
-              scope.row.projectManagerEmail === user.email ||
-                scope.row.leadAnalystEmail === user.email ||
-                scope.row.dataSpecialistEmail === user.email
+              scope.row.projectManagerId === selectedUser.id ||
+                scope.row.leadAnalystId === selectedUser.id ||
+                scope.row.dataSpecialistId === selectedUser.id
             "
             class="fas fa-user"
           ></i>
@@ -88,7 +87,7 @@
 import { formatDate, pluralize } from '@/helper';
 import { project } from '@/config';
 import { TOGGLE_FAVORITE_PROJECT } from '@/graphql/mutations';
-import { GET_CLIENTS, GET_USER } from '@/graphql/queries';
+import { GET_CLIENTS } from '@/graphql/queries';
 import { UPDATE_CLIENT, UPDATE_PROJECT } from '@/graphql/mutations';
 export default {
   name: 'TotalProjects',
@@ -96,12 +95,17 @@ export default {
     totalProjectList: {
       type: Array,
       required: true
+    },
+    selectedUser: {
+      type: Object,
+      required: true
+    },
+    clientId: {
+      type: Number,
+      default: 0
     }
   },
   apollo: {
-    user: {
-      query: GET_USER
-    },
     clientList: {
       query: GET_CLIENTS
     }
@@ -125,24 +129,31 @@ export default {
     },
     sortByRole(a) {
       if (
-        a.projectManagerEmail === this.user.email ||
-        a.leadAnalystEmail === this.user.email ||
-        a.dataSpecialistEmail === this.user.email
+        a.projectManagerId === this.selectedUser.id ||
+        a.leadAnalystId === this.selectedUser.id ||
+        a.dataSpecialistId === this.selectedUser.id
       )
         return -1;
       return 1;
     },
     editProject(project) {
-      this.$modal.show('edit-project', { project });
+      this.$modal.show('edit-project', {
+        project,
+        userId: this.selectedUser.id
+      });
     },
     deleteProject(id) {
-      this.$modal.show('delete', { id });
+      this.$modal.show('delete', {
+        id,
+        userId: this.selectedUser.id,
+        clientId: this.clientId
+      });
     },
     async toggleFavoriteProject(id) {
       try {
         await this.$apollo.mutate({
           mutation: TOGGLE_FAVORITE_PROJECT,
-          variables: { id }
+          variables: { id, userId: this.selectedUser.id }
         });
       } catch (error) {
         return 'this was an error';

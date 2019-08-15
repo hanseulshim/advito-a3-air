@@ -2,7 +2,12 @@
   <div v-if="password === 'air2019'">
     <Sidebar />
     <div id="app">
-      <Header />
+      <Header
+        :client="client"
+        :project="project"
+        :client-list="clientList"
+        :project-list="projectList"
+      />
       <router-view />
       <Modals />
     </div>
@@ -16,7 +21,12 @@
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import Modals from '@/components/Modals';
-import { GET_PROJECTS, GET_CLIENTS } from '@/graphql/queries';
+import {
+  GET_PROJECTS,
+  GET_CLIENTS,
+  GET_CLIENT,
+  GET_PROJECT
+} from '@/graphql/queries';
 import { UPDATE_PROJECT, UPDATE_CLIENT } from '@/graphql/mutations';
 export default {
   name: 'App',
@@ -26,8 +36,23 @@ export default {
     Modals
   },
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    clientList: {
+      query: GET_CLIENTS
+    },
+    project: {
+      query: GET_PROJECT
+    },
     projectList: {
       query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id,
+          userId: null
+        };
+      },
       result({ data }) {
         this.restoreState(data.projectList);
       }
@@ -38,7 +63,8 @@ export default {
       password: 'air2019',
       projectList: [],
       clientList: [],
-      client: null
+      client: {},
+      project: {}
     };
   },
   methods: {
