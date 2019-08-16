@@ -54,6 +54,11 @@ exports.normalization = {
       ) {
         ${NORMALIZATION}
       }
+      copyNormalization(
+        id: null
+      ) {
+        ${NORMALIZATION}
+      }
       updateNormalization(
         id: null
         usageFrom: 1483246800001
