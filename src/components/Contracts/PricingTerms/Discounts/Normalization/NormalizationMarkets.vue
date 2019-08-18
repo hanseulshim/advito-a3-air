@@ -144,8 +144,11 @@ export default {
     showDeleteNormalizationMarketModal() {
       this.$modal.show('delete-normalization-market-modal');
     },
-    showEditNormalizationMarketModal() {
-      this.$modal.show('edit-normalization-market-modal');
+    showEditNormalizationMarketModal(normMarket) {
+      this.$modal.show('edit-normalization-market-modal', {
+        normalization: this.normalization,
+        normMarket
+      });
     },
     tableRowClassName({ row }) {
       return row.inactive ? 'inactive-row' : '';

@@ -74,7 +74,7 @@ mutation createNormalizationMarket(
 `;
 
 export const UPDATE_NORMALIZATION_MARKET = gql`
-mutation updateNormalization(
+mutation updateNormalizationMarket(
   $marketId: Int!
   $marketA: String!
   $marketB: String!
@@ -84,7 +84,7 @@ mutation updateNormalization(
   $notes: String
   $fareList: [NormalizationFareInput]
 ) {
-  updateNormalization(
+  updateNormalizationMarket(
     marketId: $marketId
     marketA: $marketA
     marketB: $marketB
