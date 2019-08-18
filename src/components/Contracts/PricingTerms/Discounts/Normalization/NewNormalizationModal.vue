@@ -65,11 +65,7 @@
 </template>
 <script>
 import { CREATE_NORMALIZATION } from '@/graphql/mutations';
-import {
-  GET_DISCOUNT_LIST,
-  GET_PRICING_TERM,
-  GET_NORMALIZATION_LIST
-} from '@/graphql/queries';
+import { GET_DISCOUNT_LIST, GET_NORMALIZATION_LIST } from '@/graphql/queries';
 export default {
   name: 'NewNormalizationModal',
   data() {
@@ -135,25 +131,19 @@ export default {
             discountId: this.discountId,
             ...this.form
           },
-          update: (store, { data: { newNormalization } }) => {
-            const query = {
-              query: GET_DISCOUNT_LIST,
-              variables: {
-                pricingTermId: this.pricingTermId
-              }
-            };
-            const data = store.readQuery(query);
-            data.normalizationList.push(newNormalization);
-            store.writeQuery({
-              ...query,
-              data
-            });
-          },
+
           refetchQueries: () => [
             {
               query: GET_NORMALIZATION_LIST,
               variables: {
                 discountId: this.discountId
+              },
+              fetchPolicy: 'network-only'
+            },
+            {
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.pricingTermId
               },
               fetchPolicy: 'network-only'
             }
