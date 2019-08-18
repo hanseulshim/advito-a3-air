@@ -17,14 +17,14 @@
 </template>
 
 <script>
-// import { GET_CONTRACT, GET_PRICING_TERM_LIST } from '@/graphql/queries';
-// import { DELETE_PRICING_TERMS } from '@/graphql/mutations';
+import { DELETE_NORMALIZATION_MARKET } from '@/graphql/mutations';
+import { GET_NORMALIZATION_MARKET_LIST } from '@/graphql/queries';
 export default {
   name: 'DeleteNormalizationMarketModal',
   data() {
     return {
-      contractId: null,
-      idList: []
+      normMarket: null,
+      normalization: null
     };
   },
   methods: {
@@ -32,44 +32,35 @@ export default {
       this.$modal.hide('delete-normalization-market-modal');
     },
     async deleteNormalization() {
-      //   try {
-      //     await this.$apollo.mutate({
-      //       mutation: DELETE_PRICING_TERMS,
-      //       variables: {
-      //         contractId: this.contractId,
-      //         idList: this.idList
-      //       },
-      //       refetchQueries: () => [
-      //         {
-      //           query: GET_CONTRACT,
-      //           variables: { id: this.contractId }
-      //         },
-      //         {
-      //           query: GET_PRICING_TERM_LIST,
-      //           variables: { contractId: this.contractId }
-      //         }
-      //       ]
-      //     });
-      //     this.$emit('clear-bulk-actions');
-      //     this.$modal.show('success', {
-      //       message: 'Pricing Term successfully deleted.',
-      //       name: 'delete-normalization-modal'
-      //     });
-      //   } catch (error) {
-      //     this.$modal.show('error', {
-      //       message: error.message
-      //     });
-      //   }
-      alert('Normalization Market deleted!');
+      try {
+        await this.$apollo.mutate({
+          mutation: DELETE_NORMALIZATION_MARKET,
+          variables: {
+            id: this.normMarket.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_NORMALIZATION_MARKET_LIST,
+              variables: { normalizationId: this.normalization.id },
+            }
+          ]
+        });
+        this.$modal.show('success', {
+          message: 'Normalization market successfully deleted.',
+          name: 'delete-normalization-market-modal'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
-    beforeOpen() {
-      // beforeOpen(event) {
-      //   this.contractId = event.params.contractId;
-      //   this.idList = event.params.idList;
+    beforeOpen(event) {
+      this.normMarket = event.params.normMarket;
+      this.normalization = event.params.normalization;
     },
     beforeClose() {
-      this.contractId = null;
-      this.idList = [];
+      this.normMarket = null;
     }
   }
 };

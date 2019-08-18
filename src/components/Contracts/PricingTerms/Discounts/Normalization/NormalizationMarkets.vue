@@ -1,14 +1,10 @@
 <template>
-  <!-- <div class="title-row space-between">
-    <div class="section-header">Discount : {{ discount.name }}</div>
-    <el-tooltip effect="dark" content="Close Modal" placement="top">
-      <i class="fas fa-times close-modal-button" @click="hideModal" />
-    </el-tooltip>
-  </div> -->
   <div>
     <div class="title-row space-between">
       <div class="section-header">
-        <span>{{ pluralize('normalization markets', 1) }}</span>
+        <span>{{
+          pluralize('normalization market', normalizationMarketList.length)
+        }}</span>
       </div>
       <div class="menu-container">
         <button class="button long" @click="showNewNormalizationMarketModal()">
@@ -22,17 +18,17 @@
       :data="normalizationMarketList"
       :row-class-name="tableRowClassName"
     >
-      <el-table-column label="Market">{{ 'ORD - LHR' }}</el-table-column>
-      <el-table-column label="Fare Paid" :min-width="discount.effectiveDates" />
-      <el-table-column label="Usage" />
-      <el-table-column label="Override Usage" :render-header="renderHeader">
-        <template>
-          <p>2</p>
-        </template>
-      </el-table-column>
+      <el-table-column label="Market" :formatter="formatMarkets" />
+      <el-table-column label="Fare Paid" prop="farePaid" />
+      <el-table-column label="Usage" prop="usageOverride" />
+      <el-table-column
+        label="Override Usage"
+        :render-header="renderHeader"
+        prop="usageOverride"
+      />
       <el-table-column
         label="Travel Date"
-        :min-width="discount.effectiveDates"
+        :min-width="normalization.effectiveDates"
         :formatter="formatDate"
       />
       <el-table-column label="Compare" />
@@ -49,9 +45,8 @@
         label="Override Discount"
         :render-header="renderHeader"
       />
-      <el-table-column :min-width="discount.actions">
-        <template>
-          <!-- <template slot-scope="props"> -->
+      <el-table-column :min-width="normalization.actions">
+        <template slot-scope="props">
           <el-tooltip
             effect="dark"
             content="Edit Normalization Market"
@@ -59,7 +54,7 @@
           >
             <i
               class="fas fa-pencil-alt icon-spacer"
-              @click="showEditNormalizationMarketModal()"
+              @click="showEditNormalizationMarketModal(props.row)"
             />
           </el-tooltip>
           <el-tooltip
@@ -69,7 +64,7 @@
           >
             <i
               class="fas fa-trash-alt"
-              @click="showDeleteNormalizationMarketModal()"
+              @click="showDeleteNormalizationMarketModal(props.row)"
             />
           </el-tooltip>
         </template>
@@ -81,13 +76,10 @@
   </div>
 </template>
 <script>
-// import CopyNormalizationModal from './Normalization/CopyNormalizationModal';
-// import NewNormalizationModal from './Normalization/NewNormalizationModal';
-// import DeleteNormalizationModal from './Normalization/DeleteNormalizationModal';
-// import EditNormalizationModal from './Normalization/EditNormalizationModal';
 import NewNormalizationMarketModal from './NewNormalizationMarketModal';
 import EditNormalizationMarketModal from './EditNormalizationMarketModal';
 import DeleteNormalizationMarketModal from './DeleteNormalizationMarketModal';
+import { GET_NORMALIZATION_MARKET_LIST } from '@/graphql/queries';
 import { formatDate, pluralize } from '@/helper';
 export default {
   name: 'NormalizationMarkets',
@@ -95,14 +87,27 @@ export default {
     NewNormalizationMarketModal,
     EditNormalizationMarketModal,
     DeleteNormalizationMarketModal
-    // CopyNormalizationModal,
-    // NewNormalizationModal,
-    // DeleteNormalizationModal
+  },
+  props: {
+    normalization: {
+      default: null,
+      type: Object
+    }
+  },
+  apollo: {
+    normalizationMarketList: {
+      query: GET_NORMALIZATION_MARKET_LIST,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          normalizationId: this.normalization.id
+        };
+      }
+    }
   },
   data() {
     return {
-      discount: {},
-      normalizationMarketList: [{ id: 1 }, { id: 2 }]
+      normalizationMarketList: []
     };
   },
   computed: {},
@@ -111,9 +116,10 @@ export default {
       return pluralize(word, count);
     },
     formatDate(row) {
-      return `${formatDate(row.effectiveFrom)} — ${formatDate(
-        row.effectiveTo
-      )}`;
+      return `${formatDate(row.farePullDate)} `;
+    },
+    formatMarkets(row) {
+      return `${row.marketA} - ${row.marketB}`;
     },
     renderHeader(h, { column }) {
       return h(
@@ -131,13 +137,21 @@ export default {
       );
     },
     showNewNormalizationMarketModal() {
-      this.$modal.show('new-normalization-market-modal');
+      this.$modal.show('new-normalization-market-modal', {
+        normalization: this.normalization
+      });
     },
-    showDeleteNormalizationMarketModal() {
-      this.$modal.show('delete-normalization-market-modal');
+    showDeleteNormalizationMarketModal(normMarket) {
+      this.$modal.show('delete-normalization-market-modal', {
+        normMarket,
+        normalization: this.normalization
+      });
     },
-    showEditNormalizationMarketModal() {
-      this.$modal.show('edit-normalization-market-modal');
+    showEditNormalizationMarketModal(normMarket) {
+      this.$modal.show('edit-normalization-market-modal', {
+        normalization: this.normalization,
+        normMarket
+      });
     },
     tableRowClassName({ row }) {
       return row.inactive ? 'inactive-row' : '';

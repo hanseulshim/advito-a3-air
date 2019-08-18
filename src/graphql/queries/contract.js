@@ -200,8 +200,8 @@ query normalization($id: Int!) {
 `;
 
 export const GET_NORMALIZATION_MARKET_LIST = gql`
-  query normalization($normalizationId: Int) {
-    normalization(normalizationId: $normalizationId) {
+  query normalizationMarketList($normalizationId: Int) {
+    normalizationMarketList(normalizationId: $normalizationId) {
       ${NORMALIZATION_MARKET}
     }
   }

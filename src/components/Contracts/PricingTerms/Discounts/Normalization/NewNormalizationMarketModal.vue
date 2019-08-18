@@ -22,20 +22,41 @@
         class="newMarketForm"
       >
         <div class="flex-row space-between">
-          <el-form-item label="Select New Market *" class="flex2">
-            <el-select placeholder="Select Top Market" />
+          <el-form-item
+            label="Select New Market *"
+            class="flex2"
+            prop="topMarket"
+          >
+            <el-select
+              v-model="form.topMarket"
+              placeholder="Select Top Market"
+              value-key="id"
+            >
+              <el-option
+                v-for="item in topMarketList"
+                :key="item.index"
+                :label="`${item.marketA} - ${item.marketB}`"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="Override Usage" class="flex1">
-            <el-input />
+            <el-input v-model="form.usageOverride" type="number" />
           </el-form-item>
-          <el-form-item label="Travel Date *" class="flex1">
-            <el-date-picker />
+          <el-form-item label="Travel Date *" class="flex1" prop="farePullDate">
+            <el-date-picker
+              v-model="form.farePullDate"
+              format="dd MMM yyyy"
+              placeholder="Pick a day"
+              class="date-picker"
+            />
           </el-form-item>
         </div>
         <div class="flex-row">
           <el-form-item label="Notes" class="flex1">
             <el-input
-              v-model="text"
+              v-model="form.notes"
               v-loading="$apollo.loading"
               class="market-notes"
               placeholder="Enter note here"
@@ -45,22 +66,36 @@
         </div>
         <div class="flex-row">
           <el-form-item label="Fare Basis" class="flex1">
-            <el-input />
+            <el-input v-model="form.fareBasis" />
           </el-form-item>
-          <el-form-item label="RT/OW" class="flex1">
-            <el-input />
+          <el-form-item label="RT/OW" class="flex1" prop="directionType">
+            <el-select v-model="form.directionType">
+              <el-option
+                v-for="item in directionOptions"
+                :key="item.index"
+                :label="item.label"
+                :value="item.label"
+              ></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="Amount" class="flex1">
-            <el-input />
+          <el-form-item label="Amount" class="flex1" prop="amount">
+            <el-input v-model="form.amount" type="number" />
           </el-form-item>
-          <el-form-item label="Currency" class="flex1">
-            <el-input />
+          <el-form-item label="Currency" class="flex1" prop="currencyCode">
+            <el-select v-model="form.currencyCode">
+              <el-option
+                v-for="item in currencyList"
+                :key="item.index"
+                :label="item.name"
+                :value="item.code"
+              ></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="AP (Days)" class="flex1">
-            <el-input />
+          <el-form-item label="AP (Days)" class="flex1" prop="advancePurchase">
+            <el-input v-model="form.advancePurchase" type="number" />
           </el-form-item>
-          <el-form-item label="Min Stay (Days)" class="flex1">
-            <el-input />
+          <el-form-item label="Min Stay (Days)" class="flex1" prop="minstay">
+            <el-input v-model="form.minstay" type="number" />
           </el-form-item>
         </div>
         <el-form-item class="save-container">
@@ -122,13 +157,97 @@
   </modal>
 </template>
 <script>
+import {
+  GET_TOP_MARKET_LIST,
+  GET_CURRENCY_LIST,
+  GET_NORMALIZATION_MARKET_LIST
+} from '@/graphql/queries';
+import { CREATE_NORMALIZATION_MARKET } from '@/graphql/mutations';
 export default {
   name: 'NewNormalizationMarketModal',
-  apollo: {},
+  apollo: {
+    topMarketList: {
+      query: GET_TOP_MARKET_LIST,
+      variables() {
+        return {
+          normalizationId: this.normalization.id
+        };
+      }
+    },
+    currencyList: {
+      query: GET_CURRENCY_LIST
+    }
+  },
   data() {
     return {
+      topMarketList: [],
+      currencyList: [],
+      normalization: {},
       form: {
-        text: ''
+        topMarket: null,
+        notes: '',
+        usageOverride: null,
+        farePullDate: null,
+        id: null,
+        fareType: 1,
+        fareBasis: null,
+        amount: null,
+        currencyCode: null,
+        directionType: null,
+        advancePurchase: null,
+        minstay: null
+      },
+      directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }],
+      rules: {
+        topMarket: [
+          {
+            required: true,
+            message: 'Please select a top market.',
+            trigger: 'change'
+          }
+        ],
+        farePullDate: [
+          {
+            required: true,
+            message: 'Please input a travel date.',
+            trigger: 'change'
+          }
+        ],
+        amount: [
+          {
+            required: true,
+            message: 'Please input an amount.',
+            trigger: 'change'
+          }
+        ],
+        currencyCode: [
+          {
+            required: true,
+            message: 'Please select a currency.',
+            trigger: 'change'
+          }
+        ],
+        directionType: [
+          {
+            required: true,
+            message: 'Please select a direction type.',
+            trigger: 'change'
+          }
+        ],
+        advancePurchase: [
+          {
+            required: true,
+            message: 'Please input advance purchase days',
+            trigger: 'change'
+          }
+        ],
+        minstay: [
+          {
+            required: true,
+            message: 'Please input a minimum stay',
+            trigger: 'change'
+          }
+        ]
       },
       tableData: [
         {
@@ -193,8 +312,7 @@ export default {
           bookingClass: 'D',
           usage: 2
         }
-      ],
-      rules: {}
+      ]
     };
   },
   methods: {
@@ -214,72 +332,67 @@ export default {
       return 'rowStyle';
     },
     async newMarket() {
-      //   try {
-      //     this.form.normalizationValue = parseFloat(this.form.normalizationValue)
-      //       ? parseFloat(this.form.normalizationValue)
-      //       : null;
-      //     await this.$apollo.mutate({
-      //       mutation: COPY_DISCOUNT,
-      //       variables: {
-      //         ...this.form
-      //       },
-      //       update: (store, { data: { newMarket } }) => {
-      //         const query = {
-      //           query: GET_DISCOUNT_LIST,
-      //           variables: {
-      //             pricingTermId: this.pricingTermId
-      //           }
-      //         };
-      //         const data = store.readQuery(query);
-      //         data.normalizationList.push(newMarket);
-      //         store.writeQuery({
-      //           ...query,
-      //           data
-      //         });
-      //       },
-      //       refetchQueries: () => [
-      //         {
-      //           query: GET_PRICING_TERM,
-      //           variables: {
-      //             id: this.pricingTermId
-      //           }
-      //         }
-      //       ]
-      //     });
-      //     this.$emit('toggle-row', this.pricingTermId);
-      //     this.$modal.show('success', {
-      //       message: 'Discount successfully copied.',
-      //       name: 'copy-normalization'
-      //     });
-      //   } catch (error) {
-      //     this.$modal.show('error', {
-      //       message: error.message
-      //     });
-      //   }
-      alert('Successfuly created new normalization market!');
+      try {
+        await this.$apollo.mutate({
+          mutation: CREATE_NORMALIZATION_MARKET,
+          variables: {
+            normalizationId: this.normalization.id,
+            marketA: this.form.topMarket.marketA,
+            marketB: this.form.topMarket.marketB,
+            farePaid: this.form.topMarket.farePaid,
+            usageOverride: parseInt(this.form.usageOverride),
+            farePullDate: this.form.farePullDate,
+            notes: this.form.notes,
+            fareList: [
+              {
+                id: null,
+                fareType: this.form.fareType,
+                fareBasis: this.form.fareBasis,
+                amount: parseInt(this.form.amount),
+                currencyCode: this.form.currencyCode,
+                directionType: this.form.directionType,
+                advancePurchase: this.form.advancePurchase,
+                minstay: this.form.minstay
+              }
+            ]
+          },
+          refetchQueries: () => [
+            {
+              query: GET_NORMALIZATION_MARKET_LIST,
+              variables: {
+                normalizationId: this.normalization.id
+              }
+            }
+          ]
+        });
+        // this.$emit('toggle-row', this.pricingTermId);
+        this.$modal.show('success', {
+          message: 'Normalization market successfully created.',
+          name: 'new-normalization-market-modal'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
-    beforeOpen() {
-      // beforeOpen(event) {
-      //   const {
-      //     id,
-      //     name,
-      //     normalizationTypeId,
-      //     normalizationValue,
-      //     journeyTypeId,
-      //     directionTypeId
-      //   } = event.params.normalization;
-      //   this.pricingTermId = event.params.pricingTermId;
-      //   this.form.id = id;
-      //   this.form.name = name;
-      //   this.form.normalizationTypeId = normalizationTypeId;
-      //   this.form.normalizationValue =
-      //     normalizationTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-      //       ? normalizationValue * 100
-      //       : normalizationValue;
-      //   this.form.journeyTypeId = journeyTypeId;
-      //   this.form.directionTypeId = directionTypeId;
+    beforeOpen(event) {
+      this.normalization = event.params.normalization;
     },
-    beforeClose() {}
+    beforeClose() {
+      this.form.topMarket = null;
+      this.form.notes = '';
+      this.form.usageOverride = null;
+      this.form.farePullDate = null;
+      this.form.id = null;
+      this.form.fareType = 1;
+      this.form.fareBasis = null;
+      this.form.amount = null;
+      this.form.currencyCode = null;
+      this.form.directionType = null;
+      this.form.advancePurchase = null;
+      this.form.minstay = null;
+    }
   }
 };
 </script>

@@ -60,7 +60,7 @@ export const DELETE_NORMALIZATION = gql`
 `;
 
 export const CREATE_NORMALIZATION_MARKET = gql`
-mutation createNormalization(
+mutation createNormalizationMarket(
   $normalizationId: Int!
   $marketA: String!
   $marketB: String!
@@ -70,7 +70,7 @@ mutation createNormalization(
   $notes: String
   $fareList: [NormalizationFareInput]
 ) {
-  createNormalization(
+  createNormalizationMarket(
     normalizationId: $normalizationId
     marketA: $marketA
     marketB: $marketB
@@ -86,7 +86,7 @@ mutation createNormalization(
 `;
 
 export const UPDATE_NORMALIZATION_MARKET = gql`
-mutation updateNormalization(
+mutation updateNormalizationMarket(
   $marketId: Int!
   $marketA: String!
   $marketB: String!
@@ -96,7 +96,7 @@ mutation updateNormalization(
   $notes: String
   $fareList: [NormalizationFareInput]
 ) {
-  updateNormalization(
+  updateNormalizationMarket(
     marketId: $marketId
     marketA: $marketA
     marketB: $marketB
