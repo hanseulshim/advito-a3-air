@@ -21,6 +21,18 @@ export const CREATE_NORMALIZATION = gql`
   }
 `;
 
+export const COPY_NORMALIZATION = gql`
+  mutation copyNormalization(
+    $id: Int!
+  ) {
+    copyNormalization(
+      id: $id
+    ) {
+      ${NORMALIZATION}
+    }
+  }
+`;
+
 export const UPDATE_NORMALIZATION = gql`
   mutation updateNormalization(
     $id: Int!
