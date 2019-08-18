@@ -11,11 +11,11 @@ exports.normalization = {
           created: 'n.created',
           createdby: 'n.createdby',
           marketCount: db.raw(`
-            (SELECT COUNT(*) FROM discountnormalisationmarket as m WHERE m.normalisationid = n.id)
+            (SELECT COUNT(*) FROM discountnormalisationmarket as m WHERE m.normalisationid = n.id and m.isdeleted = FALSE)
           `)
         })
         .where('discountid', discountId)
-        .andWhere('isdeleted', false),
+        .andWhere('n.isdeleted', false),
     normalizationMarketList: async (_, { normalizationId = null }, { db }) => {
       const normalizationMarketList = await db('discountnormalisationmarket')
         .select({
@@ -350,7 +350,7 @@ const getNormalization = async (db, id) => {
       created: 'n.created',
       createdby: 'n.createdby',
       marketCount: db.raw(`
-      (SELECT COUNT(*) FROM discountnormalisationmarket as m WHERE m.normalisationid = n.id)
+      (SELECT COUNT(*) FROM discountnormalisationmarket as m WHERE m.normalisationid = n.id and m.isdeleted = FALSE)
     `)
     })
     .where('id', id);
