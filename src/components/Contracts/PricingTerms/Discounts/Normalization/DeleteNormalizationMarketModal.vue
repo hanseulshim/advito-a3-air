@@ -42,7 +42,6 @@ export default {
             {
               query: GET_NORMALIZATION_MARKET_LIST,
               variables: { normalizationId: this.normalization.id },
-              fetchPolicy: 'network-only'
             }
           ]
         });
