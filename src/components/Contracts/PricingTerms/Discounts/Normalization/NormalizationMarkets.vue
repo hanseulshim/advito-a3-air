@@ -141,8 +141,11 @@ export default {
         normalization: this.normalization
       });
     },
-    showDeleteNormalizationMarketModal() {
-      this.$modal.show('delete-normalization-market-modal');
+    showDeleteNormalizationMarketModal(normMarket) {
+      this.$modal.show('delete-normalization-market-modal', {
+        normMarket,
+        normalization: this.normalization
+      });
     },
     showEditNormalizationMarketModal(normMarket) {
       this.$modal.show('edit-normalization-market-modal', {
