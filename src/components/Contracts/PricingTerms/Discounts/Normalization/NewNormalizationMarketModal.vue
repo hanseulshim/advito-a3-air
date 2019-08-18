@@ -365,7 +365,6 @@ export default {
             }
           ]
         });
-        // this.$emit('toggle-row', this.pricingTermId);
         this.$modal.show('success', {
           message: 'Normalization market successfully created.',
           name: 'new-normalization-market-modal'

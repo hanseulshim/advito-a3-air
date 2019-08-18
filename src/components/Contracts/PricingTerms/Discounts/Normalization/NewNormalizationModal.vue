@@ -137,15 +137,13 @@ export default {
               query: GET_NORMALIZATION_LIST,
               variables: {
                 discountId: this.discountId
-              },
-              fetchPolicy: 'network-only'
+              }
             },
             {
               query: GET_DISCOUNT_LIST,
               variables: {
                 pricingTermId: this.pricingTermId
-              },
-              fetchPolicy: 'network-only'
+              }
             }
           ]
         });
