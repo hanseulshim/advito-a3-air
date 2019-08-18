@@ -359,7 +359,6 @@ export default {
           refetchQueries: () => [
             {
               query: GET_NORMALIZATION_MARKET_LIST,
-              fetchPolicy: 'network-only',
               variables: {
                 normalizationId: this.normalization.id
               }
