@@ -41,7 +41,6 @@ export default {
           refetchQueries: () => [
             {
               query: GET_NORMALIZATION_LIST,
-              fetchPolicy: 'network-only',
               variables: {
                 discountId: this.discountId
               }
