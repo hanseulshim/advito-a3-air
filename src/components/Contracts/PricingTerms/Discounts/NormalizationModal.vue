@@ -72,7 +72,7 @@
           >
             <i
               class="far fa-copy icon-spacer"
-              @click="showCopyNormalizationModal()"
+              @click="showCopyNormalizationModal(props.row)"
             />
           </el-tooltip>
           <el-tooltip
@@ -167,8 +167,11 @@ export default {
       this.discount = event.params.discount;
       this.pricingTermId = event.params.pricingTermId;
     },
-    showCopyNormalizationModal() {
-      this.$modal.show('copy-normalization-modal');
+    showCopyNormalizationModal(normalization) {
+      this.$modal.show('copy-normalization-modal', {
+        normalization,
+        discountId: this.discountId
+      });
     },
     showNewNormalizationModal() {
       this.$modal.show('new-normalization-modal', {
