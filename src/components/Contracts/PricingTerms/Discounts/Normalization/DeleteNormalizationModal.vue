@@ -44,7 +44,6 @@ export default {
               variables: {
                 discountId: this.discountId
               },
-              fetchPolicy: 'network-only'
             }
           ]
         });
