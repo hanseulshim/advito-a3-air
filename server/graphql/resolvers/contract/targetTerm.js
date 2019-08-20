@@ -85,7 +85,7 @@ exports.targetTerm = {
     },
     copyTargetTerm: async (_, { id, name }, { db }) => {
       const { rows } = await db.raw(
-        `SELECT targetterm_createcopy(
+        `SELECT targetterm_v2_createcopy(
           ${id},
           '${name}',
           null,
@@ -94,7 +94,7 @@ exports.targetTerm = {
           null
         )`
       );
-      const [{ targetterm_createcopy: newId }] = rows;
+      const [{ targetterm_v2_createcopy: newId }] = rows;
       return await getTargetTerm(db, newId);
     },
     editTargetTerm: async (
