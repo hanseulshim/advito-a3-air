@@ -43,7 +43,7 @@ export default {
               query: GET_NORMALIZATION_LIST,
               variables: {
                 discountId: this.discountId
-              },
+              }
             }
           ]
         });
