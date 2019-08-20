@@ -58,11 +58,8 @@ exports.contract = {
       const { rows } = await db.raw(
         `SELECT contractcontainer_createcopy(${id}, '${name}')`
       );
-      const [copyContract] = rows;
-      const [contract] = await getContract(
-        db,
-        copyContract.contract_createcopy
-      );
+      const [{ contractcontainer_createcopy: newId }] = rows;
+      const [contract] = await getContract(db, newId);
       return contract;
     },
     editContract: async (
