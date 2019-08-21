@@ -1,5 +1,5 @@
 <template>
-  <div v-if="password === 'air2019'">
+  <div v-if="authenticated">
     <Sidebar />
     <div id="app">
       <Header
@@ -13,7 +13,7 @@
     </div>
   </div>
   <div v-else class="validation-container">
-    <el-input v-model="password" placeholder="Please input password"></el-input>
+    <router-view />
   </div>
 </template>
 
@@ -61,11 +61,17 @@ export default {
   data() {
     return {
       password: 'air2019',
+      authenticated: false,
       projectList: [],
       clientList: [],
       client: {},
       project: {}
     };
+  },
+  mounted() {
+    if (!this.authenticated) {
+      this.$router.replace({ name: 'login' });
+    }
   },
   methods: {
     async restoreState(projList) {
