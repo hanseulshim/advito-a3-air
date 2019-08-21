@@ -26,6 +26,9 @@ export const formatTime = num => numeral(num).format('00:00');
 
 export const formatPercent = num => numeral(num).format('0%');
 
+export const formatCurrency = num =>
+  `$ ${num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`;
+
 export const filterGeography = (list, query) =>
   list.filter(
     item =>

@@ -31,7 +31,10 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <NormalizationMarkets :normalization="props.row" />
+          <NormalizationMarkets
+            :normalization="props.row"
+            :discount="discount"
+          />
         </template>
       </el-table-column>
       <el-table-column
