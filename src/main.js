@@ -48,7 +48,23 @@ const apolloClient = new ApolloClient({
   }
 });
 
+const advitoClient = new ApolloClient({
+  uri: 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql',
+  fetch,
+  onError: ({ graphQLErrors }) => {
+    if (graphQLErrors) {
+      graphQLErrors.forEach(({ extensions }) => {
+        if (extensions.code === 'UNAUTHENTICATED') logout();
+      });
+    }
+  }
+});
+
 const apolloProvider = new VueApollo({
+  clients: {
+    apolloClient,
+    advitoClient
+  },
   defaultClient: apolloClient
 });
 
