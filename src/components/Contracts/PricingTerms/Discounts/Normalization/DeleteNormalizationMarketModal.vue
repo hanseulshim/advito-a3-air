@@ -41,7 +41,7 @@ export default {
           refetchQueries: () => [
             {
               query: GET_NORMALIZATION_MARKET_LIST,
-              variables: { normalizationId: this.normalization.id },
+              variables: { normalizationId: this.normalization.id }
             }
           ]
         });
