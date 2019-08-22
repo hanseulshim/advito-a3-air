@@ -3,13 +3,13 @@
     <div class="contracts-navigation-container">
       <router-link
         class="nav-item contract-item"
-        :to="`/projectList/${$route.params.projectId}/contracts`"
+        :to="`/${$route.params.projectId}/contracts`"
       >
         <span class="nav-title">All Contracts</span>
       </router-link>
       <router-link
         class="nav-item contract-item"
-        :to="`/projectList/${$route.params.projectId}/contracts/pricing-terms`"
+        :to="`/${$route.params.projectId}/contracts/pricing-terms`"
         :class="{ active: $route.path.includes('pricing-terms') }"
       >
         <span class="data-icon">
@@ -19,7 +19,7 @@
       </router-link>
       <router-link
         class="nav-item contract-item"
-        :to="`/projectList/${$route.params.projectId}/contracts/target-terms`"
+        :to="`/${$route.params.projectId}/contracts/target-terms`"
         :class="{ active: $route.path.includes('target-terms') }"
       >
         <span class="data-icon">

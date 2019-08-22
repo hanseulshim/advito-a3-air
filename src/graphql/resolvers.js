@@ -21,12 +21,12 @@ export default {
     ) => {
       if (project.id) {
         if (route.includes('contracts')) {
-          router.push(`/projectList/${project.id}/contracts`);
+          router.push(`/${project.id}/contracts`);
         } else {
-          router.push(`/projectList/${project.id}/${route}`);
+          router.push(`/${project.id}/${route}`);
         }
       } else {
-        router.push('/');
+        router.push('/projectList');
       }
       cache.writeData({
         data: {

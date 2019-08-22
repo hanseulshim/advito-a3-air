@@ -3,11 +3,7 @@
     <i class="fas fa-chevron-up"></i>
     <router-link
       class="nav-item data-nav-item"
-      :to="
-        `/projectList/${
-          $route.params.projectId
-        }/data/import-errors/imported-tickets`
-      "
+      :to="`/${$route.params.projectId}/data/import-errors/imported-tickets`"
       :class="{
         active: $route.path.includes('imported-tickets')
       }"
@@ -17,11 +13,7 @@
     <span class="spacer">|</span>
     <router-link
       class="nav-item data-nav-item"
-      :to="
-        `/projectList/${
-          $route.params.projectId
-        }/data/import-errors/error-tickets`
-      "
+      :to="`/${$route.params.projectId}/data/import-errors/error-tickets`"
       :class="{
         active: $route.path.includes('error-tickets')
       }"
@@ -31,9 +23,7 @@
     <span class="spacer">|</span>
     <router-link
       class="nav-item data-nav-item"
-      :to="
-        `/projectList/${$route.params.projectId}/data/import-errors/error-ratio`
-      "
+      :to="`/${$route.params.projectId}/data/import-errors/error-ratio`"
       :class="{
         active: $route.path.includes('error-ratio')
       }"

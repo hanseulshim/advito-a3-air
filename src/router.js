@@ -37,58 +37,56 @@ const router = new Router({
         {
           path: 'projectList',
           name: 'root',
-          component: AirManager,
+          component: AirManager
+        },
+        {
+          path: '/:projectId',
+          name: 'project',
+          component: Project,
           children: [
             {
-              path: '/:projectId',
-              name: 'project',
-              component: Project,
+              path: 'program-settings',
+              component: ProjectSettings
+            },
+            {
+              path: 'contracts',
+              component: Contracts,
               children: [
                 {
-                  path: 'program-settings',
-                  component: ProjectSettings
+                  path: '',
+                  component: ContractList
                 },
                 {
-                  path: 'contracts',
-                  component: Contracts,
-                  children: [
-                    {
-                      path: '',
-                      component: ContractList
-                    },
-                    {
-                      path: 'pricing-terms',
-                      component: PricingTerms
-                    },
-                    {
-                      path: 'target-terms',
-                      component: TargetTerms
-                    }
-                  ]
+                  path: 'pricing-terms',
+                  component: PricingTerms
                 },
                 {
-                  path: 'data',
-                  component: DataSet,
-                  children: [
-                    {
-                      path: 'import-errors/:path',
-                      component: ImportErrors
-                    },
-                    {
-                      path: 'division-trends/:path',
-                      component: DivisionTrends
-                    },
-                    {
-                      path: 'pos-trends/:path',
-                      component: PosTrends
-                    }
-                  ]
-                },
-                {
-                  path: 'process',
-                  component: Process
+                  path: 'target-terms',
+                  component: TargetTerms
                 }
               ]
+            },
+            {
+              path: 'data',
+              component: DataSet,
+              children: [
+                {
+                  path: 'import-errors/:path',
+                  component: ImportErrors
+                },
+                {
+                  path: 'division-trends/:path',
+                  component: DivisionTrends
+                },
+                {
+                  path: 'pos-trends/:path',
+                  component: PosTrends
+                }
+              ]
+            },
+            {
+              path: 'process',
+              component: Process
             }
           ]
         }
