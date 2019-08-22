@@ -4,7 +4,7 @@
     <router-link
       class="nav-item data-nav-item"
       :to="
-        `/project/${
+        `/projectList/${
           $route.params.projectId
         }/data/import-errors/imported-tickets`
       "
@@ -18,7 +18,9 @@
     <router-link
       class="nav-item data-nav-item"
       :to="
-        `/project/${$route.params.projectId}/data/import-errors/error-tickets`
+        `/projectList/${
+          $route.params.projectId
+        }/data/import-errors/error-tickets`
       "
       :class="{
         active: $route.path.includes('error-tickets')
@@ -29,7 +31,9 @@
     <span class="spacer">|</span>
     <router-link
       class="nav-item data-nav-item"
-      :to="`/project/${$route.params.projectId}/data/import-errors/error-ratio`"
+      :to="
+        `/projectList/${$route.params.projectId}/data/import-errors/error-ratio`
+      "
       :class="{
         active: $route.path.includes('error-ratio')
       }"

@@ -4,13 +4,13 @@
       <router-link
         class="data-nav-item nav-item data-nav"
         :to="
-          `/project/${
+          `/projectList/${
             $route.params.projectId
           }/data/import-errors/imported-tickets`
         "
         :class="{
           active: $route.path.includes(
-            `/project/${$route.params.projectId}/data/import-errors`
+            `/projectList/${$route.params.projectId}/data/import-errors`
           )
         }"
       >
@@ -21,10 +21,10 @@
       </router-link>
       <router-link
         class="data-nav-item nav-item data-nav"
-        :to="`/project/${$route.params.projectId}/data/pos-trends/tickets`"
+        :to="`/projectList/${$route.params.projectId}/data/pos-trends/tickets`"
         :class="{
           active: $route.path.includes(
-            `/project/${$route.params.projectId}/data/pos-trends`
+            `/projectList/${$route.params.projectId}/data/pos-trends`
           )
         }"
       >
@@ -35,10 +35,12 @@
       </router-link>
       <router-link
         class="data-nav-item nav-item data-nav"
-        :to="`/project/${$route.params.projectId}/data/division-trends/tickets`"
+        :to="
+          `/projectList/${$route.params.projectId}/data/division-trends/tickets`
+        "
         :class="{
           active: $route.path.includes(
-            `/project/${$route.params.projectId}/data/division-trends`
+            `/projectList/${$route.params.projectId}/data/division-trends`
           )
         }"
       >
@@ -67,21 +69,21 @@
       <PosTrends
         v-if="
           $route.path.includes(
-            `/project/${$route.params.projectId}/data/pos-trends`
+            `/projectList/${$route.params.projectId}/data/pos-trends`
           )
         "
       />
       <DivisionTrends
         v-if="
           $route.path.includes(
-            `/project/${$route.params.projectId}/data/division-trends`
+            `/projectList/${$route.params.projectId}/data/division-trends`
           )
         "
       />
       <ImportErrors
         v-if="
           $route.path.includes(
-            `/project/${$route.params.projectId}/data/import-errors`
+            `/projectList/${$route.params.projectId}/data/import-errors`
           )
         "
       />

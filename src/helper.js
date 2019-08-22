@@ -50,24 +50,30 @@ export const removeTypename = payload => {
   });
 };
 
-export const checkToken = router => {
-  const localToken = localStorage.getItem('air-session-token');
-  if (localToken) {
-    router.replace({ name: 'root', query: null });
-    return localToken;
+export const setUser = user => {
+  if (localStorage.getItem('advito-360-user')) {
+    localStorage.removeItem('advito-360-user');
   }
-
-  const queryArray = window.location.hash.split('sessionToken=');
-  const sessionToken = queryArray[1] ? queryArray[1] : '';
-  if (sessionToken) {
-    localStorage.setItem('air-session-token', sessionToken);
-    router.replace({ name: 'root', query: null });
-  }
-  return sessionToken;
+  localStorage.setItem('advito-360-user', JSON.stringify(user));
 };
 
-export const logout = () => {
-  localStorage.removeItem('air-session-token');
-  // window.location.href =
-  //   'https://s3.amazonaws.com/beta.boostlabs/BlackOps/index.html#/login';
+export const validateUser = () => {
+  if (localStorage.getItem('advito-360-user')) {
+    const user = JSON.parse(localStorage.getItem('advito-360-user'));
+    return { user };
+  } else {
+    return { user: {} };
+  }
+};
+
+export const getToken = () => {
+  if (localStorage.getItem('advito-360-user')) {
+    const user = JSON.parse(localStorage.getItem('advito-360-user'));
+    return user.sessionToken;
+  } else return '';
+};
+
+export const logout = router => {
+  localStorage.removeItem('advito-360-user');
+  router.replace({ name: 'login' });
 };

@@ -154,7 +154,9 @@
           >
             <router-link
               :to="
-                `/project/${$route.params.projectId}/contracts/pricing-terms`
+                `/projectList/${
+                  $route.params.projectId
+                }/contracts/pricing-terms`
               "
             >
               <button class="button number" @click="selectContract(props.row)">
@@ -168,7 +170,9 @@
         <template slot-scope="props">
           <el-tooltip effect="dark" content="View Target Terms" placement="top">
             <router-link
-              :to="`/project/${$route.params.projectId}/contracts/target-terms`"
+              :to="
+                `/projectList/${$route.params.projectId}/contracts/target-terms`
+              "
             >
               <button class="button number" @click="selectContract(props.row)">
                 {{ props.row.targetTermCount }}

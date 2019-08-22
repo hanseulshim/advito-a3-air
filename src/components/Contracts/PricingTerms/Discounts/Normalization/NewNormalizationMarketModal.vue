@@ -222,7 +222,8 @@
 import {
   GET_TOP_MARKET_LIST,
   GET_CURRENCY_LIST,
-  GET_NORMALIZATION_MARKET_LIST
+  GET_NORMALIZATION_MARKET_LIST,
+  GET_NORMALIZATION_LIST
 } from '@/graphql/queries';
 import { CREATE_NORMALIZATION_MARKET } from '@/graphql/mutations';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
@@ -501,6 +502,12 @@ export default {
               query: GET_NORMALIZATION_MARKET_LIST,
               variables: {
                 normalizationId: this.normalization.id
+              }
+            },
+            {
+              query: GET_NORMALIZATION_LIST,
+              variables: {
+                discountId: this.discount.id
               }
             }
           ]

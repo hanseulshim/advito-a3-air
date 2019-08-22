@@ -21,9 +21,9 @@ export default {
     ) => {
       if (project.id) {
         if (route.includes('contracts')) {
-          router.push(`/project/${project.id}/contracts`);
+          router.push(`/projectList/${project.id}/contracts`);
         } else {
-          router.push(`/project/${project.id}/${route}`);
+          router.push(`/projectList/${project.id}/${route}`);
         }
       } else {
         router.push('/');

@@ -4,3 +4,4 @@ export * from './dataSet';
 export * from './collection';
 export * from './contract';
 export * from './process';
+export * from './user';

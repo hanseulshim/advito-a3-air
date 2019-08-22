@@ -10,8 +10,7 @@ import VModal from 'vue-js-modal';
 import 'element-ui/lib/theme-chalk/index.css';
 import defaults from './graphql/defaults';
 import resolvers from './graphql/resolvers';
-// import { checkToken, logout } from './helper';
-import { logout } from './helper';
+import { getToken, logout } from './helper';
 
 const apolloClient = new ApolloClient({
   // uri: 'http://localhost:8085/graphql',
@@ -29,8 +28,8 @@ const apolloClient = new ApolloClient({
   },
   fetch,
   request: operation => {
-    // const sessiontoken = getToken();
-    const sessiontoken = 'MY^PR3TTYP0NY';
+    const sessiontoken = getToken();
+    // const sessiontoken = 'MY^PR3TTYP0NY';
     if (sessiontoken) {
       operation.setContext({
         headers: {
@@ -42,7 +41,7 @@ const apolloClient = new ApolloClient({
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout();
+        if (extensions.code === 'UNAUTHENTICATED') logout(router);
       });
     }
   }
@@ -54,7 +53,7 @@ const advitoClient = new ApolloClient({
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout();
+        if (extensions.code === 'UNAUTHENTICATED') logout(router);
       });
     }
   }
