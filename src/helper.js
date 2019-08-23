@@ -73,7 +73,8 @@ export const getToken = () => {
   } else return '';
 };
 
-export const logout = router => {
+export const logout = (router, client) => {
   localStorage.removeItem('advito-360-user');
   router.replace({ name: 'login' });
+  client.resetStore();
 };

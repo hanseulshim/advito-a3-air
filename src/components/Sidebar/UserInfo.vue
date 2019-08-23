@@ -5,12 +5,22 @@
       <i class="fas fa-cog" />
     </div>
     <div>Shayan</div>
+    <button type="button" class="button logout" @click="logout">
+      Logout
+    </button>
   </div>
 </template>
 
 <script>
+import router from '@/router';
+import { logout } from '@/helper';
 export default {
-  name: 'UserInfo'
+  name: 'UserInfo',
+  methods: {
+    logout() {
+      logout(router, this.$apollo);
+    }
+  }
 };
 </script>
 

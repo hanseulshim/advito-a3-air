@@ -11,15 +11,12 @@
         @click="collapse = true"
       />
       <UserInfo />
-      <button type="button" class="button" @click="logout">Logout</button>
     </div>
   </div>
 </template>
 
 <script>
 import UserInfo from './UserInfo.vue';
-import router from '@/router';
-import { logout } from '@/helper';
 export default {
   name: 'Sidebar',
   components: {
@@ -29,11 +26,6 @@ export default {
     return {
       collapse: true
     };
-  },
-  methods: {
-    logout() {
-      logout(router);
-    }
   }
 };
 </script>

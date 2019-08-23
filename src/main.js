@@ -38,11 +38,14 @@ const apolloClient = new ApolloClient({
       });
     }
   },
-  onError: ({ graphQLErrors }) => {
+  onError: ({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router);
+        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
       });
+    }
+    if (networkError) {
+      console.log('THIS IS A NETWORK ERROR', networkError);
     }
   }
 });
@@ -53,7 +56,7 @@ const advitoClient = new ApolloClient({
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router);
+        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
       });
     }
   }
