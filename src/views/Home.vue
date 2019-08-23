@@ -62,42 +62,44 @@ export default {
   },
   methods: {
     async restoreState(projList) {
-      //   try {
-      //     const path = this.$route.path;
-      //     const outsideUrl = path.includes('project');
-      //     if (outsideUrl) {
-      //       const splitPath = path.split('/');
-      //       const projectId = parseInt(splitPath[2]);
-      //       const route = splitPath.slice(3).join('/');
-      //       const matched = projList.filter(proj => proj.id === projectId)[0];
-      //       await this.$apollo.mutate({
-      //         mutation: UPDATE_PROJECT,
-      //         variables: {
-      //           project: matched,
-      //           route
-      //         }
-      //       });
-      //       const {
-      //         data: { clientList }
-      //       } = await this.$apollo.query({
-      //         query: GET_CLIENTS
-      //       });
-      //       const matchedClient = clientList.filter(
-      //         client => client.id === matched.clientId
-      //       )[0];
-      //       this.$apollo.mutate({
-      //         mutation: UPDATE_CLIENT,
-      //         variables: {
-      //           client: matchedClient
-      //         }
-      //       });
-      //     } else return;
-      //   } catch (error) {
-      //     this.$modal.show('error', {
-      //       message: error.message
-      //     });
-      //     console.log('heres ya error', error);
-      //   }
+      try {
+        const path = this.$route.path;
+        const outsideUrl = str => /\d/.test(str);
+        if (outsideUrl(path)) {
+          const splitPath = path.split('/');
+
+          const projectId = parseInt(splitPath[1]);
+
+          const route = splitPath.slice(2).join('/');
+
+          const matched = projList.filter(proj => proj.id === projectId)[0];
+          await this.$apollo.mutate({
+            mutation: UPDATE_PROJECT,
+            variables: {
+              project: matched,
+              route
+            }
+          });
+          const {
+            data: { clientList }
+          } = await this.$apollo.query({
+            query: GET_CLIENTS
+          });
+          const matchedClient = clientList.filter(
+            client => client.id === matched.clientId
+          )[0];
+          this.$apollo.mutate({
+            mutation: UPDATE_CLIENT,
+            variables: {
+              client: matchedClient
+            }
+          });
+        } else return;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     }
   }
 };

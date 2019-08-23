@@ -111,7 +111,7 @@ export default {
   row-gap: 1em;
   column-gap: 1em;
   align-items: flex-end;
-  margin-bottom: 2em;
+  margin-bottom: 4em;
 }
 .logo {
   max-width: 294px;
