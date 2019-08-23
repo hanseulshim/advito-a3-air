@@ -45,9 +45,12 @@ const authenticateUser = async (sessionToken, advitoDb) => {
   const sessionDurationSeconds = sessionRow.session_duration_sec;
   const now = new Date();
   const newExpiration = new Date(now.getTime() + sessionDurationSeconds * 1000);
-  await advitoDb('advito_user_session')
-    .where('advito_user_id', userId)
-    .update('session_expiration', newExpiration);
+  const timeDifference = Math.floor((newExpiration - sessionExp) / 1000 / 60);
+  if (timeDifference > 50) {
+    await advitoDb('advito_user_session')
+      .where('advito_user_id', userId)
+      .update('session_expiration', newExpiration);
+  }
   const nameFirst = sessionRow.u_name_first;
   const nameLast = sessionRow.u_name_last;
   const email = sessionRow.u_email;
