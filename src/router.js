@@ -6,6 +6,7 @@ import Project from './views/Project';
 import ProjectSettings from '@/components/ProjectSettings';
 
 import Login from '@/components/Login';
+import ResetPassword from '@/components/Login/ResetPassword';
 import DataSet from '@/components/DataSet';
 import PosTrends from '@/components/DataSet/PosTrends';
 import DivisionTrends from '@/components/DataSet/DivisionTrends';
@@ -28,6 +29,11 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/resetpassword',
+      name: 'resetpassword',
+      component: ResetPassword
     },
     {
       path: '/',

@@ -16,24 +16,35 @@
         <el-form-item prop="username">
           <el-input v-model="form.username" placeholder="Login" />
         </el-form-item>
-        <el-form-item prop="password" type="password">
-          <el-input v-model="form.password" placeholder="Password" />
+        <el-form-item prop="password">
+          <el-input
+            v-model="form.password"
+            placeholder="Password"
+            type="password"
+          />
         </el-form-item>
       </el-form>
       <div class="submit-row">
         <button class="button" type="button" @click="validateForm">
           Login
         </button>
-        <span>Forgot password?</span>
+        <span class="forgot-password" @click="showForgotPasswordModal"
+          >Forgot password?</span
+        >
       </div>
     </div>
+    <ForgotPasswordModal />
   </div>
 </template>
 <script>
 import { LOGIN } from '@/graphql/mutations';
 import { setUser } from '@/helper';
+import ForgotPasswordModal from './ForgotPasswordModal';
 export default {
   name: 'Login',
+  components: {
+    ForgotPasswordModal
+  },
   data() {
     return {
       form: {
@@ -63,6 +74,9 @@ export default {
     }
   },
   methods: {
+    showForgotPasswordModal() {
+      this.$modal.show('forgot-password');
+    },
     validateForm() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -97,8 +111,8 @@ export default {
 };
 </script>
 <style lang="scss">
-/* @import '@/styles/global.scss';
-@import './styles.scss'; */
+@import '@/styles/global.scss';
+
 .login-container {
   width: 100%;
   height: 100%;
@@ -111,7 +125,9 @@ export default {
 
 .login-logo {
   margin: 3em 0 0 5em;
-  width: 10%;
+  max-width: 200px;
+  width: 100%;
+  /* height: auto; */
   align-self: flex-start;
 }
 
@@ -126,10 +142,8 @@ export default {
 
 .shimmer {
   display: inline-block;
-  color: white;
-
+  color: black;
   background: #acacac -webkit-gradient(linear, 100% 0, 0 0, from(#acacac), color-stop(0.5, #ffffff), to(#acacac));
-
   background-position: -4rem top; /*50px*/
   background-repeat: no-repeat;
   -webkit-background-clip: text;
@@ -145,10 +159,13 @@ export default {
     background-position: -4rem top; /*50px*/
   }
 
+  20% {
+    background-position: 15.5rem top; /*200px*/
+  }
+
   40% {
     background-position: 25.5rem top; /*200px*/
   }
-
   100% {
     background-position: 25.5rem top; /*200px*/
   }
@@ -156,7 +173,7 @@ export default {
 
 .login-form {
   padding: 3em 4em;
-  width: 25%;
+  width: 20%;
 }
 
 .submit-row {
@@ -167,5 +184,9 @@ export default {
   button {
     text-transform: uppercase;
   }
+}
+
+.forgot-password {
+  cursor: pointer;
 }
 </style>
