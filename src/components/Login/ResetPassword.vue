@@ -24,17 +24,30 @@
             type="password"
           />
         </el-form-item>
-        <el-form-item prop="verifyPassword">
+        <el-form-item prop="confirmPassword">
           <el-input
-            v-model="form.verifyPassword"
+            v-model="form.confirmPassword"
             placeholder="Verify Password"
             type="password"
           />
         </el-form-item>
       </el-form>
       <div class="submit-reset-password">
-        <button class="button" type="button" @click="validateForm">
+        <button
+          v-if="!passwordReset"
+          class="button"
+          type="button"
+          @click="validateForm"
+        >
           Reset
+        </button>
+        <button
+          v-if="passwordReset"
+          class="button"
+          type="button"
+          @click="pushToLogin"
+        >
+          Back to Login
         </button>
       </div>
     </div>
@@ -48,8 +61,9 @@ export default {
     return {
       form: {
         password: null,
-        verifyPassword: null
-      }
+        confirmPassword: null
+      },
+      passwordReset: false
     };
   },
   computed: {
@@ -62,7 +76,7 @@ export default {
             trigger: 'change'
           }
         ],
-        verifyPassword: [
+        confirmPassword: [
           {
             required: true,
             message: 'Please enter a valid password',
@@ -82,27 +96,32 @@ export default {
         }
       });
     },
+    pushToLogin() {
+      this.$router.replace({ name: 'login' });
+    },
     async resetPassword() {
-      alert('Password reset!');
-      //   try {
-      //     const { username, password } = this.form;
-      //     const {
-      //       data: { reset-password }
-      //     } = await this.$apollo.mutate({
-      //       mutation: LOGIN,
-      //       variables: {
-      //         username,
-      //         password
-      //       },
-      //       client: 'advitoClient'
-      //     });
-      //     setUser(login);
-      //     this.$router.replace({ name: 'root' });
-      //   } catch (error) {
-      //     this.$modal.show('error', {
-      //       message: error.message
-      //     });
-      //   }
+      const token = this.$route.query.t;
+
+      try {
+        const { password, confirmPassword } = this.form;
+        await this.$apollo.mutate({
+          mutation: RESET_PASSWORD,
+          variables: {
+            token,
+            password,
+            confirmPassword
+          },
+          client: 'advitoClient'
+        });
+        this.$modal.show('success', {
+          message: 'Password Successfully reset'
+        });
+        this.passwordReset = true;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     }
   }
 };

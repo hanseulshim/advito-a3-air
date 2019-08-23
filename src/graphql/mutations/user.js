@@ -17,3 +17,17 @@ export const SEND_RESET_PASSWORD = gql`
     sendResetPasswordEmail(email: $email)
   }
 `;
+
+export const RESET_PASSWORD = gql`
+  mutation resetPassword(
+    $token: String!
+    $password: String!
+    $confirmPassword: String!
+  ) {
+    resetPassword(
+      token: $token
+      password: $password
+      confirmPassword: $confirmPassword
+    )
+  }
+`;
