@@ -38,34 +38,32 @@ export default {
       const navItems = [
         {
           id: 1,
-          link: `/project/${this.project.id}/program-settings`,
-          path: `/project/${this.project.id}/program-settings`,
+          link: `/${this.project.id}/program-settings`,
+          path: `/${this.project.id}/program-settings`,
           title: 'project settings'
         },
         {
           id: 2,
-          link: `/project/${
-            this.project.id
-          }/data/import-errors/imported-tickets`,
-          path: `/project/${this.project.id}/data`,
+          link: `/${this.project.id}/data/import-errors/imported-tickets`,
+          path: `/${this.project.id}/data`,
           title: 'data'
         },
         {
           id: 3,
-          link: `/project/${this.project.id}/contracts`,
-          path: `/project/${this.project.id}/contracts`,
+          link: `/${this.project.id}/contracts`,
+          path: `/${this.project.id}/contracts`,
           title: 'contracts'
         },
         {
           id: 4,
-          link: `/project/${this.project.id}/scenario-settings`,
-          path: `/project/${this.project.id}/scenario-settings`,
+          link: `/${this.project.id}/scenario-settings`,
+          path: `/${this.project.id}/scenario-settings`,
           title: 'scenario settings'
         },
         {
           id: 5,
-          link: `/project/${this.project.id}/process`,
-          path: `/project/${this.project.id}/process`,
+          link: `/${this.project.id}/process`,
+          path: `/${this.project.id}/process`,
           title: 'process'
         }
       ];

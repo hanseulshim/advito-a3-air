@@ -17,14 +17,15 @@
 </template>
 <script>
 import { COPY_NORMALIZATION } from '@/graphql/mutations';
-import { GET_NORMALIZATION_LIST } from '@/graphql/queries';
+import { GET_NORMALIZATION_LIST, GET_DISCOUNT_LIST } from '@/graphql/queries';
 export default {
   name: 'CopyNormalizationModal',
 
   data() {
     return {
       normalization: null,
-      discountId: null
+      discountId: null,
+      pricingTermId: null
     };
   },
   methods: {
@@ -44,6 +45,12 @@ export default {
               variables: {
                 discountId: this.discountId
               }
+            },
+            {
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             }
           ]
         });
@@ -60,9 +67,12 @@ export default {
     beforeOpen(event) {
       this.normalization = event.params.normalization;
       this.discountId = event.params.discountId;
+      this.pricingTermId = event.params.pricingTermId;
     },
     beforeClose() {
       this.normalization = null;
+      this.discountId = null;
+      this.pricingTermId = null;
     }
   }
 };

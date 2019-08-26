@@ -64,6 +64,68 @@
             />
           </el-form-item>
         </div>
+        <div v-if="percentageDiscount">
+          <p class="section-header">Applicable</p>
+          <div class="flex-row">
+            <el-form-item label="Fare Basis" class="flex1">
+              <el-input v-model="form.fareBasisApplicable" />
+            </el-form-item>
+            <el-form-item
+              label="RT/OW"
+              class="flex1"
+              prop="directionTypeApplicable"
+            >
+              <el-select v-model="form.directionTypeApplicable">
+                <el-option
+                  v-for="item in directionOptions"
+                  :key="item.index"
+                  :label="item.label"
+                  :value="item.label"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="Amount" class="flex1" prop="amountApplicable">
+              <el-input v-model="form.amountApplicable" type="number" />
+            </el-form-item>
+            <el-form-item
+              label="Currency"
+              class="flex1"
+              prop="currencyCodeApplicable"
+            >
+              <el-select v-model="form.currencyCodeApplicable" filterable>
+                <el-option
+                  v-for="item in currencyList"
+                  :key="item.index"
+                  :label="item.name"
+                  :value="item.code"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="AP (Days)"
+              class="flex1"
+              prop="advancePurchaseApplicable"
+            >
+              <el-input
+                v-model="form.advancePurchaseApplicable"
+                type="number"
+                :min="0"
+              />
+            </el-form-item>
+            <el-form-item
+              label="Min Stay (Days)"
+              class="flex1"
+              prop="minstayApplicable"
+            >
+              <el-input
+                v-model="form.minstayApplicable"
+                type="number"
+                :min="0"
+              />
+            </el-form-item>
+          </div>
+        </div>
+        <p class="section-header">Compare</p>
         <div class="flex-row">
           <el-form-item label="Fare Basis" class="flex1">
             <el-input v-model="form.fareBasis" />
@@ -82,7 +144,7 @@
             <el-input v-model="form.amount" type="number" />
           </el-form-item>
           <el-form-item label="Currency" class="flex1" prop="currencyCode">
-            <el-select v-model="form.currencyCode">
+            <el-select v-model="form.currencyCode" filterable>
               <el-option
                 v-for="item in currencyList"
                 :key="item.index"
@@ -104,7 +166,7 @@
           </button>
         </el-form-item>
       </el-form>
-      <div class="updateMarketTables">
+      <div v-if="form.topMarket" class="updateMarketTables">
         <div class="flex-row">
           <el-table
             :data="tableData"
@@ -162,7 +224,9 @@ import {
   GET_CURRENCY_LIST,
   GET_NORMALIZATION_MARKET_LIST
 } from '@/graphql/queries';
+import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { UPDATE_NORMALIZATION_MARKET } from '@/graphql/mutations';
+import { formatDate } from '@/helper';
 export default {
   name: 'EditNormalizationMarketModal',
   apollo: {
@@ -189,6 +253,7 @@ export default {
     return {
       topMarketList: [],
       currencyList: [],
+      discount: {},
       normalization: {},
       normMarket: {},
       form: {
@@ -196,67 +261,22 @@ export default {
         notes: '',
         usageOverride: null,
         farePullDate: null,
-        id: null,
-        fareType: 1,
+        compareFareId: null,
+        applicableFareId: null,
         fareBasis: null,
         amount: null,
         currencyCode: null,
         directionType: null,
         advancePurchase: null,
-        minstay: null
+        minstay: null,
+        fareBasisApplicable: null,
+        directionTypeApplicable: null,
+        amountApplicable: null,
+        currencyCodeApplicable: null,
+        advancePurchaseApplicable: null,
+        minstayApplicable: null
       },
       directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }],
-      rules: {
-        topMarket: [
-          {
-            required: true,
-            message: 'Please select a top market.',
-            trigger: 'change'
-          }
-        ],
-        farePullDate: [
-          {
-            required: true,
-            message: 'Please input a travel date.',
-            trigger: 'change'
-          }
-        ],
-        amount: [
-          {
-            required: true,
-            message: 'Please input an amount.',
-            trigger: 'change'
-          }
-        ],
-        currencyCode: [
-          {
-            required: true,
-            message: 'Please select a currency.',
-            trigger: 'change'
-          }
-        ],
-        directionType: [
-          {
-            required: true,
-            message: 'Please select a direction type.',
-            trigger: 'change'
-          }
-        ],
-        advancePurchase: [
-          {
-            required: true,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstay: [
-          {
-            required: true,
-            message: 'Please input a minimum stay',
-            trigger: 'change'
-          }
-        ]
-      },
       tableData: [
         {
           label: '0-2',
@@ -323,8 +343,138 @@ export default {
       ]
     };
   },
-  computed: {},
-
+  computed: {
+    percentageDiscount() {
+      return this.discount.discountTypeName === 'Percentage';
+    },
+    rules() {
+      const applicableRulesRequired =
+        this.discount.discountTypeName === 'Percentage';
+      return {
+        topMarket: [
+          {
+            required: true,
+            message: 'Please select a top market.',
+            trigger: 'change'
+          }
+        ],
+        farePullDate: [
+          {
+            required: true,
+            message: 'Please input a travel date.',
+            trigger: 'change'
+          }
+        ],
+        directionType: [
+          {
+            required: true,
+            message: 'Please select a direction type.',
+            trigger: 'change'
+          }
+        ],
+        amount: [
+          {
+            required: true,
+            message: 'Please input an amount.',
+            trigger: 'change'
+          }
+        ],
+        currencyCode: [
+          {
+            required: true,
+            message: 'Please select a currency.',
+            trigger: 'change'
+          }
+        ],
+        advancePurchase: [
+          {
+            required: true,
+            message: 'Please input advance purchase days',
+            trigger: 'change'
+          }
+        ],
+        minstay: [
+          {
+            required: true,
+            message: 'Please input a minimum stay',
+            trigger: 'change'
+          }
+        ],
+        directionTypeApplicable: [
+          {
+            required: applicableRulesRequired,
+            message: 'Please select a direction type',
+            trigger: 'change'
+          }
+        ],
+        amountApplicable: [
+          {
+            required: applicableRulesRequired,
+            message: 'Please input an amount',
+            trigger: 'change'
+          }
+        ],
+        currencyCodeApplicable: [
+          {
+            required: applicableRulesRequired,
+            message: 'Please select a currency.',
+            trigger: 'change'
+          }
+        ],
+        advancePurchaseApplicable: [
+          {
+            required: applicableRulesRequired,
+            message: 'Please input advance purchase days',
+            trigger: 'change'
+          }
+        ],
+        minstayApplicable: [
+          {
+            required: applicableRulesRequired,
+            message: 'Please input a minimum stay',
+            trigger: 'change'
+          }
+        ]
+      };
+    },
+    fareList() {
+      return this.discount.discountTypeName === 'Fixed'
+        ? [
+            {
+              id: null,
+              fareType: DISCOUNT_LOOKUP.COMPARE_FARE_TYPE,
+              fareBasis: this.form.fareBasis,
+              directionType: this.form.directionType,
+              amount: parseInt(this.form.amount),
+              currencyCode: this.form.currencyCode,
+              advancePurchase: this.form.advancePurchase,
+              minstay: this.form.minstay
+            }
+          ]
+        : [
+            {
+              id: this.form.compareFareId,
+              fareType: DISCOUNT_LOOKUP.COMPARE_FARE_TYPE,
+              fareBasis: this.form.fareBasis,
+              directionType: this.form.directionType,
+              amount: parseInt(this.form.amount),
+              currencyCode: this.form.currencyCode,
+              advancePurchase: this.form.advancePurchase,
+              minstay: this.form.minstay
+            },
+            {
+              id: this.form.applicableFareId,
+              fareType: DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE,
+              fareBasis: this.form.fareBasisApplicable,
+              directionType: this.form.directionTypeApplicable,
+              amount: parseInt(this.form.amountApplicable),
+              currencyCode: this.form.currencyCodeApplicable,
+              advancePurchase: this.form.advancePurchaseApplicable,
+              minstay: this.form.minstayApplicable
+            }
+          ];
+    }
+  },
   methods: {
     hideModal() {
       this.$modal.hide('edit-normalization-market-modal');
@@ -341,6 +491,9 @@ export default {
     rowClassName() {
       return 'rowStyle';
     },
+    formatDate(date) {
+      return formatDate(date);
+    },
     async updateMarket() {
       try {
         await this.$apollo.mutate({
@@ -353,18 +506,7 @@ export default {
             usageOverride: parseInt(this.form.usageOverride),
             farePullDate: this.form.farePullDate,
             notes: this.form.notes,
-            fareList: [
-              {
-                id: null,
-                fareType: this.form.fareType,
-                fareBasis: this.form.fareBasis,
-                amount: parseInt(this.form.amount),
-                currencyCode: this.form.currencyCode,
-                directionType: this.form.directionType,
-                advancePurchase: this.form.advancePurchase,
-                minstay: this.form.minstay
-              }
-            ]
+            fareList: this.fareList
           },
           refetchQueries: () => [
             {
@@ -387,32 +529,67 @@ export default {
       }
     },
     beforeOpen(event) {
-      const { normMarket } = event.params;
+      const { normMarket, discount, normalization } = event.params;
+      const compareFare = normMarket.fareList.find(
+        fareList => fareList.fareType === DISCOUNT_LOOKUP.COMPARE_FARE_TYPE
+      );
+      this.topMarketList.length
+        ? (this.form.topMarket = this.topMarketList.find(
+            market =>
+              market.marketA === normMarket.marketA &&
+              market.marketB === normMarket.marketB
+          ))
+        : null;
+
       this.normMarket = normMarket;
-      this.normalization = event.params.normalization;
+      this.discount = discount;
+      this.normalization = normalization;
       this.form.usageOverride = normMarket.usageOverride;
-      this.form.farePullDate = new Date(normMarket.farePullDate);
+      this.form.farePullDate = this.formatDate(normMarket.farePullDate);
       this.form.notes = normMarket.notes;
-      this.form.fareBasis = normMarket.fareList[0].fareBasis;
-      this.form.amount = normMarket.fareList[0].amount;
-      this.form.currencyCode = normMarket.fareList[0].currencyCode;
-      this.form.directionType = normMarket.fareList[0].directionType;
-      this.form.advancePurchase = normMarket.fareList[0].advancePurchase;
-      this.form.minstay = normMarket.fareList[0].minstay;
+      this.form.compareFareId = compareFare.id;
+      this.form.fareBasis = compareFare.fareBasis;
+      this.form.amount = compareFare.amount;
+      this.form.currencyCode = compareFare.currencyCode;
+      this.form.directionType = compareFare.directionType;
+      this.form.advancePurchase = compareFare.advancePurchase;
+      this.form.minstay = compareFare.minstay;
+      //If its a percentage discount, also sustain these form values
+      if (this.percentageDiscount) {
+        const applicableFare = normMarket.fareList.find(
+          fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
+        );
+        this.form.applicableFareId = applicableFare.id;
+        this.form.fareBasisApplicable = applicableFare.fareBasis;
+        this.form.amountApplicable = applicableFare.amount;
+        this.form.currencyCodeApplicable = applicableFare.currencyCode;
+        this.form.directionTypeApplicable = applicableFare.directionType;
+        this.form.advancePurchaseApplicable = applicableFare.advancePurchase;
+        this.form.minstayApplicable = applicableFare.minstay;
+      }
     },
     beforeClose() {
+      // this.normMarket = null;
+      // this.discount = null;
+      // this.normalization = null;
       this.form.topMarket = null;
       this.form.notes = '';
       this.form.usageOverride = null;
       this.form.farePullDate = null;
-      this.form.id = null;
-      this.form.fareType = 1;
+      this.form.compareFareId = null;
+      this.form.applicableFareId = null;
       this.form.fareBasis = null;
       this.form.amount = null;
       this.form.currencyCode = null;
       this.form.directionType = null;
       this.form.advancePurchase = null;
       this.form.minstay = null;
+      this.form.fareBasisApplicable = null;
+      this.form.directionTypeApplicable = null;
+      this.form.amountApplicable = null;
+      this.form.currencyCodeApplicable = null;
+      this.form.advancePurchaseApplicable = null;
+      this.form.minstayApplicable = null;
     }
   }
 };
