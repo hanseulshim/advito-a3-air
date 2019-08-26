@@ -1,4 +1,5 @@
 const uuidv4 = require('uuid/v4');
+const { sendNoteEmail } = require('../../utils');
 
 exports.note = {
   Query: {
@@ -35,6 +36,7 @@ exports.note = {
         : [null];
       if (!id) return null;
       const [note] = await getNote(db, id);
+      sendNoteEmail(db, parentId, parentTable, assignedToId);
       return note;
     },
     editNote: async (
@@ -50,6 +52,7 @@ exports.note = {
         })
         .where('id', noteId);
       const [note] = await getNote(db, noteId);
+      sendNoteEmail(db, parentId, parentTable, assignedToId);
       return note;
     },
     deleteNote: async (
@@ -57,19 +60,16 @@ exports.note = {
       { parentId, parentTable, resetImportant, noteId, important },
       { db, user }
     ) => {
-      await db('usernote as n')
-        .select({
-          parentId: 'n1.parentid',
-          parentTable: 'n1.parenttable'
-        })
-        .leftJoin('usernote as n1', 'n.parentnoteid', 'n1.id')
-        .where('n.id', noteId);
+      const { assignedto: assignedToId } = await db('usernote')
+        .where('id', noteId)
+        .first();
       await db('usernote')
         .where('id', noteId)
         .del();
       if (resetImportant) {
         await updateNoteStatus(db, user, parentId, parentTable, important);
       }
+      sendNoteEmail(db, parentId, parentTable, assignedToId);
       return noteId;
     }
   }
