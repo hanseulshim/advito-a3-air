@@ -29,14 +29,19 @@
         </el-form-item>
         <div class="submit-row">
           <button
-            v-if="!passwordReset"
+            v-if="!showLoginButton"
             class="button"
-            type="button"
+            type="submit"
             @click="validateForm"
           >
             Reset
           </button>
-          <button v-if="passwordReset" class="button" @click="pushToLogin">
+          <button
+            v-if="showLoginButton"
+            type="button"
+            class="button"
+            @click="pushToLogin"
+          >
             Go to Login
           </button>
         </div>
@@ -54,7 +59,7 @@ export default {
         password: null,
         confirmPassword: null
       },
-      passwordReset: false
+      showLoginButton: false
     };
   },
   computed: {
@@ -63,7 +68,7 @@ export default {
         password: [
           {
             required: true,
-            message: 'Please enter a valid username',
+            message: 'Please enter a valid password',
             trigger: 'change'
           }
         ],
@@ -78,7 +83,8 @@ export default {
     }
   },
   methods: {
-    validateForm() {
+    validateForm(event) {
+      event.preventDefault();
       this.$refs.resetPassword.validate(valid => {
         if (valid) {
           this.resetPassword();
@@ -92,27 +98,30 @@ export default {
     },
     async resetPassword() {
       const token = this.$route.query.t;
-
-      try {
-        const { password, confirmPassword } = this.form;
-        await this.$apollo.mutate({
-          mutation: RESET_PASSWORD,
-          variables: {
-            token,
-            password,
-            confirmPassword
-          },
-          client: 'advitoClient'
-        });
-        this.$modal.show('success', {
-          message: 'Password Successfully reset'
-        });
-        this.passwordReset = true;
-      } catch (error) {
+      if (token) {
+        try {
+          await this.$apollo.mutate({
+            mutation: RESET_PASSWORD,
+            variables: {
+              token,
+              ...this.form
+            },
+            client: 'advitoClient'
+          });
+          this.$modal.show('success', {
+            message: 'Password Successfully reset'
+          });
+          this.showLoginButton = true;
+        } catch (error) {
+          this.$modal.show('error', {
+            message: error.message
+          });
+        }
+      } else
         this.$modal.show('error', {
-          message: error.message
+          message: 'Invalid Token. Please go back to login'
         });
-      }
+      this.showLoginButton = true;
     }
   }
 };

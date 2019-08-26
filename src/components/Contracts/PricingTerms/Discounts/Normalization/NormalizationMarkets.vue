@@ -161,9 +161,10 @@ export default {
       }
     },
     formatCompare(row) {
-      //Not currently differntiating between discount types. Do we need to? What about compare vs applicable amounts?
       const { amount, directionType } = row.fareList[0];
-      return `${formatCurrency(directionType === 'OW' ? amount * 2 : amount)}`;
+      return `${this.formatCurrency(
+        directionType === 'OW' ? amount * 2 : amount
+      )}`;
     },
     formatResulting(row) {
       //Grab the direction type and the discount value from the discount
@@ -172,7 +173,7 @@ export default {
       if (this.discountType === 'Fixed') {
         //Fixed discount just uses a dollar amount for a discount
         //If its oneway, multiply the result by 2 to roughly estimate what the value would be for a normal two way fare
-        return `${formatCurrency(
+        return `${this.formatCurrency(
           journeyTypeName === 'Oneway' ? amount * 2 : amount
         )}`;
       } else if (this.discountType === 'Percentage') {
@@ -183,7 +184,7 @@ export default {
 
         const cost = applicableFareList.amount * (1 - discountValue);
 
-        return `${formatCurrency(
+        return `${this.formatCurrency(
           journeyTypeName === 'Oneway' ? cost * 2 : cost
         )}`;
       }

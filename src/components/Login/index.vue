@@ -77,7 +77,9 @@ export default {
     showForgotPasswordModal() {
       this.$modal.show('forgot-password');
     },
-    validateForm() {
+    validateForm(e) {
+      e.preventDefault();
+
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.login();

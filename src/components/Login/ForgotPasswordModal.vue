@@ -25,7 +25,7 @@
         <el-input v-model="form.email" placeholder="Email" />
       </el-form-item>
       <el-form-item class="save-container">
-        <button class="button" type="button" @click="validateForm">
+        <button class="button" type="submit" @click="validateForm">
           SUBMIT
         </button>
       </el-form-item>
@@ -56,7 +56,9 @@ export default {
     hideModal() {
       this.$modal.hide('forgot-password');
     },
-    validateForm() {
+    validateForm(e) {
+      e.preventDefault();
+
       this.$refs.forgotPassword.validate(valid => {
         if (valid) {
           this.submitEmail();
@@ -85,7 +87,9 @@ export default {
       }
     },
     beforeOpen() {},
-    beforeClose() {}
+    beforeClose() {
+      this.email = null;
+    }
   }
 };
 </script>
