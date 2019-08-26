@@ -173,7 +173,8 @@ export default {
     showCopyNormalizationModal(normalization) {
       this.$modal.show('copy-normalization-modal', {
         normalization,
-        discountId: this.discountId
+        discountId: this.discount.id,
+        pricingTermId: this.pricingTermId
       });
     },
     showNewNormalizationModal() {
@@ -185,7 +186,8 @@ export default {
     showDeleteNormalizationModal(normalization) {
       this.$modal.show('delete-normalization-modal', {
         id: normalization.id,
-        discountId: this.discount.id
+        discountId: this.discount.id,
+        pricingTermId: this.pricingTermId
       });
     },
     showEditNormalizationModal(normalization) {

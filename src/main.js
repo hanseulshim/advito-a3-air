@@ -12,7 +12,7 @@ import defaults from './graphql/defaults';
 import resolvers from './graphql/resolvers';
 import { getToken, logout } from './helper';
 
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
   // uri: 'http://localhost:8085/graphql',
   // ADVITO ENDPOINTS
   uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',

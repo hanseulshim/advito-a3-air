@@ -23,15 +23,15 @@
             type="password"
           />
         </el-form-item>
+        <div class="submit-row">
+          <button class="button" type="submit" @click="validateForm">
+            Login
+          </button>
+          <span class="forgot-password" @click="showForgotPasswordModal"
+            >Forgot password?</span
+          >
+        </div>
       </el-form>
-      <div class="submit-row">
-        <button class="button" type="button" @click="validateForm">
-          Login
-        </button>
-        <span class="forgot-password" @click="showForgotPasswordModal"
-          >Forgot password?</span
-        >
-      </div>
     </div>
     <ForgotPasswordModal />
   </div>

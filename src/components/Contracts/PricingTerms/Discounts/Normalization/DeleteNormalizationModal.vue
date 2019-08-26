@@ -18,13 +18,14 @@
 
 <script>
 import { DELETE_NORMALIZATION } from '@/graphql/mutations';
-import { GET_NORMALIZATION_LIST } from '@/graphql/queries';
+import { GET_NORMALIZATION_LIST, GET_DISCOUNT_LIST } from '@/graphql/queries';
 export default {
   name: 'DeleteNormalizationModal',
   data() {
     return {
       id: null,
-      discountId: null
+      discountId: null,
+      pricingTermId: null
     };
   },
   methods: {
@@ -44,6 +45,12 @@ export default {
               variables: {
                 discountId: this.discountId
               }
+            },
+            {
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
             }
           ]
         });
@@ -60,10 +67,12 @@ export default {
     beforeOpen(event) {
       this.id = event.params.id;
       this.discountId = event.params.discountId;
+      this.pricingTermId = event.params.pricingTermId;
     },
     beforeClose() {
       this.id = null;
       this.discountId = null;
+      this.pricingTermId = null;
     }
   }
 };

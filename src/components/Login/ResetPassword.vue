@@ -1,11 +1,10 @@
 <template>
-  <div class="reset-password-container">
-    <img
-      class="reset-password-logo"
-      alt="advito-logo"
-      src="@/assets/logo.png"
-    />
-    <div class="reset-password-form">
+  <div class="login-container">
+    <img class="login-logo" alt="advito-logo" src="@/assets/logo.png" />
+    <div class="application-title shimmer">
+      Reset Password
+    </div>
+    <div class="login-form">
       <el-form
         ref="resetPassword"
         :model="form"
@@ -14,9 +13,6 @@
         label-width="150px"
         hide-required-asterisk
       >
-        <div class="title-row space-between">
-          <div class="section-header">Reset Password</div>
-        </div>
         <el-form-item prop="password">
           <el-input
             v-model="form.password"
@@ -27,29 +23,24 @@
         <el-form-item prop="confirmPassword">
           <el-input
             v-model="form.confirmPassword"
-            placeholder="Verify Password"
+            placeholder="Confirm Password"
             type="password"
           />
         </el-form-item>
+        <div class="submit-row">
+          <button
+            v-if="!passwordReset"
+            class="button"
+            type="button"
+            @click="validateForm"
+          >
+            Reset
+          </button>
+          <button v-if="passwordReset" class="button" @click="pushToLogin">
+            Go to Login
+          </button>
+        </div>
       </el-form>
-      <div class="submit-reset-password">
-        <button
-          v-if="!passwordReset"
-          class="button"
-          type="button"
-          @click="validateForm"
-        >
-          Reset
-        </button>
-        <button
-          v-if="passwordReset"
-          class="button"
-          type="button"
-          @click="pushToLogin"
-        >
-          Back to Login
-        </button>
-      </div>
     </div>
   </div>
 </template>

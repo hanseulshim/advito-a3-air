@@ -13,12 +13,13 @@
 
 <script>
 import router from '@/router';
+import { apolloClient } from '@/main.js';
 import { logout } from '@/helper';
 export default {
   name: 'UserInfo',
   methods: {
     logout() {
-      logout(router, this.$apollo);
+      logout(router, apolloClient);
     }
   }
 };

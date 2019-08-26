@@ -1,5 +1,6 @@
 import moment from 'moment';
 import numeral from 'numeral';
+import defaults from './graphql/defaults';
 
 export const formatDate = date => {
   return date
@@ -76,5 +77,5 @@ export const getToken = () => {
 export const logout = (router, client) => {
   localStorage.removeItem('advito-360-user');
   router.replace({ name: 'login' });
-  client.resetStore();
+  client.cache.writeData({ data: defaults });
 };
