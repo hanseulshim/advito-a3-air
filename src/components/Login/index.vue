@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <img class="login-logo" alt="advito-logo" src="@/assets/logo.png" />
-    <div class="application-title shimmer">
+    <div class="application-title">
       Welcome to A3
     </div>
     <div class="login-form">
@@ -140,37 +140,6 @@ export default {
   font-weight: 100;
   line-height: 1.25em;
   color: black;
-}
-
-.shimmer {
-  display: inline-block;
-  color: black;
-  background: #acacac -webkit-gradient(linear, 100% 0, 0 0, from(#acacac), color-stop(0.5, #ffffff), to(#acacac));
-  background-position: -4rem top; /*50px*/
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-animation-name: shimmer;
-  -webkit-animation-duration: 5.2s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-background-size: 4rem 100%; /*50px*/
-}
-
-@-webkit-keyframes shimmer {
-  0% {
-    background-position: -4rem top; /*50px*/
-  }
-
-  20% {
-    background-position: 15.5rem top; /*200px*/
-  }
-
-  40% {
-    background-position: 25.5rem top; /*200px*/
-  }
-  100% {
-    background-position: 25.5rem top; /*200px*/
-  }
 }
 
 .login-form {
