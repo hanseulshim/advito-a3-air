@@ -103,7 +103,7 @@ exports.sendNoteEmail = async (db, parentId, parentTable, assignedToId) => {
 
   const placeholders = {
     NAMEFIRST: user.name_first,
-    URL: `${APP_URL}/project/${projectId}/contracts`,
+    URL: `${APP_URL}/${projectId}/contracts`,
     CONTRACTNAME: contractName,
     PROJECTNAME: projectName
   };

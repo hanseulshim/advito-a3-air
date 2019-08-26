@@ -191,11 +191,9 @@ export default {
     },
     formatEffectiveDiscount(row) {
       //grab the compare and resulting column values and parse back to integers
-      const compare = Number(
-        this.formatCompare(row).replace(/[^0-9\.-]+/g, '')
-      );
+      const compare = Number(this.formatCompare(row).replace(/[^0-9.-]+/g, ''));
       const resulting = Number(
-        this.formatResulting(row).replace(/[^0-9\.-]+/g, '')
+        this.formatResulting(row).replace(/[^0-9.-]+/g, '')
       );
 
       return formatPercent(this.calcEffectiveDiscount(compare, resulting));
