@@ -56,7 +56,7 @@
     />
     <div class="note-assign-container">
       <div class="note-assign-text">Assign note to:</div>
-      <el-select v-model="assignedToId" placeholder="Select User">
+      <el-select v-model="assignedToId" filterable placeholder="Select User">
         <el-option
           v-for="item in assigneeList"
           :key="item.id"

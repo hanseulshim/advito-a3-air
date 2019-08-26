@@ -29,6 +29,11 @@ const {
   PREFERRED_AIRLINE_COLLECTION,
   PREFERRED_AIRLINE_LOOKUP
 } = require('./collection');
+const { ADVITO_AIR_APPLICATION, EMAIL_SENDER, EMAIL_BCC } = require('./email');
+
+// const APP_URL = 'http://localhost:8080/#';
+const APP_URL =
+  'https://s3.amazonaws.com/alpha.boostlabs/air-dev/index.html?#/';
 
 module.exports = {
   AIR_APPLICATION_ID,
@@ -57,5 +62,9 @@ module.exports = {
   TRAVEL_SECTOR_COLLECTION,
   AIRLINE_GROUP_COLLECTION,
   PREFERRED_AIRLINE_COLLECTION,
-  PREFERRED_AIRLINE_LOOKUP
+  PREFERRED_AIRLINE_LOOKUP,
+  ADVITO_AIR_APPLICATION,
+  EMAIL_SENDER,
+  EMAIL_BCC,
+  APP_URL
 };
