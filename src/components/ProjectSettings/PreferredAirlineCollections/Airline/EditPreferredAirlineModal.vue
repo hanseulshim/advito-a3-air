@@ -89,7 +89,11 @@
           />
         </div>
       </div>
-      <button class="button airline-group-button" @click="addAirline">
+      <button
+        class="button airline-group-button"
+        type="button"
+        @click="addAirline"
+      >
         ADD
       </button>
       <div class="airline-group-container">

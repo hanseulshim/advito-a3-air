@@ -2,19 +2,21 @@ const { PROJECT_LOOKUP } = require('../constants');
 
 exports.project = {
   Query: {
-    projectList: async (_, { clientId }, { db, user }) => {
-      return clientId
+    projectList: async (_, { clientId = null, userId = null }, { db }) =>
+      clientId
         ? await db('project_list as pl')
             .select({
               ...projectSelect,
-              ...getFavorite(db, user)
+              ...getFavorite(db, userId)
             })
             .where('isdeleted', false)
             .andWhere('clientid', clientId)
         : await db('project_list as pl')
-            .select({ ...projectSelect, ...getFavorite(db, user) })
-            .where('isdeleted', false);
-    },
+            .select({
+              ...projectSelect,
+              ...getFavorite(db, userId)
+            })
+            .where('isdeleted', false),
     projectTypeList: async (_, __, { db }) => {
       return await db('lov_lookup')
         .select({
@@ -36,6 +38,7 @@ exports.project = {
     addProject: async (
       _,
       {
+        userId,
         clientId,
         clientName,
         projectTypeId,
@@ -52,7 +55,7 @@ exports.project = {
         currencyId,
         distanceUnitId
       },
-      { db, user }
+      { db }
     ) => {
       const name = getProjectName(
         projectTypeName,
@@ -79,11 +82,12 @@ exports.project = {
         )
       `);
       const [{ project_create: newId }] = rows;
-      return await getProject(db, newId, user);
+      return await getProject(db, newId, userId);
     },
     editProject: async (
       _,
       {
+        userId,
         id,
         savingsTypeId,
         effectiveFrom,
@@ -97,7 +101,7 @@ exports.project = {
         currencyId,
         distanceUnitId
       },
-      { db, user }
+      { db }
     ) => {
       await db.raw(`
         SELECT project_update(
@@ -115,7 +119,7 @@ exports.project = {
           ${distanceUnitId}
         )
       `);
-      return await getProject(db, id, user);
+      return await getProject(db, id, userId);
     },
     deleteProject: async (_, { id }, { db }) => {
       await db.raw(`
@@ -123,11 +127,11 @@ exports.project = {
       `);
       return id;
     },
-    toggleFavoriteProject: async (_, { id }, { db, user }) => {
+    toggleFavoriteProject: async (_, { id, userId }, { db }) => {
       await db.raw(`
-        SELECT project_favorite(${id}, ${user.id})
+        SELECT project_favorite(${id}, ${userId})
       `);
-      return await getProject(db, id, user);
+      return await getProject(db, id, userId);
     }
   }
 };
@@ -154,11 +158,9 @@ const getProject = async (db, id, user) => {
   return project;
 };
 
-const getFavorite = (db, user) => ({
+const getFavorite = (db, userId) => ({
   favorite: db.raw(
-    `COALESCE(EXISTS(SELECT p.id FROM projectuserfavourite as p GROUP BY p.id HAVING userid=${
-      user.id
-    } AND projectid=pl.id),FALSE)`
+    `COALESCE((SELECT count(*) FROM projectuserfavourite as p WHERE userid=${userId} AND projectid=pl.id) > 0,FALSE)`
   )
 });
 

@@ -30,14 +30,16 @@
       :row-class-name="tableRowClassName"
     >
       <el-table-column type="expand">
-        <template>
-          <NormalizationMarkets />
+        <template slot-scope="props">
+          <NormalizationMarkets
+            :normalization="props.row"
+            :discount="discount"
+          />
         </template>
       </el-table-column>
       <el-table-column
         label="Effective Dates"
-        :min-width="discount.effectiveDates"
-        :formatter="formatDate"
+        :formatter="formatEffectiveDate"
         sortable
         :sort-orders="['ascending', 'descending']"
         sort-by="effectiveTo"
@@ -45,40 +47,27 @@
       <el-table-column
         label="Data Date Range"
         :min-width="discount.effectiveDates"
-        :formatter="formatDate"
+        :formatter="formatUsageDate"
         sortable
         :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveTo"
+        sort-by="usageTo"
       />
       <el-table-column
         label="Made By"
         :min-width="discount.effectiveDates"
         sortable
+        prop="createdby"
       />
       <el-table-column
         label="Created Date"
-        :min-width="discount.effectiveDates"
-        :formatter="formatDate"
+        :formatter="formatCreatedDate"
         sortable
         :sort-orders="['ascending', 'descending']"
         sort-by="effectiveTo"
       />
-      <el-table-column label="Markets" :min-width="discount.effectiveDates">
-        <template>
-          <p>2</p>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Actions"
-        :min-width="discount.effectiveDates"
-        :formatter="formatDate"
-        sortable
-        :sort-orders="['ascending', 'descending']"
-        sort-by="effectiveTo"
-      />
+      <el-table-column label="Markets" prop="marketCount" />
       <el-table-column label="Actions" :min-width="discount.actions">
-        <template>
-          <!-- <template slot-scope="props"> -->
+        <template slot-scope="props">
           <el-tooltip
             effect="dark"
             content="Copy Normalization"
@@ -86,7 +75,7 @@
           >
             <i
               class="far fa-copy icon-spacer"
-              @click="showCopyNormalizationModal()"
+              @click="showCopyNormalizationModal(props.row)"
             />
           </el-tooltip>
           <el-tooltip
@@ -96,7 +85,7 @@
           >
             <i
               class="fas fa-pencil-alt icon-spacer"
-              @click="showEditNormalizationModal()"
+              @click="showEditNormalizationModal(props.row)"
             />
           </el-tooltip>
           <el-tooltip
@@ -106,14 +95,14 @@
           >
             <i
               class="fas fa-trash-alt"
-              @click="showDeleteNormalizationModal()"
+              @click="showDeleteNormalizationModal(props.row)"
             />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <CopyNormalizationModal />
-    <NewNormalizationModal />
+    <NewNormalizationModal @toggle-row="toggleRow" />
     <DeleteNormalizationModal />
     <EditNormalizationModal />
   </modal>
@@ -125,6 +114,7 @@ import DeleteNormalizationModal from './Normalization/DeleteNormalizationModal';
 import EditNormalizationModal from './Normalization/EditNormalizationModal';
 import NormalizationMarkets from './Normalization/NormalizationMarkets';
 import { formatDate, pluralize } from '@/helper';
+import { GET_NORMALIZATION_LIST } from '@/graphql/queries';
 export default {
   name: 'NormalizationModal',
   components: {
@@ -134,10 +124,27 @@ export default {
     EditNormalizationModal,
     NormalizationMarkets
   },
+  apollo: {
+    normalizationList: {
+      query: GET_NORMALIZATION_LIST,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          discountId: this.discount.id
+        };
+      },
+      result({ data }) {
+        if (data && this.discount.id) {
+          this.normalizationList === data.normalizationList;
+        }
+      }
+    }
+  },
   data() {
     return {
       discount: {},
-      normalizationList: [{ id: 1 }, { id: 2 }]
+      pricingTermId: null,
+      normalizationList: []
     };
   },
   computed: {},
@@ -145,28 +152,48 @@ export default {
     pluralize(word, count) {
       return pluralize(word, count);
     },
-    formatDate(row) {
+    formatCreatedDate(row) {
+      return `${formatDate(row.created)}`;
+    },
+    formatEffectiveDate(row) {
       return `${formatDate(row.effectiveFrom)} — ${formatDate(
         row.effectiveTo
       )}`;
+    },
+    formatUsageDate(row) {
+      return `${formatDate(row.usageFrom)} — ${formatDate(row.usageTo)}`;
     },
     hideModal() {
       this.$modal.hide('normalization-modal');
     },
     beforeOpen(event) {
       this.discount = event.params.discount;
+      this.pricingTermId = event.params.pricingTermId;
     },
-    showCopyNormalizationModal() {
-      this.$modal.show('copy-normalization-modal');
+    showCopyNormalizationModal(normalization) {
+      this.$modal.show('copy-normalization-modal', {
+        normalization,
+        discountId: this.discount.id,
+        pricingTermId: this.pricingTermId
+      });
     },
     showNewNormalizationModal() {
-      this.$modal.show('new-normalization-modal');
+      this.$modal.show('new-normalization-modal', {
+        discountId: this.discount.id,
+        pricingTermId: this.pricingTermId
+      });
     },
-    showDeleteNormalizationModal() {
-      this.$modal.show('delete-normalization-modal');
+    showDeleteNormalizationModal(normalization) {
+      this.$modal.show('delete-normalization-modal', {
+        id: normalization.id,
+        discountId: this.discount.id,
+        pricingTermId: this.pricingTermId
+      });
     },
-    showEditNormalizationModal() {
-      this.$modal.show('edit-normalization-modal');
+    showEditNormalizationModal(normalization) {
+      this.$modal.show('edit-normalization-modal', {
+        normalization
+      });
     },
     tableRowClassName({ row }) {
       return row.inactive ? 'inactive-row' : '';

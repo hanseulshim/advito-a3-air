@@ -4,7 +4,9 @@ import {
   PRICING_TERM,
   DISCOUNT,
   TARGET_TERM,
-  TARGET_LEVEL
+  TARGET_LEVEL,
+  NORMALIZATION,
+  NORMALIZATION_MARKET
 } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
@@ -177,6 +179,71 @@ export const GET_INCENTIVE_TYPE_LIST = gql`
     incentiveTypeList {
       id
       name
+    }
+  }
+`;
+
+export const GET_NORMALIZATION_LIST = gql`
+query normalizationList($discountId: Int) {
+  normalizationList(discountId: $discountId) {
+    ${NORMALIZATION}
+  }
+}
+`;
+
+export const GET_NORMALIZATION = gql`
+query normalization($id: Int!) {
+  normalization(id: $id) {
+    ${NORMALIZATION}
+  }
+}
+`;
+
+export const GET_NORMALIZATION_MARKET_LIST = gql`
+  query normalizationMarketList($normalizationId: Int) {
+    normalizationMarketList(normalizationId: $normalizationId) {
+      ${NORMALIZATION_MARKET}
+    }
+  }
+`;
+
+export const GET_TOP_MARKET_LIST = gql`
+  query topMarketList($normalizationId: Int) {
+    topMarketList(normalizationId: $normalizationId) {
+      id
+      value
+      marketA
+      marketB
+      farePaid
+      usage
+    }
+  }
+`;
+
+export const GET_MARKET_ADVANCED_TICKET_LIST = gql`
+  query marketAdvancedTicketList($normalizationId: Int) {
+    marketAdvancedTicketList(normalizationId: $normalizationId) {
+      label
+      value
+    }
+  }
+`;
+
+export const GET_MARKET_DEPARTURE_LIST = gql`
+  query marketDepartureList($normalizationId: Int) {
+    marketDepartureList(normalizationId: $normalizationId) {
+      label
+      value
+    }
+  }
+`;
+
+export const GET_MARKET_FARE_BASIS_LIST = gql`
+  query marketDepartureList($normalizationId: Int) {
+    marketDepartureList(normalizationId: $normalizationId) {
+      fareBasis
+      bookingClass
+      usage
     }
   }
 `;

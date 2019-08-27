@@ -100,6 +100,34 @@ export const NOTE = `id
         assignedToId
         assignedToName`;
 
+export const NORMALIZATION = `id
+usageFrom
+usageTo
+effectiveFrom
+effectiveTo
+created
+createdby
+marketCount
+`;
+
+export const NORMALIZATION_MARKET = `id
+marketA
+marketB
+farePaid
+usageOverride
+farePullDate
+notes
+fareList {
+  id
+  fareType
+  fareBasis
+  amount
+  currencyCode
+  directionType
+  advancePurchase
+  minstay
+}`;
+
 export const CONTRACT_LOOKUP = {
   CONTRACT: 7,
   PROPOSAL: 8,
@@ -120,7 +148,9 @@ export const DISCOUNT_LOOKUP = {
   DIRECTION_TYPE: 5,
   BULK_ACTION: 2,
   BULK_ACTION_DELETE: 13,
-  RULE_TYPE: 1
+  RULE_TYPE: 1,
+  COMPARE_FARE_TYPE: 1,
+  APPLICABLE_FARE_TYPE: 2
 };
 
 export const PRICING_TERM_LOOKUP = {

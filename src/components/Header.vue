@@ -21,6 +21,7 @@
       placeholder="Select Project"
       filterable
       clearable
+      :disabled="projectList.length === 0"
       @change="updateProject"
     >
       <el-option
@@ -49,43 +50,27 @@
 </template>
 
 <script>
-import {
-  GET_CLIENTS,
-  GET_PROJECTS,
-  GET_CLIENT,
-  GET_PROJECT
-} from '@/graphql/queries';
 import { UPDATE_CLIENT, UPDATE_PROJECT } from '@/graphql/mutations';
 
 export default {
   name: 'Header',
-  apollo: {
+  props: {
     client: {
-      query: GET_CLIENT
+      type: Object,
+      required: true
     },
     project: {
-      query: GET_PROJECT
+      type: Object,
+      required: true
     },
     clientList: {
-      query: GET_CLIENTS
+      type: Array,
+      required: true
     },
     projectList: {
-      query: GET_PROJECTS,
-      variables() {
-        return {
-          clientId: this.client.id
-        };
-      }
+      type: Array,
+      required: true
     }
-  },
-  data() {
-    return {
-      selected: null,
-      clientList: [],
-      projectList: [],
-      project: null,
-      client: null
-    };
   },
   methods: {
     updateClient(id) {
@@ -126,7 +111,7 @@ export default {
   row-gap: 1em;
   column-gap: 1em;
   align-items: flex-end;
-  margin-bottom: 2em;
+  margin-bottom: 4em;
 }
 .logo {
   max-width: 294px;

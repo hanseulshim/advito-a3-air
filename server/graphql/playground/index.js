@@ -7,6 +7,7 @@ const { contract } = require('./contract');
 const { pricingTerm } = require('./contract/pricingTerm');
 const { targetTerm } = require('./contract/targetTerm');
 const { discount } = require('./contract/discount');
+const { normalization } = require('./contract/normalization');
 const { note } = require('./contract/note');
 const { rule } = require('./contract/rule');
 const { user } = require('./user');
@@ -14,6 +15,8 @@ const { process } = require('./process');
 
 exports.playground = {
   tabs: [
+    normalization.queries,
+    normalization.mutations,
     collection.queries,
     client,
     rule.queries,

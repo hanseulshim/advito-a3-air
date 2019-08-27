@@ -62,7 +62,7 @@
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename, filterGeography } from '@/helper';
 import {
   GET_GEOGRAPHY_LIST,
   GET_CONNECTION_POINT_LIST,
@@ -223,9 +223,7 @@ export default {
     filterGeoList(query) {
       if (query !== '') {
         this.loading = true;
-        this.options = this.geographyList.filter(item => {
-          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        });
+        this.options = filterGeography(this.geographyList, query);
         this.loading = false;
       } else {
         this.options = [];

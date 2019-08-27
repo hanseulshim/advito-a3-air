@@ -87,7 +87,7 @@
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename, filterGeography } from '@/helper';
 import {
   GET_MARKET_LIST,
   GET_MARKET_RULE_LIST,
@@ -256,9 +256,7 @@ export default {
     filterOriginMarkets(query) {
       if (query !== '') {
         this.loadingOrigin = true;
-        this.originOptions = this.marketList.filter(item => {
-          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        });
+        this.originOptions = filterGeography(this.marketList, query);
         this.loadingOrigin = false;
       } else {
         this.originOptions = [];
@@ -267,9 +265,7 @@ export default {
     filterArrivalMarkets(query) {
       if (query !== '') {
         this.loadingArrival = true;
-        this.arrivalOptions = this.marketList.filter(item => {
-          return item.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-        });
+        this.arrivalOptions = filterGeography(this.marketList, query);
         this.loadingArrival = false;
       } else {
         this.arrivalOptions = [];

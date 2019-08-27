@@ -1,9 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import AirManager from './views/AirManager';
+import Home from './views/Home';
 import Project from './views/Project';
 import ProjectSettings from '@/components/ProjectSettings';
 
+import Login from '@/components/Login';
+import ResetPassword from '@/components/Login/ResetPassword';
 import DataSet from '@/components/DataSet';
 import PosTrends from '@/components/DataSet/PosTrends';
 import DivisionTrends from '@/components/DataSet/DivisionTrends';
@@ -16,65 +19,95 @@ import TargetTerms from '@/components/Contracts/TargetTerms';
 
 import Process from '@/components/Process';
 
+import { getToken } from './helper';
+
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
-      path: '/',
-      name: 'root',
-      component: AirManager
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
-      path: '/project/:projectId',
-      name: 'project',
-      component: Project,
+      path: '/resetpassword',
+      name: 'resetpassword',
+      component: ResetPassword
+    },
+    {
+      path: '/',
+      name: 'Home',
+      component: Home,
       children: [
         {
-          path: 'program-settings',
-          component: ProjectSettings
+          path: 'projectList',
+          name: 'root',
+          component: AirManager
         },
         {
-          path: 'contracts',
-          component: Contracts,
+          path: '/:projectId',
+          name: 'project',
+          component: Project,
           children: [
             {
-              path: '',
-              component: ContractList
+              path: 'program-settings',
+              component: ProjectSettings
             },
             {
-              path: 'pricing-terms',
-              component: PricingTerms
+              path: 'contracts',
+              component: Contracts,
+              children: [
+                {
+                  path: '',
+                  component: ContractList
+                },
+                {
+                  path: 'pricing-terms',
+                  component: PricingTerms
+                },
+                {
+                  path: 'target-terms',
+                  component: TargetTerms
+                }
+              ]
             },
             {
-              path: 'target-terms',
-              component: TargetTerms
+              path: 'data',
+              component: DataSet,
+              children: [
+                {
+                  path: 'import-errors/:path',
+                  component: ImportErrors
+                },
+                {
+                  path: 'division-trends/:path',
+                  component: DivisionTrends
+                },
+                {
+                  path: 'pos-trends/:path',
+                  component: PosTrends
+                }
+              ]
+            },
+            {
+              path: 'process',
+              component: Process
             }
           ]
-        },
-        {
-          path: 'data',
-          component: DataSet,
-          children: [
-            {
-              path: 'import-errors/:path',
-              component: ImportErrors
-            },
-            {
-              path: 'division-trends/:path',
-              component: DivisionTrends
-            },
-            {
-              path: 'pos-trends/:path',
-              component: PosTrends
-            }
-          ]
-        },
-        {
-          path: 'process',
-          component: Process
         }
       ]
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.fullPath === '/login') {
+    if (getToken()) {
+      next('/');
+    }
+  }
+  next();
+});
+
+export default router;

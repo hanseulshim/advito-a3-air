@@ -306,12 +306,14 @@ export default {
       const timeframeIsRequired =
         this.form.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
         this.form.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT;
+
       return {
         name: [
           {
             required: true,
-            message: 'Please input a target term name.',
-            trigger: 'change'
+            message: 'Please input a valid target term name.',
+            trigger: 'change',
+            pattern: /^[A-Za-z0-9 ]+$/
           }
         ],
         targetTypeId: [

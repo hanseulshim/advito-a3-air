@@ -73,6 +73,70 @@ type DirectionType {
   id: Int
   name: String
 }
+
+type Normalization {
+  id: Int
+  usageFrom: Date
+  usageTo: Date
+  effectiveFrom: Date
+  effectiveTo: Date
+  created: Date
+  createdby: String
+  marketCount: Int
+}
+type NormalizationMarket {
+  id: Int
+  marketA: String
+  marketB: String
+  farePaid: Float
+  usageOverride: Float
+  farePullDate: Date
+  notes: String
+  fareList: [NormalizationFare]
+}
+type NormalizationFare {
+  id: Int
+  fareType: Int
+  fareBasis: String
+  amount: Float
+  currencyCode: String
+  directionType: String
+  advancePurchase: String
+  minstay: String
+}
+input NormalizationFareInput {
+  id: Int
+  fareType: Int!
+  fareBasis: String
+  amount: Float!
+  currencyCode: String!
+  directionType: String!
+  advancePurchase: String!
+  minstay: String!
+}
+type TopMarket {
+  id: Int
+  value: String
+  marketA: String
+  marketB: String
+  farePaid: Float
+  usage: Float
+}
+type MarketAdvancedTicket {
+  label: String
+  value: Float
+}
+type MarketDeparture {
+  label: String
+  value: Float
+}
+type MarketFareBasis {
+  fareBasis: String
+  bookingClass: String
+  usage: Float
+}
+
+
 type TargetTerm {
   id: Int
   name: String
@@ -159,6 +223,14 @@ extend type Query {
   discountTypeList: [DiscountType] @auth
   journeyTypeList: [JourneyType] @auth
   directionTypeList: [DirectionType] @auth
+
+  normalizationList(discountId: Int): [Normalization] @auth
+  normalization(id: Int!): Normalization @auth
+  normalizationMarketList(normalizationId: Int): [NormalizationMarket] @auth
+  topMarketList(normalizationId: Int): [TopMarket] @auth
+  marketAdvancedTicketList(normalizationId: Int): [MarketAdvancedTicket] @auth
+  marketDepartureList(normalizationId: Int): [MarketDeparture] @auth
+  marketFareBasisList(normalizationId: Int): [MarketFareBasis] @auth
 
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth
@@ -293,6 +365,47 @@ extend type Mutation {
   deleteDiscounts(pricingTermId: Int!, idList: [Int]!): [Int] @auth
   updateDiscountAppliedOrder(
     updateDiscountList: [NewAppliedOrder]!
+  ): Int @auth
+
+
+  createNormalization(
+    discountId: Int!
+    usageFrom: Date!
+    usageTo: Date!
+    effectiveFrom: Date!
+    effectiveTo: Date!
+  ): Normalization @auth
+  updateNormalization(
+    id: Int!
+    usageFrom: Date!
+    usageTo: Date!
+    effectiveFrom: Date!
+    effectiveTo: Date!
+  ): Normalization @auth
+  deleteNormalization(id: Int!): Int @auth
+  copyNormalization(id: Int!): Normalization @auth
+  createNormalizationMarket(
+    normalizationId: Int!
+    marketA: String!
+    marketB: String!
+    farePaid: Float!
+    usageOverride: Float
+    farePullDate: Date!
+    notes: String
+    fareList: [NormalizationFareInput]
+  ): NormalizationMarket  @auth
+  updateNormalizationMarket(
+    marketId: Int!
+    marketA: String!
+    marketB: String!
+    farePaid: Float!
+    usageOverride: Float
+    farePullDate: Date!
+    notes: String
+    fareList: [NormalizationFareInput]
+  ): NormalizationMarket  @auth
+  deleteNormalizationMarket(
+    id: Int!
   ): Int @auth
   
   addNote(

@@ -3,7 +3,7 @@
     <i class="fas fa-chevron-up"></i>
     <router-link
       class="nav-item data-nav-item"
-      :to="`/project/${$route.params.projectId}/data/division-trends/tickets`"
+      :to="`/${$route.params.projectId}/data/division-trends/tickets`"
       :class="{
         active: $route.path.includes('division-trends/tickets')
       }"
@@ -13,7 +13,7 @@
     <span class="spacer">|</span>
     <router-link
       class="nav-item data-nav-item"
-      :to="`/project/${$route.params.projectId}/data/division-trends/segments`"
+      :to="`/${$route.params.projectId}/data/division-trends/segments`"
       :class="{
         active: $route.path.includes('division-trends/segments')
       }"
@@ -23,7 +23,7 @@
     <span class="spacer">|</span>
     <router-link
       class="nav-item data-nav-item"
-      :to="`/project/${$route.params.projectId}/data/division-trends/fare-paid`"
+      :to="`/${$route.params.projectId}/data/division-trends/fare-paid`"
       :class="{
         active: $route.path.includes('division-trends/fare-paid')
       }"

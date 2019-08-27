@@ -84,13 +84,13 @@ exports.library = {
         .andWhere('isdeleted', false)
         .orderBy('code'),
     currencyList: async (_, __, { db }) =>
-      await db('blops.currency as c')
+      await db('blops.currency')
         .select({
           id: 'id',
-          name: 'c.currency_name',
-          code: 'c.currency_code'
+          name: db.raw(`(SELECT * FROM currency_getname(id))`),
+          code: 'currency_code'
         })
-        .orderBy('c.currency_code'),
+        .orderBy('currency_code'),
     distanceUnitList: async (_, __, { db }) =>
       await db('lov_lookup')
         .select({
@@ -114,7 +114,12 @@ exports.library = {
             ADVITO_GEOSET_ID
           );
         })
-        .orWhere('locationtype', LOCATION_LOOKUP.SUBREGION)
+        .orWhere(function() {
+          this.where('locationtype', LOCATION_LOOKUP.SUBREGION).andWhere(
+            'geosetid',
+            ADVITO_GEOSET_ID
+          );
+        })
         .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)
         .orWhere('locationtype', LOCATION_LOOKUP.CITY)
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)

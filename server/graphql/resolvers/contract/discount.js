@@ -153,7 +153,9 @@ const getDiscountList = async (db, pricingTermId) =>
       ruleCount: db.raw(
         '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
-      normalizationCount: 'd.count_normalizations',
+      normalizationCount: db.raw(
+        '(SELECT COUNT(*) FROM discountnormalisation as dn where dn.isdeleted = FALSE and dn.discountid = d.id)'
+      ),
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'
@@ -191,7 +193,9 @@ const getDiscount = async (db, id) => {
       ruleCount: db.raw(
         '(SELECT COUNT(*) from (select rules_checker(d.rulescontainerguidref)) as c)'
       ),
-      normalizationCount: 'd.count_normalizations',
+      normalizationCount: db.raw(
+        '(SELECT COUNT(*) FROM discountnormalisation as dn where dn.isdeleted = FALSE and dn.discountid = d.id)'
+      ),
       noteImportant: db.raw('COALESCE(n.important, FALSE)'),
       noteContent: db.raw(
         'CASE WHEN (SELECT COUNT(*) FROM usernote n1 WHERE n1.parentnoteid = n.id) = 0 THEN FALSE else TRUE END'

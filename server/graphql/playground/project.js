@@ -7,7 +7,7 @@ exports.project = {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
     {
-      projectList(clientId: 1) {
+      projectList(clientId: null, userId: null) {
         ${PROJECT}
       }
       projectTypeList {

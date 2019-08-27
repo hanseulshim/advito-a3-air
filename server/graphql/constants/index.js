@@ -9,6 +9,8 @@ const {
   CONTRACT_LOOKUP,
   DISCOUNT_LOOKUP,
   PRICING_TERM_LOOKUP,
+  NORMALIZATION,
+  NORMALIZATION_MARKET,
   RULE_LOOKUP
 } = require('./contract');
 const { DATA_SET } = require('./dataSet');
@@ -27,6 +29,14 @@ const {
   PREFERRED_AIRLINE_COLLECTION,
   PREFERRED_AIRLINE_LOOKUP
 } = require('./collection');
+const { ADVITO_AIR_APPLICATION, EMAIL_SENDER, EMAIL_BCC } = require('./email');
+
+// const APP_URL = 'http://localhost:8080/#';
+const APP_URL = 'https://s3.amazonaws.com/alpha.boostlabs/air-dev/index.html?#';
+// const APP_URL =
+//   'https://s3.amazonaws.com/beta.boostlabs/air/index.html#';
+// const APP_URL =
+//   'https://s3.amazonaws.com/alpha.boostlabs/air/index.html#';
 
 module.exports = {
   AIR_APPLICATION_ID,
@@ -38,6 +48,8 @@ module.exports = {
   TARGET_LEVEL,
   TARGET_TERM_LOOKUP,
   DISCOUNT,
+  NORMALIZATION,
+  NORMALIZATION_MARKET,
   NOTE,
   CONTRACT_LOOKUP,
   DISCOUNT_LOOKUP,
@@ -53,5 +65,9 @@ module.exports = {
   TRAVEL_SECTOR_COLLECTION,
   AIRLINE_GROUP_COLLECTION,
   PREFERRED_AIRLINE_COLLECTION,
-  PREFERRED_AIRLINE_LOOKUP
+  PREFERRED_AIRLINE_LOOKUP,
+  ADVITO_AIR_APPLICATION,
+  EMAIL_SENDER,
+  EMAIL_BCC,
+  APP_URL
 };

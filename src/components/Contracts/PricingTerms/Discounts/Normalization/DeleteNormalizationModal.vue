@@ -17,14 +17,15 @@
 </template>
 
 <script>
-// import { GET_CONTRACT, GET_PRICING_TERM_LIST } from '@/graphql/queries';
-// import { DELETE_PRICING_TERMS } from '@/graphql/mutations';
+import { DELETE_NORMALIZATION } from '@/graphql/mutations';
+import { GET_NORMALIZATION_LIST, GET_DISCOUNT_LIST } from '@/graphql/queries';
 export default {
   name: 'DeleteNormalizationModal',
   data() {
     return {
-      contractId: null,
-      idList: []
+      id: null,
+      discountId: null,
+      pricingTermId: null
     };
   },
   methods: {
@@ -32,44 +33,46 @@ export default {
       this.$modal.hide('delete-normalization-modal');
     },
     async deleteNormalization() {
-      //   try {
-      //     await this.$apollo.mutate({
-      //       mutation: DELETE_PRICING_TERMS,
-      //       variables: {
-      //         contractId: this.contractId,
-      //         idList: this.idList
-      //       },
-      //       refetchQueries: () => [
-      //         {
-      //           query: GET_CONTRACT,
-      //           variables: { id: this.contractId }
-      //         },
-      //         {
-      //           query: GET_PRICING_TERM_LIST,
-      //           variables: { contractId: this.contractId }
-      //         }
-      //       ]
-      //     });
-      //     this.$emit('clear-bulk-actions');
-      //     this.$modal.show('success', {
-      //       message: 'Pricing Term successfully deleted.',
-      //       name: 'delete-normalization-modal'
-      //     });
-      //   } catch (error) {
-      //     this.$modal.show('error', {
-      //       message: error.message
-      //     });
-      //   }
-      alert('Normalization deleted!');
+      try {
+        await this.$apollo.mutate({
+          mutation: DELETE_NORMALIZATION,
+          variables: {
+            id: this.id
+          },
+          refetchQueries: () => [
+            {
+              query: GET_NORMALIZATION_LIST,
+              variables: {
+                discountId: this.discountId
+              }
+            },
+            {
+              query: GET_DISCOUNT_LIST,
+              variables: {
+                pricingTermId: this.pricingTermId
+              }
+            }
+          ]
+        });
+        this.$modal.show('success', {
+          message: 'Normalization successfully deleted.',
+          name: 'delete-normalization-modal'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
-    beforeOpen() {
-      // beforeOpen(event) {
-      //   this.contractId = event.params.contractId;
-      //   this.idList = event.params.idList;
+    beforeOpen(event) {
+      this.id = event.params.id;
+      this.discountId = event.params.discountId;
+      this.pricingTermId = event.params.pricingTermId;
     },
     beforeClose() {
-      this.contractId = null;
-      this.idList = [];
+      this.id = null;
+      this.discountId = null;
+      this.pricingTermId = null;
     }
   }
 };

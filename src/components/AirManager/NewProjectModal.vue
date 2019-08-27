@@ -3,6 +3,7 @@
     classes="modal-container"
     name="new-project"
     height="auto"
+    @before-open="beforeOpen"
     @before-close="beforeClose"
   >
     <el-form
@@ -168,7 +169,6 @@
 <script>
 import {
   GET_PROJECTS,
-  GET_CLIENT,
   GET_CLIENTS,
   GET_CURRENCY_LIST,
   GET_DISTANCE_UNIT_LIST,
@@ -225,6 +225,7 @@ export default {
   data() {
     return {
       form: {
+        userId: null,
         clientId: null,
         clientName: null,
         projectTypeId: null,
@@ -329,6 +330,7 @@ export default {
           }
         ]
       },
+      clientId: null,
       clientList: [],
       currencyList: [],
       distanceUnitList: [],
@@ -372,20 +374,16 @@ export default {
           variables: {
             ...this.form
           },
-          update: (store, data) => {
-            const project = data.data.addProject;
-            const client = store.readQuery({
-              query: GET_CLIENT
-            }).client;
-            const newData = store.readQuery({
+          update: (store, { data: { addProject } }) => {
+            const query = {
               query: GET_PROJECTS,
-              variables: { clientId: client.id }
-            });
-            newData.projectList.push(project);
+              variables: { clientId: this.clientId, userId: this.form.userId }
+            };
+            const data = store.readQuery(query);
+            data.projectList.push(addProject);
             store.writeQuery({
-              query: GET_PROJECTS,
-              variables: { clientId: client.id },
-              data: newData
+              ...query,
+              data
             });
           }
         });
@@ -399,7 +397,14 @@ export default {
         });
       }
     },
+    beforeOpen(event) {
+      const { userId, clientId } = event.params;
+      this.form.userId = userId;
+      this.clientId = clientId;
+    },
     beforeClose() {
+      this.clientId = null;
+      this.form.userId = null;
       this.form.clientId = null;
       this.form.clientName = null;
       this.form.projectTypeId = null;
