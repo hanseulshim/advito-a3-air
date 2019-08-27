@@ -40,7 +40,7 @@ export const apolloClient = new ApolloClient({
       });
     }
     if (networkError) {
-      console.log('THIS IS A NETWORK ERROR', networkError);
+      // console.log('THIS IS A NETWORK ERROR', networkError);
     }
   }
 });

@@ -3,7 +3,8 @@ const {
   AuthenticationError
 } = require('apollo-server-lambda');
 
-const AIR_ID = 2;
+const AIR_ADMIN = 10;
+const AIR_USER = 11;
 
 class RequireAuthDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
@@ -12,7 +13,7 @@ class RequireAuthDirective extends SchemaDirectiveVisitor {
       const [, , context] = args;
       if (context.user) {
         const roleIds = context.user.role;
-        if (!roleIds.includes(AIR_ID))
+        if (!roleIds.includes(AIR_ADMIN) && !roleIds.includes(AIR_USER))
           throw new AuthenticationError('User did not have AIR role');
         const result = await resolve.apply(this, args);
         return result;
