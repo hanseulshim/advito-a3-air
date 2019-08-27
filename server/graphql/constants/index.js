@@ -33,6 +33,10 @@ const { ADVITO_AIR_APPLICATION, EMAIL_SENDER, EMAIL_BCC } = require('./email');
 
 // const APP_URL = 'http://localhost:8080/#';
 const APP_URL = 'https://s3.amazonaws.com/alpha.boostlabs/air-dev/index.html?#';
+// const APP_URL =
+//   'https://s3.amazonaws.com/beta.boostlabs/air/index.html#';
+// const APP_URL =
+//   'https://s3.amazonaws.com/alpha.boostlabs/air/index.html#';
 
 module.exports = {
   AIR_APPLICATION_ID,

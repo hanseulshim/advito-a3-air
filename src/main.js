@@ -14,14 +14,9 @@ import { getToken, logout } from './helper';
 
 export const apolloClient = new ApolloClient({
   // uri: 'http://localhost:8085/graphql',
-  // ADVITO ENDPOINTS
-  uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
   // uri: 'https://lr0bjpyqgj.execute-api.us-east-2.amazonaws.com/alpha/graphql',
   // uri: 'https://hq893l4up1.execute-api.us-east-2.amazonaws.com/beta/graphql',
-  // BOOST ENDPOINTS
-  // uri: 'https://c1wt7hzxc5.execute-api.us-east-2.amazonaws.com/test/graphql',
-  // uri: 'https://5aoegpag40.execute-api.us-east-2.amazonaws.com/alpha/graphql',
-  // uri: 'https://daqpm0wy59.execute-api.us-east-2.amazonaws.com/beta/graphql',
+  uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
   clientState: {
     defaults,
     resolvers
@@ -51,6 +46,8 @@ export const apolloClient = new ApolloClient({
 });
 
 const advitoClient = new ApolloClient({
+  // uri: 'https://trfrs1gzn8.execute-api.us-east-2.amazonaws.com/alpha/graphql',
+  // uri: 'https://7smhjazdr2.execute-api.us-east-2.amazonaws.com/beta/graphql',
   uri: 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql',
   fetch,
   onError: ({ graphQLErrors }) => {
