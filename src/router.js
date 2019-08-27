@@ -41,6 +41,11 @@ const router = new Router({
       component: Home,
       children: [
         {
+          path: '',
+          name: 'home-redirect',
+          redirect: { name: 'root' }
+        },
+        {
           path: 'projectList',
           name: 'root',
           component: AirManager
