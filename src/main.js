@@ -36,7 +36,7 @@ export const apolloClient = new ApolloClient({
   onError: ({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
+        if (extensions.code === 'UNAUTHENTICATED') logout(router, apolloClient);
       });
     }
     if (networkError) {
@@ -53,7 +53,7 @@ const advitoClient = new ApolloClient({
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
+        if (extensions.code === 'UNAUTHENTICATED') logout(router, apolloClient);
       });
     }
   }

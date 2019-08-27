@@ -112,6 +112,14 @@ router.beforeEach((to, from, next) => {
       next('/');
     }
   }
+
+  //trying to capture the route when user is coming in from the note sending SES
+  // if (/\d/.test(to.fullPath)) {
+  //   const path = to.fullPath;
+  //   if (next.fullPath === '/login') {
+  //     next(path);
+  //   }
+  // }
   next();
 });
 
