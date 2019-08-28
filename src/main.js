@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import fetch from 'unfetch';
+import 'babel-polyfill';
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import App from './App.vue';

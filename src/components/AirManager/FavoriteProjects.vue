@@ -132,13 +132,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/global.scss';
 .favorite-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 1em;
-  row-gap: 1em;
+  display: flex;
+  flex-wrap: wrap;
   margin-top: 2em;
 }
 .favorite-project {
+  margin-right: 1em;
+  margin-bottom: 1em;
+  width: 32%;
   border: 1px solid $gray-nurse;
   border-radius: 10px;
   overflow: hidden;
