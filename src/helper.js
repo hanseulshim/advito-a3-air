@@ -76,7 +76,7 @@ export const getToken = () => {
 
 export const logout = async (router, client) => {
   try {
-    // const sessionToken = getToken();
+    const sessionToken = getToken();
     // await client.mutate({
     //   mutation: LOGOUT,
     //   variables: {
