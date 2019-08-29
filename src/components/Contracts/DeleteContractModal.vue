@@ -23,7 +23,8 @@ export default {
   name: 'DeleteContractModal',
   data() {
     return {
-      id: null
+      id: null,
+      projectId: null
     };
   },
   methods: {
@@ -39,7 +40,10 @@ export default {
           },
           update: (store, { data: { deleteContract } }) => {
             const query = {
-              query: GET_CONTRACT_LIST
+              query: GET_CONTRACT_LIST,
+              variables: {
+                projectId: this.projectId
+              }
             };
             const data = store.readQuery(query);
             data.contractList = data.contractList.filter(
@@ -63,6 +67,7 @@ export default {
     },
     beforeOpen(event) {
       this.id = event.params.id;
+      this.projectId = event.params.projectId;
     },
     beforeClose() {
       this.id = null;

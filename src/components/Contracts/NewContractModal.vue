@@ -97,6 +97,7 @@ export default {
         divisionId: null
       },
       CONTRACT_LOOKUP,
+      projectId: null,
       clientId: null,
       contractTypeList: [],
       divisionTypeList: [],
@@ -144,11 +145,15 @@ export default {
         await this.$apollo.mutate({
           mutation: CREATE_CONTRACT,
           variables: {
-            ...this.form
+            ...this.form,
+            projectId: this.projectId
           },
           update: (store, { data: { createContract } }) => {
             const query = {
-              query: GET_CONTRACT_LIST
+              query: GET_CONTRACT_LIST,
+              variables: {
+                projectId: this.projectId
+              }
             };
             const data = store.readQuery(query);
             data.contractList.push(createContract);
@@ -175,6 +180,7 @@ export default {
     },
     beforeOpen(event) {
       this.clientId = event.params.clientId;
+      this.projectId = event.params.projectId;
     },
     beforeClose() {
       Object.keys(this.form).forEach(key => {

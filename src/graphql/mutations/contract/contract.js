@@ -17,6 +17,7 @@ export const UPDATE_CONTRACT = gql`
 export const CREATE_CONTRACT = gql`
   mutation createContract(
     $name: String!
+    $projectId: Int!
     $typeId: Int!
     $round: Int
     $description: String
@@ -24,6 +25,7 @@ export const CREATE_CONTRACT = gql`
   ) {
     createContract(
       name: $name
+      projectId: $projectId
       typeId: $typeId
       round: $round
       description: $description

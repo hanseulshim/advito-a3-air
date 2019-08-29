@@ -2,7 +2,8 @@ const { CONTRACT_LOOKUP } = require('../../constants');
 
 exports.contract = {
   Query: {
-    contractList: async (_, __, { db }) => await getContractList(db),
+    contractList: async (_, { projectId = null }, { db }) =>
+      await getContractList(db, projectId),
     contract: async (_, { id }, { db }) => await getContract(db, id),
     contractTypeList: async (_, __, { db }) =>
       await db('lov_lookup')
@@ -32,7 +33,7 @@ exports.contract = {
   Mutation: {
     createContract: async (
       _,
-      { name, typeId, round, divisionId, description },
+      { name, projectId, typeId, round, divisionId, description },
       { db }
     ) => {
       const [id] = await db('contractcontainer').insert(
@@ -41,6 +42,7 @@ exports.contract = {
           contracttype: typeId,
           round,
           description,
+          projectid: projectId,
           qc: 0
         },
         'id'
@@ -97,7 +99,7 @@ exports.contract = {
   }
 };
 
-const getContractList = async db =>
+const getContractList = async (db, projectId) =>
   await db('contractcontainer as c')
     .select({
       id: 'c.id',
@@ -128,6 +130,7 @@ const getContractList = async db =>
     .leftJoin('contractdivision as cd', 'c.id', 'cd.contractid')
     .leftJoin('division as d', 'cd.divisionid', 'd.id')
     .where('c.isdeleted', false)
+    .andWhere('c.projectid', projectId)
     .groupBy('c.id', 'l.id', 'd.id');
 
 const getContract = async (db, id) =>
