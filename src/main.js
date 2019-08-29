@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import fetch from 'unfetch';
+import 'babel-polyfill';
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import App from './App.vue';
@@ -36,7 +37,7 @@ export const apolloClient = new ApolloClient({
   onError: ({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
+        if (extensions.code === 'UNAUTHENTICATED') logout(router, apolloClient);
       });
     }
     if (networkError) {
@@ -53,7 +54,7 @@ const advitoClient = new ApolloClient({
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
+        if (extensions.code === 'UNAUTHENTICATED') logout(router, apolloClient);
       });
     }
   }

@@ -119,15 +119,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/global.scss';
 .project-info-container {
-  display: grid;
-  grid-template-areas: 'projectName column1 column2 column3 buttons';
-  grid-template-columns: auto 23% 23% 23% 75px;
-  column-gap: 1em;
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 3em;
   color: $dove-gray;
 }
 .project-name {
-  grid-area: projectName;
   font-size: 1.5em;
   align-self: center;
   color: $tradewind;

@@ -105,33 +105,38 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/global.scss';
 .header-container {
-  display: grid;
-  grid-template-areas: 'logo . . . addy' 'navigation navigation . . .';
-  grid-template-columns: 25% 17% 17% auto 75px;
-  row-gap: 1em;
-  column-gap: 1em;
+  display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   margin-bottom: 4em;
+
+  .el-select {
+    flex: 1;
+    max-width: 250px;
+    margin-right: 1em;
+  }
 }
 .logo {
   max-width: 294px;
   width: 100%;
+  margin-right: 5%;
 }
 
 .icon-container {
   color: $tradewind;
   cursor: pointer;
-  grid-area: addy;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: auto;
 }
 .fa-comment-alt {
   font-size: 2.5em;
 }
 
 .navigation {
-  grid-area: navigation;
+  width: 100%;
+  margin-top: 1em;
 }
 .previous-nav {
   color: $tree-poppy;
