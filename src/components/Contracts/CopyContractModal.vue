@@ -41,6 +41,7 @@ export default {
         id: null,
         name: null
       },
+      projectId: null,
       rules: {
         name: [
           {
@@ -74,7 +75,10 @@ export default {
           },
           update: (store, { data: { copyContract } }) => {
             const query = {
-              query: GET_CONTRACT_LIST
+              query: GET_CONTRACT_LIST,
+              variables: {
+                projectId: this.projectId
+              }
             };
             const data = store.readQuery(query);
             data.contractList.push(copyContract);
@@ -96,6 +100,7 @@ export default {
     },
     beforeOpen(event) {
       this.form.id = event.params.id;
+      this.projectId = event.params.projectId;
     },
     beforeClose() {
       this.form.id = null;

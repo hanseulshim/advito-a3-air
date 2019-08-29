@@ -34,7 +34,11 @@
 </template>
 
 <script>
-import { GET_PRICING_TERM_LIST, GET_CONTRACT_LIST } from '@/graphql/queries';
+import {
+  GET_PRICING_TERM_LIST,
+  GET_CONTRACT_LIST,
+  GET_PROJECT
+} from '@/graphql/queries';
 import { COPY_PRICING_TERM } from '@/graphql/mutations';
 export default {
   name: 'CopyPricingTermModal',
@@ -45,6 +49,7 @@ export default {
         name: null,
         ignore: false
       },
+      project: {},
       contractId: null,
       rules: {
         name: [
@@ -94,7 +99,7 @@ export default {
           refetchQueries: () => [
             {
               query: GET_CONTRACT_LIST,
-              variables: { id: this.contractId }
+              variables: { id: this.contractId, projectId: this.project.id }
             }
           ]
         });

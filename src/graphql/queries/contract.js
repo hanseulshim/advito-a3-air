@@ -10,8 +10,8 @@ import {
 } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
-{
-  contractList {
+query contractList($projectId: Int) {
+  contractList(projectId: $projectId) {
     ${CONTRACT}
   }
 }

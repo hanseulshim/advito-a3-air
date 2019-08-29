@@ -209,7 +209,7 @@ input NewAppliedOrder {
 }
 
 extend type Query {
-  contractList: [Contract] @auth
+  contractList(projectId: Int): [Contract] @auth
   contract(id: Int!): [Contract] @auth
   contractTypeList: [ContractType] @auth
   divisionTypeList(clientId: Int): [DivisionType] @auth
@@ -245,6 +245,7 @@ extend type Query {
 extend type Mutation {
   createContract(
     name: String!
+    projectId: Int!
     typeId: Int!
     round: Int
     divisionId: Int

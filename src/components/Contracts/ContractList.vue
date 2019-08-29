@@ -207,7 +207,7 @@
 
 <script>
 import { pluralize, formatDate, formatPercent } from '@/helper';
-import { GET_CONTRACT_LIST, GET_CLIENT } from '@/graphql/queries';
+import { GET_CONTRACT_LIST, GET_CLIENT, GET_PROJECT } from '@/graphql/queries';
 import { UPDATE_CONTRACT } from '@/graphql/mutations';
 import { contract } from '@/config';
 import NewContractModal from './NewContractModal';
@@ -224,15 +224,24 @@ export default {
   },
   apollo: {
     contractList: {
-      query: GET_CONTRACT_LIST
+      query: GET_CONTRACT_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
     },
     client: {
       query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
     }
   },
   data() {
     return {
       client: {},
+      project: {},
       contractList: [],
       contract
     };
@@ -253,16 +262,19 @@ export default {
       return qc !== 1;
     },
     showNewContractModal() {
-      this.$modal.show('new-contract', { clientId: this.client.id });
+      this.$modal.show('new-contract', {
+        clientId: this.client.id,
+        projectId: this.project.id
+      });
     },
     showCopyContractModal(id) {
-      this.$modal.show('copy-contract', { id });
+      this.$modal.show('copy-contract', { id, projectId: this.project.id });
     },
     showEditContractModal(contract) {
       this.$modal.show('edit-contract', { contract, clientId: this.client.id });
     },
     showDeleteContractModal(id) {
-      this.$modal.show('delete-contract', { id });
+      this.$modal.show('delete-contract', { id, projectId: this.project.id });
     },
     selectContract(selectedContract) {
       this.$apollo.mutate({
