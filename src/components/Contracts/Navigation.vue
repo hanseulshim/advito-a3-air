@@ -70,21 +70,18 @@ export default {
 <style lang="scss">
 @import '@/styles/global.scss';
 .contracts-navigation-container {
-  display: grid;
-  grid-template-areas: 'all-contracts pricing-terms target-terms . contract-name';
-  grid-template-columns: 10% 15% 15% auto;
-  row-gap: 1em;
-  column-gap: 1em;
+  display: flex;
   align-items: center;
 }
 .contract-name {
   text-align: right;
-  grid-area: contract-name;
   font-weight: 400;
   color: $black;
+  margin-left: auto;
 }
 .contract-item {
   display: flex;
+  margin-right: 5.5em;
   align-items: center;
   .nav-title {
     font-size: 16px;

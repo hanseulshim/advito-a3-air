@@ -1,71 +1,75 @@
 <template>
   <div class="process-container">
-    <div class="info-container">
-      <div class="info">
-        <div class="info-text">
-          <span class="info-text-value">{{ process.contracts }}</span>
-          <span class="info-text-label">CONTRACTS</span>
+    <div class="metrics-container">
+      <div class="info-container">
+        <div class="info">
+          <div class="info-text">
+            <span class="info-text-value">{{ process.contracts }}</span>
+            <span class="info-text-label">CONTRACTS</span>
+          </div>
+          <div class="info-text">
+            <span class="info-text-value">{{ process.dataSets }}</span>
+            <span class="info-text-label">DATASETS</span>
+          </div>
+          <div class="info-text">
+            <span class="info-text-value">{{
+              formatNumberLarge(process.records)
+            }}</span>
+            <span class="info-text-label">O&D RECORDS</span>
+          </div>
+          <div class="info-text">
+            <span class="info-text-value processed">{{
+              process.processing
+                ? '—'
+                : lastProcessed && lastProcessed.contracts
+            }}</span>
+            <span class="info-text-label">Processed Contracts</span>
+          </div>
+          <div class="info-text">
+            <span class="info-text-value processed">{{
+              process.processing ? '—' : lastProcessed && lastProcessed.dataSets
+            }}</span>
+            <span class="info-text-label">Processed Datasets</span>
+          </div>
+          <div class="info-text">
+            <span class="info-text-value processed">{{
+              process.processing
+                ? '—'
+                : lastProcessed && formatNumberLarge(lastProcessed.records)
+            }}</span>
+            <span class="info-text-label">Processed O&D Records</span>
+          </div>
         </div>
-        <div class="info-text">
-          <span class="info-text-value">{{ process.dataSets }}</span>
-          <span class="info-text-label">DATASETS</span>
-        </div>
-        <div class="info-text">
-          <span class="info-text-value">{{
-            formatNumberLarge(process.records)
+        <div class="last-processed">
+          <span>{{
+            process.processing ? 'Process Started: ' : 'Last Processed: '
           }}</span>
-          <span class="info-text-label">O&D RECORDS</span>
-        </div>
-        <div class="info-text">
-          <span class="info-text-value processed">{{
-            process.processing ? '—' : lastProcessed && lastProcessed.contracts
-          }}</span>
-          <span class="info-text-label">Processed Contracts</span>
-        </div>
-        <div class="info-text">
-          <span class="info-text-value processed">{{
-            process.processing ? '—' : lastProcessed && lastProcessed.dataSets
-          }}</span>
-          <span class="info-text-label">Processed Datasets</span>
-        </div>
-        <div class="info-text">
-          <span class="info-text-value processed">{{
+          <span class="processed">{{
             process.processing
-              ? '—'
-              : lastProcessed && formatNumberLarge(lastProcessed.records)
+              ? getProcessDate(process.processStartDate)
+              : getProcessDate(lastProcessed && lastProcessed.date)
           }}</span>
-          <span class="info-text-label">Processed O&D Records</span>
         </div>
       </div>
-      <div class="last-processed info-text">
-        <span>{{
-          process.processing ? 'Process Started:' : 'Last Processed:'
-        }}</span>
-        <span class="processed">{{
-          process.processing
-            ? getProcessDate(process.processStartDate)
-            : getProcessDate(lastProcessed && lastProcessed.date)
-        }}</span>
+      <div class="progress-container">
+        <el-progress
+          v-loading="process.processing"
+          type="circle"
+          color="#5AB7B2"
+          :stroke-width="10"
+          :percentage="100"
+          :show-text="!process.processing"
+        />
+        <button
+          v-if="process.processing"
+          class="button"
+          @click="showCancelProcessModal"
+        >
+          CANCEL
+        </button>
+        <button v-else class="button" @click="startProcess">PROCESS</button>
+        <div>* Data and Contracts have to be 100% QC'ed before Processing</div>
       </div>
-    </div>
-    <div class="progress-container">
-      <el-progress
-        v-loading="process.processing"
-        type="circle"
-        color="#5AB7B2"
-        :stroke-width="10"
-        :percentage="100"
-        :show-text="!process.processing"
-      />
-      <button
-        v-if="process.processing"
-        class="button"
-        @click="showCancelProcessModal"
-      >
-        CANCEL
-      </button>
-      <button v-else class="button" @click="startProcess">PROCESS</button>
-      <div>* Data and Contracts have to be 100% QC'ed before Processing</div>
     </div>
     <div class="recent-container">
       <div class="section-header title-row space-between">
@@ -221,50 +225,59 @@ export default {
 @import '@/styles/global.scss';
 .process-container {
   padding: 2% 10%;
-  display: grid;
-  grid-template-areas:
-    'info progress'
-    'recent recent';
-  grid-template-columns: 50% 50%;
-  grid-column-gap: 2em;
-  .info-container {
-    grid-area: info;
-    .info {
-      padding: 2em;
-      display: grid;
-      grid-template-areas:
-        'contracts dataSets records'
-        'contracts dataSets records';
-      grid-gap: 2em 0;
-    }
-    .info-text {
-      display: flex;
-      flex-direction: column;
-      .info-text-value {
-        font-size: 40px;
+  display: flex;
+  flex-direction: column;
+  .metrics-container {
+    display: flex;
+    .info-container {
+      flex: 1;
+      margin-right: 2em;
+      .info {
+        padding: 2em 2em 0em 2em;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+        position: relative;
       }
+      .info-text {
+        width: 30%;
+        margin-bottom: 2em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        .info-text-value {
+          font-size: 40px;
+        }
+        .info-text-label {
+          margin-top: 10px;
+        }
+      }
+      .last-processed {
+        background: $gallery;
+        padding: 1em 2em;
+        height: 3em;
+        flex: 1;
+        position: relative;
+        bottom: 0;
+      }
+
       .processed {
         color: $tradewind;
       }
-      .info-text-label {
-        margin-top: 10px;
-      }
     }
-    .last-processed {
-      background: $gallery;
-      padding: 1em 2em;
+    .progress-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2em;
     }
   }
-  .progress-container {
-    grid-area: progress;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2em;
-  }
+
   .recent-container {
-    grid-area: recent;
     margin-top: 3em;
   }
   .info-container,
