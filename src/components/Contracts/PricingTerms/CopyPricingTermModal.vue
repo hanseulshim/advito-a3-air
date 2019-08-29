@@ -42,6 +42,11 @@ import {
 import { COPY_PRICING_TERM } from '@/graphql/mutations';
 export default {
   name: 'CopyPricingTermModal',
+  apollo: {
+    project: {
+      query: GET_PROJECT
+    }
+  },
   data() {
     return {
       form: {
