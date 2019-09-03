@@ -23,19 +23,19 @@ exports.normalization = {
         marketB
         farePaid
         usage
-      }
-      marketAdvancedTicketList(normalizationId: null) {
-        label
-        value
-      }
-      marketDepartureList(normalizationId: null) {
-        label
-        value
-      }
-      marketFareBasisList(normalizationId: null) {
-        fareBasis
-        bookingClass
-        usage
+        advancedTicketList {
+          label
+          value
+        }
+        departureList {
+          label
+          value
+        }
+        fareBasisList {
+          fareBasis
+          bookingClass
+          usage
+        }
       }
     }`
   },
