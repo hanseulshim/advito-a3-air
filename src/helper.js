@@ -1,7 +1,6 @@
 import moment from 'moment';
 import numeral from 'numeral';
 import defaults from './graphql/defaults';
-import { LOGOUT } from '@/graphql/mutations';
 
 export const formatDate = date => {
   return date
@@ -69,25 +68,15 @@ export const validateUser = () => {
 
 export const getToken = () => {
   if (localStorage.getItem('advito-360-user')) {
-    const user = JSON.parse(localStorage.getItem('advito-360-user'));
-    return user.sessionToken;
+    const { sessionToken } = JSON.parse(
+      localStorage.getItem('advito-360-user')
+    );
+    return sessionToken;
   } else return '';
 };
 
 export const logout = async (router, client) => {
-  try {
-    const sessionToken = getToken();
-    // await client.mutate({
-    //   mutation: LOGOUT,
-    //   variables: {
-    //     sessionToken
-    //   },
-    //   client: 'advitoClient'
-    // });
-    localStorage.removeItem('advito-360-user');
-    router.replace({ name: 'login' });
-    client.cache.writeData({ data: defaults });
-  } catch (error) {
-    console.log('ERROR LOGGING OUT : ', error);
-  }
+  localStorage.removeItem('advito-360-user');
+  router.replace({ name: 'login' });
+  client.cache.writeData({ data: defaults });
 };

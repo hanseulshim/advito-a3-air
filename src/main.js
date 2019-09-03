@@ -34,14 +34,11 @@ export const apolloClient = new ApolloClient({
       });
     }
   },
-  onError: ({ graphQLErrors, networkError }) => {
+  onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, apolloClient);
+        if (extensions.code === 401) logout(router, apolloClient);
       });
-    }
-    if (networkError) {
-      // console.log('THIS IS A NETWORK ERROR', networkError);
     }
   }
 });

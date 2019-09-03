@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import router from '@/router';
-import { apolloClient } from '@/main.js';
-import { logout } from '@/helper';
+import { logout, getToken } from '@/helper';
+import { apolloClient } from '@/main';
 import { GET_USER } from '@/graphql/queries';
+import { LOGOUT } from '@/graphql/mutations';
 export default {
   name: 'UserInfo',
   apollo: {
@@ -29,8 +29,19 @@ export default {
     };
   },
   methods: {
-    logout() {
-      logout(router, apolloClient);
+    async logout() {
+      try {
+        await this.$apollo.mutate({
+          mutation: LOGOUT,
+          variables: {
+            sessionToken: getToken()
+          },
+          client: 'advitoClient'
+        });
+        logout(this.$router, apolloClient);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 };
