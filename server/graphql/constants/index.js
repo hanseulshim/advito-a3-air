@@ -36,6 +36,8 @@ const APP_URL = 'https://s3.amazonaws.com/alpha.boostlabs/air-dev/index.html?#';
 // const APP_URL = 'https://s3.amazonaws.com/beta.boostlabs/air/index.html#';
 // const APP_URL = 'https://s3.amazonaws.com/alpha.boostlabs/air/index.html#';
 
+const REGEX_USER = /'/;
+
 module.exports = {
   AIR_APPLICATION_ID,
   ADVITO_CLIENT,
@@ -67,5 +69,6 @@ module.exports = {
   ADVITO_AIR_APPLICATION,
   EMAIL_SENDER,
   EMAIL_BCC,
-  APP_URL
+  APP_URL,
+  REGEX_USER
 };

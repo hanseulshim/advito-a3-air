@@ -1,3 +1,4 @@
+const { REGEX_USER } = require('../../constants');
 exports.normalization = {
   Query: {
     normalizationList: async (_, { discountId = null }, { db }) =>
@@ -170,7 +171,7 @@ exports.normalization = {
               ? `'${new Date(effectiveTo).toISOString()}'`
               : null
           },
-          '${user.name}'
+          '${user.name.replace(REGEX_USER, "''")}'
         )`
       );
       const [{ discount_normalisation_create: id }] = rows;
@@ -204,7 +205,7 @@ exports.normalization = {
               ? `'${new Date(effectiveTo).toISOString()}'`
               : null
           },
-          '${user.name}'
+          '${user.name.replace(REGEX_USER, "''")}'
         )`
       );
       return await getNormalization(db, id);
