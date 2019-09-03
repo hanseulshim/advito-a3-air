@@ -44,6 +44,7 @@ export const apolloClient = new ApolloClient({
 });
 
 const advitoClient = new ApolloClient({
+  // uri: 'http://localhost:4000/graphql',
   // uri: 'https://trfrs1gzn8.execute-api.us-east-2.amazonaws.com/alpha/graphql',
   // uri: 'https://7smhjazdr2.execute-api.us-east-2.amazonaws.com/beta/graphql',
   uri: 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql',
