@@ -27,7 +27,9 @@
       <el-table-column label="Usage" :formatter="formatUsage" />
       <el-table-column label="Override Usage" :render-header="renderHeader">
         <template slot-scope="props">
-          {{ `${props.row.usageOverride}%` }}
+          {{
+            `${props.row.usageOverride ? props.row.usageOverride + '%' : ''}`
+          }}
         </template>
       </el-table-column>
       <el-table-column
