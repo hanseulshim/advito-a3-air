@@ -1,3 +1,4 @@
+const { REGEX_USER } = require('../../constants');
 exports.normalization = {
   Query: {
     normalizationList: async (_, { discountId = null }, { db }) =>
@@ -57,7 +58,10 @@ exports.normalization = {
         marketA: 'LAX',
         marketB: 'JFK',
         farePaid: 12345,
-        usage: 0.5
+        usage: 0.5,
+        advancedTicketList: advancedTicketList(),
+        departureList: departureList(),
+        fareBasisList: fareBasisList()
       },
       {
         id: 2,
@@ -65,7 +69,10 @@ exports.normalization = {
         marketA: 'DFW',
         marketB: 'JFK',
         farePaid: 54321,
-        usage: 0.9
+        usage: 0.9,
+        advancedTicketList: advancedTicketList(),
+        departureList: departureList(),
+        fareBasisList: fareBasisList()
       },
       {
         id: 3,
@@ -73,71 +80,10 @@ exports.normalization = {
         marketA: 'BWI',
         marketB: 'OAK',
         farePaid: 34182,
-        usage: 0.25
-      }
-    ],
-    marketAdvancedTicketList: async () => [
-      {
-        label: '0-2',
-        value: 0.34
-      },
-      {
-        label: '3-4',
-        value: 0.2
-      },
-      {
-        label: '7-10',
-        value: 0.11
-      },
-      {
-        label: '14-20',
-        value: 0.25
-      },
-      {
-        label: '21+',
-        value: 0.1
-      }
-    ],
-    marketDepartureList: async () => [
-      {
-        label: 'Sunday',
-        value: 0.14
-      },
-      {
-        label: 'Monday',
-        value: 0.2
-      },
-      {
-        label: 'Tuesday',
-        value: 0.11
-      },
-      {
-        label: 'Wednesday',
-        value: 0.25
-      },
-      {
-        label: 'Thursday',
-        value: 0.1
-      },
-      {
-        label: 'Friday',
-        value: 0.1
-      },
-      {
-        label: 'Saturday',
-        value: 0.1
-      }
-    ],
-    marketFareBasisList: async () => [
-      {
-        fareBasis: 'DGFBLM',
-        bookingClass: 'D',
-        usage: 0.98
-      },
-      {
-        fareBasis: 'J1NQO4C5',
-        bookingClass: 'D',
-        usage: 0.02
+        usage: 0.25,
+        advancedTicketList: advancedTicketList(),
+        departureList: departureList(),
+        fareBasisList: fareBasisList()
       }
     ]
   },
@@ -170,7 +116,7 @@ exports.normalization = {
               ? `'${new Date(effectiveTo).toISOString()}'`
               : null
           },
-          '${user.name}'
+          '${user.name.replace(REGEX_USER, "''")}'
         )`
       );
       const [{ discount_normalisation_create: id }] = rows;
@@ -204,7 +150,7 @@ exports.normalization = {
               ? `'${new Date(effectiveTo).toISOString()}'`
               : null
           },
-          '${user.name}'
+          '${user.name.replace(REGEX_USER, "''")}'
         )`
       );
       return await getNormalization(db, id);
@@ -384,3 +330,68 @@ const getNormalizationMarket = async (db, id) => {
   normalizationMarket.fareList = normalizationFareList;
   return normalizationMarket;
 };
+
+const advancedTicketList = () => [
+  {
+    label: '0-2',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: '3-4',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: '7-10',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: '14-20',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: '21+',
+    value: Math.floor(Math.random() * 100) / 100
+  }
+];
+const departureList = () => [
+  {
+    label: 'Sunday',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: 'Monday',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: 'Tuesday',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: 'Wednesday',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: 'Thursday',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: 'Friday',
+    value: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    label: 'Saturday',
+    value: Math.floor(Math.random() * 100) / 100
+  }
+];
+const fareBasisList = () => [
+  {
+    fareBasis: 'DGFBLM',
+    bookingClass: 'D',
+    usage: Math.floor(Math.random() * 100) / 100
+  },
+  {
+    fareBasis: 'J1NQO4C5',
+    bookingClass: 'D',
+    usage: Math.floor(Math.random() * 100) / 100
+  }
+];
