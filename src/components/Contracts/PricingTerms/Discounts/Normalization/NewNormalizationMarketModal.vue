@@ -169,20 +169,23 @@
       <div v-if="form.topMarket" class="newMarketTables">
         <div class="flex-row">
           <el-table
-            :data="tableData"
+            :data="form.topMarket.advancedTicketList"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
           >
-            <el-table-column prop="label" label="Adv. Tkt. (Days)" width="auto">
-            </el-table-column>
-            <el-table-column prop="percent" width="75">
+            <el-table-column
+              prop="label"
+              label="Adv. Tkt. (Days)"
+              width="auto"
+            />
+            <el-table-column width="75">
               <template slot-scope="props">
-                {{ props.row.percent }}%
+                {{ Math.round(props.row.value * 100) }}%
               </template>
             </el-table-column>
           </el-table>
           <el-table
-            :data="tableData2"
+            :data="form.topMarket.departureList"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
             size="small"
@@ -191,14 +194,14 @@
             </el-table-column>
             <el-table-column prop="percent" width="100">
               <template slot-scope="props">
-                {{ props.row.percent }}%
+                {{ Math.round(props.row.value * 100) }}%
               </template>
             </el-table-column>
           </el-table>
         </div>
         <div class="flex-row">
           <el-table
-            :data="tableData3"
+            :data="form.topMarket.fareBasisList"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
             style="margin-top: 20px"
@@ -209,7 +212,7 @@
             </el-table-column>
             <el-table-column prop="usage" label="Usage"
               ><template slot-scope="props">
-                {{ props.row.usage }}%
+                {{ Math.round(props.row.usage * 100) }}%
               </template>
             </el-table-column>
           </el-table>
@@ -266,71 +269,7 @@ export default {
         advancePurchaseApplicable: null,
         minstayApplicable: null
       },
-      directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }],
-      tableData: [
-        {
-          label: '0-2',
-          percent: 5
-        },
-        {
-          label: '3-4',
-          percent: 20
-        },
-        {
-          label: '7-10',
-          percent: 11
-        },
-        {
-          label: '14-20',
-          percent: 25
-        },
-        {
-          label: '21+',
-          percent: 10
-        }
-      ],
-      tableData2: [
-        {
-          label: 'Sunday',
-          percent: 5
-        },
-        {
-          label: 'Monday',
-          percent: 20
-        },
-        {
-          label: 'Tuesday',
-          percent: 11
-        },
-        {
-          label: 'Wednesday',
-          percent: 25
-        },
-        {
-          label: 'Thursday',
-          percent: 10
-        },
-        {
-          label: 'Friday',
-          percent: 10
-        },
-        {
-          label: 'Saturday',
-          percent: 10
-        }
-      ],
-      tableData3: [
-        {
-          fareBasis: 'DGFBLM',
-          bookingClass: 'D',
-          usage: 98
-        },
-        {
-          fareBasis: 'J1NQO4C5',
-          bookingClass: 'D',
-          usage: 2
-        }
-      ]
+      directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }]
     };
   },
   computed: {
