@@ -79,4 +79,5 @@ export const logout = async (router, client) => {
   localStorage.removeItem('advito-360-user');
   router.replace({ name: 'login' });
   client.cache.writeData({ data: defaults });
+  client.resetStore();
 };
