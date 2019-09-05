@@ -1,9 +1,9 @@
-const { ApolloServer } = require('apollo-server-lambda');
-const { typeDefs } = require('./graphql/typeDefs');
-const { resolvers } = require('./graphql/resolvers');
-const requireAuthDirective = require('./graphql/directives');
-const { playground } = require('./graphql/playground');
-const { authenticateUser } = require('./graphql/helper');
+import { ApolloServer } from 'apollo-server-lambda';
+import { typeDefs } from './typeDefs';
+import { resolvers } from './resolvers';
+import requireAuthDirective from './directives';
+import { playground } from './playground';
+import { authenticateUser } from './helper';
 
 require('dotenv').config();
 const db = require('knex')({
@@ -39,7 +39,7 @@ const server = new ApolloServer({
   playground
 });
 
-exports.graphqlHandler = server.createHandler({
+export const graphqlHandler = server.createHandler({
   cors: {
     origin: true,
     credentials: true
