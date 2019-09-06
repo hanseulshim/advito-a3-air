@@ -17,6 +17,7 @@
       v-loading="$apollo.loading"
       :data="normalizationMarketList"
       :row-class-name="tableRowClassName"
+      :default-sort="{ prop: 'farePaid', order: 'descending' }"
     >
       <el-table-column label="Market" :formatter="formatMarkets" />
       <el-table-column label="Fare Paid">
@@ -170,22 +171,27 @@ export default {
     },
     formatResulting(row) {
       //Grab the direction type and the discount value from the discount
-      const { journeyTypeName, amount } = this.discount;
+      const { journeyTypeName, discountValue } = this.discount;
 
       if (this.discountType === 'Fixed') {
-        //Fixed discount just uses a dollar amount for a discount
+        //Fixed discount just uses a dollar discountValue for a discount
         //If its oneway, multiply the result by 2 to roughly estimate what the value would be for a normal two way fare
         return `${this.formatCurrency(
-          journeyTypeName === 'Oneway' ? amount * 2 : amount
+          journeyTypeName === 'Oneway' ? discountValue * 2 : discountValue
         )}`;
       } else if (this.discountType === 'Percentage') {
+        //Grab the percentage discount value from the discount
         const { discountValue } = this.discount;
+
+        //find the 'Applicable' farelist values instead of the 'Compare' values from the normalization market
         const applicableFareList = row.fareList.find(
           fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
         );
 
+        //the value here is the 'amount' value from the applicable part of normalization market multiplied by ( 1 - discount percent)
         const cost = applicableFareList.amount * (1 - discountValue);
 
+        //Again, if its oneway fare on the discount, multiply it by 2
         return `${this.formatCurrency(
           journeyTypeName === 'Oneway' ? cost * 2 : cost
         )}`;

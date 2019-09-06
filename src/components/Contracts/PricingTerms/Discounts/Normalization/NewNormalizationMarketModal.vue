@@ -317,20 +317,6 @@ export default {
             trigger: 'change'
           }
         ],
-        advancePurchase: [
-          {
-            required: true,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstay: [
-          {
-            required: true,
-            message: 'Please input a minimum stay',
-            trigger: 'change'
-          }
-        ],
         directionTypeApplicable: [
           {
             required: applicableRulesRequired,
@@ -349,20 +335,6 @@ export default {
           {
             required: applicableRulesRequired,
             message: 'Please select a currency.',
-            trigger: 'change'
-          }
-        ],
-        advancePurchaseApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstayApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input a minimum stay',
             trigger: 'change'
           }
         ]

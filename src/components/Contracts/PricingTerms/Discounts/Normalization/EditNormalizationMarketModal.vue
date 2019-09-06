@@ -279,71 +279,7 @@ export default {
         advancePurchaseApplicable: null,
         minstayApplicable: null
       },
-      directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }],
-      tableData: [
-        {
-          label: '0-2',
-          percent: 5
-        },
-        {
-          label: '3-4',
-          percent: 20
-        },
-        {
-          label: '7-10',
-          percent: 11
-        },
-        {
-          label: '14-20',
-          percent: 25
-        },
-        {
-          label: '21+',
-          percent: 10
-        }
-      ],
-      tableData2: [
-        {
-          label: 'Sunday',
-          percent: 5
-        },
-        {
-          label: 'Monday',
-          percent: 20
-        },
-        {
-          label: 'Tuesday',
-          percent: 11
-        },
-        {
-          label: 'Wednesday',
-          percent: 25
-        },
-        {
-          label: 'Thursday',
-          percent: 10
-        },
-        {
-          label: 'Friday',
-          percent: 10
-        },
-        {
-          label: 'Saturday',
-          percent: 10
-        }
-      ],
-      tableData3: [
-        {
-          fareBasis: 'DGFBLM',
-          bookingClass: 'D',
-          usage: 98
-        },
-        {
-          fareBasis: 'J1NQO4C5',
-          bookingClass: 'D',
-          usage: 2
-        }
-      ]
+      directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }]
     };
   },
   computed: {
@@ -389,20 +325,6 @@ export default {
             trigger: 'change'
           }
         ],
-        advancePurchase: [
-          {
-            required: true,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstay: [
-          {
-            required: true,
-            message: 'Please input a minimum stay',
-            trigger: 'change'
-          }
-        ],
         directionTypeApplicable: [
           {
             required: applicableRulesRequired,
@@ -421,20 +343,6 @@ export default {
           {
             required: applicableRulesRequired,
             message: 'Please select a currency.',
-            trigger: 'change'
-          }
-        ],
-        advancePurchaseApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstayApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input a minimum stay',
             trigger: 'change'
           }
         ]

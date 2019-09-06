@@ -67,8 +67,9 @@ export default {
           title: 'process'
         }
       ];
-
+      //If the project is not a Sourcing project, remove "Scenario Settings"
       if (this.project.projectTypeId !== 3) {
+        //If the project savings type is "None" then also remove the contracts tab
         if (this.project.savingsTypeId === 66) {
           return navItems.filter(item => item.id !== 4 && item.id !== 3);
         } else {
