@@ -17,7 +17,6 @@
       v-loading="$apollo.loading"
       :data="normalizationMarketList"
       :row-class-name="tableRowClassName"
-      :default-sort="{ prop: 'farePaid', order: 'descending' }"
     >
       <el-table-column label="Market" :formatter="formatMarkets" />
       <el-table-column label="Fare Paid">
@@ -118,6 +117,11 @@ export default {
         return {
           normalizationId: this.normalization.id
         };
+      },
+      result({ data: { normalizationMarketList } }) {
+        this.normalizationMarketList = normalizationMarketList.sort(
+          (a, b) => a.farePaid - b.farePaid
+        );
       }
     }
   },
