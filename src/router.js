@@ -7,6 +7,7 @@ import ProjectSettings from '@/components/ProjectSettings';
 
 import Login from '@/components/Login';
 import ResetPassword from '@/components/Login/ResetPassword';
+
 import DataSet from '@/components/DataSet';
 import PosTrends from '@/components/DataSet/PosTrends';
 import DivisionTrends from '@/components/DataSet/DivisionTrends';
@@ -16,6 +17,8 @@ import Contracts from '@/components/Contracts';
 import ContractList from '@/components/Contracts/ContractList';
 import PricingTerms from '@/components/Contracts/PricingTerms';
 import TargetTerms from '@/components/Contracts/TargetTerms';
+
+import ScenarioSettings from '@/components/ScenarioSettings';
 
 import Process from '@/components/Process';
 
@@ -95,6 +98,10 @@ const router = new Router({
               ]
             },
             {
+              path: 'scenario-settings',
+              component: ScenarioSettings
+            },
+            {
               path: 'process',
               component: Process
             }
@@ -111,6 +118,14 @@ router.beforeEach((to, from, next) => {
       next('/');
     }
   }
+
+  //trying to capture the route when user is coming in from the note sending SES
+  // if (/\d/.test(to.fullPath)) {
+  //   const path = to.fullPath;
+  //   if (next.fullPath === '/login') {
+  //     next(path);
+  //   }
+  // }
   next();
 });
 

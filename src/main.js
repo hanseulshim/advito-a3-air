@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import fetch from 'unfetch';
+import 'babel-polyfill';
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import App from './App.vue';
@@ -33,19 +34,17 @@ export const apolloClient = new ApolloClient({
       });
     }
   },
-  onError: ({ graphQLErrors, networkError }) => {
+  onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
+        if (extensions.code === 401) logout(router, apolloClient);
       });
-    }
-    if (networkError) {
-      // console.log('THIS IS A NETWORK ERROR', networkError);
     }
   }
 });
 
 const advitoClient = new ApolloClient({
+  // uri: 'http://localhost:4000/graphql',
   // uri: 'https://trfrs1gzn8.execute-api.us-east-2.amazonaws.com/alpha/graphql',
   // uri: 'https://7smhjazdr2.execute-api.us-east-2.amazonaws.com/beta/graphql',
   uri: 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql',
@@ -53,7 +52,7 @@ const advitoClient = new ApolloClient({
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, this);
+        if (extensions.code === 'UNAUTHENTICATED') logout(router, apolloClient);
       });
     }
   }

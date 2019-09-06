@@ -1,7 +1,4 @@
-const {
-  SchemaDirectiveVisitor,
-  AuthenticationError
-} = require('apollo-server-lambda');
+const { SchemaDirectiveVisitor, ApolloError } = require('apollo-server-lambda');
 
 const AIR_ADMIN = 10;
 const AIR_USER = 11;
@@ -14,12 +11,13 @@ class RequireAuthDirective extends SchemaDirectiveVisitor {
       if (context.user) {
         const roleIds = context.user.role;
         if (!roleIds.includes(AIR_ADMIN) && !roleIds.includes(AIR_USER))
-          throw new AuthenticationError('User did not have AIR role');
+          throw new ApolloError('User did not have AIR role', 401);
         const result = await resolve.apply(this, args);
         return result;
       } else {
-        throw new AuthenticationError(
-          'You must be signed in to view this resource.'
+        throw new ApolloError(
+          'You must be signed in to view this resource.',
+          401
         );
       }
     };

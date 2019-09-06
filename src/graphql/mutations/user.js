@@ -31,3 +31,9 @@ export const RESET_PASSWORD = gql`
     )
   }
 `;
+
+export const LOGOUT = gql`
+  mutation logout($sessionToken: String!) {
+    logout(sessionToken: $sessionToken)
+  }
+`;

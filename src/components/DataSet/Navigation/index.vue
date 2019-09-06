@@ -113,32 +113,19 @@ export default {
 <style lang="scss">
 @import '@/styles/global.scss';
 .data-navigation-container {
-  display: grid;
-  grid-template-areas: 'import pos division . annualization dataset';
-  grid-template-columns: 15% 15% 15% auto 150px 200px;
-  -ms-grid-columns: 15% 1em 15% 1em 15% 1em auto 1em 150px 1em 200px;
-  row-gap: 1em;
-  column-gap: 1em;
+  display: flex;
   align-items: center;
 }
 .annualization {
-  -ms-grid-row: 1;
-  grid-row: 1;
-  -ms-grid-column: 9;
-  grid-column: 9;
-  grid-area: annualization;
 }
 .dataset {
-  -ms-grid-row: 1;
-  grid-row: 1;
-  -ms-grid-column: 11;
-  grid-column: 11;
-  grid-area: dataset;
+  margin-left: auto;
 }
 .data-nav-item {
   &.data-nav {
     display: flex;
     align-items: center;
+    margin-right: 6em;
   }
   .nav-title {
     font-size: 16px;

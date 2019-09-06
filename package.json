@@ -4,14 +4,19 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "start": "cd ./server && yarn start",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "alpha": "vue-cli-service build && aws s3 sync  ./dist s3://alpha.boostlabs/air/ --acl public-read --profile boost",
+    "alpha-server": "cd ./server && yarn alpha",
     "beta": "vue-cli-service build && aws s3 sync  ./dist s3://beta.boostlabs/air/ --acl public-read --profile boost",
-    "dev": "vue-cli-service build && aws s3 sync  ./dist s3://alpha.boostlabs/air-dev/ --acl public-read --profile boost"
+    "beta-server": "cd ./server && yarn beta",
+    "dev": "vue-cli-service build && aws s3 sync  ./dist s3://alpha.boostlabs/air-dev/ --acl public-read --profile boost",
+    "dev-server": "cd ./server && yarn dev"
   },
   "dependencies": {
     "apollo-boost": "^0.1.28",
+    "babel-polyfill": "^6.26.0",
     "element-ui": "^2.5.4",
     "graphql": "^14.1.1",
     "moment": "^2.24.0",

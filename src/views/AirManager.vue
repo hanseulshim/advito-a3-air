@@ -4,28 +4,32 @@
       <div class="favorite-projects section-header">
         {{ pluralize('favorite project', favoriteProjectList.length) }}
       </div>
-      <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
-      <el-select
-        :value="selectedUser.id"
-        placeholder="Select"
-        filterable
-        @change="updateSelectedUser"
-      >
-        <el-option
-          v-for="item in userList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        />
-      </el-select>
-      <button class="button long" @click="showNewProject">+ NEW PROJECT</button>
-      <el-tooltip
-        effect="dark"
-        content="Show Project Information"
-        placement="top"
-      >
-        <i class="fas fa-info project-top-item" @click="showInfoModal" />
-      </el-tooltip>
+      <div class="options-controls">
+        <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
+        <el-select
+          :value="selectedUser.id"
+          placeholder="Select"
+          filterable
+          @change="updateSelectedUser"
+        >
+          <el-option
+            v-for="item in userList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+        <button class="button long" @click="showNewProject">
+          + NEW PROJECT
+        </button>
+        <el-tooltip
+          effect="dark"
+          content="Show Project Information"
+          placement="top"
+        >
+          <i class="fas fa-info project-top-item" @click="showInfoModal" />
+        </el-tooltip>
+      </div>
     </div>
     <FavoriteProjects
       :favorite-project-list="favoriteProjectList"
@@ -165,14 +169,25 @@ export default {
 }
 
 .option-container {
-  display: grid;
-  grid-template-areas: 'favorites inactive user newProject info';
-  grid-template-columns: auto 130px 200px 150px 30px;
-  column-gap: 1em;
-  justify-items: flex-end;
+  display: flex;
   align-items: flex-end;
 }
+
+.options-controls {
+  display: flex;
+  flex: 4;
+  justify-content: space-between;
+  align-items: flex-end;
+  .el-select {
+    width: 250px;
+  }
+  .el-checkbox {
+    margin-right: 0;
+  }
+}
+
 .favorite-projects {
   justify-self: flex-start;
+  flex: 5;
 }
 </style>

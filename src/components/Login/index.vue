@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div v-loading="loading" class="login-container">
     <img class="login-logo" alt="advito-logo" src="@/assets/logo.png" />
     <div class="application-title">
       Welcome to A3
@@ -50,7 +50,8 @@ export default {
       form: {
         username: null,
         password: null
-      }
+      },
+      loading: false
     };
   },
   computed: {
@@ -89,24 +90,25 @@ export default {
       });
     },
     async login() {
+      this.loading = true;
       try {
-        const { username, password } = this.form;
         const {
           data: { login }
         } = await this.$apollo.mutate({
           mutation: LOGIN,
           variables: {
-            username,
-            password
+            ...this.form
           },
           client: 'advitoClient'
         });
         setUser(login);
         this.$router.replace({ name: 'root' });
+        this.loading = false;
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
         });
+        this.loading = false;
       }
     }
   }
