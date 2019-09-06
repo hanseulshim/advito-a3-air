@@ -178,7 +178,6 @@ export default {
       const { journeyTypeName, discountValue } = this.discount;
 
       if (this.discountType === 'Fixed') {
-        //Fixed discount just uses a dollar discountValue for a discount
         //If its oneway, multiply the result by 2 to roughly estimate what the value would be for a normal two way fare
         return `${this.formatCurrency(
           journeyTypeName === 'Oneway' ? discountValue * 2 : discountValue
@@ -189,7 +188,7 @@ export default {
           fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
         );
 
-        //the value here is the 'amount' value from the applicable part of normalization market multiplied by ( 1 - discount percent)
+        //the value here is the 'amount' value from the applicable part of normalization market multiplied by ( 1 - the percent discount)
         const discounted = applicableFareList.amount * (1 - discountValue);
 
         //Again, if its oneway fare on the discount, multiply it by 2
@@ -197,7 +196,7 @@ export default {
           journeyTypeName === 'Oneway' ? discounted * 2 : discounted
         )}`;
       } else if (this.discountType === 'Subtraction') {
-        //same deal as percentage except discount value is subtracted from amount
+        //Same deal as percentage type discount except discount value is subtracted from amount
 
         const applicableFareList = row.fareList.find(
           fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
