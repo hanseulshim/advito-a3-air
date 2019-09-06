@@ -64,7 +64,7 @@
             />
           </el-form-item>
         </div>
-        <div v-if="percentageDiscount">
+        <div v-if="nonFixedDiscount">
           <p class="section-header">Applicable</p>
           <div class="flex-row">
             <el-form-item label="Fare Basis" class="flex1">
@@ -283,12 +283,11 @@ export default {
     };
   },
   computed: {
-    percentageDiscount() {
-      return this.discount.discountTypeName === 'Percentage';
+    nonFixedDiscount() {
+      return this.discount.discountTypeName !== 'Fixed';
     },
     rules() {
-      const applicableRulesRequired =
-        this.discount.discountTypeName === 'Percentage';
+      const applicableRulesRequired = this.nonFixedDiscount;
       return {
         topMarket: [
           {
@@ -466,7 +465,7 @@ export default {
       this.form.advancePurchase = compareFare.advancePurchase;
       this.form.minstay = compareFare.minstay;
       //If its a percentage discount, also sustain these form values
-      if (this.percentageDiscount) {
+      if (this.nonFixedDiscount) {
         const applicableFare = normMarket.fareList.find(
           fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
         );

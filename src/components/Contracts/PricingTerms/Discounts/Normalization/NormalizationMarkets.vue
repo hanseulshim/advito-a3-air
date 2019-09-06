@@ -180,20 +180,28 @@ export default {
           journeyTypeName === 'Oneway' ? discountValue * 2 : discountValue
         )}`;
       } else if (this.discountType === 'Percentage') {
-        //Grab the percentage discount value from the discount
-        const { discountValue } = this.discount;
-
         //find the 'Applicable' farelist values instead of the 'Compare' values from the normalization market
         const applicableFareList = row.fareList.find(
           fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
         );
 
         //the value here is the 'amount' value from the applicable part of normalization market multiplied by ( 1 - discount percent)
-        const cost = applicableFareList.amount * (1 - discountValue);
+        const discounted = applicableFareList.amount * (1 - discountValue);
 
         //Again, if its oneway fare on the discount, multiply it by 2
         return `${this.formatCurrency(
-          journeyTypeName === 'Oneway' ? cost * 2 : cost
+          journeyTypeName === 'Oneway' ? discounted * 2 : discounted
+        )}`;
+      } else if (this.discountType === 'Subtraction') {
+        //same deal as percentage except discount value is subtracted from amount
+
+        const applicableFareList = row.fareList.find(
+          fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
+        );
+
+        const discounted = applicableFareList.amount - discountValue;
+        return `${this.formatCurrency(
+          journeyTypeName === 'Oneway' ? discounted * 2 : discounted
         )}`;
       }
     },
@@ -220,7 +228,7 @@ export default {
 
       if (usageOverride) {
         return formatPercent((usageOverride * effectiveDiscount).toFixed(2));
-      } else return 'None';
+      } else return ' ';
     },
     renderHeader(h, { column }) {
       return h(
