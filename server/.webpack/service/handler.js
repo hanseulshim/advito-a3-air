@@ -737,6 +737,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _directives__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./directives */ "./directives.js");
 /* harmony import */ var _playground__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./playground */ "./playground/index.js");
 /* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helper */ "./helper.js");
+/* harmony import */ var knex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! knex */ "knex");
+/* harmony import */ var knex__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(knex__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var objection__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! objection */ "objection");
+/* harmony import */ var objection__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(objection__WEBPACK_IMPORTED_MODULE_7__);
+
+
 
 
 
@@ -746,15 +752,17 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__(/*! dotenv */ "dotenv").config();
 
-const db = __webpack_require__(/*! knex */ "knex")({
+const db = knex__WEBPACK_IMPORTED_MODULE_6___default()({
   client: 'pg',
   connection: {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.AIR_DB_DATABASE
-  }
+  },
+  ...Object(objection__WEBPACK_IMPORTED_MODULE_7__["knexSnakeCaseMappers"])()
 });
+objection__WEBPACK_IMPORTED_MODULE_7__["Model"].knex(db);
 
 const advitoDb = __webpack_require__(/*! knex */ "knex")({
   client: 'pg',
@@ -856,6 +864,113 @@ const authenticateUser = async (sessionToken, advitoDb) => {
     role: roleIds
   };
 };
+
+/***/ }),
+
+/***/ "./models/index.js":
+/*!*************************!*\
+  !*** ./models/index.js ***!
+  \*************************/
+/*! exports provided: AdvitoUser, AdvitoUserRoleLink, AdvitoUserSession, AccessToken, EmailTemplate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user */ "./models/user.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AdvitoUser", function() { return _user__WEBPACK_IMPORTED_MODULE_0__["AdvitoUser"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AdvitoUserRoleLink", function() { return _user__WEBPACK_IMPORTED_MODULE_0__["AdvitoUserRoleLink"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AdvitoUserSession", function() { return _user__WEBPACK_IMPORTED_MODULE_0__["AdvitoUserSession"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AccessToken", function() { return _user__WEBPACK_IMPORTED_MODULE_0__["AccessToken"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "EmailTemplate", function() { return _user__WEBPACK_IMPORTED_MODULE_0__["EmailTemplate"]; });
+
+
+
+/***/ }),
+
+/***/ "./models/user.js":
+/*!************************!*\
+  !*** ./models/user.js ***!
+  \************************/
+/*! exports provided: AdvitoUser, AdvitoUserRoleLink, AdvitoUserSession, AccessToken, EmailTemplate */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdvitoUser", function() { return AdvitoUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdvitoUserRoleLink", function() { return AdvitoUserRoleLink; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdvitoUserSession", function() { return AdvitoUserSession; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AccessToken", function() { return AccessToken; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EmailTemplate", function() { return EmailTemplate; });
+/* harmony import */ var objection__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! objection */ "objection");
+/* harmony import */ var objection__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(objection__WEBPACK_IMPORTED_MODULE_0__);
+
+class AdvitoUser extends objection__WEBPACK_IMPORTED_MODULE_0__["Model"] {
+  static get tableName() {
+    return 'blops.advitoUser';
+  }
+
+  fullName() {
+    return this.nameFirst + ' ' + this.nameLast;
+  }
+
+  static get relationMappings() {
+    return {
+      advitoUserRoleLink: {
+        relation: objection__WEBPACK_IMPORTED_MODULE_0__["Model"].HasManyRelation,
+        modelClass: AdvitoUserRoleLink,
+        join: {
+          from: 'advitoUser.id',
+          to: 'advitoUserRoleLink.advitoUserId'
+        }
+      },
+      advitoUserSession: {
+        relation: objection__WEBPACK_IMPORTED_MODULE_0__["Model"].HasManyRelation,
+        modelClass: AdvitoUserSession,
+        join: {
+          from: 'advitoUser.id',
+          to: 'advitoUserSession.advitoUserId'
+        }
+      },
+      accessToken: {
+        relation: objection__WEBPACK_IMPORTED_MODULE_0__["Model"].HasManyRelation,
+        modelClass: AccessToken,
+        join: {
+          from: 'advitoUser.id',
+          to: 'accessToken.advitoUserId'
+        }
+      }
+    };
+  }
+
+}
+class AdvitoUserRoleLink extends objection__WEBPACK_IMPORTED_MODULE_0__["Model"] {
+  static get tableName() {
+    return 'advitoUserRoleLink';
+  }
+
+}
+class AdvitoUserSession extends objection__WEBPACK_IMPORTED_MODULE_0__["Model"] {
+  static get tableName() {
+    return 'advitoUserSession';
+  }
+
+}
+class AccessToken extends objection__WEBPACK_IMPORTED_MODULE_0__["Model"] {
+  static get tableName() {
+    return 'accessToken';
+  }
+
+}
+class EmailTemplate extends objection__WEBPACK_IMPORTED_MODULE_0__["Model"] {
+  static get tableName() {
+    return 'emailTemplate';
+  }
+
+}
 
 /***/ }),
 
@@ -6692,48 +6807,29 @@ const projectSelect = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "user", function() { return user; });
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./constants/index.js");
+/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models */ "./models/index.js");
+/* harmony import */ var objection__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! objection */ "objection");
+/* harmony import */ var objection__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(objection__WEBPACK_IMPORTED_MODULE_2__);
+
+
 
 const user = {
   Query: {
     userList: async (_, {
       clientId = null
-    }, {
-      db
-    }) => await db('blops.advito_user').select({
-      id: 'id',
-      name: db.raw("CONCAT(name_first, ' ', name_last)"),
-      email: 'email'
-    }).where('client_id', clientId).orWhere('client_id', _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"]).orderBy('name_first'),
+    }) => await _models__WEBPACK_IMPORTED_MODULE_1__["AdvitoUser"].query().select('advitoUser.id', 'advitoUser.email', Object(objection__WEBPACK_IMPORTED_MODULE_2__["raw"])("CONCAT(name_first, ' ', name_last)").as('name')).where('clientId', clientId ? clientId : _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"]).orderBy('nameFirst'),
     user: (_, __, {
       user
     }) => user,
     projectManagerList: async (_, {
-      clientId
-    }, {
-      db
-    }) => await db('blops.advito_user').select({
-      id: 'id',
-      name: db.raw("CONCAT(name_first, ' ', name_last)"),
-      email: 'email'
-    }).where('client_id', clientId).orWhere('client_id', _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"]),
+      clientId = null
+    }) => await _models__WEBPACK_IMPORTED_MODULE_1__["AdvitoUser"].query().select('advitoUser.id', 'advitoUser.email', Object(objection__WEBPACK_IMPORTED_MODULE_2__["raw"])("CONCAT(name_first, ' ', name_last)").as('name')).where('client_id', clientId).orWhere('client_id', _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"]).orderBy('nameFirst'),
     leadAnalystList: async (_, {
-      clientId
-    }, {
-      db
-    }) => await db('blops.advito_user').select({
-      id: 'id',
-      name: db.raw("CONCAT(name_first, ' ', name_last)"),
-      email: 'email'
-    }).where('client_id', clientId).orWhere('client_id', _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"]),
+      clientId = null
+    }) => await _models__WEBPACK_IMPORTED_MODULE_1__["AdvitoUser"].query().select('advitoUser.id', 'advitoUser.email', Object(objection__WEBPACK_IMPORTED_MODULE_2__["raw"])("CONCAT(name_first, ' ', name_last)").as('name')).where('client_id', clientId).orWhere('client_id', _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"]).orderBy('nameFirst'),
     dataSpecialistList: async (_, {
-      clientId
-    }, {
-      db
-    }) => await db('blops.advito_user').select({
-      id: 'id',
-      name: db.raw("CONCAT(name_first, ' ', name_last)"),
-      email: 'email'
-    }).where('client_id', clientId).orWhere('client_id', _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"])
+      clientId = null
+    }) => await _models__WEBPACK_IMPORTED_MODULE_1__["AdvitoUser"].query().select('advitoUser.id', 'advitoUser.email', Object(objection__WEBPACK_IMPORTED_MODULE_2__["raw"])("CONCAT(name_first, ' ', name_last)").as('name')).where('client_id', clientId).orWhere('client_id', _constants__WEBPACK_IMPORTED_MODULE_0__["ADVITO_CLIENT"]).orderBy('nameFirst')
   }
 };
 
@@ -8546,6 +8642,17 @@ module.exports = require("knex");
 /***/ (function(module, exports) {
 
 module.exports = require("lodash.merge");
+
+/***/ }),
+
+/***/ "objection":
+/*!****************************!*\
+  !*** external "objection" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("objection");
 
 /***/ }),
 
