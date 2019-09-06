@@ -27,7 +27,7 @@ export const formatTime = num => numeral(num).format('00:00');
 
 export const formatPercent = num => numeral(num).format('0%');
 
-export const formatCurrency = num => numeral(num).format('$0,0.00');
+export const formatCurrency = num => numeral(num).format('0,0.00');
 
 export const filterGeography = (list, query) =>
   list.filter(

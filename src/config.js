@@ -94,6 +94,17 @@ export const discount = {
   actions: 120
 };
 
+export const scenario = {
+  round: 'P1',
+  scenarioName: 'test-scenario',
+  airlineContracts: true,
+  contractTargets: true,
+  preferredAirlines: true,
+  parameters: 'HIST',
+  tripDistribution: true,
+  effectiveSavings: ''
+};
+
 export const target = {
   targetAmount: 150,
   scoreTarget: 150,

@@ -64,7 +64,7 @@
             />
           </el-form-item>
         </div>
-        <div v-if="percentageDiscount">
+        <div v-if="nonFixedDiscount">
           <p class="section-header">Applicable</p>
           <div class="flex-row">
             <el-form-item label="Fare Basis" class="flex1">
@@ -273,14 +273,13 @@ export default {
     };
   },
   computed: {
-    percentageDiscount() {
+    nonFixedDiscount() {
       if (this.discount) {
-        return this.discount.discountTypeName === 'Percentage';
+        return this.discount.discountTypeName !== 'Fixed';
       } else return false;
     },
     rules() {
-      const applicableRulesRequired =
-        this.discount && this.discount.discountTypeName === 'Percentage';
+      const applicableRulesRequired = this.discount && this.nonFixedDiscount;
       return {
         topMarket: [
           {
@@ -317,20 +316,6 @@ export default {
             trigger: 'change'
           }
         ],
-        advancePurchase: [
-          {
-            required: true,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstay: [
-          {
-            required: true,
-            message: 'Please input a minimum stay',
-            trigger: 'change'
-          }
-        ],
         directionTypeApplicable: [
           {
             required: applicableRulesRequired,
@@ -349,20 +334,6 @@ export default {
           {
             required: applicableRulesRequired,
             message: 'Please select a currency.',
-            trigger: 'change'
-          }
-        ],
-        advancePurchaseApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstayApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input a minimum stay',
             trigger: 'change'
           }
         ]
