@@ -99,7 +99,10 @@
       <el-table-column label="Actions">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="Edit Scenario" placement="top">
-            <i class="fas fa-pencil-alt icon-spacer" />
+            <i
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditScenarioModal"
+            />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete Scenario" placement="top">
             <i class="fas fa-trash-alt" />
@@ -108,16 +111,19 @@
       </el-table-column>
     </el-table>
     <NewScenarioModal />
+    <EditScenarioModal />
   </div>
 </template>
 <script>
 import { formatDate, formatPercent, pluralize } from '@/helper';
 import NewScenarioModal from './NewScenarioModal';
+import EditScenarioModal from './EditScenarioModal';
 import { scenario } from '@/config';
 export default {
   name: 'ScenarioSettings',
   components: {
-    NewScenarioModal
+    NewScenarioModal,
+    EditScenarioModal
   },
   data() {
     return {
@@ -163,6 +169,9 @@ export default {
     },
     showNewScenarioModal() {
       this.$modal.show('new-scenario');
+    },
+    showEditScenarioModal() {
+      this.$modal.show('edit-scenario');
     }
   }
 };
