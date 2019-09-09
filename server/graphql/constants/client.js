@@ -1,3 +1,0 @@
-exports.AIR_APPLICATION_ID = 2;
-exports.ADVITO_CLIENT = 1;
-exports.ADVITO_GEOSET_ID = 1;

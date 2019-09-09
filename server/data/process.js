@@ -1,4 +1,4 @@
-exports.process = {
+export const processData = {
   contracts: 3,
   dataSets: 4,
   records: 1102000,
