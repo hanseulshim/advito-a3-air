@@ -22,7 +22,6 @@ export const authenticateUser = async (sessionToken, advitoDb) => {
     .where('s.session_token', sessionToken)
     .andWhere('s.session_end', null)
     .first();
-  console.log(session);
 
   if (!session) throw new ApolloError('Session is invalid.', 401);
 
