@@ -214,8 +214,8 @@ export const normalization = {
             ${amount},
             '${currencyCode}',
             '${directionType}',
-            '${advancePurchase}',
-            '${minstay}'
+            ${advancePurchase ? `'${advancePurchase}'` : null},
+            ${minstay ? `'${minstay}'` : null}
           )
         `)
       );
@@ -270,8 +270,8 @@ export const normalization = {
             ${amount},
             '${currencyCode}',
             '${directionType}',
-            '${advancePurchase}',
-            '${minstay}'
+            ${advancePurchase ? `'${advancePurchase}'` : null},
+            ${minstay ? `'${minstay}'` : null}
           )
         `)
       );

@@ -64,7 +64,7 @@
             />
           </el-form-item>
         </div>
-        <div v-if="percentageDiscount">
+        <div v-if="nonFixedDiscount">
           <p class="section-header">Applicable</p>
           <div class="flex-row">
             <el-form-item label="Fare Basis" class="flex1">
@@ -279,80 +279,15 @@ export default {
         advancePurchaseApplicable: null,
         minstayApplicable: null
       },
-      directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }],
-      tableData: [
-        {
-          label: '0-2',
-          percent: 5
-        },
-        {
-          label: '3-4',
-          percent: 20
-        },
-        {
-          label: '7-10',
-          percent: 11
-        },
-        {
-          label: '14-20',
-          percent: 25
-        },
-        {
-          label: '21+',
-          percent: 10
-        }
-      ],
-      tableData2: [
-        {
-          label: 'Sunday',
-          percent: 5
-        },
-        {
-          label: 'Monday',
-          percent: 20
-        },
-        {
-          label: 'Tuesday',
-          percent: 11
-        },
-        {
-          label: 'Wednesday',
-          percent: 25
-        },
-        {
-          label: 'Thursday',
-          percent: 10
-        },
-        {
-          label: 'Friday',
-          percent: 10
-        },
-        {
-          label: 'Saturday',
-          percent: 10
-        }
-      ],
-      tableData3: [
-        {
-          fareBasis: 'DGFBLM',
-          bookingClass: 'D',
-          usage: 98
-        },
-        {
-          fareBasis: 'J1NQO4C5',
-          bookingClass: 'D',
-          usage: 2
-        }
-      ]
+      directionOptions: [{ label: 'RT', value: 1 }, { label: 'OW', value: 2 }]
     };
   },
   computed: {
-    percentageDiscount() {
-      return this.discount.discountTypeName === 'Percentage';
+    nonFixedDiscount() {
+      return this.discount.discountTypeName !== 'Fixed';
     },
     rules() {
-      const applicableRulesRequired =
-        this.discount.discountTypeName === 'Percentage';
+      const applicableRulesRequired = this.nonFixedDiscount;
       return {
         topMarket: [
           {
@@ -389,20 +324,6 @@ export default {
             trigger: 'change'
           }
         ],
-        advancePurchase: [
-          {
-            required: true,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstay: [
-          {
-            required: true,
-            message: 'Please input a minimum stay',
-            trigger: 'change'
-          }
-        ],
         directionTypeApplicable: [
           {
             required: applicableRulesRequired,
@@ -421,20 +342,6 @@ export default {
           {
             required: applicableRulesRequired,
             message: 'Please select a currency.',
-            trigger: 'change'
-          }
-        ],
-        advancePurchaseApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input advance purchase days',
-            trigger: 'change'
-          }
-        ],
-        minstayApplicable: [
-          {
-            required: applicableRulesRequired,
-            message: 'Please input a minimum stay',
             trigger: 'change'
           }
         ]
@@ -558,7 +465,7 @@ export default {
       this.form.advancePurchase = compareFare.advancePurchase;
       this.form.minstay = compareFare.minstay;
       //If its a percentage discount, also sustain these form values
-      if (this.percentageDiscount) {
+      if (this.nonFixedDiscount) {
         const applicableFare = normMarket.fareList.find(
           fareList => fareList.fareType === DISCOUNT_LOOKUP.APPLICABLE_FARE_TYPE
         );

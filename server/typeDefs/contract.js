@@ -111,8 +111,8 @@ input NormalizationFareInput {
   amount: Float!
   currencyCode: String!
   directionType: String!
-  advancePurchase: String!
-  minstay: String!
+  advancePurchase: String
+  minstay: String
 }
 type TopMarket {
   id: Int
