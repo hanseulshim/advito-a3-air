@@ -44,7 +44,13 @@ functions:
 custom:
   serverless-offline:
     port: 8085
+  webpack:
+      webpackConfig: ./webpack.config.js
+      includeModules:
+        forceInclude:
+          - pg
 
 plugins:
+  - serverless-webpack
   - serverless-offline
   - serverless-plugin-warmup
