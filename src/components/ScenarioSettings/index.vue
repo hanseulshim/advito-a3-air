@@ -4,7 +4,10 @@
       <div class="section-header">
         {{ pluralize('scenario', scenarioList.length) }}
       </div>
-      <button class="button long">
+      <button v-if="selectedIdList.length" class="button long runScenarioBtn">
+        RUN SCENARIOS
+      </button>
+      <button class="button long" @click="showNewScenarioModal">
         + NEW SCENARIO
       </button>
     </div>
@@ -41,7 +44,11 @@
         :min-width="scenario.airlineContracts"
       >
         <template slot-scope="props">
-          {{ props.row.airlineContracts ? `checkmark` : '—' }}
+          <i
+            v-if="props.row.airlineContracts"
+            class="fas fa-check
+          icon-spacer"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -49,7 +56,11 @@
         :min-width="scenario.contractTargets"
       >
         <template slot-scope="props">
-          {{ props.row.contractTargets ? `checkmark` : '—' }}
+          <i
+            v-if="props.row.contractTargets"
+            class="fas fa-check
+          icon-spacer"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -57,7 +68,11 @@
         :min-width="scenario.preferredAirlines"
       >
         <template slot-scope="props">
-          {{ props.row.preferredAirlines ? `checkmark` : '—' }}
+          <i
+            v-if="props.row.preferredAirlines"
+            class="fas fa-check
+          icon-spacer"
+          />
         </template>
       </el-table-column>
       <el-table-column label="Paramters" :min-width="scenario.parameters">
@@ -68,7 +83,11 @@
         :min-width="scenario.tripDistribution"
       >
         <template slot-scope="props">
-          {{ props.row.tripDistribution ? `checkmark` : '—' }}
+          <i
+            v-if="props.row.tripDistribution"
+            class="fas fa-check
+          icon-spacer"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -79,26 +98,32 @@
       </el-table-column>
       <el-table-column label="Actions">
         <template slot-scope="props">
-          <el-tooltip effect="dark" content="Edit Discount" placement="top">
+          <el-tooltip effect="dark" content="Edit Scenario" placement="top">
             <i class="fas fa-pencil-alt icon-spacer" />
           </el-tooltip>
-          <el-tooltip effect="dark" content="Delete Discount" placement="top">
+          <el-tooltip effect="dark" content="Delete Scenario" placement="top">
             <i class="fas fa-trash-alt" />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
+    <NewScenarioModal />
   </div>
 </template>
 <script>
 import { formatDate, formatPercent, pluralize } from '@/helper';
+import NewScenarioModal from './NewScenarioModal';
 import { scenario } from '@/config';
 export default {
   name: 'ScenarioSettings',
+  components: {
+    NewScenarioModal
+  },
   data() {
     return {
       scenarioList: [
         {
+          id: 1,
           round: 'Baseline',
           scenarioName: 'test-scenario',
           airlineContracts: true,
@@ -109,6 +134,7 @@ export default {
           effectiveSavings: ''
         },
         {
+          id: 2,
           round: 'P1',
           scenarioName: 'test-scenario',
           airlineContracts: true,
@@ -134,7 +160,17 @@ export default {
       } else {
         this.selectedIdList.splice(index, 1);
       }
+    },
+    showNewScenarioModal() {
+      this.$modal.show('new-scenario');
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+@import '@/styles/global.scss';
+.runScenarioBtn {
+  margin-left: auto;
+  margin-right: 1em;
+}
+</style>
