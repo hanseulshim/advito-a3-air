@@ -108,24 +108,24 @@ const router = new Router({
               component: ScenarioSettings,
               children: [
                 {
-                  path: 'scenario-name',
+                  path: 'edit-scenario/scenario-name',
                   name: 'scenario-name',
                   component: ScenarioName
                 },
                 {
-                  path: 'scenario-contracts',
+                  path: 'edit-scenario/scenario-contracts',
                   component: ScenarioContracts
                 },
                 {
-                  path: 'scenario-preferred-airlines',
+                  path: 'edit-scenario/scenario-preferred-airlines',
                   component: ScenarioPreferredAirlines
                 },
                 {
-                  path: 'scenario-parameters',
+                  path: 'edit-scenario/scenario-parameters',
                   component: ScenarioParameters
                 },
                 {
-                  path: 'scenario-trip-distribution',
+                  path: 'edit-scenario/scenario-trip-distribution',
                   component: ScenarioTripDistribution
                 }
               ]

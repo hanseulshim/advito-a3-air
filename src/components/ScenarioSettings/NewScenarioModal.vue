@@ -44,7 +44,7 @@
         <el-radio-group v-model="form.scenarioTemplate">
           <el-radio :label="1">Initialize a blank scenario</el-radio>
           <el-radio :label="2">Copy parameters from a scenario</el-radio>
-          <el-radio :label="3">Copy paramters from another project</el-radio>
+          <el-radio :label="3">Copy parameters from another project</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item

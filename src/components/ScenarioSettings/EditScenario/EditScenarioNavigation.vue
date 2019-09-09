@@ -3,10 +3,16 @@
     <div class="scenario-navigation-container">
       <router-link
         class="data-nav-item nav-item data-nav"
-        :to="`/${$route.params.projectId}/scenario-settings/scenario-name`"
+        :to="
+          `/${
+            $route.params.projectId
+          }/scenario-settings/edit-scenario/scenario-name`
+        "
         :class="{
           active: $route.path.includes(
-            `/${$route.params.projectId}/scenario-settings/scenario-name`
+            `/${
+              $route.params.projectId
+            }/scenario-settings/edit-scenario/scenario-name`
           )
         }"
       >
@@ -14,10 +20,16 @@
       </router-link>
       <router-link
         class="data-nav-item nav-item data-nav"
-        :to="`/${$route.params.projectId}/scenario-settings/scenario-contracts`"
+        :to="
+          `/${
+            $route.params.projectId
+          }/scenario-settings/edit-scenario/scenario-contracts`
+        "
         :class="{
           active: $route.path.includes(
-            `/${$route.params.projectId}/scenario-settings/scenario-contracts`
+            `/${
+              $route.params.projectId
+            }/scenario-settings/edit-scenario/scenario-contracts`
           )
         }"
       >
@@ -28,13 +40,13 @@
         :to="
           `/${
             $route.params.projectId
-          }/scenario-settings/scenario-preferred-airlines`
+          }/scenario-settings/edit-scenario/scenario-preferred-airlines`
         "
         :class="{
           active: $route.path.includes(
             `/${
               $route.params.projectId
-            }/scenario-settings/scenario-preferred-airlines`
+            }/scenario-settings/edit-scenario/scenario-preferred-airlines`
           )
         }"
       >
@@ -43,11 +55,15 @@
       <router-link
         class="data-nav-item nav-item data-nav"
         :to="
-          `/${$route.params.projectId}/scenario-settings/scenario-parameters`
+          `/${
+            $route.params.projectId
+          }/scenario-settings/edit-scenario/scenario-parameters`
         "
         :class="{
           active: $route.path.includes(
-            `/${$route.params.projectId}/scenario-settings/scenario-parameters`
+            `/${
+              $route.params.projectId
+            }/scenario-settings/edit-scenario/scenario-parameters`
           )
         }"
       >
@@ -58,13 +74,13 @@
         :to="
           `/${
             $route.params.projectId
-          }/scenario-settings/scenario-trip-distribution`
+          }/scenario-settings/edit-scenario/scenario-trip-distribution`
         "
         :class="{
           active: $route.path.includes(
             `/${
               $route.params.projectId
-            }/scenario-settings/scenario-trip-distribution`
+            }/scenario-settings/edit-scenario/scenario-trip-distribution`
           )
         }"
       >
