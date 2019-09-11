@@ -127,54 +127,54 @@ export default {
           return false;
         }
       });
-    },
-    async createContract() {
-      try {
-        await this.$apollo.mutate({
-          mutation: CREATE_CONTRACT,
-          variables: {
-            ...this.form,
-            projectId: this.projectId
-          },
-          update: (store, { data: { createContract } }) => {
-            const query = {
-              query: GET_CONTRACT_LIST,
-              variables: {
-                projectId: this.projectId
-              }
-            };
-            const data = store.readQuery(query);
-            data.contractList.push(createContract);
-            store.writeQuery({
-              ...query,
-              data
-            });
-          }
-        });
-        this.$modal.show('success', {
-          message: 'Contract successfully created.',
-          name: 'new-contract'
-        });
-      } catch (error) {
-        this.$modal.show('error', {
-          message: error.message
-        });
-      }
-    },
-    updateType(value) {
-      if (value !== CONTRACT_LOOKUP.PROPOSAL) {
-        this.form.round = null;
-      }
-    },
-    beforeOpen(event) {
-      this.clientId = event.params.clientId;
-      this.projectId = event.params.projectId;
-    },
-    beforeClose() {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = null;
-      });
     }
+    //   async createContract() {
+    //     try {
+    //       await this.$apollo.mutate({
+    //         mutation: CREATE_CONTRACT,
+    //         variables: {
+    //           ...this.form,
+    //           projectId: this.projectId
+    //         },
+    //         update: (store, { data: { createContract } }) => {
+    //           const query = {
+    //             query: GET_CONTRACT_LIST,
+    //             variables: {
+    //               projectId: this.projectId
+    //             }
+    //           };
+    //           const data = store.readQuery(query);
+    //           data.contractList.push(createContract);
+    //           store.writeQuery({
+    //             ...query,
+    //             data
+    //           });
+    //         }
+    //       });
+    //       this.$modal.show('success', {
+    //         message: 'Contract successfully created.',
+    //         name: 'new-contract'
+    //       });
+    //     } catch (error) {
+    //       this.$modal.show('error', {
+    //         message: error.message
+    //       });
+    //     }
+    //   },
+    //   updateType(value) {
+    //     if (value !== CONTRACT_LOOKUP.PROPOSAL) {
+    //       this.form.round = null;
+    //     }
+    //   },
+    //   beforeOpen(event) {
+    //     this.clientId = event.params.clientId;
+    //     this.projectId = event.params.projectId;
+    //   },
+    //   beforeClose() {
+    //     Object.keys(this.form).forEach(key => {
+    //       this.form[key] = null;
+    //     });
+    //   }
   }
 };
 </script>

@@ -94,6 +94,9 @@ export default {
               client: matchedClient
             }
           });
+          if (path.includes('scenario-settings')) {
+            this.$router.replace({ name: 'scenario-settings' });
+          }
         } else return;
       } catch (error) {
         this.$modal.show('error', {
