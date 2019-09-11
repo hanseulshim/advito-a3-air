@@ -35,7 +35,7 @@
       <el-table-column
         prop="scenarioName"
         label="Scenario Name"
-        sortbale
+        sortable
         :min-width="scenario.scenarioName"
         :sort-orders="['ascending', 'descending']"
       />
@@ -101,7 +101,7 @@
           <el-tooltip effect="dark" content="Edit Scenario" placement="top">
             <i
               class="fas fa-pencil-alt icon-spacer"
-              @click="showEditScenarioModal"
+              @click="showEditScenarioModal(props.row)"
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete Scenario" placement="top">
@@ -170,8 +170,10 @@ export default {
     showNewScenarioModal() {
       this.$modal.show('new-scenario');
     },
-    showEditScenarioModal() {
-      this.$modal.show('edit-scenario');
+    showEditScenarioModal(scenario) {
+      this.$modal.show('edit-scenario', {
+        scenario
+      });
     }
   }
 };

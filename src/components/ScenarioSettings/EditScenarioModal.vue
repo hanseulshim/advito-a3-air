@@ -2,8 +2,8 @@
   <modal
     classes="modal-container"
     name="edit-scenario"
-    height="auto"
-    width="1200px"
+    height="800px"
+    width="1100px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
@@ -14,7 +14,7 @@
       </el-tooltip>
     </div>
     <EditScenarioNavigation />
-    <router-view />
+    <router-view :scenario="scenario" />
   </modal>
 </template>
 
@@ -36,21 +36,15 @@ export default {
       this.$modal.hide('edit-scenario');
       this.$router.replace({ name: 'scenario-settings' });
     },
-    validateForm() {
-      this.$refs.editProjectForm.validate(valid => {
-        if (valid) {
-          this.editScenario();
-        } else {
-          return false;
-        }
-      });
-    },
-    beforeOpen() {
+    beforeOpen(e) {
       this.$router.replace({ name: 'scenario-name' });
+      this.scenario = e.params.scenario;
     },
     beforeClose() {
       this.$router.replace({ name: 'scenario-settings' });
+      this.scenario = null;
     }
   }
 };
 </script>
+<style scoped lang="scss"></style>

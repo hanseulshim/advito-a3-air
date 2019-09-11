@@ -116,8 +116,7 @@ export default {
   display: flex;
   align-items: center;
 }
-.annualization {
-}
+
 .dataset {
   margin-left: auto;
 }

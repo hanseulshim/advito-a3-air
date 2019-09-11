@@ -1,11 +1,5 @@
 <template>
-  <modal
-    classes="modal-container"
-    name="new-scenario"
-    height="auto"
-    @before-open="beforeOpen"
-    @before-close="beforeClose"
-  >
+  <modal classes="modal-container" name="new-scenario" height="auto">
     <el-form
       ref="newScenario"
       :model="form"
@@ -24,11 +18,7 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="Round *" prop="round">
-        <el-select
-          v-model="form.round"
-          class="select-modal"
-          @change="updateRound"
-        >
+        <el-select v-model="form.round" class="select-modal">
           <el-option
             v-for="item in roundList"
             :key="item.id"
@@ -122,13 +112,13 @@ export default {
     validateForm() {
       this.$refs.newScenario.validate(valid => {
         if (valid) {
-          this.createContract();
+          this.createScenario();
         } else {
           return false;
         }
       });
-    }
-    //   async createContract() {
+    },
+    //   async createScenario() {
     //     try {
     //       await this.$apollo.mutate({
     //         mutation: CREATE_CONTRACT,
@@ -161,20 +151,12 @@ export default {
     //       });
     //     }
     //   },
-    //   updateType(value) {
-    //     if (value !== CONTRACT_LOOKUP.PROPOSAL) {
-    //       this.form.round = null;
-    //     }
-    //   },
-    //   beforeOpen(event) {
-    //     this.clientId = event.params.clientId;
-    //     this.projectId = event.params.projectId;
-    //   },
-    //   beforeClose() {
-    //     Object.keys(this.form).forEach(key => {
-    //       this.form[key] = null;
-    //     });
-    //   }
+    // },
+    beforeClose() {
+      Object.keys(this.form).forEach(key => {
+        this.form[key] = null;
+      });
+    }
   }
 };
 </script>
