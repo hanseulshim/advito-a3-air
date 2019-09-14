@@ -1,4 +1,4 @@
-export const airlineGroupCollection = {
+export default {
   name: 'Airline Group Collection Mutations',
   endpoint: 'http://localhost:8085/graphql',
   headers: { sessiontoken: 'MY^PR3TTYP0NY' },

@@ -1,6 +1,6 @@
 import { NORMALIZATION, NORMALIZATION_MARKET } from '../../constants';
 
-export const normalization = {
+export default {
   queries: {
     name: 'Normalization Queries',
     endpoint: 'http://localhost:8085/graphql',

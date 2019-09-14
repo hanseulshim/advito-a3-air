@@ -1,6 +1,6 @@
 import { PROJECT } from '../constants';
 
-export const project = {
+export default {
   queries: {
     name: 'Project Queries',
     endpoint: 'http://localhost:8085/graphql',

@@ -1,12 +1,12 @@
+import { SCENARIO } from '../constants';
 export default {
-  name: 'Client Queries',
+  name: 'Scenario  Queries',
   endpoint: 'http://localhost:8085/graphql',
   headers: { sessiontoken: 'MY^PR3TTYP0NY' },
   query: `
   {
-    clientList {
-      id
-      name
+    scenarioList(projectId: null) {
+      ${SCENARIO}
     }
   }`
 };

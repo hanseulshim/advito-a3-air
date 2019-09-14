@@ -8,7 +8,7 @@ import {
   AIRLINE_GROUP_COLLECTION,
   PREFERRED_AIRLINE_COLLECTION
 } from '../../constants';
-export const collection = {
+export default {
   queries: {
     name: 'Collection Queries',
     endpoint: 'http://localhost:8085/graphql',

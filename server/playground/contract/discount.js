@@ -1,6 +1,6 @@
 import { DISCOUNT } from '../../constants';
 
-export const discount = {
+export default {
   queries: {
     name: 'Discount Queries',
     endpoint: 'http://localhost:8085/graphql',

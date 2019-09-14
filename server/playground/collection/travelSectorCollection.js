@@ -1,4 +1,4 @@
-export const travelSectorCollection = {
+export default {
   name: 'Travel Sector Collection Mutations',
   endpoint: 'http://localhost:8085/graphql',
   headers: { sessiontoken: 'MY^PR3TTYP0NY' },

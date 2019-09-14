@@ -1,4 +1,4 @@
-export const user = {
+export default {
   queries: {
     name: 'User Queries',
     endpoint: 'http://localhost:8085/graphql',

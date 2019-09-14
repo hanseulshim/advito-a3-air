@@ -1,4 +1,4 @@
-export const rule = {
+export default {
   queries: {
     name: 'Rule Queries',
     endpoint: 'http://localhost:8085/graphql',

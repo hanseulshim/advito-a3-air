@@ -1,6 +1,6 @@
 import { TARGET_TERM, TARGET_LEVEL } from '../../constants';
 
-export const targetTerm = {
+export default {
   queries: {
     name: 'Target Term Queries',
     endpoint: 'http://localhost:8085/graphql',

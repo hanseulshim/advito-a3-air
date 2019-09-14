@@ -1,5 +1,5 @@
 import { DATA_SET } from '../constants';
-export const dataSet = {
+export default {
   queries: {
     name: 'Data Set Queries',
     endpoint: 'http://localhost:8085/graphql',

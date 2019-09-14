@@ -9,6 +9,7 @@ import { library } from './library';
 import { contract } from './contract';
 import { user } from './user';
 import { process } from './process';
+import { scenario } from './scenario';
 
 export const resolvers = {
   ...merge(
@@ -19,7 +20,8 @@ export const resolvers = {
     library,
     contract,
     user,
-    process
+    process,
+    scenario
   ),
   Date: new GraphQLScalarType({
     name: 'Date',
