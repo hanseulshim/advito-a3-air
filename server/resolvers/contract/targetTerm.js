@@ -1,13 +1,10 @@
 import { TARGET_TERM_LOOKUP } from '../../constants';
-import { targetLevelList } from '../../data';
 
 export const targetTerm = {
   Query: {
     targetTermList: async (_, { contractId }, { db }) =>
       contractId ? await getTargetTermList(db, contractId) : [],
     targetTerm: async (_, { id }, { db }) => await getTargetTerm(db, id),
-    targetLevelList: (_, { targetTermId }) =>
-      targetLevelList.filter(t => t.targetTermId === targetTermId),
     targetTypeList: async (_, __, { db }) =>
       await db('lov_lookup')
         .select({
