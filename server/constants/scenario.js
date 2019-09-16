@@ -4,7 +4,6 @@ export const SCENARIO = `scenarioId
         name
         description
         airlineContracts
-        contractTargets
         preferredAirlines
         useHistoricalShare
         tripDistribution

@@ -6,7 +6,6 @@ type Scenario {
   name: String
   description: String
   airlineContracts: Boolean
-  contractTargets: Boolean
   preferredAirlines: Boolean
   useHistoricalShare: Boolean
   tripDistribution: Boolean
