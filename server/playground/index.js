@@ -16,7 +16,8 @@ import process from './process';
 
 export default {
   tabs: [
-    scenario,
+    scenario.queries,
+    scenario.mutations,
     client,
     dataSet.queries,
     dataSet.mutations,

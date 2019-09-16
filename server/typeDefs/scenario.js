@@ -26,7 +26,7 @@ type Scenario {
   hidden: Boolean
   deleted: Boolean
   initType: Int
-  initScenarioid: Int
+  initScenarioId: Int
   preferredCarriersSet: Boolean
   contractsSet: Boolean
   overridesSet: Boolean
@@ -59,8 +59,23 @@ type Scenario {
   initializationScenarioId: Int
   scenarioParametersSet: Boolean
 }
+type ScenarioType {
+  id: Int
+  name: String
+}
 extend type Query {
   scenarioList(projectId: Int): [Scenario] @auth
   scenario(id: Int!): Scenario @auth
+  scenarioTypeList: [ScenarioType] @auth
+}
+extend type Mutation {
+  createScenario(
+    projectId: Int!
+    name: String!
+    shortName: String!
+    description: String
+    initType: Int!
+    initScenarioId: Int
+  ): Scenario @auth
 }
 `;
