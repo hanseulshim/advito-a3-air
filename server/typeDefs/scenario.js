@@ -2,9 +2,26 @@ export const scenario = `
 type Scenario {
   scenarioId: Int
   projectId: Int
-  scenarioSeq: Int
   shortName: String
   name: String
+  description: String
+  airlineContracts: Boolean
+  contractTargets: Boolean
+  preferredAirlines: Boolean
+  useHistoricalShare: Boolean
+  tripDistribution: Boolean
+  effectiveSavings: Float
+  influenceLevelCd: Int
+  priceInfluenceLevelCd: Int
+  biasOverride: Int
+  servedMarketThreshold: Float
+  overlapThreshold: Float
+  segmentIncrease: Float
+  fareIncrease: Float
+  useHistoricalFares: Boolean
+  ignoresSmallQsi: Boolean
+  smallQsiThreshold: Float
+  scenarioSeq: Int
   dateTimeCreated: Date
   dateTimeAccessed: Date
   hidden: Boolean
@@ -18,12 +35,6 @@ type Scenario {
   scenarioDataExported: Boolean
   fromDate: Date
   toDate: Date
-  influenceLevelCd: Int
-  priceInfluenceLevelCd: Int
-  servedMarketThreshold: Float
-  overlapThreshold: Float
-  segmentIncrease: Float
-  fareIncrease: Float
   segments: Float
   contractSegments: Float
   publishedFare: Float
@@ -48,14 +59,9 @@ type Scenario {
   initializationProjectId: Int
   initializationScenarioId: Int
   scenarioParametersSet: Boolean
-  useHistoricalShare: Boolean
-  biasOverride: Int
-  ignoresSmallQsi: Boolean
-  smallQsiThreshold: Float
-  useHistoricalFares: Boolean
-  description: String
 }
 extend type Query {
   scenarioList(projectId: Int): [Scenario] @auth
+  scenario(id: Int!): Scenario @auth
 }
 `;

@@ -1,54 +1,21 @@
 export const SCENARIO = `scenarioId
         projectId
-        scenarioSeq
         shortName
         name
-        dateTimeCreated
-        dateTimeAccessed
-        hidden
-        deleted
-        initType
-        initScenarioid
-        preferredCarriersSet
-        contractsSet
-        overridesSet
-        scenarioRun
-        scenarioDataExported
-        fromDate
-        toDate
+        description
+        airlineContracts
+        contractTargets
+        preferredAirlines
+        useHistoricalShare
+        tripDistribution
+        effectiveSavings
         influenceLevelCd
         priceInfluenceLevelCd
+        biasOverride
         servedMarketThreshold
         overlapThreshold
         segmentIncrease
         fareIncrease
-        segments
-        contractSegments
-        publishedFare
-        publishedCommissions
-        publishedOverrides
-        farePaid
-        commissions
-        backend
-        overrides
-        coverageSegments
-        coverageNetOutlays
-        overlapSegments
-        overlapMarkets
-        overlapNetOutlays
-        contractsEvaluated
-        overlapEvaluated
-        wizardInProgress
-        wizardCurrentStep
-        wizardContractOverride
-        wizardOverrideOverride
-        initializationType
-        initializationProjectId
-        initializationScenarioId
-        scenarioParametersSet
-        useHistoricalShare
-        biasOverride
-        ignoresSmallQsi
-        smallQsiThreshold
         useHistoricalFares
-        description`;
+        ignoresSmallQsi
+        smallQsiThreshold`;

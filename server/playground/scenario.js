@@ -8,5 +8,8 @@ export default {
     scenarioList(projectId: null) {
       ${SCENARIO}
     }
+    scenario(id: null) {
+      ${SCENARIO}
+    }
   }`
 };

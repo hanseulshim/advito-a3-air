@@ -4,4 +4,7 @@ export class Scenario extends Model {
   static get tableName() {
     return 'scenario';
   }
+  static get idColumn() {
+    return 'scenarioId';
+  }
 }
