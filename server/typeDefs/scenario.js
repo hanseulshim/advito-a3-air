@@ -86,6 +86,7 @@ extend type Query {
   scenario(id: Int!): Scenario @auth
   scenarioTypeList: [ScenarioType] @auth
   scenarioParameters: ScenarioParameters @auth
+  scenarioContractList(scenarioId: Int): [Int] @auth
 }
 extend type Mutation {
   createScenario(
@@ -120,5 +121,9 @@ extend type Mutation {
     ignoresSmallQsi: Boolean!
     smallQsiThreshold: Float
   ): Scenario @auth
+  toggleScenarioContract(
+    scenarioId: Int!
+    contractId: Int!
+  ): Int @auth
 }
 `;

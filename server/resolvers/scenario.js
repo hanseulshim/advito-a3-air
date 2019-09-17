@@ -1,5 +1,5 @@
 import { UserInputError } from 'apollo-server-lambda';
-import { Scenario, Lookup } from '../models';
+import { Scenario, Lookup, ScenarioContract } from '../models';
 import { SCENARIO_LOOKUP } from '../constants';
 import { raw } from 'objection';
 
@@ -30,7 +30,14 @@ export const scenario = {
         'type',
         SCENARIO_LOOKUP.BIAS_OVERRIDE_TYPE
       )
-    })
+    }),
+    scenarioContractList: async (_, { scenarioId }) => {
+      const scenarioContractList = await ScenarioContract.query().where(
+        'scenarioId',
+        scenarioId
+      );
+      return scenarioContractList.map(contract => contract.contractId);
+    }
   },
   Mutation: {
     createScenario: async (
@@ -144,6 +151,22 @@ export const scenario = {
           smallQsiThreshold
         });
       return getScenario(scenarioId);
+    },
+    toggleScenarioContract: async (_, { scenarioId, contractId }) => {
+      const scenarioContractList = await ScenarioContract.query()
+        .where('scenarioId', scenarioId)
+        .andWhere('contractId', contractId);
+      if (scenarioContractList.length) {
+        await ScenarioContract.query()
+          .delete()
+          .where('scenarioId', scenarioId)
+          .andWhere('contractId', contractId);
+      } else {
+        await ScenarioContract.query().insert({
+          scenarioId,
+          contractId
+        });
+      }
     }
   }
 };

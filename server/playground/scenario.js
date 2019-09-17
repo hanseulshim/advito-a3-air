@@ -16,6 +16,7 @@ export default {
       id
       name
     }
+    scenarioContractList(scenarioId: null)
     scenarioParameters {
       influenceLevelList {
         id
@@ -76,6 +77,10 @@ export default {
       ) {
         ${SCENARIO}
       }
+      toggleScenarioContract(
+        scenarioId: null
+        contractId: null
+      )
     }`
   }
 };
