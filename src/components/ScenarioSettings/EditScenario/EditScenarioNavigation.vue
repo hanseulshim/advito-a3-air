@@ -109,7 +109,7 @@ export default {
   display: flex;
   align-items: center;
   margin-top: 3em;
-  margin-bottom: 3em;
+  margin-bottom: 2em;
   border-bottom: 2px solid $botticelli;
   padding-bottom: 10px;
 }

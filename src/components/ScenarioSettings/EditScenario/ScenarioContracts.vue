@@ -22,6 +22,7 @@
         label="Effective Dates"
         prop="effectiveDates"
         :formatter="formatDate"
+        :min-width="contract.effectiveDates"
       />
       <el-table-column label="Point of Sale" prop="pointOfSale" />
     </el-table>
@@ -32,6 +33,7 @@
 </template>
 <script>
 import { formatDate } from '@/helper';
+import { contract } from '@/config';
 export default {
   name: 'ScenarioContracts',
   components: {},
@@ -100,7 +102,8 @@ export default {
           pointOfSale: 'Country...'
         }
       ],
-      selectedIdList: []
+      selectedIdList: [],
+      contract
     };
   },
   methods: {
