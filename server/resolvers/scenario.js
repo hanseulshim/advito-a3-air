@@ -152,21 +152,17 @@ export const scenario = {
         });
       return getScenario(scenarioId);
     },
-    toggleScenarioContract: async (_, { scenarioId, contractId }) => {
-      const scenarioContractList = await ScenarioContract.query()
-        .where('scenarioId', scenarioId)
-        .andWhere('contractId', contractId);
-      if (scenarioContractList.length) {
-        await ScenarioContract.query()
-          .delete()
-          .where('scenarioId', scenarioId)
-          .andWhere('contractId', contractId);
-      } else {
-        await ScenarioContract.query().insert({
+    toggleScenarioContract: async (_, { scenarioId, contractIdList }) => {
+      await ScenarioContract.query()
+        .delete()
+        .where('scenarioId', scenarioId);
+      const contractRequests = contractIdList.map(id =>
+        ScenarioContract.query().insert({
           scenarioId,
-          contractId
-        });
-      }
+          contractId: id
+        })
+      );
+      await Promise.all(contractRequests);
     }
   }
 };

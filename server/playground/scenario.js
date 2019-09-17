@@ -79,7 +79,7 @@ export default {
       }
       toggleScenarioContract(
         scenarioId: null
-        contractId: null
+        contractIdList: []
       )
     }`
   }

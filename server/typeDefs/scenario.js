@@ -123,7 +123,7 @@ extend type Mutation {
   ): Scenario @auth
   toggleScenarioContract(
     scenarioId: Int!
-    contractId: Int!
+    contractIdList: [Int]!
   ): Int @auth
 }
 `;
