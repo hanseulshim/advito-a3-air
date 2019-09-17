@@ -65,6 +65,7 @@ export const scenario = {
         const copyScenario = await Scenario.query().findById(
           initializationScenarioId
         );
+        params.projectId = copyScenario.projectId;
         params.influenceLevelCd = copyScenario.influenceLevelCd;
         params.priceInfluenceLevelCd = copyScenario.priceInfluenceLevelCd;
         params.biasOverride = copyScenario.biasOverride;
