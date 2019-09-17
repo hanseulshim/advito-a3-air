@@ -1,5 +1,1 @@
-const { process } = require('./process');
-
-module.exports = {
-  process
-};
+export * from './process';

@@ -1,20 +1,24 @@
-const { ApolloServer } = require('apollo-server-lambda');
-const { typeDefs } = require('./graphql/typeDefs');
-const { resolvers } = require('./graphql/resolvers');
-const requireAuthDirective = require('./graphql/directives');
-const { playground } = require('./graphql/playground');
-const { authenticateUser } = require('./graphql/helper');
+import { ApolloServer } from 'apollo-server-lambda';
+import { typeDefs } from './typeDefs';
+import { resolvers } from './resolvers';
+import requireAuthDirective from './directives';
+import playground from './playground';
+import { authenticateUser } from './helper';
+import Knex from 'knex';
+import { Model, knexSnakeCaseMappers } from 'objection';
 
 require('dotenv').config();
-const db = require('knex')({
+const db = Knex({
   client: 'pg',
   connection: {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.AIR_DB_DATABASE
-  }
+  },
+  ...knexSnakeCaseMappers()
 });
+Model.knex(db);
 const advitoDb = require('knex')({
   client: 'pg',
   connection: {
@@ -39,7 +43,7 @@ const server = new ApolloServer({
   playground
 });
 
-exports.graphqlHandler = server.createHandler({
+export const graphqlHandler = server.createHandler({
   cors: {
     origin: true,
     credentials: true

@@ -12,7 +12,9 @@
     "beta": "vue-cli-service build && aws s3 sync  ./dist s3://beta.boostlabs/air/ --acl public-read --profile boost",
     "beta-server": "cd ./server && yarn beta",
     "dev": "vue-cli-service build && aws s3 sync  ./dist s3://alpha.boostlabs/air-dev/ --acl public-read --profile boost",
-    "dev-server": "cd ./server && yarn dev"
+    "dev-server": "cd ./server && yarn dev",
+    "prod": "vue-cli-service build && aws s3 sync  ./dist s3://a3-prod1/ --acl public-read --profile advito",
+    "prod-server": "cd ./server && yarn prod"
   },
   "dependencies": {
     "apollo-boost": "^0.1.28",
