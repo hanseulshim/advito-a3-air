@@ -17,11 +17,11 @@
       :data="scenarioList"
       :default-sort="{ prop: 'name', order: 'ascending' }"
     >
-      <el-table-column label="Select" :min-width="scenario.round">
+      <el-table-column label="Select">
         <template slot-scope="props">
           <el-checkbox
-            :value="selectedIdList.includes(props.row.id)"
-            @change="toggleSelection(props.row.id)"
+            :value="selectedIdList.includes(props.row.scenarioId)"
+            @change="toggleSelection(props.row.scenarioId)"
           />
         </template>
       </el-table-column>
@@ -33,10 +33,10 @@
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="scenarioName"
+        prop="shortName"
         label="Scenario Name"
         sortable
-        :min-width="scenario.scenarioName"
+        :min-width="scenario.shortName"
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
@@ -75,7 +75,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Paramters" :min-width="scenario.parameters">
+      <el-table-column label="Parameters" :min-width="scenario.parameters">
         {{ 'Hist' }}
       </el-table-column>
       <el-table-column
@@ -115,7 +115,8 @@
   </div>
 </template>
 <script>
-import { formatDate, formatPercent, pluralize } from '@/helper';
+import { GET_SCENARIO_LIST, GET_PROJECT } from '@/graphql/queries';
+import { pluralize } from '@/helper';
 import NewScenarioModal from './NewScenarioModal';
 import EditScenarioModal from './EditScenarioModal';
 import { scenario } from '@/config';
@@ -125,34 +126,25 @@ export default {
     NewScenarioModal,
     EditScenarioModal
   },
+  apollo: {
+    project: {
+      query: GET_PROJECT
+    },
+    scenarioList: {
+      query: GET_SCENARIO_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    }
+  },
   data() {
     return {
-      scenarioList: [
-        {
-          id: 1,
-          round: 'Baseline',
-          scenarioName: 'test-scenario',
-          airlineContracts: true,
-          contractTargets: true,
-          preferredAirlines: true,
-          parameters: 'HIST',
-          tripDistribution: true,
-          effectiveSavings: ''
-        },
-        {
-          id: 2,
-          round: 'P1',
-          scenarioName: 'test-scenario',
-          airlineContracts: true,
-          contractTargets: true,
-          preferredAirlines: true,
-          parameters: 'HIST',
-          tripDistribution: true,
-          effectiveSavings: ''
-        }
-      ],
+      scenarioList: [],
       scenario,
-      selectedIdList: []
+      selectedIdList: [],
+      project: {}
     };
   },
   methods: {

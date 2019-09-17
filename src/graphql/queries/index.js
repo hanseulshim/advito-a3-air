@@ -7,3 +7,4 @@ export * from './contract';
 export * from './user';
 export * from './process';
 export * from './rule';
+export * from './scenario';
