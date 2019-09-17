@@ -43,11 +43,23 @@ export default {
         name: ""
         shortName: ""
         description: ""
-        initType: 92
-        initScenarioId: null
+        initializationType: 92
+        initializationProjectId: null
+        initializationScenarioId: null
       ) {
         ${SCENARIO}
       }
+      updateScenario(
+        scenarioId: null
+        name: ""
+        shortName: ""
+        description: ""
+      ) {
+        ${SCENARIO}
+      }
+      deleteScenario(
+        scenarioId: null
+      )
     }`
   }
 };
