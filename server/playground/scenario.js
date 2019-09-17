@@ -16,6 +16,20 @@ export default {
       id
       name
     }
+    scenarioParameters {
+      influenceLevelList {
+        id
+        name
+      }
+      priceInfluenceLevelList {
+        id
+        name
+      }
+      biasOverrideList {
+        id
+        name
+      }
+    }
   }`
   },
   mutations: {

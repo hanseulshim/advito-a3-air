@@ -63,10 +63,29 @@ type ScenarioType {
   id: Int
   name: String
 }
+type InfluenceLevelType {
+  id: Int
+  name: String
+}
+type PriceInfluenceLevelType {
+  id: Int
+  name: String
+}
+type BiasOverride {
+  id: Int
+  name: String
+}
+type ScenarioParameters {
+  influenceLevelList: [InfluenceLevelType]
+  priceInfluenceLevelList: [PriceInfluenceLevelType]
+  biasOverrideList: [BiasOverride]
+}
+
 extend type Query {
   scenarioList(projectId: Int): [Scenario] @auth
   scenario(id: Int!): Scenario @auth
   scenarioTypeList: [ScenarioType] @auth
+  scenarioParameters: ScenarioParameters @auth
 }
 extend type Mutation {
   createScenario(

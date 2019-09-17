@@ -23,7 +23,21 @@ export const scenario = {
         )
         .findById(id),
     scenarioTypeList: async () =>
-      await Lookup.query().where('type', SCENARIO_LOOKUP.INIT_TYPE)
+      await Lookup.query().where('type', SCENARIO_LOOKUP.INIT_TYPE),
+    scenarioParameters: async () => ({
+      influenceLevelList: await Lookup.query().where(
+        'type',
+        SCENARIO_LOOKUP.INFLUENCE_LEVEL_TYPE
+      ),
+      priceInfluenceLevelList: await Lookup.query().where(
+        'type',
+        SCENARIO_LOOKUP.PRICE_INFLUENCE_LEVEL_TYPE
+      ),
+      biasOverrideList: await Lookup.query().where(
+        'type',
+        SCENARIO_LOOKUP.BIAS_OVERRIDE_TYPE
+      )
+    })
   },
   Mutation: {
     // createScenario: async (
