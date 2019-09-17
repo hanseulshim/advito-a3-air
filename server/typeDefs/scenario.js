@@ -106,5 +106,19 @@ extend type Mutation {
   deleteScenario(
     scenarioId: Int!
   ): Int @auth
+  updateScenarioParameters(
+    scenarioId: Int!
+    influenceLevelCd: Int!
+    priceInfluenceLevelCd: Int!
+    biasOverride: Int!
+    servedMarketThreshold: Float
+    overlapThreshold: Float
+    segmentIncrease: Float
+    fareIncrease: Float
+    useHistoricalShare: Boolean!
+    useHistoricalFares: Boolean!
+    ignoresSmallQsi: Boolean!
+    smallQsiThreshold: Float
+  ): Scenario @auth
 }
 `;

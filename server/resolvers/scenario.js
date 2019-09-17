@@ -109,6 +109,41 @@ export const scenario = {
     deleteScenario: async (_, { scenarioId }) => {
       await Scenario.query().deleteById(scenarioId);
       return scenarioId;
+    },
+    updateScenarioParameters: async (
+      _,
+      {
+        scenarioId,
+        influenceLevelCd,
+        priceInfluenceLevelCd,
+        biasOverride,
+        servedMarketThreshold,
+        overlapThreshold,
+        segmentIncrease,
+        fareIncrease,
+        useHistoricalShare,
+        useHistoricalFares,
+        ignoresSmallQsi,
+        smallQsiThreshold
+      }
+    ) => {
+      await Scenario.query()
+        .findById(scenarioId)
+        .patch({
+          scenarioId,
+          influenceLevelCd,
+          priceInfluenceLevelCd,
+          biasOverride,
+          servedMarketThreshold,
+          overlapThreshold,
+          segmentIncrease,
+          fareIncrease,
+          useHistoricalShare,
+          useHistoricalFares,
+          ignoresSmallQsi,
+          smallQsiThreshold
+        });
+      return getScenario(scenarioId);
     }
   }
 };
