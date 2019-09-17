@@ -93,8 +93,18 @@ extend type Mutation {
     name: String!
     shortName: String!
     description: String
-    initType: Int!
-    initScenarioId: Int
+    initializationType: Int!
+    initializationProjectId: Int
+    initializationScenarioId: Int
   ): Scenario @auth
+  updateScenario(
+    scenarioId: Int!
+    name: String!
+    shortName: String!
+    description: String
+  ): Scenario @auth
+  deleteScenario(
+    scenarioId: Int!
+  ): Int @auth
 }
 `;
