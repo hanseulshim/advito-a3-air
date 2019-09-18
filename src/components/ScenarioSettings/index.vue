@@ -26,22 +26,23 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="round"
+        prop="shortName"
         label="Round"
-        :min-width="scenario.round"
+        :min-width="scenario.shortName"
         sortable
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="shortName"
+        prop="name"
         label="Scenario Name"
         sortable
-        :min-width="scenario.shortName"
+        :min-width="scenario.name"
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         label="Airline Contracts"
         :min-width="scenario.airlineContracts"
+        align="center"
       >
         <template slot-scope="props">
           <i
@@ -52,20 +53,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Contract Targets"
-        :min-width="scenario.contractTargets"
-      >
-        <template slot-scope="props">
-          <i
-            v-if="props.row.contractTargets"
-            class="fas fa-check
-          icon-spacer"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column
         label="Preferred Airlines"
         :min-width="scenario.preferredAirlines"
+        align="center"
       >
         <template slot-scope="props">
           <i
@@ -76,11 +66,14 @@
         </template>
       </el-table-column>
       <el-table-column label="Parameters" :min-width="scenario.parameters">
-        {{ 'Hist' }}
+        <template slot-scope="props">
+          {{ props.row.useHistoricalShare ? 'HIST' : ' ' }}
+        </template>
       </el-table-column>
       <el-table-column
         label="Trip Distribution"
         :min-width="scenario.tripDistribution"
+        align="center"
       >
         <template slot-scope="props">
           <i
@@ -91,11 +84,10 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="effectiveSavings"
         label="Effective Savings"
         :min-width="scenario.effectiveSavings"
-      >
-        {{ ' ' }}
-      </el-table-column>
+      />
       <el-table-column label="Actions">
         <template slot-scope="props">
           <el-tooltip effect="dark" content="Edit Scenario" placement="top">

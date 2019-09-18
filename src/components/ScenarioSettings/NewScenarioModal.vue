@@ -17,36 +17,71 @@
       <el-form-item label="Name *" prop="name">
         <el-input v-model="form.name" />
       </el-form-item>
-      <el-form-item label="Round *" prop="round">
-        <el-select v-model="form.round" class="select-modal">
+      <el-form-item label="Round *" prop="shortName">
+        <el-input v-model="form.shortName" />
+      </el-form-item>
+      <el-form-item label="Description">
+        <el-input v-model="form.description" type="textarea" />
+      </el-form-item>
+      <el-form-item prop="initializationType">
+        <el-radio-group v-model="form.initializationType">
+          <el-radio :label="SCENARIO_LOOKUP.INIT_BLANK"
+            >Initialize a blank scenario</el-radio
+          >
+          <el-radio :label="SCENARIO_LOOKUP.INIT_COPY_SCENARIO"
+            >Copy parameters from a scenario</el-radio
+          >
+          <el-radio :label="SCENARIO_LOOKUP.INIT_COPY_PROJECT"
+            >Copy parameters from another project</el-radio
+          >
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item
+        v-if="form.initializationType === 93"
+        prop="initializationScenarioId"
+      >
+        <el-select
+          v-model="form.initializationScenarioId"
+          class="select-modal"
+          placeholder="Select Scenario"
+        >
           <el-option
-            v-for="item in roundList"
+            v-for="item in scenarioList"
             :key="item.id"
             :label="item.name"
             :value="item.id"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="Description">
-        <el-input v-model="form.description" type="textarea" />
-      </el-form-item>
-      <el-form-item prop="scenarioTemplate">
-        <el-radio-group v-model="form.scenarioTemplate">
-          <el-radio :label="1">Initialize a blank scenario</el-radio>
-          <el-radio :label="2">Copy parameters from a scenario</el-radio>
-          <el-radio :label="3">Copy parameters from another project</el-radio>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item
-        v-if="form.scenarioTemplate === 2 || form.scenarioTemplate === 3"
+        v-if="form.initializationType === 94"
+        prop="initializationProjectId"
       >
         <el-select
-          v-model="form.scenarioId"
+          v-model="form.initializationProjectId"
+          class="select-modal"
+          placeholder="Select Project"
+          @change="getScenariosByProject"
+        >
+          <el-option
+            v-for="item in projectList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item
+        v-if="form.initializationType === 94 && form.initializationProjectId"
+        prop="initializationScenarioId"
+      >
+        <el-select
+          v-model="form.initializationScenarioId"
           class="select-modal"
           placeholder="Select Scenario"
         >
           <el-option
-            v-for="item in scenarioList"
+            v-for="item in scenarioListByProject"
             :key="item.id"
             :label="item.name"
             :value="item.id"
@@ -61,25 +96,67 @@
 </template>
 
 <script>
-// import { GET_SCENARIO_LIST } from '@/graphql/queries';
-// import { CONTRACT_LOOKUP } from '@/graphql/constants';
-// import { CREATE_SCENARIO } from '@/graphql/mutations';
+import {
+  GET_USER,
+  GET_CLIENT,
+  GET_PROJECT,
+  GET_SCENARIO_LIST,
+  GET_PROJECTS
+} from '@/graphql/queries';
+import { SCENARIO_LOOKUP } from '@/graphql/constants';
+import { CREATE_SCENARIO } from '@/graphql/mutations';
 export default {
   name: 'NewScenarioModal',
-  apollo: {},
+  apollo: {
+    user: {
+      query: GET_USER
+    },
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
+    projectList: {
+      query: GET_PROJECTS,
+      variables() {
+        return {
+          clientId: this.client.id,
+          userId: this.user.id
+        };
+      }
+    },
+    scenarioList: {
+      query: GET_SCENARIO_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    }
+  },
   data() {
     return {
+      user: null,
+      client: null,
+      project: null,
+      projectList: [],
+      scenarioList: [],
+      scenarioListByProject: [],
+      SCENARIO_LOOKUP,
       form: {
         name: null,
-        typeId: null,
-        round: null,
+        shortName: null,
         description: null,
-        scenarioTemplate: null,
-        scenarioId: null
-      },
-      roundList: [],
-      scenarioList: [],
-      rules: {
+        initializationType: null,
+        initializationProjectId: null,
+        initializationScenarioId: null
+      }
+    };
+  },
+  computed: {
+    rules() {
+      return {
         name: [
           {
             required: true,
@@ -87,23 +164,44 @@ export default {
             trigger: 'change'
           }
         ],
-        round: [
+        shortName: [
           {
             required: true,
             message: 'Please input a round.',
             trigger: 'change'
-          },
-          { type: 'number', message: 'Round must be a number' }
+          }
         ],
-        scenarioTemplate: [
+        initializationType: [
           {
             required: true,
             message: 'Please select a scenario initialization setting.',
             trigger: 'change'
           }
+        ],
+        initializationProjectId: [
+          {
+            required:
+              this.form.initializationType === SCENARIO_LOOKUP.INIT_COPY_PROJECT
+                ? true
+                : false,
+            message: 'Please select a project.',
+            trigger: 'change'
+          }
+        ],
+        initializationScenarioId: [
+          {
+            required:
+              this.form.initializationType ===
+                SCENARIO_LOOKUP.INIT_COPY_SCENARIO ||
+              SCENARIO_LOOKUP.INIT_COPY_PROJECT
+                ? true
+                : false,
+            message: 'Please input a scenario.',
+            trigger: 'change'
+          }
         ]
-      }
-    };
+      };
+    }
   },
   methods: {
     hideModal() {
@@ -118,40 +216,50 @@ export default {
         }
       });
     },
-    //   async createScenario() {
-    //     try {
-    //       await this.$apollo.mutate({
-    //         mutation: CREATE_CONTRACT,
-    //         variables: {
-    //           ...this.form,
-    //           projectId: this.projectId
-    //         },
-    //         update: (store, { data: { createContract } }) => {
-    //           const query = {
-    //             query: GET_CONTRACT_LIST,
-    //             variables: {
-    //               projectId: this.projectId
-    //             }
-    //           };
-    //           const data = store.readQuery(query);
-    //           data.contractList.push(createContract);
-    //           store.writeQuery({
-    //             ...query,
-    //             data
-    //           });
-    //         }
-    //       });
-    //       this.$modal.show('success', {
-    //         message: 'Contract successfully created.',
-    //         name: 'new-contract'
-    //       });
-    //     } catch (error) {
-    //       this.$modal.show('error', {
-    //         message: error.message
-    //       });
-    //     }
-    //   },
-    // },
+    async getScenariosByProject(projectId) {
+      try {
+        const {
+          data: { scenarioList }
+        } = await this.$apollo.query({
+          query: GET_SCENARIO_LIST,
+          variables: {
+            projectId
+          }
+        });
+        this.scenarioListByProject = scenarioList;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
+    },
+    async createScenario() {
+      try {
+        await this.$apollo.mutate({
+          mutation: CREATE_SCENARIO,
+          variables: {
+            projectId: this.projectId,
+            ...this.form
+          },
+          refetchQueries: () => [
+            {
+              query: GET_SCENARIO_LIST,
+              variables: {
+                projectId: this.project.id
+              }
+            }
+          ]
+        });
+        this.$modal.show('success', {
+          message: 'Scenario successfully created.',
+          name: 'new-scenario'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
+    },
     beforeClose() {
       Object.keys(this.form).forEach(key => {
         this.form[key] = null;

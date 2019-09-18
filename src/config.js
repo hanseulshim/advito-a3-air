@@ -95,7 +95,7 @@ export const discount = {
 };
 
 export const scenario = {
-  airlineContracts: 100,
+  airlineContracts: 75,
   backend: 100,
   biasOverride: 100,
   commissions: 100,
@@ -128,7 +128,7 @@ export const scenario = {
   overlapThreshold: 100,
   overrides: 100,
   overridesSet: 100,
-  preferredAirlines: 100,
+  preferredAirlines: 75,
   preferredCarriersSet: 100,
   priceInfluenceLevelCd: 100,
   projectId: 100,
@@ -146,9 +146,9 @@ export const scenario = {
   shortName: 100,
   smallQsiThreshold: 100,
   toDate: 100,
-  tripDistribution: 100,
+  tripDistribution: 75,
   useHistoricalFares: 100,
-  useHistoricalShare: 100,
+  useHistoricalShare: 50,
   wizardContractOverride: 100,
   wizardCurrentStep: 100,
   wizardInProgress: 100,
