@@ -60,6 +60,22 @@ export default {
       deleteScenario(
         scenarioId: null
       )
+      updateScenarioParameters(
+        scenarioId: null
+        influenceLevelCd: null
+        priceInfluenceLevelCd: null
+        biasOverride: null
+        servedMarketThreshold: null
+        overlapThreshold: null
+        segmentIncrease: null
+        fareIncrease: null
+        useHistoricalShare: null
+        useHistoricalFares: null
+        ignoresSmallQsi: null
+        smallQsiThreshold: null
+      ) {
+        ${SCENARIO}
+      }
     }`
   }
 };
