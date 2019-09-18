@@ -1,5 +1,10 @@
 <template>
-  <modal classes="modal-container" name="new-scenario" height="auto">
+  <modal
+    classes="modal-container"
+    name="new-scenario"
+    height="auto"
+    @before-close="beforeClose"
+  >
     <el-form
       ref="newScenario"
       :model="form"
@@ -24,7 +29,10 @@
         <el-input v-model="form.description" type="textarea" />
       </el-form-item>
       <el-form-item prop="initializationType">
-        <el-radio-group v-model="form.initializationType">
+        <el-radio-group
+          v-model="form.initializationType"
+          @change="restoreScenarioList"
+        >
           <el-radio :label="SCENARIO_LOOKUP.INIT_BLANK"
             >Initialize a blank scenario</el-radio
           >
@@ -35,23 +43,6 @@
             >Copy parameters from another project</el-radio
           >
         </el-radio-group>
-      </el-form-item>
-      <el-form-item
-        v-if="form.initializationType === 93"
-        prop="initializationScenarioId"
-      >
-        <el-select
-          v-model="form.initializationScenarioId"
-          class="select-modal"
-          placeholder="Select Scenario"
-        >
-          <el-option
-            v-for="item in scenarioList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
       </el-form-item>
       <el-form-item
         v-if="form.initializationType === 94"
@@ -72,7 +63,10 @@
         </el-select>
       </el-form-item>
       <el-form-item
-        v-if="form.initializationType === 94 && form.initializationProjectId"
+        v-if="
+          form.initializationType === 93 ||
+            (form.initializationType === 94 && form.initializationProjectId)
+        "
         prop="initializationScenarioId"
       >
         <el-select
@@ -81,10 +75,10 @@
           placeholder="Select Scenario"
         >
           <el-option
-            v-for="item in scenarioListByProject"
+            v-for="item in scenarioList"
             :key="item.id"
             :label="item.name"
-            :value="item.id"
+            :value="item.scenarioId"
           />
         </el-select>
       </el-form-item>
@@ -125,14 +119,6 @@ export default {
           userId: this.user.id
         };
       }
-    },
-    scenarioList: {
-      query: GET_SCENARIO_LIST,
-      variables() {
-        return {
-          projectId: this.project.id
-        };
-      }
     }
   },
   data() {
@@ -142,7 +128,6 @@ export default {
       project: null,
       projectList: [],
       scenarioList: [],
-      scenarioListByProject: [],
       SCENARIO_LOOKUP,
       form: {
         name: null,
@@ -216,6 +201,25 @@ export default {
         }
       });
     },
+    async restoreScenarioList(initType) {
+      if (initType === 93) {
+        try {
+          const {
+            data: { scenarioList }
+          } = await this.$apollo.query({
+            query: GET_SCENARIO_LIST,
+            variables: {
+              projectId: this.project.id
+            }
+          });
+          this.scenarioList = scenarioList;
+        } catch (error) {
+          this.$modal.show('error', {
+            message: error.message
+          });
+        }
+      }
+    },
     async getScenariosByProject(projectId) {
       try {
         const {
@@ -226,7 +230,7 @@ export default {
             projectId
           }
         });
-        this.scenarioListByProject = scenarioList;
+        this.scenarioList = scenarioList;
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
@@ -238,7 +242,7 @@ export default {
         await this.$apollo.mutate({
           mutation: CREATE_SCENARIO,
           variables: {
-            projectId: this.projectId,
+            projectId: this.project.id,
             ...this.form
           },
           refetchQueries: () => [

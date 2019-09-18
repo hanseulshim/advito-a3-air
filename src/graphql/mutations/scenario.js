@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { SCENARIO } from '../constants';
 
 export const CREATE_SCENARIO = gql`
   mutation createScenario(
@@ -13,11 +14,13 @@ export const CREATE_SCENARIO = gql`
     createScenario(
       projectId: $projectId
       name: $name
-      shortName: $shortname
+      shortName: $shortName
       description: $description
       initializationType: $initializationType
       initializationProjectId: $initializationProjectId
       initializationScenarioId: $initializationScenarioId
-    )
+    ){
+        ${SCENARIO}
+    }
   }
 `;
