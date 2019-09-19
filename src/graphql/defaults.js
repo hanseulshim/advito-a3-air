@@ -2,6 +2,7 @@ export default {
   client: {
     id: null,
     name: null,
+    gcn: null,
     __typename: 'Client'
   },
   projectStatusList: [

@@ -6,7 +6,8 @@ export const client = {
       await db('blops.client_advito_application_link as link')
         .select({
           id: 'client.id',
-          name: 'client.client_name'
+          name: 'client.client_name',
+          gcn: 'client.gcn'
         })
         .leftJoin('blops.client', 'client.id', 'link.client_id')
         .where('link.advito_application_id', AIR_APPLICATION_ID)
