@@ -1,6 +1,6 @@
 export const scenario = `
 type Scenario {
-  scenarioId: Int
+  id: Int
   projectId: Int
   shortName: String
   name: String
@@ -86,6 +86,7 @@ extend type Query {
   scenario(id: Int!): Scenario @auth
   scenarioTypeList: [ScenarioType] @auth
   scenarioParameters: ScenarioParameters @auth
+  scenarioContractList(scenarioId: Int): [Int] @auth
 }
 extend type Mutation {
   createScenario(
@@ -98,16 +99,16 @@ extend type Mutation {
     initializationScenarioId: Int
   ): Scenario @auth
   updateScenario(
-    scenarioId: Int!
+    id: Int!
     name: String!
     shortName: String!
     description: String
   ): Scenario @auth
   deleteScenario(
-    scenarioId: Int!
+    id: Int!
   ): Int @auth
   updateScenarioParameters(
-    scenarioId: Int!
+    id: Int!
     influenceLevelCd: Int!
     priceInfluenceLevelCd: Int!
     biasOverride: Int!
@@ -120,5 +121,9 @@ extend type Mutation {
     ignoresSmallQsi: Boolean!
     smallQsiThreshold: Float
   ): Scenario @auth
+  toggleScenarioContract(
+    scenarioId: Int!
+    contractIdList: [Int]!
+  ): Int @auth
 }
 `;

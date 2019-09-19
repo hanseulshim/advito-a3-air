@@ -1,5 +1,5 @@
 import { UserInputError } from 'apollo-server-lambda';
-import { Scenario, Lookup } from '../models';
+import { Scenario, Lookup, ScenarioContract } from '../models';
 import { SCENARIO_LOOKUP } from '../constants';
 import { raw } from 'objection';
 
@@ -9,6 +9,7 @@ export const scenario = {
       await Scenario.query()
         .select(
           'scenario.*',
+          'scenario.scenarioId as id',
           raw(
             `EXISTS(SELECT * FROM scenariocontract WHERE scenario_id = scenario.scenario_id)`
           ).as('airlineContracts')
@@ -30,7 +31,14 @@ export const scenario = {
         'type',
         SCENARIO_LOOKUP.BIAS_OVERRIDE_TYPE
       )
-    })
+    }),
+    scenarioContractList: async (_, { scenarioId }) => {
+      const scenarioContractList = await ScenarioContract.query().where(
+        'scenarioId',
+        scenarioId
+      );
+      return scenarioContractList.map(contract => contract.contractId);
+    }
   },
   Mutation: {
     createScenario: async (
@@ -96,24 +104,24 @@ export const scenario = {
       });
       return getScenario(resultScenario.scenarioId);
     },
-    updateScenario: async (_, { scenarioId, name, shortName, description }) => {
+    updateScenario: async (_, { id, name, shortName, description }) => {
       await Scenario.query()
-        .findById(scenarioId)
+        .findById(id)
         .patch({
           name,
           shortName,
           description
         });
-      return getScenario(scenarioId);
+      return getScenario(id);
     },
-    deleteScenario: async (_, { scenarioId }) => {
-      await Scenario.query().deleteById(scenarioId);
-      return scenarioId;
+    deleteScenario: async (_, { id }) => {
+      await Scenario.query().deleteById(id);
+      return id;
     },
     updateScenarioParameters: async (
       _,
       {
-        scenarioId,
+        id,
         influenceLevelCd,
         priceInfluenceLevelCd,
         biasOverride,
@@ -128,9 +136,8 @@ export const scenario = {
       }
     ) => {
       await Scenario.query()
-        .findById(scenarioId)
+        .findById(id)
         .patch({
-          scenarioId,
           influenceLevelCd,
           priceInfluenceLevelCd,
           biasOverride,
@@ -143,7 +150,19 @@ export const scenario = {
           ignoresSmallQsi,
           smallQsiThreshold
         });
-      return getScenario(scenarioId);
+      return getScenario(id);
+    },
+    toggleScenarioContract: async (_, { scenarioId, contractIdList }) => {
+      await ScenarioContract.query()
+        .delete()
+        .where('scenarioId', scenarioId);
+      const contractRequests = contractIdList.map(id =>
+        ScenarioContract.query().insert({
+          scenarioId,
+          contractId: id
+        })
+      );
+      await Promise.all(contractRequests);
     }
   }
 };
@@ -152,6 +171,7 @@ const getScenario = async id =>
   await Scenario.query()
     .select(
       'scenario.*',
+      'scenario.scenarioId as id',
       raw(
         `EXISTS(SELECT * FROM scenariocontract WHERE scenario_id = scenario.scenario_id)`
       ).as('airlineContracts')

@@ -1,4 +1,4 @@
-export const SCENARIO = `scenarioId
+export const SCENARIO = `id
         projectId
         shortName
         name
