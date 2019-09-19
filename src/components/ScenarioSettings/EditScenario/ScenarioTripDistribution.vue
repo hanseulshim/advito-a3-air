@@ -139,6 +139,7 @@ export default {
           countryCode: 'AUS'
         }
       ],
+      tableData: [],
       form: {
         market: null,
         sector: 'Intra Eur',
