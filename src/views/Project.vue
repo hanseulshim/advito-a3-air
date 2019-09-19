@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      project: {},
+      project: null,
       projectStatusList: []
     };
   },
