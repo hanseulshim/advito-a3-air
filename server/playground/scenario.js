@@ -51,7 +51,7 @@ export default {
         ${SCENARIO}
       }
       updateScenario(
-        scenarioId: null
+        id: null
         name: ""
         shortName: ""
         description: ""
@@ -59,10 +59,10 @@ export default {
         ${SCENARIO}
       }
       deleteScenario(
-        scenarioId: null
+        id: null
       )
       updateScenarioParameters(
-        scenarioId: null
+        id: null
         influenceLevelCd: null
         priceInfluenceLevelCd: null
         biasOverride: null

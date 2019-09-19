@@ -1,6 +1,6 @@
 export const scenario = `
 type Scenario {
-  scenarioId: Int
+  id: Int
   projectId: Int
   shortName: String
   name: String
@@ -99,16 +99,16 @@ extend type Mutation {
     initializationScenarioId: Int
   ): Scenario @auth
   updateScenario(
-    scenarioId: Int!
+    id: Int!
     name: String!
     shortName: String!
     description: String
   ): Scenario @auth
   deleteScenario(
-    scenarioId: Int!
+    id: Int!
   ): Int @auth
   updateScenarioParameters(
-    scenarioId: Int!
+    id: Int!
     influenceLevelCd: Int!
     priceInfluenceLevelCd: Int!
     biasOverride: Int!

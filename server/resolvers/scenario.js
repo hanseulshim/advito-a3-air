@@ -9,6 +9,7 @@ export const scenario = {
       await Scenario.query()
         .select(
           'scenario.*',
+          'scenario.scenarioId as id',
           raw(
             `EXISTS(SELECT * FROM scenariocontract WHERE scenario_id = scenario.scenario_id)`
           ).as('airlineContracts')
@@ -103,24 +104,24 @@ export const scenario = {
       });
       return getScenario(resultScenario.scenarioId);
     },
-    updateScenario: async (_, { scenarioId, name, shortName, description }) => {
+    updateScenario: async (_, { id, name, shortName, description }) => {
       await Scenario.query()
-        .findById(scenarioId)
+        .findById(id)
         .patch({
           name,
           shortName,
           description
         });
-      return getScenario(scenarioId);
+      return getScenario(id);
     },
-    deleteScenario: async (_, { scenarioId }) => {
-      await Scenario.query().deleteById(scenarioId);
-      return scenarioId;
+    deleteScenario: async (_, { id }) => {
+      await Scenario.query().deleteById(id);
+      return id;
     },
     updateScenarioParameters: async (
       _,
       {
-        scenarioId,
+        id,
         influenceLevelCd,
         priceInfluenceLevelCd,
         biasOverride,
@@ -135,9 +136,8 @@ export const scenario = {
       }
     ) => {
       await Scenario.query()
-        .findById(scenarioId)
+        .findById(id)
         .patch({
-          scenarioId,
           influenceLevelCd,
           priceInfluenceLevelCd,
           biasOverride,
@@ -150,7 +150,7 @@ export const scenario = {
           ignoresSmallQsi,
           smallQsiThreshold
         });
-      return getScenario(scenarioId);
+      return getScenario(id);
     },
     toggleScenarioContract: async (_, { scenarioId, contractIdList }) => {
       await ScenarioContract.query()
@@ -171,6 +171,7 @@ const getScenario = async id =>
   await Scenario.query()
     .select(
       'scenario.*',
+      'scenario.scenarioId as id',
       raw(
         `EXISTS(SELECT * FROM scenariocontract WHERE scenario_id = scenario.scenario_id)`
       ).as('airlineContracts')
