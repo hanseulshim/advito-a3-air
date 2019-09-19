@@ -55,6 +55,11 @@ type Geography {
   locationType: Int
 }
 
+type Market {
+  id: Int
+  name: String
+}
+
 extend type Query {
   airlineList: [Airline] @auth
   airportList: [Airport] @auth
@@ -64,7 +69,7 @@ extend type Query {
   countryList: [Geography] @auth
   currencyList: [Currency] @auth
   geographyList: [Geography] @auth
-  marketList: [Geography] @auth
+  marketGeoList: [Geography] @auth
   distanceUnitList: [DistanceUnit] @auth
 }
 `;

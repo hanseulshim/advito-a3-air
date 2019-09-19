@@ -89,7 +89,7 @@
 <script>
 import { removeTypename, filterGeography } from '@/helper';
 import {
-  GET_MARKET_LIST,
+  GET_MARKET_GEO_LIST,
   GET_MARKET_RULE_LIST,
   GET_DISCOUNT,
   GET_TARGET_TERM
@@ -112,8 +112,8 @@ export default {
     }
   },
   apollo: {
-    marketList: {
-      query: GET_MARKET_LIST
+    marketGeoList: {
+      query: GET_MARKET_GEO_LIST
     },
     marketRuleList: {
       query: GET_MARKET_RULE_LIST,
@@ -130,7 +130,7 @@ export default {
   },
   data() {
     return {
-      marketList: [],
+      marketGeoList: [],
       originOptions: [],
       arrivalOptions: [],
       exclude: false,
@@ -256,7 +256,7 @@ export default {
     filterOriginMarkets(query) {
       if (query !== '') {
         this.loadingOrigin = true;
-        this.originOptions = filterGeography(this.marketList, query);
+        this.originOptions = filterGeography(this.marketGeoList, query);
         this.loadingOrigin = false;
       } else {
         this.originOptions = [];
@@ -265,7 +265,7 @@ export default {
     filterArrivalMarkets(query) {
       if (query !== '') {
         this.loadingArrival = true;
-        this.arrivalOptions = filterGeography(this.marketList, query);
+        this.arrivalOptions = filterGeography(this.marketGeoList, query);
         this.loadingArrival = false;
       } else {
         this.arrivalOptions = [];

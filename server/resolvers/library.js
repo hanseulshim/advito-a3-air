@@ -125,7 +125,7 @@ export const library = {
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
         .andWhere('isdeleted', false)
         .orderBy('code'),
-    marketList: async (_, __, { db }) =>
+    marketGeoList: async (_, __, { db }) =>
       await db('location')
         .select({
           id: 'id',
