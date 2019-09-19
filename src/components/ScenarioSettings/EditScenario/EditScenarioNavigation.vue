@@ -108,7 +108,7 @@ export default {
 .scenario-navigation-container {
   display: flex;
   align-items: center;
-  margin-top: 3em;
+  margin-top: 2em;
   margin-bottom: 2em;
   border-bottom: 2px solid $botticelli;
   padding-bottom: 10px;

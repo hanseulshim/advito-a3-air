@@ -52,7 +52,7 @@ publishedCommissions
 publishedFare
 publishedOverrides
 scenarioDataExported
-scenarioId
+id
 scenarioParametersSet
 scenarioRun
 scenarioSeq

@@ -5,6 +5,7 @@
     label-position="left"
     label-width="75px"
     hide-required-asterisk
+    class="trip-dist-form"
   >
     <div class="form-row">
       <el-form-item label="Market *" prop="market" class="flex-3">
@@ -48,26 +49,82 @@
         <el-checkbox v-model="form.allPOS"
           >All Point of Sale Countries</el-checkbox
         >
+        <div class="checkbox-container">
+          <el-checkbox
+            v-for="country in pointOfSaleList"
+            :key="country.countryCode"
+            :label="country.id"
+            >{{ country }}</el-checkbox
+          >
+        </div>
       </div>
+      <div class="form-column">
+        <span class="form-title"> Divisions</span>
+        <el-checkbox v-model="form.allPOS">All Divisions</el-checkbox>
+        <div class="checkbox-container">
+          <el-checkbox
+            v-for="country in pointOfSaleList"
+            :key="country.countryCode"
+            :label="country.id"
+            >{{ country }}</el-checkbox
+          >
+        </div>
+      </div>
+    </div>
+    <div class="form-row"></div>
+    <div class="save-container">
+      <button class="button" type="button" @click="saveScenarioParameters">
+        SAVE
+      </button>
     </div>
   </el-form>
 </template>
-
 <script>
+import { GET_POINT_OF_SALE_LIST } from '@/graphql/queries';
 export default {
   name: 'ScenarioTripDistribution',
-  components: {},
   props: {
     scenario: {
       default: null,
       type: Object
     }
   },
-  apollo: {},
+  // apollo: {
+  //   pointOfSaleList:{
+  //     query: GET_POINT_OF_SALE_LIST,
+  //     variables:
+  //   }
+  // },
   data() {
     return {
       markets: ['A', 'B', 'C', 'D'],
       fareCategories: [],
+      pointOfSaleList: [
+        {
+          id: 1,
+          countryCode: 'USA'
+        },
+        {
+          id: 2,
+          countryCode: 'FRA'
+        },
+        {
+          id: 3,
+          countryCode: 'GER'
+        },
+        {
+          id: 4,
+          countryCode: 'ANG'
+        },
+        {
+          id: 5,
+          countryCode: 'SPN'
+        },
+        {
+          id: 6,
+          countryCode: 'AUS'
+        }
+      ],
       form: {
         market: null,
         sector: 'Intra Eur',
@@ -95,21 +152,31 @@ export default {
         this.form.restrictedEconomy = false;
         this.form.leisureFares = false;
       }
+    },
+    saveScenarioParameters() {
+      alert('saved');
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+.trip-dist-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .form-row {
   display: flex;
   box-sizing: border-box;
-  flex: 1;
+  margin-bottom: 1em;
+  justify-content: space-between;
 }
 
 .form-column {
   display: flex;
   flex-direction: column;
-
+  width: 30%;
   .el-checkbox {
     margin-bottom: 5px;
   }
@@ -134,5 +201,22 @@ export default {
 .form-title {
   font-weight: 500;
   color: black;
+  margin-bottom: 10px;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dedede;
+  padding: 1em;
+  height: 150px;
+  overflow: scroll;
+}
+
+.save-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
 }
 </style>

@@ -136,7 +136,7 @@ export const scenario = {
   publishedFare: 100,
   publishedOverrides: 100,
   scenarioDataExported: 100,
-  scenarioId: 100,
+  id: 100,
   scenarioParametersSet: 100,
   scenarioRun: 100,
   scenarioSeq: 100,

@@ -78,7 +78,7 @@
             v-for="item in scenarioList"
             :key="item.id"
             :label="item.name"
-            :value="item.scenarioId"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>

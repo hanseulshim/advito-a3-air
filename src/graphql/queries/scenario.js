@@ -1,66 +1,18 @@
 import gql from 'graphql-tag';
+import { SCENARIO } from '../constants';
 
 export const GET_SCENARIO_LIST = gql`
   query scenarioList($projectId: Int) {
     scenarioList(projectId: $projectId) {
-      scenarioId
-      projectId
-      shortName
-      name
-      description
-      airlineContracts
-      preferredAirlines
-      useHistoricalShare
-      tripDistribution
-      effectiveSavings
-      influenceLevelCd
-      priceInfluenceLevelCd
-      biasOverride
-      servedMarketThreshold
-      overlapThreshold
-      segmentIncrease
-      fareIncrease
-      useHistoricalFares
-      ignoresSmallQsi
-      smallQsiThreshold
-      scenarioSeq
-      dateTimeCreated
-      dateTimeAccessed
-      hidden
-      deleted
-      initType
-      initScenarioId
-      preferredCarriersSet
-      contractsSet
-      overridesSet
-      scenarioRun
-      scenarioDataExported
-      fromDate
-      toDate
-      segments
-      contractSegments
-      publishedFare
-      publishedCommissions
-      publishedOverrides
-      farePaid
-      commissions
-      backend
-      overrides
-      coverageSegments
-      coverageNetOutlays
-      overlapSegments
-      overlapMarkets
-      overlapNetOutlays
-      contractsEvaluated
-      overlapEvaluated
-      wizardInProgress
-      wizardCurrentStep
-      wizardContractOverride
-      wizardOverrideOverride
-      initializationType
-      initializationProjectId
-      initializationScenarioId
-      scenarioParametersSet
+      ${SCENARIO}
+    }
+  }
+`;
+
+export const GET_SCENARIO = gql`
+  query scenario($id: Int!) {
+    scenario(id: $id) {
+      ${SCENARIO}
     }
   }
 `;

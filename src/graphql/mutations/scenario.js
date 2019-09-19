@@ -24,3 +24,21 @@ export const CREATE_SCENARIO = gql`
     }
   }
 `;
+
+export const UPDATE_SCENARIO = gql`
+  mutation updateScenario(
+    $id: Int!
+    $name: String!
+    $shortName: String!
+    $description: String
+  ) {
+    updateScenario(
+      id: $id
+      name: $name
+      shortName: $shortName
+      description: $description
+    ){
+    ${SCENARIO}
+    }
+  }
+`;

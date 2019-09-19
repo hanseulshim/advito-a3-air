@@ -7,14 +7,16 @@
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >
-    <div class="title-row space-between">
-      <div class="section-header">edit scenario</div>
-      <el-tooltip effect="dark" content="Close Modal" placement="top">
-        <i class="fas fa-times close-modal-button" @click="hideModal"></i>
-      </el-tooltip>
+    <div class="container">
+      <div class="title-row space-between">
+        <div class="section-header">edit scenario</div>
+        <el-tooltip effect="dark" content="Close Modal" placement="top">
+          <i class="fas fa-times close-modal-button" @click="hideModal"></i>
+        </el-tooltip>
+      </div>
+      <EditScenarioNavigation />
+      <router-view :scenario="scenario" class="content" />
     </div>
-    <EditScenarioNavigation />
-    <router-view :scenario="scenario" />
   </modal>
 </template>
 
@@ -47,4 +49,14 @@ export default {
   }
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+}
+</style>

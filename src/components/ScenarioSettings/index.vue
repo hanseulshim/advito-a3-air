@@ -20,8 +20,8 @@
       <el-table-column label="Select">
         <template slot-scope="props">
           <el-checkbox
-            :value="selectedIdList.includes(props.row.scenarioId)"
-            @change="toggleSelection(props.row.scenarioId)"
+            :value="selectedIdList.includes(props.row.id)"
+            @change="toggleSelection(props.row.id)"
           />
         </template>
       </el-table-column>

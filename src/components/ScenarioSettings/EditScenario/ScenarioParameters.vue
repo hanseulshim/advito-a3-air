@@ -6,6 +6,7 @@
     label-position="left"
     label-width="300px"
     hide-required-asterisk
+    class="scenario-params-form"
   >
     <div class="form-row">
       <el-form-item prop="preferredCarrier" class="column" label-width="0px">
@@ -85,7 +86,7 @@
           >Use published fares per carrier instead of blended fares</el-checkbox
         >
         <el-checkbox v-model="form.ignoreCarriers"
-          >Ignore carriers with service less than
+          >Ignore carriers with service less than (%)
           <el-input v-model="form.serviceLessThan" type="number" size="small"
         /></el-checkbox>
       </div>
@@ -159,6 +160,11 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.scenario-params-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 .form-row {
   display: flex;
   align-items: flex-start;
@@ -205,6 +211,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 3em;
+  margin-top: auto;
 }
 </style>
