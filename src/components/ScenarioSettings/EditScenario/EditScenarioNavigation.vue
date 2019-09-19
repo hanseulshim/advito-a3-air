@@ -91,7 +91,7 @@
         <span class="nav-title">Trip Distribution</span>
         <i class="fas fa-chevron-up" />
       </router-link>
-      <el-tooltip effect="dark" :content="path" placement="top">
+      <el-tooltip effect="dark" content="Show Info" placement="top">
         <i class="fas fa-info project-info-icon" />
       </el-tooltip>
     </div>

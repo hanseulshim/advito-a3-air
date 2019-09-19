@@ -97,13 +97,17 @@
             />
           </el-tooltip>
           <el-tooltip effect="dark" content="Delete Scenario" placement="top">
-            <i class="fas fa-trash-alt" />
+            <i
+              class="fas fa-trash-alt"
+              @click="showDeleteScenarioModal(props.row)"
+            />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <NewScenarioModal />
     <EditScenarioModal />
+    <DeleteScenarioModal />
   </div>
 </template>
 <script>
@@ -111,12 +115,14 @@ import { GET_SCENARIO_LIST, GET_PROJECT } from '@/graphql/queries';
 import { pluralize } from '@/helper';
 import NewScenarioModal from './NewScenarioModal';
 import EditScenarioModal from './EditScenarioModal';
+import DeleteScenarioModal from './DeleteScenarioModal';
 import { scenario } from '@/config';
 export default {
   name: 'ScenarioSettings',
   components: {
     NewScenarioModal,
-    EditScenarioModal
+    EditScenarioModal,
+    DeleteScenarioModal
   },
   apollo: {
     project: {
@@ -157,6 +163,12 @@ export default {
     showEditScenarioModal(scenario) {
       this.$modal.show('edit-scenario', {
         scenario
+      });
+    },
+    showDeleteScenarioModal(scenario) {
+      this.$modal.show('delete-scenario', {
+        id: scenario.id,
+        projectId: scenario.projectId
       });
     }
   }

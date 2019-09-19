@@ -16,3 +16,9 @@ export const GET_SCENARIO = gql`
     }
   }
 `;
+
+export const GET_SCENARIO_CONTRACT_LIST = gql`
+  query scenarioContractList($scenarioId: Int!) {
+    scenarioContractList(scenarioId: $scenarioId)
+  }
+`;

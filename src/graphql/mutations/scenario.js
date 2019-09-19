@@ -42,3 +42,9 @@ export const UPDATE_SCENARIO = gql`
     }
   }
 `;
+
+export const DELETE_SCENARIO = gql`
+  mutation deleteScenario($id: Int!) {
+    deleteScenario(id: $id)
+  }
+`;

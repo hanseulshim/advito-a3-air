@@ -15,7 +15,11 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="airline" label="Airlines" />
+      <el-table-column
+        prop="airline"
+        label="Airlines"
+        :min-width="contract.name"
+      />
       <el-table-column prop="contract" label="Contract">
         <template slot-scope="props">
           <i v-if="props.row.contract" class="fas fa-check" />
@@ -40,7 +44,7 @@
         label="Effective Dates"
         prop="effectiveDates"
         :formatter="formatDate"
-        :min-width="contract.effectiveDates"
+        :min-width="contract.effectiveFrom"
       />
       <el-table-column label="Point of Sale" prop="pointOfSale" />
     </el-table>

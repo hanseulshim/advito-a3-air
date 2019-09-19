@@ -54,7 +54,7 @@
             v-for="country in pointOfSaleList"
             :key="country.countryCode"
             :label="country.id"
-            >{{ country }}</el-checkbox
+            >{{ country.countryCode }}</el-checkbox
           >
         </div>
       </div>
@@ -66,7 +66,7 @@
             v-for="country in pointOfSaleList"
             :key="country.countryCode"
             :label="country.id"
-            >{{ country }}</el-checkbox
+            >{{ country.countryCode }}</el-checkbox
           >
         </div>
       </div>

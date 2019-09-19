@@ -32,6 +32,7 @@
   </div>
 </template>
 <script>
+import { GET_SCENARIO_CONTRACT_LIST } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import { contract } from '@/config';
 export default {
@@ -43,65 +44,19 @@ export default {
       type: Object
     }
   },
-  apollo: {},
+  apollo: {
+    scenarioContractList: {
+      query: GET_SCENARIO_CONTRACT_LIST,
+      variables() {
+        return {
+          scenarioId: this.scenario.id
+        };
+      }
+    }
+  },
   data() {
     return {
-      scenarioContractList: [
-        {
-          id: 1,
-          name: 'Aeroflot POS CH',
-          round: 'P1',
-          airlineGroup: 'Delta JV',
-          effectiveFrom: 1514782800000,
-          effectiveTo: 1514782800000,
-          pointOfSale: 'Country, Country'
-        },
-        {
-          id: 2,
-          name: 'Aeroflot POS CH',
-          round: 'P1',
-          airlineGroup: 'Delta JV',
-          effectiveFrom: 1514782800000,
-          effectiveTo: 1514782800000,
-          pointOfSale: 'Country...'
-        },
-        {
-          id: 3,
-          name: 'Aeroflot POS CH',
-          round: 'P1',
-          airlineGroup: 'Delta JV',
-          effectiveFrom: 1514782800000,
-          effectiveTo: 1514782800000,
-          pointOfSale: 'Country...'
-        },
-        {
-          id: 4,
-          name: 'Aeroflot POS CH',
-          round: 'P1',
-          airlineGroup: 'Delta JV',
-          effectiveFrom: 1514782800000,
-          effectiveTo: 1514782800000,
-          pointOfSale: 'Country...'
-        },
-        {
-          id: 5,
-          name: 'Aeroflot POS CH',
-          round: 'P1',
-          airlineGroup: 'Delta JV',
-          effectiveFrom: 1514782800000,
-          effectiveTo: 1514782800000,
-          pointOfSale: 'Country...'
-        },
-        {
-          id: 6,
-          name: 'Aeroflot POS CH',
-          round: 'P1',
-          airlineGroup: 'Delta JV',
-          effectiveFrom: 1514782800000,
-          effectiveTo: 1514782800000,
-          pointOfSale: 'Country...'
-        }
-      ],
+      scenarioContractList: [],
       selectedIdList: [],
       contract
     };
