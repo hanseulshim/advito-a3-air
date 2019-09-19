@@ -91,6 +91,9 @@
         <span class="nav-title">Trip Distribution</span>
         <i class="fas fa-chevron-up" />
       </router-link>
+      <el-tooltip effect="dark" :content="path" placement="top">
+        <i class="fas fa-info project-info-icon" />
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -108,7 +111,7 @@ export default {
 .scenario-navigation-container {
   display: flex;
   align-items: center;
-  margin-top: 2em;
+  margin-top: 1em;
   margin-bottom: 2em;
   border-bottom: 2px solid $botticelli;
   padding-bottom: 10px;
@@ -136,10 +139,23 @@ export default {
   .fa-chevron-up {
     position: absolute;
     visibility: hidden;
-    bottom: -15px;
+    bottom: -19px;
     background: $white;
     color: $botticelli;
     left: 22.375px;
+  }
+}
+.project-info-icon {
+  margin-left: auto;
+  color: $tradewind;
+  cursor: pointer;
+  align-self: center;
+  &.fa-info {
+    border: 1px solid $tradewind;
+    color: $tradewind;
+    &:hover {
+      background: $tradewind;
+    }
   }
 }
 </style>

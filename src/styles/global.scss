@@ -23,6 +23,10 @@
   &.number {
     width: 35px;
   }
+  &.no-width{
+    width:auto;
+    padding:5px 10px;
+  }
   &.disabled {
     opacity: 0.6;
     &:hover {

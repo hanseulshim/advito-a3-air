@@ -170,8 +170,9 @@ export default {
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 1.5em;
+  flex: 1;
   .el-form-item {
-    flex: 1;
+    width: 30%;
   }
 
   .el-radio-group {

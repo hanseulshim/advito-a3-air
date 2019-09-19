@@ -3,7 +3,7 @@
     classes="modal-container"
     name="edit-scenario"
     height="800px"
-    width="1100px"
+    width="1000px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >

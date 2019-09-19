@@ -71,7 +71,21 @@
         </div>
       </div>
     </div>
-    <div class="form-row"></div>
+    <div class="trip-dist-controls">
+      <button class="button no-width" type="button">SET TO HISTORY</button>
+      <button class="button no-width" type="button">SET TO QSI</button>
+      <button class="button no-width" type="button">
+        CLEAR TRIP DISTRIBUTION
+      </button>
+    </div>
+    <div class="form-row flex-1">
+      <el-table ref="tripDistributionTable" :data="tableData" class="tripTable">
+        <el-table-column label="Airlines" />
+        <el-table-column label="Historical Share" />
+        <el-table-column label="Future QSI Share" />
+        <el-table-column label="Trip Distribution" />
+      </el-table>
+    </div>
     <div class="save-container">
       <button class="button" type="button" @click="saveScenarioParameters">
         SAVE
@@ -169,8 +183,8 @@ export default {
 .form-row {
   display: flex;
   box-sizing: border-box;
-  margin-bottom: 1em;
   justify-content: space-between;
+  margin-bottom: 1em;
 }
 
 .form-column {
@@ -190,6 +204,10 @@ export default {
   margin-right: 4em;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
 .flex-2 {
   flex: 2;
 }
@@ -204,12 +222,25 @@ export default {
   margin-bottom: 10px;
 }
 
+.trip-dist-controls {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin: 1em 0;
+  button {
+    margin-left: 2.5%;
+  }
+}
+
+.tripTable {
+}
+
 .checkbox-container {
   display: flex;
   flex-direction: column;
   border: 1px solid #dedede;
   padding: 1em;
-  height: 150px;
+  height: 100px;
   overflow: scroll;
 }
 
