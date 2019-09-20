@@ -56,8 +56,9 @@ type Geography {
 }
 
 type Market {
-  id: Int
-  name: String
+  marketNorm: String
+  marketScenario: String
+  marketSector: String
 }
 
 extend type Query {
@@ -70,6 +71,7 @@ extend type Query {
   currencyList: [Currency] @auth
   geographyList: [Geography] @auth
   marketGeoList: [Geography] @auth
+  marketList(clientGcn: String): [Market] @auth
   distanceUnitList: [DistanceUnit] @auth
 }
 `;

@@ -1,6 +1,6 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 import { project } from './project';
 import { client } from './client';
 import { collection } from './collection';
