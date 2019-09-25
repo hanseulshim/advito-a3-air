@@ -63,10 +63,5 @@ export default {
       name
       locationType
     }
-    marketList(clientGcn: null) {
-      marketNorm
-      marketScenario
-      marketSector
-    }
   }`
 };

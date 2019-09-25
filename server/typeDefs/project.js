@@ -24,10 +24,10 @@ type Project {
   dataSpecialistId: Int
   dataSpecialistName: String
   dataSpecialistEmail: String
- currencyId: Int
- currencyName: String
- distanceUnitId: Int
- distanceUnitName: String
+  currencyId: Int
+  currencyName: String
+  distanceUnitId: Int
+  distanceUnitName: String
   progress: String
   favorite: Boolean
 }

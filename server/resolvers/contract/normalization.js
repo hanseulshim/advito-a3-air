@@ -1,4 +1,11 @@
 import { REGEX_USER } from '../../constants';
+import { Market, MarketCalculated, Normalization } from '../../models';
+import { raw } from 'objection';
+import merge from 'lodash/merge';
+import sum from 'lodash/sum';
+import sumBy from 'lodash/sumBy';
+import numeral from 'numeral';
+
 export const normalization = {
   Query: {
     normalizationList: async (_, { discountId = null }, { db }) =>
@@ -44,48 +51,115 @@ export const normalization = {
               minstay: 'minstay'
             })
             .where('normalisationmarketid', market.id);
-          market.fareList = normalizationFareList;
+          market.fareList = normalizationFareList; // eslint-disable-line
         }
       );
       await Promise.all(normalizationFareRequests);
       return normalizationMarketList;
     },
     normalization: async (_, { id }, { db }) => await getNormalization(db, id),
-    topMarketList: async () => [
-      {
-        id: 1,
-        value: 'LAX - JFK 12345 50%',
-        marketA: 'LAX',
-        marketB: 'JFK',
-        farePaid: 12345,
-        usage: 0.5,
-        advancedTicketList: advancedTicketList(),
-        departureList: departureList(),
-        fareBasisList: fareBasisList()
-      },
-      {
-        id: 2,
-        value: 'DFW - JFK 54321 90%',
-        marketA: 'DFW',
-        marketB: 'JFK',
-        farePaid: 54321,
-        usage: 0.9,
-        advancedTicketList: advancedTicketList(),
-        departureList: departureList(),
-        fareBasisList: fareBasisList()
-      },
-      {
-        id: 3,
-        value: 'BWI - OAK 34182 25%',
-        marketA: 'BWI',
-        marketB: 'OAK',
-        farePaid: 34182,
-        usage: 0.25,
-        advancedTicketList: advancedTicketList(),
-        departureList: departureList(),
-        fareBasisList: fareBasisList()
-      }
-    ]
+    topMarketList: async (_, { clientGcn = null, normalizationId = null }) => {
+      const { usageFrom, usageTo } = await Normalization.query()
+        .select('usagefrom as usageFrom', 'usageto as usageTo')
+        .findById(normalizationId);
+      const marketList = await Market.query()
+        .select(
+          'odoriginmarket as originMarket',
+          'oddestmarket as destMarket',
+          'travelsector as marketSector',
+          raw(`ARRAY_AGG(id)`).as('idList')
+        )
+        .where('deleted', false)
+        .andWhere('clientgcn', clientGcn)
+        .andWhere('departuredate', '>=', usageFrom)
+        .andWhere('arrivaldate', '<=', usageTo)
+        .groupBy('odoriginmarket', 'oddestmarket', 'travelsector')
+        .havingNotNull('odoriginmarket')
+        .havingNotNull('oddestmarket');
+      const marketCalcRequests = marketList.map((market, index) => {
+        market.id = index;
+        return MarketCalculated.query()
+          .select('farepaidinusd as farePaidInUsd')
+          .whereIn('origindestinationsegmentid', market.idList);
+      });
+      const marketCalcResults = await Promise.all(marketCalcRequests);
+      const marketCalculated = marketCalcResults.map((market, index) => ({
+        id: index,
+        farePaid: sum(
+          market.map(({ farePaidInUsd }) => parseInt(farePaidInUsd))
+        )
+      }));
+      merge(marketList, marketCalculated);
+      const totalSum = sumBy(marketList, 'farePaid');
+      return marketList.map(
+        ({ originMarket, destMarket, farePaid, idList }) => ({
+          name: `${originMarket} - ${destMarket} ${numeral(farePaid).format(
+            '0,0'
+          )} (${numeral(farePaid / totalSum).format('0.00%')})`,
+          originMarket,
+          destMarket,
+          idList
+        })
+      );
+    },
+    marketAdvancedTicketList: async (_, { idList = [] }) => {
+      const marketList = await Market.query()
+        .select('id', 'departuredate as departureDate')
+        .whereIn('id', idList)
+        .orderBy('id');
+      const marketCalculatedList = await MarketCalculated.query()
+        .select(
+          'origindestinationsegmentid as id',
+          'ticketingdate as ticketingDate'
+        )
+        .whereIn('origindestinationsegmentid', idList)
+        .orderBy('origindestinationsegmentid');
+      merge(marketList, marketCalculatedList.map(v => ({ ...v })));
+      return advancedTicketList.map(({ label, min, max }) => ({
+        label,
+        value:
+          marketList
+            .map(
+              ({ departureDate, ticketingDate }) =>
+                (departureDate - ticketingDate) / (1000 * 60 * 60 * 24)
+            )
+            .filter(difference => difference >= min && difference <= max)
+            .length / marketList.length
+      }));
+    },
+    marketDepartureList: async (_, { idList = [] }) => {
+      const marketList = await Market.query()
+        .select('departuredate as departureDate')
+        .whereIn('id', idList)
+        .orderBy('id');
+      return departureList.map(({ label }, index) => ({
+        label,
+        value:
+          marketList
+            .map(({ departureDate }) => new Date(departureDate).getDay())
+            .filter(departureDate => departureDate === index).length /
+          marketList.length
+      }));
+    },
+    marketFareBasis: async (_, { idList = [] }) => {
+      const marketList = await Market.query()
+        .select('odfarebasis as fareBasis', 'odbookingclass as bookingClass')
+        .groupBy('odfarebasis', 'odbookingclass')
+        .whereIn('id', idList);
+      const marketListAll = await Market.query()
+        .select('odfarebasis as fareBasis', 'odbookingclass as bookingClass')
+        .whereIn('id', idList);
+      return marketList.map(({ fareBasis, bookingClass }) => ({
+        fareBasis,
+        bookingClass,
+        usage:
+          marketListAll.filter(
+            market =>
+              market.fareBasis === fareBasis &&
+              market.bookingClass === bookingClass
+          ).length / marketListAll.length
+      }));
+    }
   },
   Mutation: {
     createNormalization: async (
@@ -331,67 +405,53 @@ const getNormalizationMarket = async (db, id) => {
   return normalizationMarket;
 };
 
-const advancedTicketList = () => [
+const advancedTicketList = [
   {
     label: '0-2',
-    value: Math.floor(Math.random() * 100) / 100
+    min: 0,
+    max: 2
   },
   {
-    label: '3-4',
-    value: Math.floor(Math.random() * 100) / 100
+    label: '3-6',
+    min: 3,
+    max: 6
   },
   {
-    label: '7-10',
-    value: Math.floor(Math.random() * 100) / 100
+    label: '7-13',
+    min: 7,
+    max: 13
   },
   {
     label: '14-20',
-    value: Math.floor(Math.random() * 100) / 100
+    min: 14,
+    max: 20
   },
   {
     label: '21+',
-    value: Math.floor(Math.random() * 100) / 100
+    min: 21,
+    max: Infinity
   }
 ];
-const departureList = () => [
+const departureList = [
   {
-    label: 'Sunday',
-    value: Math.floor(Math.random() * 100) / 100
+    label: 'Sunday'
   },
   {
-    label: 'Monday',
-    value: Math.floor(Math.random() * 100) / 100
+    label: 'Monday'
   },
   {
-    label: 'Tuesday',
-    value: Math.floor(Math.random() * 100) / 100
+    label: 'Tuesday'
   },
   {
-    label: 'Wednesday',
-    value: Math.floor(Math.random() * 100) / 100
+    label: 'Wednesday'
   },
   {
-    label: 'Thursday',
-    value: Math.floor(Math.random() * 100) / 100
+    label: 'Thursday'
   },
   {
-    label: 'Friday',
-    value: Math.floor(Math.random() * 100) / 100
+    label: 'Friday'
   },
   {
-    label: 'Saturday',
-    value: Math.floor(Math.random() * 100) / 100
-  }
-];
-const fareBasisList = () => [
-  {
-    fareBasis: 'DGFBLM',
-    bookingClass: 'D',
-    usage: Math.floor(Math.random() * 100) / 100
-  },
-  {
-    fareBasis: 'J1NQO4C5',
-    bookingClass: 'D',
-    usage: Math.floor(Math.random() * 100) / 100
+    label: 'Saturday'
   }
 ];

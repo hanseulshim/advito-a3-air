@@ -3,12 +3,6 @@ import {
   LOCATION_LOOKUP,
   ADVITO_GEOSET_ID
 } from '../constants';
-import { Market, MarketCalculated } from '../models';
-import { raw } from 'objection';
-import merge from 'lodash/merge';
-import sum from 'lodash/sum';
-import sumBy from 'lodash/sumBy';
-import numeral from 'numeral';
 
 export const library = {
   Query: {
@@ -144,44 +138,6 @@ export const library = {
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
         .orWhere('locationtype', LOCATION_LOOKUP.CITY)
         .andWhere('isdeleted', false)
-        .orderBy('code'),
-    marketList: async (_, { clientGcn = null }) => {
-      const marketList = await Market.query()
-        .select(
-          'odoriginmarket as originMarket',
-          'oddestmarket as destMarket',
-          'travelsector as marketSector',
-          raw(`ARRAY_AGG(id)`).as('idList')
-        )
-        .where('deleted', false)
-        .andWhere('clientgcn', clientGcn)
-        .groupBy('odoriginmarket', 'oddestmarket', 'travelsector')
-        .havingNotNull('odoriginmarket')
-        .havingNotNull('oddestmarket');
-      const marketCalcRequests = marketList.map((market, index) => {
-        market.id = index;
-        return MarketCalculated.query()
-          .select('farepaidinusd as farePaidInUsd')
-          .whereIn('id', market.idList);
-      });
-      const marketCalcResults = await Promise.all(marketCalcRequests);
-      const marketCalculated = marketCalcResults.map((market, index) => ({
-        id: index,
-        farePaid: sum(
-          market.map(({ farePaidInUsd }) => parseInt(farePaidInUsd))
-        )
-      }));
-      merge(marketList, marketCalculated);
-      const totalSum = sumBy(marketList, 'farePaid');
-      return marketList.map(
-        ({ originMarket, destMarket, farePaid, marketSector }) => ({
-          marketNorm: `${originMarket} - ${destMarket} ${numeral(
-            farePaid
-          ).format('0,0')} (${numeral(farePaid / totalSum).format('0.00%')})`,
-          marketScenario: `${originMarket} - ${destMarket}`,
-          marketSector
-        })
-      );
-    }
+        .orderBy('code')
   }
 };

@@ -55,12 +55,6 @@ type Geography {
   locationType: Int
 }
 
-type Market {
-  marketNorm: String
-  marketScenario: String
-  marketSector: String
-}
-
 extend type Query {
   airlineList: [Airline] @auth
   airportList: [Airport] @auth
@@ -71,7 +65,6 @@ extend type Query {
   currencyList: [Currency] @auth
   geographyList: [Geography] @auth
   marketGeoList: [Geography] @auth
-  marketList(clientGcn: String): [Market] @auth
   distanceUnitList: [DistanceUnit] @auth
 }
 `;
