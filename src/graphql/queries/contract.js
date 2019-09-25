@@ -4,9 +4,7 @@ import {
   PRICING_TERM,
   DISCOUNT,
   TARGET_TERM,
-  TARGET_LEVEL,
-  NORMALIZATION,
-  NORMALIZATION_MARKET
+  TARGET_LEVEL
 } from '../constants';
 
 export const GET_CONTRACT_LIST = gql`
@@ -179,56 +177,6 @@ export const GET_INCENTIVE_TYPE_LIST = gql`
     incentiveTypeList {
       id
       name
-    }
-  }
-`;
-
-export const GET_NORMALIZATION_LIST = gql`
-query normalizationList($discountId: Int) {
-  normalizationList(discountId: $discountId) {
-    ${NORMALIZATION}
-  }
-}
-`;
-
-export const GET_NORMALIZATION = gql`
-query normalization($id: Int!) {
-  normalization(id: $id) {
-    ${NORMALIZATION}
-  }
-}
-`;
-
-export const GET_NORMALIZATION_MARKET_LIST = gql`
-  query normalizationMarketList($normalizationId: Int) {
-    normalizationMarketList(normalizationId: $normalizationId) {
-      ${NORMALIZATION_MARKET}
-    }
-  }
-`;
-
-export const GET_TOP_MARKET_LIST = gql`
-  query topMarketList($normalizationId: Int) {
-    topMarketList(normalizationId: $normalizationId) {
-      id
-      value
-      marketA
-      marketB
-      farePaid
-      usage
-      advancedTicketList {
-        label
-        value
-      }
-      departureList {
-        label
-        value
-      }
-      fareBasisList {
-        fareBasis
-        bookingClass
-        usage
-      }
     }
   }
 `;

@@ -67,6 +67,9 @@ export default {
         return {
           scenarioId: this.scenarioId
         };
+      },
+      result({ data: { scenarioContractList } }) {
+        this.selectedIdList = [...scenarioContractList];
       }
     }
   },
@@ -100,7 +103,15 @@ export default {
           variables: {
             scenarioId: this.scenarioId,
             contractIdList: [...this.selectedIdList]
-          }
+          },
+          refetchQueries: () => [
+            {
+              query: GET_SCENARIO_CONTRACT_LIST,
+              variables: {
+                scenarioId: this.scenarioId
+              }
+            }
+          ]
         });
         this.$modal.show('success', {
           message: 'Scenario contracts successfully updated'
