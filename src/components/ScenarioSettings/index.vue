@@ -111,7 +111,12 @@
   </div>
 </template>
 <script>
-import { GET_SCENARIO_LIST, GET_PROJECT } from '@/graphql/queries';
+import {
+  GET_USER,
+  GET_CLIENT,
+  GET_SCENARIO_LIST,
+  GET_PROJECT
+} from '@/graphql/queries';
 import { pluralize } from '@/helper';
 import NewScenarioModal from './NewScenarioModal';
 import EditScenarioModal from './EditScenarioModal';
@@ -125,6 +130,12 @@ export default {
     DeleteScenarioModal
   },
   apollo: {
+    user: {
+      query: GET_USER
+    },
+    client: {
+      query: GET_CLIENT
+    },
     project: {
       query: GET_PROJECT
     },
@@ -139,10 +150,12 @@ export default {
   },
   data() {
     return {
+      user: null,
+      client: null,
+      project: null,
       scenarioList: [],
       scenario,
-      selectedIdList: [],
-      project: {}
+      selectedIdList: []
     };
   },
   methods: {
@@ -158,7 +171,11 @@ export default {
       }
     },
     showNewScenarioModal() {
-      this.$modal.show('new-scenario');
+      this.$modal.show('new-scenario', {
+        user: this.user,
+        client: this.client,
+        project: this.project
+      });
     },
     showEditScenarioModal(scenario) {
       this.$modal.show('edit-scenario', {

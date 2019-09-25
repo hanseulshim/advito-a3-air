@@ -8,40 +8,44 @@
     hide-required-asterisk
     class="scenario-params-form"
   >
-    <div class="form-row">
-      <el-form-item prop="preferredCarrier" class="column" label-width="0px">
+    <div v-loading="$apollo.loading" class="form-row">
+      <el-form-item prop="influenceLevelCd" class="column" label-width="0px">
         <span class="radio-group-title"
           >Preferred carrier influence/compliance</span
         >
-        <el-radio-group v-model="form.preferredCarrier">
-          <el-radio :label="1">Little or no influence</el-radio>
-          <el-radio :label="2">Minimal influence</el-radio>
-          <el-radio :label="3">Medium influence</el-radio>
-          <el-radio :label="4">Strong influence</el-radio>
-          <el-radio :label="5">Very strong influence</el-radio>
-          <el-radio :label="6">Mandate</el-radio>
+        <el-radio-group v-model="form.influenceLevelCd">
+          <el-radio
+            v-for="influenceLevel in scenarioParameters.influenceLevelList"
+            :key="influenceLevel.id"
+            :label="influenceLevel.id"
+            >{{ influenceLevel.name }}</el-radio
+          >
         </el-radio-group>
       </el-form-item>
-      <el-form-item prop="priceSensitivity" class="column" label-width="0px">
+      <el-form-item
+        prop="priceInfluenceLevelCd"
+        class="column"
+        label-width="0px"
+      >
         <span class="radio-group-title">Price sensitivity</span>
-        <el-radio-group v-model="form.priceSensitivity">
-          <el-radio :label="1">Little or no influence</el-radio>
-          <el-radio :label="2">Minimal influence</el-radio>
-          <el-radio :label="3">Medium influence</el-radio>
-          <el-radio :label="4">Strong influence</el-radio>
-          <el-radio :label="5">Very strong influence</el-radio>
-          <el-radio :label="6">Primary influence</el-radio>
+        <el-radio-group v-model="form.priceInfluenceLevelCd">
+          <el-radio
+            v-for="priceLevel in scenarioParameters.priceInfluenceLevelList"
+            :key="priceLevel.id"
+            :label="priceLevel.id"
+            >{{ priceLevel.name }}</el-radio
+          >
         </el-radio-group>
       </el-form-item>
-      <el-form-item prop="travelerBias" class="column" label-width="0px">
+      <el-form-item prop="biasOverride" class="column" label-width="0px">
         <span class="radio-group-title">Traveler bias</span>
-        <el-radio-group v-model="form.travelerBias" label="Traveler bias">
-          <el-radio :label="1">Automatically adjust bias</el-radio>
-          <el-radio :label="2">Eliminate 20% of residual bias</el-radio>
-          <el-radio :label="3">Eliminate 40% of residual bias</el-radio>
-          <el-radio :label="4">Eliminate 60% of residual bias</el-radio>
-          <el-radio :label="5">Eliminate 80% of residual bias</el-radio>
-          <el-radio :label="6">Eliminate all bias effects</el-radio>
+        <el-radio-group v-model="form.biasOverride" label="Traveler bias">
+          <el-radio
+            v-for="biasOverride in scenarioParameters.biasOverrideList"
+            :key="biasOverride.id"
+            :label="biasOverride.id"
+            >{{ biasOverride.name }}</el-radio
+          >
         </el-radio-group>
       </el-form-item>
     </div>
@@ -65,78 +69,126 @@
           />
         </el-form-item>
         <el-form-item
-          prop="segmentDelta"
+          prop="segmentIncrease"
           label="Assumed increase/decrease in segments (%)"
         >
-          <el-input v-model="form.segmentDelta" type="number" size="small" />
+          <el-input v-model="form.segmentIncrease" type="number" size="small" />
         </el-form-item>
         <el-form-item
-          prop="fareDelta"
+          prop="fareIncrease"
           label="Assumed increase/decrease in fares (%)"
         >
-          <el-input v-model="form.faredelta" type="number" size="small" />
+          <el-input v-model="form.fareIncrease" type="number" size="small" />
         </el-form-item>
       </div>
       <div class="form-column">
         <p class="radio-group-title">Advanced features</p>
-        <el-checkbox v-model="form.historicalShares"
+        <el-checkbox v-model="form.useHistoricalShare"
           >Use historical share instead of predicted share</el-checkbox
         >
-        <el-checkbox v-model="form.publishedFares"
+        <el-checkbox v-model="form.useHistoricalFares"
           >Use published fares per carrier instead of blended fares</el-checkbox
         >
-        <el-checkbox v-model="form.ignoreCarriers"
+        <el-checkbox v-model="form.ignoresSmallQsi"
           >Ignore carriers with service less than (%)
-          <el-input v-model="form.serviceLessThan" type="number" size="small"
+          <el-input v-model="form.smallQsiThreshold" type="number" size="small"
         /></el-checkbox>
       </div>
     </div>
     <div class="save-container">
-      <button class="button" type="button" @click="saveScenarioParameters">
+      <button class="button" type="button" @click="validateForm">
         SAVE
       </button>
     </div>
   </el-form>
 </template>
-
 <script>
+import { GET_SCENARIO_PARAMETERS, GET_SCENARIO } from '@/graphql/queries';
+import { UPDATE_SCENARIO_PARAMETERS } from '@/graphql/mutations';
 export default {
   name: 'ScenarioParameters',
   components: {},
   props: {
-    scenario: {
-      default: null,
-      type: Object
+    scenarioId: {
+      type: Number,
+      default: null
     }
   },
-  apollo: {},
+  apollo: {
+    scenario: {
+      query: GET_SCENARIO,
+      variables() {
+        return {
+          id: this.scenarioId
+        };
+      },
+      result({ data: { scenario } }) {
+        const {
+          influenceLevelCd,
+          priceInfluenceLevelCd,
+          biasOverride,
+          servedMarketThreshold,
+          overlapThreshold,
+          segmentIncrease,
+          fareIncrease,
+          useHistoricalShare,
+          useHistoricalFares,
+          ignoresSmallQsi,
+          smallQsiThreshold
+        } = scenario;
+
+        this.form.influenceLevelCd = influenceLevelCd;
+        this.form.priceInfluenceLevelCd = priceInfluenceLevelCd;
+        this.form.biasOverride = biasOverride;
+        this.form.servedMarketThreshold = servedMarketThreshold;
+        this.form.overlapThreshold = overlapThreshold;
+        this.form.segmentIncrease = segmentIncrease;
+        this.form.fareIncrease = fareIncrease;
+        this.form.useHistoricalShare = useHistoricalShare;
+        this.form.useHistoricalFares = useHistoricalFares;
+        this.form.ignoresSmallQsi = ignoresSmallQsi;
+        this.form.smallQsiThreshold = smallQsiThreshold;
+      }
+    },
+    scenarioParameters: {
+      query: GET_SCENARIO_PARAMETERS
+    }
+  },
   data() {
     return {
+      scenarioParameters: {},
       form: {
-        preferredCarrier: null,
-        priceSensitivity: null,
-        travelerBias: null,
+        influenceLevelCd: null,
+        priceInfluenceLevelCd: null,
+        biasOverride: null,
         servedMarketThreshold: null,
         overlapThreshold: null,
-        segmentDelta: null,
-        fareDelta: null,
-        historicalShares: false,
-        publishedFares: false,
-        ignoreCarriers: false,
-        serviceLessThan: null
+        segmentIncrease: null,
+        fareIncrease: null,
+        useHistoricalShare: false,
+        useHistoricalFares: false,
+        ignoresSmallQsi: false,
+        smallQsiThreshold: null
       },
       rules: {
-        name: [
+        influenceLevelCd: [
           {
             required: true,
-            message: 'Please input a scenario name.',
+            message: 'Please select a preferred carrier influence level',
             trigger: 'change'
           }
         ],
-        round: [
+        priceInfluenceLevelCd: [
           {
             required: true,
-            message: 'Please select a scenario round.',
+            message: 'Please select a price influence level.',
+            trigger: 'change'
+          }
+        ],
+        biasOverride: [
+          {
+            required: true,
+            message: 'Please select a traveler bias adjustment.',
             trigger: 'change'
           }
         ]
@@ -153,8 +205,40 @@ export default {
         }
       });
     },
-    saveScenarioParameters() {
-      alert('Parameters saved!');
+    cleanObject(obj) {
+      for (let key in obj) {
+        if (typeof obj[key] === 'string') {
+          obj[key] = Number(obj[key]);
+        }
+      }
+      return obj;
+    },
+    async saveScenarioParameters() {
+      try {
+        const cleanedForm = this.cleanObject(this.form);
+        await this.$apollo.mutate({
+          mutation: UPDATE_SCENARIO_PARAMETERS,
+          variables: {
+            id: this.scenario.id,
+            ...cleanedForm
+          },
+          refetchQueries: () => [
+            {
+              query: GET_SCENARIO,
+              variables: {
+                id: this.scenario.id
+              }
+            }
+          ]
+        });
+        this.$modal.show('success', {
+          message: 'Scenario parameters successfully updated.'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     }
   }
 };

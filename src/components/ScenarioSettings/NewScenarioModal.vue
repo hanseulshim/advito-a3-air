@@ -4,6 +4,7 @@
     name="new-scenario"
     height="auto"
     @before-close="beforeClose"
+    @before-open="beforeOpen"
   >
     <el-form
       ref="newScenario"
@@ -33,14 +34,11 @@
           v-model="form.initializationType"
           @change="restoreScenarioList"
         >
-          <el-radio :label="SCENARIO_LOOKUP.INIT_BLANK"
-            >Initialize a blank scenario</el-radio
-          >
-          <el-radio :label="SCENARIO_LOOKUP.INIT_COPY_SCENARIO"
-            >Copy parameters from a scenario</el-radio
-          >
-          <el-radio :label="SCENARIO_LOOKUP.INIT_COPY_PROJECT"
-            >Copy parameters from another project</el-radio
+          <el-radio
+            v-for="type in scenarioTypeList"
+            :key="type.id"
+            :label="type.id"
+            >{{ type.name }}</el-radio
           >
         </el-radio-group>
       </el-form-item>
@@ -91,10 +89,8 @@
 
 <script>
 import {
-  GET_USER,
-  GET_CLIENT,
-  GET_PROJECT,
   GET_SCENARIO_LIST,
+  GET_SCENARIO_TYPE_LIST,
   GET_PROJECTS
 } from '@/graphql/queries';
 import { SCENARIO_LOOKUP } from '@/graphql/constants';
@@ -102,15 +98,6 @@ import { CREATE_SCENARIO } from '@/graphql/mutations';
 export default {
   name: 'NewScenarioModal',
   apollo: {
-    user: {
-      query: GET_USER
-    },
-    client: {
-      query: GET_CLIENT
-    },
-    project: {
-      query: GET_PROJECT
-    },
     projectList: {
       query: GET_PROJECTS,
       variables() {
@@ -118,7 +105,13 @@ export default {
           clientId: this.client.id,
           userId: this.user.id
         };
+      },
+      skip() {
+        return !this.client || !this.user;
       }
+    },
+    scenarioTypeList: {
+      query: GET_SCENARIO_TYPE_LIST
     }
   },
   data() {
@@ -128,6 +121,7 @@ export default {
       project: null,
       projectList: [],
       scenarioList: [],
+      scenarioTypeList: [],
       SCENARIO_LOOKUP,
       form: {
         name: null,
@@ -169,7 +163,7 @@ export default {
               this.form.initializationType === SCENARIO_LOOKUP.INIT_COPY_PROJECT
                 ? true
                 : false,
-            message: 'Please select a project.',
+            message: 'Please make a selection.',
             trigger: 'change'
           }
         ],
@@ -181,7 +175,7 @@ export default {
               SCENARIO_LOOKUP.INIT_COPY_PROJECT
                 ? true
                 : false,
-            message: 'Please input a scenario.',
+            message: 'Please make a selection.',
             trigger: 'change'
           }
         ]
@@ -263,6 +257,12 @@ export default {
           message: error.message
         });
       }
+    },
+    beforeOpen(e) {
+      const { user, client, project } = e.params;
+      this.user = user;
+      this.client = client;
+      this.project = project;
     },
     beforeClose() {
       Object.keys(this.form).forEach(key => {

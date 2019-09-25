@@ -15,7 +15,7 @@
         </el-tooltip>
       </div>
       <EditScenarioNavigation />
-      <router-view :scenario="scenario" class="content" />
+      <router-view v-if="scenario" :scenario-id="scenario.id" class="content" />
     </div>
   </modal>
 </template>
@@ -39,8 +39,8 @@ export default {
       this.$router.replace({ name: 'scenario-settings' });
     },
     beforeOpen(e) {
-      this.$router.replace({ name: 'scenario-name' });
       this.scenario = e.params.scenario;
+      this.$router.replace({ name: 'scenario-name' });
     },
     beforeClose() {
       this.$router.replace({ name: 'scenario-settings' });

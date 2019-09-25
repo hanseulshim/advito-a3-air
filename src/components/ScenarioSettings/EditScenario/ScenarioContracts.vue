@@ -3,7 +3,7 @@
     <el-table
       ref="scenarioContractList"
       v-loading="$apollo.loading"
-      :data="scenarioContractList"
+      :data="contractList"
       :default-sort="{ prop: 'name', order: 'ascending' }"
       :max-height="500"
     >
@@ -32,32 +32,50 @@
   </div>
 </template>
 <script>
-import { GET_SCENARIO_CONTRACT_LIST } from '@/graphql/queries';
+import {
+  GET_SCENARIO_CONTRACT_LIST,
+  GET_PROJECT,
+  GET_CONTRACT_LIST
+} from '@/graphql/queries';
+import { TOGGLE_SCENARIO_CONTRACT } from '@/graphql/mutations';
 import { formatDate } from '@/helper';
 import { contract } from '@/config';
 export default {
   name: 'ScenarioContracts',
   components: {},
   props: {
-    scenario: {
-      default: null,
-      type: Object
+    scenarioId: {
+      type: Number,
+      default: null
     }
   },
   apollo: {
+    project: {
+      query: GET_PROJECT
+    },
+    contractList: {
+      query: GET_CONTRACT_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    },
     scenarioContractList: {
       query: GET_SCENARIO_CONTRACT_LIST,
       variables() {
         return {
-          scenarioId: this.scenario.id
+          scenarioId: this.scenarioId
         };
       }
     }
   },
   data() {
     return {
+      contractList: [],
       scenarioContractList: [],
       selectedIdList: [],
+      project: null,
       contract
     };
   },
@@ -75,8 +93,23 @@ export default {
         this.selectedIdList.splice(index, 1);
       }
     },
-    saveContracts() {
-      alert('contract list saved.');
+    async saveContracts() {
+      try {
+        await this.$apollo.mutate({
+          mutation: TOGGLE_SCENARIO_CONTRACT,
+          variables: {
+            scenarioId: this.scenarioId,
+            contractIdList: [...this.selectedIdList]
+          }
+        });
+        this.$modal.show('success', {
+          message: 'Scenario contracts successfully updated'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     }
   }
 };

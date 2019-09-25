@@ -26,19 +26,34 @@
 </template>
 <script>
 import { UPDATE_SCENARIO } from '@/graphql/mutations';
-import { GET_SCENARIO_LIST } from '@/graphql/queries';
+import { GET_SCENARIO } from '@/graphql/queries';
 export default {
   name: 'ScenarioName',
   components: {},
-  apollo: {},
   props: {
+    scenarioId: {
+      type: Number,
+      default: null
+    }
+  },
+  apollo: {
     scenario: {
-      default: null,
-      type: Object
+      query: GET_SCENARIO,
+      variables() {
+        return {
+          id: this.scenarioId
+        };
+      },
+      result({ data: { scenario } }) {
+        this.form.name = scenario.name;
+        this.form.shortName = scenario.shortName;
+        this.form.description = scenario.description;
+      }
     }
   },
   data() {
     return {
+      scenario: null,
       form: {
         name: null,
         shortName: null,
@@ -61,11 +76,6 @@ export default {
         ]
       }
     };
-  },
-  mounted() {
-    this.form.name = this.scenario.name;
-    this.form.shortName = this.scenario.shortName;
-    this.form.description = this.scenario.description;
   },
   methods: {
     validateForm() {
