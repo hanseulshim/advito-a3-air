@@ -114,16 +114,12 @@ input NormalizationFareInput {
   advancePurchase: String
   minstay: String
 }
+
 type TopMarket {
-  id: Int
-  value: String
-  marketA: String
-  marketB: String
-  farePaid: Float
-  usage: Float
-  advancedTicketList: [MarketAdvancedTicket]
-  departureList:[MarketDeparture]
-  fareBasisList:[MarketFareBasis]
+  name: String
+  originMarket: String
+  destMarket: String
+  idList: [Int]
 }
 type MarketAdvancedTicket {
   label: String
@@ -230,7 +226,10 @@ extend type Query {
   normalizationList(discountId: Int): [Normalization] @auth
   normalization(id: Int!): Normalization @auth
   normalizationMarketList(normalizationId: Int): [NormalizationMarket] @auth
-  topMarketList(normalizationId: Int): [TopMarket] @auth
+  topMarketList(clientGcn: String, normalizationId: Int): [TopMarket] @auth
+  marketAdvancedTicketList(idList: [Int]): [MarketAdvancedTicket] @auth
+  marketDepartureList(idList: [Int]): [MarketDeparture] @auth
+  marketFareBasis(idList: [Int]): [MarketFareBasis] @auth
 
   targetTermList(contractId: Int): [TargetTerm] @auth
   targetTerm(id: Int!): TargetTerm @auth

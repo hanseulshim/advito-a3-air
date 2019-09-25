@@ -1,7 +1,8 @@
 export const client = `
 type Client {
-  id: Int,
-  name: String,
+  id: Int
+  name: String
+  gcn: String
 }
 
 extend type Query {

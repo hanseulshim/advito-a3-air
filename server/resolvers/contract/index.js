@@ -1,4 +1,4 @@
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 import { contractContainer } from './contractContainer';
 import { pricingTerm } from './pricingTerm';
 import { targetTerm } from './targetTerm';

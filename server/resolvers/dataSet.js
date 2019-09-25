@@ -49,40 +49,45 @@ export const dataSet = {
         .limit(12)
         .where('isdeleted', false)
         .andWhere('project_id', projectId);
-      const dataList = colList.map(
-        async ({ month, year, last_updated, qc }) => {
-          const { rows: countryRows } = await db.raw(
-            `select * from geo_country_stats_activity
+      const dataList = colList.map(async ({ month, year }) => {
+        const [qcData] = await db('geo_country_stats_activity')
+          .limit(1)
+          .where('isdeleted', false)
+          .andWhere('stat_month', month)
+          .andWhere('stat_year', year)
+          .andWhere('project_id', projectId);
+        const { qc, lastUpdated } = qcData ? qcData : {};
+        const { rows: countryRows } = await db.raw(
+          `select * from geo_country_stats_activity
           where stat_month = ${month} and stat_year = ${year} and project_id = ${projectId}
           order by geo_country_stats_id;`
-          );
-          const mappedCountryRows = countryRows.map(row => ({
-            tickets: row.trend_count_tickets,
-            segments: row.trend_count_segments,
-            farePaid: row.stat_sum_farepaid,
-            importedTickets: row.trend_count_imported,
-            errorTickets: row.trend_count_error,
-            errorRatio: row.stat_ratio_error
-          }));
-          const { rows: divisionRows } = await db.raw(
-            `select * from division_stats_activity
+        );
+        const mappedCountryRows = countryRows.map(row => ({
+          tickets: row.trend_count_tickets,
+          segments: row.trend_count_segments,
+          farePaid: row.stat_sum_farepaid,
+          importedTickets: row.trend_count_imported,
+          errorTickets: row.trend_count_error,
+          errorRatio: row.stat_ratio_error
+        }));
+        const { rows: divisionRows } = await db.raw(
+          `select * from division_stats_activity
           where stat_month = ${month} and stat_year = ${year} and project_id = ${projectId}
           order by division_stats_id;`
-          );
-          const mappedDivisionRows = divisionRows.map(row => ({
-            tickets: row.trend_count_tickets,
-            segments: row.trend_count_segments,
-            farePaid: row.stat_sum_farepaid
-          }));
-          return {
-            name: `${year}-${month}`,
-            dateUpdated: last_updated,
-            qc,
-            countryData: mappedCountryRows,
-            divisionData: mappedDivisionRows
-          };
-        }
-      );
+        );
+        const mappedDivisionRows = divisionRows.map(row => ({
+          tickets: row.trend_count_tickets,
+          segments: row.trend_count_segments,
+          farePaid: row.stat_sum_farepaid
+        }));
+        return {
+          name: `${year}-${month}`,
+          dateUpdated: lastUpdated,
+          qc,
+          countryData: mappedCountryRows,
+          divisionData: mappedDivisionRows
+        };
+      });
       return await Promise.all(dataList);
     }
   },

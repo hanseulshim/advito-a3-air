@@ -1,4 +1,4 @@
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 import { locationCollection } from './locationCollection';
 import { travelSectorCollection } from './travelSectorCollection';
 import { airlineGroupCollection } from './airlineGroupCollection';

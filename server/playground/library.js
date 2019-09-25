@@ -57,7 +57,7 @@ export default {
       code
       name
     }
-    marketList {
+    marketGeoList {
       id
       code
       name

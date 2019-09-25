@@ -28,9 +28,9 @@ export const GET_GEOGRAPHY_LIST = gql`
   }
 `;
 
-export const GET_MARKET_LIST = gql`
-  query marketList {
-    marketList {
+export const GET_MARKET_GEO_LIST = gql`
+  query marketGeoList {
+    marketGeoList {
       code
       name
       locationType
