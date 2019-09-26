@@ -2,7 +2,7 @@ import { ApolloServer } from 'apollo-server-lambda';
 import { typeDefs } from './typeDefs';
 import { resolvers } from './resolvers';
 import requireAuthDirective from './directives';
-import { playground } from './playground';
+import playground from './playground';
 import { authenticateUser } from './helper';
 import Knex from 'knex';
 import { Model, knexSnakeCaseMappers } from 'objection';

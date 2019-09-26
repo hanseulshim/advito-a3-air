@@ -5,8 +5,8 @@ export class AdvitoUser extends Model {
     return 'blops.advitoUser';
   }
 
-  fullName() {
-    return this.nameFirst + ' ' + this.nameLast;
+  get name() {
+    return `${this.nameFirst} ${this.nameLast}`;
   }
 
   static get relationMappings() {

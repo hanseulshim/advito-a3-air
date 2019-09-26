@@ -1,6 +1,6 @@
 import { NOTE } from '../../constants';
 
-export const note = {
+export default {
   queries: {
     name: 'Note Queries',
     endpoint: 'http://localhost:8085/graphql',

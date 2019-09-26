@@ -1,14 +1,14 @@
-import { locationCollection } from './locationCollection';
-import { travelSectorCollection } from './travelSectorCollection';
-import { airlineGroupCollection } from './airlineGroupCollection';
-import { preferredAirlineCollection } from './preferredAirlineCollection';
+import locationCollection from './locationCollection';
+import travelSectorCollection from './travelSectorCollection';
+import airlineGroupCollection from './airlineGroupCollection';
+import preferredAirlineCollection from './preferredAirlineCollection';
 import {
   LOCATION_COLLECTION,
   TRAVEL_SECTOR_COLLECTION,
   AIRLINE_GROUP_COLLECTION,
   PREFERRED_AIRLINE_COLLECTION
 } from '../../constants';
-export const collection = {
+export default {
   queries: {
     name: 'Collection Queries',
     endpoint: 'http://localhost:8085/graphql',

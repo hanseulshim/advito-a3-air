@@ -64,7 +64,7 @@ extend type Query {
   countryList: [Geography] @auth
   currencyList: [Currency] @auth
   geographyList: [Geography] @auth
-  marketList: [Geography] @auth
+  marketGeoList: [Geography] @auth
   distanceUnitList: [DistanceUnit] @auth
 }
 `;

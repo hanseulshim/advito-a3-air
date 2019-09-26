@@ -1,6 +1,6 @@
 import { NORMALIZATION, NORMALIZATION_MARKET } from '../../constants';
 
-export const normalization = {
+export default {
   queries: {
     name: 'Normalization Queries',
     endpoint: 'http://localhost:8085/graphql',
@@ -16,26 +16,24 @@ export const normalization = {
       normalizationMarketList(normalizationId: null) {
         ${NORMALIZATION_MARKET}
       }
-      topMarketList(normalizationId: null) {
-        id
+      topMarketList(clientGcn: "", normalizationId: null) {
+        name
+        originMarket
+        destMarket
+        idList
+      }
+      marketAdvancedTicketList(idList: []) {
+        label
         value
-        marketA
-        marketB
-        farePaid
+      }
+      marketDepartureList(idList: []) {
+        label
+        value
+      }
+      MarketFareBasis(idList: []) {
+        fareBasis
+        bookingClass
         usage
-        advancedTicketList {
-          label
-          value
-        }
-        departureList {
-          label
-          value
-        }
-        fareBasisList {
-          fareBasis
-          bookingClass
-          usage
-        }
       }
     }`
   },

@@ -1,6 +1,6 @@
 import { CONTRACT } from '../../constants';
 
-export const contract = {
+export default {
   queries: {
     name: 'Contract Queries',
     endpoint: 'http://localhost:8085/graphql',

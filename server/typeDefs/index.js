@@ -8,6 +8,7 @@ import { contract } from './contract';
 import { user } from './user';
 import { rule } from './rule';
 import { process } from './process';
+import { scenario } from './scenario';
 
 export const typeDefs = gql`
   scalar Date
@@ -21,6 +22,7 @@ export const typeDefs = gql`
   ${user}
   ${process}
   ${rule}
+  ${scenario}
   type Query {
     _empty: String
   }

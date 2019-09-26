@@ -1,6 +1,6 @@
 import { PRICING_TERM } from '../../constants';
 
-export const pricingTerm = {
+export default {
   queries: {
     name: 'Pricing Term Queries',
     endpoint: 'http://localhost:8085/graphql',

@@ -1,6 +1,6 @@
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 import { project } from './project';
 import { client } from './client';
 import { collection } from './collection';
@@ -9,6 +9,7 @@ import { library } from './library';
 import { contract } from './contract';
 import { user } from './user';
 import { process } from './process';
+import { scenario } from './scenario';
 
 export const resolvers = {
   ...merge(
@@ -19,7 +20,8 @@ export const resolvers = {
     library,
     contract,
     user,
-    process
+    process,
+    scenario
   ),
   Date: new GraphQLScalarType({
     name: 'Date',

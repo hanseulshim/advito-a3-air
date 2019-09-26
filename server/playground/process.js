@@ -1,6 +1,6 @@
 import { PROCESS } from '../constants';
 
-export const process = {
+export default {
   queries: {
     name: 'Process Queries',
     endpoint: 'http://localhost:8085/graphql',
