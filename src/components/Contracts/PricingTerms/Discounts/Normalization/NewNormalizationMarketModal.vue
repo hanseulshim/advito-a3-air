@@ -439,22 +439,9 @@ export default {
     beforeClose() {
       this.normalization = null;
       this.discount = null;
-      this.form.topMarket = null;
-      this.form.notes = '';
-      this.form.usageOverride = null;
-      this.form.farePullDate = null;
-      this.form.fareBasis = null;
-      this.form.amount = null;
-      this.form.currencyCode = null;
-      this.form.directionType = null;
-      this.form.advancePurchase = null;
-      this.form.minstay = null;
-      this.form.fareBasisApplicable = null;
-      this.form.directionTypeApplicable = null;
-      this.form.amountApplicable = null;
-      this.form.currencyCodeApplicable = null;
-      this.form.advancePurchaseApplicable = null;
-      this.form.minstayApplicable = null;
+      Object.keys(this.form).forEach(key => {
+        this.form[key] = null;
+      });
     }
   }
 };

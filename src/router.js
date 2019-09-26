@@ -19,6 +19,11 @@ import PricingTerms from '@/components/Contracts/PricingTerms';
 import TargetTerms from '@/components/Contracts/TargetTerms';
 
 import ScenarioSettings from '@/components/ScenarioSettings';
+import ScenarioName from '@/components/ScenarioSettings/EditScenario/ScenarioName';
+import ScenarioContracts from '@/components/ScenarioSettings/EditScenario/ScenarioContracts';
+import ScenarioPreferredAirlines from '@/components/ScenarioSettings/EditScenario/ScenarioPreferredAirlines';
+import ScenarioParameters from '@/components/ScenarioSettings/EditScenario/ScenarioParameters';
+import ScenarioTripDistribution from '@/components/ScenarioSettings/EditScenario/ScenarioTripDistribution';
 
 import Process from '@/components/Process';
 
@@ -99,7 +104,31 @@ const router = new Router({
             },
             {
               path: 'scenario-settings',
-              component: ScenarioSettings
+              name: 'scenario-settings',
+              component: ScenarioSettings,
+              children: [
+                {
+                  path: 'edit-scenario/scenario-name',
+                  name: 'scenario-name',
+                  component: ScenarioName
+                },
+                {
+                  path: 'edit-scenario/scenario-contracts',
+                  component: ScenarioContracts
+                },
+                {
+                  path: 'edit-scenario/scenario-preferred-airlines',
+                  component: ScenarioPreferredAirlines
+                },
+                {
+                  path: 'edit-scenario/scenario-parameters',
+                  component: ScenarioParameters
+                },
+                {
+                  path: 'edit-scenario/scenario-trip-distribution',
+                  component: ScenarioTripDistribution
+                }
+              ]
             },
             {
               path: 'process',

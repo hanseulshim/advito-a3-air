@@ -4,7 +4,10 @@
       <div class="section-header">
         {{ pluralize('scenario', scenarioList.length) }}
       </div>
-      <button class="button long">
+      <button v-if="selectedIdList.length" class="button long runScenarioBtn">
+        RUN SCENARIOS
+      </button>
+      <button class="button long" @click="showNewScenarioModal">
         + NEW SCENARIO
       </button>
     </div>
@@ -14,7 +17,7 @@
       :data="scenarioList"
       :default-sort="{ prop: 'name', order: 'ascending' }"
     >
-      <el-table-column label="Select" :min-width="scenario.round">
+      <el-table-column label="Select">
         <template slot-scope="props">
           <el-checkbox
             :value="selectedIdList.includes(props.row.id)"
@@ -23,102 +26,134 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="round"
+        prop="shortName"
         label="Round"
-        :min-width="scenario.round"
+        :min-width="scenario.shortName"
         sortable
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
-        prop="scenarioName"
+        prop="name"
         label="Scenario Name"
-        sortbale
-        :min-width="scenario.scenarioName"
+        sortable
+        :min-width="scenario.name"
         :sort-orders="['ascending', 'descending']"
       />
       <el-table-column
         label="Airline Contracts"
         :min-width="scenario.airlineContracts"
+        align="center"
       >
         <template slot-scope="props">
-          {{ props.row.airlineContracts ? `checkmark` : '—' }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Contract Targets"
-        :min-width="scenario.contractTargets"
-      >
-        <template slot-scope="props">
-          {{ props.row.contractTargets ? `checkmark` : '—' }}
+          <i
+            v-if="props.row.airlineContracts"
+            class="fas fa-check
+          icon-spacer"
+          />
         </template>
       </el-table-column>
       <el-table-column
         label="Preferred Airlines"
         :min-width="scenario.preferredAirlines"
+        align="center"
       >
         <template slot-scope="props">
-          {{ props.row.preferredAirlines ? `checkmark` : '—' }}
+          <i
+            v-if="props.row.preferredAirlines"
+            class="fas fa-check
+          icon-spacer"
+          />
         </template>
       </el-table-column>
-      <el-table-column label="Paramters" :min-width="scenario.parameters">
-        {{ 'Hist' }}
+      <el-table-column label="Parameters" :min-width="scenario.parameters">
+        <template slot-scope="props">
+          {{ props.row.useHistoricalShare ? 'HIST' : ' ' }}
+        </template>
       </el-table-column>
       <el-table-column
         label="Trip Distribution"
         :min-width="scenario.tripDistribution"
+        align="center"
       >
         <template slot-scope="props">
-          {{ props.row.tripDistribution ? `checkmark` : '—' }}
+          <i
+            v-if="props.row.tripDistribution"
+            class="fas fa-check
+          icon-spacer"
+          />
         </template>
       </el-table-column>
       <el-table-column
+        prop="effectiveSavings"
         label="Effective Savings"
         :min-width="scenario.effectiveSavings"
-      >
-        {{ ' ' }}
-      </el-table-column>
+      />
       <el-table-column label="Actions">
         <template slot-scope="props">
-          <el-tooltip effect="dark" content="Edit Discount" placement="top">
-            <i class="fas fa-pencil-alt icon-spacer" />
+          <el-tooltip effect="dark" content="Edit Scenario" placement="top">
+            <i
+              class="fas fa-pencil-alt icon-spacer"
+              @click="showEditScenarioModal(props.row)"
+            />
           </el-tooltip>
-          <el-tooltip effect="dark" content="Delete Discount" placement="top">
-            <i class="fas fa-trash-alt" />
+          <el-tooltip effect="dark" content="Delete Scenario" placement="top">
+            <i
+              class="fas fa-trash-alt"
+              @click="showDeleteScenarioModal(props.row)"
+            />
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
+    <NewScenarioModal />
+    <EditScenarioModal />
+    <DeleteScenarioModal />
   </div>
 </template>
 <script>
-import { formatDate, formatPercent, pluralize } from '@/helper';
+import {
+  GET_USER,
+  GET_CLIENT,
+  GET_SCENARIO_LIST,
+  GET_PROJECT
+} from '@/graphql/queries';
+import { pluralize } from '@/helper';
+import NewScenarioModal from './NewScenarioModal';
+import EditScenarioModal from './EditScenarioModal';
+import DeleteScenarioModal from './DeleteScenarioModal';
 import { scenario } from '@/config';
 export default {
   name: 'ScenarioSettings',
+  components: {
+    NewScenarioModal,
+    EditScenarioModal,
+    DeleteScenarioModal
+  },
+  apollo: {
+    user: {
+      query: GET_USER
+    },
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
+    scenarioList: {
+      query: GET_SCENARIO_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    }
+  },
   data() {
     return {
-      scenarioList: [
-        {
-          round: 'Baseline',
-          scenarioName: 'test-scenario',
-          airlineContracts: true,
-          contractTargets: true,
-          preferredAirlines: true,
-          parameters: 'HIST',
-          tripDistribution: true,
-          effectiveSavings: ''
-        },
-        {
-          round: 'P1',
-          scenarioName: 'test-scenario',
-          airlineContracts: true,
-          contractTargets: true,
-          preferredAirlines: true,
-          parameters: 'HIST',
-          tripDistribution: true,
-          effectiveSavings: ''
-        }
-      ],
+      user: null,
+      client: null,
+      project: null,
+      scenarioList: [],
       scenario,
       selectedIdList: []
     };
@@ -134,7 +169,32 @@ export default {
       } else {
         this.selectedIdList.splice(index, 1);
       }
+    },
+    showNewScenarioModal() {
+      this.$modal.show('new-scenario', {
+        user: this.user,
+        client: this.client,
+        project: this.project
+      });
+    },
+    showEditScenarioModal(scenario) {
+      this.$modal.show('edit-scenario', {
+        scenario
+      });
+    },
+    showDeleteScenarioModal(scenario) {
+      this.$modal.show('delete-scenario', {
+        id: scenario.id,
+        projectId: scenario.projectId
+      });
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+@import '@/styles/global.scss';
+.runScenarioBtn {
+  margin-left: auto;
+  margin-right: 1em;
+}
+</style>
