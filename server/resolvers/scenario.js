@@ -1,7 +1,14 @@
 import { UserInputError } from 'apollo-server-lambda';
-import { Scenario, Lookup, ScenarioContract } from '../models';
+import {
+  Scenario,
+  Lookup,
+  ScenarioContract,
+  Contract,
+  ScenarioPreferredCarrier
+} from '../models';
 import { SCENARIO_LOOKUP } from '../constants';
 import { raw } from 'objection';
+import uniq from 'lodash/uniq';
 
 export const scenario = {
   Query: {
@@ -38,7 +45,22 @@ export const scenario = {
         scenarioId
       );
       return scenarioContractList.map(contract => contract.contractId);
-    }
+    },
+    scenarioPreferredContractCarrierList: async (_, { projectId }) => {
+      const contractList = await Contract.query()
+        .select(raw('(select * from contract_carrier_getlist(id))'))
+        .where('isdeleted', false)
+        .andWhere('projectid', projectId);
+      const flattened = contractList.reduce(
+        (a, b) => a.concat(b.contractCarrierGetlist),
+        []
+      );
+      return uniq(flattened);
+    },
+    scenarioPreferredCarrierList: async (_, { scenarioId }) =>
+      await ScenarioPreferredCarrier.query().where('scenarioId', scenarioId),
+    scenarioPreferredCarrierTierList: async () =>
+      await Lookup.query().where('type', SCENARIO_LOOKUP.PREFERRED_CARRIER_TYPE)
   },
   Mutation: {
     createScenario: async (
@@ -163,6 +185,22 @@ export const scenario = {
         })
       );
       await Promise.all(contractRequests);
+    },
+    updateScenarioPreferredCarriers: async (_, { carrierList = [] }) => {
+      const scenarioRequests = carrierList.map(
+        ({ id, scenarioId, sectorId, carrier, tier }) => {
+          const obj = {
+            scenarioId,
+            sectorId,
+            carrierCd: carrier,
+            tier
+          };
+          return id
+            ? ScenarioPreferredCarrier.query().patchAndFetchById(id, obj)
+            : ScenarioPreferredCarrier.query().insert(obj);
+        }
+      );
+      await Promise.all(scenarioRequests);
     }
   }
 };
