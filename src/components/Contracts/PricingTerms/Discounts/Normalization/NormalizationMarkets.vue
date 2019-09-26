@@ -155,7 +155,11 @@ export default {
       return `${row.marketA} - ${row.marketB}`;
     },
     formatUsage(row) {
-      return `${((row.farePaid / this.farePaidAllMarkets) * 100).toFixed(2)}%`;
+      if (row.farePaid > 0) {
+        return `${((row.farePaid / this.farePaidAllMarkets) * 100).toFixed(
+          2
+        )}%`;
+      } else return 0;
     },
     calcEffectiveDiscount(compare, resulting) {
       //Reusable function for getting the effective discount
