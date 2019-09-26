@@ -31,6 +31,18 @@ export default {
         name
       }
     }
+    scenarioPreferredContractList(projectId: null)
+    scenarioPreferredCarrierList(scenarioId: null) {
+      id
+      scenarioId
+      sectorId
+      carrier
+      tier
+    }
+    scenarioPreferredCarrierTierList {
+      id
+      name
+    }
   }`
   },
   mutations: {

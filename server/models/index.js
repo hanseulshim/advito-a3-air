@@ -3,3 +3,4 @@ export * from './scenario';
 export * from './lookup';
 export * from './market';
 export * from './normalization';
+export * from './contract';

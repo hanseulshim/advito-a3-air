@@ -80,6 +80,17 @@ type ScenarioParameters {
   priceInfluenceLevelList: [PriceInfluenceLevelType]
   biasOverrideList: [BiasOverride]
 }
+type ScenarioPreferredCarrier {
+  id: Int
+  scenarioId: Int
+  sectorId: Int
+  carrier: String
+  tier: Int
+}
+type ScenarioPreferredCarrierTier {
+  id: Int
+  name: String
+}
 
 extend type Query {
   scenarioList(projectId: Int): [Scenario] @auth
@@ -87,6 +98,9 @@ extend type Query {
   scenarioTypeList: [ScenarioType] @auth
   scenarioParameters: ScenarioParameters @auth
   scenarioContractList(scenarioId: Int): [Int] @auth
+  scenarioPreferredContractList(projectId: Int): [String] @auth
+  scenarioPreferredCarrierList(scenarioId: Int): [ScenarioPreferredCarrier] @auth
+  scenarioPreferredCarrierTierList: [ScenarioPreferredCarrierTier] @auth
 }
 extend type Mutation {
   createScenario(

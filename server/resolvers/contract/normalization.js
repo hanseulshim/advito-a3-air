@@ -59,6 +59,7 @@ export const normalization = {
     },
     normalization: async (_, { id }, { db }) => await getNormalization(db, id),
     topMarketList: async (_, { clientGcn = null, normalizationId = null }) => {
+      if (!normalizationId) return;
       const { usageFrom, usageTo } = await Normalization.query()
         .select('usagefrom as usageFrom', 'usageto as usageTo')
         .findById(normalizationId);
