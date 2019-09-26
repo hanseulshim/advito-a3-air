@@ -99,6 +99,7 @@ export const normalization = {
           )} (${numeral(farePaid / totalSum).format('0.00%')})`,
           originMarket,
           destMarket,
+          farePaid,
           idList
         })
       );

@@ -46,7 +46,7 @@ export const scenario = {
       );
       return scenarioContractList.map(contract => contract.contractId);
     },
-    scenarioPreferredContractList: async (_, { projectId }) => {
+    scenarioPreferredContractCarrierList: async (_, { projectId }) => {
       const contractList = await Contract.query()
         .select(raw('(select * from contract_carrier_getlist(id))'))
         .where('isdeleted', false)
@@ -185,6 +185,22 @@ export const scenario = {
         })
       );
       await Promise.all(contractRequests);
+    },
+    updateScenarioPreferredCarriers: async (_, { carrierList = [] }) => {
+      const scenarioRequests = carrierList.map(
+        ({ id, scenarioId, sectorId, carrier, tier }) => {
+          const obj = {
+            scenarioId,
+            sectorId,
+            carrierCd: carrier,
+            tier
+          };
+          return id
+            ? ScenarioPreferredCarrier.query().patchAndFetchById(id, obj)
+            : ScenarioPreferredCarrier.query().insert(obj);
+        }
+      );
+      await Promise.all(scenarioRequests);
     }
   }
 };

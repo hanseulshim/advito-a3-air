@@ -31,7 +31,7 @@ export default {
         name
       }
     }
-    scenarioPreferredContractList(projectId: null)
+    scenarioPreferredContractCarrierList(projectId: null)
     scenarioPreferredCarrierList(scenarioId: null) {
       id
       scenarioId
@@ -93,6 +93,7 @@ export default {
         scenarioId: null
         contractIdList: []
       )
+      updateScenarioPreferredCarriers(carrierList: [])
     }`
   }
 };

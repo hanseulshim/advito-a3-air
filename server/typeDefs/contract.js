@@ -119,6 +119,7 @@ type TopMarket {
   name: String
   originMarket: String
   destMarket: String
+  farePaid: Float
   idList: [Int]
 }
 type MarketAdvancedTicket {
