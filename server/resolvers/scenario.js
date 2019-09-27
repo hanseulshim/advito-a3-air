@@ -114,7 +114,10 @@ export const scenario = {
         })
       );
     },
-    scenarioTripDistributionList: async (_, { scenarioId, idList }) => {
+    scenarioTripDistributionList: async (
+      _,
+      { projectId, scenarioId, idList }
+    ) => {
       const marketList = await Market.query()
         .select('recordkey as recordKey')
         .whereIn('id', idList);
@@ -126,6 +129,7 @@ export const scenario = {
           'hqsi as hQsi',
           'citynamepair as cityNamePair',
           'poscountryname as posCountryName',
+          'farecategory as fareCategory',
           's.id as id',
           's.trip_distribution as tripDistribution'
         )
@@ -137,11 +141,21 @@ export const scenario = {
         .where(function() {
           this.whereNotNull('fqsi').orWhereNotNull('hqsi');
         })
+        .andWhere('projectid', projectId)
         .whereIn('recordkey', marketList.map(({ recordKey }) => recordKey));
-
-      console.log(activityList);
       return activityList.reduce(
-        (arr, { id, airlineName, fQsi, hQsi, tripDistribution }) => {
+        (
+          arr,
+          {
+            id,
+            airlineName,
+            fQsi,
+            hQsi,
+            tripDistribution,
+            posCountryName,
+            fareCategory
+          }
+        ) => {
           const index = arr.findIndex(v => v.airlineName === airlineName);
           if (index !== -1) {
             arr[index].fQsi += parseFloat(fQsi);
@@ -153,6 +167,8 @@ export const scenario = {
             tripDistribution,
             scenarioId,
             airlineName,
+            posCountryName,
+            fareCategory,
             fQsi: parseFloat(fQsi),
             hQsi: parseFloat(hQsi)
           });

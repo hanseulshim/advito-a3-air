@@ -48,11 +48,13 @@ export default {
       travelSector
       idList
     }
-    scenarioTripDistributionList(idList: [], scenarioId: null) {
+    scenarioTripDistributionList(idList: [], projectId: null, scenarioId: null) {
       id
       scenarioId
       tripDistribution
       airlineName
+      posCountryName
+      fareCategory
       fQsi
       hQsi
     }
