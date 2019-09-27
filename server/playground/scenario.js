@@ -43,6 +43,19 @@ export default {
       id
       name
     }
+    scenarioMarketList(clientGcn: null) {
+      name
+      travelSector
+      idList
+    }
+    scenarioTripDistributionList(idList: [], scenarioId: null) {
+      id
+      scenarioId
+      tripDistribution
+      airlineName
+      fQsi
+      hQsi
+    }
   }`
   },
   mutations: {

@@ -98,6 +98,19 @@ type ScenarioPreferredCarrierTier {
   id: Int
   name: String
 }
+type ScenarioMarket {
+  name: String
+  travelSector: String
+  idList: [Int]
+}
+type ScenarioTripDistribution {
+  id: Int
+  scenarioId: Int
+  tripDistribution: Float
+  airlineName: String
+  fQsi: Float
+  hQsi: Float
+}
 
 extend type Query {
   scenarioList(projectId: Int): [Scenario] @auth
@@ -108,6 +121,8 @@ extend type Query {
   scenarioPreferredContractCarrierList(projectId: Int): [String] @auth
   scenarioPreferredCarrierList(scenarioId: Int): [ScenarioPreferredCarrier] @auth
   scenarioPreferredCarrierTierList: [ScenarioPreferredCarrierTier] @auth
+  scenarioMarketList(clientGcn: String, projectId: Int): [ScenarioMarket] @auth
+  scenarioTripDistributionList(idList: [Int], scenarioId: Int!): [ScenarioTripDistribution] @auth
 }
 extend type Mutation {
   createScenario(
