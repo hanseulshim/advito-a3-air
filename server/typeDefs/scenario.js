@@ -84,14 +84,14 @@ type ScenarioPreferredCarrier {
   id: Int
   scenarioId: Int
   sectorId: Int
-  carrier: String
+  carrierCode: String
   tier: Int
 }
 input ScenarioPreferredCarrierInput {
   id: Int
   scenarioId: Int
   sectorId: Int
-  carrier: String
+  carrierCode: String
   tier: Int
 }
 type ScenarioPreferredCarrierTier {
@@ -115,10 +115,10 @@ type ScenarioTripDistribution {
 }
 input ScenarioTripDistributionInput {
   id: Int
-  scenario_id: Int
-  city_pair: String
-  carrier_code: String
-  trip_distribution: Float
+  scenarioId: Int
+  cityPair: String
+  carrierCode: String
+  tripDistribution: Float
 }
 
 extend type Query {

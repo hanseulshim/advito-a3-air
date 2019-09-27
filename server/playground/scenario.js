@@ -36,7 +36,7 @@ export default {
       id
       scenarioId
       sectorId
-      carrier
+      carrierCode
       tier
     }
     scenarioPreferredCarrierTierList {
@@ -109,6 +109,7 @@ export default {
         contractIdList: []
       )
       updateScenarioPreferredCarriers(carrierList: [])
+      updateScenarioTripDistributions(tripDistributionList: [])
     }`
   }
 };

@@ -5,6 +5,7 @@ import {
   ScenarioContract,
   Contract,
   ScenarioPreferredCarrier,
+  ScenarioTrip,
   Market,
   Activity
 } from '../models';
@@ -304,16 +305,35 @@ export const scenario = {
     },
     updateScenarioPreferredCarriers: async (_, { carrierList = [] }) => {
       const scenarioRequests = carrierList.map(
-        ({ id, scenarioId, sectorId, carrier, tier }) => {
+        ({ id, scenarioId, sectorId, carrierCode, tier }) => {
           const obj = {
             scenarioId,
             sectorId,
-            carrierCd: carrier,
+            carrierCode,
             tier
           };
           return id
             ? ScenarioPreferredCarrier.query().patchAndFetchById(id, obj)
             : ScenarioPreferredCarrier.query().insert(obj);
+        }
+      );
+      await Promise.all(scenarioRequests);
+    },
+    updateScenarioTripDistributions: async (
+      _,
+      { tripDistributionList = [] }
+    ) => {
+      const scenarioRequests = tripDistributionList.map(
+        ({ id, scenarioId, cityPair, carrierCode, tripDistribution }) => {
+          const obj = {
+            scenarioId,
+            cityPair,
+            carrierCode,
+            tripDistribution
+          };
+          return id
+            ? ScenarioTrip.query().patchAndFetchById(id, obj)
+            : ScenarioTrip.query().insert(obj);
         }
       );
       await Promise.all(scenarioRequests);
