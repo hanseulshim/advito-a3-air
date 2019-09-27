@@ -31,6 +31,33 @@ export default {
         name
       }
     }
+    scenarioPreferredContractCarrierList(projectId: null)
+    scenarioPreferredCarrierList(scenarioId: null) {
+      id
+      scenarioId
+      sectorId
+      carrierCode
+      tier
+    }
+    scenarioPreferredCarrierTierList {
+      id
+      name
+    }
+    scenarioMarketList(clientGcn: null) {
+      name
+      travelSector
+      idList
+    }
+    scenarioTripDistributionList(idList: [], projectId: null, scenarioId: null) {
+      id
+      scenarioId
+      tripDistribution
+      airlineName
+      posCountryName
+      fareCategory
+      fQsi
+      hQsi
+    }
   }`
   },
   mutations: {
@@ -81,6 +108,8 @@ export default {
         scenarioId: null
         contractIdList: []
       )
+      updateScenarioPreferredCarriers(carrierList: [])
+      updateScenarioTripDistributions(tripDistributionList: [])
     }`
   }
 };

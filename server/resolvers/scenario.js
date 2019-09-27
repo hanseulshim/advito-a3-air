@@ -1,7 +1,17 @@
 import { UserInputError } from 'apollo-server-lambda';
-import { Scenario, Lookup, ScenarioContract } from '../models';
-import { SCENARIO_LOOKUP } from '../constants';
+import {
+  Scenario,
+  Lookup,
+  ScenarioContract,
+  Contract,
+  ScenarioPreferredCarrier,
+  ScenarioTrip,
+  Market,
+  Activity
+} from '../models';
+import { SCENARIO_LOOKUP, LOCATION_LOOKUP } from '../constants';
 import { raw } from 'objection';
+import uniq from 'lodash/uniq';
 
 export const scenario = {
   Query: {
@@ -38,6 +48,135 @@ export const scenario = {
         scenarioId
       );
       return scenarioContractList.map(contract => contract.contractId);
+    },
+    scenarioPreferredContractCarrierList: async (_, { projectId }) => {
+      const contractList = await Contract.query()
+        .select(raw('(select * from contract_carrier_getlist(id))'))
+        .where('isdeleted', false)
+        .andWhere('projectid', projectId);
+      const flattened = contractList.reduce(
+        (a, b) => a.concat(b.contractCarrierGetlist),
+        []
+      );
+      return uniq(flattened);
+    },
+    scenarioPreferredCarrierList: async (_, { scenarioId }) =>
+      await ScenarioPreferredCarrier.query().where('scenarioId', scenarioId),
+    scenarioPreferredCarrierTierList: async () =>
+      await Lookup.query().where(
+        'type',
+        SCENARIO_LOOKUP.PREFERRED_CARRIER_TYPE
+      ),
+    scenarioMarketList: async (_, { clientGcn }) => {
+      const marketList = await Market.query()
+        .select(
+          'odoriginmarket as originMarket',
+          'oddestmarket as destMarket',
+          'travelsector as travelSector',
+          'l1.name as originMarketName',
+          'l2.name as destMarketName',
+          raw(`ARRAY_AGG(origindestinationsegment.id)`).as('idList')
+        )
+        .where('deleted', false)
+        .andWhere('clientgcn', clientGcn)
+        .groupBy(
+          'odoriginmarket',
+          'oddestmarket',
+          'travelsector',
+          'l1.name',
+          'l2.name'
+        )
+        .havingNotNull('odoriginmarket')
+        .havingNotNull('oddestmarket')
+        .leftJoin(
+          'location as l1',
+          'origindestinationsegment.odoriginmarket',
+          'l1.code'
+        )
+        .where('l1.locationtype', LOCATION_LOOKUP.AIRPORT)
+        .leftJoin(
+          'location as l2',
+          'origindestinationsegment.oddestmarket',
+          'l2.code'
+        )
+        .where('l2.locationtype', LOCATION_LOOKUP.AIRPORT);
+      return marketList.map(
+        ({
+          originMarket,
+          originMarketName,
+          destMarket,
+          destMarketName,
+          travelSector,
+          idList
+        }) => ({
+          name: `(${originMarket}) ${originMarketName} - (${destMarket}) ${destMarketName}`,
+          travelSector,
+          idList
+        })
+      );
+    },
+    scenarioTripDistributionList: async (
+      _,
+      { projectId, scenarioId, idList }
+    ) => {
+      const marketList = await Market.query()
+        .select('recordkey as recordKey')
+        .whereIn('id', idList);
+      const activityList = await Activity.query()
+        .select(
+          'airlinename as airlineName',
+          'airlinecd as airlineCd',
+          'fqsi as fQsi',
+          'hqsi as hQsi',
+          'citynamepair as cityNamePair',
+          'poscountryname as posCountryName',
+          'farecategory as fareCategory',
+          's.id as id',
+          's.trip_distribution as tripDistribution'
+        )
+        .leftJoin(
+          'scenariotrip as s',
+          'asr_activityflat_all.airlinecd',
+          's.carrier_code'
+        )
+        .where(function() {
+          this.whereNotNull('fqsi').orWhereNotNull('hqsi');
+        })
+        .andWhere('projectid', projectId)
+        .whereIn('recordkey', marketList.map(({ recordKey }) => recordKey));
+      return activityList.reduce(
+        (
+          arr,
+          {
+            id,
+            airlineName,
+            fQsi,
+            hQsi,
+            tripDistribution,
+            posCountryName,
+            fareCategory
+          }
+        ) => {
+          const index = arr.findIndex(v => v.airlineName === airlineName);
+          if (index !== -1) {
+            arr[index].fQsi += parseFloat(fQsi);
+            arr[index].hQsi += parseFloat(hQsi);
+            return arr;
+          }
+          arr.push({
+            id,
+            tripDistribution,
+            scenarioId,
+            airlineName,
+            posCountryName,
+            fareCategory,
+            fQsi: parseFloat(fQsi),
+            hQsi: parseFloat(hQsi)
+          });
+          return arr;
+        },
+        []
+      );
     }
   },
   Mutation: {
@@ -163,6 +302,41 @@ export const scenario = {
         })
       );
       await Promise.all(contractRequests);
+    },
+    updateScenarioPreferredCarriers: async (_, { carrierList = [] }) => {
+      const scenarioRequests = carrierList.map(
+        ({ id, scenarioId, sectorId, carrierCode, tier }) => {
+          const obj = {
+            scenarioId,
+            sectorId,
+            carrierCode,
+            tier
+          };
+          return id
+            ? ScenarioPreferredCarrier.query().patchAndFetchById(id, obj)
+            : ScenarioPreferredCarrier.query().insert(obj);
+        }
+      );
+      await Promise.all(scenarioRequests);
+    },
+    updateScenarioTripDistributions: async (
+      _,
+      { tripDistributionList = [] }
+    ) => {
+      const scenarioRequests = tripDistributionList.map(
+        ({ id, scenarioId, cityPair, carrierCode, tripDistribution }) => {
+          const obj = {
+            scenarioId,
+            cityPair,
+            carrierCode,
+            tripDistribution
+          };
+          return id
+            ? ScenarioTrip.query().patchAndFetchById(id, obj)
+            : ScenarioTrip.query().insert(obj);
+        }
+      );
+      await Promise.all(scenarioRequests);
     }
   }
 };
