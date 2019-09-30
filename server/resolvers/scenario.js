@@ -197,6 +197,27 @@ export const scenario = {
             .where('isdeleted', false)
             .andWhere('groupid', projectDataRef.dataRefId)
         : [];
+    },
+    scenarioPreferredAirlineList: async (_, { projectId }, { db }) => {
+      const projectDataRef = await ProjectDataRef.query()
+        .select('datarefid as dataRefId')
+        .where('status', 1)
+        .andWhere('datareftype', 2)
+        .andWhere('projectid', projectId)
+        .first();
+      return projectDataRef
+        ? await db('pcgcarrier as p')
+            .select({
+              id: 'p.id',
+              airlineId: 'carrierid',
+              name: 'c.name'
+            })
+            .leftJoin('carrier as c', 'c.id', 'p.carrierid')
+            .leftJoin('lov_lookup as l', 'l.id', 'p.preferencelevelid')
+            .where('p.isdeleted', false)
+            .andWhere('pcgroupid', projectDataRef.dataRefId)
+            .orderBy('p.id')
+        : [];
     }
   },
   Mutation: {
