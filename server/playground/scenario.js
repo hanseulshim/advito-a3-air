@@ -58,6 +58,12 @@ export default {
       fQsi
       hQsi
     }
+    scenarioTravelSectorList(projectId: null) {
+      id
+      name
+      shortName
+      standard
+    }
   }`
   },
   mutations: {
