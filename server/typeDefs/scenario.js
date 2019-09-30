@@ -132,6 +132,7 @@ extend type Query {
   scenarioPreferredCarrierTierList: [ScenarioPreferredCarrierTier] @auth
   scenarioMarketList(clientGcn: String, projectId: Int): [ScenarioMarket] @auth
   scenarioTripDistributionList(idList: [Int], scenarioId: Int!, projectId: Int!): [ScenarioTripDistribution] @auth
+  scenarioTravelSectorList(projectId: Int!): [TravelSector] @auth
 }
 extend type Mutation {
   createScenario(

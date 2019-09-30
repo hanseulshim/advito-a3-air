@@ -7,7 +7,8 @@ import {
   ScenarioPreferredCarrier,
   ScenarioTrip,
   Market,
-  Activity
+  Activity,
+  ProjectDataRef
 } from '../models';
 import { SCENARIO_LOOKUP, LOCATION_LOOKUP } from '../constants';
 import { raw } from 'objection';
@@ -177,6 +178,25 @@ export const scenario = {
         },
         []
       );
+    },
+    scenarioTravelSectorList: async (_, { projectId }, { db }) => {
+      const projectDataRef = await ProjectDataRef.query()
+        .select('datarefid as dataRefId')
+        .where('status', 1)
+        .andWhere('datareftype', 2)
+        .andWhere('projectid', projectId)
+        .first();
+      return projectDataRef
+        ? await db('travelsector')
+            .select({
+              id: 'id',
+              name: 'name',
+              shortName: 'shortname',
+              standard: 'isstandard'
+            })
+            .where('isdeleted', false)
+            .andWhere('groupid', projectDataRef.dataRefId)
+        : [];
     }
   },
   Mutation: {
