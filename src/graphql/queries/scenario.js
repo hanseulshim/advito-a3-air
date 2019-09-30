@@ -71,7 +71,8 @@ export const GET_SCENARIO_PREFERRED_CARRIER_LIST = gql`
 export const GET_SCENARIO_TRAVEL_SECTOR_LIST = gql`
   query scenarioTravelSectorList($projectId: Int!) {
     scenarioTravelSectorList(projectId: $projectId) {
-      idname
+      id
+      name
       shortName
       standard
     }

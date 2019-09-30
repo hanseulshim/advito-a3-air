@@ -13,37 +13,32 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="airline"
+        prop="carrierCode"
         label="Airlines"
         :min-width="contract.name"
       />
-      <el-table-column prop="contract" label="Contract">
+      <el-table-column label="Contract">
         <template slot-scope="props">
-          <i v-if="props.row.contract" class="fas fa-check" />
+          <i v-if="checkContract(props.row.carrierCode)" class="fas fa-check" />
         </template>
       </el-table-column>
-      <el-table-column label="CAN-MXCRB" prop="canMxc">
+      <el-table-column
+        v-for="sector in scenarioTravelSectorList"
+        :key="sector.id"
+        :label="sector.shortName"
+        :min-width="contract.name"
+      >
         <template slot-scope="props">
-          <el-select
-            v-model="props.row.canMxc"
-            @change="value => updateCanMxc(value, props.row.id)"
-          >
+          <el-select v-model="props.row.tier">
             <el-option
               v-for="tier in scenarioPreferredCarrierTierList"
               :key="tier.id"
-              :label="tier.name"
               :value="tier.id"
+              :label="tier.name"
             />
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column
-        label="Effective Dates"
-        prop="effectiveDates"
-        :formatter="formatDate"
-        :min-width="contract.effectiveFrom"
-      />
-      <el-table-column label="Point of Sale" prop="pointOfSale" />
     </el-table>
     <div class="save-container">
       <button class="button" type="button" @click="saveContracts">SAVE</button>
@@ -128,6 +123,13 @@ export default {
     },
     toggleSelection(row) {
       console.log(row);
+    },
+    checkContract(carrierCode) {
+      if (
+        this.scenarioPreferredContractCarrierList.find(v => v === carrierCode)
+      ) {
+        return true;
+      } else return false;
     },
     saveContracts() {
       alert('contract list saved.');
