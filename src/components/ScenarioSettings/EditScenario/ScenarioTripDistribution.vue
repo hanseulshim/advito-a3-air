@@ -94,23 +94,51 @@
   </el-form>
 </template>
 <script>
-import { GET_POINT_OF_SALE_LIST } from '@/graphql/queries';
+import {
+  GET_CLIENT,
+  GET_PROJECT,
+  GET_SCENARIO,
+  GET_SCENARIO_MARKET_LIST
+} from '@/graphql/queries';
 export default {
   name: 'ScenarioTripDistribution',
   props: {
-    scenario: {
+    scenarioId: {
       default: null,
-      type: Object
+      type: Number
     }
   },
-  // apollo: {
-  //   pointOfSaleList:{
-  //     query: GET_POINT_OF_SALE_LIST,
-  //     variables:
-  //   }
-  // },
+  apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
+    scenario: {
+      query: GET_SCENARIO,
+      variables() {
+        return {
+          id: this.scenarioId
+        };
+      }
+    },
+    scenarioMarketList: {
+      query: GET_SCENARIO_MARKET_LIST,
+      variables() {
+        return {
+          clientGcn: this.client.gcn,
+          projectId: this.project.id
+        };
+      }
+    }
+  },
   data() {
     return {
+      client: {},
+      project: {},
+      scenairo: {},
+      scenarioMarketList: [],
       markets: ['A', 'B', 'C', 'D'],
       fareCategories: [],
       pointOfSaleList: [

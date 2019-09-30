@@ -3,16 +3,13 @@
     <el-table
       ref="preferredAirlineList"
       v-loading="$apollo.loading"
-      :data="preferredAirlineList"
+      :data="scenarioPreferredCarrierList"
       :default-sort="{ prop: 'name', order: 'ascending' }"
       :max-height="500"
     >
-      <el-table-column label="Select">
+      <el-table-column>
         <template slot-scope="props">
-          <el-checkbox
-            :value="selectedIdList.includes(props.row.id)"
-            @change="toggleSelection(props.row.id)"
-          />
+          <el-checkbox @change="toggleSelection(props.row)" />
         </template>
       </el-table-column>
       <el-table-column
@@ -32,10 +29,10 @@
             @change="value => updateCanMxc(value, props.row.id)"
           >
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="tier in scenarioPreferredCarrierTierList"
+              :key="tier.id"
+              :label="tier.name"
+              :value="tier.id"
             />
           </el-select>
         </template>
@@ -54,94 +51,73 @@
   </div>
 </template>
 <script>
+import {
+  GET_SCENARIO_PREFERRED_CONTRACT_CARRIER_LIST,
+  GET_SCENARIO_PREFERRED_CARRIER_LIST,
+  GET_SCENARIO_TRAVEL_SECTOR_LIST,
+  GET_SCENARIO_PREFERRED_CARRIER_TIER_LIST,
+  GET_SCENARIO,
+  GET_PROJECT
+} from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import { contract } from '@/config';
 export default {
   name: 'ScenarioPreferredAirlines',
   components: {},
   props: {
-    scenario: {
+    scenarioId: {
       default: null,
-      type: Object
+      type: Number
     }
   },
-  apollo: {},
+  apollo: {
+    project: {
+      query: GET_PROJECT
+    },
+    scenario: {
+      query: GET_SCENARIO,
+      variables() {
+        return {
+          id: this.scenarioId
+        };
+      }
+    },
+    scenarioPreferredContractCarrierList: {
+      query: GET_SCENARIO_PREFERRED_CONTRACT_CARRIER_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    },
+    scenarioTravelSectorList: {
+      query: GET_SCENARIO_TRAVEL_SECTOR_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    },
+    scenarioPreferredCarrierList: {
+      query: GET_SCENARIO_PREFERRED_CARRIER_LIST,
+      variables() {
+        return {
+          scenarioId: this.scenarioId
+        };
+      }
+    },
+    scenarioPreferredCarrierTierList: {
+      query: GET_SCENARIO_PREFERRED_CARRIER_TIER_LIST
+    }
+  },
   data() {
     return {
-      preferredAirlineList: [
-        {
-          id: 1,
-          airline: 'Acvila Air',
-          contract: true,
-          canMxc: 'primary',
-          intraAfr: 'primary',
-          intraAsia: 'secondary',
-          intraCan: 'secondary',
-          intraCsamr: 'primary'
-        },
-        {
-          id: 2,
-          airline: 'Adam Sky Connection',
-          contract: true,
-          canMxc: 'primary',
-          intraAfr: 'primary',
-          intraAsia: 'secondary',
-          intraCan: 'secondary',
-          intraCsamr: 'primary'
-        },
-        {
-          id: 3,
-          airline: 'Ai',
-          contract: false,
-          canMxc: 'primary',
-          intraAfr: 'primary',
-          intraAsia: 'secondary',
-          intraCan: 'secondary',
-          intraCsamr: 'primary'
-        },
-        {
-          id: 4,
-          airline: 'Adria Airways',
-          contract: true,
-          canMxc: 'primary',
-          intraAfr: 'primary',
-          intraAsia: 'secondary',
-          intraCan: 'secondary',
-          intraCsamr: 'primary'
-        },
-        {
-          id: 5,
-          airline: 'Aer Lingus',
-          contract: true,
-          canMxc: 'secondary',
-          intraAfr: 'primary',
-          intraAsia: 'secondary',
-          intraCan: 'secondary',
-          intraCsamr: 'primary'
-        },
-        {
-          id: 6,
-          airline: 'Aeroflot',
-          contract: true,
-          canMxc: 'primary',
-          intraAfr: 'primary',
-          intraAsia: 'secondary',
-          intraCan: 'secondary',
-          intraCsamr: 'primary'
-        }
-      ],
-      selectedIdList: [],
-      contract,
-      options: [
-        {
-          value: 'primary',
-          label: 'Primary'
-        },
-        {
-          value: 'secondary',
-          label: 'Secondary'
-        }
-      ]
+      scenarioPreferredContractCarrierList: [],
+      scenarioPreferredCarrierList: [],
+      scenarioPreferredCarrierTierList: [],
+      scenarioTravelSectorList: [],
+      project: {},
+      contract
     };
   },
   methods: {
@@ -150,13 +126,8 @@ export default {
         row.effectiveTo
       )}`;
     },
-    toggleSelection(id) {
-      const index = this.selectedIdList.indexOf(id);
-      if (index === -1) {
-        this.selectedIdList.push(id);
-      } else {
-        this.selectedIdList.splice(index, 1);
-      }
+    toggleSelection(row) {
+      console.log(row);
     },
     saveContracts() {
       alert('contract list saved.');
