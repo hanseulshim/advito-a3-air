@@ -64,6 +64,11 @@ export default {
       shortName
       standard
     }
+    scenarioPreferredAirlineList(projectId: null) {
+      id
+      airlineId
+      name
+    }
   }`
   },
   mutations: {
