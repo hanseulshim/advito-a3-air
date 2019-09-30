@@ -39,9 +39,6 @@ export class ScenarioPreferredCarrier extends Model {
   static get tableName() {
     return 'scenariopreferredcarrier';
   }
-  get carrierCode() {
-    return this.carrierCd;
-  }
 }
 export class ScenarioTrip extends Model {
   static get tableName() {
