@@ -110,7 +110,10 @@ export default {
       this.$modal.show('edit-project', { project });
     },
     showInfoModal() {
-      this.$modal.show('info');
+      this.$modal.show('info', {
+        source:
+          'https://a3-upload-pdf.s3.us-east-2.amazonaws.com/Advito_Help_Contracts.pdf'
+      });
     }
   }
 };
