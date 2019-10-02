@@ -88,6 +88,16 @@ export const GET_SCENARIO_PREFERRED_CARRIER_TIER_LIST = gql`
   }
 `;
 
+export const GET_SCENARIO_PREFERRED_AIRLINE_LIST = gql`
+  query scenarioPreferredAirlineList($projectId: Int!) {
+    scenarioPreferredAirlineList(projectId: $projectId) {
+      id
+      code
+      name
+    }
+  }
+`;
+
 export const GET_SCENARIO_MARKET_LIST = gql`
   query scenarioMarketList($clientGcn: String, $projectId: Int) {
     scenarioMarketList(clientGcn: $clientGcn, projectId: $projectId) {

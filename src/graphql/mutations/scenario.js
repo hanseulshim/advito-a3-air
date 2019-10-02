@@ -91,3 +91,11 @@ export const TOGGLE_SCENARIO_CONTRACT = gql`
     )
   }
 `;
+
+export const UPDATE_SCENARIO_PREFERRED_CARRIERS = gql`
+  mutation updateScenarioPreferredCarriers(
+    $carrierList: [ScenarioPreferredCarrierInput]
+  ) {
+    updateScenarioPreferredCarriers(carrierList: $carrierList)
+  }
+`;

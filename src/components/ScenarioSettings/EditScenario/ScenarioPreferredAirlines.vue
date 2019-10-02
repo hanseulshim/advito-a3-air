@@ -3,7 +3,7 @@
     <el-table
       ref="preferredAirlineList"
       v-loading="$apollo.loading"
-      :data="scenarioPreferredCarrierList"
+      :data="scenarioPreferredAirlineList"
       :default-sort="{ prop: 'name', order: 'ascending' }"
       :max-height="500"
     >
@@ -13,13 +13,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="carrierCode"
+        prop="name"
         label="Airlines"
         :min-width="contract.name"
       />
       <el-table-column label="Contract">
         <template slot-scope="props">
-          <i v-if="checkContract(props.row.carrierCode)" class="fas fa-check" />
+          <i v-if="checkContract(props.row.code)" class="fas fa-check" />
         </template>
       </el-table-column>
       <el-table-column
@@ -29,7 +29,12 @@
         :min-width="contract.name"
       >
         <template slot-scope="props">
-          <el-select v-model="props.row.tier">
+          <el-select
+            :value="setTierValue(props.row, props.column.label)"
+            @change="
+              value => changeSectorTier(value, props.row, props.column.label)
+            "
+          >
             <el-option
               v-for="tier in scenarioPreferredCarrierTierList"
               :key="tier.id"
@@ -51,10 +56,12 @@ import {
   GET_SCENARIO_PREFERRED_CARRIER_LIST,
   GET_SCENARIO_TRAVEL_SECTOR_LIST,
   GET_SCENARIO_PREFERRED_CARRIER_TIER_LIST,
+  GET_SCENARIO_PREFERRED_AIRLINE_LIST,
   GET_SCENARIO,
   GET_PROJECT
 } from '@/graphql/queries';
-import { formatDate } from '@/helper';
+import { UPDATE_SCENARIO_PREFERRED_CARRIERS } from '@/graphql/mutations';
+import { formatDate, removeTypename } from '@/helper';
 import { contract } from '@/config';
 export default {
   name: 'ScenarioPreferredAirlines',
@@ -93,12 +100,31 @@ export default {
         };
       }
     },
+    scenarioPreferredAirlineList: {
+      query: GET_SCENARIO_PREFERRED_AIRLINE_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    },
     scenarioPreferredCarrierList: {
       query: GET_SCENARIO_PREFERRED_CARRIER_LIST,
       variables() {
         return {
           scenarioId: this.scenarioId
         };
+      },
+      result({ data: { scenarioPreferredCarrierList } }) {
+        this.scenarioPreferredCarrierListCopy = scenarioPreferredCarrierList.map(
+          carrier => ({
+            id: carrier.id,
+            scenarioId: carrier.scenarioId,
+            sectorId: carrier.sectorId,
+            carrierCode: carrier.carrierCode,
+            tier: carrier.tier
+          })
+        );
       }
     },
     scenarioPreferredCarrierTierList: {
@@ -109,8 +135,10 @@ export default {
     return {
       scenarioPreferredContractCarrierList: [],
       scenarioPreferredCarrierList: [],
+      scenarioPreferredCarrierListCopy: [],
       scenarioPreferredCarrierTierList: [],
       scenarioTravelSectorList: [],
+      scenarioPreferredAirlineList: [],
       project: {},
       contract
     };
@@ -124,21 +152,63 @@ export default {
     toggleSelection(row) {
       console.log(row);
     },
-    checkContract(carrierCode) {
-      if (
-        this.scenarioPreferredContractCarrierList.find(v => v === carrierCode)
-      ) {
-        return true;
-      } else return false;
-    },
-    saveContracts() {
-      alert('contract list saved.');
-    },
-    updateCanMxc(v, id) {
-      const airline = this.preferredAirlineList.find(
-        airline => airline.id === id
+    changeSectorTier(tier, row, sector) {
+      const sectorId = this.scenarioTravelSectorList.find(
+        v => v.shortName === sector
+      ).id;
+
+      const { code, id } = row;
+      const carrier = this.scenarioPreferredCarrierListCopy.find(
+        carrier => carrier.id === id && carrier.sectorId === sectorId
       );
-      airline.canMxc === v;
+
+      console.log(carrier, sectorId);
+
+      if (carrier) {
+        carrier.tier = tier;
+      } else {
+        this.scenarioPreferredCarrierListCopy.push({
+          id: null,
+          scenarioId: this.scenarioId,
+          sectorId,
+          carrierCode: code,
+          tier
+        });
+      }
+    },
+    setTierValue(row, sector) {
+      const sectorId = this.scenarioTravelSectorList.find(
+        v => v.shortName === sector
+      ).id;
+
+      const { code } = row;
+      const carrier = this.scenarioPreferredCarrierListCopy.find(
+        carrier => carrier.carrierCode === code && carrier.sectorId === sectorId
+      );
+
+      if (carrier) {
+        return carrier.tier;
+      } else return 'Select';
+    },
+    checkContract(code) {
+      return this.scenarioPreferredContractCarrierList.indexOf(code) !== -1;
+    },
+    async saveContracts() {
+      try {
+        await this.$apollo.mutate({
+          mutation: UPDATE_SCENARIO_PREFERRED_CARRIERS,
+          variables: {
+            carrierList: [...this.scenarioPreferredCarrierListCopy]
+          }
+        });
+        this.$modal.show('success', {
+          message: 'Preferred carrier list updated.'
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     }
   }
 };
