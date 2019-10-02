@@ -18,10 +18,19 @@
 </template>
 
 <script>
-import { GET_PROCESS } from '@/graphql/queries';
+import {
+  GET_PROJECT,
+  GET_PROCESS,
+  GET_RECENT_PROCESS_LIST
+} from '@/graphql/queries';
 import { STOP_PROCESS } from '@/graphql/mutations';
 export default {
   name: 'CancelProcessModal',
+  apollo: {
+    project: {
+      query: GET_PROJECT
+    }
+  },
   methods: {
     hideModal() {
       this.$modal.hide('cancel-process');
@@ -29,17 +38,21 @@ export default {
     stopProcess() {
       this.$apollo.mutate({
         mutation: STOP_PROCESS,
-        update: (store, data) => {
-          const stopProcess = data.data.stopProcess;
-          const newData = store.readQuery({
-            query: GET_PROCESS
-          });
-          newData.process = stopProcess;
-          store.writeQuery({
+        variables: { projectId: this.project.id },
+        refetchQueries: () => [
+          {
             query: GET_PROCESS,
-            data: newData
-          });
-        }
+            variables: {
+              projectId: this.project.id
+            }
+          },
+          {
+            query: GET_RECENT_PROCESS_LIST,
+            variables: {
+              projectId: this.project.id
+            }
+          }
+        ]
       });
       this.hideModal();
     }

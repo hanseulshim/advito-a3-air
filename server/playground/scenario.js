@@ -43,7 +43,7 @@ export default {
       id
       name
     }
-    scenarioMarketList(clientGcn: null) {
+    scenarioMarketList(clientGcn: null, projectId: null) {
       name
       travelSector
       idList
@@ -66,7 +66,7 @@ export default {
     }
     scenarioPreferredAirlineList(projectId: null) {
       id
-      airlineId
+      code
       name
     }
   }`

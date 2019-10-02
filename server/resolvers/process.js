@@ -1,28 +1,46 @@
-import { processData } from '../data';
+import { Project, Report } from '../models';
 
 export const process = {
   Query: {
-    process: () => process
+    process: async (_, { projectId }) => {
+      const project = await Project.query().findById(projectId);
+      if (!project) return null;
+      const report = await Report.query()
+        .where('projectid', projectId)
+        .andWhere('isdeleted', false)
+        .orderBy('id', 'desc')
+        .limit(1)
+        .first();
+      project.procStart = report ? report.procStart : null;
+      project.procEnd = report ? report.procEnd : null;
+      project.processing = !(report && report.procEnd);
+      return project;
+    },
+    recentProcessList: async (_, { projectId }) =>
+      await Report.query()
+        .where('projectid', projectId)
+        .andWhere('isdeleted', false)
+        .orderBy('id', 'desc')
+        .limit(5)
   },
   Mutation: {
-    startProcess: () => {
-      processData.processing = true;
-      processData.processStartDate = new Date();
-      return processData;
+    startProcess: async (_, { projectId, projectName }, { db, user }) => {
+      await db.raw(`
+        SELECT advito_a3_processproject(
+          ${projectId},
+          '${projectName}',
+          '${user.name}'
+        )
+      `);
     },
-    stopProcess: () => {
-      processData.processing = false;
-      processData.processStartDate = null;
-      processData.recentProcessList.push({
-        date: new Date(),
-        contracts: 5,
-        dataSets: 5,
-        records: 1234567,
-        processDuration: 100,
-        status: 1,
-        processedBy: 'Scott Cashon'
-      });
-      return processData;
+    stopProcess: async (_, { projectId }) => {
+      await Report.query()
+        .where('projectid', projectId)
+        .andWhere('isdeleted', false)
+        .orderBy('id', 'desc')
+        .limit(1)
+        .first()
+        .patch({ procEnd: new Date() });
     }
   }
 };

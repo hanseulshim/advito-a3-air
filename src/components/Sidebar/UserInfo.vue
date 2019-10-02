@@ -40,7 +40,7 @@ export default {
         });
         logout(this.$router, apolloClient);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     }
   }

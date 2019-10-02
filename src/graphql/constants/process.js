@@ -1,14 +1,10 @@
-export const PROCESS = `contracts
-        dataSets
-        records
+export const PROCESS = `currContCount
+        currDsCount
+        currRecCount
+        priContCount
+        priDsCount
+        priRecCount
+        procStart
+        procEnd
         processing
-        processStartDate
-        recentProcessList {
-          date
-          contracts
-          dataSets
-          records
-          processDuration
-          status
-          processedBy
-        }`;
+`;
