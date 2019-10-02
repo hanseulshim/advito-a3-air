@@ -149,9 +149,7 @@ export default {
         row.effectiveTo
       )}`;
     },
-    toggleSelection(row) {
-      console.log(row);
-    },
+    toggleSelection(row) {},
     changeSectorTier(tier, row, sector) {
       const sectorId = this.scenarioTravelSectorList.find(
         v => v.shortName === sector
@@ -161,9 +159,6 @@ export default {
       const carrier = this.scenarioPreferredCarrierListCopy.find(
         carrier => carrier.id === id && carrier.sectorId === sectorId
       );
-
-      console.log(carrier, sectorId);
-
       if (carrier) {
         carrier.tier = tier;
       } else {
