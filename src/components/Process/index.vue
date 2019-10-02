@@ -4,38 +4,38 @@
       <div class="info-container">
         <div class="info">
           <div class="info-text">
-            <span class="info-text-value">{{ process.contracts }}</span>
+            <span class="info-text-value">{{
+              process.currContCount ? process.currContCount : 0
+            }}</span>
             <span class="info-text-label">CONTRACTS</span>
           </div>
           <div class="info-text">
-            <span class="info-text-value">{{ process.dataSets }}</span>
+            <span class="info-text-value">{{
+              process.currDsCount ? process.currDsCount : 0
+            }}</span>
             <span class="info-text-label">DATASETS</span>
           </div>
           <div class="info-text">
             <span class="info-text-value">{{
-              formatNumberLarge(process.records)
+              formatNumberLarge(process.currRecCount)
             }}</span>
             <span class="info-text-label">O&D RECORDS</span>
           </div>
           <div class="info-text">
             <span class="info-text-value processed">{{
-              process.processing
-                ? '—'
-                : lastProcessed && lastProcessed.contracts
+              process.priContCount ? process.priContCount : '—'
             }}</span>
             <span class="info-text-label">Processed Contracts</span>
           </div>
           <div class="info-text">
             <span class="info-text-value processed">{{
-              process.processing ? '—' : lastProcessed && lastProcessed.dataSets
+              process.priDsCount ? process.priDsCount : '—'
             }}</span>
             <span class="info-text-label">Processed Datasets</span>
           </div>
           <div class="info-text">
             <span class="info-text-value processed">{{
-              process.processing
-                ? '—'
-                : lastProcessed && formatNumberLarge(lastProcessed.records)
+              process.priRecCount ? formatNumberLarge(process.priRecCount) : '—'
             }}</span>
             <span class="info-text-label">Processed O&D Records</span>
           </div>
@@ -46,8 +46,8 @@
           }}</span>
           <span class="processed">{{
             process.processing
-              ? getProcessDate(process.processStartDate)
-              : getProcessDate(lastProcessed && lastProcessed.date)
+              ? getProcessDate(process.procStart)
+              : getProcessDate(process.procEnd)
           }}</span>
         </div>
       </div>
@@ -74,53 +74,53 @@
     <div class="recent-container">
       <div class="section-header title-row space-between">
         <div>
-          {{ pluralize('recent process', process.recentProcessList.length) }}
+          {{ pluralize('recent process', recentProcessList.length) }}
         </div>
       </div>
       <el-table
-        :data="process.recentProcessList"
+        :data="recentProcessList"
         :default-sort="{ prop: 'date', order: 'descending' }"
       >
         <el-table-column
-          prop="date"
+          prop="procEnd"
           label="Date"
-          :formatter="row => formatDateTime(row.date)"
+          :formatter="
+            row => (row.procEnd ? formatDateTime(row.procEnd) : 'Not completed')
+          "
           :min-width="processCol.date"
         />
         <el-table-column
-          prop="contracts"
+          prop="contCount"
           label="Contracts"
           align="right"
           :min-width="processCol.contracts"
         />
         <el-table-column
-          prop="dataSets"
+          prop="dsCount"
           label="Datasets"
           align="right"
           :min-width="processCol.dataSets"
         />
         <el-table-column
-          prop="records"
+          prop="recCount"
           label="Total records"
           align="right"
-          :formatter="row => formatNumber(row.records)"
+          :formatter="row => formatNumber(row.recCount)"
           :min-width="processCol.records"
         />
         <el-table-column
-          prop="processDuration"
           label="Process duration"
           align="right"
-          :formatter="row => formatTime(row.processDuration)"
+          :formatter="row => formatTime(row.procEnd - row.procStart)"
           :min-width="processCol.processDuration"
         />
         <el-table-column
           prop="status"
           label="Status"
-          :formatter="row => formatStatus(row.status)"
           :min-width="processCol.status"
         />
         <el-table-column
-          prop="processedBy"
+          prop="procBy"
           label="Processed By"
           :min-width="processCol.processedBy"
         />
@@ -132,13 +132,16 @@
 
 <script>
 import CancelProcessModal from './CancelProcessModal';
-import { GET_PROCESS } from '@/graphql/queries';
+import {
+  GET_PROCESS,
+  GET_PROJECT,
+  GET_RECENT_PROCESS_LIST
+} from '@/graphql/queries';
 import { START_PROCESS } from '@/graphql/mutations';
 import { processCol } from '@/config';
 import {
   formatNumber,
   formatNumberLarge,
-  formatTime,
   formatPercent,
   formatDateFromNow,
   formatDateTime,
@@ -150,18 +153,31 @@ export default {
     CancelProcessModal
   },
   apollo: {
+    project: {
+      query: GET_PROJECT
+    },
     process: {
-      query: GET_PROCESS
+      query: GET_PROCESS,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
+    },
+    recentProcessList: {
+      query: GET_RECENT_PROCESS_LIST,
+      variables() {
+        return {
+          projectId: this.project.id
+        };
+      }
     }
   },
   data() {
     return {
-      process: {
-        contracts: null,
-        dataSets: null,
-        recentProcessList: [],
-        records: null
-      },
+      process: {},
+      project: {},
+      recentProcessList: [],
       processCol
     };
   },
@@ -184,9 +200,10 @@ export default {
       return formatNumberLarge(num);
     },
     formatTime(time) {
-      const timeFormat = formatTime(time).split(':');
-      const hours = parseInt(this.formatNumber(timeFormat[1]));
-      const minutes = this.formatNumber(timeFormat[2]);
+      if (time <= 0) return '0 hr 0 min';
+      const hourFactor = 1000 * 60 * 60;
+      const hours = Math.floor(time / hourFactor);
+      const minutes = Math.round((time / hourFactor - hours) * 60);
       return hours ? `${hours} hr ${minutes} min` : `${minutes} min`;
     },
     formatDateTime(date) {
@@ -201,17 +218,24 @@ export default {
     startProcess() {
       this.$apollo.mutate({
         mutation: START_PROCESS,
-        update: (store, data) => {
-          const startProcess = data.data.startProcess;
-          const newData = store.readQuery({
-            query: GET_PROCESS
-          });
-          newData.process = startProcess;
-          store.writeQuery({
+        variables: {
+          projectId: this.project.id,
+          projectName: this.project.name
+        },
+        refetchQueries: () => [
+          {
             query: GET_PROCESS,
-            data: newData
-          });
-        }
+            variables: {
+              projectId: this.project.id
+            }
+          },
+          {
+            query: GET_RECENT_PROCESS_LIST,
+            variables: {
+              projectId: this.project.id
+            }
+          }
+        ]
       });
     },
     showCancelProcessModal() {

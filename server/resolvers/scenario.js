@@ -209,7 +209,7 @@ export const scenario = {
         ? await db('pcgcarrier as p')
             .select({
               id: 'p.id',
-              airlineId: 'carrierid',
+              code: 'c.code',
               name: 'c.name'
             })
             .leftJoin('carrier as c', 'c.id', 'p.carrierid')

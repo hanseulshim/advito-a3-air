@@ -80,6 +80,7 @@ type PreferredAirline {
   id: Int
   airlineId: Int
   name: String
+  code: String
   preferenceLevelId: Int
   preferenceLevelName: String
   effectiveStartDate: Date
