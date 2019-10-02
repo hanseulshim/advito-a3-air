@@ -11,7 +11,7 @@
         <i class="fas fa-times close-modal-button" @click="closeModal"></i>
       </el-tooltip>
     </div>
-    <div>
+    <div v-if="source">
       <pdf :src="source" :page="1" />
     </div>
   </modal>
@@ -33,8 +33,10 @@ export default {
       this.$modal.hide('info');
     },
     beforeOpen(event) {
-      const { source } = event.params;
-      this.source = source;
+      if (event.params) {
+        const { source } = event.params;
+        this.source = source;
+      }
     }
   }
 };
