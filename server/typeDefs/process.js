@@ -1,28 +1,32 @@
 export const process = `
 type Process {
-  contracts: Int
-  dataSets: Int
-  records: Int
+  currContCount: Int
+  currDsCount: Int
+  currRecCount: Int
+  priContCount: Int
+  priDsCount: Int
+  priRecCount: Int
+  procStart: Date
+  procEnd: Date
   processing: Boolean
-  processStartDate: Date
-  recentProcessList: [RecentProcess]
 }
 
 type RecentProcess {
-  date: Date
-  contracts: Int
-  dataSets: Int
-  records: Int
-  processDuration: Int
-  status: Float
-  processedBy: String
+  procEnd: Date
+  procStart: Date
+  contCount: Int
+  dsCount: Int
+  recCount: Int
+  status: String
+  procBy: String
 }
 
 extend type Query {
-  process: Process @auth
+  process(projectId: Int): Process @auth
+  recentProcessList(projectId: Int): [RecentProcess] @auth
 }
 extend type Mutation {
-  startProcess: Process @auth
-  stopProcess: Process @auth
+  startProcess(projectId: Int!, projectName: String!): Int @auth
+  stopProcess(projectId: Int!): Int @auth
 }
 `;

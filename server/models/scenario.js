@@ -16,6 +16,14 @@ export class Scenario extends Model {
           from: 'scenario.scenarioId',
           to: 'scenariocontract.scenarioId'
         }
+      },
+      scenarioPreferredCarrier: {
+        relation: Model.HasManyRelation,
+        modelClass: ScenarioPreferredCarrier,
+        join: {
+          from: 'scenario.scenarioId',
+          to: 'scenariopreferredcarrier.scenarioId'
+        }
       }
     };
   }
@@ -24,5 +32,19 @@ export class Scenario extends Model {
 export class ScenarioContract extends Model {
   static get tableName() {
     return 'scenariocontract';
+  }
+}
+
+export class ScenarioPreferredCarrier extends Model {
+  static get tableName() {
+    return 'scenariopreferredcarrier';
+  }
+}
+export class ScenarioTrip extends Model {
+  static get tableName() {
+    return 'scenariotrip';
+  }
+  get carrier() {
+    return this.carrierCd;
   }
 }

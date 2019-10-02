@@ -20,6 +20,7 @@ export default {
         name
         originMarket
         destMarket
+        farePaid
         idList
       }
       marketAdvancedTicketList(idList: []) {

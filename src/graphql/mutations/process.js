@@ -1,18 +1,13 @@
 import gql from 'graphql-tag';
-import { PROCESS } from '../constants';
 
 export const START_PROCESS = gql`
-  mutation startProcess {
-    startProcess {
-      ${PROCESS}
-    }
+  mutation startProcess($projectId: Int!, $projectName: String!) {
+    startProcess(projectId: $projectId, projectName: $projectName)
   }
 `;
 
 export const STOP_PROCESS = gql`
-  mutation stopProcess {
-    stopProcess {
-      ${PROCESS}
-    }
+  mutation stopProcess($projectId: Int!) {
+    stopProcess(projectId: $projectId)
   }
 `;

@@ -7,8 +7,17 @@ export default {
     headers: { sessiontoken: 'MY^PR3TTYP0NY' },
     query: `
   {
-    process {
+    process(projectId: null) {
       ${PROCESS}
+    }
+    recentProcessList(projectId: null) {
+      procEnd
+      procStart
+      contCount
+      dsCount
+      recCount
+      status
+      procBy
     }
   }`
   },

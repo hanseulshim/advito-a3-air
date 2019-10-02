@@ -80,6 +80,46 @@ type ScenarioParameters {
   priceInfluenceLevelList: [PriceInfluenceLevelType]
   biasOverrideList: [BiasOverride]
 }
+type ScenarioPreferredCarrier {
+  id: Int
+  scenarioId: Int
+  sectorId: Int
+  carrierCode: String
+  tier: Int
+}
+input ScenarioPreferredCarrierInput {
+  id: Int
+  scenarioId: Int
+  sectorId: Int
+  carrierCode: String
+  tier: Int
+}
+type ScenarioPreferredCarrierTier {
+  id: Int
+  name: String
+}
+type ScenarioMarket {
+  name: String
+  travelSector: String
+  idList: [Int]
+}
+type ScenarioTripDistribution {
+  id: Int
+  scenarioId: Int
+  tripDistribution: Float
+  airlineName: String
+  fareCategory: String
+  posCountryName: String
+  fQsi: Float
+  hQsi: Float
+}
+input ScenarioTripDistributionInput {
+  id: Int
+  scenarioId: Int
+  cityPair: String
+  carrierCode: String
+  tripDistribution: Float
+}
 
 extend type Query {
   scenarioList(projectId: Int): [Scenario] @auth
@@ -87,6 +127,13 @@ extend type Query {
   scenarioTypeList: [ScenarioType] @auth
   scenarioParameters: ScenarioParameters @auth
   scenarioContractList(scenarioId: Int): [Int] @auth
+  scenarioPreferredContractCarrierList(projectId: Int): [String] @auth
+  scenarioPreferredCarrierList(scenarioId: Int): [ScenarioPreferredCarrier] @auth
+  scenarioPreferredCarrierTierList: [ScenarioPreferredCarrierTier] @auth
+  scenarioMarketList(clientGcn: String, projectId: Int): [ScenarioMarket] @auth
+  scenarioTripDistributionList(idList: [Int], scenarioId: Int!, projectId: Int!): [ScenarioTripDistribution] @auth
+  scenarioTravelSectorList(projectId: Int!): [TravelSector] @auth
+  scenarioPreferredAirlineList(projectId: Int!): [PreferredAirline] @auth
 }
 extend type Mutation {
   createScenario(
@@ -125,5 +172,7 @@ extend type Mutation {
     scenarioId: Int!
     contractIdList: [Int]!
   ): Int @auth
+  updateScenarioPreferredCarriers(carrierList: [ScenarioPreferredCarrierInput]): Int @auth
+  updateScenarioTripDistributions(tripDistributionList: [ScenarioTripDistributionInput]): Int @auth
 }
 `;

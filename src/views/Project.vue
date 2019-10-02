@@ -89,12 +89,10 @@ export default {
   },
   methods: {
     getStatus(id) {
-      const project = this.projectStatusList.filter(
-        project => project.id === id
-      )[0];
-      if (project.status === 'valid') {
+      const project = this.projectStatusList.find(p => p.id === id);
+      if (project && project.status === 'valid') {
         return 'valid';
-      } else if (project.status === 'invalid') {
+      } else if (project && project.status === 'invalid') {
         return 'invalid';
       } else {
         return '';
