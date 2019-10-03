@@ -30,5 +30,8 @@ export const PROJECT = `id
 
 export const PROJECT_LOOKUP = {
   PROJECT_TYPE: 1,
+  DPM: 1,
+  ASR: 2,
+  SOURCING: 3,
   SAVINGS_TYPE: 9
 };

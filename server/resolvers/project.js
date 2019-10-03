@@ -23,7 +23,8 @@ export const project = {
           id: 'id',
           name: 'name_val'
         })
-        .where('type', PROJECT_LOOKUP.PROJECT_TYPE);
+        .where('type', PROJECT_LOOKUP.PROJECT_TYPE)
+        .whereNot('id', PROJECT_LOOKUP.SOURCING);
     },
     savingsTypeList: async (_, __, { db }) => {
       return await db('lov_lookup')
