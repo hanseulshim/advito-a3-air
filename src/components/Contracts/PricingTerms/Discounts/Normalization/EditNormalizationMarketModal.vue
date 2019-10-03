@@ -30,12 +30,13 @@
             <el-select
               v-model="form.topMarket"
               placeholder="Select Top Market"
-              value-key="id"
+              value-key="name"
+              @change="onMarketSelect"
             >
               <el-option
                 v-for="item in topMarketList"
                 :key="item.index"
-                :label="`${item.marketA} - ${item.marketB}`"
+                :label="`${item.originMarket} - ${item.destMarket}`"
                 :value="item"
               >
               </el-option>
@@ -169,7 +170,7 @@
       <div v-if="form.topMarket" class="updateMarkettables">
         <div class="flex-row">
           <el-table
-            :data="form.topMarket.advancedTicketList"
+            :data="marketAdvancedTicketList"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
           >
@@ -185,7 +186,7 @@
             </el-table-column>
           </el-table>
           <el-table
-            :data="form.topMarket.departureList"
+            :data="marketDepartureList"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
             size="small"
@@ -201,7 +202,7 @@
         </div>
         <div class="flex-row">
           <el-table
-            :data="form.topMarket.fareBasisList"
+            :data="marketFareBasis"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
             style="margin-top: 20px"
@@ -225,7 +226,11 @@
 import {
   GET_TOP_MARKET_LIST,
   GET_CURRENCY_LIST,
-  GET_NORMALIZATION_MARKET_LIST
+  GET_NORMALIZATION_MARKET_LIST,
+  GET_CLIENT,
+  GET_MARKET_ADVANCED_TICKET_LIST,
+  GET_MARKET_DEPARTURE_LIST,
+  GET_MARKET_FARE_BASIS
 } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { UPDATE_NORMALIZATION_MARKET } from '@/graphql/mutations';
@@ -233,19 +238,29 @@ import { formatDate } from '@/helper';
 export default {
   name: 'EditNormalizationMarketModal',
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
     topMarketList: {
       query: GET_TOP_MARKET_LIST,
       variables() {
         return {
-          normalizationId: this.normalization.id
+          normalizationId: this.normalization.id || null,
+          clientGcn: this.client.gcn || null
         };
       },
       result({ data: { topMarketList } }) {
-        this.form.topMarket = topMarketList.find(
+        const matched = topMarketList.find(
           market =>
-            market.marketA === this.normMarket.marketA &&
-            market.marketB === this.normMarket.marketB
+            market.originMarket === this.normMarket.marketA &&
+            market.destMarket === this.normMarket.marketB
         );
+
+        this.form.topMarket = matched;
+        this.onMarketSelect(matched);
+      },
+      skip() {
+        return !this.normalization;
       }
     },
     currencyList: {
@@ -257,8 +272,12 @@ export default {
       topMarketList: [],
       currencyList: [],
       discount: {},
-      normalization: {},
+      normalization: null,
+      client: {},
       normMarket: {},
+      marketAdvancedTicketList: [],
+      marketDepartureList: [],
+      marketFareBasis: [],
       form: {
         topMarket: null,
         notes: '',
@@ -351,7 +370,7 @@ export default {
       return this.discount.discountTypeName === 'Fixed'
         ? [
             {
-              id: null,
+              id: this.form.compareFareId,
               fareType: DISCOUNT_LOOKUP.COMPARE_FARE_TYPE,
               fareBasis: this.form.fareBasis,
               directionType: this.form.directionType,
@@ -410,8 +429,8 @@ export default {
           mutation: UPDATE_NORMALIZATION_MARKET,
           variables: {
             marketId: this.normMarket.id,
-            marketA: this.form.topMarket.marketA,
-            marketB: this.form.topMarket.marketB,
+            marketA: this.form.topMarket.originMarket,
+            marketB: this.form.topMarket.destMarket,
             farePaid: this.form.topMarket.farePaid,
             usageOverride: parseInt(this.form.usageOverride),
             farePullDate: this.form.farePullDate,
@@ -421,7 +440,6 @@ export default {
           refetchQueries: () => [
             {
               query: GET_NORMALIZATION_MARKET_LIST,
-              fetchPolicy: 'network-only',
               variables: {
                 normalizationId: this.normalization.id
               }
@@ -438,6 +456,43 @@ export default {
         });
       }
     },
+    async onMarketSelect(market) {
+      try {
+        const {
+          data: { marketAdvancedTicketList }
+        } = await this.$apollo.query({
+          query: GET_MARKET_ADVANCED_TICKET_LIST,
+          variables: {
+            idList: market.idList
+          }
+        });
+        this.marketAdvancedTicketList = marketAdvancedTicketList;
+
+        const {
+          data: { marketDepartureList }
+        } = await this.$apollo.query({
+          query: GET_MARKET_DEPARTURE_LIST,
+          variables: {
+            idList: market.idList
+          }
+        });
+        this.marketDepartureList = marketDepartureList;
+
+        const {
+          data: { marketFareBasis }
+        } = await this.$apollo.query({
+          query: GET_MARKET_FARE_BASIS,
+          variables: {
+            idList: market.idList
+          }
+        });
+        this.marketFareBasis = marketFareBasis;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
+    },
     beforeOpen(event) {
       const { normMarket, discount, normalization } = event.params;
       const compareFare = normMarket.fareList.find(
@@ -446,8 +501,8 @@ export default {
       this.topMarketList.length
         ? (this.form.topMarket = this.topMarketList.find(
             market =>
-              market.marketA === normMarket.marketA &&
-              market.marketB === normMarket.marketB
+              market.originMarket === normMarket.marketA &&
+              market.destMarket === normMarket.marketB
           ))
         : null;
 

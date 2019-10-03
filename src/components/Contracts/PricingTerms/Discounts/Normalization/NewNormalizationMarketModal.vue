@@ -30,12 +30,13 @@
             <el-select
               v-model="form.topMarket"
               placeholder="Select Top Market"
-              value-key="id"
+              value-key="name"
+              @change="onMarketSelect"
             >
               <el-option
                 v-for="item in topMarketList"
                 :key="item.index"
-                :label="`${item.marketA} - ${item.marketB}`"
+                :label="`${item.originMarket} - ${item.destMarket}`"
                 :value="item"
               >
               </el-option>
@@ -169,7 +170,7 @@
       <div v-if="form.topMarket" class="newMarketTables">
         <div class="flex-row">
           <el-table
-            :data="form.topMarket.advancedTicketList"
+            :data="marketAdvancedTicketList"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
           >
@@ -185,7 +186,7 @@
             </el-table-column>
           </el-table>
           <el-table
-            :data="form.topMarket.departureList"
+            :data="marketDepartureList"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
             size="small"
@@ -201,7 +202,7 @@
         </div>
         <div class="flex-row">
           <el-table
-            :data="form.topMarket.fareBasisList"
+            :data="marketFareBasis"
             stripe
             :cell-style="{ padding: '0', height: '20px' }"
             style="margin-top: 20px"
@@ -226,19 +227,35 @@ import {
   GET_TOP_MARKET_LIST,
   GET_CURRENCY_LIST,
   GET_NORMALIZATION_MARKET_LIST,
-  GET_NORMALIZATION_LIST
+  GET_NORMALIZATION_LIST,
+  GET_CLIENT,
+  GET_MARKET_ADVANCED_TICKET_LIST,
+  GET_MARKET_DEPARTURE_LIST,
+  GET_MARKET_FARE_BASIS
 } from '@/graphql/queries';
 import { CREATE_NORMALIZATION_MARKET } from '@/graphql/mutations';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 export default {
   name: 'NewNormalizationMarketModal',
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
     topMarketList: {
       query: GET_TOP_MARKET_LIST,
       variables() {
         return {
-          normalizationId: this.normalization.id
+          normalizationId: this.normalization.id || null,
+          clientGcn: this.client.gcn || null
         };
+      },
+      result({ data: { topMarketList } }) {
+        if (!topMarketList.length) {
+          this.preventCreation();
+        }
+      },
+      skip() {
+        return !this.normalization;
       }
     },
     currencyList: {
@@ -249,8 +266,12 @@ export default {
     return {
       topMarketList: [],
       currencyList: [],
-      normalization: {},
+      normalization: null,
       discount: {},
+      client: {},
+      marketAdvancedTicketList: [],
+      marketDepartureList: [],
+      marketFareBasis: [],
       form: {
         topMarket: null,
         notes: '',
@@ -399,8 +420,8 @@ export default {
           mutation: CREATE_NORMALIZATION_MARKET,
           variables: {
             normalizationId: this.normalization.id,
-            marketA: this.form.topMarket.marketA,
-            marketB: this.form.topMarket.marketB,
+            marketA: this.form.topMarket.originMarket,
+            marketB: this.form.topMarket.destMarket,
             farePaid: this.form.topMarket.farePaid,
             usageOverride: parseInt(this.form.usageOverride),
             farePullDate: this.form.farePullDate,
@@ -432,6 +453,43 @@ export default {
         });
       }
     },
+    async onMarketSelect(market) {
+      try {
+        const {
+          data: { marketAdvancedTicketList }
+        } = await this.$apollo.query({
+          query: GET_MARKET_ADVANCED_TICKET_LIST,
+          variables: {
+            idList: market.idList
+          }
+        });
+        this.marketAdvancedTicketList = marketAdvancedTicketList;
+
+        const {
+          data: { marketDepartureList }
+        } = await this.$apollo.query({
+          query: GET_MARKET_DEPARTURE_LIST,
+          variables: {
+            idList: market.idList
+          }
+        });
+        this.marketDepartureList = marketDepartureList;
+
+        const {
+          data: { marketFareBasis }
+        } = await this.$apollo.query({
+          query: GET_MARKET_FARE_BASIS,
+          variables: {
+            idList: market.idList
+          }
+        });
+        this.marketFareBasis = marketFareBasis;
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
+    },
     beforeOpen(event) {
       this.normalization = event.params.normalization;
       this.discount = event.params.discount;
@@ -441,6 +499,13 @@ export default {
       this.discount = null;
       Object.keys(this.form).forEach(key => {
         this.form[key] = null;
+      });
+    },
+    preventCreation() {
+      this.$modal.hide('new-normalization-market-modal');
+      this.$modal.show('error', {
+        message:
+          'You cannot create a normalization market if no top markets exist.'
       });
     }
   }

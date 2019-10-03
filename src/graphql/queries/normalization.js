@@ -32,19 +32,35 @@ export const GET_TOP_MARKET_LIST = gql`
       originMarket
       destMarket
       idList
-      advancedTicketList {
-        label
-        value
-      }
-      departureList {
-        label
-        value
-      }
-      fareBasisList {
-        fareBasis
-        bookingClass
-        usage
-      }
+      farePaid
+    }
+  }
+`;
+
+export const GET_MARKET_ADVANCED_TICKET_LIST = gql`
+  query marketAdvancedTicketList($idList: [Int]) {
+    marketAdvancedTicketList(idList: $idList) {
+      label
+      value
+    }
+  }
+`;
+
+export const GET_MARKET_DEPARTURE_LIST = gql`
+  query marketDepartureList($idList: [Int]) {
+    marketDepartureList(idList: $idList) {
+      label
+      value
+    }
+  }
+`;
+
+export const GET_MARKET_FARE_BASIS = gql`
+  query marketFareBasis($idList: [Int]) {
+    marketFareBasis(idList: $idList) {
+      fareBasis
+      bookingClass
+      usage
     }
   }
 `;

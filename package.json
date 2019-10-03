@@ -23,6 +23,7 @@
     "graphql": "^14.1.1",
     "moment": "^2.24.0",
     "numeral": "^2.0.6",
+    "pdfvuer": "^1.4.0",
     "unfetch": "^4.1.0",
     "vue": "^2.5.22",
     "vue-apollo": "^3.0.0-beta.28",
