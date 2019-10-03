@@ -61,7 +61,7 @@ import {
   GET_PROJECT
 } from '@/graphql/queries';
 import { UPDATE_SCENARIO_PREFERRED_CARRIERS } from '@/graphql/mutations';
-import { formatDate, removeTypename } from '@/helper';
+import { formatDate } from '@/helper';
 import { contract } from '@/config';
 export default {
   name: 'ScenarioPreferredAirlines',
@@ -149,7 +149,7 @@ export default {
         row.effectiveTo
       )}`;
     },
-    toggleSelection(row) {},
+    toggleSelection() {},
     changeSectorTier(tier, row, sector) {
       const sectorId = this.scenarioTravelSectorList.find(
         v => v.shortName === sector
