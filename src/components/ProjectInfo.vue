@@ -112,7 +112,8 @@ export default {
     showInfoModal() {
       this.$modal.show('info', {
         source:
-          'https://a3-upload-pdf.s3.us-east-2.amazonaws.com/Advito_Help_Contracts.pdf'
+          'https://a3-upload-pdf.s3.us-east-2.amazonaws.com/Advito_Help_Project_Detail.pdf',
+        name: 'Project Details'
       });
     }
   }
