@@ -26,6 +26,7 @@ input DataSetAnnualization {
 }
 type DataSetColumn {
   name: String
+  date: Date
   dateUpdated: Date
   qc: Boolean
   countryData: [CountryData]

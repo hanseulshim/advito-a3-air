@@ -82,6 +82,7 @@ export const dataSet = {
         }));
         return {
           name: `${year}-${month}`,
+          date: new Date(year, month),
           dateUpdated: lastUpdated,
           qc,
           countryData: mappedCountryRows,
