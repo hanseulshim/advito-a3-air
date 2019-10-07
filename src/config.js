@@ -89,7 +89,7 @@ export const discount = {
   journeyType: 100,
   directionType: 115,
   rules: 75,
-  normalization: 120,
+  normalization: 150,
   note: 100,
   actions: 120
 };
