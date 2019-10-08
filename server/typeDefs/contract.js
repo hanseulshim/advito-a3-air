@@ -5,7 +5,7 @@ type Contract {
   typeId: Int
   typeName: String
   description: String
-  round: Int
+  round: String
   effectiveFrom: Date
   effectiveTo: Date
   qc: Float
