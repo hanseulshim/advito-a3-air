@@ -86,7 +86,7 @@
                   formatDateTime(column.dateUpdated)
                 }}</span>
                 <span class="header-text">{{
-                  formatDataSetCol(column.name)
+                  formatDataSetCol(column.date)
                 }}</span>
               </span>
             </template>

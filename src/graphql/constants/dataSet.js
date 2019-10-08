@@ -1,6 +1,7 @@
 export const DATA_SET = `name
         dateUpdated
         qc
+        date
         countryData {
           tickets
           segments
