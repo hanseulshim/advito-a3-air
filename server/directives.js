@@ -9,7 +9,7 @@ export default class RequireAuthDirective extends SchemaDirectiveVisitor {
     field.resolve = async (...args) => {
       const [, , context] = args;
       if (context.user) {
-        const roleIds = context.user.role;
+        const roleIds = context.user.roleIds.map(role => parseInt(role));
         if (!roleIds.includes(AIR_ADMIN) && !roleIds.includes(AIR_USER))
           throw new ApolloError('User did not have AIR role', 401);
         const result = await resolve.apply(this, args);
