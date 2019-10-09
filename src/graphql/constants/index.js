@@ -4,3 +4,4 @@ export * from './process';
 export * from './project';
 export * from './collection';
 export * from './scenario';
+export * from './application';

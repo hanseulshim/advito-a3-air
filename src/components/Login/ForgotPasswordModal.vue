@@ -34,6 +34,7 @@
 </template>
 <script>
 import { SEND_RESET_PASSWORD } from '@/graphql/mutations';
+import { AIR_ID } from '@/graphql/constants';
 export default {
   name: 'ForgotPasswordModal',
   data() {
@@ -72,6 +73,7 @@ export default {
         await this.$apollo.mutate({
           mutation: SEND_RESET_PASSWORD,
           variables: {
+            appId: AIR_ID,
             email: this.form.email
           },
           client: 'advitoClient'
