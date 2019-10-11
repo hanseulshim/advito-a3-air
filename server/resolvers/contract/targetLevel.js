@@ -71,6 +71,7 @@ export const targetLevel = {
 
 const getTargetLevelList = async (db, targetTermId) => {
   const targetLevel = await getTargetLevelName(db, targetTermId);
+  if (!targetLevel) return [];
   return await db(targetLevel.tableName)
     .select({
       id: 'control',
@@ -86,6 +87,7 @@ const getTargetLevelList = async (db, targetTermId) => {
 
 const getTargetLevel = async (db, id, targetTermId) => {
   const targetLevel = await getTargetLevelName(db, targetTermId);
+  if (!targetLevel) return null;
   const [level] = await db(targetLevel.tableName)
     .select({
       id: 'control',
@@ -135,5 +137,7 @@ const getTargetLevelName = async (db, targetTermId) => {
       tableName: 'targetkpg',
       targetAmount: 'targetsegmentshare'
     };
+  } else {
+    return null;
   }
 };

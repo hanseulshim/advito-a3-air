@@ -12,7 +12,7 @@ export const authenticateUser = async sessionToken => {
   const { id, sessionExpiration, sessionDurationSec } = session;
   const sessionExp = new Date(sessionExpiration);
   if (sessionExp <= new Date()) {
-    throw new ApolloError('Session is invalid.', 401);
+    throw new ApolloError('Session has expired.', 401);
   }
   const now = new Date();
   const newExpiration = new Date(now.getTime() + sessionDurationSec * 1000);
