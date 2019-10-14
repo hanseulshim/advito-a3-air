@@ -5,7 +5,7 @@ export class AdvitoUser extends Model {
     return 'blops.advitoUser';
   }
 
-  fullName() {
+  name() {
     return this.nameFirst + ' ' + this.nameLast;
   }
 
