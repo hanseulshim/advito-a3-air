@@ -1,5 +1,6 @@
 import { ApolloError } from 'apollo-server-lambda';
 import { AdvitoUserSession } from './models';
+import moment from 'moment';
 
 export const authenticateUser = async sessionToken => {
   if (!sessionToken) return null;
@@ -10,17 +11,20 @@ export const authenticateUser = async sessionToken => {
   if (!session) throw new ApolloError('Session is invalid.', 401);
 
   const { id, sessionExpiration, sessionDurationSec } = session;
-  const sessionExp = new Date(sessionExpiration);
-  if (sessionExp <= new Date()) {
+
+  if (sessionExpiration <= moment.utc()) {
     throw new ApolloError('Session has expired.', 401);
   }
-  const now = new Date();
-  const newExpiration = new Date(now.getTime() + sessionDurationSec * 1000);
-  const timeDifference = Math.floor((newExpiration - sessionExp) / 1000 / 60);
+  const newExpiration = moment.utc().add(sessionDurationSec, 's');
+  const timeDifference = newExpiration.diff(sessionExpiration, 'm');
   if (timeDifference > 50) {
-    await AdvitoUserSession.patchAndFetchById(id, {
-      sessionExpiration: newExpiration
-    });
+    try {
+      await AdvitoUserSession.query().patchAndFetchById(id, {
+        sessionExpiration: newExpiration
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const user = await session.$relatedQuery('advitoUser').first();

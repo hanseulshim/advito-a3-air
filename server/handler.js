@@ -6,6 +6,13 @@ import playground from './playground';
 import { authenticateUser } from './helper';
 import Knex from 'knex';
 import { Model, knexSnakeCaseMappers } from 'objection';
+import moment from 'moment';
+import pg from 'pg';
+const types = pg.types;
+const TIMESTAMP_OID = 1114;
+types.setTypeParser(TIMESTAMP_OID, val =>
+  val === null ? null : moment.utc(val)
+);
 
 require('dotenv').config();
 const db = Knex({
@@ -25,7 +32,14 @@ const advitoDb = require('knex')({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.ADVITO_DB_DATABASE
+    database: process.env.ADVITO_DB_DATABASE,
+    timezone: 'UTC',
+    typeCast: function(field, next) {
+      if (field.type == 'DATETIME') {
+        return moment(field.string()).format('YYYY-MM-DD HH:mm:ss');
+      }
+      return next();
+    }
   }
 });
 

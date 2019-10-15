@@ -51,6 +51,16 @@ const advitoClient = new ApolloClient({
   uri: 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql',
   // uri: 'https://759byqkv94.execute-api.us-east-2.amazonaws.com/prod/graphql',
   fetch,
+  request: operation => {
+    const sessiontoken = getToken();
+    if (sessiontoken) {
+      operation.setContext({
+        headers: {
+          sessiontoken
+        }
+      });
+    }
+  },
   onError: ({ graphQLErrors }) => {
     if (graphQLErrors) {
       graphQLErrors.forEach(({ extensions }) => {

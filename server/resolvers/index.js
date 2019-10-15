@@ -10,6 +10,7 @@ import { contract } from './contract';
 import { user } from './user';
 import { process } from './process';
 import { scenario } from './scenario';
+import moment from 'moment';
 
 export const resolvers = {
   ...merge(
@@ -27,10 +28,10 @@ export const resolvers = {
     name: 'Date',
     description: 'Date custom scalar type',
     parseValue(value) {
-      return new Date(value).toISOString();
+      return moment.utc(value);
     },
     serialize(value) {
-      return new Date(value).getTime();
+      return moment.utc(value).valueOf();
     },
     parseLiteral(ast) {
       if (ast.kind === Kind.INT) {
