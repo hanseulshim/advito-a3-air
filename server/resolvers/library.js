@@ -1,8 +1,4 @@
-import {
-  LIBRARY_LOOKUP,
-  LOCATION_LOOKUP,
-  ADVITO_GEOSET_ID
-} from '../constants';
+import { LIBRARY_LOOKUP, LOCATION_LOOKUP, ADVITO_GEOSET_ID } from '../constants'
 
 export const library = {
   Query: {
@@ -112,32 +108,18 @@ export const library = {
           this.where('locationtype', LOCATION_LOOKUP.REGION).andWhere(
             'geosetid',
             ADVITO_GEOSET_ID
-          );
+          )
         })
         .orWhere(function() {
           this.where('locationtype', LOCATION_LOOKUP.SUBREGION).andWhere(
             'geosetid',
             ADVITO_GEOSET_ID
-          );
+          )
         })
         .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)
         .orWhere('locationtype', LOCATION_LOOKUP.CITY)
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
         .andWhere('isdeleted', false)
-        .orderBy('code'),
-    marketGeoList: async (_, __, { db }) =>
-      await db('location')
-        .select({
-          id: 'id',
-          name: db.raw(
-            `CONCAT(code, ' [', (SELECT location_gettypename(locationtype)), '] ', name)`
-          ),
-          code: 'code',
-          locationType: 'locationtype'
-        })
-        .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
-        .orWhere('locationtype', LOCATION_LOOKUP.CITY)
-        .andWhere('isdeleted', false)
         .orderBy('code')
   }
-};
+}

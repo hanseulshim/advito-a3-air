@@ -29,8 +29,7 @@
           :key="item.index"
           :label="item.name"
           :value="item"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
       <label>Destination:</label>
       <el-select
@@ -53,8 +52,7 @@
           :key="item.index"
           :label="item.name"
           :value="item"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
       <label>Exclude:</label>
       <el-checkbox v-model="exclude" name="exclude" />
@@ -89,7 +87,7 @@
 <script>
 import { removeTypename, filterGeography } from '@/helper';
 import {
-  GET_MARKET_GEO_LIST,
+  GET_GEOGRAPHY_LIST,
   GET_MARKET_RULE_LIST,
   GET_DISCOUNT,
   GET_TARGET_TERM
@@ -112,8 +110,8 @@ export default {
     }
   },
   apollo: {
-    marketGeoList: {
-      query: GET_MARKET_GEO_LIST
+    geographyList: {
+      query: GET_GEOGRAPHY_LIST
     },
     marketRuleList: {
       query: GET_MARKET_RULE_LIST,
@@ -130,7 +128,7 @@ export default {
   },
   data() {
     return {
-      marketGeoList: [],
+      geographyList: [],
       originOptions: [],
       arrivalOptions: [],
       exclude: false,
@@ -256,7 +254,7 @@ export default {
     filterOriginMarkets(query) {
       if (query !== '') {
         this.loadingOrigin = true;
-        this.originOptions = filterGeography(this.marketGeoList, query);
+        this.originOptions = filterGeography(this.geographyList, query);
         this.loadingOrigin = false;
       } else {
         this.originOptions = [];
@@ -265,7 +263,7 @@ export default {
     filterArrivalMarkets(query) {
       if (query !== '') {
         this.loadingArrival = true;
-        this.arrivalOptions = filterGeography(this.marketGeoList, query);
+        this.arrivalOptions = filterGeography(this.geographyList, query);
         this.loadingArrival = false;
       } else {
         this.arrivalOptions = [];

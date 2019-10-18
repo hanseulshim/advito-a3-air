@@ -56,11 +56,6 @@ export default {
       id
       code
       name
-    }
-    marketGeoList {
-      id
-      code
-      name
       locationType
     }
   }`

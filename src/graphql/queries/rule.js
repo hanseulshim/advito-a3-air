@@ -28,16 +28,6 @@ export const GET_GEOGRAPHY_LIST = gql`
   }
 `;
 
-export const GET_MARKET_GEO_LIST = gql`
-  query marketGeoList {
-    marketGeoList {
-      code
-      name
-      locationType
-    }
-  }
-`;
-
 export const GET_TICKETING_DATE_LIST = gql`
   query ticketingDateList($parentId: Int, $parentType: Int) {
     ticketingDateList(parentId: $parentId, parentType: $parentType) {
