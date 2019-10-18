@@ -34,6 +34,7 @@ export const authenticateUser = async sessionToken => {
     .map(role => role.advitoRoleId);
   return {
     ...user,
+    name: user.name(),
     roleIds
   };
 };

@@ -51,7 +51,7 @@ export const normalization = {
               minstay: 'minstay'
             })
             .where('normalisationmarketid', market.id);
-          market.fareList = normalizationFareList; // eslint-disable-line
+          market.fareList = normalizationFareList // eslint-disable-line
         }
       );
       await Promise.all(normalizationFareRequests);
@@ -169,6 +169,7 @@ export const normalization = {
       { discountId, usageFrom, usageTo, effectiveFrom, effectiveTo },
       { db, user }
     ) => {
+      console.log(user);
       const { rows } = await db.raw(
         `SELECT discount_normalisation_create(
           ${discountId},
