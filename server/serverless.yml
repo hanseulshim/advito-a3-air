@@ -5,7 +5,15 @@ provider:
   runtime: nodejs8.10
   region: us-east-2
   timeout: 30
-  environment: ${file(./env.yml)}
+  stage: dev
+  environment:
+    DB_HOST: ${self:custom.environment.DB_HOST}
+    DB_USER: ${self:custom.environment.DB_USER}
+    DB_PASSWORD: ${self:custom.environment.DB_PASSWORD}
+    ADVITO_DB_DATABASE: ${self:custom.environment.ADVITO_DB_DATABASE}
+    AWS_SES_ACCESS_KEY_ID: ${self:custom.environment.AWS_SES_ACCESS_KEY_ID}
+    AWS_SES_SECRET_ACCESS_KEY: ${self:custom.environment.AWS_SES_SECRET_ACCESS_KEY}
+    AWS_SES_REGION: ${self:custom.environment.AWS_SES_REGION}
   vpc:
     securityGroupIds:
       - 'sg-09b7d9888c893594d'
@@ -42,13 +50,15 @@ functions:
             allowCredentials: false
 
 custom:
+  stage: ${opt:stage, self:provider.stage}
+  environment: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
   serverless-offline:
     port: 8085
   webpack:
-      webpackConfig: ./webpack.config.js
-      includeModules:
-        forceInclude:
-          - pg
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      forceInclude:
+        - pg
 
 plugins:
   - serverless-webpack
