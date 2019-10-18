@@ -120,7 +120,7 @@ export default {
               parentId: this.parentId,
               bookingClassType:
                 PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
-              bookingClassRuleList: this.bookingClassRuleList
+              bookingClassList: this.bookingClassRuleList
             },
             refetchQueries: () => [
               {
@@ -178,7 +178,7 @@ export default {
               parentId: this.parentId,
               bookingClassType:
                 PRICING_TERM_LOOKUP.PUBLISHED_BOOKING_CLASS_TYPE,
-              bookingClassRuleList: this.bookingClassRuleList
+              bookingClassList: this.bookingClassRuleList
             },
             refetchQueries: () => [
               {

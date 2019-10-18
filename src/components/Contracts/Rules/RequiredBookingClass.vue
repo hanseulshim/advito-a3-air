@@ -119,7 +119,7 @@ export default {
             variables: {
               parentId: this.parentId,
               bookingClassType: PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE,
-              bookingClassRuleList: this.bookingClassRuleList
+              bookingClassList: this.bookingClassRuleList
             },
             refetchQueries: () => [
               {
@@ -176,7 +176,7 @@ export default {
             variables: {
               parentId: this.parentId,
               bookingClassType: PRICING_TERM_LOOKUP.REQUIRED_BOOKING_CLASS_TYPE,
-              bookingClassRuleList: this.bookingClassRuleList
+              bookingClassList: this.bookingClassRuleList
             },
             refetchQueries: () => [
               {
