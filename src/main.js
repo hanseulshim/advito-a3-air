@@ -11,14 +11,10 @@ import VModal from 'vue-js-modal';
 import 'element-ui/lib/theme-chalk/index.css';
 import defaults from './graphql/defaults';
 import resolvers from './graphql/resolvers';
-import { getToken, logout } from './helper';
+import { getToken, logout, getApi, getAdvitoApi } from './helper';
 
 export const apolloClient = new ApolloClient({
-  // uri: 'http://localhost:8085/graphql',
-  // uri: 'https://lr0bjpyqgj.execute-api.us-east-2.amazonaws.com/alpha/graphql',
-  // uri: 'https://hq893l4up1.execute-api.us-east-2.amazonaws.com/beta/graphql',
-  uri: 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql',
-  // uri: 'https://m5pnqi4l5e.execute-api.us-east-2.amazonaws.com/prod/graphql',
+  uri: getApi(),
   clientState: {
     defaults,
     resolvers
@@ -45,11 +41,7 @@ export const apolloClient = new ApolloClient({
 });
 
 const advitoClient = new ApolloClient({
-  // uri: 'http://localhost:4000/graphql',
-  // uri: 'https://trfrs1gzn8.execute-api.us-east-2.amazonaws.com/alpha/graphql',
-  // uri: 'https://7smhjazdr2.execute-api.us-east-2.amazonaws.com/beta/graphql',
-  uri: 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql',
-  // uri: 'https://759byqkv94.execute-api.us-east-2.amazonaws.com/prod/graphql',
+  uri: getAdvitoApi(),
   fetch,
   request: operation => {
     const sessiontoken = getToken();

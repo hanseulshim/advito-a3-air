@@ -81,3 +81,29 @@ export const logout = async (router, client) => {
   client.cache.writeData({ data: defaults });
   client.resetStore();
 };
+
+export const getApi = () => {
+  const VUE_APP_STAGE = process.env.VUE_APP_STAGE;
+  return VUE_APP_STAGE === 'dev'
+    ? 'https://s0dcs7ru0d.execute-api.us-east-2.amazonaws.com/dev/graphql'
+    : VUE_APP_STAGE === 'alpha'
+    ? 'https://lr0bjpyqgj.execute-api.us-east-2.amazonaws.com/alpha/graphql'
+    : VUE_APP_STAGE === 'beta'
+    ? 'https://hq893l4up1.execute-api.us-east-2.amazonaws.com/beta/graphql'
+    : VUE_APP_STAGE === 'prod'
+    ? 'https://m5pnqi4l5e.execute-api.us-east-2.amazonaws.com/prod/graphql'
+    : 'http://localhost:8085/graphql';
+};
+
+export const getAdvitoApi = () => {
+  const VUE_APP_STAGE = process.env.VUE_APP_STAGE;
+  return VUE_APP_STAGE === 'dev'
+    ? 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql'
+    : VUE_APP_STAGE === 'alpha'
+    ? 'https://trfrs1gzn8.execute-api.us-east-2.amazonaws.com/alpha/graphql'
+    : VUE_APP_STAGE === 'beta'
+    ? 'https://7smhjazdr2.execute-api.us-east-2.amazonaws.com/beta/graphql'
+    : VUE_APP_STAGE === 'prod'
+    ? 'https://759byqkv94.execute-api.us-east-2.amazonaws.com/prod/graphql'
+    : 'http://localhost:4000/graphql';
+};
