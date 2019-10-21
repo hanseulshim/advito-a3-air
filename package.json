@@ -21,7 +21,7 @@
     "deploy:dev": "VUE_APP_STAGE=dev vue-cli-service build && aws s3 sync  ./dist s3://dev.boostlabs/air/ --acl public-read --profile boost",
     "deploy:dev:server": "cd ./server && yarn dev",
     "deploy:dev:all": "yarn deploy:dev & yarn deploy:dev:server",
-    "deploy:prod": "VUE_APP_STAGE=prod vue-cli-service build && aws s3 sync  ./dist s3://air-prod1/ --acl public-read --profile advito",
+    "deploy:prod": "VUE_APP_STAGE=prod vue-cli-service build && aws s3 sync  ./dist s3://a3-prod1/ --acl public-read --profile advito",
     "deploy:prod:server": "cd ./server && yarn prod",
     "deploy:prod:all": "yarn deploy:prod & yarn deploy:prod:server",
     "deploy:all:front": "deploy:alph && deploy:beta && deploy:dev && deploy:prod",
