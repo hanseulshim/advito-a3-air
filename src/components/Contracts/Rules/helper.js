@@ -40,11 +40,6 @@ export const ruleTypes = [
     id: 7
   },
   {
-    value: 'PublishedBookingClass',
-    label: 'Published Booking Class',
-    id: 8
-  },
-  {
     value: 'RequiredBookingClass',
     label: 'Required Booking Class',
     id: 9
