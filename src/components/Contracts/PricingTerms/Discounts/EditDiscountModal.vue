@@ -137,7 +137,7 @@ export default {
             ...this.form,
             discountValue:
               this.form.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-                ? parseFloat(this.form.discountValue) / 100
+                ? this.form.discountValue / 100
                 : this.form.discountValue
           }
         });
