@@ -130,13 +130,15 @@ export default {
     },
     async createDiscount() {
       try {
-        this.form.discountValue = parseFloat(this.form.discountValue)
-          ? parseFloat(this.form.discountValue)
-          : null;
+        this.form.discountValue = parseFloat(this.form.discountValue) || null;
         await this.$apollo.mutate({
           mutation: EDIT_DISCOUNT,
           variables: {
-            ...this.form
+            ...this.form,
+            discountValue:
+              this.form.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+                ? parseFloat(this.form.discountValue) / 100
+                : this.form.discountValue
           }
         });
         this.$modal.show('success', {

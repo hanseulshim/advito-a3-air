@@ -251,8 +251,8 @@ export default {
         this.updateRule = rule;
         this.startDay = rule.startDay;
         this.endDay = rule.endDay;
-        this.startTime = rule.unformattedStart;
-        this.endTime = rule.unformattedEnd;
+        this.startTime = new Date();
+        this.endTime = new Date();
         this.exclude = rule.exclude;
       } else return;
     },
@@ -265,6 +265,7 @@ export default {
       this.dayOfWeekList[ruleIndex].endDay = this.endDay;
       this.dayOfWeekList[ruleIndex].startTime = formattedStart;
       this.dayOfWeekList[ruleIndex].endTime = formattedEnd;
+      this.dayOfWeekList[ruleIndex].exclude = this.exclude;
 
       this.updateRule = null;
       this.startDay = null;

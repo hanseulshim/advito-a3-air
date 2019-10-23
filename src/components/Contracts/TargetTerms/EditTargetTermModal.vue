@@ -92,7 +92,15 @@
       >
         <div class="text-input-container qsi">
           <el-input v-model.number="form.qsi" />
-          <span>%</span>
+          <span>
+            {{
+              targetTypeId === 21 || targetTypeId === 20
+                ? '%'
+                : targetTypeId === 24
+                ? 'points'
+                : ''
+            }}
+          </span>
         </div>
       </el-form-item>
       <el-form-item
@@ -420,7 +428,8 @@ export default {
       this.form.cabinC = cabinC;
       this.form.cabinP = cabinP;
       this.form.cabinY = cabinY;
-      this.form.qsi = qsi ? qsi * 100 : null;
+      this.form.qsi =
+        targetTypeId === 21 || targetTypeId === 20 ? qsi * 100 : qsi;
       this.form.softTarget = softTarget;
       this.form.internalTarget = internalTarget;
       this.form.timeframe = timeframe;
