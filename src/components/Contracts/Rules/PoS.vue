@@ -11,6 +11,7 @@
       <el-select
         v-model="selectedCountry"
         filterable
+        :filter-method="filterOptions"
         placeholder="Select"
         size="mini"
         clearable
@@ -39,7 +40,7 @@
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename, filterGeography } from '@/helper';
 import {
   GET_COUNTRY_LIST,
   GET_POINT_OF_SALE_LIST,
@@ -147,11 +148,19 @@ export default {
     };
   },
   computed: {
-    filteredCountryList() {
-      return this.countryList.filter(
-        country =>
-          !this.pointOfSaleList.some(rule => rule.countryCode === country.code)
-      );
+    filteredCountryList: {
+      get() {
+        return this.countryList.filter(
+          country =>
+            !this.pointOfSaleList.some(
+              rule => rule.countryCode === country.code
+            )
+        );
+      },
+      set(newList) {
+        console.log(newList);
+        return newList;
+      }
     }
   },
   methods: {
@@ -233,6 +242,14 @@ export default {
         this.$modal.show('error', {
           message: error.message
         });
+      }
+    },
+    filterOptions(query) {
+      if (query) {
+        this.filteredCountryList = filterGeography(
+          this.filteredCountryList,
+          query
+        );
       }
     }
   }
