@@ -19,10 +19,9 @@
         placeholder="Please enter a keyword"
         :remote-method="filterOriginMarkets"
         :loading="loadingOrigin"
-        value-key="name"
+        value-key="code"
         @change="clearOptions('origin')"
         @clear="clearOptions('origin')"
-        @blur="clearOptions('origin')"
       >
         <el-option
           v-for="item in originOptions"
@@ -45,7 +44,6 @@
         value-key="name"
         @change="clearOptions()"
         @clear="clearOptions()"
-        @blur="clearOptions()"
       >
         <el-option
           v-for="item in arrivalOptions"
@@ -188,7 +186,10 @@ export default {
       }
     },
     createTag() {
-      if (this.origin.locationType && this.arrival.locationType) {
+      if (
+        this.origin.locationType !== null &&
+        this.arrival.locationType !== null
+      ) {
         const ruleContainerId = this.marketRuleList.length
           ? this.marketRuleList[0].ruleContainerId
           : null;

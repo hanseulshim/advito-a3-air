@@ -71,6 +71,7 @@ import {
   GET_JOURNEY_TYPE_LIST,
   GET_DIRECTION_TYPE_LIST
 } from '@/graphql/queries';
+import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { CREATE_DISCOUNT } from '@/graphql/mutations';
 export default {
   name: 'NewDiscountModal',
@@ -131,13 +132,15 @@ export default {
     },
     async createDiscount() {
       try {
-        this.form.discountValue = parseFloat(this.form.discountValue)
-          ? parseFloat(this.form.discountValue)
-          : null;
+        this.form.discountValue = parseFloat(this.form.discountValue) || null;
         await this.$apollo.mutate({
           mutation: CREATE_DISCOUNT,
           variables: {
-            ...this.form
+            ...this.form,
+            discountValue:
+              this.form.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+                ? this.form.discountValue / 100
+                : this.form.discountValue
           },
           update: (store, { data: { createDiscount } }) => {
             const query = {

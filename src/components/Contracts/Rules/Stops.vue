@@ -37,9 +37,7 @@
         closable
         @close="deleteTag(rule)"
       >
-        {{
-          ` ${rule.minStops !== null ? rule.minStops : '0'} - ${rule.maxStops}`
-        }}
+        {{ ` ${rule.minStops} - ${rule.maxStops}` }}
       </el-tag>
     </div>
   </div>
@@ -76,8 +74,8 @@ export default {
   data() {
     return {
       editMode: false,
-      minStops: 0,
-      maxStops: 0,
+      minStops: null,
+      maxStops: null,
       stopsList: []
     };
   },
@@ -108,8 +106,8 @@ export default {
           });
         }
         this.editMode = !this.editMode;
-        this.minStops = 0;
-        this.maxStops = 0;
+        this.minStops = null;
+        this.maxStops = null;
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
@@ -139,13 +137,13 @@ export default {
         this.stopsList.push({
           id: null,
           ruleContainerId,
-          minStops: parseInt(this.minStops),
-          maxStops: parseInt(this.maxStops),
+          minStops: this.minStops ? parseInt(this.minStops) : null,
+          maxStops: this.maxStops ? parseInt(this.maxStops) : null,
           isDeleted: false
         });
 
-        this.minStops = 0;
-        this.maxStops = 0;
+        this.minStops = null;
+        this.maxStops = null;
       }
     },
     async deleteTag(tag) {
