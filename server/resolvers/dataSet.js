@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const dataSet = {
   Query: {
     dataSetCountryList: async (_, { projectId }, { db }) =>
@@ -45,7 +47,7 @@ export const dataSet = {
       if (!projectId) return [];
       const colList = await db('geo_country_stats_activity')
         .distinct('stat_month as month', 'stat_year as year')
-        .orderBy([{ column: 'stat_year', order: 'desc' }, 'stat_month'])
+        .orderBy(['stat_year', 'stat_month'])
         .limit(12)
         .where('isdeleted', false)
         .andWhere('project_id', projectId);
@@ -81,8 +83,8 @@ export const dataSet = {
           farePaid: row.stat_sum_farepaid
         }));
         return {
-          name: `${year}-${month}`,
-          date: new Date(year, month + 1),
+          name: moment.utc(`${year}-${month}`).format('YYYY-MM'),
+          date: moment.utc(`${year}-${month}`),
           dateUpdated: lastUpdated,
           qc,
           countryData: mappedCountryRows,

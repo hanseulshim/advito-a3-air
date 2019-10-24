@@ -65,16 +65,12 @@ export const discount = {
       },
       { db }
     ) => {
-      const value =
-        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-          ? discountValue / 100
-          : discountValue;
       const { rows } = await db.raw(
         `SELECT discount_createcopy(
         ${id},
         '${name}',
         ${discountTypeId},
-        ${value},
+        ${discountValue},
         ${journeyTypeId},
         ${directionTypeId},
         null,
@@ -97,12 +93,8 @@ export const discount = {
       },
       { db }
     ) => {
-      const value =
-        discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-          ? discountValue / 100
-          : discountValue;
       await db.raw(
-        `SELECT discount_update(${id}, '${name}', ${discountTypeId}, ${value}, ${journeyTypeId}, ${directionTypeId})`
+        `SELECT discount_update(${id}, '${name}', ${discountTypeId}, ${discountValue}, ${journeyTypeId}, ${directionTypeId})`
       );
       return await getDiscount(db, id);
     },

@@ -1,4 +1,5 @@
 import { CONTRACT_LOOKUP } from '../../constants';
+import { Contract } from '../../models';
 
 export const contractContainer = {
   Query: {

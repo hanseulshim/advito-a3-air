@@ -2,22 +2,22 @@ import moment from 'moment';
 import numeral from 'numeral';
 import defaults from './graphql/defaults';
 
-export const formatDate = date => {
-  return date
-    ? moment(date)
+export const formatDate = date =>
+  date
+    ? moment
+        .utc(date)
         .format('DD MMM YYYY')
         .toUpperCase()
     : '';
-};
 
 export const formatDataSetCol = date =>
-  date ? moment(new Date(date), 'MM/DD/YYYY').format('YYYY-MM') : '';
+  date ? moment.utc(date).format('YYYY-MM') : '';
 
-export const formatDateFromNow = date => (date ? moment(date).fromNow() : '');
+export const formatDateFromNow = date =>
+  date ? moment.utc(date).fromNow() : '';
 
-export const formatDateTime = date => {
-  return date ? moment(date).format('DD MMM YYYY H:mm') : '';
-};
+export const formatDateTime = date =>
+  date ? moment.utc(date).format('DD MMM YYYY H:mm') : '';
 
 export const formatNumber = num => numeral(num).format('0,0');
 
