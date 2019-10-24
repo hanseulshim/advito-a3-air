@@ -10,10 +10,6 @@ export default {
       #  fareCategoryId
       #  code
       #}
-      #airlineCodeList {
-      #  name
-      #  code
-      #}
       #dayOfWeekUnitList {
       #  id
       #  name

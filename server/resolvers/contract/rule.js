@@ -25,13 +25,6 @@ export const rule = {
           code: 'code'
         })
         .where('isdeleted', false),
-    airlineCodeList: async (_, __, { db }) =>
-      await db('carrier')
-        .select({
-          name: 'name',
-          code: 'code'
-        })
-        .where('isdeleted', false),
     dayOfWeekUnitList: async (_, __, { db }) =>
       await db('lov_lookup')
         .select({

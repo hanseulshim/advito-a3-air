@@ -181,11 +181,6 @@ input AirlineInput {
   isDeleted: Boolean
 }
 
-type AirlineCode {
-  code: String
-  name: String
-}
-
 type TicketDesignator {
   id: Int
   ruleContainerId: String
@@ -453,7 +448,6 @@ extend type Query {
   bookingClassRuleList(parentId: Int, bookingClassType: Int): [BookingClassRule] @auth
   bookingClassCodeList: [BookingClassCode] @auth
   airlineRuleList(parentId: Int, parentType: Int, airlineType: Int): [AirlineRule] @auth
-  airlineCodeList: [AirlineCode] @auth
   ticketDesignatorList(parentId: Int): [TicketDesignator] @auth
   tourCodeList(parentId: Int): [TourCode] @auth
   advancedTicketingList(parentId: Int): [AdvancedTicketing] @auth
@@ -498,4 +492,4 @@ extend type Mutation {
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 
-`;
+`

@@ -114,15 +114,6 @@ export const GET_BOOKING_CLASS_RULE_LIST = gql`
   }
 `;
 
-export const GET_AIRLINE_CODE_LIST = gql`
-  query airlineCodeList {
-    airlineCodeList {
-      code
-      name
-    }
-  }
-`;
-
 export const GET_AIRLINE_RULE_LIST = gql`
   query airlineRuleList($parentId: Int, $airlineType: Int, $parentType: Int) {
     airlineRuleList(
