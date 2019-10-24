@@ -187,8 +187,8 @@ export default {
     },
     createTag() {
       if (
-        this.origin.locationType !== null &&
-        this.arrival.locationType !== null
+        !(this.origin.locationType == null) &&
+        !(this.arrival.locationType == null)
       ) {
         const ruleContainerId = this.marketRuleList.length
           ? this.marketRuleList[0].ruleContainerId

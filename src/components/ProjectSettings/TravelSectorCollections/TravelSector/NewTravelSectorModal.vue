@@ -238,7 +238,10 @@ export default {
     filterDestination(query) {
       if (query !== '') {
         this.loadingDestination = true;
-        this.destinationOptions = filterByNameAndCode(this.geographyList, query);
+        this.destinationOptions = filterByNameAndCode(
+          this.geographyList,
+          query
+        );
         this.loadingDestination = false;
       } else {
         this.destinationOptions = [];

@@ -256,7 +256,7 @@ export default {
         this.exclude = rule.exclude;
       } else return;
     },
-    updateTag() { 
+    updateTag() {
       const ruleIndex = this.dayOfWeekList.indexOf(this.updateRule);
 
       this.dayOfWeekList[ruleIndex].startDay = this.startDay;
