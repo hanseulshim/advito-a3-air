@@ -131,13 +131,15 @@ export default {
     },
     async copyDiscount() {
       try {
-        this.form.discountValue = parseFloat(this.form.discountValue)
-          ? parseFloat(this.form.discountValue)
-          : null;
+        this.form.discountValue = parseFloat(this.form.discountValue) || null;
         await this.$apollo.mutate({
           mutation: COPY_DISCOUNT,
           variables: {
-            ...this.form
+            ...this.form,
+            discountValue:
+              this.form.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
+                ? this.form.discountValue / 100
+                : this.form.discountValue
           },
           update: (store, { data: { copyDiscount } }) => {
             const query = {
