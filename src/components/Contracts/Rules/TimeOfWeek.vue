@@ -46,14 +46,14 @@
         placeholder="Select"
         size="mini"
         clearable
-        format="HH:mm"
+        value-format="HH:mm"
       />
       <label>End Time:</label>
       <el-time-picker
         v-model="endTime"
         placeholder="Select"
         size="mini"
-        format="HH:mm"
+        value-format="HH:mm"
         clearable
       />
       <label>Exclude:</label>
@@ -196,8 +196,8 @@ export default {
           ruleContainerId,
           startDay: this.startDay,
           endDay: this.endDay,
-          startTime: this.formatTime(this.startTime),
-          endTime: this.formatTime(this.endTime),
+          startTime: this.startTime,
+          endTime: this.endTime,
           exclude: this.exclude,
           isDeleted: false
         });
@@ -251,20 +251,18 @@ export default {
         this.updateRule = rule;
         this.startDay = rule.startDay;
         this.endDay = rule.endDay;
-        this.startTime = new Date();
-        this.endTime = new Date();
+        this.startTime = rule.startTime;
+        this.endTime = rule.endTime;
         this.exclude = rule.exclude;
       } else return;
     },
-    updateTag() {
-      const formattedStart = this.formatTime(this.startTime);
-      const formattedEnd = this.formatTime(this.endTime);
+    updateTag() { 
       const ruleIndex = this.dayOfWeekList.indexOf(this.updateRule);
 
       this.dayOfWeekList[ruleIndex].startDay = this.startDay;
       this.dayOfWeekList[ruleIndex].endDay = this.endDay;
-      this.dayOfWeekList[ruleIndex].startTime = formattedStart;
-      this.dayOfWeekList[ruleIndex].endTime = formattedEnd;
+      this.dayOfWeekList[ruleIndex].startTime = this.startTime;
+      this.dayOfWeekList[ruleIndex].endTime = this.endTime;
       this.dayOfWeekList[ruleIndex].exclude = this.exclude;
 
       this.updateRule = null;
