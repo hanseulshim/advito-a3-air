@@ -1,7 +1,11 @@
 <template>
   <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Flight Number: Main Segment</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules" />
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
@@ -52,11 +56,11 @@
         @close="deleteTag(rule)"
       >
         {{
-        rule.carrierCode +
-        ' ' +
-        `${rule.startRange !== null ? rule.startRange : '0'} - ${
-        rule.endRange
-        }`
+          rule.carrierCode +
+            ' ' +
+            `${rule.startRange !== null ? rule.startRange : '0'} - ${
+              rule.endRange
+            }`
         }}
       </el-tag>
     </div>
@@ -71,27 +75,27 @@
         @close="deleteTag(rule)"
       >
         {{
-        rule.carrierCode +
-        ' ' +
-        `${rule.startRange !== null ? rule.startRange : '0'} - ${
-        rule.endRange
-        }`
+          rule.carrierCode +
+            ' ' +
+            `${rule.startRange !== null ? rule.startRange : '0'} - ${
+              rule.endRange
+            }`
         }}
       </el-tag>
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
+import { removeTypename } from '@/helper';
 import {
   GET_AIRLINE_LIST,
   GET_FLIGHT_NUMBER_LIST,
   GET_DISCOUNT
-} from "@/graphql/queries";
-import { UPDATE_FLIGHT_NUMBER_LIST } from "@/graphql/mutations";
-import { PRICING_TERM_LOOKUP } from "@/graphql/constants";
+} from '@/graphql/queries';
+import { UPDATE_FLIGHT_NUMBER_LIST } from '@/graphql/mutations';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
-  name: "FlightNumber",
+  name: 'FlightNumber',
   props: {
     parentId: {
       default: null,
@@ -148,7 +152,7 @@ export default {
     async saveRules() {
       try {
         if (this.editMode && !this.flightNumberList.length) {
-          this.$emit("delete-rule", "FlightNumber");
+          this.$emit('delete-rule', 'FlightNumber');
         } else if (this.editMode) {
           await this.$apollo.mutate({
             mutation: UPDATE_FLIGHT_NUMBER_LIST,
@@ -175,7 +179,7 @@ export default {
         this.endRange = null;
         this.selectedAirline = [];
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }
@@ -203,8 +207,8 @@ export default {
         this.endRange = null;
         this.selectedAirline = [];
       } else {
-        this.$modal.show("error", {
-          message: "Error: Airline, Start, & End are all required values"
+        this.$modal.show('error', {
+          message: 'Error: Airline, Start, & End are all required values'
         });
       }
     },
@@ -232,11 +236,11 @@ export default {
               rule => !rule.isDeleted
             );
             if (!this.flightNumberList.length || !rulesRemaining) {
-              this.$emit("delete-rule", "FlightNumber");
+              this.$emit('delete-rule', 'FlightNumber');
             }
           });
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }
@@ -245,5 +249,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>

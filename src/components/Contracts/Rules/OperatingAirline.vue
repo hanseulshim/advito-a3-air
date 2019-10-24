@@ -1,7 +1,11 @@
 <template>
   <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Operating Airline (Information Purpose Only)</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules" />
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-select
@@ -32,7 +36,8 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ rule.carrierCode }}</el-tag>
+        >{{ rule.carrierCode }}</el-tag
+      >
     </div>
     <div class="rule-tags">
       <label v-if="excludedRules.length">Excluded:</label>
@@ -43,12 +48,13 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-      >{{ rule.carrierCode }}</el-tag>
+        >{{ rule.carrierCode }}</el-tag
+      >
     </div>
   </div>
 </template>
 <script>
-import { removeTypename } from "@/helper";
+import { removeTypename } from '@/helper';
 import {
   GET_AIRLINE_LIST,
   GET_AIRLINE_RULE_LIST,
@@ -56,11 +62,11 @@ import {
   GET_TARGET_TERM,
   GET_PRICING_TERM,
   GET_CONTRACT
-} from "@/graphql/queries";
-import { UPDATE_AIRLINE_RULE } from "@/graphql/mutations";
-import { PRICING_TERM_LOOKUP } from "@/graphql/constants";
+} from '@/graphql/queries';
+import { UPDATE_AIRLINE_RULE } from '@/graphql/mutations';
+import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
 export default {
-  name: "OperatingAirline",
+  name: 'OperatingAirline',
   props: {
     parentId: {
       default: null,
@@ -178,7 +184,7 @@ export default {
     async saveRules() {
       try {
         if (this.editMode && !this.airlineRuleList.length) {
-          this.$emit("delete-rule", "OperatingAirline");
+          this.$emit('delete-rule', 'OperatingAirline');
         } else if (this.editMode) {
           await this.$apollo.mutate({
             mutation: UPDATE_AIRLINE_RULE,
@@ -195,12 +201,12 @@ export default {
           });
         }
         if (this.parentType === 1) {
-          this.$emit("toggle-row", this.pricingTermId);
+          this.$emit('toggle-row', this.pricingTermId);
         }
         this.editMode = !this.editMode;
         this.selectedAirline = [];
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }
@@ -224,8 +230,8 @@ export default {
 
         this.selectedAirline = [];
       } else {
-        this.$modal.show("error", {
-          message: "Please select an airline"
+        this.$modal.show('error', {
+          message: 'Please select an airline'
         });
       }
     },
@@ -253,15 +259,15 @@ export default {
               rule => !rule.isDeleted
             );
             if (!this.airlineRuleList.length || !rulesRemaining) {
-              this.$emit("delete-rule", "OperatingAirline");
-              this.$emit("toggle-row", this.pricingTermId);
+              this.$emit('delete-rule', 'OperatingAirline');
+              this.$emit('toggle-row', this.pricingTermId);
             }
             if (this.parentType === 1) {
-              this.$emit("toggle-row", this.pricingTermId);
+              this.$emit('toggle-row', this.pricingTermId);
             }
           });
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }
@@ -270,5 +276,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>
