@@ -153,14 +153,14 @@ export default {
       if (this.query) {
         return filterByNameAndCode(this.countryList, this.query).filter(
           country =>
-            !this.pointOfSaleList.some(
+            !this.pointOfOriginList.some(
               rule => rule.countryCode === country.code
             )
         );
       } else {
         return this.countryList.filter(
           country =>
-            !this.pointOfSaleList.some(
+            !this.pointOfOriginList.some(
               rule => rule.countryCode === country.code
             )
         );
