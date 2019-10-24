@@ -273,7 +273,7 @@ export default {
       this.endTime = '';
     },
     formatTime(date) {
-      return date ? moment(date).format('H:mm') : '';
+      return date ? moment.utc(date).format('H:mm') : '';
     },
     getTagString(rule) {
       if (!this.dayOfWeekList.length || !this.dayOfWeekUnitList.length) {

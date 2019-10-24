@@ -32,14 +32,7 @@ const advitoDb = require('knex')({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.ADVITO_DB_DATABASE,
-    timezone: 'UTC',
-    typeCast: function(field, next) {
-      if (field.type == 'DATETIME') {
-        return moment(field.string()).format('YYYY-MM-DD HH:mm:ss');
-      }
-      return next();
-    }
+    database: process.env.ADVITO_DB_DATABASE
   }
 });
 
