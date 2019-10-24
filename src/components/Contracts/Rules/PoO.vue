@@ -11,6 +11,7 @@
       <el-select
         v-model="selectedCountry"
         filterable
+        :filter-method="setQueryString"
         placeholder="Select"
         size="mini"
         clearable
@@ -39,7 +40,7 @@
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename, filterByNameAndCode } from '@/helper';
 import {
   GET_COUNTRY_LIST,
   GET_POINT_OF_ORIGIN_LIST,
@@ -94,6 +95,7 @@ export default {
     return {
       countryList: [],
       editMode: false,
+      query: '',
       selectedCountry: [],
       pointOfOriginList: [],
       discountQueries: [
@@ -148,12 +150,21 @@ export default {
   },
   computed: {
     filteredCountryList() {
-      return this.countryList.filter(
-        country =>
-          !this.pointOfOriginList.some(
-            rule => rule.countryCode === country.code
-          )
-      );
+      if (this.query) {
+        return filterByNameAndCode(this.countryList, this.query).filter(
+          country =>
+            !this.pointOfSaleList.some(
+              rule => rule.countryCode === country.code
+            )
+        );
+      } else {
+        return this.countryList.filter(
+          country =>
+            !this.pointOfSaleList.some(
+              rule => rule.countryCode === country.code
+            )
+        );
+      }
     }
   },
   methods: {
@@ -236,6 +247,9 @@ export default {
           message: error.message
         });
       }
+    },
+    setQueryString(query) {
+      this.query = query;
     }
   }
 };

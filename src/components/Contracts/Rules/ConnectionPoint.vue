@@ -22,7 +22,6 @@
         value-key="name"
         @change="clearGeo()"
         @clear="clearGeo()"
-        @blur="clearGeo()"
       >
         <el-option
           v-for="country in filteredGeoList"
@@ -62,7 +61,7 @@
   </div>
 </template>
 <script>
-import { removeTypename, filterGeography } from '@/helper';
+import { removeTypename, filterByNameAndCode } from '@/helper';
 import {
   GET_GEOGRAPHY_LIST,
   GET_CONNECTION_POINT_LIST,
@@ -223,7 +222,7 @@ export default {
     filterGeoList(query) {
       if (query !== '') {
         this.loading = true;
-        this.options = filterGeography(this.geographyList, query);
+        this.options = filterByNameAndCode(this.geographyList, query);
         this.loading = false;
       } else {
         this.options = [];

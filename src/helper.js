@@ -29,12 +29,14 @@ export const formatPercent = num => numeral(num).format('0%');
 
 export const formatCurrency = num => numeral(num).format('0,0.00');
 
-export const filterGeography = (list, query) =>
-  list.filter(
-    item =>
-      item.name.toLowerCase().includes(query.toLowerCase()) ||
-      item.code.toLowerCase().includes(query.toLowerCase())
-  );
+export const filterByNameAndCode = (list, query) =>
+  list
+    .filter(
+      item =>
+        item.name.toLowerCase().includes(query.toLowerCase()) ||
+        item.code.toLowerCase().includes(query.toLowerCase())
+    )
+    .sort(a => (a.code.toLowerCase().includes(query.toLowerCase()) ? -1 : +1));
 
 export const pluralize = (word, count) => {
   return count > 1
