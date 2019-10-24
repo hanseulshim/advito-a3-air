@@ -116,7 +116,7 @@
 <script>
 import { GET_GEOGRAPHY_LIST, GET_TRAVEL_SECTOR_LIST } from '@/graphql/queries';
 import { EDIT_TRAVEL_SECTOR } from '@/graphql/mutations';
-import { filterGeography } from '@/helper';
+import { filterByNameAndCode } from '@/helper';
 export default {
   name: 'EditTravelSectorModal',
   apollo: {
@@ -236,7 +236,7 @@ export default {
     filterOrigin(query) {
       if (query !== '') {
         this.loadingOrigin = true;
-        this.originOptions = filterGeography(this.geographyList, query);
+        this.originOptions = filterByNameAndCode(this.geographyList, query);
         this.loadingOrigin = false;
       } else {
         this.originOptions = [];
@@ -245,7 +245,7 @@ export default {
     filterDestination(query) {
       if (query !== '') {
         this.loadingDestination = true;
-        this.destinationOptions = filterGeography(this.geographyList, query);
+        this.destinationOptions = filterByNameAndCode(this.geographyList, query);
         this.loadingDestination = false;
       } else {
         this.destinationOptions = [];

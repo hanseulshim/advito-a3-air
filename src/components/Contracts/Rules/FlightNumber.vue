@@ -11,6 +11,7 @@
       <el-select
         v-model="selectedAirline"
         filterable
+        :filter-method="setQueryString"
         placeholder="Select"
         size="mini"
         clearable
@@ -86,9 +87,9 @@
   </div>
 </template>
 <script>
-import { removeTypename } from '@/helper';
+import { removeTypename, filterByNameAndCode } from '@/helper';
 import {
-  GET_AIRLINE_CODE_LIST,
+  GET_AIRLINE_LIST,
   GET_FLIGHT_NUMBER_LIST,
   GET_DISCOUNT
 } from '@/graphql/queries';
@@ -107,8 +108,8 @@ export default {
     }
   },
   apollo: {
-    airlineCodeList: {
-      query: GET_AIRLINE_CODE_LIST
+    airlineList: {
+      query: GET_AIRLINE_LIST
     },
     flightNumberList: {
       query: GET_FLIGHT_NUMBER_LIST,
@@ -124,8 +125,9 @@ export default {
   },
   data() {
     return {
-      airlineCodeList: [],
+      airlineList: [],
       flightNumberList: [],
+      query: '',
       selectedAirline: [],
       startRange: null,
       endRange: null,
@@ -142,10 +144,20 @@ export default {
       return this.flightNumberList.filter(rule => !rule.exclude);
     },
     filteredAirlineList() {
-      return this.airlineCodeList.filter(
-        airline =>
-          !this.flightNumberList.some(rule => rule.carrierCode === airline.code)
-      );
+      if (this.query) {
+        return filterByNameAndCode(this.airlineList, this.query).filter(
+          airline =>
+            !this.flightNumberList.some(
+              rule => rule.carrierCode === airline.code
+            )
+        );
+      } else
+        return this.airlineList.filter(
+          airline =>
+            !this.flightNumberList.some(
+              rule => rule.carrierCode === airline.code
+            )
+        );
     }
   },
   methods: {
@@ -244,6 +256,9 @@ export default {
           message: error.message
         });
       }
+    },
+    setQueryString(query) {
+      this.query = query;
     }
   }
 };
