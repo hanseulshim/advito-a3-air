@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const dataSet = {
   Query: {
     dataSetCountryList: async (_, { projectId }, { db }) =>
@@ -82,7 +84,7 @@ export const dataSet = {
         }));
         return {
           name: `${year}-${month}`,
-          date: new Date(year, month + 1),
+          date: moment.utc(`${year}-${month}`),
           dateUpdated: lastUpdated,
           qc,
           countryData: mappedCountryRows,
