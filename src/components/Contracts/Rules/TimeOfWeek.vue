@@ -196,8 +196,8 @@ export default {
           ruleContainerId,
           startDay: this.startDay,
           endDay: this.endDay,
-          startTime: this.formatTime(this.startTime),
-          endTime: this.formatTime(this.endTime),
+          startTime: this.startTime,
+          endTime: this.endTime,
           exclude: this.exclude,
           isDeleted: false
         });
