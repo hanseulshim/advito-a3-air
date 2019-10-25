@@ -36,7 +36,9 @@ export const filterByNameAndCode = (list, query) =>
         item.name.toLowerCase().includes(query.toLowerCase()) ||
         item.code.toLowerCase().includes(query.toLowerCase())
     )
-    .sort(a => (a.code.toLowerCase().includes(query.toLowerCase()) ? -1 : +1));
+    .sort(a => (a.code.toLowerCase().includes(query.toLowerCase()) ? -1 : +1))
+    .sort(a => (a.code.length === query.length ? -1 : +1))
+    .sort(a => (a.code.toLowerCase() === query.toLowerCase() ? -1 : +1));
 
 export const pluralize = (word, count) => {
   return count > 1
