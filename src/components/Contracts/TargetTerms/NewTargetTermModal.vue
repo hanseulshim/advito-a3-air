@@ -312,8 +312,7 @@ export default {
           {
             required: true,
             message: 'Please input a valid target term name.',
-            trigger: 'change',
-            pattern: /^[A-Za-z0-9 ]+$/
+            trigger: 'change'
           }
         ],
         targetTypeId: [

@@ -4,6 +4,17 @@ export class Contract extends Model {
   static get tableName() {
     return 'contractcontainer';
   }
+
+  // static relationMappings = {
+  //   pricingTerms: {
+  //     relation: Model.HasManyRelation,
+  //     modelClass: PricingTerm,
+  //     join: {
+  //       from: 'persons.id',
+  //       to: 'animals.ownerId'
+  //     }
+  //   }
+  // };
 }
 export class TargetTerm extends Model {
   static get tableName() {

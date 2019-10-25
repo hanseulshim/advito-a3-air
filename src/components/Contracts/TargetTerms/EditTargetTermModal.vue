@@ -293,8 +293,7 @@ export default {
           {
             required: true,
             message: 'Please input a target term name.',
-            trigger: 'change',
-            pattern: /^[A-Za-z0-9 ]+$/
+            trigger: 'change'
           }
         ],
         timeframe: [{ type: 'number', message: 'Timeframe must be a number' }],
