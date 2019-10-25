@@ -12,5 +12,6 @@ export const client = {
         .leftJoin('blops.client', 'client.id', 'link.client_id')
         .where('link.advito_application_id', AIR_APPLICATION_ID)
         .andWhere('client.is_active', true)
+        .orderBy('client.client_name')
   }
 };
