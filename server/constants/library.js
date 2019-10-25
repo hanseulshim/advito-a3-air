@@ -5,6 +5,7 @@ export const LIBRARY_LOOKUP = {
 export const LOCATION_LOOKUP = {
   AIRPORT: 0,
   CITY: 1,
+  STATE: 2,
   COUNTRY: 3,
   SUBREGION: 4,
   REGION: 5,

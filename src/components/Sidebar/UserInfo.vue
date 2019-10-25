@@ -1,7 +1,7 @@
 <template>
   <div v-loading="$apollo.loading" class="user-info-container">
     <div class="sidebar-avatar-container">
-      <img id="sidebar-avatar" alt="avatar" src="@/assets/shayan.jpeg" />
+      <img id="sidebar-avatar" alt="avatar" src="@/assets/user.png" />
       <i class="fas fa-cog" />
     </div>
     <div>{{ user.name }}</div>

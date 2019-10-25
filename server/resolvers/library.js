@@ -1,4 +1,8 @@
-import { LIBRARY_LOOKUP, LOCATION_LOOKUP, ADVITO_GEOSET_ID } from '../constants'
+import {
+  LIBRARY_LOOKUP,
+  LOCATION_LOOKUP,
+  ADVITO_GEOSET_ID
+} from '../constants';
 
 export const library = {
   Query: {
@@ -108,18 +112,24 @@ export const library = {
           this.where('locationtype', LOCATION_LOOKUP.REGION).andWhere(
             'geosetid',
             ADVITO_GEOSET_ID
-          )
+          );
         })
         .orWhere(function() {
           this.where('locationtype', LOCATION_LOOKUP.SUBREGION).andWhere(
             'geosetid',
             ADVITO_GEOSET_ID
-          )
+          );
         })
         .orWhere('locationtype', LOCATION_LOOKUP.COUNTRY)
+        .orWhere(function() {
+          this.whereNot('name', 'Default State').andWhere(
+            'locationtype',
+            LOCATION_LOOKUP.STATE
+          );
+        })
         .orWhere('locationtype', LOCATION_LOOKUP.CITY)
         .orWhere('locationtype', LOCATION_LOOKUP.AIRPORT)
         .andWhere('isdeleted', false)
         .orderBy('code')
   }
-}
+};
