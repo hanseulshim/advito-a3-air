@@ -246,6 +246,11 @@ export default {
       type: Number,
       required: true,
       default: null
+    },
+    contractId: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -287,17 +292,22 @@ export default {
       }
     },
     showNewDiscountModal() {
-      this.$modal.show('new-discount', { pricingTermId: this.pricingTermId });
+      this.$modal.show('new-discount', {
+        contractId: this.contractId,
+        pricingTermId: this.pricingTermId
+      });
     },
     showCopyDiscountModal(discount) {
       this.$modal.show('copy-discount', {
         discount,
+        contractId: this.contractId,
         pricingTermId: this.pricingTermId
       });
     },
     showDeleteDiscountModal(idList) {
       this.$modal.show('delete-discount', {
         pricingTermId: this.pricingTermId,
+        contractId: this.contractId,
         idList
       });
     },

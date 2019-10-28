@@ -282,7 +282,6 @@ export default {
           name: 'edit-preferred-airline'
         });
       } catch (error) {
-        console.log(error);
         this.$modal.show('error', {
           message: 'Failed to edit preferred Airline. Please try again.'
         });

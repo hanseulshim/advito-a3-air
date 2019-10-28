@@ -11,9 +11,9 @@
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
-        <span>{{
-          pluralize('pricing term', filteredPricingTermList.length)
-        }}</span>
+        <span>
+          {{ pluralize('pricing term', filteredPricingTermList.length) }}
+        </span>
       </div>
       <div class="menu-container">
         <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
@@ -50,7 +50,11 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <Discounts :pricing-term-id="props.row.id" @toggle-row="toggleRow" />
+          <Discounts
+            :pricing-term-id="props.row.id"
+            :contract-id="selectedContract.id"
+            @toggle-row="toggleRow"
+          />
         </template>
       </el-table-column>
       <el-table-column

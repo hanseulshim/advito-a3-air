@@ -1,4 +1,6 @@
 import { DISCOUNT_LOOKUP } from '../../constants';
+import { updateQC } from './contractContainer';
+import { Discount, PricingTerm } from '../../models';
 
 export const discount = {
   Query: {
@@ -51,6 +53,8 @@ export const discount = {
         )`
       );
       const [{ discount_create: id }] = rows;
+      const pricingTerm = await PricingTerm.query().findById(pricingTermId);
+      updateQC(parseInt(pricingTerm.contractcontainerid));
       return await getDiscount(db, id);
     },
     copyDiscount: async (
@@ -79,6 +83,9 @@ export const discount = {
         null)`
       );
       const [{ discount_createcopy: newId }] = rows;
+      const discount = await Discount.query().findById(id);
+      const pricingTerm = await discount.$relatedQuery('pricingTerm');
+      updateQC(parseInt(pricingTerm.contractcontainerid));
       return await getDiscount(db, parseInt(newId));
     },
     editDiscount: async (
@@ -106,6 +113,8 @@ export const discount = {
       );
       await Promise.all(queries);
       await db.raw(`SELECT discount_update_sequence_all(${pricingTermId})`);
+      const pricingTerm = await PricingTerm.query().findById(pricingTermId);
+      updateQC(parseInt(pricingTerm.contractcontainerid));
       return idList;
     },
     updateDiscountAppliedOrder: async (_, { updateDiscountList }, { db }) => {

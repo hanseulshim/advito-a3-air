@@ -50,7 +50,6 @@ import {
   GET_TARGET_TERM_LIST,
   GET_PRICING_TERM_LIST
 } from '@/graphql/queries';
-import moment from 'moment';
 
 export default {
   name: 'TicketDate',

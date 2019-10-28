@@ -321,7 +321,7 @@ extend type Mutation {
     fareCategoryTo: Date
   ): TargetTerm @auth
   toggleTargetTermQC(contractId: Int!, idList: [Int]!): [TargetTerm] @auth
-  deleteTargetTerms(idList: [Int]!): [Int] @auth
+  deleteTargetTerms(contractId: Int!, idList: [Int]!): [Int] @auth
 
   createTargetLevel(
     targetTermId: Int!
