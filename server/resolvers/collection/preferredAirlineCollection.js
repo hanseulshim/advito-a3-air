@@ -1,4 +1,5 @@
 import { PREFERRED_AIRLINE_LOOKUP } from '../../constants';
+import moment from 'moment';
 
 export const preferredAirlineCollection = {
   Query: {
@@ -104,12 +105,12 @@ export const preferredAirlineCollection = {
           const { rows } = await db.raw(
             `SELECT pcg_carrier_create(${groupId}, ${airlineId}, ${preferenceLevelId}, ${
               effectiveStartDate
-                ? `'${new Date(effectiveStartDate).toISOString()}'`
+                ? `'${moment.utc(effectiveStartDate).toISOString()}'`
                 : null
             },
             ${
               effectiveEndDate
-                ? `'${new Date(effectiveEndDate).toISOString()}'`
+                ? `'${moment.utc(effectiveEndDate).toISOString()}'`
                 : null
             })`
           );
@@ -135,12 +136,12 @@ export const preferredAirlineCollection = {
           const { rows } = await db.raw(
             `SELECT pcg_carrier_update(${groupId}, ${id}, ${airlineId}, ${preferenceLevelId}, ${
               effectiveStartDate
-                ? `'${new Date(effectiveStartDate).toISOString()}'`
+                ? `'${moment.utc(effectiveStartDate).toISOString()}'`
                 : null
             },
             ${
               effectiveEndDate
-                ? `'${new Date(effectiveEndDate).toISOString()}'`
+                ? `'${moment.utc(effectiveEndDate).toISOString()}'`
                 : null
             },
             ${deleted})`

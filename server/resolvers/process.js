@@ -1,4 +1,5 @@
 import { Project, Report } from '../models';
+import moment from 'moment';
 
 export const process = {
   Query: {
@@ -40,7 +41,7 @@ export const process = {
         .orderBy('id', 'desc')
         .limit(1)
         .first()
-        .patch({ procEnd: new Date() });
+        .patch({ procEnd: moment.utc() });
     }
   }
 };

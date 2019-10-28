@@ -5,6 +5,7 @@ import merge from 'lodash/merge';
 import sum from 'lodash/sum';
 import sumBy from 'lodash/sumBy';
 import numeral from 'numeral';
+import moment from 'moment';
 
 export const normalization = {
   Query: {
@@ -138,7 +139,7 @@ export const normalization = {
         label,
         value:
           marketList
-            .map(({ departureDate }) => new Date(departureDate).getDay())
+            .map(({ departureDate }) => moment.utc(departureDate).getDay())
             .filter(departureDate => departureDate === index).length /
           marketList.length
       }));
@@ -174,23 +175,23 @@ export const normalization = {
         `SELECT discount_normalisation_create(
           ${discountId},
           ${
-            new Date(usageFrom).toISOString()
-              ? `'${new Date(usageFrom).toISOString()}'`
+            moment.utc(usageFrom).toISOString()
+              ? `'${moment.utc(usageFrom).toISOString()}'`
               : null
           },
           ${
-            new Date(usageTo).toISOString()
-              ? `'${new Date(usageTo).toISOString()}'`
+            moment.utc(usageTo).toISOString()
+              ? `'${moment.utc(usageTo).toISOString()}'`
               : null
           },
           ${
-            new Date(effectiveFrom).toISOString()
-              ? `'${new Date(effectiveFrom).toISOString()}'`
+            moment.utc(effectiveFrom).toISOString()
+              ? `'${moment.utc(effectiveFrom).toISOString()}'`
               : null
           },
           ${
-            new Date(effectiveTo).toISOString()
-              ? `'${new Date(effectiveTo).toISOString()}'`
+            moment.utc(effectiveTo).toISOString()
+              ? `'${moment.utc(effectiveTo).toISOString()}'`
               : null
           },
           '${user.name.replace(REGEX_USER, "''")}'
@@ -208,23 +209,23 @@ export const normalization = {
         `SELECT discount_normalisation_update(
           ${id},
           ${
-            new Date(usageFrom).toISOString()
-              ? `'${new Date(usageFrom).toISOString()}'`
+            moment.utc(usageFrom).toISOString()
+              ? `'${moment.utc(usageFrom).toISOString()}'`
               : null
           },
           ${
-            new Date(usageTo).toISOString()
-              ? `'${new Date(usageTo).toISOString()}'`
+            moment.utc(usageTo).toISOString()
+              ? `'${moment.utc(usageTo).toISOString()}'`
               : null
           },
           ${
-            new Date(effectiveFrom).toISOString()
-              ? `'${new Date(effectiveFrom).toISOString()}'`
+            moment.utc(effectiveFrom).toISOString()
+              ? `'${moment.utc(effectiveFrom).toISOString()}'`
               : null
           },
           ${
-            new Date(effectiveTo).toISOString()
-              ? `'${new Date(effectiveTo).toISOString()}'`
+            moment.utc(effectiveTo).toISOString()
+              ? `'${moment.utc(effectiveTo).toISOString()}'`
               : null
           },
           '${user.name.replace(REGEX_USER, "''")}'
@@ -265,8 +266,8 @@ export const normalization = {
           ${farePaid},
           ${usageOverride},
           ${
-            new Date(farePullDate).toISOString()
-              ? `'${new Date(farePullDate).toISOString()}'`
+            moment.utc(farePullDate).toISOString()
+              ? `'${moment.utc(farePullDate).toISOString()}'`
               : null
           },
           ${notes ? `'${notes}'` : null}
@@ -321,8 +322,8 @@ export const normalization = {
           ${farePaid},
           ${usageOverride},
           ${
-            new Date(farePullDate).toISOString()
-              ? `'${new Date(farePullDate).toISOString()}'`
+            moment.utc(farePullDate).toISOString()
+              ? `'${moment.utc(farePullDate).toISOString()}'`
               : null
           },
           ${notes ? `'${notes}'` : null}

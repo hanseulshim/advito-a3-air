@@ -54,6 +54,8 @@ import {
   GET_CONTRACT
 } from '@/graphql/queries';
 import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
+import moment from 'moment';
+
 export default {
   name: 'TicketingDates',
   props: {
@@ -195,8 +197,8 @@ export default {
         this.ticketingDateList.push({
           id: null,
           ruleContainerId,
-          startDate: new Date(this.startDate),
-          endDate: new Date(this.endDate),
+          startDate: moment.utc(this.startDate),
+          endDate: moment.utc(this.endDate),
           isDeleted: false
         });
         this.startDate = '';
@@ -250,14 +252,14 @@ export default {
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = new Date(rule.startDate);
-        this.endDate = new Date(rule.endDate);
+        this.startDate = moment.utc(rule.startDate);
+        this.endDate = moment.utc(rule.endDate);
       } else return;
     },
     updateTag() {
       const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
-      this.ticketingDateList[ruleIndex].startDate = new Date(this.startDate);
-      this.ticketingDateList[ruleIndex].endDate = new Date(this.endDate);
+      this.ticketingDateList[ruleIndex].startDate = moment.utc(this.startDate);
+      this.ticketingDateList[ruleIndex].endDate = moment.utc(this.endDate);
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';

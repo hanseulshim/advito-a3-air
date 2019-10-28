@@ -1,5 +1,6 @@
 import uuidv4 from 'uuid/v4';
 import { sendNoteEmail } from '../../utils';
+import moment from 'moment';
 
 export const note = {
   Query: {
@@ -25,7 +26,7 @@ export const note = {
               id: uuidv4(),
               text,
               important,
-              lastupdate: new Date(),
+              lastupdate: moment.utc(),
               lastupdatedby: user.id,
               assignee: user.id,
               assignedto: assignedToId,
@@ -123,7 +124,7 @@ const updateNoteStatus = async (db, user, parentId, parentTable, important) => {
           id: uuidv4(),
           text: '',
           important,
-          lastupdate: new Date(),
+          lastupdate: moment.utc(),
           lastupdatedby: user.id,
           parentid: parentId,
           parenttable: parentTable

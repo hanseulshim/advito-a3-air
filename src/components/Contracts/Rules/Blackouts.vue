@@ -47,6 +47,7 @@
 import { formatDate, removeTypename } from '@/helper';
 import { GET_BLACKOUT_LIST, GET_DISCOUNT } from '@/graphql/queries';
 import { UPDATE_BLACKOUT_LIST } from '@/graphql/mutations';
+import moment from 'moment';
 
 export default {
   name: 'Blackouts',
@@ -141,8 +142,8 @@ export default {
         this.blackoutList.push({
           id: null,
           ruleContainerId,
-          startDate: new Date(this.startDate),
-          endDate: new Date(this.endDate),
+          startDate: moment.utc(this.startDate),
+          endDate: moment.utc(this.endDate),
           isDeleted: false
         });
         this.startDate = '';
@@ -185,8 +186,8 @@ export default {
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = new Date(rule.start);
-        this.endDate = new Date(rule.end);
+        this.startDate = moment.utc(rule.start);
+        this.endDate = moment.utc(rule.end);
       } else return;
     },
     updateTag() {

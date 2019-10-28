@@ -3,6 +3,7 @@ import {
   TARGET_TERM_LOOKUP,
   PRICING_TERM_LOOKUP
 } from '../../constants';
+import moment from 'moment';
 
 export const bulkRule = {
   Mutation: {
@@ -14,9 +15,9 @@ export const bulkRule = {
       const tableName = getParentTable(parentType);
       const queries = ticketingDateList.map(({ id, startDate, endDate }) =>
         db.raw(`
-        SELECT ticketdaterule_create_bulk(${id}, '${tableName}', '${new Date(
-          startDate
-        ).toISOString()}', '${new Date(endDate).toISOString()}')
+        SELECT ticketdaterule_create_bulk(${id}, '${tableName}', '${moment
+          .utc(startDate)
+          .toISOString()}', '${moment.utc(endDate).toISOString()}')
       `)
       );
       await Promise.all(queries);
@@ -25,9 +26,9 @@ export const bulkRule = {
       const tableName = getParentTable(parentType);
       const queries = travelDateList.map(({ id, startDate, endDate }) =>
         db.raw(`
-        SELECT traveldaterule_create_bulk(${id}, '${tableName}', '${new Date(
-          startDate
-        ).toISOString()}', '${new Date(endDate).toISOString()}')
+        SELECT traveldaterule_create_bulk(${id}, '${tableName}', '${moment
+          .utc(startDate)
+          .toISOString()}', '${moment.utc(endDate).toISOString()}')
       `)
       );
       await Promise.all(queries);
