@@ -92,15 +92,7 @@
       >
         <div class="text-input-container qsi">
           <el-input v-model.number="form.qsi" />
-          <span>
-            {{
-              targetTypeId === 21 || targetTypeId === 20
-                ? '%'
-                : targetTypeId === 24
-                ? 'points'
-                : ''
-            }}
-          </span>
+          <span>{{ '%' }}</span>
         </div>
       </el-form-item>
       <el-form-item
@@ -364,18 +356,13 @@ export default {
     },
     async editTargetTerm() {
       try {
-
         const qsi = this.form.qsi || 0;
 
         await this.$apollo.mutate({
           mutation: EDIT_TARGET_TERM,
           variables: {
             ...this.form,
-            qsi:
-              this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
-              this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE
-                ? qsi / 100
-                : qsi
+            qsi: qsi / 100
           }
         });
         this.$modal.show('success', {
@@ -423,8 +410,7 @@ export default {
       this.form.cabinC = cabinC;
       this.form.cabinP = cabinP;
       this.form.cabinY = cabinY;
-      this.form.qsi =
-        targetTypeId === 21 || targetTypeId === 20 ? qsi * 100 : qsi;
+      this.form.qsi = qsi * 100;
       this.form.softTarget = softTarget;
       this.form.internalTarget = internalTarget;
       this.form.timeframe = timeframe;
