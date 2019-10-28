@@ -1,7 +1,11 @@
 <template>
   <div v-loading="$apollo.loading" class="rule-container">
     <p class="rule-title">Travel Dates</p>
-    <i v-if="!editMode" class="fas fa-pencil-alt edit-rule" @click="saveRules" />
+    <i
+      v-if="!editMode"
+      class="fas fa-pencil-alt edit-rule"
+      @click="saveRules"
+    />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
       <el-date-picker
@@ -40,17 +44,17 @@
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from "@/helper";
+import { formatDate, removeTypename } from '@/helper';
 import {
   GET_TRAVEL_DATE_LIST,
   GET_DISCOUNT,
   GET_TARGET_TERM
-} from "@/graphql/queries";
-import { UPDATE_TRAVEL_DATES } from "@/graphql/mutations";
-import moment from "moment";
+} from '@/graphql/queries';
+import { UPDATE_TRAVEL_DATES } from '@/graphql/mutations';
+import moment from 'moment';
 
 export default {
-  name: "TravelDates",
+  name: 'TravelDates',
   props: {
     parentId: {
       default: null,
@@ -68,7 +72,7 @@ export default {
   apollo: {
     travelDateList: {
       query: GET_TRAVEL_DATE_LIST,
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
       variables() {
         return {
           parentId: this.parentId,
@@ -83,8 +87,8 @@ export default {
   data() {
     return {
       editMode: false,
-      startDate: "",
-      endDate: "",
+      startDate: '',
+      endDate: '',
       updateRule: null,
       travelDateList: []
     };
@@ -93,7 +97,7 @@ export default {
     async saveRules() {
       try {
         if (this.editMode && !this.travelDateList.length) {
-          this.$emit("delete-rule", "TravelDates");
+          this.$emit('delete-rule', 'TravelDates');
         } else if (this.editMode) {
           await this.$apollo.mutate({
             mutation: UPDATE_TRAVEL_DATES,
@@ -120,11 +124,11 @@ export default {
           });
         }
         this.editMode = !this.editMode;
-        this.startDate = "";
-        this.endDate = "";
+        this.startDate = '';
+        this.endDate = '';
         this.updateRule = null;
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }
@@ -146,15 +150,15 @@ export default {
           endDate: moment.utc(this.endDate),
           isDeleted: false
         });
-        this.startDate = "";
-        this.endDate = "";
+        this.startDate = '';
+        this.endDate = '';
       } else if (!this.startDate || !this.endDate) {
-        this.$modal.show("error", {
-          message: "Please enter both a start date and an end date"
+        this.$modal.show('error', {
+          message: 'Please enter both a start date and an end date'
         });
       } else if (this.startDate.getTime() === this.endDate.getTime()) {
-        this.$modal.show("error", {
-          message: "Please enter a valid start date and end date."
+        this.$modal.show('error', {
+          message: 'Please enter a valid start date and end date.'
         });
       }
     },
@@ -186,11 +190,11 @@ export default {
               rule => !rule.isDeleted
             );
             if (!this.travelDateList.length || !rulesRemaining) {
-              this.$emit("delete-rule", "TravelDates");
+              this.$emit('delete-rule', 'TravelDates');
             }
           });
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }
@@ -207,8 +211,8 @@ export default {
       this.travelDateList[ruleIndex].startDate = moment.utc(this.startDate);
       this.travelDateList[ruleIndex].endDate = moment.utc(this.endDate);
       this.updateRule = null;
-      this.startDate = "";
-      this.endDate = "";
+      this.startDate = '';
+      this.endDate = '';
     },
     formatDate(date) {
       return formatDate(date);
@@ -217,5 +221,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./ruleStyles.scss";
+@import './ruleStyles.scss';
 </style>
