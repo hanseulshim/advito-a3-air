@@ -336,13 +336,6 @@ export default {
             trigger: 'change'
           }
         ],
-        qsi: [
-          {
-            required: true,
-            message: 'Please input a QSI',
-            trigger: 'change'
-          }
-        ],
         dpmPrice: [
           {
             required: true,
@@ -433,6 +426,8 @@ export default {
           this.form.dpmPrice = parseFloat(this.form.dpmPrice);
         }
 
+        const qsi = this.form.qsi || 0;
+
         await this.$apollo.mutate({
           mutation: CREATE_TARGET_TERM,
           variables: {
@@ -440,8 +435,8 @@ export default {
             qsi:
               this.form.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
               this.form.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE
-                ? this.form.qsi / 100
-                : this.form.qsi
+                ? qsi / 100
+                : qsi
           },
           update: (store, { data: { createTargetTerm } }) => {
             const query = {

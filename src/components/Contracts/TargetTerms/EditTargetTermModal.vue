@@ -304,13 +304,6 @@ export default {
             trigger: 'change'
           }
         ],
-        qsi: [
-          {
-            required: true,
-            message: 'Please input a QSI',
-            trigger: 'change'
-          }
-        ],
         dpmPrice: [
           {
             required: true,
@@ -371,6 +364,9 @@ export default {
     },
     async editTargetTerm() {
       try {
+
+        const qsi = this.form.qsi || 0;
+
         await this.$apollo.mutate({
           mutation: EDIT_TARGET_TERM,
           variables: {
@@ -378,8 +374,8 @@ export default {
             qsi:
               this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
               this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE
-                ? this.form.qsi / 100
-                : this.form.qsi
+                ? qsi / 100
+                : qsi
           }
         });
         this.$modal.show('success', {
