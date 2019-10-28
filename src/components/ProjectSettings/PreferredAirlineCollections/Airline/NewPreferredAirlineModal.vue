@@ -252,9 +252,9 @@ export default {
           variables: {
             ...this.form,
             effectiveStartDate: formatDatePickerTime(
-              this.forms.effectiveStartDate
+              this.form.effectiveStartDate
             ),
-            effectiveEndDate: formatDatePickerTime(this.forms.effectiveEndDate)
+            effectiveEndDate: formatDatePickerTime(this.form.effectiveEndDate)
           },
           refetchQueries: () => [
             {

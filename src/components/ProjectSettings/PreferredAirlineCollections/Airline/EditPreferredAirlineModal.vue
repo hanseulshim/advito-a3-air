@@ -258,9 +258,9 @@ export default {
           variables: {
             ...this.form,
             effectiveStartDate: formatDatePickerTime(
-              this.forms.effectiveStartDate
+              this.form.effectiveStartDate
             ),
-            effectiveEndDate: formatDatePickerTime(this.forms.effectiveEndDate)
+            effectiveEndDate: formatDatePickerTime(this.form.effectiveEndDate)
           },
           refetchQueries: () => [
             {
@@ -282,6 +282,7 @@ export default {
           name: 'edit-preferred-airline'
         });
       } catch (error) {
+        console.log(error);
         this.$modal.show('error', {
           message: 'Failed to edit preferred Airline. Please try again.'
         });
