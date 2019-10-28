@@ -1,7 +1,8 @@
 import {
   DISCOUNT_LOOKUP,
   TARGET_TERM_LOOKUP,
-  RULE_LOOKUP
+  RULE_LOOKUP,
+  REGEX_USER
 } from '../../constants';
 
 export const rule = {
@@ -411,7 +412,11 @@ const updateRule = async (
           ${rule.ruleContainerId ? `'${rule.ruleContainerId}'` : null},
           ${ruleInfo.params.map(param => {
             return param.type === 'string'
-              ? `${rule[param.name] ? `'${rule[param.name]}'` : null}`
+              ? `${
+                  rule[param.name]
+                    ? `'${rule[param.name].replace(REGEX_USER, "''")}'`
+                    : null
+                }`
               : param.type === 'date'
               ? `${
                   new Date(rule[param.name]).toISOString()
