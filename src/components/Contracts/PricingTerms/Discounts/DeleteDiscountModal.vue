@@ -21,13 +21,18 @@
 </template>
 
 <script>
-import { GET_DISCOUNT_LIST, GET_PRICING_TERM } from '@/graphql/queries';
+import {
+  GET_DISCOUNT_LIST,
+  GET_PRICING_TERM,
+  GET_CONTRACT
+} from '@/graphql/queries';
 import { DELETE_DISCOUNTS } from '@/graphql/mutations';
 export default {
   name: 'DeleteDiscountModal',
   data() {
     return {
       idList: [],
+      contractId: null,
       pricingTermId: null
     };
   },
@@ -41,6 +46,7 @@ export default {
           mutation: DELETE_DISCOUNTS,
           variables: {
             idList: this.idList,
+            contractId: this.contractId,
             pricingTermId: this.pricingTermId
           },
           refetchQueries: () => [
@@ -48,6 +54,12 @@ export default {
               query: GET_PRICING_TERM,
               variables: {
                 id: this.pricingTermId
+              }
+            },
+            {
+              query: GET_CONTRACT,
+              variables: {
+                id: this.contractId
               }
             },
             {
@@ -70,10 +82,12 @@ export default {
     beforeOpen(event) {
       this.idList = event.params.idList;
       this.pricingTermId = event.params.pricingTermId;
+      this.contractId = event.params.contractId;
     },
     beforeClose() {
       this.idList = [];
       this.pricingTermId = null;
+      this.contractId = null;
     }
   }
 };

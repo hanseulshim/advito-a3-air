@@ -5,7 +5,8 @@ export const user = {
   Query: {
     userList: async (_, { clientId = null }) =>
       await AdvitoUser.query()
-        .where('clientId', clientId ? clientId : ADVITO_CLIENT)
+        .where('clientId', ADVITO_CLIENT)
+        .orWhere('clientId', clientId)
         .orderBy('nameFirst'),
     user: (_, __, { user }) => user,
     projectManagerList: async (_, { clientId = null }) =>

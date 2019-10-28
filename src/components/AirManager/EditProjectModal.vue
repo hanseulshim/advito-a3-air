@@ -144,6 +144,7 @@
 </template>
 
 <script>
+import { formatDatePickerTime } from '@/helper';
 import { EDIT_PROJECT } from '@/graphql/mutations';
 import {
   GET_CURRENCY_LIST,
@@ -314,7 +315,11 @@ export default {
         await this.$apollo.mutate({
           mutation: EDIT_PROJECT,
           variables: {
-            ...this.form
+            ...this.form,
+            effectiveFrom: formatDatePickerTime(this.form.effectiveFrom),
+            effectiveTo: formatDatePickerTime(this.form.effectiveTo),
+            reportFrom: formatDatePickerTime(this.form.reportFrom),
+            reportTo: formatDatePickerTime(this.form.reportTo)
           }
         });
         this.$modal.show('success', {

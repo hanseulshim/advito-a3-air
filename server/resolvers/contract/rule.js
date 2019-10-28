@@ -4,6 +4,7 @@ import {
   RULE_LOOKUP,
   REGEX_USER
 } from '../../constants';
+import moment from 'moment';
 
 export const rule = {
   Query: {
@@ -419,8 +420,8 @@ const updateRule = async (
                 }`
               : param.type === 'date'
               ? `${
-                  new Date(rule[param.name]).toISOString()
-                    ? `'${new Date(rule[param.name]).toISOString()}'`
+                  moment.utc(rule[param.name]).toISOString()
+                    ? `'${moment.utc(rule[param.name]).toISOString()}'`
                     : null
                 }`
               : `${rule[param.name]}`;

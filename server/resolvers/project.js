@@ -1,4 +1,5 @@
 import { PROJECT_LOOKUP } from '../constants';
+import moment from 'moment';
 
 export const project = {
   Query: {
@@ -143,8 +144,8 @@ const getProjectName = (
   effectiveFrom,
   effectiveTo
 ) => {
-  const effectiveFromYear = new Date(effectiveFrom).getFullYear();
-  const effectiveToYear = new Date(effectiveTo).getFullYear();
+  const effectiveFromYear = moment.utc(effectiveFrom).year();
+  const effectiveToYear = moment.utc(effectiveTo).year();
   const yearRange =
     effectiveFromYear !== effectiveToYear
       ? `${effectiveFromYear} - ${effectiveToYear.toString().substr(-2)}`

@@ -61,6 +61,7 @@ import {
   GET_CLIENT,
   GET_CLIENTS
 } from '@/graphql/queries';
+import moment from 'moment';
 
 export default {
   name: 'AirManager',
@@ -123,7 +124,7 @@ export default {
         project =>
           project.effectiveTo === null ||
           this.showInactive ||
-          project.effectiveTo > new Date()
+          project.effectiveTo > moment.utc()
       );
     },
     favoriteProjectList() {

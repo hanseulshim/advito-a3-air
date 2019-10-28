@@ -1,3 +1,6 @@
+import { updateQC } from './contractContainer';
+import { PricingTerm } from '../../models';
+
 export const pricingTerm = {
   Query: {
     pricingTermList: async (_, { contractId }, { db }) =>
@@ -21,6 +24,8 @@ export const pricingTerm = {
         `SELECT pricingterm_createcopy(${id}, '${name}', null, null, null, null)`
       );
       const [{ pricingterm_createcopy: newId }] = rows;
+      const pricingTerm = await PricingTerm.query().findById(id);
+      updateQC(parseInt(pricingTerm.contractcontainerid));
       return await getPricingTerm(db, newId);
     },
     editPricingTerm: async (_, { id, name, ignore }, { db }) => {
@@ -40,6 +45,7 @@ export const pricingTerm = {
       `)
       );
       await Promise.all(queries);
+      updateQC(contractId);
       return await getPricingTermList(db, contractId);
     },
     deletePricingTerms: async (_, { contractId, idList }, { db }) => {
@@ -50,6 +56,7 @@ export const pricingTerm = {
       );
       await Promise.all(queries);
       await db.raw(`SELECT pricingterm_update_sequence_all(${contractId})`);
+      updateQC(contractId);
       return idList;
     },
     updateAppliedOrder: async (_, { updatePricingTermList }, { db }) => {

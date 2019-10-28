@@ -422,8 +422,8 @@ mutation editTargetTerm(
 `;
 
 export const DELETE_TARGET_TERMS = gql`
-  mutation deleteTargetTerms($idList: [Int]!) {
-    deleteTargetTerms(idList: $idList)
+  mutation deleteTargetTerms($contractId: Int!, $idList: [Int]!) {
+    deleteTargetTerms(contractId: $contractId, idList: $idList)
   }
 `;
 

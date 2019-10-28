@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const airlineGroupCollection = {
   Query: {
     airlineGroupCollectionList: async (
@@ -83,12 +85,12 @@ export const airlineGroupCollection = {
           ${description ? `'${description}'` : null},
           ${
             effectiveStartDate
-              ? `'${new Date(effectiveStartDate).toISOString()}'`
+              ? `'${moment.utc(effectiveStartDate).toISOString()}'`
               : null
           },
           ${
             effectiveEndDate
-              ? `'${new Date(effectiveEndDate).toISOString()}'`
+              ? `'${moment.utc(effectiveEndDate).toISOString()}'`
               : null
           }
         )`
@@ -120,12 +122,12 @@ export const airlineGroupCollection = {
       const { rows } = await db.raw(
         `SELECT carrier_group_create(${collectionId}, '${name}', '${code}', ${
           effectiveStartDate
-            ? `'${new Date(effectiveStartDate).toISOString()}'`
+            ? `'${moment.utc(effectiveStartDate).toISOString()}'`
             : null
         },
         ${
           effectiveEndDate
-            ? `'${new Date(effectiveEndDate).toISOString()}'`
+            ? `'${moment.utc(effectiveEndDate).toISOString()}'`
             : null
         })`
       );
@@ -135,12 +137,12 @@ export const airlineGroupCollection = {
           db.raw(
             `SELECT carrier_group_member_create(${newId}, ${airlineId}, ${
               effectiveStartDate
-                ? `'${new Date(effectiveStartDate).toISOString()}'`
+                ? `'${moment.utc(effectiveStartDate).toISOString()}'`
                 : null
             },
             ${
               effectiveEndDate
-                ? `'${new Date(effectiveEndDate).toISOString()}'`
+                ? `'${moment.utc(effectiveEndDate).toISOString()}'`
                 : null
             })`
           )
@@ -162,12 +164,12 @@ export const airlineGroupCollection = {
       await db.raw(
         `SELECT carrier_group_update(${carrierGroupId}, '${name}', '${code}', ${
           effectiveStartDate
-            ? `'${new Date(effectiveStartDate).toISOString()}'`
+            ? `'${moment.utc(effectiveStartDate).toISOString()}'`
             : null
         },
         ${
           effectiveEndDate
-            ? `'${new Date(effectiveEndDate).toISOString()}'`
+            ? `'${moment.utc(effectiveEndDate).toISOString()}'`
             : null
         })`
       );
@@ -176,12 +178,12 @@ export const airlineGroupCollection = {
           db.raw(
             `SELECT carrier_group_member_update(${carrierGroupId}, ${id}, ${airlineId}, ${
               effectiveStartDate
-                ? `'${new Date(effectiveStartDate).toISOString()}'`
+                ? `'${moment.utc(effectiveStartDate).toISOString()}'`
                 : null
             },
             ${
               effectiveEndDate
-                ? `'${new Date(effectiveEndDate).toISOString()}'`
+                ? `'${moment.utc(effectiveEndDate).toISOString()}'`
                 : null
             })`
           )

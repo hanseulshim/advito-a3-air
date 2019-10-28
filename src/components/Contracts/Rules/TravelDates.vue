@@ -44,13 +44,14 @@
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from '@/helper';
+import { formatDate, removeTypename, formatDatePickerTime } from '@/helper';
 import {
   GET_TRAVEL_DATE_LIST,
   GET_DISCOUNT,
   GET_TARGET_TERM
 } from '@/graphql/queries';
 import { UPDATE_TRAVEL_DATES } from '@/graphql/mutations';
+
 export default {
   name: 'TravelDates',
   props: {
@@ -144,8 +145,8 @@ export default {
         this.travelDateList.push({
           id: null,
           ruleContainerId,
-          startDate: new Date(this.startDate),
-          endDate: new Date(this.endDate),
+          startDate: formatDatePickerTime(this.startDate),
+          endDate: formatDatePickerTime(this.endDate),
           isDeleted: false
         });
         this.startDate = '';
@@ -200,14 +201,18 @@ export default {
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = new Date(rule.startDate);
-        this.endDate = new Date(rule.endDate);
+        this.startDate = formatDatePickerTime(rule.startDate);
+        this.endDate = formatDatePickerTime(rule.endDate);
       } else return;
     },
     updateTag() {
       const ruleIndex = this.travelDateList.indexOf(this.updateRule);
-      this.travelDateList[ruleIndex].startDate = new Date(this.startDate);
-      this.travelDateList[ruleIndex].endDate = new Date(this.endDate);
+      this.travelDateList[ruleIndex].startDate = formatDatePickerTime(
+        this.startDate
+      );
+      this.travelDateList[ruleIndex].endDate = formatDatePickerTime(
+        this.endDate
+      );
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';

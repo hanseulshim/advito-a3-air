@@ -11,9 +11,9 @@
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
-        <span>{{
-          pluralize('pricing term', filteredPricingTermList.length)
-        }}</span>
+        <span>
+          {{ pluralize('pricing term', filteredPricingTermList.length) }}
+        </span>
       </div>
       <div class="menu-container">
         <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
@@ -50,7 +50,11 @@
     >
       <el-table-column type="expand">
         <template slot-scope="props">
-          <Discounts :pricing-term-id="props.row.id" @toggle-row="toggleRow" />
+          <Discounts
+            :pricing-term-id="props.row.id"
+            :contract-id="selectedContract.id"
+            @toggle-row="toggleRow"
+          />
         </template>
       </el-table-column>
       <el-table-column
@@ -95,9 +99,7 @@
         :min-width="term.name"
       >
         <template slot-scope="props">
-          <div :class="{ 'error-qc': !props.row.qc }">
-            {{ props.row.name }}
-          </div>
+          <div :class="{ 'error-qc': !props.row.qc }">{{ props.row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -136,9 +138,7 @@
             placement="top"
           >
             <div slot="content">{{ props.row.airlineList.join(', ') }}</div>
-            <span>
-              {{ props.row.airlineList.length }}
-            </span>
+            <span>{{ props.row.airlineList.length }}</span>
           </el-tooltip>
           <span v-else>
             {{
@@ -188,17 +188,21 @@
             </span>
           </el-tooltip>
           <span v-else>
-            <span>{{
-              props.row.pointOfSaleList.length
-                ? props.row.pointOfSaleList.join('')
-                : 0
-            }}</span>
-            <span> / </span>
-            <span>{{
-              props.row.pointOfOriginList.length
-                ? props.row.pointOfOriginList.join('')
-                : 0
-            }}</span>
+            <span>
+              {{
+                props.row.pointOfSaleList.length
+                  ? props.row.pointOfSaleList.join('')
+                  : 0
+              }}
+            </span>
+            <span>/</span>
+            <span>
+              {{
+                props.row.pointOfOriginList.length
+                  ? props.row.pointOfOriginList.join('')
+                  : 0
+              }}
+            </span>
           </span>
         </template>
       </el-table-column>
@@ -296,6 +300,8 @@ import BulkActionModal from './BulkActionModal';
 import NoteModal from './NoteModal';
 import Discounts from './Discounts';
 import ChangeAppliedOrderModal from './ChangeAppliedOrderModal';
+import moment from 'moment';
+
 export default {
   name: 'PricingTerms',
   components: {
@@ -345,10 +351,14 @@ export default {
   computed: {
     filteredPricingTermList() {
       return this.pricingTermList
-        .filter(term => this.showInactive || term.effectiveTo > new Date())
+        .filter(
+          term =>
+            this.showInactive ||
+            moment.utc(term.effectiveTo).isSameOrAfter(moment.utc(), 'day')
+        )
         .map(term => ({
           ...term,
-          inactive: term.effectiveTo < new Date()
+          inactive: moment.utc(term.effectiveTo).isBefore(moment.utc(), 'day')
         }));
     }
   },

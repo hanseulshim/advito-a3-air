@@ -67,7 +67,8 @@ import {
   GET_DISCOUNT_TYPE_LIST,
   GET_PRICING_TERM,
   GET_JOURNEY_TYPE_LIST,
-  GET_DIRECTION_TYPE_LIST
+  GET_DIRECTION_TYPE_LIST,
+  GET_CONTRACT
 } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { COPY_DISCOUNT } from '@/graphql/mutations';
@@ -86,6 +87,7 @@ export default {
   },
   data() {
     return {
+      contractId: null,
       discountTypeList: [],
       journeyTypeList: [],
       directionTypeList: [],
@@ -161,6 +163,12 @@ export default {
               variables: {
                 id: this.pricingTermId
               }
+            },
+            {
+              query: GET_CONTRACT,
+              variables: {
+                id: this.contractId
+              }
             }
           ]
         });
@@ -194,9 +202,11 @@ export default {
           : discountValue;
       this.form.journeyTypeId = journeyTypeId;
       this.form.directionTypeId = directionTypeId;
+      this.contractId = event.params.contractId;
     },
     beforeClose() {
       this.pricingTermId = null;
+      this.contractId = null;
       this.form.id = null;
       this.form.name = null;
       this.form.discountTypeId = null;

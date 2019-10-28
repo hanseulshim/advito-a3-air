@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { formatDate } from '@/helper';
+import { formatDate, formatDatePickerTime } from '@/helper';
 import { UPDATE_TICKETING_DATE_BULK } from '@/graphql/mutations';
 import {
   GET_DISCOUNT_LIST,
@@ -50,6 +50,7 @@ import {
   GET_TARGET_TERM_LIST,
   GET_PRICING_TERM_LIST
 } from '@/graphql/queries';
+
 export default {
   name: 'TicketDate',
   props: {
@@ -167,8 +168,8 @@ export default {
     createTag() {
       if (this.startDate && this.endDate) {
         this.ticketingDateList.push({
-          startDate: new Date(this.startDate),
-          endDate: new Date(this.endDate)
+          startDate: formatDatePickerTime(this.startDate),
+          endDate: formatDatePickerTime(this.endDate)
         });
         this.startDate = '';
         this.endDate = '';
@@ -184,13 +185,17 @@ export default {
     },
     editTag(rule) {
       this.updateRule = rule;
-      this.startDate = new Date(rule.startDate);
-      this.endDate = new Date(rule.endDate);
+      this.startDate = formatDatePickerTime(rule.startDate);
+      this.endDate = formatDatePickerTime(rule.endDate);
     },
     updateTag() {
       const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
-      this.ticketingDateList[ruleIndex].startDate = new Date(this.startDate);
-      this.ticketingDateList[ruleIndex].endDate = new Date(this.endDate);
+      this.ticketingDateList[ruleIndex].startDate = formatDatePickerTime(
+        this.startDate
+      );
+      this.ticketingDateList[ruleIndex].endDate = formatDatePickerTime(
+        this.endDate
+      );
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';

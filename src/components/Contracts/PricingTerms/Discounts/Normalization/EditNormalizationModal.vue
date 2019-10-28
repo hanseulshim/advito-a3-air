@@ -66,6 +66,7 @@
 
 <script>
 import { UPDATE_NORMALIZATION } from '@/graphql/mutations';
+import { formatDatePickerTime } from '@/helper';
 export default {
   name: 'EditNormalizationModal',
   data() {
@@ -127,7 +128,11 @@ export default {
         await this.$apollo.mutate({
           mutation: UPDATE_NORMALIZATION,
           variables: {
-            ...this.form
+            ...this.form,
+            usageFrom: formatDatePickerTime(this.form.usageFrom),
+            usageTo: formatDatePickerTime(this.form.usageTo),
+            effectiveFrom: formatDatePickerTime(this.form.effectiveFrom),
+            effectiveTo: formatDatePickerTime(this.form.effectiveTo)
           }
         });
         this.$modal.show('success', {

@@ -10,6 +10,16 @@ export const formatDate = date =>
         .toUpperCase()
     : '';
 
+export const formatDatePickerTime = date => {
+  if (!date) return null;
+  const newDate = new Date(date);
+  return moment.utc([
+    newDate.getFullYear(),
+    newDate.getMonth(),
+    newDate.getDate()
+  ]);
+};
+
 export const formatDataSetCol = date =>
   date ? moment.utc(date).format('YYYY-MM') : '';
 

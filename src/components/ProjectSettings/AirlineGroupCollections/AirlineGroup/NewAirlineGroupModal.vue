@@ -140,6 +140,7 @@ import {
   GET_AIRLINE_LIST
 } from '@/graphql/queries';
 import { ADD_AIRLINE_GROUP } from '@/graphql/mutations';
+import { formatDatePickerTime } from '@/helper';
 export default {
   name: 'NewAirlineGroupModal',
   apollo: {
@@ -215,8 +216,8 @@ export default {
       ) {
         const airlineList = this.airlineIdList.map(airlineId => ({
           airlineId,
-          effectiveStartDate: this.effectiveStartDate,
-          effectiveEndDate: this.effectiveEndDate
+          effectiveStartDate: formatDatePickerTime(this.effectiveStartDate),
+          effectiveEndDate: formatDatePickerTime(this.effectiveEndDate)
         }));
         this.form.airlineList.push(...airlineList);
         this.airlineIdList = [];
@@ -235,7 +236,11 @@ export default {
         await this.$apollo.mutate({
           mutation: ADD_AIRLINE_GROUP,
           variables: {
-            ...this.form
+            ...this.form,
+            effectiveStartDate: formatDatePickerTime(
+              this.form.effectiveStartDate
+            ),
+            effectiveEndDate: formatDatePickerTime(this.form.effectiveEndDate)
           },
           refetchQueries: () => [
             {

@@ -40,6 +40,7 @@ export default {
         await this.$apollo.mutate({
           mutation: DELETE_TARGET_TERMS,
           variables: {
+            contractId: this.contractId,
             idList: this.idList
           },
           update: (store, { data: { deleteTargetTerms } }) => {

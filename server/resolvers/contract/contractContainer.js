@@ -167,3 +167,26 @@ const getContract = async (db, id) =>
     .where('c.isdeleted', false)
     .andWhere('c.id', id)
     .groupBy('c.id', 'l.id', 'd.id');
+
+export const updateQC = async id => {
+  const contract = await Contract.query()
+    .findById(id)
+    .eager(
+      '[pricingTerms(onlyValid).discounts(onlyValid), targetTerms(onlyValid)]'
+    );
+  let count = 0;
+  let total = 0;
+  contract.pricingTerms.forEach(term => {
+    if (term.qc) {
+      count += term.discounts.length;
+    }
+    total += term.discounts.length;
+  });
+  contract.targetTerms.forEach(term => {
+    if (term.qc) {
+      count++;
+    }
+    total++;
+  });
+  await Contract.query().patchAndFetchById(id, { qc: count / total });
+};

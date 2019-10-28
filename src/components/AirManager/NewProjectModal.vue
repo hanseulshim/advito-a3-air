@@ -179,6 +179,7 @@ import {
   GET_SAVINGS_TYPE_LIST
 } from '@/graphql/queries';
 import { ADD_PROJECT } from '@/graphql/mutations';
+import { formatDatePickerTime } from '@/helper';
 export default {
   name: 'NewProjectModal',
   apollo: {
@@ -372,7 +373,11 @@ export default {
         await this.$apollo.mutate({
           mutation: ADD_PROJECT,
           variables: {
-            ...this.form
+            ...this.form,
+            effectiveFrom: formatDatePickerTime(this.form.effectiveFrom),
+            effectiveTo: formatDatePickerTime(this.form.effectiveTo),
+            reportFrom: formatDatePickerTime(this.form.reportFrom),
+            reportTo: formatDatePickerTime(this.form.reportTo)
           },
           update: (store, { data: { addProject } }) => {
             const query = {

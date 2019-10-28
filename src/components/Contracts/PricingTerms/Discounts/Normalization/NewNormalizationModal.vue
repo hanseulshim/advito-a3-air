@@ -66,6 +66,7 @@
 <script>
 import { CREATE_NORMALIZATION } from '@/graphql/mutations';
 import { GET_DISCOUNT_LIST, GET_NORMALIZATION_LIST } from '@/graphql/queries';
+import { formatDatePickerTime } from '@/helper';
 export default {
   name: 'NewNormalizationModal',
   data() {
@@ -129,7 +130,11 @@ export default {
           mutation: CREATE_NORMALIZATION,
           variables: {
             discountId: this.discountId,
-            ...this.form
+            ...this.form,
+            effectiveFrom: formatDatePickerTime(this.form.effectiveFrom),
+            effectiveTo: formatDatePickerTime(this.form.effectiveTo),
+            usageFrom: formatDatePickerTime(this.form.usageFrom),
+            usageTo: formatDatePickerTime(this.form.usageTo)
           },
 
           refetchQueries: () => [

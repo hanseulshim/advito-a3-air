@@ -1,4 +1,6 @@
 import { TARGET_TERM_LOOKUP } from '../../constants';
+import { updateQC } from './contractContainer';
+import { TargetTerm } from '../../models';
 
 export const targetTerm = {
   Query: {
@@ -78,6 +80,7 @@ export const targetTerm = {
         )`
       );
       const [{ targetterm_create: id }] = rows;
+      updateQC(contractId);
       return await getTargetTerm(db, id);
     },
     copyTargetTerm: async (_, { id, name }, { db }) => {
@@ -92,6 +95,8 @@ export const targetTerm = {
         )`
       );
       const [{ targetterm_v2_createcopy: newId }] = rows;
+      const targetTerm = await TargetTerm.query().findById(id);
+      updateQC(parseInt(targetTerm.contractcontainerid));
       return await getTargetTerm(db, newId);
     },
     editTargetTerm: async (
@@ -155,15 +160,17 @@ export const targetTerm = {
       `)
       );
       await Promise.all(queries);
+      updateQC(contractId);
       return await getTargetTermList(db, contractId);
     },
-    deleteTargetTerms: async (_, { idList }, { db }) => {
+    deleteTargetTerms: async (_, { contractId, idList }, { db }) => {
       const queries = idList.map(id =>
         db.raw(`
         SELECT targetterm_delete(${id})
       `)
       );
       await Promise.all(queries);
+      updateQC(contractId);
       return idList;
     }
   }
