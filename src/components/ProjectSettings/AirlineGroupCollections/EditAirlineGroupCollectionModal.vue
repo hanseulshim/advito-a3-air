@@ -63,6 +63,7 @@
 
 <script>
 import { EDIT_AIRLINE_GROUP_COLLECTION } from '@/graphql/mutations';
+import { formatDatePickerTime } from '@/helper';
 export default {
   name: 'EditAirlineGroupCollectionModal',
   data() {
@@ -120,6 +121,8 @@ export default {
           mutation: EDIT_AIRLINE_GROUP_COLLECTION,
           variables: {
             ...this.form,
+            effectiveStartDate: formatDatePickerTime(this.effectiveStartDate),
+            effectiveEndDate: formatDatePickerTime(this.effectiveEndDate),
             projectId: this.project.id
           }
         });

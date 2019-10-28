@@ -244,6 +244,7 @@ import {
 } from '@/graphql/queries';
 import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import { EDIT_TARGET_TERM } from '@/graphql/mutations';
+import { formatDatePickerTime } from '@/helper';
 export default {
   name: 'EditTargetTermModal',
   apollo: {
@@ -375,6 +376,15 @@ export default {
           mutation: EDIT_TARGET_TERM,
           variables: {
             ...this.form,
+            dpmStartDate: formatDatePickerTime(this.form.dpmStartDate),
+            baselineDateFrom: formatDatePickerTime(this.form.baselineDateFrom),
+            baselineDateTo: formatDatePickerTime(this.form.baselineDateTo),
+            goalDateFrom: formatDatePickerTime(this.form.goalDateFrom),
+            goalDateTo: formatDatePickerTime(this.form.goalDateTo),
+            airlineGroupFrom: formatDatePickerTime(this.form.airlineGroupFrom),
+            airlineGroupTo: formatDatePickerTime(this.form.airlineGroupTo),
+            fareCategoryFrom: formatDatePickerTime(this.form.fareCategoryFrom),
+            fareCategoryTo: formatDatePickerTime(this.form.fareCategoryTo),
             qsi:
               this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
               this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE

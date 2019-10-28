@@ -45,7 +45,7 @@
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from '@/helper';
+import { formatDate, removeTypename, formatDatePickerTime } from '@/helper';
 import {
   GET_TICKETING_DATE_LIST,
   GET_DISCOUNT,
@@ -54,7 +54,6 @@ import {
   GET_CONTRACT
 } from '@/graphql/queries';
 import { UPDATE_TICKETING_DATES } from '@/graphql/mutations';
-import moment from 'moment';
 
 export default {
   name: 'TicketingDates',
@@ -193,12 +192,11 @@ export default {
         const ruleContainerId = this.ticketingDateList.length
           ? this.ticketingDateList[0].ruleContainerId
           : null;
-
         this.ticketingDateList.push({
           id: null,
           ruleContainerId,
-          startDate: moment.utc(this.startDate),
-          endDate: moment.utc(this.endDate),
+          startDate: formatDatePickerTime(this.startDate),
+          endDate: formatDatePickerTime(this.endDate),
           isDeleted: false
         });
         this.startDate = '';
@@ -252,14 +250,18 @@ export default {
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = moment.utc(rule.startDate);
-        this.endDate = moment.utc(rule.endDate);
+        this.startDate = formatDatePickerTime(rule.startDate);
+        this.endDate = formatDatePickerTime(rule.endDate);
       } else return;
     },
     updateTag() {
       const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
-      this.ticketingDateList[ruleIndex].startDate = moment.utc(this.startDate);
-      this.ticketingDateList[ruleIndex].endDate = moment.utc(this.endDate);
+      this.ticketingDateList[ruleIndex].startDate = formatDatePickerTime(
+        this.startDate
+      );
+      this.ticketingDateList[ruleIndex].endDate = formatDatePickerTime(
+        this.endDate
+      );
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';

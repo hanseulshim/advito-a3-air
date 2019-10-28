@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { formatDate } from '@/helper';
+import { formatDate, formatDatePickerTime } from '@/helper';
 import { UPDATE_TRAVEL_DATE_BULK } from '@/graphql/mutations';
 import {
   GET_DISCOUNT_LIST,
@@ -50,7 +50,6 @@ import {
   GET_TARGET_TERM_LIST,
   GET_PRICING_TERM_LIST
 } from '@/graphql/queries';
-import moment from 'moment';
 
 export default {
   name: 'TravelDate',
@@ -168,8 +167,8 @@ export default {
     },
     createTag() {
       this.travelDateList.push({
-        startDate: moment.utc(this.startDate),
-        endDate: moment.utc(this.endDate)
+        startDate: formatDatePickerTime(this.startDate),
+        endDate: formatDatePickerTime(this.endDate)
       });
       this.startDate = '';
       this.endDate = '';
@@ -180,13 +179,17 @@ export default {
     },
     editTag(rule) {
       this.updateRule = rule;
-      this.startDate = moment.utc(rule.startDate);
-      this.endDate = moment.utc(rule.endDate);
+      this.startDate = formatDatePickerTime(rule.startDate);
+      this.endDate = formatDatePickerTime(rule.endDate);
     },
     updateTag() {
       const ruleIndex = this.travelDateList.indexOf(this.updateRule);
-      this.travelDateList[ruleIndex].startDate = moment.utc(this.startDate);
-      this.travelDateList[ruleIndex].endDate = moment.utc(this.endDate);
+      this.travelDateList[ruleIndex].startDate = formatDatePickerTime(
+        this.startDate
+      );
+      this.travelDateList[ruleIndex].endDate = formatDatePickerTime(
+        this.endDate
+      );
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';

@@ -38,8 +38,7 @@
                 :key="item.index"
                 :label="`${item.originMarket} - ${item.destMarket}`"
                 :value="item"
-              >
-              </el-option>
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Override Usage" class="flex1">
@@ -180,9 +179,9 @@
               width="auto"
             />
             <el-table-column width="75">
-              <template slot-scope="props">
-                {{ Math.round(props.row.value * 100) }}%
-              </template>
+              <template slot-scope="props"
+                >{{ Math.round(props.row.value * 100) }}%</template
+              >
             </el-table-column>
           </el-table>
           <el-table
@@ -191,12 +190,15 @@
             :cell-style="{ padding: '0', height: '20px' }"
             size="small"
           >
-            <el-table-column prop="label" label="Departure" width="100">
-            </el-table-column>
+            <el-table-column
+              prop="label"
+              label="Departure"
+              width="100"
+            ></el-table-column>
             <el-table-column prop="percent" width="100">
-              <template slot-scope="props">
-                {{ Math.round(props.row.value * 100) }}%
-              </template>
+              <template slot-scope="props"
+                >{{ Math.round(props.row.value * 100) }}%</template
+              >
             </el-table-column>
           </el-table>
         </div>
@@ -207,14 +209,18 @@
             :cell-style="{ padding: '0', height: '20px' }"
             style="margin-top: 20px"
           >
-            <el-table-column prop="fareBasis" label="Fare Basis">
-            </el-table-column>
-            <el-table-column prop="bookingClass" label="Booking Class">
-            </el-table-column>
-            <el-table-column prop="usage" label="Usage"
-              ><template slot-scope="props">
-                {{ Math.round(props.row.usage * 100) }}%
-              </template>
+            <el-table-column
+              prop="fareBasis"
+              label="Fare Basis"
+            ></el-table-column>
+            <el-table-column
+              prop="bookingClass"
+              label="Booking Class"
+            ></el-table-column>
+            <el-table-column prop="usage" label="Usage">
+              <template slot-scope="props"
+                >{{ Math.round(props.row.usage * 100) }}%</template
+              >
             </el-table-column>
           </el-table>
         </div>
@@ -234,7 +240,7 @@ import {
 } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { UPDATE_NORMALIZATION_MARKET } from '@/graphql/mutations';
-import { formatDate } from '@/helper';
+import { formatDate, formatDatePickerTime } from '@/helper';
 export default {
   name: 'EditNormalizationMarketModal',
   apollo: {
@@ -433,7 +439,7 @@ export default {
             marketB: this.form.topMarket.destMarket,
             farePaid: this.form.topMarket.farePaid,
             usageOverride: parseInt(this.form.usageOverride),
-            farePullDate: this.form.farePullDate,
+            farePullDate: formatDatePickerTime(this.form.farePullDate),
             notes: this.form.notes,
             fareList: this.fareList
           },

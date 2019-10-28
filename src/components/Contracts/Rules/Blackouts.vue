@@ -44,10 +44,9 @@
   </div>
 </template>
 <script>
-import { formatDate, removeTypename } from '@/helper';
+import { formatDate, removeTypename, formatDatePickerTime } from '@/helper';
 import { GET_BLACKOUT_LIST, GET_DISCOUNT } from '@/graphql/queries';
 import { UPDATE_BLACKOUT_LIST } from '@/graphql/mutations';
-import moment from 'moment';
 
 export default {
   name: 'Blackouts',
@@ -142,8 +141,8 @@ export default {
         this.blackoutList.push({
           id: null,
           ruleContainerId,
-          startDate: moment.utc(this.startDate),
-          endDate: moment.utc(this.endDate),
+          startDate: formatDatePickerTime(this.startDate),
+          endDate: formatDatePickerTime(this.endDate),
           isDeleted: false
         });
         this.startDate = '';
@@ -186,14 +185,16 @@ export default {
     editTag(rule) {
       if (this.editMode) {
         this.updateRule = rule;
-        this.startDate = moment.utc(rule.start);
-        this.endDate = moment.utc(rule.end);
+        this.startDate = formatDatePickerTime(rule.startDate);
+        this.endDate = formatDatePickerTime(rule.endDate);
       } else return;
     },
     updateTag() {
       const ruleIndex = this.blackoutList.indexOf(this.updateRule);
-      this.blackoutList[ruleIndex].start = formatDate(this.startDate);
-      this.blackoutList[ruleIndex].end = formatDate(this.endDate);
+      this.blackoutList[ruleIndex].startDate = formatDatePickerTime(
+        this.startDate
+      );
+      this.blackoutList[ruleIndex].endDate = formatDatePickerTime(this.endDate);
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';

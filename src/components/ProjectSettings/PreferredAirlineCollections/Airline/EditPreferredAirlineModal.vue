@@ -171,6 +171,7 @@ import {
   GET_AIRLINE_LIST
 } from '@/graphql/queries';
 import { EDIT_PREFERRED_AIRLINE } from '@/graphql/mutations';
+import { formatDatePickerTime } from '@/helper';
 export default {
   name: 'EditPreferredAirlineModal',
   apollo: {
@@ -232,8 +233,8 @@ export default {
           airlineId,
           posIdList: [...this.posIdList],
           preferenceLevelId: this.preferenceLevelId,
-          effectiveStartDate: this.effectiveStartDate,
-          effectiveEndDate: this.effectiveEndDate,
+          effectiveStartDate: formatDatePickerTime(this.effectiveStartDate),
+          effectiveEndDate: formatDatePickerTime(this.effectiveEndDate),
           deleted: false
         }));
         this.form.airlineList.push(...airlineList);
@@ -255,7 +256,11 @@ export default {
         await this.$apollo.mutate({
           mutation: EDIT_PREFERRED_AIRLINE,
           variables: {
-            ...this.form
+            ...this.form,
+            effectiveStartDate: formatDatePickerTime(
+              this.forms.effectiveStartDate
+            ),
+            effectiveEndDate: formatDatePickerTime(this.forms.effectiveEndDate)
           },
           refetchQueries: () => [
             {

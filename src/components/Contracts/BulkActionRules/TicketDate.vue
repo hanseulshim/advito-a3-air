@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { formatDate } from '@/helper';
+import { formatDate, formatDatePickerTime } from '@/helper';
 import { UPDATE_TICKETING_DATE_BULK } from '@/graphql/mutations';
 import {
   GET_DISCOUNT_LIST,
@@ -169,8 +169,8 @@ export default {
     createTag() {
       if (this.startDate && this.endDate) {
         this.ticketingDateList.push({
-          startDate: moment.utc(this.startDate),
-          endDate: moment.utc(this.endDate)
+          startDate: formatDatePickerTime(this.startDate),
+          endDate: formatDatePickerTime(this.endDate)
         });
         this.startDate = '';
         this.endDate = '';
@@ -186,13 +186,17 @@ export default {
     },
     editTag(rule) {
       this.updateRule = rule;
-      this.startDate = moment.utc(rule.startDate);
-      this.endDate = moment.utc(rule.endDate);
+      this.startDate = formatDatePickerTime(rule.startDate);
+      this.endDate = formatDatePickerTime(rule.endDate);
     },
     updateTag() {
       const ruleIndex = this.ticketingDateList.indexOf(this.updateRule);
-      this.ticketingDateList[ruleIndex].startDate = moment.utc(this.startDate);
-      this.ticketingDateList[ruleIndex].endDate = moment.utc(this.endDate);
+      this.ticketingDateList[ruleIndex].startDate = formatDatePickerTime(
+        this.startDate
+      );
+      this.ticketingDateList[ruleIndex].endDate = formatDatePickerTime(
+        this.endDate
+      );
       this.updateRule = null;
       this.startDate = '';
       this.endDate = '';
