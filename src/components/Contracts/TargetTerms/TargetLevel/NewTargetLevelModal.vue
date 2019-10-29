@@ -22,10 +22,8 @@
       </div>
       <el-form-item label="Target Amount *" prop="targetAmount">
         <div class="target-amount-input-container">
-          <el-input v-model.number="form.targetAmount" /><span
-            v-if="showPercent()"
-            >%</span
-          >
+          <el-input v-model.number="form.targetAmount" />
+          <span v-if="showPercent()">%</span>
         </div>
       </el-form-item>
       <el-form-item v-if="showIncentiveInput()" label="Incentive Description">
@@ -85,7 +83,6 @@ export default {
       if (
         this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
         this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
-        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
         this.targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {
         return true;

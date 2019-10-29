@@ -158,13 +158,7 @@
       <el-table-column
         label="QSI"
         :min-width="term.qsi"
-        :formatter="
-          row =>
-            row.targetTypeName === 'Segment Share' ||
-            row.targetTypeName === 'Revenue Share'
-              ? formatPercent(row.qsi)
-              : row.qsi
-        "
+        :formatter="row => formatPercent(row.qsi)"
       />
       <el-table-column
         label="Incentive"
@@ -350,7 +344,6 @@ export default {
       if (
         targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
         targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
-        targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
         targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {
         return formatPercent(targetAmount);

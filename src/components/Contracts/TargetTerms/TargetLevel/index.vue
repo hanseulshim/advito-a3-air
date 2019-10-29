@@ -122,7 +122,6 @@ export default {
       if (
         this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
         this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
-        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
         this.targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {
         return formatPercent(targetAmount);

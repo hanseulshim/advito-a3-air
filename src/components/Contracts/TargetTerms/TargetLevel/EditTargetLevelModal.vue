@@ -22,10 +22,8 @@
       </div>
       <el-form-item label="Target Amount *" prop="targetAmount">
         <div class="target-amount-input-container">
-          <el-input v-model.number="form.targetAmount" /><span
-            v-if="showPercent()"
-            >%</span
-          >
+          <el-input v-model.number="form.targetAmount" />
+          <span v-if="showPercent()">%</span>
         </div>
       </el-form-item>
       <el-form-item v-if="showIncentiveInput()" label="Incentive Description">
@@ -85,8 +83,8 @@ export default {
     showPercent() {
       if (
         this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
         this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
-        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE ||
         this.targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {
         return true;
@@ -134,10 +132,22 @@ export default {
         incentiveDescription,
         scoringTarget
       } = event.params.targetLevel;
+
+      let amount;
+      if (
+        event.params.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        event.params.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
+        event.params.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+        event.params.targetTypeId === TARGET_TERM_LOOKUP.KPG
+      ) {
+        amount = targetAmount * 100;
+      } else {
+        amount = targetAmount;
+      }
       this.targetTypeId = event.params.targetTypeId;
       this.form.id = id;
       this.form.targetTermId = targetTermId;
-      this.form.targetAmount = targetAmount * 100;
+      this.form.targetAmount = amount;
       this.form.incentiveDescription = incentiveDescription;
       this.incentiveTypeId = event.params.incentiveTypeId;
       this.form.scoringTarget = scoringTarget;
