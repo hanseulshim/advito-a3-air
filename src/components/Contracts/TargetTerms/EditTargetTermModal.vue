@@ -229,6 +229,7 @@
 </template>
 
 <script>
+import numeral from 'numeral';
 import {
   GET_TARGET_TYPE_LIST,
   GET_INCENTIVE_TYPE_LIST,
@@ -420,7 +421,7 @@ export default {
       this.form.cabinC = cabinC;
       this.form.cabinP = cabinP;
       this.form.cabinY = cabinY;
-      this.form.qsi = qsi * 100;
+      this.form.qsi = parseInt((qsi * 100).toFixed(2));
       this.form.softTarget = softTarget;
       this.form.internalTarget = internalTarget;
       this.form.timeframe = timeframe;

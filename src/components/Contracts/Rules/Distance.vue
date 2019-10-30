@@ -153,11 +153,7 @@ export default {
         });
       } else if (this.minDistance === 0 && this.maxDistance === 0) {
         this.$modal.show('error', {
-          message: 'Error: Please enter both minimum and maximum distance'
-        });
-      } else if (this.maxDistance === 0) {
-        this.$modal.show('error', {
-          message: 'Error: Maximum cannot be 0'
+          message: 'Error: Please enter either a minimum and maximum distance'
         });
       } else if (!this.distanceUnit) {
         this.$modal.show('error', {
@@ -172,8 +168,8 @@ export default {
           id: null,
           ruleContainerId,
           distanceUnit: this.distanceUnit,
-          minDistance: parseInt(this.minDistance),
-          maxDistance: parseInt(this.maxDistance),
+          minDistance: parseInt(this.minDistance) || 0,
+          maxDistance: parseInt(this.maxDistance) || 0,
           isDeleted: false
         });
 
