@@ -19,7 +19,8 @@ export const targetLevel = {
         ${targetTermId},
         '${targetLevelName.targetAmount}',
         ${
-          targetLevelName.targetAmount === 'numberofsegments'
+          targetLevelName.targetAmount === 'numberofsegments' ||
+          targetLevelName.targetAmount === 'amount'
             ? targetAmount
             : targetAmount / 100
         },
@@ -40,7 +41,8 @@ export const targetLevel = {
         ${targetTermId},
         '${targetLevelName.targetAmount}',
         ${
-          targetLevelName.targetAmount === 'numberofsegments'
+          targetLevelName.targetAmount === 'numberofsegments' ||
+          targetLevelName.targetAmount === 'amount'
             ? targetAmount
             : targetAmount / 100
         },
