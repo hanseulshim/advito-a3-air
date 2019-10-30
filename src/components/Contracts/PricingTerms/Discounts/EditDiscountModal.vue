@@ -165,7 +165,7 @@ export default {
       this.form.discountTypeId = discountTypeId;
       this.form.discountValue =
         discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-          ? discountValue * 100
+          ? parseInt((discountValue * 100).toFixed(2))
           : discountValue;
       this.form.journeyTypeId = journeyTypeId;
       this.form.directionTypeId = directionTypeId;

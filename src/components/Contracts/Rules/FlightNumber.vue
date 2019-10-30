@@ -145,19 +145,8 @@ export default {
     },
     filteredAirlineList() {
       if (this.query) {
-        return filterByNameAndCode(this.airlineList, this.query).filter(
-          airline =>
-            !this.flightNumberList.some(
-              rule => rule.carrierCode === airline.code
-            )
-        );
-      } else
-        return this.airlineList.filter(
-          airline =>
-            !this.flightNumberList.some(
-              rule => rule.carrierCode === airline.code
-            )
-        );
+        return filterByNameAndCode(this.airlineList, this.query);
+      } else return this.airlineList;
     }
   },
   methods: {

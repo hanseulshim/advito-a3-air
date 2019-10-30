@@ -28,7 +28,13 @@
         :min-width="contract.name"
         sortable
         :sort-orders="['ascending', 'descending']"
-      />
+      >
+        <template slot-scope="props">
+          <div :class="checkErrorQc(props.row.qc) ? 'error-qc' : 'qc-complete'">
+            {{ props.row.name }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="typeName"
         label="Type"
@@ -131,17 +137,21 @@
             </span>
           </el-tooltip>
           <span v-else>
-            <span>{{
-              props.row.pointOfSaleList.length
-                ? props.row.pointOfSaleList.join('')
-                : 0
-            }}</span>
-            <span> / </span>
-            <span>{{
-              props.row.pointOfOriginList.length
-                ? props.row.pointOfOriginList.join('')
-                : 0
-            }}</span>
+            <span>
+              {{
+                props.row.pointOfSaleList.length
+                  ? props.row.pointOfSaleList.join('')
+                  : 0
+              }}
+            </span>
+            <span>/</span>
+            <span>
+              {{
+                props.row.pointOfOriginList.length
+                  ? props.row.pointOfOriginList.join('')
+                  : 0
+              }}
+            </span>
           </span>
         </template>
       </el-table-column>
@@ -290,6 +300,10 @@ export default {
 @import '@/styles/global.scss';
 .error-qc {
   color: $monza;
+}
+
+.qc-complete {
+  color: #a1d071;
 }
 .pos-popup-container {
   max-width: 300px;
