@@ -18,12 +18,7 @@ export const targetLevel = {
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',
-        ${
-          targetLevelName.targetAmount === 'numberofsegments' ||
-          targetLevelName.targetAmount === 'amount'
-            ? targetAmount
-            : targetAmount / 100
-        },
+        ${targetAmount},
         '${incentiveDescription}',
         ${scoringTarget},
         ${1}
@@ -40,12 +35,7 @@ export const targetLevel = {
         '${targetLevelName.tableName}',
         ${targetTermId},
         '${targetLevelName.targetAmount}',
-        ${
-          targetLevelName.targetAmount === 'numberofsegments' ||
-          targetLevelName.targetAmount === 'amount'
-            ? targetAmount
-            : targetAmount / 100
-        },
+        ${targetAmount},
         '${incentiveDescription}',
         ${scoringTarget},
         ${1}
