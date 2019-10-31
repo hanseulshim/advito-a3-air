@@ -165,13 +165,13 @@ export default {
   .pos-trends {
     margin-left: 15%;
     .fa-chevron-up {
-      left: calc(15% + 1em + 22.375px);
+      left: calc(19% + 1em + 22.375px);
     }
   }
   .division-trends {
     margin-left: 30%;
     .fa-chevron-up {
-      left: calc(30% + 2em + 22.375px);
+      left: calc(36% + 2em + 22.375px);
     }
   }
   .spacer {
