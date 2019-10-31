@@ -48,7 +48,6 @@ export const dataSet = {
       const colList = await db('geo_country_stats_activity')
         .distinct('stat_month as month', 'stat_year as year')
         .orderBy(['stat_year', 'stat_month'])
-        .limit(12)
         .where('isdeleted', false)
         .andWhere('project_id', projectId);
       const dataList = colList.map(async ({ month, year }) => {
