@@ -107,7 +107,7 @@ const getTargetLevelName = async (db, targetTermId) => {
   } else if (targetType === TARGET_TERM_LOOKUP.REVENUE_SHARE) {
     return {
       tableName: 'targetrevenueshare_v2',
-      targetAmount: 'numberofsegments'
+      targetAmount: 'amount'
     };
   } else if (targetType === TARGET_TERM_LOOKUP.SHARE_GAP) {
     return {
