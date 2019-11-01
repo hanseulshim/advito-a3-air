@@ -92,10 +92,8 @@ export default {
       const project = this.projectStatusList.find(p => p.id === id);
       if (project && project.status === 'valid') {
         return 'valid';
-      } else if (project && project.status === 'invalid') {
-        return 'invalid';
       } else {
-        return '';
+        return 'invalid';
       }
     }
   }
