@@ -13,6 +13,10 @@ export const bulkRule = {
       { db }
     ) => {
       const tableName = getParentTable(parentType);
+      const deleteQueries = ticketingDateList.map(({ id }) =>
+        db.raw(`SELECT ticketdaterule_delete_bulk(${id}, '${tableName}')`)
+      );
+      await Promise.all(deleteQueries);
       const queries = ticketingDateList.map(({ id, startDate, endDate }) =>
         db.raw(`
         SELECT ticketdaterule_create_bulk(${id}, '${tableName}', '${moment
@@ -24,6 +28,10 @@ export const bulkRule = {
     },
     updateTravelDateBulk: async (_, { parentType, travelDateList }, { db }) => {
       const tableName = getParentTable(parentType);
+      const deleteQueries = travelDateList.map(({ id }) =>
+        db.raw(`SELECT traveldaterule_delete_bulk(${id}, '${tableName}')`)
+      );
+      await Promise.all(deleteQueries);
       const queries = travelDateList.map(({ id, startDate, endDate }) =>
         db.raw(`
         SELECT traveldaterule_create_bulk(${id}, '${tableName}', '${moment
@@ -35,6 +43,10 @@ export const bulkRule = {
     },
     updateTourCodeBulk: async (_, { parentType, tourCodeList }, { db }) => {
       const tableName = getParentTable(parentType);
+      const deleteQueries = tourCodeList.map(({ id }) =>
+        db.raw(`SELECT tourcoderule_delete_bulk(${id}, '${tableName}')`)
+      );
+      await Promise.all(deleteQueries);
       const queries = tourCodeList.map(({ id, tourCode }) =>
         db.raw(`
         SELECT tourcoderule_create_bulk(${id}, '${tableName}', '${tourCode}')
@@ -48,6 +60,10 @@ export const bulkRule = {
       { db }
     ) => {
       const tableName = getParentTable(parentType);
+      const deleteQueries = ticketDesignatorList.map(({ id }) =>
+        db.raw(`SELECT ticketdesignatorrule_delete_bulk(${id}, '${tableName}')`)
+      );
+      await Promise.all(deleteQueries);
       const queries = ticketDesignatorList.map(({ id, ticketDesignator }) =>
         db.raw(`
         SELECT ticketdesignatorrule_create_bulk(${id}, '${tableName}', '${ticketDesignator}')

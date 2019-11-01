@@ -40,6 +40,8 @@ export class TargetTerm extends Model {
   }
 
   static get relationMappings() {
+    const { RulesContainer } = require('./rules');
+
     return {
       contract: {
         relation: Model.BelongsToOneRelation,
@@ -47,6 +49,14 @@ export class TargetTerm extends Model {
         join: {
           from: 'targetterm_v2.contractcontainerid',
           to: 'contractcontainer.id'
+        }
+      },
+      rules: {
+        relation: Model.HasOneRelation,
+        modelClass: RulesContainer,
+        join: {
+          from: 'targetterm_v2.rulescontainerguidref',
+          to: 'rulescontainer.guidref'
         }
       }
     };
@@ -102,6 +112,7 @@ export class Discount extends Model {
   }
 
   static get relationMappings() {
+    const { RulesContainer } = require('./rules');
     return {
       pricingTerm: {
         relation: Model.BelongsToOneRelation,
@@ -109,6 +120,14 @@ export class Discount extends Model {
         join: {
           from: 'discount.pricingtermid',
           to: 'pricingterm.id'
+        }
+      },
+      rules: {
+        relation: Model.HasOneRelation,
+        modelClass: RulesContainer,
+        join: {
+          from: 'discount.rulescontainerguidref',
+          to: 'rulescontainer.guidref'
         }
       }
     };
