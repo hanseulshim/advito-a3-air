@@ -20,11 +20,9 @@ export const sendNoteEmail = async (
   const user = await db('blops.advito_user')
     .where('id', assignedToId)
     .first();
-  const { email_subject: emailSubject, email_body: emailBody } = await db(
-    'blops.email_template'
-  )
+  const { emailSubject, emailBody } = await db('blops.email_template')
     .where('template_name', 'Note')
-    .where('advito_application_id', ADVITO_AIR_APPLICATION)
+    .andWhere('advito_application_id', ADVITO_AIR_APPLICATION)
     .first();
   let message = emailBody;
 
