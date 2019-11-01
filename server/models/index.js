@@ -6,3 +6,4 @@ export * from './normalization';
 export * from './contract';
 export * from './activity';
 export * from './project';
+export * from './rules';
