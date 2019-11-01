@@ -492,4 +492,4 @@ extend type Mutation {
   deleteRule(id: Int!, ruleType: Int!): Int @auth
 }
 
-`
+`;
