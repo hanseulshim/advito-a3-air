@@ -115,9 +115,9 @@ export default {
   }
 }
 .pricing-terms {
-  margin-left: calc(10% + 1em);
+  margin-left: calc(15% + 1em);
 }
 .target-terms {
-  margin-left: calc(25% + 2em);
+  margin-left: calc(30% + 2em);
 }
 </style>

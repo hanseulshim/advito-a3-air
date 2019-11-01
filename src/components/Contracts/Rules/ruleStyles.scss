@@ -21,11 +21,11 @@
 .save-rule {
   position: absolute;
   right: 0;
-  top: 10%;
+  top: 5%;
   color: #ff9e16;
   border: 1px solid #ff9e16;
   border-radius: 10px;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   font-size: 0.8em;
   cursor: pointer;
   background: transparent;
@@ -40,80 +40,76 @@
 
   .el-tag {
     margin-right: 1em;
-    margin-bottom:.5em;
-    
+    margin-bottom: 0.5em;
   }
 
   label {
     margin-right: 1em;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
   }
-
 }
 
-    .bulk-save-container{
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 3em;
-    }
+.bulk-save-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3em;
+}
 
-    .save-rule-bulk{
-    color: #ff9e16;
-    border: 1px solid #ff9e16;
-    border-radius: 10px;
-    padding: .5em 1em;
-    font-size: 0.8em;
-    cursor: pointer;
-    background: transparent;
-    text-transform: uppercase;
-    }
+.save-rule-bulk {
+  color: #ff9e16;
+  border: 1px solid #ff9e16;
+  border-radius: 10px;
+  padding: 0.5em 1em;
+  font-size: 0.8em;
+  cursor: pointer;
+  background: transparent;
+  text-transform: uppercase;
+}
 
 //DatePicker Styling. Ticketing Dates, Travel Dates,
 
 .control-row {
   display: flex;
   align-items: center;
-  margin-top: 1em;
+  margin-top: 2.5%;
 
   .date-picker {
     margin-right: 2em;
   }
 
   .el-select {
-    width:25%;
+    width: 25%;
     margin-right: 2em;
   }
 
-  .el-date-editor--time{
-    max-width:20%;
+  .el-date-editor--time {
+    max-width: 20%;
     margin-right: 2em;
   }
 
   .number-input {
-    width:15%;
+    width: 15%;
     margin-right: 2em;
   }
 
-  .el-checkbox{
+  .el-checkbox {
     margin-right: 2em;
   }
 
   button {
-  color: #ff9e16;
-  border: 1px solid #ff9e16;
-  border-radius: 10px;
-  padding: .5em 1em;
-  font-size: 0.8em;
-  cursor: pointer;
-  background: transparent;
-  text-transform: uppercase;
+    color: #ff9e16;
+    border: 1px solid #ff9e16;
+    border-radius: 10px;
+    padding: 0.5em 1em;
+    font-size: 0.8em;
+    cursor: pointer;
+    background: transparent;
+    text-transform: uppercase;
   }
 
   label {
-    margin-right: .5em;
+    margin-right: 0.5em;
   }
-
-
 }

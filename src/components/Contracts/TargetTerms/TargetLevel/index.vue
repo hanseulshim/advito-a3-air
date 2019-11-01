@@ -121,6 +121,7 @@ export default {
     formatTargetAmount({ targetAmount }) {
       if (
         this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+        this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
         this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
         this.targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {

@@ -101,10 +101,21 @@ export default {
     },
     async editTargetLevel() {
       try {
+        let targetAmountFormatted;
+        if (
+          this.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE ||
+          this.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
+          this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
+          this.targetTypeId === TARGET_TERM_LOOKUP.KPG
+        ) {
+          targetAmountFormatted = this.form.targetAmount / 100;
+        } else targetAmountFormatted = this.form.targetAmount;
+
         await this.$apollo.mutate({
           mutation: EDIT_TARGET_LEVEL,
           variables: {
-            ...this.form
+            ...this.form,
+            targetAmount: targetAmountFormatted
           },
           refetchQueries: () => [
             {
@@ -140,7 +151,7 @@ export default {
         event.params.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
         event.params.targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {
-        amount = targetAmount * 100;
+        amount = parseInt((targetAmount * 100).toFixed(2));
       } else {
         amount = targetAmount;
       }
