@@ -442,11 +442,7 @@ export default {
             airlineGroupTo: formatDatePickerTime(this.form.airlineGroupTo),
             fareCategoryFrom: formatDatePickerTime(this.form.fareCategoryFrom),
             fareCategoryTo: formatDatePickerTime(this.form.fareCategoryTo),
-            qsi:
-              this.form.targetTypeId === TARGET_TERM_LOOKUP.REVENUE_SHARE ||
-              this.form.targetTypeId === TARGET_TERM_LOOKUP.SEGMENT_SHARE
-                ? qsi / 100
-                : qsi
+            qsi: qsi / 100
           },
           update: (store, { data: { createTargetTerm } }) => {
             const query = {
