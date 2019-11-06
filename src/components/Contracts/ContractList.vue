@@ -54,9 +54,9 @@
         :sort-orders="['ascending', 'descending']"
         sort-by="round"
       >
-        <template slot-scope="props">
-          {{ props.row.round ? props.row.round : '—' }}
-        </template>
+        <template slot-scope="props">{{
+          props.row.round ? props.row.round : '—'
+        }}</template>
       </el-table-column>
       <el-table-column
         label="Effective Dates"
@@ -218,7 +218,7 @@
 <script>
 import { pluralize, formatDate, formatPercent } from '@/helper';
 import { GET_CONTRACT_LIST, GET_CLIENT, GET_PROJECT } from '@/graphql/queries';
-import { UPDATE_CONTRACT } from '@/graphql/mutations';
+import { UPDATE_CONTRACT, UPDATE_PROJECT_STATUS } from '@/graphql/mutations';
 import { contract } from '@/config';
 import NewContractModal from './NewContractModal';
 import CopyContractModal from './CopyContractModal';
@@ -239,6 +239,9 @@ export default {
         return {
           projectId: this.project.id
         };
+      },
+      result({ data }) {
+        this.checkContractStatus();
       }
     },
     client: {
@@ -290,6 +293,18 @@ export default {
       this.$apollo.mutate({
         mutation: UPDATE_CONTRACT,
         variables: { selectedContract }
+      });
+    },
+    checkContractStatus() {
+      const invalidStatus = this.contractList.some(
+        contract => !contract.qc === 1
+      );
+      this.$apollo.mutate({
+        mutation: UPDATE_PROJECT_STATUS,
+        variables: {
+          id: 3,
+          status: invalidStatus ? 'invalid' : 'valid'
+        }
       });
     }
   }
