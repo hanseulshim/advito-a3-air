@@ -31,20 +31,14 @@
         :value="item.id"
       ></el-option>
     </el-select>
-    <div class="icon-container">
-      <i class="far fa-comment-alt" />
-      <span>Ask Addy</span>
-    </div>
     <div class="navigation">
-      <span class="previous-nav link">« Back to Console</span>
-      <span> | </span>
       <span
         :class="{ link: client.id, 'previous-nav': project.id }"
         @click="updateClient()"
-        >Air Program Manager</span
+        >A3</span
       >
-      <span v-if="project.id"> | </span>
-      <span v-if="project.id">Project</span>
+      <span v-if="project.id">{{ ` | ` }}</span>
+      <span v-if="project.id">{{ project.name }}</span>
     </div>
   </div>
 </template>

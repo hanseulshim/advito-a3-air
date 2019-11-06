@@ -71,6 +71,8 @@
           <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table
+          v-if="tableRendered"
+          :key="column.id"
           :data="column.countryData"
           show-summary
           :summary-method="getSummaries"
@@ -92,6 +94,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <p v-if="!tableRendered">Loading....</p>
       </div>
     </div>
     <DeleteDatasetModal @delete-dataset="deleteDataSet" />
@@ -133,7 +136,8 @@ export default {
   },
   data() {
     return {
-      dataSetCountryList: []
+      dataSetCountryList: [],
+      tableRendered: true
     };
   },
   computed: {
@@ -149,6 +153,14 @@ export default {
     },
     selectorTotal() {
       return this.selector ? `${this.selector}Total` : '';
+    }
+  },
+  watch: {
+    filteredDataSetList: {
+      deep: true,
+      handler() {
+        this.rerender();
+      }
     }
   },
   methods: {
@@ -180,55 +192,73 @@ export default {
         );
       });
     },
-    toggleDataSet(name, qc) {
+    async toggleDataSet(name, qc) {
       const [year, month] = name.split('-');
-      this.$apollo.mutate({
-        mutation: TOGGLE_DATA_SET,
-        variables: {
-          projectId: this.projectId,
-          month: parseInt(month),
-          year: parseInt(year),
-          qc
-        },
-        refetchQueries: () => [
-          {
-            query: GET_DATA_SET_COLUMN_LIST,
-            variables: {
-              projectId: this.projectId
+      try {
+        await this.$apollo.mutate({
+          mutation: TOGGLE_DATA_SET,
+          variables: {
+            projectId: this.projectId,
+            month: parseInt(month),
+            year: parseInt(year),
+            qc
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DATA_SET_COLUMN_LIST,
+              variables: {
+                projectId: this.projectId
+              }
             }
-          }
-        ]
-      });
+          ]
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
     showDeleteDatasetModal(name) {
       this.$modal.show('deleteDataset', {
         id: name
       });
     },
-    deleteDataSet(name) {
+    async deleteDataSet(name) {
       const [year, month] = name.split('-');
-      this.$apollo.mutate({
-        mutation: DELETE_DATA_SET,
-        variables: {
-          projectId: this.projectId,
-          month: parseInt(month),
-          year: parseInt(year)
-        },
-        refetchQueries: () => [
-          {
-            query: GET_DATA_SET_COLUMN_LIST,
-            variables: {
-              projectId: this.projectId
+      this.tableRendered = false;
+      try {
+        await this.$apollo.mutate({
+          mutation: DELETE_DATA_SET,
+          variables: {
+            projectId: this.projectId,
+            month: parseInt(month),
+            year: parseInt(year)
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DATA_SET_COLUMN_LIST,
+              variables: {
+                projectId: this.projectId
+              }
             }
-          }
-        ]
-      });
+          ]
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
     tableRowClassName(status) {
       if (status === null || status === false) {
         return 'need-qc-row';
       }
       return '';
+    },
+    rerender() {
+      this.$nextTick(() => {
+        this.tableRendered = true;
+      });
     }
   }
 };

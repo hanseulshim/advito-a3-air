@@ -43,6 +43,7 @@
           <i v-else class="fas fa-trash-alt reject-hide" />
         </div>
         <el-table
+          v-if="tableRendered"
           :data="column.countryData"
           show-summary
           :summary-method="getSummaries"
@@ -54,16 +55,17 @@
           >
             <template slot="header">
               <span class="header-container content">
-                <span class="updated-date">{{
-                  formatDateTime(column.dateUpdated)
-                }}</span>
-                <span class="header-text">{{
-                  formatDataSetCol(column.date)
-                }}</span>
+                <span class="updated-date">
+                  {{ formatDateTime(column.dateUpdated) }}
+                </span>
+                <span class="header-text">
+                  {{ formatDataSetCol(column.date) }}
+                </span>
               </span>
             </template>
           </el-table-column>
         </el-table>
+        <p v-if="!tableRendered">Loading....</p>
       </div>
     </div>
     <DeleteDatasetModal @delete-dataset="deleteDataSet" />
@@ -111,7 +113,8 @@ export default {
   },
   data() {
     return {
-      dataSetCountryList: []
+      dataSetCountryList: [],
+      tableRendered: true
     };
   },
   computed: {
@@ -127,6 +130,14 @@ export default {
     },
     selectorTotal() {
       return this.selector ? `${this.selector}Total` : '';
+    }
+  },
+  watch: {
+    filteredDataSetList: {
+      deep: true,
+      handler() {
+        this.rerender();
+      }
     }
   },
   methods: {
@@ -160,23 +171,29 @@ export default {
     },
     toggleDataSet(name, qc) {
       const [year, month] = name.split('-');
-      this.$apollo.mutate({
-        mutation: TOGGLE_DATA_SET,
-        variables: {
-          projectId: this.projectId,
-          month: parseInt(month),
-          year: parseInt(year),
-          qc
-        },
-        refetchQueries: () => [
-          {
-            query: GET_DATA_SET_COLUMN_LIST,
-            variables: {
-              projectId: this.projectId
+      try {
+        this.$apollo.mutate({
+          mutation: TOGGLE_DATA_SET,
+          variables: {
+            projectId: this.projectId,
+            month: parseInt(month),
+            year: parseInt(year),
+            qc
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DATA_SET_COLUMN_LIST,
+              variables: {
+                projectId: this.projectId
+              }
             }
-          }
-        ]
-      });
+          ]
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
     showDeleteDatasetModal(name) {
       this.$modal.show('deleteDataset', {
@@ -185,28 +202,40 @@ export default {
     },
     deleteDataSet(name) {
       const [year, month] = name.split('-');
-      this.$apollo.mutate({
-        mutation: DELETE_DATA_SET,
-        variables: {
-          projectId: this.projectId,
-          month: parseInt(month),
-          year: parseInt(year)
-        },
-        refetchQueries: () => [
-          {
-            query: GET_DATA_SET_COLUMN_LIST,
-            variables: {
-              projectId: this.projectId
+      this.tableRendered = false;
+      try {
+        this.$apollo.mutate({
+          mutation: DELETE_DATA_SET,
+          variables: {
+            projectId: this.projectId,
+            month: parseInt(month),
+            year: parseInt(year)
+          },
+          refetchQueries: () => [
+            {
+              query: GET_DATA_SET_COLUMN_LIST,
+              variables: {
+                projectId: this.projectId
+              }
             }
-          }
-        ]
-      });
+          ]
+        });
+      } catch (error) {
+        this.$modal.show('error', {
+          message: error.message
+        });
+      }
     },
     tableRowClassName(status) {
       if (!status) {
         return 'need-qc-row';
       }
       return '';
+    },
+    rerender() {
+      this.$nextTick(() => {
+        this.tableRendered = true;
+      });
     }
   }
 };
