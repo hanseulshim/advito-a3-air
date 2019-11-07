@@ -49,11 +49,11 @@
 </template>
 
 <script>
-import { UPDATE_DISCOUNT_APPLIED_ORDER } from "@/graphql/mutations";
-import { term } from "@/config";
-import { GET_DISCOUNT_LIST } from "@/graphql/queries";
+import { UPDATE_DISCOUNT_APPLIED_ORDER } from '@/graphql/mutations';
+import { term } from '@/config';
+import { GET_DISCOUNT_LIST } from '@/graphql/queries';
 export default {
-  name: "ChangeDiscountAppliedOrderModal",
+  name: 'ChangeDiscountAppliedOrderModal',
   apollo: {
     discountList: {
       query: GET_DISCOUNT_LIST,
@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     hideModal() {
-      this.$modal.hide("change-discount-order");
+      this.$modal.hide('change-discount-order');
     },
     async changeAppliedOrder() {
       try {
@@ -102,12 +102,12 @@ export default {
             }
           ]
         });
-        this.$modal.show("success", {
-          message: "Applied Order successfully changed.",
-          name: "change-discount-order"
+        this.$modal.show('success', {
+          message: 'Applied Order successfully changed.',
+          name: 'change-discount-order'
         });
       } catch (error) {
-        this.$modal.show("error", {
+        this.$modal.show('error', {
           message: error.message
         });
       }
@@ -151,7 +151,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/styles/global.scss";
+@import '@/styles/global.scss';
 .scroll-container {
   height: 100%;
   overflow: auto;

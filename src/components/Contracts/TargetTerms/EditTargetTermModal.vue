@@ -229,7 +229,6 @@
 </template>
 
 <script>
-import numeral from 'numeral';
 import {
   GET_TARGET_TYPE_LIST,
   GET_INCENTIVE_TYPE_LIST,
