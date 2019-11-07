@@ -232,6 +232,17 @@ export default {
         return {
           pricingTermId: this.pricingTermId
         };
+      },
+      result({ error }) {
+        if (error) {
+          this.$modal.show('error', {
+            message: error.message
+          });
+          this.discountList = [];
+        }
+      },
+      error(error) {
+        console.log(error);
       }
     },
     bulkActionList: {

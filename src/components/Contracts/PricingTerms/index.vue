@@ -11,9 +11,9 @@
           <div slot="content">QC must be 100%</div>
           <i class="fas fa-exclamation-circle" />
         </el-tooltip>
-        <span>
-          {{ pluralize('pricing term', filteredPricingTermList.length) }}
-        </span>
+        <span>{{
+          pluralize('pricing term', filteredPricingTermList.length)
+        }}</span>
       </div>
       <div class="menu-container">
         <el-checkbox v-model="showInactive">Show inactive</el-checkbox>
@@ -326,6 +326,17 @@ export default {
         return {
           contractId: this.selectedContract.id
         };
+      },
+      result({ error }) {
+        if (error) {
+          this.$modal.show('error', {
+            message: error.message
+          });
+          this.pricingTermList = [];
+        }
+      },
+      error(error) {
+        console.log(error);
       }
     },
     bulkActionList: {

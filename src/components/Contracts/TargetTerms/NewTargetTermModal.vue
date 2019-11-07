@@ -98,10 +98,10 @@
           <el-input v-model.number="form.qsi" />
           <span>
             {{
-              form.targetTypeId === 21 || form.targetTypeId === 20
+              form.targetTypeId === 20 ||
+              form.targetTypeId === 21 ||
+              form.targetTypeId === 24
                 ? '%'
-                : form.targetTypeId === 24
-                ? 'points'
                 : ''
             }}
           </span>

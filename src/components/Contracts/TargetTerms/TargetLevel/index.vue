@@ -85,6 +85,17 @@ export default {
         return {
           targetTermId: this.targetTermId
         };
+      },
+      result({ error }) {
+        if (error) {
+          this.$modal.show('error', {
+            message: error.message
+          });
+          this.targetLevelList = [];
+        }
+      },
+      error(error) {
+        console.log(error);
       }
     }
   },

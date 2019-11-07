@@ -54,9 +54,9 @@
         :sort-orders="['ascending', 'descending']"
         sort-by="round"
       >
-        <template slot-scope="props">{{
-          props.row.round ? props.row.round : '—'
-        }}</template>
+        <template slot-scope="props">
+          {{ props.row.round ? props.row.round : '—' }}
+        </template>
       </el-table-column>
       <el-table-column
         label="Effective Dates"
@@ -240,8 +240,16 @@ export default {
           projectId: this.project.id
         };
       },
-      result({ data }) {
-        this.checkContractStatus();
+      result({ error }) {
+        if (error) {
+          this.$modal.show('error', {
+            message: error.message
+          });
+          this.contractList = [];
+        }
+      },
+      error(error) {
+        console.log(error);
       }
     },
     client: {
@@ -297,7 +305,7 @@ export default {
     },
     checkContractStatus() {
       const invalidStatus = this.contractList.some(
-        contract => !contract.qc === 1
+        contract => contract.qc !== 1
       );
       this.$apollo.mutate({
         mutation: UPDATE_PROJECT_STATUS,
