@@ -2,7 +2,7 @@
   <modal
     classes="modal-container"
     name="pricingTermRulesModal"
-    :height="600"
+    :height="800"
     width="800px"
     @before-open="beforeOpen"
     @before-close="beforeClose"
