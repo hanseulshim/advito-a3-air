@@ -96,15 +96,7 @@
       >
         <div class="text-input-container qsi">
           <el-input v-model.number="form.qsi" />
-          <span>
-            {{
-              form.targetTypeId === 20 ||
-              form.targetTypeId === 21 ||
-              form.targetTypeId === 24
-                ? '%'
-                : ''
-            }}
-          </span>
+          <span>{{ '%' }}</span>
         </div>
       </el-form-item>
       <el-form-item
