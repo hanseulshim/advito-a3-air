@@ -1,12 +1,12 @@
 <template>
   <div v-loading="$apollo.loading" class="rule-container">
-    <p class="rule-title">Market</p>
-    <i
-      v-if="!editMode"
-      class="fas fa-pencil-alt edit-rule"
-      @click="saveRules"
-    />
-    <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
+    <div class="flex-row">
+      <p class="rule-title">Market</p>
+      <i v-if="!editMode" class="fas fa-pencil-alt" @click="saveRules" />
+      <button v-if="editMode" class="save-button" @click="saveRules">
+        Save
+      </button>
+    </div>
     <div v-if="editMode" class="control-row">
       <label>Origin:</label>
       <el-select
@@ -280,6 +280,22 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import './ruleStyles.scss';
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .save-button {
+    color: #ff9e16;
+    border: 1px solid #ff9e16;
+    border-radius: 10px;
+    padding: 0.5em 1em;
+    font-size: 0.8em;
+    cursor: pointer;
+    background: transparent;
+    text-transform: uppercase;
+  }
+}
 </style>
