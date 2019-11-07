@@ -5,6 +5,7 @@ import {
   REGEX_USER
 } from '../../constants';
 import moment from 'moment';
+import { RulesContainer, Discount, TargetTerm } from '../../models';
 
 export const rule = {
   Query: {
@@ -431,6 +432,7 @@ const updateRule = async (
       `)
   );
   await Promise.all(queries);
+  await updateRuleCount(parentId, parentType);
   return await getRuleList(db, parentId, parentType, ruleType, type);
 };
 
@@ -935,5 +937,77 @@ const getRuleInfo = id => {
         }
       ]
     };
+  }
+};
+
+export const updateRuleCount = async (
+  parentId,
+  parentType = DISCOUNT_LOOKUP.RULE_TYPE
+) => {
+  const parentTable =
+    parentType === DISCOUNT_LOOKUP.RULE_TYPE
+      ? await Discount.query().findById(parentId)
+      : await TargetTerm.query().findById(parentId);
+  if (!parentTable) return;
+  const rulesContainer = await RulesContainer.query()
+    .where('guidref', parentTable.rulescontainerguidref)
+    .first();
+  const list = await Promise.all([
+    rulesContainer.$relatedQuery('ticketDateRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('travelDateRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('pointOfSale').where('isdeleted', false),
+    rulesContainer.$relatedQuery('pointOfOrigin').where('isdeleted', false),
+    rulesContainer.$relatedQuery('geographyRule').where('isdeleted', false),
+    rulesContainer
+      .$relatedQuery('fareBasisList')
+      .where('isdeleted', false)
+      .andWhere('type', 1),
+    rulesContainer
+      .$relatedQuery('fareBasisList')
+      .where('isdeleted', false)
+      .andWhere('type', 2),
+    rulesContainer
+      .$relatedQuery('bookingClassRule')
+      .where('isdeleted', false)
+      .andWhere('bookingclasstype', 1),
+    rulesContainer
+      .$relatedQuery('bookingClassRule')
+      .where('isdeleted', false)
+      .andWhere('bookingclasstype', 2),
+    rulesContainer
+      .$relatedQuery('carrierRule')
+      .where('isdeleted', false)
+      .andWhere('ruletype', 1),
+    rulesContainer
+      .$relatedQuery('carrierRule')
+      .where('isdeleted', false)
+      .andWhere('ruletype', 2),
+    rulesContainer
+      .$relatedQuery('carrierRule')
+      .where('isdeleted', false)
+      .andWhere('ruletype', 3),
+    rulesContainer
+      .$relatedQuery('ticketDesignatorRule')
+      .where('isdeleted', false),
+    rulesContainer.$relatedQuery('tourCodeRule').where('isdeleted', false),
+    rulesContainer
+      .$relatedQuery('advancePurchaseRule')
+      .where('isdeleted', false),
+    rulesContainer.$relatedQuery('minStayRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('maxStayRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('dayOfWeekRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('stopsRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('connectionRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('flightNumberRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('blackoutDateRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('distanceRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('cabinRule').where('isdeleted', false),
+    rulesContainer.$relatedQuery('fareCategoryRule').where('isdeleted', false)
+  ]);
+  const ruleCount = list.filter(l => l.length).length;
+  if (parentType === DISCOUNT_LOOKUP.RULE_TYPE) {
+    await Discount.query().patchAndFetchById(parentId, { ruleCount });
+  } else {
+    await TargetTerm.query().patchAndFetchById(parentId, { ruleCount });
   }
 };
