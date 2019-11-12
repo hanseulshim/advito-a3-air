@@ -54,9 +54,9 @@
         :sort-orders="['ascending', 'descending']"
         sort-by="round"
       >
-        <template slot-scope="props">
-          {{ props.row.round ? props.row.round : '—' }}
-        </template>
+        <template slot-scope="props">{{
+          props.row.round ? props.row.round : '—'
+        }}</template>
       </el-table-column>
       <el-table-column
         label="Effective Dates"
@@ -233,30 +233,34 @@ export default {
     DeleteContractModal
   },
   apollo: {
+    client: {
+      query: GET_CLIENT
+    },
+    project: {
+      query: GET_PROJECT
+    },
     contractList: {
       query: GET_CONTRACT_LIST,
+      fetchPolicy: 'network-only',
       variables() {
         return {
           projectId: this.project.id
         };
       },
-      result({ error }) {
+      result({ error, data }) {
         if (error) {
           this.$modal.show('error', {
             message: error.message
           });
           this.contractList = [];
         }
+        if (data) {
+          this.checkContractStatus(data);
+        }
       },
       error(error) {
         console.log(error);
       }
-    },
-    client: {
-      query: GET_CLIENT
-    },
-    project: {
-      query: GET_PROJECT
     }
   },
   data() {
@@ -303,10 +307,11 @@ export default {
         variables: { selectedContract }
       });
     },
-    checkContractStatus() {
-      const invalidStatus = this.contractList.some(
+    checkContractStatus(data) {
+      const invalidStatus = data.contractList.some(
         contract => contract.qc !== 1
       );
+
       this.$apollo.mutate({
         mutation: UPDATE_PROJECT_STATUS,
         variables: {
