@@ -175,7 +175,7 @@
       <el-table-column label="Rules" prop="ruleCount" :min-width="term.rules">
         <template slot-scope="props">
           <button class="button number" @click="toggleRulesModal(props.row)">
-            {{ props.row.ruleCount }}
+            {{ props.row.ruleCount || 0 }}
           </button>
         </template>
       </el-table-column>
