@@ -563,7 +563,7 @@ const getRuleInfo = id => {
         },
         {
           name: 'matchExclude',
-          type: 'string'
+          type: 'boolean'
         },
         {
           name: 'matchValue',
