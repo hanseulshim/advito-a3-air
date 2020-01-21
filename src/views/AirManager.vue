@@ -124,7 +124,10 @@ export default {
         project =>
           project.effectiveTo === null ||
           this.showInactive ||
-          project.effectiveTo > moment.utc()
+          moment
+            .utc()
+            .startOf('day')
+            .diff(project.effectiveTo) <= 0
       );
     },
     favoriteProjectList() {

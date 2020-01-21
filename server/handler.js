@@ -14,7 +14,6 @@ types.setTypeParser(TIMESTAMP_OID, val =>
   val === null ? null : moment.utc(val)
 );
 
-require('dotenv').config();
 const db = Knex({
   client: 'pg',
   connection: {
@@ -33,7 +32,8 @@ const advitoDb = require('knex')({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.ADVITO_DB_DATABASE
-  }
+  },
+  ...knexSnakeCaseMappers()
 });
 
 const server = new ApolloServer({
@@ -42,7 +42,7 @@ const server = new ApolloServer({
   context: async ({ event }) => {
     const sessionToken = event.headers.sessiontoken || '';
     const user = await authenticateUser(sessionToken, advitoDb);
-    return { user, db };
+    return { user, db, advitoDb };
   },
   schemaDirectives: {
     auth: requireAuthDirective

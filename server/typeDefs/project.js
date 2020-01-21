@@ -63,7 +63,7 @@ extend type Mutation {
     description: String
     projectManagerId: Int!
     leadAnalystId: Int!
-    dataSpecialistId: Int!
+    dataSpecialistId: Int
     currencyId: Int!
     distanceUnitId: Int!
   ): Project @auth
@@ -78,7 +78,7 @@ extend type Mutation {
     description: String
     projectManagerId: Int!
     leadAnalystId: Int!
-    dataSpecialistId: Int!
+    dataSpecialistId: Int
     currencyId: Int!
     distanceUnitId: Int!
   ): Project @auth

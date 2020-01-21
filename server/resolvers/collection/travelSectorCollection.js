@@ -16,7 +16,7 @@ export const travelSectorCollection = {
           ),
           standard: 'isstandard',
           active: db.raw(
-            `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = s.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 2) = 1, FALSE)`
+            `COALESCE((SELECT COUNT(*) FROM project_data_ref as p WHERE p.data_ref_id = s.id AND p.project_id = ${projectId} AND status = 1 AND data_ref_type = 2) = 1, FALSE)`
           )
         })
         .where('isdeleted', false)
@@ -154,7 +154,7 @@ const getTravelSectorCollection = async (db, id, projectId) => {
       ),
       standard: 'isstandard',
       active: db.raw(
-        `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = s.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 2) = 1, FALSE)`
+        `COALESCE((SELECT COUNT(*) FROM project_data_ref as p WHERE p.data_ref_id = s.id AND p.project_id = ${projectId} AND status = 1 AND data_ref_type = 2) = 1, FALSE)`
       )
     })
     .where('id', id);

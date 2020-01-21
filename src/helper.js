@@ -108,16 +108,3 @@ export const getApi = () => {
     ? 'https://m5pnqi4l5e.execute-api.us-east-2.amazonaws.com/prod/graphql'
     : 'http://localhost:8085/graphql';
 };
-
-export const getAdvitoApi = () => {
-  const VUE_APP_STAGE = process.env.VUE_APP_STAGE;
-  return VUE_APP_STAGE === 'dev'
-    ? 'https://lfl1qiymy7.execute-api.us-east-2.amazonaws.com/dev/graphql'
-    : VUE_APP_STAGE === 'alpha'
-    ? 'https://trfrs1gzn8.execute-api.us-east-2.amazonaws.com/alpha/graphql'
-    : VUE_APP_STAGE === 'beta'
-    ? 'https://7smhjazdr2.execute-api.us-east-2.amazonaws.com/beta/graphql'
-    : VUE_APP_STAGE === 'prod'
-    ? 'https://759byqkv94.execute-api.us-east-2.amazonaws.com/prod/graphql'
-    : 'http://localhost:4000/graphql';
-};

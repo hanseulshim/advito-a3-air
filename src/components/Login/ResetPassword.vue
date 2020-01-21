@@ -105,8 +105,7 @@ export default {
             variables: {
               token,
               ...this.form
-            },
-            client: 'advitoClient'
+            }
           });
           this.$modal.show('success', {
             message: 'Password Successfully reset'

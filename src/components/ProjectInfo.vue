@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { GET_PROJECT } from '@/graphql/queries';
+import { GET_PROJECT, GET_USER } from '@/graphql/queries';
 import { formatDate } from '@/helper';
 import EditProjectModal from '@/components/AirManager/EditProjectModal';
 export default {
@@ -80,6 +80,9 @@ export default {
   apollo: {
     project: {
       query: GET_PROJECT
+    },
+    user: {
+      query: GET_USER
     }
   },
   data() {
@@ -107,7 +110,7 @@ export default {
       return formatDate(date);
     },
     editProject(project) {
-      this.$modal.show('edit-project', { project });
+      this.$modal.show('edit-project', { project, userId: this.user.id });
     },
     showInfoModal() {
       this.$modal.show('info', {

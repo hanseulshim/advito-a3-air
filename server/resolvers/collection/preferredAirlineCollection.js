@@ -18,7 +18,7 @@ export const preferredAirlineCollection = {
             `(SELECT COUNT(*) FROM pcgcarrier WHERE pcgroupid = p.id AND isdeleted = FALSE)`
           ),
           active: db.raw(
-            `COALESCE((SELECT COUNT(*) FROM projectdataref as pd WHERE pd.datarefid = p.id AND pd.projectid = ${projectId} AND status = 1 AND datareftype = 4) = 1, FALSE)`
+            `COALESCE((SELECT COUNT(*) FROM project_data_ref as pd WHERE pd.data_ref_id = p.id AND pd.project_id = ${projectId} AND status = 1 AND data_ref_type = 4) = 1, FALSE)`
           )
         })
         .where('isdeleted', false)
@@ -172,7 +172,7 @@ const getPreferredAirlineCollection = async (db, id, projectId) => {
         `(SELECT COUNT(*) FROM pcgcarrier WHERE pcgroupid = p.id AND isdeleted = FALSE)`
       ),
       active: db.raw(
-        `COALESCE((SELECT COUNT(*) FROM projectdataref as pd WHERE pd.datarefid = p.id AND pd.projectid = ${projectId} AND status = 1 AND datareftype = 4) = 1, FALSE)`
+        `COALESCE((SELECT COUNT(*) FROM project_data_ref as pd WHERE pd.data_ref_id = p.id AND pd.project_id = ${projectId} AND status = 1 AND data_ref_type = 4) = 1, FALSE)`
       )
     })
     .where('id', id);

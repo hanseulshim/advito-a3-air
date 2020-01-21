@@ -31,6 +31,7 @@ export const resolvers = {
       return moment.utc(value);
     },
     serialize(value) {
+      console.log(moment.utc(value).format());
       return moment.utc(value).valueOf();
     },
     parseLiteral(ast) {

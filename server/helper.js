@@ -2,9 +2,9 @@ import { ApolloError } from 'apollo-server-lambda';
 import { AdvitoUserSession } from './models';
 import moment from 'moment';
 
-export const authenticateUser = async sessionToken => {
+export const authenticateUser = async (sessionToken, advitoDb) => {
   if (!sessionToken) return null;
-  const session = await AdvitoUserSession.query()
+  const session = await AdvitoUserSession.query(advitoDb)
     .where('sessionToken', sessionToken)
     .andWhere('sessionEnd', null)
     .first();
@@ -19,7 +19,7 @@ export const authenticateUser = async sessionToken => {
   const timeDifference = newExpiration.diff(sessionExpiration, 'm');
   if (timeDifference > 50) {
     try {
-      await AdvitoUserSession.query().patchAndFetchById(id, {
+      await AdvitoUserSession.query(advitoDb).patchAndFetchById(id, {
         sessionExpiration: newExpiration
       });
     } catch (err) {
@@ -27,14 +27,13 @@ export const authenticateUser = async sessionToken => {
     }
   }
 
-  const user = await session.$relatedQuery('advitoUser').first();
+  const user = await session.$relatedQuery('advitoUser', advitoDb).first();
   if (!user) throw new ApolloError('User not found', 401);
-  const roleIds = await user
-    .$relatedQuery('advitoUserRoleLink')
-    .map(role => role.advitoRoleId);
+  const roleLinkList = await user.$relatedQuery('advitoUserRoleLink', advitoDb);
+  const roleIds = roleLinkList.map(role => role.advitoRoleId);
   return {
     ...user,
-    name: user.name(),
+    name: user.fullName(),
     roleIds
   };
 };

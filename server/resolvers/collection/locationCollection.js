@@ -20,7 +20,7 @@ export const locationCollection = {
           ),
           standard: 'isstandard',
           active: db.raw(
-            `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = l.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 1) = 1, FALSE)`
+            `COALESCE((SELECT COUNT(*) FROM project_data_ref as p WHERE p.data_ref_id = l.id AND p.project_id = ${projectId} AND status = 1 AND data_ref_type = 1) = 1, FALSE)`
           )
         })
         .where('isdeleted', false)
@@ -134,7 +134,7 @@ const getLocationCollection = async (db, id, projectId) => {
       ),
       standard: 'isstandard',
       active: db.raw(
-        `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = l.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 1) = 1, FALSE)`
+        `COALESCE((SELECT COUNT(*) FROM project_data_ref as p WHERE p.data_ref_id = l.id AND p.project_id = ${projectId} AND status = 1 AND data_ref_type = 1) = 1, FALSE)`
       )
     })
     .where('id', id);

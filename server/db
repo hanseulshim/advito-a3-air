@@ -1,0 +1,94 @@
+-- PROJECT COLUMN RENAME
+ALTER TABLE project
+RENAME COLUMN createdon to created_on;
+ALTER TABLE project
+RENAME COLUMN lastupdated to last_updated;
+ALTER TABLE project
+RENAME COLUMN isdeleted to is_deleted;
+ALTER TABLE project
+RENAME COLUMN project_typeid to project_type_id;
+ALTER TABLE project
+RENAME COLUMN savings_typeid to savings_type_id;
+ALTER TABLE project
+RENAME COLUMN excludedfromreport to excluded_from_report;
+ALTER TABLE project
+RENAME COLUMN distance_typeid to distance_type_id;
+ALTER TABLE project
+RENAME COLUMN currency_typeid to currency_type_id;
+ALTER TABLE project
+RENAME COLUMN datasource to data_source;
+ALTER TABLE project
+RENAME COLUMN projectmanagerid to project_manager_id;
+ALTER TABLE project
+RENAME COLUMN leadanalystid to lead_analyst_id;
+ALTER TABLE project
+RENAME COLUMN dataspecialistid to data_specialist_id;
+
+-- PROJECT DATA REF COLUMN RENAME
+ALTER TABLE projectdataref
+RENAME TO project_data_ref;
+ALTER TABLE project_data_ref   
+RENAME COLUMN projectid to project_id;
+ALTER TABLE project_data_ref
+RENAME COLUMN datareftype to data_ref_type;
+ALTER TABLE project_data_ref
+RENAME COLUMN datarefid to data_ref_id;
+ALTER TABLE project_data_ref
+RENAME COLUMN ignoredata to ignore_data;
+ALTER TABLE project_data_ref
+RENAME COLUMN usedata to use_data;
+
+-- DELETE FUNCTIONS
+DROP FUNCTION IF EXISTS project_create;
+DROP FUNCTION IF EXISTS project_update;
+DROP FUNCTION IF EXISTS project_delete;
+DROP FUNCTION IF EXISTS project_favorite;
+
+-- PROJECT_LIST VIEW
+DROP VIEW IF EXISTS project_list;
+CREATE VIEW project_list AS  SELECT p.id,
+    c.id AS client_id,
+    c.client_name AS client_name,
+    p.name_val AS name,
+    p.description,
+    p.project_type_id AS project_type_id,
+    l1.name_val AS project_type_name,
+    p.savings_type_id AS savings_type_id,
+    l2.name_val AS savings_type_name,
+    p.effective_from AS effective_from,
+    p.effective_to AS effective_to,
+    p.report_from AS report_from,
+    p.report_to AS report_to,
+    p.project_manager_id,
+    concat(u1.name_first, ' ', u1.name_last) AS project_manager_name,
+    u1.username AS project_manager_email,
+    p.lead_analyst_id,
+    concat(u2.name_first, ' ', u2.name_last) AS lead_analyst_name,
+    u2.username AS lead_analyst_email,
+    p.data_specialist_id,
+    concat(u3.name_first, ' ', u3.name_last) AS data_specialist_name,
+    u3.username AS data_specialist_email,
+    p.currency_type_id AS currency_id,
+    cu.currency_name AS currency_name,
+    p.distance_type_id AS distance_unit_id,
+    l3.name_val AS distance_unit_name,
+    p.is_deleted AS is_deleted
+   FROM ((((((((project p
+     LEFT JOIN blops.client c ON ((p.client_id = c.id)))
+     LEFT JOIN lov_lookup l1 ON ((p.project_type_id = l1.id)))
+     LEFT JOIN lov_lookup l2 ON ((p.savings_type_id = l2.id)))
+     LEFT JOIN blops.advito_user u1 ON ((p.project_manager_id = u1.id)))
+     LEFT JOIN blops.advito_user u2 ON ((p.lead_analyst_id = u2.id)))
+     LEFT JOIN blops.advito_user u3 ON ((p.data_specialist_id = u3.id)))
+     LEFT JOIN blops.currency cu ON ((p.currency_type_id = cu.id)))
+     LEFT JOIN lov_lookup l3 ON ((p.distance_type_id = l3.id)));
+
+ALTER TABLE "public"."project_list" OWNER TO "AdvitoAdmin";
+
+-- PROJECT FAVORITE TABLE
+ALTER TABLE projectuserfavourite
+RENAME TO project_user_favorite;
+ALTER TABLE project_user_favorite
+RENAME COLUMN projectid to project_id;
+ALTER TABLE project_user_favorite
+RENAME COLUMN userid to user_id;

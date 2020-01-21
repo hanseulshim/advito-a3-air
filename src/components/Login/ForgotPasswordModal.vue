@@ -75,8 +75,7 @@ export default {
           variables: {
             appId: AIR_ID,
             email: this.form.email
-          },
-          client: 'advitoClient'
+          }
         });
         this.$modal.show('success', {
           message: 'Email instructions have been sent!',

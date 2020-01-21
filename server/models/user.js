@@ -2,10 +2,14 @@ import { Model } from 'objection';
 
 export class AdvitoUser extends Model {
   static get tableName() {
-    return 'blops.advitoUser';
+    return 'advitoUser';
   }
 
   name() {
+    return this.nameFirst + ' ' + this.nameLast;
+  }
+
+  fullName() {
     return this.nameFirst + ' ' + this.nameLast;
   }
 
@@ -15,24 +19,32 @@ export class AdvitoUser extends Model {
         relation: Model.HasManyRelation,
         modelClass: AdvitoUserRoleLink,
         join: {
-          from: 'blops.advitoUser.id',
-          to: 'blops.advitoUserRoleLink.advitoUserId'
+          from: 'advitoUser.id',
+          to: 'advitoUserRoleLink.advitoUserId'
         }
       },
       advitoUserSession: {
         relation: Model.HasManyRelation,
         modelClass: AdvitoUserSession,
         join: {
-          from: 'blops.advitoUser.id',
-          to: 'blops.advitoUserSession.advitoUserId'
+          from: 'advitoUser.id',
+          to: 'advitoUserSession.advitoUserId'
         }
       },
       accessToken: {
         relation: Model.HasManyRelation,
         modelClass: AccessToken,
         join: {
-          from: 'blops.advitoUser.id',
-          to: 'blops.accessToken.advitoUserId'
+          from: 'advitoUser.id',
+          to: 'accessToken.advitoUserId'
+        }
+      },
+      advitoUserLog: {
+        relation: Model.HasManyRelation,
+        modelClass: AdvitoUserLog,
+        join: {
+          from: 'advitoUser.id',
+          to: 'advitoUserLog.advitoUserId'
         }
       }
     };
@@ -41,13 +53,13 @@ export class AdvitoUser extends Model {
 
 export class AdvitoUserRoleLink extends Model {
   static get tableName() {
-    return 'blops.advitoUserRoleLink';
+    return 'advitoUserRoleLink';
   }
 }
 
 export class AdvitoUserSession extends Model {
   static get tableName() {
-    return 'blops.advitoUserSession';
+    return 'advitoUserSession';
   }
 
   static get relationMappings() {
@@ -56,8 +68,8 @@ export class AdvitoUserSession extends Model {
         relation: Model.HasManyRelation,
         modelClass: AdvitoUser,
         join: {
-          from: 'blops.advitoUserSession.advitoUserId',
-          to: 'blops.advitoUser.id'
+          from: 'advitoUserSession.advitoUserId',
+          to: 'advitoUser.id'
         }
       }
     };
@@ -66,12 +78,31 @@ export class AdvitoUserSession extends Model {
 
 export class AccessToken extends Model {
   static get tableName() {
-    return 'blops.accessToken';
+    return 'accessToken';
   }
 }
 
 export class EmailTemplate extends Model {
   static get tableName() {
-    return 'blops.emailTemplate';
+    return 'emailTemplate';
+  }
+}
+
+export class AdvitoUserLog extends Model {
+  static get tableName() {
+    return 'advitoUserLog';
+  }
+
+  static get relationMappings() {
+    return {
+      advitoUser: {
+        relation: Model.HasManyRelation,
+        modelClass: AdvitoUser,
+        join: {
+          from: 'advitoUserLog.advitoUserId',
+          to: 'advitoUser.id'
+        }
+      }
+    };
   }
 }
