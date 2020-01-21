@@ -94,8 +94,8 @@ export default {
           this.targetLevelList = [];
         }
       },
-      error(error) {
-        console.log(error);
+      error() {
+        // console.log(error);
       }
     }
   },
