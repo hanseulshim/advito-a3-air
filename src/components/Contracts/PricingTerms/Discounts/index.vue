@@ -241,8 +241,8 @@ export default {
           this.discountList = [];
         }
       },
-      error(error) {
-        console.log(error);
+      error() {
+        // console.log(error);
       }
     },
     bulkActionList: {

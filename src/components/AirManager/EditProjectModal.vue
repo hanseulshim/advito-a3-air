@@ -102,7 +102,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="Data Specialist *" prop="dataSpecialistId">
+      <el-form-item label="Data Specialist" prop="dataSpecialistId">
         <el-select
           v-model="form.dataSpecialistId"
           class="select-modal"
@@ -259,13 +259,6 @@ export default {
           {
             required: true,
             message: 'Please select a lead analyst',
-            trigger: 'change'
-          }
-        ],
-        dataSpecialistId: [
-          {
-            required: true,
-            message: 'Please select a data specialist',
             trigger: 'change'
           }
         ],

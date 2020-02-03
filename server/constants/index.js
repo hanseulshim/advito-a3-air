@@ -7,6 +7,7 @@ export * from './library';
 export * from './collection';
 export * from './email';
 export * from './scenario';
+export * from './user';
 
 // export const APP_URL = 'http://localhost:8080/#';
 // export const APP_URL =

@@ -35,8 +35,7 @@ export default {
           mutation: LOGOUT,
           variables: {
             sessionToken: getToken()
-          },
-          client: 'advitoClient'
+          }
         });
         logout(this.$router, apolloClient);
       } catch (err) {

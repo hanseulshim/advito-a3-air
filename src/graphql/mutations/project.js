@@ -22,7 +22,7 @@ export const ADD_PROJECT = gql`
     $description: String
     $projectManagerId: Int!
     $leadAnalystId: Int!
-    $dataSpecialistId: Int!
+    $dataSpecialistId: Int
     $currencyId: Int!
     $distanceUnitId: Int!
   ) {
@@ -61,7 +61,7 @@ export const EDIT_PROJECT = gql`
     $description: String
     $projectManagerId: Int!
     $leadAnalystId: Int!
-    $dataSpecialistId: Int!
+    $dataSpecialistId: Int
     $currencyId: Int!
     $distanceUnitId: Int!
   ) {

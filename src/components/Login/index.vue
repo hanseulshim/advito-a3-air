@@ -98,8 +98,7 @@ export default {
           mutation: LOGIN,
           variables: {
             ...this.form
-          },
-          client: 'advitoClient'
+          }
         });
         setUser(login);
         this.$router.replace({ name: 'root' });

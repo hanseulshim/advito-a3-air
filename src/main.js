@@ -11,7 +11,7 @@ import VModal from 'vue-js-modal';
 import 'element-ui/lib/theme-chalk/index.css';
 import defaults from './graphql/defaults';
 import resolvers from './graphql/resolvers';
-import { getToken, logout, getApi, getAdvitoApi } from './helper';
+import { getToken, logout, getApi } from './helper';
 
 export const apolloClient = new ApolloClient({
   uri: getApi(),
@@ -40,32 +40,9 @@ export const apolloClient = new ApolloClient({
   }
 });
 
-const advitoClient = new ApolloClient({
-  uri: getAdvitoApi(),
-  fetch,
-  request: operation => {
-    const sessiontoken = getToken();
-    if (sessiontoken) {
-      operation.setContext({
-        headers: {
-          sessiontoken
-        }
-      });
-    }
-  },
-  onError: ({ graphQLErrors }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ extensions }) => {
-        if (extensions.code === 'UNAUTHENTICATED') logout(router, apolloClient);
-      });
-    }
-  }
-});
-
 const apolloProvider = new VueApollo({
   clients: {
-    apolloClient,
-    advitoClient
+    apolloClient
   },
   defaultClient: apolloClient
 });

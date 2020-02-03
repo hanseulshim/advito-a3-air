@@ -258,8 +258,8 @@ export default {
           this.checkContractStatus(data);
         }
       },
-      error(error) {
-        console.log(error);
+      error() {
+        // console.log(error);
       }
     }
   },

@@ -296,8 +296,8 @@ export default {
           this.targetTermList = [];
         }
       },
-      error(error) {
-        console.log(error);
+      error() {
+        // console.log(error);
       }
     },
     bulkActionList: {

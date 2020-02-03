@@ -16,7 +16,7 @@ export const airlineGroupCollection = {
           effectiveStartDate: 'startdate',
           effectiveEndDate: 'enddate',
           active: db.raw(
-            `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = c.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 3) = 1, FALSE)`
+            `COALESCE((SELECT COUNT(*) FROM project_data_ref as p WHERE p.data_ref_id = c.id AND p.project_id = ${projectId} AND status = 1 AND data_ref_type = 3) = 1, FALSE)`
           ),
           airlineGroupCount: db.raw(
             `(SELECT COUNT(*) FROM carriergroup WHERE collectionid = c.id AND isdeleted = FALSE)`
@@ -206,7 +206,7 @@ const getAirlineGroupCollection = async (db, id, projectId) => {
       effectiveStartDate: 'startdate',
       effectiveEndDate: 'enddate',
       active: db.raw(
-        `COALESCE((SELECT COUNT(*) FROM projectdataref as p WHERE p.datarefid = c.id AND p.projectid = ${projectId} AND status = 1 AND datareftype = 3) = 1, FALSE)`
+        `COALESCE((SELECT COUNT(*) FROM project_data_ref as p WHERE p.data_ref_id = c.id AND p.project_id = ${projectId} AND status = 1 AND data_ref_type = 3) = 1, FALSE)`
       ),
       airlineGroupCount: db.raw(
         `(SELECT COUNT(*) FROM carriergroup WHERE collectionid = c.id AND isdeleted = FALSE)`

@@ -335,8 +335,8 @@ export default {
           this.pricingTermList = [];
         }
       },
-      error(error) {
-        console.log(error);
+      error() {
+        // console.log(error);
       }
     },
     bulkActionList: {
