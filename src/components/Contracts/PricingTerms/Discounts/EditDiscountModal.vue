@@ -135,10 +135,7 @@ export default {
           mutation: EDIT_DISCOUNT,
           variables: {
             ...this.form,
-            discountValue:
-              this.form.discountTypeId === DISCOUNT_LOOKUP.PERCENTAGE
-                ? this.form.discountValue / 100
-                : this.form.discountValue
+            discountValue: this.form.discountValue
           }
         });
         this.$modal.show('success', {

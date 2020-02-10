@@ -285,7 +285,8 @@ export default {
       )}`;
     },
     formatPercent(num) {
-      return formatPercent(num);
+      const percent = num ? num / 100 : 0;
+      return formatPercent(percent);
     },
     toggleSelection(id) {
       const index = this.bulkIdList.indexOf(id);
