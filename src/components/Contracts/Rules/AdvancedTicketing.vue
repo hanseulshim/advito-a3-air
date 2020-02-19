@@ -8,9 +8,8 @@
     />
     <button v-if="editMode" class="save-rule" @click="saveRules">Save</button>
     <div v-if="editMode" class="control-row">
-      <label>Within:</label>
       <el-input
-        v-model="endRange"
+        v-model="startRange"
         type="number"
         size="mini"
         :min="0"
@@ -43,7 +42,7 @@
         size="small"
         closable
         @close="deleteTag(rule)"
-        >{{ `Within ${rule.endRange} Days` }}</el-tag
+        >{{ `${rule.startRange} Days` }}</el-tag
       >
     </div>
   </div>
@@ -87,8 +86,8 @@ export default {
       ],
       selectedUnit: TIME_UNIT_LOOKUP.DAYS,
       editMode: false,
-      startRange: 0,
-      endRange: null,
+      startRange: null,
+      endRange: 1000,
       advancedTicketingList: []
     };
   },
@@ -119,7 +118,7 @@ export default {
           });
         }
         this.editMode = !this.editMode;
-        this.endRange = null;
+        this.startRange = null;
       } catch (error) {
         this.$modal.show('error', {
           message: error.message
@@ -127,13 +126,13 @@ export default {
       }
     },
     createTag() {
-      if (!this.endRange) {
+      if (!this.startRange) {
         this.$modal.show('error', {
           message: 'Error: Please enter a valid timeframe'
         });
       } else if (
         this.advancedTicketingList.some(
-          rule => rule.endRange === parseInt(this.endRange)
+          rule => rule.startRange === parseInt(this.startRange)
         )
       ) {
         this.$modal.show('error', {
@@ -147,13 +146,13 @@ export default {
         this.advancedTicketingList.push({
           id: null,
           ruleContainerId,
-          startRange: this.startRange,
-          endRange: parseInt(this.endRange),
+          startRange: parseInt(this.startRange),
+          endRange: this.endRange,
           unit: this.selectedUnit,
           isDeleted: false
         });
 
-        this.endRange = null;
+        this.startRange = null;
       }
     },
     async deleteTag(tag) {
