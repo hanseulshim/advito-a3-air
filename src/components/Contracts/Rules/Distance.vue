@@ -169,7 +169,7 @@ export default {
           ruleContainerId,
           distanceUnit: this.distanceUnit,
           minDistance: parseInt(this.minDistance) || null,
-          maxDistance: parseInt(this.maxDistance) || null,
+          maxDistance: parseInt(this.maxDistance) || 60000,
           isDeleted: false
         });
 
@@ -237,7 +237,9 @@ export default {
         const unit = this.units.filter(
           unit => unit.value === rule.distanceUnit
         )[0];
-        return ` ${rule.minDistance} - ${rule.maxDistance} ${unit.label}`;
+        return ` ${rule.minDistance} - ${
+          rule.maxDistance === 60000 ? '' : rule.maxDistance
+        } ${unit.label}`;
       }
     }
   }

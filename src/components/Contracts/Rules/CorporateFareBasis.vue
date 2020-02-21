@@ -349,13 +349,7 @@ export default {
       if (!this.fareBasisList.length || !this.fareBasisUnitList.length) {
         return;
       } else {
-        return `${rule.name} ${
-          rule.containsPosition
-            ? ` at position ${rule.containsPosition}`
-            : rule.containsMultiplePosition
-            ? `at posiiton ${rule.containsMultiplePosition}`
-            : ''
-        }`;
+        return rule.name;
       }
     }
   }
