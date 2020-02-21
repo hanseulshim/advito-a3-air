@@ -348,13 +348,7 @@ export default {
       if (!this.fareBasisList.length || !this.fareBasisUnitList.length) {
         return;
       } else {
-        const propName = Object.keys(rule).filter(
-          key => key.includes('Value') && rule[key] !== null
-        );
-
-        const value = rule[propName];
-
-        return `${rule.name} ${value} ${
+        return `${rule.name} ${
           rule.containsPosition
             ? ` at position ${rule.containsPosition}`
             : rule.containsMultiplePosition
