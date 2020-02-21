@@ -287,10 +287,14 @@ import {
   GET_PRICING_TERM_LIST,
   GET_SELECTED_CONTRACT,
   GET_CONTRACT,
-  GET_BULK_ACTION_LIST
+  GET_BULK_ACTION_LIST,
+  GET_CONTRACT_LIST
 } from '@/graphql/queries';
 import { PRICING_TERM_LOOKUP } from '@/graphql/constants';
-import { TOGGLE_PRICING_TERM_QC } from '@/graphql/mutations';
+import {
+  TOGGLE_PRICING_TERM_QC,
+  UPDATE_PROJECT_STATUS
+} from '@/graphql/mutations';
 import CopyPricingTermModal from './CopyPricingTermModal';
 import NewPricingTermModal from './NewPricingTermModal';
 import EditPricingTermModal from './EditPricingTermModal';
@@ -471,6 +475,24 @@ export default {
               variables: { id: this.selectedContract.id }
             }
           ]
+        });
+        const { data } = await this.$apollo.query({
+          query: GET_CONTRACT_LIST,
+          fetchPolicy: 'network-only',
+          variables: {
+            projectId: parseInt(this.$route.params.projectId)
+          }
+        });
+        const invalidStatus = data.contractList.some(
+          contract => contract.qc !== 1
+        );
+
+        this.$apollo.mutate({
+          mutation: UPDATE_PROJECT_STATUS,
+          variables: {
+            id: 3,
+            status: invalidStatus ? 'invalid' : 'valid'
+          }
         });
         this.clearBulkActions();
       } catch (error) {
