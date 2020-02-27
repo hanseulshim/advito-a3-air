@@ -24,9 +24,9 @@
     "deploy:prod": "VUE_APP_STAGE=prod vue-cli-service build && aws s3 sync  ./dist s3://a3-prod1/ --acl public-read --profile advito",
     "deploy:prod:server": "cd ./server && yarn prod",
     "deploy:prod:all": "yarn deploy:prod & yarn deploy:prod:server",
-    "deploy:all:front": "deploy:alph && deploy:beta && deploy:dev && deploy:prod",
+    "deploy:all:front": "yarn deploy:alph && yarn deploy:beta && yarn deploy:dev && yarn deploy:prod",
     "deploy:all:server": "cd ./server && yarn all",
-    "deploy:all": "deploy:alpha:all && deploy:beta:all && deploy:dev:all && deploy:prod:all"
+    "deploy:all": "yarn deploy:alpha:all && yarn deploy:beta:all && yarn deploy:dev:all && yarn deploy:prod:all"
   },
   "dependencies": {
     "apollo-boost": "^0.1.28",
