@@ -182,14 +182,17 @@ const getProject = async (userId, id = null, clientId = null) => {
     return ProjectList.query()
       .alias('p')
       .select(['p.*', raw(favorite).as('favorite')])
-      .findById(id);
+      .findById(id)
+      .orderBy('p.name');
   } else if (clientId) {
     return ProjectList.query()
       .alias('p')
       .select(['p.*', raw(favorite).as('favorite')])
-      .where('clientId', clientId);
+      .where('clientId', clientId)
+      .orderBy('p.name');
   }
   return ProjectList.query()
     .alias('p')
-    .select(['p.*', raw(favorite).as('favorite')]);
+    .select(['p.*', raw(favorite).as('favorite')])
+    .orderBy('p.name');
 };
