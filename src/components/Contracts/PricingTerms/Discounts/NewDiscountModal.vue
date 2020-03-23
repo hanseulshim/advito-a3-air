@@ -72,7 +72,6 @@ import {
   GET_DIRECTION_TYPE_LIST,
   GET_CONTRACT
 } from '@/graphql/queries';
-import { DISCOUNT_LOOKUP } from '@/graphql/constants';
 import { CREATE_DISCOUNT } from '@/graphql/mutations';
 export default {
   name: 'NewDiscountModal',

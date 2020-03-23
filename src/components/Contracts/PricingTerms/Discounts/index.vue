@@ -200,7 +200,8 @@
 </template>
 
 <script>
-import { formatDate, formatPercent, pluralize } from '@/helper';
+import { formatDate, pluralize } from '@/helper';
+import numeral from 'numeral';
 import { discount } from '@/config';
 import { GET_DISCOUNT_LIST, GET_BULK_ACTION_LIST } from '@/graphql/queries';
 import { DISCOUNT_LOOKUP } from '@/graphql/constants';
@@ -286,7 +287,7 @@ export default {
     },
     formatPercent(num) {
       const percent = num ? num / 100 : 0;
-      return formatPercent(percent);
+      return numeral(percent).format('0.[0]%');
     },
     toggleSelection(id) {
       const index = this.bulkIdList.indexOf(id);

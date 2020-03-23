@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { formatPercent, pluralize } from '@/helper';
+import { pluralize } from '@/helper';
 import { target } from '@/config';
 import { GET_TARGET_LEVEL_LIST, GET_TARGET_TERM } from '@/graphql/queries';
 import { TOGGLE_TARGET_LEVEL } from '@/graphql/mutations';
@@ -71,6 +71,7 @@ import { TARGET_TERM_LOOKUP } from '@/graphql/constants';
 import NewTargetLevelModal from './NewTargetLevelModal';
 import EditTargetLevelModal from './EditTargetLevelModal';
 import DeleteTargetLevelModal from './DeleteTargetLevelModal';
+import numeral from 'numeral';
 export default {
   name: 'TargetLevel',
   components: {
@@ -127,7 +128,7 @@ export default {
       return pluralize(word, count);
     },
     formatPercent(num) {
-      return formatPercent(num);
+      return numeral(num).format('0.[0]%');
     },
     formatTargetAmount({ targetAmount }) {
       if (
@@ -136,7 +137,7 @@ export default {
         this.targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
         this.targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {
-        return formatPercent(targetAmount);
+        return this.formatPercent(targetAmount);
       } else {
         return targetAmount;
       }
