@@ -244,7 +244,7 @@
 
 <script>
 import Navigation from '../Navigation';
-import { pluralize, formatDate, formatPercent } from '@/helper';
+import { pluralize, formatDate } from '@/helper';
 import { term } from '@/config';
 import {
   GET_CONTRACT,
@@ -267,6 +267,7 @@ import TargetTermNoteModal from './TargetTermNoteModal';
 import TargetTermRulesModal from './TargetTermRulesModal';
 import TargetTermBulkActionModal from './TargetTermBulkActionModal';
 import moment from 'moment';
+import numeral from 'numeral';
 
 export default {
   name: 'TargetTerms',
@@ -353,7 +354,7 @@ export default {
       )}`;
     },
     formatPercent(num) {
-      return formatPercent(num);
+      return numeral(num).format('0.[0]%');
     },
     formatTargetAmount({ targetTypeId, targetAmount }) {
       if (
@@ -362,7 +363,7 @@ export default {
         targetTypeId === TARGET_TERM_LOOKUP.SHARE_GAP ||
         targetTypeId === TARGET_TERM_LOOKUP.KPG
       ) {
-        return formatPercent(targetAmount);
+        return this.formatPercent(targetAmount);
       } else {
         return targetAmount;
       }
